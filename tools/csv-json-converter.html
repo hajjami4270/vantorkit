@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,10 +17,10 @@
   <meta name="twitter:title" content="CSV to JSON &amp; JSON to CSV Converter | VantorKit">
   <meta name="twitter:description" content="Instant bidirectional CSV and JSON conversion. 100% client-side privacy.">
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Schema.org Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
@@ -172,6 +172,145 @@
       background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .globe-icon {
+      color: var(--badge-text);
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] * {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .code-textarea, html[dir="rtl"] .editor-footer {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] table {
+      text-align: right;
     }
 
     /* Header */
@@ -801,47 +940,77 @@
 </head>
 <body>
 
-  <!-- Top Navigation with Back Link -->
+  <!-- Top Navigation with Back Link & Language Switcher -->
   <div class="top-nav">
     <a href="/" class="back-link" id="backToHome">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      <span>← Back to Tools</span>
+      <span data-i18n="backLink">← Back to Tools</span>
     </a>
     
-    <a href="/" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="vGradLeftC" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="100%" stop-color="#3b82f6" />
-          </linearGradient>
-          <linearGradient id="vGradRightC" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#818cf8" />
-            <stop offset="100%" stop-color="#c084fc" />
-          </linearGradient>
-          <linearGradient id="vGradCenterC" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#60a5fa" />
-            <stop offset="100%" stop-color="#a855f7" />
-          </linearGradient>
-        </defs>
-        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
-        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftC)" />
-        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightC)" />
-        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterC)" />
-        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
-      </svg>
-      <span>Vantor<span>Kit</span></span>
-    </a>
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeftC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRightC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenterC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftC)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightC)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterC)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Header -->
   <header>
     <div class="brand-badge">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>PDF &amp; Files • Client-Side • Zero Server Uploads</span>
+      <span data-i18n="brandBadge">PDF &amp; Files • Client-Side • Zero Server Uploads</span>
     </div>
     <h1 id="pageTitle">CSV to JSON / <span>JSON to CSV</span></h1>
-    <p class="subtitle" id="pageSubtitle">Seamlessly convert tabular CSV records to structured JSON and flatten nested JSON back into clean CSV files. Fast, private, RFC 4180 compliant.</p>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Seamlessly convert tabular CSV records to structured JSON and flatten nested JSON back into clean CSV files. Fast, private, RFC 4180 compliant.</p>
   </header>
 
   <main>
@@ -850,17 +1019,17 @@
       <div class="mode-tabs" role="tablist">
         <button type="button" class="mode-tab active" id="tabCsvToJson" role="tab" aria-selected="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-          <span>CSV to JSON</span>
+          <span data-i18n="tabCsvToJson">CSV to JSON</span>
         </button>
         <button type="button" class="mode-tab" id="tabJsonToCsv" role="tab" aria-selected="false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          <span>JSON to CSV</span>
+          <span data-i18n="tabJsonToCsv">JSON to CSV</span>
         </button>
       </div>
 
       <button type="button" class="swap-mode-btn" id="btnSwapMode" title="Swap input and output mode">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
-        <span>Swap Mode</span>
+        <span data-i18n="btnSwapMode">Swap Mode</span>
       </button>
     </div>
 
@@ -878,7 +1047,7 @@
       <!-- Options for CSV to JSON -->
       <div class="options-group" id="csvOptionsGroup">
         <label class="option-item" for="csvDelimiter">
-          <span>Delimiter:</span>
+          <span data-i18n="csvOptDelimiter">Delimiter:</span>
           <select id="csvDelimiter" class="option-select">
             <option value="auto" selected>Auto-Detect</option>
             <option value=",">Comma (,)</option>
@@ -890,16 +1059,16 @@
 
         <label class="option-item">
           <input type="checkbox" id="csvHasHeaders" class="option-checkbox" checked>
-          <span>First row is header</span>
+          <span data-i18n="csvOptHeaders">First row is header</span>
         </label>
 
         <label class="option-item">
           <input type="checkbox" id="csvParseTypes" class="option-checkbox" checked>
-          <span>Parse numbers &amp; booleans</span>
+          <span data-i18n="csvOptParseTypes">Parse numbers &amp; booleans</span>
         </label>
 
         <label class="option-item" for="jsonFormat">
-          <span>Output Format:</span>
+          <span data-i18n="csvOptFormat">Output Format:</span>
           <select id="jsonFormat" class="option-select">
             <option value="pretty" selected>Pretty (2 spaces)</option>
             <option value="minify">Minified</option>
@@ -910,7 +1079,7 @@
       <!-- Options for JSON to CSV -->
       <div class="options-group" id="jsonOptionsGroup" style="display: none;">
         <label class="option-item" for="jsonOutDelimiter">
-          <span>Output Delimiter:</span>
+          <span data-i18n="jsonOptOutDelimiter">Output Delimiter:</span>
           <select id="jsonOutDelimiter" class="option-select">
             <option value="," selected>Comma (,)</option>
             <option value=";">Semicolon (;)</option>
@@ -921,12 +1090,12 @@
 
         <label class="option-item">
           <input type="checkbox" id="jsonIncludeHeaders" class="option-checkbox" checked>
-          <span>Include header row</span>
+          <span data-i18n="jsonOptHeaders">Include header row</span>
         </label>
 
         <label class="option-item">
           <input type="checkbox" id="jsonFlatten" class="option-checkbox" checked>
-          <span>Auto-flatten nested objects</span>
+          <span data-i18n="jsonOptFlatten">Auto-flatten nested objects</span>
         </label>
       </div>
 
@@ -934,11 +1103,11 @@
       <div class="quick-actions-bar">
         <button type="button" class="btn-action-small" id="btnLoadSample">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-          <span>Load Sample</span>
+          <span data-i18n="btnLoadSample">Load Sample</span>
         </button>
         <button type="button" class="btn-action-small" id="btnClearAll">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          <span>Clear</span>
+          <span data-i18n="btnClearAll">Clear</span>
         </button>
       </div>
     </div>
@@ -958,7 +1127,7 @@
             <input type="file" id="fileUploadInput" class="file-input-hidden" accept=".csv,.json,.txt">
             <button type="button" class="editor-btn" id="btnUploadFile" title="Upload file from your computer">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span>Upload File</span>
+              <span data-i18n="btnUploadFile">Upload File</span>
             </button>
           </div>
         </div>
@@ -987,11 +1156,11 @@
           <div class="editor-controls">
             <button type="button" class="editor-btn btn-copy" id="btnCopyOutput">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Copy</span>
+              <span data-i18n="btnCopy">Copy</span>
             </button>
             <button type="button" class="editor-btn btn-primary" id="btnDownloadOutput">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>Download</span>
+              <span data-i18n="btnDownload">Download</span>
             </button>
           </div>
         </div>
@@ -1125,7 +1294,7 @@
 
   <!-- Footer matching index.html -->
   <footer>
-    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+    <p data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
   </footer>
 
   <!-- Real-Time Bidirectional Conversion Engine -->
@@ -1501,10 +1670,221 @@
         }
       }
 
+      // --- i18n Translation Dictionary ---
+      const I18N = {
+        en: {
+          langLabel: "English",
+          backLink: "← Back to Tools",
+          brandBadge: "PDF &amp; Files • Client-Side • Zero Server Uploads",
+          pageTitle: 'CSV to JSON / <span>JSON to CSV</span>',
+          pageSubtitle: "Seamlessly convert tabular CSV records to structured JSON and flatten nested JSON back into clean CSV files. Fast, private, RFC 4180 compliant.",
+          tabCsvToJson: "CSV to JSON",
+          tabJsonToCsv: "JSON to CSV",
+          btnSwapMode: "Swap Mode",
+          csvOptDelimiter: "Delimiter:",
+          csvOptHeaders: "First row is header",
+          csvOptParseTypes: "Parse numbers &amp; booleans",
+          csvOptFormat: "Output Format:",
+          jsonOptOutDelimiter: "Output Delimiter:",
+          jsonOptHeaders: "Include header row",
+          jsonOptFlatten: "Auto-flatten nested objects",
+          btnLoadSample: "Load Sample",
+          btnClearAll: "Clear",
+          btnUploadFile: "Upload File",
+          btnCopy: "Copy",
+          btnDownload: "Download",
+          inputLabelCsv: "CSV Source Data",
+          inputLabelJson: "JSON Source Data",
+          outputLabelJson: "JSON Result",
+          outputLabelCsv: "CSV Result",
+          inputPlaceholderCsv: "Paste your CSV data here or drag & drop a file...",
+          inputPlaceholderJson: "Paste your JSON data here or drag & drop a file...",
+          outputPlaceholder: "Converted output will appear here in real time...",
+          copied: "Copied!",
+          toastCopied: "Output copied to clipboard!",
+          sampleLoaded: "Sample data loaded!",
+          footerText: "© 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally."
+        },
+        ar: {
+          langLabel: "العربية",
+          backLink: "← العودة إلى الأدوات",
+          brandBadge: "ملفات وPDF • معالجة محلية • بدون رفع على الخوادم",
+          pageTitle: 'محول CSV إلى JSON / <span>JSON إلى CSV</span>',
+          pageSubtitle: "حوّل جداول CSV إلى بيانات JSON مهيكلة وسكّح كائنات JSON المتداخلة إلى ملفات CSV نظيفة. سريع، خاص، ومتوافق مع معيار RFC 4180.",
+          tabCsvToJson: "CSV إلى JSON",
+          tabJsonToCsv: "JSON إلى CSV",
+          btnSwapMode: "تبديل الوضع",
+          csvOptDelimiter: "الفاصل:",
+          csvOptHeaders: "الصف الأول يحتوي على العناوين",
+          csvOptParseTypes: "تحليل الأرقام والقيم المنطقية",
+          csvOptFormat: "تنسيق المخرجات:",
+          jsonOptOutDelimiter: "فاصل المخرجات:",
+          jsonOptHeaders: "تضمين صف العناوين",
+          jsonOptFlatten: "تسطيح الكائنات المتداخلة تلقائياً",
+          btnLoadSample: "تحميل نموذج",
+          btnClearAll: "مسح",
+          btnUploadFile: "رفع ملف",
+          btnCopy: "نسخ",
+          btnDownload: "تنزيل",
+          inputLabelCsv: "بيانات CSV المصدر",
+          inputLabelJson: "بيانات JSON المصدر",
+          outputLabelJson: "نتيجة JSON",
+          outputLabelCsv: "نتيجة CSV",
+          inputPlaceholderCsv: "الصق بيانات CSV هنا أو اسحب الملف وأفلته...",
+          inputPlaceholderJson: "الصق كائن أو مصفوفة JSON هنا أو اسحب الملف وأفلته...",
+          outputPlaceholder: "ستظهر النتيجة المحولة هنا في الوقت الفعلي...",
+          copied: "تم النسخ!",
+          toastCopied: "تم نسخ النتيجة إلى الحافظة!",
+          sampleLoaded: "تم تحميل البيانات النموذجية!",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً على جهازك."
+        },
+        fr: {
+          langLabel: "Français",
+          backLink: "← Retour aux outils",
+          brandBadge: "PDF &amp; Fichiers • Côté Client • Zéro Téléversement Serveur",
+          pageTitle: 'Convertisseur CSV vers JSON / <span>JSON vers CSV</span>',
+          pageSubtitle: "Convertissez de manière fluide les enregistrements tabulaires CSV en JSON structuré et aplatissez le JSON imbriqué en CSV propre. Rapide, privé, conforme à la norme RFC 4180.",
+          tabCsvToJson: "CSV vers JSON",
+          tabJsonToCsv: "JSON vers CSV",
+          btnSwapMode: "Inverser le mode",
+          csvOptDelimiter: "Délimiteur :",
+          csvOptHeaders: "La 1ère ligne est l'en-tête",
+          csvOptParseTypes: "Analyser nombres et booléens",
+          csvOptFormat: "Format de sortie :",
+          jsonOptOutDelimiter: "Délimiteur de sortie :",
+          jsonOptHeaders: "Inclure ligne d'en-tête",
+          jsonOptFlatten: "Aplatir objets imbriqués",
+          btnLoadSample: "Charger exemple",
+          btnClearAll: "Effacer",
+          btnUploadFile: "Téléverser fichier",
+          btnCopy: "Copier",
+          btnDownload: "Télécharger",
+          inputLabelCsv: "Données source CSV",
+          inputLabelJson: "Données source JSON",
+          outputLabelJson: "Résultat JSON",
+          outputLabelCsv: "Résultat CSV",
+          inputPlaceholderCsv: "Collez vos données CSV ici ou glissez-déposez un fichier...",
+          inputPlaceholderJson: "Collez votre JSON ici ou glissez-déposez un fichier...",
+          outputPlaceholder: "Le résultat converti apparaîtra ici en temps réel...",
+          copied: "Copié !",
+          toastCopied: "Résultat copié dans le presse-papiers !",
+          sampleLoaded: "Données d'exemple chargées !",
+          footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement."
+        },
+        it: {
+          langLabel: "Italiano",
+          backLink: "← Torna agli strumenti",
+          brandBadge: "PDF &amp; File • Lato Client • Zero Caricamenti su Server",
+          pageTitle: 'Convertitore da CSV a JSON / <span>da JSON a CSV</span>',
+          pageSubtitle: "Converti in modo fluido i record CSV tabulari in JSON strutturato e appiattisci il JSON nidificato in CSV pulito. Veloce, privato, conforme a RFC 4180.",
+          tabCsvToJson: "Da CSV a JSON",
+          tabJsonToCsv: "Da JSON a CSV",
+          btnSwapMode: "Inverti modalità",
+          csvOptDelimiter: "Delimitatore:",
+          csvOptHeaders: "La prima riga è l'intestazione",
+          csvOptParseTypes: "Analizza numeri e booleani",
+          csvOptFormat: "Formato di output:",
+          jsonOptOutDelimiter: "Delimitatore di output:",
+          jsonOptHeaders: "Includi riga intestazione",
+          jsonOptFlatten: "Appiattisci oggetti nidificati",
+          btnLoadSample: "Carica esempio",
+          btnClearAll: "Cancella",
+          btnUploadFile: "Carica file",
+          btnCopy: "Copia",
+          btnDownload: "Scarica",
+          inputLabelCsv: "Dati sorgente CSV",
+          inputLabelJson: "Dati sorgente JSON",
+          outputLabelJson: "Risultato JSON",
+          outputLabelCsv: "Risultato CSV",
+          inputPlaceholderCsv: "Incolla i dati CSV qui o trascina un file...",
+          inputPlaceholderJson: "Incolla il JSON qui o trascina un file...",
+          outputPlaceholder: "L'output convertito apparirà qui in tempo reale...",
+          copied: "Copiato!",
+          toastCopied: "Output copiato negli appunti!",
+          sampleLoaded: "Dati di esempio caricati!",
+          footerText: "© 2026 VantorKit. Utilità web veloci, private e gratuite. Tutte le elaborazioni vengono eseguite localmente."
+        }
+      };
+
+      // --- i18n Engine & State ---
+      const htmlRoot = document.getElementById('htmlRoot');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      let activeLang = 'en';
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        activeLang = lang;
+        localStorage.setItem('vantorkit_lang', lang);
+
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        currentLangLabel.textContent = I18N[lang].langLabel;
+        langOptions.forEach(opt => {
+          if (opt.dataset.lang === lang) opt.classList.add('active');
+          else opt.classList.remove('active');
+        });
+
+        const dict = I18N[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) {
+            el.innerHTML = dict[key];
+          }
+        });
+
+        const pageTitle = document.getElementById('pageTitle');
+        if (pageTitle && dict.pageTitle) pageTitle.innerHTML = dict.pageTitle;
+
+        // Update dynamic labels depending on current active mode
+        if (currentMode === 'csv-to-json') {
+          inputLabel.textContent = dict.inputLabelCsv;
+          outputLabel.textContent = dict.outputLabelJson;
+          sourceInput.placeholder = dict.inputPlaceholderCsv;
+        } else {
+          inputLabel.textContent = dict.inputLabelJson;
+          outputLabel.textContent = dict.outputLabelCsv;
+          sourceInput.placeholder = dict.inputPlaceholderJson;
+        }
+        outputResult.placeholder = dict.outputPlaceholder;
+      }
+
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = langMenu.classList.contains('open');
+        if (isOpen) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          langMenu.classList.add('open');
+          langToggleBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          setLanguage(opt.dataset.lang);
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('langDropdown').contains(e.target)) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
       // --- Switch Mode Handler ---
       function switchMode(newMode) {
         if (currentMode === newMode) return;
         currentMode = newMode;
+        const dict = I18N[activeLang] || I18N.en;
 
         if (newMode === 'csv-to-json') {
           tabCsvToJson.classList.add('active');
@@ -1515,9 +1895,9 @@
           csvOptionsGroup.style.display = 'flex';
           jsonOptionsGroup.style.display = 'none';
 
-          inputLabel.textContent = 'CSV Source Data';
-          outputLabel.textContent = 'JSON Result';
-          sourceInput.placeholder = 'Paste your CSV data here or drag & drop a file...';
+          inputLabel.textContent = dict.inputLabelCsv;
+          outputLabel.textContent = dict.outputLabelJson;
+          sourceInput.placeholder = dict.inputPlaceholderCsv;
         } else {
           tabJsonToCsv.classList.add('active');
           tabJsonToCsv.setAttribute('aria-selected', 'true');
@@ -1527,9 +1907,9 @@
           jsonOptionsGroup.style.display = 'flex';
           csvOptionsGroup.style.display = 'none';
 
-          inputLabel.textContent = 'JSON Source Data';
-          outputLabel.textContent = 'CSV Result';
-          sourceInput.placeholder = 'Paste your JSON data here or drag & drop a file...';
+          inputLabel.textContent = dict.inputLabelJson;
+          outputLabel.textContent = dict.outputLabelCsv;
+          sourceInput.placeholder = dict.inputPlaceholderJson;
         }
 
         runConversion();
@@ -1563,7 +1943,8 @@
           sourceInput.value = SAMPLES.json;
         }
         runConversion();
-        showToast('Sample data loaded!');
+        const dict = I18N[activeLang] || I18N.en;
+        showToast(dict.sampleLoaded || 'Sample data loaded!');
       });
 
       // --- Clear All Action ---
@@ -1580,14 +1961,16 @@
         const out = outputResult.value;
         if (!out) return;
 
+        const dict = I18N[activeLang] || I18N.en;
+
         function indicateSuccess() {
           const origHTML = btnCopyOutput.innerHTML;
           btnCopyOutput.innerHTML = `
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Copied!</span>
+            <span>${dict.copied || 'Copied!'}</span>
           `;
           btnCopyOutput.classList.add('copied');
-          showToast('Output copied to clipboard!');
+          showToast(dict.toastCopied || 'Output copied to clipboard!');
           setTimeout(() => {
             btnCopyOutput.innerHTML = origHTML;
             btnCopyOutput.classList.remove('copied');
@@ -1698,7 +2081,10 @@
         }
       });
 
-      // --- Initial Load with Sample ---
+      // --- Initial Load with Sample & i18n ---
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(initialLang);
+
       sourceInput.value = SAMPLES.csv;
       runConversion();
     })();

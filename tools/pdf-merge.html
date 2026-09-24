@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,10 +17,10 @@
   <meta name="twitter:title" content="PDF Merge — Free Client-Side PDF Combiner | VantorKit">
   <meta name="twitter:description" content="Combine and merge multiple PDF files locally with zero uploads.">
 
-  <!-- Google Fonts: Plus Jakarta Sans -->
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- pdf-lib CDN for client-side local PDF manipulation -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -174,6 +174,157 @@
       background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .globe-icon {
+      color: var(--badge-text);
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] * {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .queue-item {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .item-left {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .merge-main-row {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .success-header {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .success-actions {
+      flex-direction: row-reverse;
     }
 
     /* Header */
@@ -910,47 +1061,77 @@
 </head>
 <body>
 
-  <!-- Top Navigation with Back Link -->
+  <!-- Top Navigation with Back Link & Language Switcher -->
   <div class="top-nav">
     <a href="/" class="back-link" id="backToHome">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      <span>← Back to Tools</span>
+      <span data-i18n="backLink">← Back to Tools</span>
     </a>
     
-    <a href="/" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="vGradLeftP" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="100%" stop-color="#3b82f6" />
-          </linearGradient>
-          <linearGradient id="vGradRightP" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#818cf8" />
-            <stop offset="100%" stop-color="#c084fc" />
-          </linearGradient>
-          <linearGradient id="vGradCenterP" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#60a5fa" />
-            <stop offset="100%" stop-color="#a855f7" />
-          </linearGradient>
-        </defs>
-        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
-        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftP)" />
-        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightP)" />
-        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterP)" />
-        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
-      </svg>
-      <span>Vantor<span>Kit</span></span>
-    </a>
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeftP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRightP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenterP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftP)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightP)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterP)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Header -->
   <header>
     <div class="brand-badge">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      <span>PDF &amp; Files • 100% Client-Side • Zero Cloud Uploads</span>
+      <span data-i18n="brandBadge">PDF &amp; Files • 100% Client-Side • Zero Cloud Uploads</span>
     </div>
-    <h1>PDF Merge / <span>Combine Documents</span></h1>
-    <p class="subtitle">Combine multiple PDF documents into a single organized file in seconds. Completely private and processed locally on your device with zero data transmission.</p>
+    <h1 id="pageTitle">PDF Merge / <span>Combine Documents</span></h1>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Combine multiple PDF documents into a single organized file in seconds. Completely private and processed locally on your device with zero data transmission.</p>
   </header>
 
   <main>
@@ -960,11 +1141,11 @@
       <div class="dropzone-icon">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
       </div>
-      <div class="dropzone-title">Select or Drop PDF Files Here</div>
-      <div class="dropzone-subtitle">Choose multiple PDF files to combine. Files are processed locally in your browser memory for total confidentiality.</div>
+      <div class="dropzone-title" data-i18n="dropTitle">Select or Drop PDF Files Here</div>
+      <div class="dropzone-subtitle" data-i18n="dropSubtitle">Choose multiple PDF files to combine. Files are processed locally in your browser memory for total confidentiality.</div>
       <button type="button" class="dropzone-btn" id="btnBrowse">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-        <span>Browse PDF Files</span>
+        <span data-i18n="btnBrowse">Browse PDF Files</span>
       </button>
     </div>
 
@@ -972,17 +1153,17 @@
     <div class="queue-section" id="queueSection">
       <div class="queue-header">
         <div class="queue-title-wrap">
-          <span class="queue-title">Selected Documents</span>
+          <span class="queue-title" data-i18n="queueTitle">Selected Documents</span>
           <span class="queue-summary-pill" id="queueSummaryPill">0 files • 0 pages</span>
         </div>
         <div class="queue-actions">
           <button type="button" class="btn-secondary" id="btnAddMore">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>Add More</span>
+            <span data-i18n="btnAddMore">Add More</span>
           </button>
           <button type="button" class="btn-secondary" id="btnClearAll">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            <span>Clear All</span>
+            <span data-i18n="btnClearAll">Clear All</span>
           </button>
         </div>
       </div>
@@ -994,19 +1175,19 @@
       <div class="merge-action-card">
         <div class="merge-main-row">
           <div class="merge-summary-text">
-            <div class="merge-summary-title">Ready to Merge Documents</div>
-            <div class="merge-summary-desc" id="mergeSummaryDesc">Adjust sequence by dragging or using arrow buttons, then compile your final PDF.</div>
+            <div class="merge-summary-title" data-i18n="mergeSummaryTitle">Ready to Merge Documents</div>
+            <div class="merge-summary-desc" id="mergeSummaryDesc" data-i18n="mergeSummaryDesc">Adjust sequence by dragging or using arrow buttons, then compile your final PDF.</div>
           </div>
           <button type="button" class="btn-merge" id="btnMerge">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 2h8l4 4v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M4 8h2v14H4z"></path></svg>
-            <span>Merge PDFs Now</span>
+            <span data-i18n="btnMerge">Merge PDFs Now</span>
           </button>
         </div>
 
         <!-- Progress Bar Indicator -->
         <div class="progress-container" id="progressContainer">
           <div class="progress-info">
-            <span id="progressStatus">Merging documents...</span>
+            <span id="progressStatus" data-i18n="merging">Merging documents...</span>
             <span id="progressPercent">0%</span>
           </div>
           <div class="progress-track">
@@ -1022,26 +1203,26 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </div>
           <div>
-            <div class="success-title">PDF Documents Merged Successfully!</div>
-            <div class="success-subtitle">Your compiled PDF has been generated and is ready to download.</div>
+            <div class="success-title" data-i18n="successTitle">PDF Documents Merged Successfully!</div>
+            <div class="success-subtitle" data-i18n="successSubtitle">Your compiled PDF has been generated and is ready to download.</div>
           </div>
         </div>
 
         <div class="stats-grid">
           <div class="stat-box">
-            <div class="stat-label">Total Documents</div>
+            <div class="stat-label" data-i18n="statDocs">Total Documents</div>
             <div class="stat-value" id="statDocCount">0</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Combined Pages</div>
+            <div class="stat-label" data-i18n="statPages">Combined Pages</div>
             <div class="stat-value text-green" id="statPageCount">0</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Combined Size</div>
+            <div class="stat-label" data-i18n="statOriginal">Combined Size</div>
             <div class="stat-value" id="statOriginalSize">0 MB</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Merged PDF Size</div>
+            <div class="stat-label" data-i18n="statMerged">Merged PDF Size</div>
             <div class="stat-value" id="statMergedSize">0 MB</div>
           </div>
         </div>
@@ -1049,11 +1230,11 @@
         <div class="success-actions">
           <button type="button" class="btn-download" id="btnDownloadMerged">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Download Merged PDF</span>
+            <span data-i18n="btnDownload">Download Merged PDF</span>
           </button>
           <button type="button" class="btn-preview" id="btnPreviewMerged">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-            <span>Preview in New Tab</span>
+            <span data-i18n="btnPreview">Preview in New Tab</span>
           </button>
         </div>
       </div>
@@ -1131,13 +1312,208 @@
 
   <!-- Footer matching index.html -->
   <footer>
-    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+    <p data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
   </footer>
 
   <!-- PDF Merge Core Logic -->
   <script>
     (function () {
       'use strict';
+
+      // --- Internationalization (i18n) Dictionary ---
+      const I18N = {
+        en: {
+          backLink: "← Back to Tools",
+          clientBadge: "Client-Side • Privacy-First",
+          brandBadge: "PDF & Files • 100% Client-Side • Zero Cloud Uploads",
+          pageTitle: "PDF Merge / <span>Combine Documents</span>",
+          pageSubtitle: "Combine multiple PDF documents into a single organized file in seconds. Completely private and processed locally on your device with zero data transmission.",
+          dropTitle: "Select or Drop PDF Files Here",
+          dropSubtitle: "Choose multiple PDF files to combine. Files are processed locally in your browser memory for total confidentiality.",
+          btnBrowse: "Browse PDF Files",
+          queueTitle: "Selected Documents",
+          btnAddMore: "Add More",
+          btnClearAll: "Clear All",
+          mergeSummaryTitle: "Ready to Merge Documents",
+          mergeSummaryDesc: "Adjust sequence by dragging or using arrow buttons, then compile your final PDF.",
+          btnMerge: "Merge PDFs Now",
+          merging: "Merging documents...",
+          successTitle: "PDF Documents Merged Successfully!",
+          successSubtitle: "Your compiled PDF has been generated and is ready to download.",
+          statDocs: "Total Documents",
+          statPages: "Combined Pages",
+          statOriginal: "Combined Size",
+          statMerged: "Merged PDF Size",
+          btnDownload: "Download Merged PDF",
+          btnPreview: "Preview in New Tab",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally.",
+          page: "page",
+          pages: "pages",
+          files: "files",
+          dragReorder: "Drag to reorder",
+          moveUp: "Move Up",
+          moveDown: "Move Down",
+          removeDoc: "Remove Document",
+          skippedNotPdf: (name) => `Skipped "${name}" (not a PDF)`,
+          addedDocs: (n) => `Added ${n} document${n > 1 ? 's' : ''}`,
+          docRemoved: "Document removed",
+          allCleared: "All documents cleared",
+          minFilesWarning: "Please add at least 2 PDF documents to merge",
+          engineLoading: "PDF engine still loading, please wait a moment...",
+          initCompiler: "Initializing PDF compiler...",
+          procDoc: (i, total, name) => `Processing document ${i} of ${total}: ${name}...`,
+          savingStream: "Saving merged PDF stream...",
+          complete: "Complete!",
+          mergeSuccessToast: "Merged PDF downloaded successfully!",
+          downloading: "Downloading merged PDF...",
+          mergeFailed: "Failed to merge PDFs: "
+        },
+        ar: {
+          backLink: "← العودة إلى الأدوات",
+          clientBadge: "محلي بالكامل • الأولوية للخصوصية",
+          brandBadge: "ملفات PDF • محلي 100% في المتصفح • بدون رفع للسحابة",
+          pageTitle: "دمج ملفات PDF / <span>تجميع المستندات</span>",
+          pageSubtitle: "ادمج ملفات PDF متعددة في ملف واحد منظم خلال ثوانٍ معدودة. معالجة محلية خاصة بالكامل على جهازك دون أي نقل للبيانات عبر الإنترنت.",
+          dropTitle: "اختر أو اسحب ملفات PDF هنا",
+          dropSubtitle: "حدد ملفات PDF متعددة لدمجها. تتم معالجة الملفات محلياً في ذاكرة متصفحك لسرية تامة.",
+          btnBrowse: "تصفح ملفات PDF",
+          queueTitle: "المستندات المختارة",
+          btnAddMore: "إضافة المزيد",
+          btnClearAll: "مسح الكل",
+          mergeSummaryTitle: "جاهز لدمج المستندات",
+          mergeSummaryDesc: "اضبط الترتيب بالسحب أو بأزرار الأسهم، ثم قم بتجميع ملف PDF النهائي.",
+          btnMerge: "دمج ملفات PDF الآن",
+          merging: "جارٍ دمج المستندات...",
+          successTitle: "تم دمج مستندات PDF بنجاح!",
+          successSubtitle: "تم إنشاء ملف PDF المدمج وهو جاهز للتحميل فوراً.",
+          statDocs: "إجمالي المستندات",
+          statPages: "إجمالي الصفحات",
+          statOriginal: "الحجم الأصلي",
+          statMerged: "حجم الملف المدمج",
+          btnDownload: "تحميل ملف PDF المدمج",
+          btnPreview: "معاينة في علامة تبويب جديدة",
+          footerText: "© 2026 VantorKit. أدوات ويب سريعة، مجانية ومبنية للخصوصية. تتم جميع المعالجات محلياً في المتصفح.",
+          page: "صفحة",
+          pages: "صفحات",
+          files: "ملفات",
+          dragReorder: "اسحب لإعادة الترتيب",
+          moveUp: "تحريك لأعلى",
+          moveDown: "تحريك لأسفل",
+          removeDoc: "حذف المستند",
+          skippedNotPdf: (name) => `تم تخطي "${name}" (ليس ملف PDF)`,
+          addedDocs: (n) => `تمت إضافة ${n} مستند${n > 1 ? 'ات' : ''}`,
+          docRemoved: "تم حذف المستند",
+          allCleared: "تم مسح جميع المستندات",
+          minFilesWarning: "يرجى إضافة مستندين PDF على الأقل للدمج",
+          engineLoading: "محرك PDF قيد التحميل، يرجى الانتظار لحظة...",
+          initCompiler: "تهيئة مجمّع PDF...",
+          procDoc: (i, total, name) => `معالجة المستند ${i} من ${total}: ${name}...`,
+          savingStream: "حفظ ملف PDF المدمج...",
+          complete: "اكتمل!",
+          mergeSuccessToast: "تم تحميل ملف PDF المدمج بنجاح!",
+          downloading: "جارٍ تنزيل ملف PDF المدمج...",
+          mergeFailed: "فشل دمج ملفات PDF: "
+        },
+        fr: {
+          backLink: "← Retour aux outils",
+          clientBadge: "Côté Client • Priorité Confidentialité",
+          brandBadge: "PDF & Fichiers • 100% Côté Client • Zéro Téléversement",
+          pageTitle: "Fusion PDF / <span>Combiner des documents</span>",
+          pageSubtitle: "Combinez plusieurs documents PDF en un seul fichier organisé en quelques secondes. Traitement 100% privé et local sur votre appareil sans transfert réseau.",
+          dropTitle: "Sélectionnez ou déposez des fichiers PDF ici",
+          dropSubtitle: "Choisissez plusieurs fichiers PDF à assembler. Vos documents sont traités dans la mémoire locale de votre navigateur en toute confidentialité.",
+          btnBrowse: "Parcourir les fichiers PDF",
+          queueTitle: "Documents sélectionnés",
+          btnAddMore: "Ajouter d'autres",
+          btnClearAll: "Tout effacer",
+          mergeSummaryTitle: "Prêt à fusionner les documents",
+          mergeSummaryDesc: "Ajustez la séquence par glisser-déposer ou avec les flèches, puis compilez votre PDF final.",
+          btnMerge: "Fusionner les PDF maintenant",
+          merging: "Fusion des documents en cours...",
+          successTitle: "Documents PDF fusionnés avec succès !",
+          successSubtitle: "Votre PDF combiné a été généré et est prêt à être téléchargé.",
+          statDocs: "Total Documents",
+          statPages: "Pages combinées",
+          statOriginal: "Taille initiale",
+          statMerged: "Taille du PDF fusionné",
+          btnDownload: "Télécharger le PDF fusionné",
+          btnPreview: "Aperçu dans un nouvel onglet",
+          footerText: "© 2026 VantorKit. Utilitaires Web rapides, confidentiels et gratuits. Tous les traitements sont exécutés localement.",
+          page: "page",
+          pages: "pages",
+          files: "fichiers",
+          dragReorder: "Glisser pour réorganiser",
+          moveUp: "Monter",
+          moveDown: "Descendre",
+          removeDoc: "Supprimer le document",
+          skippedNotPdf: (name) => `"${name}" ignoré (pas un fichier PDF)`,
+          addedDocs: (n) => `${n} document${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''}`,
+          docRemoved: "Document supprimé",
+          allCleared: "Tous les documents ont été effacés",
+          minFilesWarning: "Veuillez ajouter au moins 2 documents PDF à fusionner",
+          engineLoading: "Moteur PDF en cours de chargement, veuillez patienter...",
+          initCompiler: "Initialisation du compilateur PDF...",
+          procDoc: (i, total, name) => `Traitement du document ${i} sur ${total} : ${name}...`,
+          savingStream: "Enregistrement du flux PDF fusionné...",
+          complete: "Terminé !",
+          mergeSuccessToast: "PDF fusionné téléchargé avec succès !",
+          downloading: "Téléchargement du PDF fusionné...",
+          mergeFailed: "Échec de la fusion des PDF : "
+        },
+        it: {
+          backLink: "← Torna agli strumenti",
+          clientBadge: "Lato Client • Privacy Garantita",
+          brandBadge: "PDF & File • 100% Lato Client • Zero Caricamenti Cloud",
+          pageTitle: "Unisci PDF / <span>Combina documenti</span>",
+          pageSubtitle: "Combina più documenti PDF in un unico file organizzato in pochi secondi. Totalmente privato ed elaborato in locale sul tuo dispositivo senza trasmissione dati.",
+          dropTitle: "Seleziona o trascina i file PDF qui",
+          dropSubtitle: "Scegli più file PDF da combinare. I documenti vengono elaborati nella memoria del browser per la massima riservatezza.",
+          btnBrowse: "Sfoglia file PDF",
+          queueTitle: "Documenti selezionati",
+          btnAddMore: "Aggiungi altri",
+          btnClearAll: "Cancella tutto",
+          mergeSummaryTitle: "Pronto per unire i documenti",
+          mergeSummaryDesc: "Regola la sequenza trascinando o usando le frecce, quindi compila il tuo PDF finale.",
+          btnMerge: "Unisci PDF adesso",
+          merging: "Unione documenti in corso...",
+          successTitle: "Documenti PDF uniti con successo!",
+          successSubtitle: "Il tuo PDF combinato è stato generato ed è pronto per il download.",
+          statDocs: "Documenti totali",
+          statPages: "Pagine totali",
+          statOriginal: "Dimensione originale",
+          statMerged: "Dimensione PDF unito",
+          btnDownload: "Scarica PDF unito",
+          btnPreview: "Anteprima in una nuova scheda",
+          footerText: "© 2026 VantorKit. Utility web veloci, private e gratuite. Tutte le elaborazioni avvengono localmente.",
+          page: "pagina",
+          pages: "pagine",
+          files: "file",
+          dragReorder: "Trascina per riordinare",
+          moveUp: "Sposta su",
+          moveDown: "Sposta giù",
+          removeDoc: "Rimuovi documento",
+          skippedNotPdf: (name) => `Saltato "${name}" (non è un PDF)`,
+          addedDocs: (n) => `Aggiunti ${n} document${n > 1 ? 'i' : 'o'}`,
+          docRemoved: "Documento rimosso",
+          allCleared: "Tutti i documenti rimossi",
+          minFilesWarning: "Aggiungi almeno 2 documenti PDF da unire",
+          engineLoading: "Motore PDF in caricamento, attendere un istante...",
+          initCompiler: "Inizializzazione compilatore PDF...",
+          procDoc: (i, total, name) => `Elaborazione documento ${i} di ${total}: ${name}...`,
+          savingStream: "Salvataggio flusso PDF unito...",
+          complete: "Completato!",
+          mergeSuccessToast: "PDF unito scaricato con successo!",
+          downloading: "Download del PDF unito in corso...",
+          mergeFailed: "Impossibile unire i PDF: "
+        }
+      };
+
+      const LANG_LABELS = {
+        en: 'English',
+        ar: 'العربية',
+        fr: 'Français',
+        it: 'Italiano'
+      };
 
       // --- State ---
       let fileQueue = []; // [{ id, file, name, size, pages, arrayBuffer }]
@@ -1172,6 +1548,86 @@
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
 
+      // --- Language Switcher DOM Elements ---
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langDropdown = document.getElementById('langDropdown');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      // --- Language Switcher Events ---
+      function toggleLangMenu(force) {
+        const isExpanded = force !== undefined ? force : !langDropdown.classList.contains('active');
+        langDropdown.classList.toggle('active', isExpanded);
+        langToggleBtn.setAttribute('aria-expanded', isExpanded);
+      }
+
+      if (langToggleBtn) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleLangMenu();
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (langDropdown && !langDropdown.contains(e.target)) {
+          toggleLangMenu(false);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && langDropdown && langDropdown.classList.contains('active')) {
+          toggleLangMenu(false);
+          langToggleBtn.focus();
+        }
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.getAttribute('data-lang');
+          if (lang && I18N[lang]) {
+            setLanguage(lang);
+            toggleLangMenu(false);
+          }
+        });
+      });
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        localStorage.setItem('vantorkit_lang', lang);
+
+        const dict = I18N[lang];
+        const isRtl = lang === 'ar';
+
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        if (currentLangLabel) {
+          currentLangLabel.textContent = LANG_LABELS[lang] || 'English';
+        }
+
+        langOptions.forEach(opt => {
+          opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+        });
+
+        // Translate data-i18n elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            if (key === 'pageTitle') {
+              el.innerHTML = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
+        });
+
+        // Re-render queue to update localized tooltips & counters
+        if (fileQueue.length > 0) {
+          renderQueue();
+        }
+      }
+
       // --- Utilities ---
       function formatBytes(bytes) {
         if (!bytes || bytes === 0) return '0 B';
@@ -1198,10 +1654,13 @@
       async function processFiles(files) {
         if (!files || files.length === 0) return;
 
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
+
         let addedCount = 0;
         for (const file of files) {
           if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-            showToast(`Skipped "${file.name}" (not a PDF)`);
+            showToast(dict.skippedNotPdf(file.name));
             continue;
           }
 
@@ -1238,12 +1697,15 @@
         }
 
         if (addedCount > 0) {
-          showToast(`Added ${addedCount} document${addedCount > 1 ? 's' : ''}`);
+          showToast(dict.addedDocs(addedCount));
         }
       }
 
       // --- Render Queue UI ---
       function renderQueue() {
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
+
         if (fileQueue.length === 0) {
           queueSection.style.display = 'none';
           successCard.style.display = 'none';
@@ -1255,7 +1717,7 @@
         // Update Summary Pill
         const totalSize = fileQueue.reduce((acc, f) => acc + f.size, 0);
         const knownPages = fileQueue.reduce((acc, f) => acc + (typeof f.pages === 'number' ? f.pages : 0), 0);
-        queueSummaryPill.textContent = `${fileQueue.length} files • ${knownPages > 0 ? knownPages + ' pages • ' : ''}${formatBytes(totalSize)}`;
+        queueSummaryPill.textContent = `${fileQueue.length} ${dict.files} • ${knownPages > 0 ? knownPages + ' ' + (knownPages === 1 ? dict.page : dict.pages) + ' • ' : ''}${formatBytes(totalSize)}`;
 
         // Render List Items
         queueList.innerHTML = '';
@@ -1266,9 +1728,13 @@
           el.dataset.id = item.id;
           el.dataset.index = index;
 
+          const pageCountText = typeof item.pages === 'number'
+            ? `${item.pages} ${item.pages === 1 ? dict.page : dict.pages}`
+            : item.pages;
+
           el.innerHTML = `
             <div class="item-left">
-              <span class="drag-handle" title="Drag to reorder">
+              <span class="drag-handle" title="${dict.dragReorder}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="6" r="1.5"></circle><circle cx="15" cy="6" r="1.5"></circle><circle cx="9" cy="12" r="1.5"></circle><circle cx="15" cy="12" r="1.5"></circle><circle cx="9" cy="18" r="1.5"></circle><circle cx="15" cy="18" r="1.5"></circle></svg>
               </span>
               <span class="order-badge">#${index + 1}</span>
@@ -1278,20 +1744,20 @@
               <div class="item-details">
                 <span class="item-name" title="${item.name}">${item.name}</span>
                 <div class="item-meta">
-                  <span class="item-page-badge">${item.pages} ${item.pages === 1 ? 'page' : 'pages'}</span>
+                  <span class="item-page-badge">${pageCountText}</span>
                   <span>${formatBytes(item.size)}</span>
                 </div>
               </div>
             </div>
 
             <div class="item-actions">
-              <button type="button" class="btn-icon btn-move-up" title="Move Up" ${index === 0 ? 'disabled' : ''}>
+              <button type="button" class="btn-icon btn-move-up" title="${dict.moveUp}" ${index === 0 ? 'disabled' : ''}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
               </button>
-              <button type="button" class="btn-icon btn-move-down" title="Move Down" ${index === fileQueue.length - 1 ? 'disabled' : ''}>
+              <button type="button" class="btn-icon btn-move-down" title="${dict.moveDown}" ${index === fileQueue.length - 1 ? 'disabled' : ''}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
               </button>
-              <button type="button" class="btn-icon btn-delete" title="Remove Document">
+              <button type="button" class="btn-icon btn-delete" title="${dict.removeDoc}">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
@@ -1334,19 +1800,23 @@
       }
 
       function removeItem(id) {
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
         fileQueue = fileQueue.filter(f => f.id !== id);
         renderQueue();
-        showToast('Document removed');
+        showToast(dict.docRemoved);
       }
 
       function clearAll() {
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
         fileQueue = [];
         if (mergedPdfBlobUrl) {
           URL.revokeObjectURL(mergedPdfBlobUrl);
           mergedPdfBlobUrl = null;
         }
         renderQueue();
-        showToast('All documents cleared');
+        showToast(dict.allCleared);
       }
 
       // --- Drag and Drop Reordering Handlers ---
@@ -1368,10 +1838,10 @@
         e.preventDefault();
         if (!draggedElement || draggedElement === this) return;
 
-        const fromIndex = parseInt(draggedElement.dataset.index, 10);
-        const toIndex = parseInt(this.dataset.index, 10);
+        const fromIdx = parseInt(draggedElement.dataset.index, 10);
+        const toIdx = parseInt(this.dataset.index, 10);
 
-        moveItem(fromIndex, toIndex);
+        moveItem(fromIdx, toIdx);
       }
 
       function handleDragEnd() {
@@ -1379,13 +1849,8 @@
         draggedElement = null;
       }
 
-      // --- File Selection Handlers ---
-      btnBrowse.addEventListener('click', (e) => {
-        e.stopPropagation();
-        fileInput.click();
-      });
-
-      dropZone.addEventListener('click', () => {
+      // --- Dropzone & File Input Events ---
+      btnBrowse.addEventListener('click', () => {
         fileInput.click();
       });
 
@@ -1396,21 +1861,23 @@
       btnClearAll.addEventListener('click', clearAll);
 
       fileInput.addEventListener('change', (e) => {
-        processFiles(e.target.files);
-        fileInput.value = '';
+        if (e.target.files && e.target.files.length > 0) {
+          processFiles(Array.from(e.target.files));
+          fileInput.value = '';
+        }
       });
 
-      // DropZone Drag Events
-      ['dragenter', 'dragover'].forEach(name => {
-        dropZone.addEventListener(name, (e) => {
+      // Drag and drop into dropzone
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
           e.preventDefault();
           e.stopPropagation();
           dropZone.classList.add('drag-active');
         });
       });
 
-      ['dragleave', 'drop'].forEach(name => {
-        dropZone.addEventListener(name, (e) => {
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
           e.preventDefault();
           e.stopPropagation();
           dropZone.classList.remove('drag-active');
@@ -1425,13 +1892,16 @@
 
       // --- PDF Merging Execution ---
       btnMerge.addEventListener('click', async () => {
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
+
         if (fileQueue.length < 2) {
-          showToast('Please add at least 2 PDF documents to merge');
+          showToast(dict.minFilesWarning);
           return;
         }
 
         if (!window.PDFLib) {
-          showToast('PDF engine still loading, please wait a moment...');
+          showToast(dict.engineLoading);
           return;
         }
 
@@ -1446,7 +1916,7 @@
         }
 
         try {
-          updateProgress(10, 'Initializing PDF compiler...');
+          updateProgress(10, dict.initCompiler);
           const { PDFDocument } = PDFLib;
           const mergedDoc = await PDFDocument.create();
 
@@ -1456,7 +1926,7 @@
           for (let i = 0; i < totalDocs; i++) {
             const item = fileQueue[i];
             const percent = Math.round(15 + ((i + 1) / totalDocs) * 65);
-            updateProgress(percent, `Processing document ${i + 1} of ${totalDocs}: ${item.name}...`);
+            updateProgress(percent, dict.procDoc(i + 1, totalDocs, item.name));
 
             let buf = item.arrayBuffer;
             if (!buf) {
@@ -1472,10 +1942,10 @@
             copiedPages.forEach(p => mergedDoc.addPage(p));
           }
 
-          updateProgress(85, 'Saving merged PDF stream...');
+          updateProgress(85, dict.savingStream);
           const mergedBytes = await mergedDoc.save();
 
-          updateProgress(100, 'Complete!');
+          updateProgress(100, dict.complete);
 
           // Create Blob URL
           if (mergedPdfBlobUrl) {
@@ -1496,11 +1966,11 @@
 
           // Auto-trigger download
           triggerDownload(mergedPdfBlobUrl, 'vantorkit-merged.pdf');
-          showToast('Merged PDF downloaded successfully!');
+          showToast(dict.mergeSuccessToast);
 
         } catch (err) {
           console.error('PDF Merge Error:', err);
-          showToast('Failed to merge PDFs: ' + err.message);
+          showToast(dict.mergeFailed + err.message);
         } finally {
           btnMerge.disabled = false;
           setTimeout(() => {
@@ -1520,9 +1990,11 @@
       }
 
       btnDownloadMerged.addEventListener('click', () => {
+        const curLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[curLang] || I18N.en;
         if (mergedPdfBlobUrl) {
           triggerDownload(mergedPdfBlobUrl, 'vantorkit-merged.pdf');
-          showToast('Downloading merged PDF...');
+          showToast(dict.downloading);
         }
       });
 
@@ -1531,6 +2003,10 @@
           window.open(mergedPdfBlobUrl, '_blank');
         }
       });
+
+      // --- Initial Execution with Saved Language ---
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(initialLang);
 
     })();
   </script>

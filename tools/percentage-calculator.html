@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit</title>
-  <meta name="description"
-    content="Calculate percentages instantly with zero page reloads. Free online tool for calculating P% of X, X is what % of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
-  <meta name="keywords"
-    content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
+  <meta name="description" content="Calculate percentages instantly with zero page reloads. Free online tool for calculating P% of X, X is what % of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
+  <meta name="keywords" content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
   <link rel="canonical" href="https://vantorkit.com/tools/percentage-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit">
-  <meta property="og:description"
-    content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
+  <meta property="og:description" content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
   <meta property="og:url" content="https://vantorkit.com/tools/percentage-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Percentage Calculator — Free Online Real-Time Percent Tool">
-  <meta name="twitter:description"
-    content="Fast, real-time percentage calculations with zero refresh. Free browser-based utility from VantorKit.">
+  <meta name="twitter:description" content="Fast, real-time percentage calculations with zero refresh. Free browser-based utility from VantorKit.">
+
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
@@ -76,15 +76,15 @@
 
   <style>
     :root {
-      --bg: #090a0f;
-      --card-bg: #12141c;
-      --card-border: #1e2230;
-      --card-hover: #262b3d;
-      --text-main: #f4f4f5;
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent: #3b82f6;
       --accent-glow: rgba(59, 130, 246, 0.15);
-      --badge-bg: #1e293b;
+      --badge-bg: rgba(30, 41, 59, 0.7);
       --badge-text: #60a5fa;
       --success: #10b981;
       --success-glow: rgba(16, 185, 129, 0.15);
@@ -99,11 +99,16 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     body {
       background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -129,69 +134,204 @@
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.9rem;
-      font-weight: 500;
-      padding: 0.5rem 0.85rem;
-      background: var(--card-bg);
+      font-weight: 600;
+      padding: 0.5rem 0.95rem;
+      background: rgba(15, 18, 28, 0.8);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
+      border-radius: 10px;
       transition: all 0.2s ease;
+      backdrop-filter: blur(12px);
     }
 
     .back-link:hover {
       color: #fff;
       border-color: var(--accent);
       background: var(--card-hover);
-      transform: translateX(-2px);
+      transform: translateX(-3px);
     }
 
     .nav-brand {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 1.2rem;
+      gap: 0.65rem;
+      font-size: 1.25rem;
       font-weight: 800;
       text-decoration: none;
       color: var(--text-main);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
 
     .nav-brand svg {
-      width: 30px;
-      height: 30px;
-      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
     }
 
-    .nav-brand span {
-      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .globe-icon {
+      color: var(--badge-text);
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] * {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
     /* Header */
     header {
-      padding: 2rem 1.5rem 2.5rem;
+      padding: 2.5rem 1.5rem 2.5rem;
       text-align: center;
-      border-bottom: 1px solid var(--card-border);
-      background: radial-gradient(circle at 50% 0%, #1e1e38 0%, transparent 70%);
+      position: relative;
     }
 
     .brand-badge {
-      display: inline-block;
-      padding: 4px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 5px 16px;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--badge-text);
       background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
       border-radius: 999px;
       margin-bottom: 1rem;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
     h1 {
-      font-size: 2.75rem;
+      font-size: 3rem;
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       margin-bottom: 0.75rem;
+      line-height: 1.2;
     }
 
     h1 span {
@@ -213,7 +353,7 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 1.5rem 1.5rem 4rem;
     }
 
     /* Modules Section */
@@ -241,6 +381,7 @@
       transition: all 0.25s ease;
       position: relative;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(14px);
     }
 
     .calc-card:hover {
@@ -351,8 +492,18 @@
       pointer-events: none;
     }
 
+    html[dir="rtl"] .input-suffix {
+      right: auto;
+      left: 1rem;
+    }
+
     .calc-input.has-suffix {
       padding-right: 2.25rem;
+    }
+
+    html[dir="rtl"] .calc-input.has-suffix {
+      padding-right: 1rem;
+      padding-left: 2.25rem;
     }
 
     /* Quick Preset Chips */
@@ -575,6 +726,7 @@
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 1.5rem;
+      backdrop-filter: blur(12px);
     }
 
     .formula-card h3 {
@@ -624,6 +776,7 @@
       padding: 1.5rem;
       margin-bottom: 3.5rem;
       overflow-x: auto;
+      backdrop-filter: blur(12px);
     }
 
     .table-container h3 {
@@ -643,6 +796,10 @@
       border-collapse: collapse;
       text-align: left;
       font-size: 0.9rem;
+    }
+
+    html[dir="rtl"] table {
+      text-align: right;
     }
 
     th {
@@ -687,6 +844,7 @@
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 1.4rem;
+      backdrop-filter: blur(12px);
     }
 
     .faq-item h4 {
@@ -709,16 +867,7 @@
       padding: 2.5rem 1.5rem;
       color: var(--text-muted);
       font-size: 0.85rem;
-      background: #06070a;
-    }
-
-    footer a {
-      color: var(--badge-text);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
+      background: rgba(7, 9, 14, 0.85);
     }
 
     /* Toast notification */
@@ -726,13 +875,13 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: var(--card-hover);
+      background: rgba(18, 24, 38, 0.95);
       color: #fff;
       border: 1px solid var(--accent);
       padding: 0.75rem 1.25rem;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.88rem;
-      font-weight: 500;
+      font-weight: 600;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
       transform: translateY(100px);
       opacity: 0;
@@ -754,74 +903,94 @@
       h1 {
         font-size: 2.15rem;
       }
-
       p.subtitle {
         font-size: 0.98rem;
       }
-
       .calc-card {
         padding: 1.25rem;
       }
-
       .top-nav {
         padding: 1rem 1rem 0;
       }
-
       main {
         padding: 1.75rem 1rem;
       }
-
       .result-value {
         font-size: 1.5rem;
       }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Top Navigation with Back Link -->
+  <!-- Top Navigation with Back Link & Language Switcher -->
   <div class="top-nav">
     <a href="/" class="back-link" id="backToHome">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="19" y1="12" x2="5" y2="12"></line>
-        <polyline points="12 19 5 12 12 5"></polyline>
-      </svg>
-      <span>← Back to All Tools</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
     </a>
-    <a href="/" class="nav-brand">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="vGradLeftTool" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="100%" stop-color="#3b82f6" />
-          </linearGradient>
-          <linearGradient id="vGradRightTool" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#818cf8" />
-            <stop offset="100%" stop-color="#c084fc" />
-          </linearGradient>
-          <linearGradient id="vGradCenterTool" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#60a5fa" />
-            <stop offset="100%" stop-color="#a855f7" />
-          </linearGradient>
-        </defs>
-        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
-        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftTool)" />
-        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightTool)" />
-        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterTool)" />
-        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
-      </svg>
-      <span>Vantor<span>Kit</span></span>
-    </a>
+
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeftP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRightP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenterP" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftP)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightP)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterP)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Header -->
   <header>
-    <div class="brand-badge">Math &amp; Finance • Client-Side • Zero Latency</div>
-    <h1>Percentage <span>Calculator</span></h1>
-    <p class="subtitle">Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard
-      percentages, proportions, and rate changes instantly.</p>
+    <div class="brand-badge" id="heroBadge" data-i18n="brandBadge">Math &amp; Finance • Client-Side • Zero Latency</div>
+    <h1 id="heroTitle">Percentage <span>Calculator</span></h1>
+    <p class="subtitle" id="heroSubtitle" data-i18n="heroSubtitle">Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard percentages, proportions, and rate changes instantly.</p>
   </header>
 
   <main>
@@ -833,22 +1002,18 @@
         <div>
           <div class="card-header">
             <div>
-              <span class="module-badge">Module 1</span>
-              <h2 id="mod1-title" class="card-title">What is P% of X?</h2>
+              <span class="module-badge" data-i18n="mod1Badge">Module 1</span>
+              <h2 id="mod1-title" class="card-title" data-i18n="mod1Title">What is P% of X?</h2>
             </div>
             <button type="button" class="reset-btn" id="m1Reset" aria-label="Reset Module 1" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                <path d="M3 3v5h5"></path>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
             </button>
           </div>
 
           <div class="calc-inputs">
             <div class="input-field-wrap">
               <label for="m1Percent" class="input-label">
-                <span>Percentage (P)</span>
+                <span data-i18n="mod1LabelP">Percentage (P)</span>
                 <span class="preset-chips">
                   <button type="button" class="preset-chip" data-target="m1Percent" data-val="5">5%</button>
                   <button type="button" class="preset-chip" data-target="m1Percent" data-val="10">10%</button>
@@ -858,19 +1023,17 @@
                 </span>
               </label>
               <div class="input-control">
-                <input type="number" id="m1Percent" class="calc-input has-suffix" placeholder="e.g. 15" value="15"
-                  step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m1Percent" class="calc-input has-suffix" placeholder="e.g. 15" value="15" step="any" inputmode="decimal" autocomplete="off">
                 <span class="input-suffix">%</span>
               </div>
             </div>
 
             <div class="input-field-wrap">
               <label for="m1Base" class="input-label">
-                <span>Base Value (X)</span>
+                <span data-i18n="mod1LabelX">Base Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m1Base" class="calc-input" placeholder="e.g. 200" value="200" step="any"
-                  inputmode="decimal" autocomplete="off">
+                <input type="number" id="m1Base" class="calc-input" placeholder="e.g. 200" value="200" step="any" inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -879,17 +1042,13 @@
         <!-- Result Box -->
         <div class="result-box">
           <div class="result-header">
-            <span class="result-label">Calculated Result</span>
+            <span class="result-label" data-i18n="calcResultLabel">Calculated Result</span>
           </div>
           <div class="result-main">
             <div class="result-value" id="m1Result">30</div>
             <button type="button" class="copy-btn" id="m1Copy" aria-label="Copy result 30">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span data-i18n="copyBtn">Copy</span>
             </button>
           </div>
           <div class="result-formula" id="m1Formula">(15 ÷ 100) × 200 = 30</div>
@@ -902,36 +1061,30 @@
         <div>
           <div class="card-header">
             <div>
-              <span class="module-badge">Module 2</span>
-              <h2 id="mod2-title" class="card-title">X is what percent of Y?</h2>
+              <span class="module-badge" data-i18n="mod2Badge">Module 2</span>
+              <h2 id="mod2-title" class="card-title" data-i18n="mod2Title">X is what percent of Y?</h2>
             </div>
             <button type="button" class="reset-btn" id="m2Reset" aria-label="Reset Module 2" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                <path d="M3 3v5h5"></path>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
             </button>
           </div>
 
           <div class="calc-inputs">
             <div class="input-field-wrap">
               <label for="m2Part" class="input-label">
-                <span>Part Value (X)</span>
+                <span data-i18n="mod2LabelX">Part Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m2Part" class="calc-input" placeholder="e.g. 45" value="45" step="any"
-                  inputmode="decimal" autocomplete="off">
+                <input type="number" id="m2Part" class="calc-input" placeholder="e.g. 45" value="45" step="any" inputmode="decimal" autocomplete="off">
               </div>
             </div>
 
             <div class="input-field-wrap">
               <label for="m2Total" class="input-label">
-                <span>Total / Whole Value (Y)</span>
+                <span data-i18n="mod2LabelY">Total / Whole Value (Y)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m2Total" class="calc-input" placeholder="e.g. 180" value="180" step="any"
-                  inputmode="decimal" autocomplete="off">
+                <input type="number" id="m2Total" class="calc-input" placeholder="e.g. 180" value="180" step="any" inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -940,17 +1093,13 @@
         <!-- Result Box -->
         <div class="result-box">
           <div class="result-header">
-            <span class="result-label">Calculated Proportion</span>
+            <span class="result-label" data-i18n="calcProportionLabel">Calculated Proportion</span>
           </div>
           <div class="result-main">
             <div class="result-value" id="m2Result">25%</div>
             <button type="button" class="copy-btn" id="m2Copy" aria-label="Copy result 25%">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span data-i18n="copyBtn">Copy</span>
             </button>
           </div>
           <div class="result-formula" id="m2Formula">(45 ÷ 180) × 100 = 25%</div>
@@ -963,50 +1112,37 @@
         <div>
           <div class="card-header">
             <div>
-              <span class="module-badge">Module 3</span>
-              <h2 id="mod3-title" class="card-title">Percentage Increase / Decrease</h2>
+              <span class="module-badge" data-i18n="mod3Badge">Module 3</span>
+              <h2 id="mod3-title" class="card-title" data-i18n="mod3Title">Percentage Increase / Decrease</h2>
             </div>
             <button type="button" class="reset-btn" id="m3Reset" aria-label="Reset Module 3" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                <path d="M3 3v5h5"></path>
-              </svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
             </button>
           </div>
 
           <div class="calc-inputs">
             <div class="input-field-wrap">
               <label for="m3Initial" class="input-label">
-                <span>Initial Value (X)</span>
+                <span data-i18n="mod3LabelX">Initial Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m3Initial" class="calc-input" placeholder="e.g. 80" value="80" step="any"
-                  inputmode="decimal" autocomplete="off">
+                <input type="number" id="m3Initial" class="calc-input" placeholder="e.g. 80" value="80" step="any" inputmode="decimal" autocomplete="off">
               </div>
             </div>
 
             <div class="swap-btn-wrap">
-              <button type="button" class="swap-btn" id="m3Swap" title="Swap Initial and Final values"
-                aria-label="Swap values">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="17 1 21 5 17 9"></polyline>
-                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-                  <polyline points="7 23 3 19 7 15"></polyline>
-                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-                </svg>
-                <span>Swap Values</span>
+              <button type="button" class="swap-btn" id="m3Swap" title="Swap Initial and Final values" aria-label="Swap values">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                <span data-i18n="swapBtn">Swap Values</span>
               </button>
             </div>
 
             <div class="input-field-wrap">
               <label for="m3Final" class="input-label">
-                <span>Final Value (Y)</span>
+                <span data-i18n="mod3LabelY">Final Value (Y)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m3Final" class="calc-input" placeholder="e.g. 100" value="100" step="any"
-                  inputmode="decimal" autocomplete="off">
+                <input type="number" id="m3Final" class="calc-input" placeholder="e.g. 100" value="100" step="any" inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -1015,30 +1151,21 @@
         <!-- Result Box -->
         <div class="result-box">
           <div class="result-header">
-            <span class="result-label">Rate of Change</span>
+            <span class="result-label" data-i18n="rateChangeLabel">Rate of Change</span>
             <span class="change-badge increase" id="m3Badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="19" x2="12" y2="5"></line>
-                <polyline points="5 12 12 5 19 12"></polyline>
-              </svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
               <span>+25% Increase</span>
             </span>
           </div>
           <div class="result-main">
             <div class="result-value text-success" id="m3Result">+25.00%</div>
             <button type="button" class="copy-btn" id="m3Copy" aria-label="Copy result +25.00%">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Copy</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span data-i18n="copyBtn">Copy</span>
             </button>
           </div>
           <div class="result-formula" id="m3Formula">((100 - 80) ÷ |80|) × 100 = +25.00%</div>
-          <div class="result-sentence" id="m3Sentence">An increase of <strong>+25.00%</strong> (difference of +20).
-          </div>
+          <div class="result-sentence" id="m3Sentence">An increase of <strong>+25.00%</strong> (difference of +20).</div>
         </div>
       </section>
 
@@ -1048,9 +1175,7 @@
     <article class="info-section" aria-labelledby="seo-heading">
       <div class="info-header">
         <h2 id="seo-heading">Understanding Percentage Formulas &amp; Practical Guide</h2>
-        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three
-          foundational formulas below for financial calculations, retail discounts, markups, and statistical
-          comparisons.</p>
+        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three foundational formulas below for financial calculations, retail discounts, markups, and statistical comparisons.</p>
       </div>
 
       <!-- 3 Formula Explanations -->
@@ -1077,8 +1202,7 @@
 
         <div class="formula-card">
           <h3>3. Percentage Change (Growth/Decline)</h3>
-          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.
-          </p>
+          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.</p>
           <div class="formula-display">Δ% = ((Y - X) / |X|) × 100</div>
           <div class="formula-example">
             <strong>Example:</strong> Price drops from $80 to $60 on Black Friday:<br>
@@ -1090,8 +1214,7 @@
       <!-- Quick Reference Table -->
       <div class="table-container">
         <h3>Common Percentage, Fraction, and Decimal Equivalents</h3>
-        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified
-          fractions.</p>
+        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified fractions.</p>
         <table>
           <thead>
             <tr>
@@ -1175,29 +1298,22 @@
       <div class="faq-grid">
         <div class="faq-item">
           <h4>What is the difference between percentage and percentage points?</h4>
-          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference
-            between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage
-            point, which corresponds to a 25% relative increase.</p>
+          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage point, which corresponds to a 25% relative increase.</p>
         </div>
 
         <div class="faq-item">
           <h4>Can a percentage increase exceed 100%?</h4>
-          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase
-            greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
+          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
         </div>
 
         <div class="faq-item">
           <h4>How do I calculate percentage change when the initial value is zero?</h4>
-          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an
-            increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage
-            change.</p>
+          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage change.</p>
         </div>
 
         <div class="faq-item">
           <h4>How do I reverse a percentage discount?</h4>
-          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)).
-            For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.
-          </p>
+          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)). For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.</p>
         </div>
       </div>
     </article>
@@ -1205,22 +1321,190 @@
 
   <!-- Notification Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-      stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
     <span id="toastMsg">Copied to clipboard</span>
   </div>
 
   <!-- Footer matching index.html -->
   <footer>
-    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+    <p data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
   </footer>
 
-  <!-- Real-Time Calculation Logic -->
+  <!-- Real-Time Calculation & Global i18n Logic -->
   <script>
     (function () {
       'use strict';
+
+      // --- Translations Dictionary (EN, AR, FR, IT) ---
+      const I18N = {
+        en: {
+          langLabel: "English",
+          backLink: "← Back to Tools",
+          brandBadge: "Math & Finance • Client-Side • Zero Latency",
+          heroTitle: 'Percentage <span>Calculator</span>',
+          heroSubtitle: "Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard percentages, proportions, and rate changes instantly.",
+          mod1Badge: "Module 1",
+          mod1Title: "What is P% of X?",
+          mod1LabelP: "Percentage (P)",
+          mod1LabelX: "Base Value (X)",
+          mod2Badge: "Module 2",
+          mod2Title: "X is what percent of Y?",
+          mod2LabelX: "Part Value (X)",
+          mod2LabelY: "Total / Whole Value (Y)",
+          mod3Badge: "Module 3",
+          mod3Title: "Percentage Increase / Decrease",
+          mod3LabelX: "Initial Value (X)",
+          mod3LabelY: "Final Value (Y)",
+          swapBtn: "Swap Values",
+          calcResultLabel: "Calculated Result",
+          calcProportionLabel: "Calculated Proportion",
+          rateChangeLabel: "Rate of Change",
+          copyBtn: "Copy",
+          copied: "Copied!",
+          toastCopied: "Copied to clipboard!",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally."
+        },
+        ar: {
+          langLabel: "العربية",
+          backLink: "← العودة إلى جميع الأدوات",
+          brandBadge: "الرياضيات والمالية • معالجة محلية • استجابة فورية",
+          heroTitle: 'حاسبة <span>النسبة المئوية</span>',
+          heroSubtitle: "حسابات دقيقة وفورية للنسب المئوية بدون إعادة تحميل الصفحة. احسب النسب الأساسية والتغير النسبي والفروقات بلمح البصر.",
+          mod1Badge: "الوحدة 1",
+          mod1Title: "كم يساوي P% من X؟",
+          mod1LabelP: "النسبة المئوية (P)",
+          mod1LabelX: "القيمة الأساسية (X)",
+          mod2Badge: "الوحدة 2",
+          mod2Title: "ما هي نسبة X من Y؟",
+          mod2LabelX: "القيمة الجزئية (X)",
+          mod2LabelY: "القيمة الإجمالية (Y)",
+          mod3Badge: "الوحدة 3",
+          mod3Title: "نسبة الزيادة أو النقصان",
+          mod3LabelX: "القيمة الأولية (X)",
+          mod3LabelY: "القيمة النهائية (Y)",
+          swapBtn: "تبديل القيم",
+          calcResultLabel: "النتيجة المحسوبة",
+          calcProportionLabel: "النسبة المحسوبة",
+          rateChangeLabel: "معدل التغير",
+          copyBtn: "نسخ",
+          copied: "تم النسخ!",
+          toastCopied: "تم النسخ إلى الحافظة!",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً على جهازك."
+        },
+        fr: {
+          langLabel: "Français",
+          backLink: "← Retour aux outils",
+          brandBadge: "Maths & Finance • Côté Client • Zéro Latence",
+          heroTitle: 'Calculateur de <span>Pourcentage</span>',
+          heroSubtitle: "Calculs de pourcentage rapides et précis en temps réel sans rechargement. Calculez instantanément les pourcentages standards et variations.",
+          mod1Badge: "Module 1",
+          mod1Title: "Que vaut P% de X ?",
+          mod1LabelP: "Pourcentage (P)",
+          mod1LabelX: "Valeur de base (X)",
+          mod2Badge: "Module 2",
+          mod2Title: "X représente quel pourcentage de Y ?",
+          mod2LabelX: "Valeur partielle (X)",
+          mod2LabelY: "Valeur totale (Y)",
+          mod3Badge: "Module 3",
+          mod3Title: "Augmentation / Diminution en %",
+          mod3LabelX: "Valeur initiale (X)",
+          mod3LabelY: "Valeur finale (Y)",
+          swapBtn: "Inverser les valeurs",
+          calcResultLabel: "Résultat Calculé",
+          calcProportionLabel: "Proportion Calculée",
+          rateChangeLabel: "Taux de Variation",
+          copyBtn: "Copier",
+          copied: "Copié !",
+          toastCopied: "Copié dans le presse-papiers !",
+          footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement."
+        },
+        it: {
+          langLabel: "Italiano",
+          backLink: "← Torna agli strumenti",
+          brandBadge: "Matematica & Finanza • Lato Client • Zero Latenza",
+          heroTitle: 'Calcolatore di <span>Percentuale</span>',
+          heroSubtitle: "Calcoli percentuali rapidi e accurati in tempo reale senza ricaricare la pagina. Calcola istantaneamente percentuali standard e variazioni.",
+          mod1Badge: "Modulo 1",
+          mod1Title: "Quanto vale il P% di X?",
+          mod1LabelP: "Percentuale (P)",
+          mod1LabelX: "Valore di base (X)",
+          mod2Badge: "Modulo 2",
+          mod2Title: "X che percentuale è di Y?",
+          mod2LabelX: "Valore parziale (X)",
+          mod2LabelY: "Valore totale (Y)",
+          mod3Badge: "Modulo 3",
+          mod3Title: "Aumento / Diminuzione in %",
+          mod3LabelX: "Valore iniziale (X)",
+          mod3LabelY: "Valore finale (Y)",
+          swapBtn: "Inverti valori",
+          calcResultLabel: "Risultato Calcolato",
+          calcProportionLabel: "Proporzione Calcolata",
+          rateChangeLabel: "Tasso di Variazione",
+          copyBtn: "Copia",
+          copied: "Copiato!",
+          toastCopied: "Copiato negli appunti!",
+          footerText: "© 2026 VantorKit. Utilità web veloci, private e gratuite. Tutte le elaborazioni vengono eseguite localmente."
+        }
+      };
+
+      // --- i18n Engine ---
+      const htmlRoot = document.getElementById('htmlRoot');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        localStorage.setItem('vantorkit_lang', lang);
+
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        currentLangLabel.textContent = I18N[lang].langLabel;
+        langOptions.forEach(opt => {
+          if (opt.dataset.lang === lang) opt.classList.add('active');
+          else opt.classList.remove('active');
+        });
+
+        const dict = I18N[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) {
+            el.innerHTML = dict[key];
+          }
+        });
+
+        const heroTitle = document.getElementById('heroTitle');
+        if (heroTitle && dict.heroTitle) heroTitle.innerHTML = dict.heroTitle;
+      }
+
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = langMenu.classList.contains('open');
+        if (isOpen) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          langMenu.classList.add('open');
+          langToggleBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          setLanguage(opt.dataset.lang);
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('langDropdown').contains(e.target)) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
 
       // --- Number Formatting Utilities ---
       function formatNumber(num, maxDecimals = 4) {
@@ -1260,7 +1544,7 @@
           const originalHTML = btnElement.innerHTML;
           btnElement.innerHTML = `
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Copied!</span>
+            <span>${(I18N[localStorage.getItem('vantorkit_lang') || 'en'] || I18N.en).copied}</span>
           `;
           btnElement.classList.add('copied');
           showToast(label);
@@ -1560,12 +1844,14 @@
         calcModule3();
       });
 
-      // Initial execution
+      // --- Initialize i18n & Calculations ---
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(initialLang);
+
       calcModule1();
       calcModule2();
       calcModule3();
     })();
   </script>
 </body>
-
 </html>
