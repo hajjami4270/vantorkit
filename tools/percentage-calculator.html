@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit</title>
-  <meta name="description" content="Calculate percentages instantly with zero page reloads. Free online tool for calculating P% of X, X is what % of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
-  <meta name="keywords" content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
+  <meta name="description"
+    content="Calculate percentages instantly with zero page reloads. Free online tool for calculating P% of X, X is what % of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
+  <meta name="keywords"
+    content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
   <link rel="canonical" href="https://vantorkit.com/tools/percentage-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit">
-  <meta property="og:description" content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
+  <meta property="og:description"
+    content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
   <meta property="og:url" content="https://vantorkit.com/tools/percentage-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Percentage Calculator — Free Online Real-Time Percent Tool">
-  <meta name="twitter:description" content="Fast, real-time percentage calculations with zero refresh. Free browser-based utility from VantorKit.">
+  <meta name="twitter:description"
+    content="Fast, real-time percentage calculations with zero refresh. Free browser-based utility from VantorKit.">
 
   <!-- Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
@@ -740,30 +745,40 @@
       h1 {
         font-size: 2.15rem;
       }
+
       p.subtitle {
         font-size: 0.98rem;
       }
+
       .calc-card {
         padding: 1.25rem;
       }
+
       .top-nav {
         padding: 1rem 1rem 0;
       }
+
       main {
         padding: 1.75rem 1rem;
       }
+
       .result-value {
         font-size: 1.5rem;
       }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Top Navigation with Back Link -->
   <div class="top-nav">
     <a href="/" class="back-link" id="backToHome">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
       <span>← Back to All Tools</span>
     </a>
     <a href="/" class="nav-brand">Vantor<span>Kit</span></a>
@@ -773,7 +788,8 @@
   <header>
     <div class="brand-badge">Math &amp; Finance • Client-Side • Zero Latency</div>
     <h1>Percentage <span>Calculator</span></h1>
-    <p class="subtitle">Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard percentages, proportions, and rate changes instantly.</p>
+    <p class="subtitle">Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard
+      percentages, proportions, and rate changes instantly.</p>
   </header>
 
   <main>
@@ -789,7 +805,11 @@
               <h2 id="mod1-title" class="card-title">What is P% of X?</h2>
             </div>
             <button type="button" class="reset-btn" id="m1Reset" aria-label="Reset Module 1" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
             </button>
           </div>
 
@@ -806,7 +826,8 @@
                 </span>
               </label>
               <div class="input-control">
-                <input type="number" id="m1Percent" class="calc-input has-suffix" placeholder="e.g. 15" value="15" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m1Percent" class="calc-input has-suffix" placeholder="e.g. 15" value="15"
+                  step="any" inputmode="decimal" autocomplete="off">
                 <span class="input-suffix">%</span>
               </div>
             </div>
@@ -816,7 +837,8 @@
                 <span>Base Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m1Base" class="calc-input" placeholder="e.g. 200" value="200" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m1Base" class="calc-input" placeholder="e.g. 200" value="200" step="any"
+                  inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -830,7 +852,11 @@
           <div class="result-main">
             <div class="result-value" id="m1Result">30</div>
             <button type="button" class="copy-btn" id="m1Copy" aria-label="Copy result 30">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
               <span>Copy</span>
             </button>
           </div>
@@ -848,7 +874,11 @@
               <h2 id="mod2-title" class="card-title">X is what percent of Y?</h2>
             </div>
             <button type="button" class="reset-btn" id="m2Reset" aria-label="Reset Module 2" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
             </button>
           </div>
 
@@ -858,7 +888,8 @@
                 <span>Part Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m2Part" class="calc-input" placeholder="e.g. 45" value="45" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m2Part" class="calc-input" placeholder="e.g. 45" value="45" step="any"
+                  inputmode="decimal" autocomplete="off">
               </div>
             </div>
 
@@ -867,7 +898,8 @@
                 <span>Total / Whole Value (Y)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m2Total" class="calc-input" placeholder="e.g. 180" value="180" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m2Total" class="calc-input" placeholder="e.g. 180" value="180" step="any"
+                  inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -881,7 +913,11 @@
           <div class="result-main">
             <div class="result-value" id="m2Result">25%</div>
             <button type="button" class="copy-btn" id="m2Copy" aria-label="Copy result 25%">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
               <span>Copy</span>
             </button>
           </div>
@@ -899,7 +935,11 @@
               <h2 id="mod3-title" class="card-title">Percentage Increase / Decrease</h2>
             </div>
             <button type="button" class="reset-btn" id="m3Reset" aria-label="Reset Module 3" title="Reset fields">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
             </button>
           </div>
 
@@ -909,13 +949,21 @@
                 <span>Initial Value (X)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m3Initial" class="calc-input" placeholder="e.g. 80" value="80" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m3Initial" class="calc-input" placeholder="e.g. 80" value="80" step="any"
+                  inputmode="decimal" autocomplete="off">
               </div>
             </div>
 
             <div class="swap-btn-wrap">
-              <button type="button" class="swap-btn" id="m3Swap" title="Swap Initial and Final values" aria-label="Swap values">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+              <button type="button" class="swap-btn" id="m3Swap" title="Swap Initial and Final values"
+                aria-label="Swap values">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
                 <span>Swap Values</span>
               </button>
             </div>
@@ -925,7 +973,8 @@
                 <span>Final Value (Y)</span>
               </label>
               <div class="input-control">
-                <input type="number" id="m3Final" class="calc-input" placeholder="e.g. 100" value="100" step="any" inputmode="decimal" autocomplete="off">
+                <input type="number" id="m3Final" class="calc-input" placeholder="e.g. 100" value="100" step="any"
+                  inputmode="decimal" autocomplete="off">
               </div>
             </div>
           </div>
@@ -936,19 +985,28 @@
           <div class="result-header">
             <span class="result-label">Rate of Change</span>
             <span class="change-badge increase" id="m3Badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="19" x2="12" y2="5"></line>
+                <polyline points="5 12 12 5 19 12"></polyline>
+              </svg>
               <span>+25% Increase</span>
             </span>
           </div>
           <div class="result-main">
             <div class="result-value text-success" id="m3Result">+25.00%</div>
             <button type="button" class="copy-btn" id="m3Copy" aria-label="Copy result +25.00%">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
               <span>Copy</span>
             </button>
           </div>
           <div class="result-formula" id="m3Formula">((100 - 80) ÷ |80|) × 100 = +25.00%</div>
-          <div class="result-sentence" id="m3Sentence">An increase of <strong>+25.00%</strong> (difference of +20).</div>
+          <div class="result-sentence" id="m3Sentence">An increase of <strong>+25.00%</strong> (difference of +20).
+          </div>
         </div>
       </section>
 
@@ -958,7 +1016,9 @@
     <article class="info-section" aria-labelledby="seo-heading">
       <div class="info-header">
         <h2 id="seo-heading">Understanding Percentage Formulas &amp; Practical Guide</h2>
-        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three foundational formulas below for financial calculations, retail discounts, markups, and statistical comparisons.</p>
+        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three
+          foundational formulas below for financial calculations, retail discounts, markups, and statistical
+          comparisons.</p>
       </div>
 
       <!-- 3 Formula Explanations -->
@@ -985,7 +1045,8 @@
 
         <div class="formula-card">
           <h3>3. Percentage Change (Growth/Decline)</h3>
-          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.</p>
+          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.
+          </p>
           <div class="formula-display">Δ% = ((Y - X) / |X|) × 100</div>
           <div class="formula-example">
             <strong>Example:</strong> Price drops from $80 to $60 on Black Friday:<br>
@@ -997,7 +1058,8 @@
       <!-- Quick Reference Table -->
       <div class="table-container">
         <h3>Common Percentage, Fraction, and Decimal Equivalents</h3>
-        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified fractions.</p>
+        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified
+          fractions.</p>
         <table>
           <thead>
             <tr>
@@ -1081,22 +1143,29 @@
       <div class="faq-grid">
         <div class="faq-item">
           <h4>What is the difference between percentage and percentage points?</h4>
-          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage point, which corresponds to a 25% relative increase.</p>
+          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference
+            between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage
+            point, which corresponds to a 25% relative increase.</p>
         </div>
 
         <div class="faq-item">
           <h4>Can a percentage increase exceed 100%?</h4>
-          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
+          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase
+            greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
         </div>
 
         <div class="faq-item">
           <h4>How do I calculate percentage change when the initial value is zero?</h4>
-          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage change.</p>
+          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an
+            increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage
+            change.</p>
         </div>
 
         <div class="faq-item">
           <h4>How do I reverse a percentage discount?</h4>
-          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)). For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.</p>
+          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)).
+            For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.
+          </p>
         </div>
       </div>
     </article>
@@ -1104,7 +1173,10 @@
 
   <!-- Notification Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
     <span id="toastMsg">Copied to clipboard</span>
   </div>
 
@@ -1463,4 +1535,5 @@
     })();
   </script>
 </body>
+
 </html>
