@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit</title>
+  <meta name="description" content="Calculate percentages instantly with zero page reloads. Free online tool for calculating P% of X, X is what % of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
+  <meta name="keywords" content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
+  <link rel="canonical" href="https://vantorkit.com/tools/percentage-calculator.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit">
+  <meta property="og:description" content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
+  <meta property="og:url" content="https://vantorkit.com/tools/percentage-calculator.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Percentage Calculator — Free Online Real-Time Percent Tool">
+  <meta name="twitter:description" content="Fast, real-time percentage calculations with zero refresh. Free browser-based utility from VantorKit.">
+
+  <!-- Structured Data: SoftwareApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Percentage Calculator",
+        "url": "https://vantorkit.com/tools/percentage-calculator.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "A fast, client-side percentage calculator supporting basic percentages, proportion calculation, and percentage increase/decrease."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How do you calculate P% of a number X?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To find P% of X, convert the percentage into a decimal by dividing by 100, then multiply by X: Formula = (P / 100) * X. For example, 15% of 200 is (15 / 100) * 200 = 30."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you calculate what percent X is of Y?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Divide X by Y and multiply the result by 100: Formula = (X / Y) * 100. For example, if you scored 45 out of 60, (45 / 60) * 100 = 75%."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is percentage increase or decrease calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Subtract the initial value (X) from the final value (Y), divide the difference by the absolute value of the initial value (|X|), and multiply by 100: Formula = ((Y - X) / |X|) * 100. If the result is positive, it is an increase; if negative, it is a decrease."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #12141c;
+      --card-border: #1e2230;
+      --card-hover: #262b3d;
+      --text-main: #f4f4f5;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --badge-bg: #1e293b;
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.15);
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --input-bg: #0c0e15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.25rem 1.5rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 0.85rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateX(-2px);
+    }
+
+    .nav-brand {
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Header */
+    header {
+      padding: 2rem 1.5rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--card-border);
+      background: radial-gradient(circle at 50% 0%, #1e1e38 0%, transparent 70%);
+    }
+
+    .brand-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* Modules Section */
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 992px) {
+      .calculator-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .calc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .calc-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+    }
+
+    .module-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .reset-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      color: #fff;
+      background: var(--card-hover);
+    }
+
+    /* Form & Inputs */
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .input-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-control {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .calc-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+      min-height: 48px;
+    }
+
+    .calc-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .calc-input.has-suffix {
+      padding-right: 2.25rem;
+    }
+
+    /* Quick Preset Chips */
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+
+    .preset-chip {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .preset-chip:hover {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Swap button for Module 3 */
+    .swap-btn-wrap {
+      display: flex;
+      justify-content: center;
+      margin: -0.25rem 0;
+    }
+
+    .swap-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--card-border);
+      color: var(--badge-text);
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .swap-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Result Box */
+    .result-box {
+      background: rgba(12, 14, 21, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .change-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .change-badge.increase {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .change-badge.decrease {
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .change-badge.neutral {
+      background: var(--badge-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+    }
+
+    .result-main {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      word-break: break-all;
+    }
+
+    .result-value.text-success {
+      color: var(--success);
+    }
+
+    .result-value.text-danger {
+      color: var(--danger);
+    }
+
+    .copy-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+    }
+
+    .copy-btn.copied {
+      color: var(--success);
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .result-formula {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: rgba(30, 34, 48, 0.5);
+      padding: 0.4rem 0.65rem;
+      border-radius: 6px;
+      border: 1px dashed var(--card-border);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .result-sentence {
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    /* SEO Informational Section */
+    .info-section {
+      border-top: 1px solid var(--card-border);
+      padding-top: 3.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+    }
+
+    .info-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .formula-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .formula-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .formula-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .formula-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .formula-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .formula-display {
+      background: #090a0f;
+      border: 1px solid var(--card-border);
+      border-left: 3px solid var(--accent);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      color: #93c5fd;
+      margin-bottom: 0.75rem;
+      overflow-x: auto;
+    }
+
+    .formula-example {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      background: rgba(30, 41, 59, 0.4);
+      padding: 0.6rem 0.85rem;
+      border-radius: 6px;
+    }
+
+    .formula-example strong {
+      color: #f1f5f9;
+    }
+
+    /* Comparison Table */
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 3.5rem;
+      overflow-x: auto;
+    }
+
+    .table-container h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .table-container p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #0c0e15;
+      color: var(--text-main);
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-muted);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-main);
+    }
+
+    td strong {
+      color: #fff;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: #06070a;
+    }
+
+    footer a {
+      color: var(--badge-text);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--card-hover);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.15rem;
+      }
+      p.subtitle {
+        font-size: 0.98rem;
+      }
+      .calc-card {
+        padding: 1.25rem;
+      }
+      .top-nav {
+        padding: 1rem 1rem 0;
+      }
+      main {
+        padding: 1.75rem 1rem;
+      }
+      .result-value {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Back Link -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>← Back to All Tools</span>
+    </a>
+    <a href="/" class="nav-brand">Vantor<span>Kit</span></a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">Math &amp; Finance • Client-Side • Zero Latency</div>
+    <h1>Percentage <span>Calculator</span></h1>
+    <p class="subtitle">Fast, accurate, real-time percentage calculations with zero page reloads. Compute standard percentages, proportions, and rate changes instantly.</p>
+  </header>
+
+  <main>
+    <!-- 3 Real-Time Calculation Modules -->
+    <div class="calculator-grid">
+
+      <!-- Module 1: What is P% of X? -->
+      <section class="calc-card" id="module1" aria-labelledby="mod1-title">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="module-badge">Module 1</span>
+              <h2 id="mod1-title" class="card-title">What is P% of X?</h2>
+            </div>
+            <button type="button" class="reset-btn" id="m1Reset" aria-label="Reset Module 1" title="Reset fields">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </button>
+          </div>
+
+          <div class="calc-inputs">
+            <div class="input-field-wrap">
+              <label for="m1Percent" class="input-label">
+                <span>Percentage (P)</span>
+                <span class="preset-chips">
+                  <button type="button" class="preset-chip" data-target="m1Percent" data-val="5">5%</button>
+                  <button type="button" class="preset-chip" data-target="m1Percent" data-val="10">10%</button>
+                  <button type="button" class="preset-chip" data-target="m1Percent" data-val="15">15%</button>
+                  <button type="button" class="preset-chip" data-target="m1Percent" data-val="20">20%</button>
+                  <button type="button" class="preset-chip" data-target="m1Percent" data-val="25">25%</button>
+                </span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m1Percent" class="calc-input has-suffix" placeholder="e.g. 15" value="15" step="any" inputmode="decimal" autocomplete="off">
+                <span class="input-suffix">%</span>
+              </div>
+            </div>
+
+            <div class="input-field-wrap">
+              <label for="m1Base" class="input-label">
+                <span>Base Value (X)</span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m1Base" class="calc-input" placeholder="e.g. 200" value="200" step="any" inputmode="decimal" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box">
+          <div class="result-header">
+            <span class="result-label">Calculated Result</span>
+          </div>
+          <div class="result-main">
+            <div class="result-value" id="m1Result">30</div>
+            <button type="button" class="copy-btn" id="m1Copy" aria-label="Copy result 30">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="result-formula" id="m1Formula">(15 ÷ 100) × 200 = 30</div>
+          <div class="result-sentence" id="m1Sentence">15% of 200 is <strong>30</strong>.</div>
+        </div>
+      </section>
+
+      <!-- Module 2: X is what percent of Y? -->
+      <section class="calc-card" id="module2" aria-labelledby="mod2-title">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="module-badge">Module 2</span>
+              <h2 id="mod2-title" class="card-title">X is what percent of Y?</h2>
+            </div>
+            <button type="button" class="reset-btn" id="m2Reset" aria-label="Reset Module 2" title="Reset fields">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </button>
+          </div>
+
+          <div class="calc-inputs">
+            <div class="input-field-wrap">
+              <label for="m2Part" class="input-label">
+                <span>Part Value (X)</span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m2Part" class="calc-input" placeholder="e.g. 45" value="45" step="any" inputmode="decimal" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="input-field-wrap">
+              <label for="m2Total" class="input-label">
+                <span>Total / Whole Value (Y)</span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m2Total" class="calc-input" placeholder="e.g. 180" value="180" step="any" inputmode="decimal" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box">
+          <div class="result-header">
+            <span class="result-label">Calculated Proportion</span>
+          </div>
+          <div class="result-main">
+            <div class="result-value" id="m2Result">25%</div>
+            <button type="button" class="copy-btn" id="m2Copy" aria-label="Copy result 25%">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="result-formula" id="m2Formula">(45 ÷ 180) × 100 = 25%</div>
+          <div class="result-sentence" id="m2Sentence">45 is <strong>25%</strong> of 180.</div>
+        </div>
+      </section>
+
+      <!-- Module 3: Percentage increase / decrease from X to Y -->
+      <section class="calc-card" id="module3" aria-labelledby="mod3-title">
+        <div>
+          <div class="card-header">
+            <div>
+              <span class="module-badge">Module 3</span>
+              <h2 id="mod3-title" class="card-title">Percentage Increase / Decrease</h2>
+            </div>
+            <button type="button" class="reset-btn" id="m3Reset" aria-label="Reset Module 3" title="Reset fields">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </button>
+          </div>
+
+          <div class="calc-inputs">
+            <div class="input-field-wrap">
+              <label for="m3Initial" class="input-label">
+                <span>Initial Value (X)</span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m3Initial" class="calc-input" placeholder="e.g. 80" value="80" step="any" inputmode="decimal" autocomplete="off">
+              </div>
+            </div>
+
+            <div class="swap-btn-wrap">
+              <button type="button" class="swap-btn" id="m3Swap" title="Swap Initial and Final values" aria-label="Swap values">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                <span>Swap Values</span>
+              </button>
+            </div>
+
+            <div class="input-field-wrap">
+              <label for="m3Final" class="input-label">
+                <span>Final Value (Y)</span>
+              </label>
+              <div class="input-control">
+                <input type="number" id="m3Final" class="calc-input" placeholder="e.g. 100" value="100" step="any" inputmode="decimal" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box">
+          <div class="result-header">
+            <span class="result-label">Rate of Change</span>
+            <span class="change-badge increase" id="m3Badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+              <span>+25% Increase</span>
+            </span>
+          </div>
+          <div class="result-main">
+            <div class="result-value text-success" id="m3Result">+25.00%</div>
+            <button type="button" class="copy-btn" id="m3Copy" aria-label="Copy result +25.00%">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="result-formula" id="m3Formula">((100 - 80) ÷ |80|) × 100 = +25.00%</div>
+          <div class="result-sentence" id="m3Sentence">An increase of <strong>+25.00%</strong> (difference of +20).</div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- SEO Informational & Formula Guide Section -->
+    <article class="info-section" aria-labelledby="seo-heading">
+      <div class="info-header">
+        <h2 id="seo-heading">Understanding Percentage Formulas &amp; Practical Guide</h2>
+        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three foundational formulas below for financial calculations, retail discounts, markups, and statistical comparisons.</p>
+      </div>
+
+      <!-- 3 Formula Explanations -->
+      <div class="formula-cards-grid">
+        <div class="formula-card">
+          <h3>1. Basic Percentage Formula</h3>
+          <p>Find the portion or absolute amount that corresponds to a specified rate out of a baseline value.</p>
+          <div class="formula-display">Result = (P / 100) × X</div>
+          <div class="formula-example">
+            <strong>Example:</strong> Calculating an 8.5% sales tax on a $120 item:<br>
+            (8.5 ÷ 100) × 120 = <strong>$10.20</strong> tax.
+          </div>
+        </div>
+
+        <div class="formula-card">
+          <h3>2. Percentage Share / Ratio</h3>
+          <p>Determine what proportion a smaller or larger part represents relative to a reference whole.</p>
+          <div class="formula-display">Percentage = (X / Y) × 100</div>
+          <div class="formula-example">
+            <strong>Example:</strong> Scoring 42 correct answers out of 50 on an exam:<br>
+            (42 ÷ 50) × 100 = <strong>84%</strong> score.
+          </div>
+        </div>
+
+        <div class="formula-card">
+          <h3>3. Percentage Change (Growth/Decline)</h3>
+          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.</p>
+          <div class="formula-display">Δ% = ((Y - X) / |X|) × 100</div>
+          <div class="formula-example">
+            <strong>Example:</strong> Price drops from $80 to $60 on Black Friday:<br>
+            ((60 - 80) ÷ 80) × 100 = <strong>-25%</strong> discount.
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Reference Table -->
+      <div class="table-container">
+        <h3>Common Percentage, Fraction, and Decimal Equivalents</h3>
+        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified fractions.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Percentage (%)</th>
+              <th>Decimal Multiplier</th>
+              <th>Simplified Fraction</th>
+              <th>Common Real-World Usage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>5%</strong></td>
+              <td>0.05</td>
+              <td>1/20</td>
+              <td>Standard state sales taxes, small brokerage fees</td>
+            </tr>
+            <tr>
+              <td><strong>10%</strong></td>
+              <td>0.10</td>
+              <td>1/10</td>
+              <td>Quick mental discounts, tithing, preliminary tips</td>
+            </tr>
+            <tr>
+              <td><strong>15%</strong></td>
+              <td>0.15</td>
+              <td>3/20</td>
+              <td>Casual dining tips, capital gains tax brackets</td>
+            </tr>
+            <tr>
+              <td><strong>20%</strong></td>
+              <td>0.20</td>
+              <td>1/5</td>
+              <td>Standard restaurant gratuity, typical down payment</td>
+            </tr>
+            <tr>
+              <td><strong>25%</strong></td>
+              <td>0.25</td>
+              <td>1/4</td>
+              <td>One quarter off, seasonal clearance sales</td>
+            </tr>
+            <tr>
+              <td><strong>33.33%</strong></td>
+              <td>0.3333</td>
+              <td>1/3</td>
+              <td>Buy two get one free (effective discount)</td>
+            </tr>
+            <tr>
+              <td><strong>50%</strong></td>
+              <td>0.50</td>
+              <td>1/2</td>
+              <td>Half off, 1-to-1 matching contributions</td>
+            </tr>
+            <tr>
+              <td><strong>75%</strong></td>
+              <td>0.75</td>
+              <td>3/4</td>
+              <td>Deep liquidation markdowns, 3/4 milestone</td>
+            </tr>
+            <tr>
+              <td><strong>100%</strong></td>
+              <td>1.00</td>
+              <td>1/1</td>
+              <td>Doubling of baseline value, complete total</td>
+            </tr>
+            <tr>
+              <td><strong>200%</strong></td>
+              <td>2.00</td>
+              <td>2/1</td>
+              <td>Tripling of baseline value (+200% increase)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="info-header" style="margin-bottom: 2rem;">
+        <h2>Frequently Asked Questions</h2>
+        <p>Answers to common questions regarding percentage mathematics, edge cases, and calculations.</p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>What is the difference between percentage and percentage points?</h4>
+          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage point, which corresponds to a 25% relative increase.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Can a percentage increase exceed 100%?</h4>
+          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How do I calculate percentage change when the initial value is zero?</h4>
+          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage change.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How do I reverse a percentage discount?</h4>
+          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)). For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Copied to clipboard</span>
+  </div>
+
+  <!-- Footer matching index.html -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+  </footer>
+
+  <!-- Real-Time Calculation Logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Number Formatting Utilities ---
+      function formatNumber(num, maxDecimals = 4) {
+        if (!Number.isFinite(num)) return '—';
+        const factor = Math.pow(10, maxDecimals);
+        const rounded = Math.round((num + Number.EPSILON) * factor) / factor;
+        return new Intl.NumberFormat('en-US', {
+          maximumFractionDigits: maxDecimals,
+          useGrouping: true
+        }).format(rounded);
+      }
+
+      function cleanRawNumber(num, maxDecimals = 4) {
+        if (!Number.isFinite(num)) return '';
+        const factor = Math.pow(10, maxDecimals);
+        return (Math.round((num + Number.EPSILON) * factor) / factor).toString();
+      }
+
+      // --- Clipboard & Toast Utilities ---
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      let toastTimer = null;
+
+      function showToast(message) {
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      function copyText(text, btnElement, label = 'Copied to clipboard!') {
+        if (!text || text === '—') return;
+
+        function indicateSuccess() {
+          const originalHTML = btnElement.innerHTML;
+          btnElement.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Copied!</span>
+          `;
+          btnElement.classList.add('copied');
+          showToast(label);
+
+          setTimeout(() => {
+            btnElement.innerHTML = originalHTML;
+            btnElement.classList.remove('copied');
+          }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+            .then(indicateSuccess)
+            .catch(() => fallbackCopy(text, indicateSuccess));
+        } else {
+          fallbackCopy(text, indicateSuccess);
+        }
+      }
+
+      function fallbackCopy(text, callback) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          callback();
+        } catch (err) {
+          console.error('Clipboard copy failed:', err);
+        }
+        document.body.removeChild(textarea);
+      }
+
+      // --- Module 1: What is P% of X? ---
+      const m1Percent = document.getElementById('m1Percent');
+      const m1Base = document.getElementById('m1Base');
+      const m1Result = document.getElementById('m1Result');
+      const m1Formula = document.getElementById('m1Formula');
+      const m1Sentence = document.getElementById('m1Sentence');
+      const m1Copy = document.getElementById('m1Copy');
+      const m1Reset = document.getElementById('m1Reset');
+
+      let m1CurrentValue = '30';
+
+      function calcModule1() {
+        const pRaw = m1Percent.value.trim();
+        const xRaw = m1Base.value.trim();
+
+        if (pRaw === '' || xRaw === '') {
+          m1Result.textContent = '—';
+          m1Formula.textContent = 'Enter values above';
+          m1Sentence.textContent = 'Enter both percentage (P) and base number (X) to compute.';
+          m1Copy.setAttribute('aria-label', 'Nothing to copy');
+          m1CurrentValue = '';
+          return;
+        }
+
+        const P = parseFloat(pRaw);
+        const X = parseFloat(xRaw);
+
+        if (isNaN(P) || isNaN(X)) {
+          m1Result.textContent = 'Invalid';
+          m1Formula.textContent = 'Invalid numeric input';
+          m1Sentence.textContent = 'Please enter valid numerical values.';
+          m1CurrentValue = '';
+          return;
+        }
+
+        const res = (P / 100) * X;
+        const resFormatted = formatNumber(res, 4);
+        m1CurrentValue = cleanRawNumber(res, 4);
+
+        m1Result.textContent = resFormatted;
+        m1Formula.textContent = `(${formatNumber(P, 4)} ÷ 100) × ${formatNumber(X, 4)} = ${resFormatted}`;
+        m1Sentence.innerHTML = `${formatNumber(P, 4)}% of ${formatNumber(X, 4)} is <strong>${resFormatted}</strong>.`;
+        m1Copy.setAttribute('aria-label', `Copy result ${resFormatted}`);
+      }
+
+      m1Percent.addEventListener('input', calcModule1);
+      m1Base.addEventListener('input', calcModule1);
+
+      m1Copy.addEventListener('click', () => {
+        if (m1CurrentValue) {
+          copyText(m1CurrentValue, m1Copy, `Copied ${m1CurrentValue} to clipboard`);
+        }
+      });
+
+      m1Reset.addEventListener('click', () => {
+        m1Percent.value = '';
+        m1Base.value = '';
+        calcModule1();
+        m1Percent.focus();
+      });
+
+      // Preset chips for Module 1
+      document.querySelectorAll('.preset-chip[data-target="m1Percent"]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          m1Percent.value = chip.dataset.val;
+          calcModule1();
+        });
+      });
+
+      // --- Module 2: X is what percent of Y? ---
+      const m2Part = document.getElementById('m2Part');
+      const m2Total = document.getElementById('m2Total');
+      const m2Result = document.getElementById('m2Result');
+      const m2Formula = document.getElementById('m2Formula');
+      const m2Sentence = document.getElementById('m2Sentence');
+      const m2Copy = document.getElementById('m2Copy');
+      const m2Reset = document.getElementById('m2Reset');
+
+      let m2CurrentValue = '25%';
+
+      function calcModule2() {
+        const xRaw = m2Part.value.trim();
+        const yRaw = m2Total.value.trim();
+
+        if (xRaw === '' || yRaw === '') {
+          m2Result.textContent = '—';
+          m2Formula.textContent = 'Enter values above';
+          m2Sentence.textContent = 'Enter part (X) and total (Y) to calculate percentage.';
+          m2Copy.setAttribute('aria-label', 'Nothing to copy');
+          m2CurrentValue = '';
+          return;
+        }
+
+        const X = parseFloat(xRaw);
+        const Y = parseFloat(yRaw);
+
+        if (isNaN(X) || isNaN(Y)) {
+          m2Result.textContent = 'Invalid';
+          m2Formula.textContent = 'Invalid numeric input';
+          m2Sentence.textContent = 'Please enter valid numerical values.';
+          m2CurrentValue = '';
+          return;
+        }
+
+        if (Y === 0) {
+          m2Result.textContent = 'Undefined';
+          m2Formula.textContent = 'Division by zero is undefined';
+          m2Sentence.textContent = 'Denominator (Y) cannot be 0 in percentage calculation.';
+          m2CurrentValue = '';
+          return;
+        }
+
+        const pct = (X / Y) * 100;
+        const pctFormatted = formatNumber(pct, 4) + '%';
+        m2CurrentValue = pctFormatted;
+
+        m2Result.textContent = pctFormatted;
+        m2Formula.textContent = `(${formatNumber(X, 4)} ÷ ${formatNumber(Y, 4)}) × 100 = ${pctFormatted}`;
+        m2Sentence.innerHTML = `${formatNumber(X, 4)} is <strong>${pctFormatted}</strong> of ${formatNumber(Y, 4)}.`;
+        m2Copy.setAttribute('aria-label', `Copy result ${pctFormatted}`);
+      }
+
+      m2Part.addEventListener('input', calcModule2);
+      m2Total.addEventListener('input', calcModule2);
+
+      m2Copy.addEventListener('click', () => {
+        if (m2CurrentValue) {
+          copyText(m2CurrentValue, m2Copy, `Copied ${m2CurrentValue} to clipboard`);
+        }
+      });
+
+      m2Reset.addEventListener('click', () => {
+        m2Part.value = '';
+        m2Total.value = '';
+        calcModule2();
+        m2Part.focus();
+      });
+
+      // --- Module 3: Percentage Increase / Decrease from X to Y ---
+      const m3Initial = document.getElementById('m3Initial');
+      const m3Final = document.getElementById('m3Final');
+      const m3Result = document.getElementById('m3Result');
+      const m3Formula = document.getElementById('m3Formula');
+      const m3Sentence = document.getElementById('m3Sentence');
+      const m3Badge = document.getElementById('m3Badge');
+      const m3Copy = document.getElementById('m3Copy');
+      const m3Reset = document.getElementById('m3Reset');
+      const m3Swap = document.getElementById('m3Swap');
+
+      let m3CurrentValue = '+25.00%';
+
+      function calcModule3() {
+        const xRaw = m3Initial.value.trim();
+        const yRaw = m3Final.value.trim();
+
+        if (xRaw === '' || yRaw === '') {
+          m3Result.textContent = '—';
+          m3Result.className = 'result-value';
+          m3Formula.textContent = 'Enter values above';
+          m3Sentence.textContent = 'Enter initial (X) and final (Y) numbers to see rate change.';
+          m3Badge.className = 'change-badge neutral';
+          m3Badge.innerHTML = '<span>No Data</span>';
+          m3Copy.setAttribute('aria-label', 'Nothing to copy');
+          m3CurrentValue = '';
+          return;
+        }
+
+        const X = parseFloat(xRaw);
+        const Y = parseFloat(yRaw);
+
+        if (isNaN(X) || isNaN(Y)) {
+          m3Result.textContent = 'Invalid';
+          m3Result.className = 'result-value';
+          m3Formula.textContent = 'Invalid numeric input';
+          m3Sentence.textContent = 'Please enter valid numerical values.';
+          m3CurrentValue = '';
+          return;
+        }
+
+        if (X === 0) {
+          if (Y === 0) {
+            m3Result.textContent = '0.00%';
+            m3Result.className = 'result-value';
+            m3Badge.className = 'change-badge neutral';
+            m3Badge.innerHTML = '<span>No Change</span>';
+            m3Formula.textContent = 'No change from 0 to 0';
+            m3Sentence.innerHTML = 'Value remained at 0.';
+            m3CurrentValue = '0%';
+          } else {
+            m3Result.textContent = 'Undefined';
+            m3Result.className = 'result-value';
+            m3Badge.className = 'change-badge neutral';
+            m3Badge.innerHTML = '<span>Undefined</span>';
+            m3Formula.textContent = 'Cannot compute % change from 0 (division by 0)';
+            m3Sentence.textContent = 'Percentage change from 0 is mathematically undefined.';
+            m3CurrentValue = '';
+          }
+          return;
+        }
+
+        const diff = Y - X;
+        const pctChange = (diff / Math.abs(X)) * 100;
+        const diffFormatted = (diff >= 0 ? '+' : '') + formatNumber(diff, 4);
+
+        if (pctChange > 0) {
+          const formatted = '+' + formatNumber(pctChange, 2) + '%';
+          m3CurrentValue = formatted;
+          m3Result.textContent = formatted;
+          m3Result.className = 'result-value text-success';
+          m3Badge.className = 'change-badge increase';
+          m3Badge.innerHTML = `
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+            <span>+${formatNumber(pctChange, 2)}% Increase</span>
+          `;
+          m3Formula.textContent = `((${formatNumber(Y, 4)} - ${formatNumber(X, 4)}) ÷ |${formatNumber(X, 4)}|) × 100 = ${formatted}`;
+          m3Sentence.innerHTML = `An increase of <strong>${formatted}</strong> (absolute difference of ${diffFormatted}).`;
+        } else if (pctChange < 0) {
+          const formatted = formatNumber(pctChange, 2) + '%';
+          m3CurrentValue = formatted;
+          m3Result.textContent = formatted;
+          m3Result.className = 'result-value text-danger';
+          m3Badge.className = 'change-badge decrease';
+          m3Badge.innerHTML = `
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+            <span>${formatNumber(Math.abs(pctChange), 2)}% Decrease</span>
+          `;
+          m3Formula.textContent = `((${formatNumber(Y, 4)} - ${formatNumber(X, 4)}) ÷ |${formatNumber(X, 4)}|) × 100 = ${formatted}`;
+          m3Sentence.innerHTML = `A decrease of <strong>${formatNumber(Math.abs(pctChange), 2)}%</strong> (absolute difference of ${diffFormatted}).`;
+        } else {
+          m3CurrentValue = '0.00%';
+          m3Result.textContent = '0.00%';
+          m3Result.className = 'result-value';
+          m3Badge.className = 'change-badge neutral';
+          m3Badge.innerHTML = '<span>No Change</span>';
+          m3Formula.textContent = `Both values are identical (${formatNumber(X, 4)})`;
+          m3Sentence.innerHTML = `No change between ${formatNumber(X, 4)} and ${formatNumber(Y, 4)}.`;
+        }
+
+        m3Copy.setAttribute('aria-label', `Copy result ${m3CurrentValue}`);
+      }
+
+      m3Initial.addEventListener('input', calcModule3);
+      m3Final.addEventListener('input', calcModule3);
+
+      m3Copy.addEventListener('click', () => {
+        if (m3CurrentValue) {
+          copyText(m3CurrentValue, m3Copy, `Copied ${m3CurrentValue} to clipboard`);
+        }
+      });
+
+      m3Reset.addEventListener('click', () => {
+        m3Initial.value = '';
+        m3Final.value = '';
+        calcModule3();
+        m3Initial.focus();
+      });
+
+      m3Swap.addEventListener('click', () => {
+        const temp = m3Initial.value;
+        m3Initial.value = m3Final.value;
+        m3Final.value = temp;
+        calcModule3();
+      });
+
+      // Initial execution
+      calcModule1();
+      calcModule2();
+      calcModule3();
+    })();
+  </script>
+</body>
+</html>
