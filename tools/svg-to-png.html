@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG to PNG Converter — Free High-Res Vector Rasterizer | VantorKit</title>
+  <meta name="description" content="Convert SVG vector images to high-resolution PNG format locally in your browser. Scale up to 8x ultra-HD, customize dimensions, transparent or solid backgrounds with zero server uploads.">
+  <meta name="keywords" content="svg to png, convert svg to png, vector to png, high res svg converter, rasterize svg, transparent png, client side image converter, free svg tool, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/svg-to-png.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SVG to PNG Converter — Free High-Res Vector Rasterizer | VantorKit">
+  <meta property="og:description" content="Transform SVG vector files into crisp, high-resolution PNGs up to 8x scale. 100% private in-browser conversion with instant downloads.">
+  <meta property="og:url" content="https://vantorkit.com/tools/svg-to-png.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SVG to PNG Converter — Free High-Res Vector Rasterizer | VantorKit">
+  <meta name="twitter:description" content="100% client-side SVG to PNG converter with custom resolution multipliers, transparency controls, and instant clipboard copying.">
+
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit SVG to PNG Converter",
+        "url": "https://vantorkit.com/tools/svg-to-png.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side SVG to PNG rasterizer supporting drag-and-drop uploads, raw SVG code pasting, 1x to 8x resolution multipliers, custom dimensions, and transparent or solid background fills."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my SVG graphics or logo files uploaded to any remote server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The rasterization process executes 100% inside your local web browser using the HTML5 Canvas vector engine. Your proprietary vectors, design files, and corporate logos never leave your computer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does resolution scaling (1x, 2x, 4x, 8x) maintain crispness without pixelation?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Unlike raster bitmaps, SVGs define shapes mathematically via geometric vectors. When scaling to 2x, 4x, or 8x, VantorKit re-renders the mathematical paths directly at the target resolution on a high-density canvas before rasterizing to PNG, ensuring pin-sharp output at any size."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the converter support transparent backgrounds?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. By default, transparency in your SVG is fully preserved in the resulting PNG. You can also select a custom solid color background fill if desired."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I convert raw SVG code directly without saving a file?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Switch to the 'Paste SVG Code' tab, paste your XML markup directly, and see the live raster preview update in real time."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(-2px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-brand svg {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.75rem;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      background: rgba(45, 55, 75, 0.8);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #0f131f;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.35rem;
+      min-width: 145px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      z-index: 100;
+      display: none;
+      backdrop-filter: blur(16px);
+    }
+
+    .lang-dropdown.active .lang-menu {
+      display: block;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] * {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .mode-tabs-wrapper {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .file-banner {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .file-banner-left {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .preset-scale-grid {
+      direction: rtl;
+    }
+
+    html[dir="rtl"] .dimensions-grid {
+      direction: rtl;
+    }
+
+    html[dir="rtl"] .actions-grid {
+      flex-direction: row-reverse;
+    }
+
+    /* Header Section */
+    header {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 9999px;
+      color: var(--badge-text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1220px;
+      width: 100%;
+      margin: 0 auto 4rem;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* Layout Grid: 2 Columns on Desktop */
+    .converter-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (min-width: 960px) {
+      .converter-grid {
+        grid-template-columns: 1.15fr 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+    /* Left Column: Input and Configuration */
+    .control-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Input Mode Tabs */
+    .mode-tabs-wrapper {
+      position: relative;
+      background: rgba(10, 14, 23, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 5px;
+      display: flex;
+      gap: 4px;
+      margin-bottom: 1.75rem;
+    }
+
+    .mode-tab-btn {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      padding: 0.65rem 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: color 0.2s ease;
+      user-select: none;
+    }
+
+    .mode-tab-btn:hover {
+      color: #fff;
+    }
+
+    .mode-tab-btn.active {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .mode-tab-pill {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      height: calc(100% - 10px);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(168, 85, 247, 0.25) 100%);
+      border: 1px solid rgba(96, 165, 250, 0.5);
+      box-shadow: 0 0 16px var(--accent-glow);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Drag & Drop Zone */
+    .dropzone {
+      border: 2px dashed rgba(96, 165, 250, 0.3);
+      border-radius: 16px;
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(13, 18, 29, 0.5);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .dropzone:hover, .dropzone.drag-active {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .dropzone-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: #60a5fa;
+    }
+
+    .dropzone-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+
+    .dropzone-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .btn-browse {
+      padding: 0.5rem 1.15rem;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 8px;
+      color: #93c5fd;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-browse:hover {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .hidden-file-input {
+      display: none;
+    }
+
+    /* Active File Banner */
+    .file-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(10, 14, 22, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
+      margin-top: 1rem;
+    }
+
+    .file-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .file-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c084fc;
+      flex-shrink: 0;
+    }
+
+    .file-details {
+      min-width: 0;
+    }
+
+    .file-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    .file-meta {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    .btn-clear-file {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .btn-clear-file:hover {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    /* Raw Code Textarea Panel */
+    .raw-code-panel {
+      display: none;
+    }
+
+    .raw-code-panel.active {
+      display: block;
+    }
+
+    .raw-textarea {
+      width: 100%;
+      height: 180px;
+      background: rgba(10, 14, 22, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      padding: 0.9rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .raw-textarea:focus {
+      border-color: rgba(96, 165, 250, 0.6);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Sample SVG Presets */
+    .samples-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .samples-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .sample-chip {
+      padding: 0.3rem 0.65rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.76rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sample-chip:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(96, 165, 250, 0.4);
+      color: #fff;
+    }
+
+    /* Controls Divider */
+    .section-divider {
+      height: 1px;
+      background: var(--card-border);
+      margin: 1.75rem 0 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Scale Multipliers */
+    .preset-scale-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .scale-btn {
+      background: rgba(10, 14, 22, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.65rem 0.4rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .scale-btn:hover {
+      background: rgba(20, 28, 44, 0.9);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .scale-btn.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.3);
+    }
+
+    .scale-multiplier {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .scale-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Custom Dimensions Row */
+    .dimensions-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .dim-input-box {
+      background: rgba(10, 14, 22, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.6rem 0.8rem;
+    }
+
+    .dim-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.2rem;
+      display: block;
+    }
+
+    .dim-field {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .dim-lock-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-top: 0.8rem;
+    }
+
+    .dim-lock-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .dim-lock-btn.locked {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(96, 165, 250, 0.4);
+      color: #60a5fa;
+    }
+
+    /* Background Fill Selector */
+    .bg-options-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .bg-mode-btn {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      background: rgba(10, 14, 22, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+    }
+
+    .bg-mode-btn:hover {
+      color: #fff;
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .bg-mode-btn.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .color-picker-box {
+      display: none;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(10, 14, 22, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.65rem 0.85rem;
+      margin-top: 0.75rem;
+    }
+
+    .color-picker-box.show {
+      display: flex;
+    }
+
+    .color-swatch-wrap {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+
+    .color-input-native {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 55px;
+      height: 55px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .color-hex-text {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      outline: none;
+      flex: 1;
+    }
+
+    .color-preset-pills {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .color-preset-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .color-preset-dot:hover {
+      transform: scale(1.2);
+    }
+
+    /* Right Column: Live Canvas Preview & Export Hub */
+    .preview-card-sticky {
+      position: sticky;
+      top: 88px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .preview-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .preview-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .preview-badge {
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--success-bg);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .preview-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulseLive 2s infinite;
+    }
+
+    @keyframes pulseLive {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Canvas Viewport with Cosmic Checkerboard Backdrop */
+    .canvas-viewport {
+      width: 100%;
+      min-height: 280px;
+      max-height: 380px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+      
+      /* Subtle cosmic checkerboard pattern for transparency */
+      background-color: #0b0f19;
+      background-image: 
+        linear-gradient(45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.04) 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    #previewCanvas {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      border-radius: 6px;
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    /* Meta Info Row */
+    .meta-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .meta-pill {
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 0.3rem 0.65rem;
+      border-radius: 8px;
+    }
+
+    /* Action Buttons */
+    .actions-grid {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-download-primary {
+      flex: 1.4;
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-download-primary:hover {
+      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.55);
+    }
+
+    .btn-action-secondary {
+      flex: 1;
+      padding: 0.85rem 0.8rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-reset {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reset:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Privacy & Features Section */
+    .info-section {
+      max-width: 1220px;
+      margin: 4.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+    }
+
+    .info-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      margin-bottom: 1.1rem;
+    }
+
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .faq-item {
+      background: rgba(14, 18, 28, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 24, 38, 0.95);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+      border-radius: 12px;
+      padding: 0.75rem 1.4rem;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.25rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2.2rem; }
+      p.subtitle { font-size: 0.98rem; }
+      .control-card { padding: 1.35rem; }
+      .preview-card-sticky { position: static; padding: 1.5rem; }
+      .actions-grid { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Back Link & Language Switcher -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+    
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeftS2P" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRightS2P" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenterS2P" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftS2P)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightS2P)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterS2P)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <span data-i18n="brandBadge">Images &amp; Vector • 100% Client-Side • Ultra-HD Rasterizer</span>
+    </div>
+    <h1 id="pageTitle">SVG to <span>PNG Converter</span></h1>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Render SVG vectors to ultra-sharp PNGs up to 8x resolution. Customize dimensions, preserve transparent backgrounds, or fill solid colors with zero server uploads.</p>
+  </header>
+
+  <main>
+    <div class="converter-grid">
+      <!-- Left Column: Input and Styling Controls -->
+      <div class="control-card">
+        <!-- Input Mode Tabs -->
+        <div class="mode-tabs-wrapper" id="modeTabs">
+          <div class="mode-tab-pill" id="modeTabPill"></div>
+          <button type="button" class="mode-tab-btn active" data-mode="upload" id="tabUpload">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span data-i18n="tabUpload">Upload File</span>
+          </button>
+          <button type="button" class="mode-tab-btn" data-mode="paste" id="tabPaste">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span data-i18n="tabPaste">Paste SVG Code</span>
+          </button>
+        </div>
+
+        <!-- Mode 1: Drag & Drop Zone -->
+        <div id="panelUpload">
+          <div class="dropzone" id="dropZone">
+            <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml">
+            <div class="dropzone-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
+            <div class="dropzone-title" data-i18n="dropTitle">Drop an SVG File Here or Click to Browse</div>
+            <div class="dropzone-desc" data-i18n="dropDesc">Supports all valid .svg files, illustrations, icons, and logos.</div>
+            <button type="button" class="btn-browse" id="btnBrowse">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span data-i18n="btnBrowse">Choose SVG File</span>
+            </button>
+          </div>
+
+          <div class="file-banner" id="fileBanner">
+            <div class="file-banner-left">
+              <div class="file-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <div class="file-details">
+                <div class="file-name" id="displayFileName">illustration.svg</div>
+                <div class="file-meta" id="displayFileMeta">0 KB • 0 × 0 px</div>
+              </div>
+            </div>
+            <button type="button" class="btn-clear-file" id="btnClearFile" title="Remove file" aria-label="Remove file">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mode 2: Raw Code Paste -->
+        <div id="panelPaste" class="raw-code-panel">
+          <textarea id="rawSvgInput" class="raw-textarea" placeholder="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>&#10;  <circle cx='50' cy='50' r='40' fill='#3b82f6'/>&#10;</svg>" spellcheck="false"></textarea>
+          <div class="samples-row">
+            <span class="samples-label" data-i18n="lblSamples">Quick Samples:</span>
+            <button type="button" class="sample-chip" data-sample="badge">VantorKit Badge</button>
+            <button type="button" class="sample-chip" data-sample="rocket">Space Rocket</button>
+            <button type="button" class="sample-chip" data-sample="chart">Pulse Chart</button>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Resolution & Scaling Controls -->
+        <div class="section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          <span data-i18n="secScaling">Resolution Scaling Multiplier</span>
+        </div>
+
+        <div class="preset-scale-grid" id="scaleGrid">
+          <div class="scale-btn active" data-scale="1">
+            <div class="scale-multiplier">1x</div>
+            <div class="scale-desc" data-i18n="scale1">Standard</div>
+          </div>
+          <div class="scale-btn" data-scale="2">
+            <div class="scale-multiplier">2x</div>
+            <div class="scale-desc" data-i18n="scale2">Retina HD</div>
+          </div>
+          <div class="scale-btn" data-scale="4">
+            <div class="scale-multiplier">4x</div>
+            <div class="scale-desc" data-i18n="scale4">4K Ultra</div>
+          </div>
+          <div class="scale-btn" data-scale="8">
+            <div class="scale-multiplier">8x</div>
+            <div class="scale-desc" data-i18n="scale8">Print Master</div>
+          </div>
+        </div>
+
+        <!-- Custom Dimensions -->
+        <div class="dimensions-grid">
+          <div class="dim-input-box">
+            <label class="dim-label" for="inputWidth" data-i18n="lblWidth">Width (px)</label>
+            <input type="number" id="inputWidth" class="dim-field" min="1" max="10000" value="400">
+          </div>
+          
+          <button type="button" class="dim-lock-btn locked" id="btnLockAspect" title="Lock aspect ratio" aria-label="Toggle lock aspect ratio">
+            <svg id="lockIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </button>
+
+          <div class="dim-input-box">
+            <label class="dim-label" for="inputHeight" data-i18n="lblHeight">Height (px)</label>
+            <input type="number" id="inputHeight" class="dim-field" min="1" max="10000" value="400">
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Background Options -->
+        <div class="section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+          <span data-i18n="secBg">Background Canvas Fill</span>
+        </div>
+
+        <div class="bg-options-row">
+          <button type="button" class="bg-mode-btn active" data-bgmode="transparent" id="btnBgTransparent">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg>
+            <span data-i18n="bgTransparent">Transparent (PNG)</span>
+          </button>
+          <button type="button" class="bg-mode-btn" data-bgmode="color" id="btnBgColor">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+            <span data-i18n="bgColor">Solid Color</span>
+          </button>
+        </div>
+
+        <div class="color-picker-box" id="bgColorControls">
+          <div class="color-swatch-wrap">
+            <input type="color" id="nativeBgColor" class="color-input-native" value="#ffffff" aria-label="Pick color">
+          </div>
+          <input type="text" id="hexBgColor" class="color-hex-text" value="#FFFFFF" maxlength="7" spellcheck="false">
+          <div class="color-preset-pills">
+            <button type="button" class="color-preset-dot" data-col="#ffffff" title="White" style="background:#ffffff;"></button>
+            <button type="button" class="color-preset-dot" data-col="#000000" title="Pure Black" style="background:#000000;"></button>
+            <button type="button" class="color-preset-dot" data-col="#0f172a" title="Dark Slate" style="background:#0f172a;"></button>
+            <button type="button" class="color-preset-dot" data-col="#3b82f6" title="Vantor Blue" style="background:#3b82f6;"></button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Live Sticky Canvas Preview & Export Hub -->
+      <div class="preview-card-sticky">
+        <div class="preview-header">
+          <div class="preview-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <span data-i18n="previewTitle">Raster Canvas Preview</span>
+          </div>
+          <div class="preview-badge" data-i18n="badgeLive">Pixel-Perfect</div>
+        </div>
+
+        <!-- Canvas Viewport -->
+        <div class="canvas-viewport" id="viewportBox">
+          <canvas id="previewCanvas" width="400" height="400"></canvas>
+        </div>
+
+        <!-- Meta Pills -->
+        <div class="meta-pills-row">
+          <span class="meta-pill" id="metaDimensions">400 × 400 px</span>
+          <span class="meta-pill" id="metaScale">Scale: 1x</span>
+          <span class="meta-pill" id="metaEstSize">Est. ~45 KB</span>
+        </div>
+
+        <!-- Export Action Buttons -->
+        <div class="actions-grid">
+          <button type="button" class="btn-download-primary" id="btnDownloadPng">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="btnDownload">Download PNG</span>
+          </button>
+          
+          <button type="button" class="btn-action-secondary" id="btnCopyClipboard">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span data-i18n="btnCopy">Copy Image</span>
+          </button>
+        </div>
+
+        <button type="button" class="btn-reset" id="btnResetAll">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+          <span data-i18n="btnReset">Reset to Default</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Educational Guide & Technical FAQ -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="infoTitle">Professional Vector Rasterization Without Compromise</h2>
+        <p data-i18n="infoDesc">Discover how browser-native Canvas engines convert vector mathematics into ultra-high-density bitmap images with zero server logging.</p>
+      </div>
+
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <div class="guide-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          </div>
+          <h3 data-i18n="card1Title">Infinite Vector Mathematics</h3>
+          <p data-i18n="card1Desc">SVGs are formed of Bézier curves and coordinate equations rather than pixels. When you scale up to 4x or 8x, our engine re-computes every line curve directly at the target pixel grid for razor-sharp clarity.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3 data-i18n="card2Title">100% In-Memory Privacy</h3>
+          <p data-i18n="card2Desc">Your proprietary design assets, client logos, and vector illustrations are processed exclusively inside your browser's local sandbox memory. Zero images or code strings are ever sent over the network.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          </div>
+          <h3 data-i18n="card3Title">Universal Compatibility</h3>
+          <p data-i18n="card3Desc">While many social networks, email clients, and desktop editors reject raw SVG vectors, high-resolution PNGs with transparent alpha channels are universally supported everywhere.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Why convert SVG vectors to PNG format?</h4>
+          <p data-i18n="faq1A">Many platforms—including Microsoft Office, Discord, Slack, and various content management systems—do not support raw SVG files or have SVG rendering vulnerabilities. PNG provides pixel-perfect universal viewing with transparent backgrounds.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What scale multiplier should I choose?</h4>
+          <p data-i18n="faq2A">For web icons and UI elements, 1x or 2x (Retina) is ideal. For presentations, 4K video overlays, or print merchandise, select 4x or 8x to generate massive high-density bitmaps that never look blurry.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I preserve transparency in my output PNG?</h4>
+          <p data-i18n="faq3A">Keep the background mode set to 'Transparent (PNG)' (the default). The output PNG will retain an intact 32-bit alpha channel, allowing the logo or illustration to sit seamlessly over any background.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Are there any file size or conversion limits?</h4>
+          <p data-i18n="faq4A">No. Because all raster processing runs natively on your computer's GPU and CPU via the browser canvas API, there are no artificial file limits, watermarks, or conversion quotas.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <!-- Footer matching index.html -->
+  <footer>
+    <p data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+  </footer>
+
+  <!-- SVG to PNG Rasterizer Engine Logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Internationalization (i18n) Dictionary ---
+      const I18N = {
+        en: {
+          backLink: "← Back to Tools",
+          brandBadge: "Images & Vector • 100% Client-Side • Ultra-HD Rasterizer",
+          pageTitle: "SVG to <span>PNG Converter</span>",
+          pageSubtitle: "Render SVG vectors to ultra-sharp PNGs up to 8x resolution. Customize dimensions, preserve transparent backgrounds, or fill solid colors with zero server uploads.",
+          tabUpload: "Upload File",
+          tabPaste: "Paste SVG Code",
+          dropTitle: "Drop an SVG File Here or Click to Browse",
+          dropDesc: "Supports all valid .svg files, illustrations, icons, and logos.",
+          btnBrowse: "Choose SVG File",
+          lblSamples: "Quick Samples:",
+          secScaling: "Resolution Scaling Multiplier",
+          scale1: "Standard",
+          scale2: "Retina HD",
+          scale4: "4K Ultra",
+          scale8: "Print Master",
+          lblWidth: "Width (px)",
+          lblHeight: "Height (px)",
+          secBg: "Background Canvas Fill",
+          bgTransparent: "Transparent (PNG)",
+          bgColor: "Solid Color",
+          previewTitle: "Raster Canvas Preview",
+          badgeLive: "Pixel-Perfect",
+          btnDownload: "Download PNG",
+          btnCopy: "Copy Image",
+          btnReset: "Reset to Default",
+          infoTitle: "Professional Vector Rasterization Without Compromise",
+          infoDesc: "Discover how browser-native Canvas engines convert vector mathematics into ultra-high-density bitmap images with zero server logging.",
+          card1Title: "Infinite Vector Mathematics",
+          card1Desc: "SVGs are formed of Bézier curves and coordinate equations rather than pixels. When you scale up to 4x or 8x, our engine re-computes every line curve directly at the target pixel grid for razor-sharp clarity.",
+          card2Title: "100% In-Memory Privacy",
+          card2Desc: "Your proprietary design assets, client logos, and vector illustrations are processed exclusively inside your browser's local sandbox memory. Zero images or code strings are ever sent over the network.",
+          card3Title: "Universal Compatibility",
+          card3Desc: "While many social networks, email clients, and desktop editors reject raw SVG vectors, high-resolution PNGs with transparent alpha channels are universally supported everywhere.",
+          faq1Q: "Why convert SVG vectors to PNG format?",
+          faq1A: "Many platforms—including Microsoft Office, Discord, Slack, and various content management systems—do not support raw SVG files or have SVG rendering vulnerabilities. PNG provides pixel-perfect universal viewing with transparent backgrounds.",
+          faq2Q: "What scale multiplier should I choose?",
+          faq2A: "For web icons and UI elements, 1x or 2x (Retina) is ideal. For presentations, 4K video overlays, or print merchandise, select 4x or 8x to generate massive high-density bitmaps that never look blurry.",
+          faq3Q: "How do I preserve transparency in my output PNG?",
+          faq3A: "Keep the background mode set to 'Transparent (PNG)' (the default). The output PNG will retain an intact 32-bit alpha channel, allowing the logo or illustration to sit seamlessly over any background.",
+          faq4Q: "Are there any file size or conversion limits?",
+          faq4A: "No. Because all raster processing runs natively on your computer's GPU and CPU via the browser canvas API, there are no artificial file limits, watermarks, or conversion quotas.",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally.",
+          // Dynamic strings:
+          copiedToast: "PNG copied to clipboard!",
+          copyErrorToast: "Could not copy image to clipboard.",
+          pngDownloadToast: "High-resolution PNG downloaded!",
+          invalidSvgToast: "Invalid SVG content. Please check markup.",
+          loadedFileToast: "SVG loaded successfully!"
+        },
+        ar: {
+          backLink: "← العودة إلى الأدوات",
+          brandBadge: "الصور والمتجهات • محلي 100% في المتصفح • تنقيط فائق الدقة",
+          pageTitle: "تحويل SVG إلى <span>صورة PNG</span>",
+          pageSubtitle: "حوّل رسوميات ومتجهات SVG إلى صور PNG فائقة النقاء بمضاعفة دقة تصل إلى 8x. تحكم بالأبعاد والشفافية والألوان دون أي رفع للسحابة.",
+          tabUpload: "رفع ملف",
+          tabPaste: "لصق كود SVG",
+          dropTitle: "اسحب ملف SVG هنا أو انقر للاختيار",
+          dropDesc: "يدعم جميع ملفات .svg والشعارات والرموز المتجهة الصالحة.",
+          btnBrowse: "اختر ملف SVG",
+          lblSamples: "عينات جاهزة:",
+          secScaling: "مضاعف دقة التكبير",
+          scale1: "قياسي",
+          scale2: "شاشات ريتنا",
+          scale4: "دقة 4K فائقة",
+          scale8: "جودة طباعة ممتازة",
+          lblWidth: "العرض (بكسل)",
+          lblHeight: "الارتفاع (بكسل)",
+          secBg: "تعبئة خلفية الصورة",
+          bgTransparent: "شفاف (PNG)",
+          bgColor: "لون مخصص",
+          previewTitle: "معاينة الصورة الناتجة",
+          badgeLive: "دقة بكسلية",
+          btnDownload: "تنزيل PNG",
+          btnCopy: "نسخ الصورة",
+          btnReset: "إعادة تعيين",
+          infoTitle: "تنقيط متجهات احترافي دون أي مساومة على الجودة",
+          infoDesc: "اكتشف كيف تحول محركات Canvas المحلية المعادلات الهندسية إلى صور نقطية فائقة الكثافة مع خصوصية مطلقة.",
+          card1Title: "معادلات هندسية لا نهائية",
+          card1Desc: "تتكون ملفات SVG من منحنيات بيزيه رياضية وليس من بكسلات مسبقة الصنع. عند المضاعفة إلى 4x أو 8x يعاد رسم المنحنيات بالكامل لحدة بصرية متناهية.",
+          card2Title: "خصوصية 100% داخل الذاكرة",
+          card2Desc: "تتم معالجة شعارات عملائك وتصميماتك الحصرية داخل ذاكرة متصفحك المحلية فقط، دون إرسال أي بايت عبر الإنترنت.",
+          card3Title: "توافق عالمي شامل",
+          card3Desc: "بينما ترفض العديد من المنصات وتطبيقات المراسلة ملفات SVG، فإن صور PNG ذات الخلفية الشفافة مدعومة في كل مكان دون استثناء.",
+          faq1Q: "لماذا أحول ملفات SVG إلى تنسيق PNG؟",
+          faq1A: "العديد من البرامج ومنصات التواصل لا تعرض ملفات SVG مباشرة. يضمن تنسيق PNG عرضاً متطابقاً وثابتاً مع الحفاظ على شفافية الخلفية.",
+          faq2Q: "أي مضاعف دقة عليّ اختياره؟",
+          faq2A: "لرموز الويب ومواقع الإنترنت، يعد 1x أو 2x مثالياً. للملصقات والطباعة الكبيرة أو شاشات 4K، اختر 4x أو 8x لتجنب أي بهتان.",
+          faq3Q: "كيف أحافظ على خلفية شفافة في الصورة الناتجة؟",
+          faq3A: "اختر وضع 'شفاف (PNG)' (الوضع الافتراضي)، وستحتفظ الصورة بقناة ألفا الشفافة لتناسب وضعها فوق أي تصميم آخر.",
+          faq4Q: "هل هناك قيود على حجم الملفات أو عدد مرات التحويل؟",
+          faq4A: "كلا، نظراً لأن التحويل يجري محلياً عبر معالج الرسوميات في جهازك، فلا توجد أي قيود أو علامات مائية أو حدود استخدام.",
+          footerText: "© 2026 VantorKit. أدوات ويب سريعة، خاصة ومجانية. تتم كافة المعالجات محلياً داخل جهازك.",
+          copiedToast: "تم نسخ صورة PNG إلى الحافظة بنجاح!",
+          copyErrorToast: "تعذر نسخ الصورة إلى الحافظة.",
+          pngDownloadToast: "تم تنزيل صورة PNG عالية الدقة!",
+          invalidSvgToast: "محتوى SVG غير صالح، يرجى فحص الكود.",
+          loadedFileToast: "تم تحميل ملف SVG بنجاح!"
+        },
+        fr: {
+          backLink: "← Retour aux outils",
+          brandBadge: "Images & Vecteur • 100% Côté Client • Rastériseur Ultra-HD",
+          pageTitle: "Convertisseur <span>SVG en PNG</span>",
+          pageSubtitle: "Convertissez vos fichiers SVG en PNG haute résolution jusqu'à 8x. Personnalisez les dimensions, conservez la transparence ou appliquez des couleurs sans téléversement serveur.",
+          tabUpload: "Importer un fichier",
+          tabPaste: "Coller le code SVG",
+          dropTitle: "Déposez un fichier SVG ici ou cliquez pour parcourir",
+          dropDesc: "Prend en charge tous les fichiers .svg valides, logos, icônes et illustrations.",
+          btnBrowse: "Choisir un fichier SVG",
+          lblSamples: "Exemples rapides :",
+          secScaling: "Multiplicateur de Résolution",
+          scale1: "Standard",
+          scale2: "Rétina HD",
+          scale4: "Ultra 4K",
+          scale8: "Qualité Impression",
+          lblWidth: "Largeur (px)",
+          lblHeight: "Hauteur (px)",
+          secBg: "Remplissage de l'Arrière-Plan",
+          bgTransparent: "Transparent (PNG)",
+          bgColor: "Couleur unie",
+          previewTitle: "Aperçu du Rendu Canvas",
+          badgeLive: "Rendu Précis",
+          btnDownload: "Télécharger PNG",
+          btnCopy: "Copier l'image",
+          btnReset: "Réinitialiser",
+          infoTitle: "Rastérisation Vectorielle Sans Compromis",
+          infoDesc: "Découvrez comment le moteur Canvas natif transforme les courbes mathématiques en bitmaps denses avec une confidentialité absolue.",
+          card1Title: "Mathématiques Vectorielles Infinies",
+          card1Desc: "Les SVGs sont constitués de courbes de Bézier. En choisissant 4x ou 8x, notre moteur recalcule chaque courbe à la résolution cible pour une netteté totale.",
+          card2Title: "Confidentialité 100% en Mémoire",
+          card2Desc: "Vos logos d'entreprise et créations graphiques restent exclusivement dans la mémoire vive de votre navigateur. Rien n'est envoyé sur internet.",
+          card3Title: "Compatibilité Universelle",
+          card3Desc: "Tandis que de nombreuses applications rejettent le format SVG, le PNG avec canal alpha transparent est supporté partout sans restriction.",
+          faq1Q: "Pourquoi convertir du SVG en PNG ?",
+          faq1A: "De nombreuses applications (Office, réseaux sociaux, suites graphiques) ne gèrent pas le format SVG. Le PNG offre une compatibilité universelle immédiate.",
+          faq2Q: "Quel multiplicateur d'échelle choisir ?",
+          faq2A: "Pour les sites web, 1x ou 2x (Retina) suffit amplement. Pour l'impression papier ou les écrans 4K, choisissez 4x ou 8x.",
+          faq3Q: "Comment conserver la transparence ?",
+          faq3A: "Laissez l'option sur 'Transparent (PNG)' (sélection par défaut). Le fichier PNG conservera son canal alpha sans dégradation.",
+          faq4Q: "Y a-t-il des limites de taille ou de conversion ?",
+          faq4A: "Aucune. Tout s'exécute directement sur votre processeur graphique via l'API Canvas de votre navigateur.",
+          footerText: "© 2026 VantorKit. Utilitaires Web rapides, confidentiels et gratuits. Tous les traitements sont exécutés localement.",
+          copiedToast: "Image PNG copiée dans le presse-papier !",
+          copyErrorToast: "Impossible de copier l'image.",
+          pngDownloadToast: "Image PNG haute résolution téléchargée !",
+          invalidSvgToast: "Contenu SVG invalide. Vérifiez le balisage.",
+          loadedFileToast: "Fichier SVG chargé avec succès !"
+        },
+        it: {
+          backLink: "← Torna agli strumenti",
+          brandBadge: "Immagini & Vettoriale • 100% Lato Client • Rasterizzatore Ultra-HD",
+          pageTitle: "Convertitore da <span>SVG a PNG</span>",
+          pageSubtitle: "Trasforma grafiche vettoriali SVG in immagini PNG nitide fino a 8x di risoluzione. Personalizza dimensioni, trasparenza e colori senza caricare dati su server.",
+          tabUpload: "Carica file",
+          tabPaste: "Incolla codice SVG",
+          dropTitle: "Trascina un file SVG qui o clicca per sfogliare",
+          dropDesc: "Supporta tutti i file .svg validi, loghi, illustrazioni e icone.",
+          btnBrowse: "Scegli file SVG",
+          lblSamples: "Esempi veloci:",
+          secScaling: "Moltiplicatore di Risoluzione",
+          scale1: "Standard",
+          scale2: "Retina HD",
+          scale4: "Ultra 4K",
+          scale8: "Stampa Professionale",
+          lblWidth: "Larghezza (px)",
+          lblHeight: "Altezza (px)",
+          secBg: "Sfondo del Canvas",
+          bgTransparent: "Trasparente (PNG)",
+          bgColor: "Colore pieno",
+          previewTitle: "Anteprima Canvas",
+          badgeLive: "Pixel-Perfect",
+          btnDownload: "Scarica PNG",
+          btnCopy: "Copia immagine",
+          btnReset: "Ripristina",
+          infoTitle: "Rasterizzazione Vettoriale Professionale",
+          infoDesc: "Scopri come il motore Canvas del browser trasforma la geometria vettoriale in bitmap ad altissima densità senza inviare dati all'esterno.",
+          card1Title: "Geometria Vettoriale Infinita",
+          card1Desc: "Gli SVG usano curve matematiche anziché pixel statici. Scalando a 4x o 8x, il nostro motore ridisegna le curve con nitidezza cristallina.",
+          card2Title: "Privacy 100% in Memoria Locale",
+          card2Desc: "I tuoi loghi aziendali e file grafici rimangono confinati nella RAM del browser, senza mai transitare su server cloud.",
+          card3Title: "Compatibilità Universale",
+          card3Desc: "Mentre molte piattaforme rifiutano i file SVG, il formato PNG con canale alpha trasparente è accettato da qualsiasi software.",
+          faq1Q: "Perché convertire SVG in formato PNG?",
+          faq1A: "Molti programmi e social network non supportano il rendering diretto degli SVG. Il PNG garantisce una visualizzazione perfetta ovunque.",
+          faq2Q: "Quale moltiplicatore di scala scegliere?",
+          faq2A: "Per il web usa 1x o 2x. Per presentazioni su schermi 4K o stampe di grande formato, scegli 4x o 8x.",
+          faq3Q: "Come mantenere lo sfondo trasparente?",
+          faq3A: "Lascia selezionata l'opzione 'Trasparente (PNG)'. Il file manterrà il canale alpha integro per sovrapporsi a qualsiasi sfondo.",
+          faq4Q: "Ci sono limiti di dimensione o conversioni?",
+          faq4A: "Nessun limite. L'elaborazione sfrutta interamente le risorse della tua scheda grafica in locale senza quote o filigrane.",
+          footerText: "© 2026 VantorKit. Utility web veloci, private e gratuite. Tutte le elaborazioni avvengono localmente.",
+          copiedToast: "Immagine PNG copiata negli appunti!",
+          copyErrorToast: "Impossibile copiare l'immagine.",
+          pngDownloadToast: "PNG ad alta risoluzione scaricato!",
+          invalidSvgToast: "Contenuto SVG non valido. Controlla il codice.",
+          loadedFileToast: "File SVG caricato con successo!"
+        }
+      };
+
+      const LANG_LABELS = {
+        en: 'English',
+        ar: 'العربية',
+        fr: 'Français',
+        it: 'Italiano'
+      };
+
+      // Built-in high-value sample SVGs
+      const SAMPLE_SVGS = {
+        badge: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  <rect x="15" y="15" width="170" height="170" rx="35" fill="#0d111d" stroke="rgba(59,130,246,0.5)" stroke-width="3"/>
+  <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(168,85,247,0.3)" stroke-width="2" stroke-dasharray="6,4"/>
+  <path d="M60 65L95 140L108 115L82 65H60Z" fill="url(#g1)" filter="url(#glow)"/>
+  <path d="M140 65L105 140L92 115L118 65H140Z" fill="url(#g2)" filter="url(#glow)"/>
+  <circle cx="100" cy="65" r="9" fill="#60a5fa"/>
+  <circle cx="100" cy="140" r="7" fill="#c084fc"/>
+</svg>`,
+        rocket: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="rf" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <linearGradient id="rb" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <!-- Flames -->
+  <path d="M100 135 C85 160, 95 185, 100 195 C105 185, 115 160, 100 135 Z" fill="url(#rf)"/>
+  <path d="M100 140 C92 155, 96 175, 100 182 C104 175, 108 155, 100 140 Z" fill="#ffffff"/>
+  <!-- Fins -->
+  <path d="M65 130 C65 130, 60 148, 48 155 C65 155, 80 145, 80 130 Z" fill="#9333ea"/>
+  <path d="M135 130 C135 130, 140 148, 152 155 C135 155, 120 145, 120 130 Z" fill="#9333ea"/>
+  <!-- Rocket Body -->
+  <path d="M100 20 C82 50, 75 95, 78 135 L122 135 C125 95, 118 50, 100 20 Z" fill="url(#rb)"/>
+  <path d="M100 20 C108 50, 115 95, 122 135 L100 135 Z" fill="rgba(0,0,0,0.15)"/>
+  <!-- Porthole -->
+  <circle cx="100" cy="75" r="16" fill="#0f172a" stroke="#60a5fa" stroke-width="3"/>
+  <circle cx="100" cy="75" r="12" fill="#38bdf8"/>
+  <circle cx="96" cy="71" r="4" fill="#ffffff"/>
+</svg>`,
+        chart: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  <defs>
+    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <!-- Grid -->
+  <line x1="20" y1="30" x2="220" y2="30" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3,3"/>
+  <line x1="20" y1="70" x2="220" y2="70" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3,3"/>
+  <line x1="20" y1="110" x2="220" y2="110" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3,3"/>
+  <!-- Area -->
+  <path d="M20 130 L20 110 C50 115, 70 85, 100 90 C130 95, 150 45, 180 50 C200 55, 210 35, 220 30 L220 130 Z" fill="url(#areaGrad)"/>
+  <!-- Line -->
+  <path d="M20 110 C50 115, 70 85, 100 90 C130 95, 150 45, 180 50 C200 55, 210 35, 220 30" fill="none" stroke="url(#lineGrad)" stroke-width="4" stroke-linecap="round"/>
+  <!-- Dots -->
+  <circle cx="100" cy="90" r="5" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="180" cy="50" r="5" fill="#a855f7" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="220" cy="30" r="6" fill="#38bdf8" stroke="#ffffff" stroke-width="2"/>
+</svg>`
+      };
+
+      // --- State ---
+      let currentMode = 'upload'; // 'upload' | 'paste'
+      let activeSvgString = SAMPLE_SVGS.badge;
+      let baseWidth = 200;
+      let baseHeight = 200;
+      let scaleFactor = 2; // Default 2x
+      let customWidth = 400;
+      let customHeight = 400;
+      let isAspectLocked = true;
+      let bgMode = 'transparent'; // 'transparent' | 'color'
+      let bgColor = '#ffffff';
+      let activeFileName = 'vantorkit-badge.svg';
+      let toastTimer = null;
+      let isRasterizing = false;
+
+      // --- DOM Elements ---
+      const modeTabs = document.getElementById('modeTabs');
+      const modeTabBtns = document.querySelectorAll('.mode-tab-btn');
+      const modeTabPill = document.getElementById('modeTabPill');
+      const panelUpload = document.getElementById('panelUpload');
+      const panelPaste = document.getElementById('panelPaste');
+
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const btnBrowse = document.getElementById('btnBrowse');
+      const fileBanner = document.getElementById('fileBanner');
+      const displayFileName = document.getElementById('displayFileName');
+      const displayFileMeta = document.getElementById('displayFileMeta');
+      const btnClearFile = document.getElementById('btnClearFile');
+
+      const rawSvgInput = document.getElementById('rawSvgInput');
+      const sampleChips = document.querySelectorAll('.sample-chip');
+
+      const scaleBtns = document.querySelectorAll('.scale-btn');
+      const inputWidth = document.getElementById('inputWidth');
+      const inputHeight = document.getElementById('inputHeight');
+      const btnLockAspect = document.getElementById('btnLockAspect');
+
+      const btnBgTransparent = document.getElementById('btnBgTransparent');
+      const btnBgColor = document.getElementById('btnBgColor');
+      const bgColorControls = document.getElementById('bgColorControls');
+      const nativeBgColor = document.getElementById('nativeBgColor');
+      const hexBgColor = document.getElementById('hexBgColor');
+      const colorPresetDots = document.querySelectorAll('.color-preset-dot');
+
+      const previewCanvas = document.getElementById('previewCanvas');
+      const metaDimensions = document.getElementById('metaDimensions');
+      const metaScale = document.getElementById('metaScale');
+      const metaEstSize = document.getElementById('metaEstSize');
+
+      const btnDownloadPng = document.getElementById('btnDownloadPng');
+      const btnCopyClipboard = document.getElementById('btnCopyClipboard');
+      const btnResetAll = document.getElementById('btnResetAll');
+
+      const langDropdown = document.getElementById('langDropdown');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+
+      // --- Utilities ---
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+
+      function triggerDownload(url, filename) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      // --- Mode Tabs Switching ---
+      function updateModeTabPill() {
+        const activeBtn = modeTabs.querySelector('.mode-tab-btn.active');
+        if (!activeBtn || !modeTabPill) return;
+        modeTabPill.style.width = `${activeBtn.offsetWidth}px`;
+        modeTabPill.style.transform = `translateX(${activeBtn.offsetLeft - 5}px)`;
+      }
+
+      modeTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-mode');
+          if (mode === currentMode) return;
+          currentMode = mode;
+
+          modeTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+          updateModeTabPill();
+
+          if (mode === 'upload') {
+            panelUpload.style.display = 'block';
+            panelPaste.style.display = 'none';
+          } else {
+            panelUpload.style.display = 'none';
+            panelPaste.style.display = 'block';
+            rawSvgInput.value = activeSvgString;
+          }
+        });
+      });
+
+      window.addEventListener('resize', updateModeTabPill);
+
+      // --- SVG Parsing & Dimension Extraction ---
+      function parseSvgMetadata(svgStr) {
+        try {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(svgStr, 'image/svg+xml');
+          const svgEl = doc.querySelector('svg');
+          if (!svgEl || doc.querySelector('parsererror')) {
+            return null;
+          }
+
+          let w = parseFloat(svgEl.getAttribute('width'));
+          let h = parseFloat(svgEl.getAttribute('height'));
+
+          // Check viewBox if width or height missing
+          const viewBox = svgEl.getAttribute('viewBox');
+          if (viewBox) {
+            const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+            if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+              if (isNaN(w) || w <= 0) w = parts[2];
+              if (isNaN(h) || h <= 0) h = parts[3];
+            }
+          }
+
+          if (isNaN(w) || w <= 0) w = 300;
+          if (isNaN(h) || h <= 0) h = 300;
+
+          return { width: Math.round(w), height: Math.round(h), doc, svgEl };
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function loadNewSvg(svgStr, filename = 'illustration.svg', fileSize = 0) {
+        const meta = parseSvgMetadata(svgStr);
+        if (!meta) {
+          const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+          showToast((I18N[activeLang] || I18N.en).invalidSvgToast);
+          return false;
+        }
+
+        activeSvgString = svgStr;
+        activeFileName = filename;
+        baseWidth = meta.width;
+        baseHeight = meta.height;
+
+        customWidth = Math.round(baseWidth * scaleFactor);
+        customHeight = Math.round(baseHeight * scaleFactor);
+
+        inputWidth.value = customWidth;
+        inputHeight.value = customHeight;
+        rawSvgInput.value = svgStr;
+
+        if (fileSize > 0) {
+          displayFileName.textContent = filename;
+          displayFileMeta.textContent = `${formatBytes(fileSize)} • ${baseWidth} × ${baseHeight} px`;
+          fileBanner.style.display = 'flex';
+        }
+
+        renderCanvas();
+        return true;
+      }
+
+      // --- Canvas Rasterization Engine ---
+      function renderCanvas() {
+        if (isRasterizing) return;
+        isRasterizing = true;
+
+        const targetW = Math.max(1, Math.min(10000, parseInt(inputWidth.value, 10) || customWidth));
+        const targetH = Math.max(1, Math.min(10000, parseInt(inputHeight.value, 10) || customHeight));
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(activeSvgString, 'image/svg+xml');
+        const svgEl = doc.querySelector('svg');
+
+        if (!svgEl || doc.querySelector('parsererror')) {
+          isRasterizing = false;
+          return;
+        }
+
+        // Ensure xmlns is present
+        if (!svgEl.getAttribute('xmlns')) {
+          svgEl.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        }
+
+        // Ensure viewBox exists so it scales cleanly
+        if (!svgEl.getAttribute('viewBox')) {
+          svgEl.setAttribute('viewBox', `0 0 ${baseWidth} ${baseHeight}`);
+        }
+
+        // Set dimensions explicitly on SVG for the rasterizer
+        svgEl.setAttribute('width', targetW);
+        svgEl.setAttribute('height', targetH);
+
+        const serializer = new XMLSerializer();
+        const normalizedSvg = serializer.serializeToString(svgEl);
+
+        const blob = new Blob([normalizedSvg], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+
+        img.onload = () => {
+          previewCanvas.width = targetW;
+          previewCanvas.height = targetH;
+          const ctx = previewCanvas.getContext('2d');
+
+          // Handle Background Fill
+          if (bgMode === 'color') {
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, targetW, targetH);
+          } else {
+            ctx.clearRect(0, 0, targetW, targetH);
+          }
+
+          // Draw Image
+          ctx.drawImage(img, 0, 0, targetW, targetH);
+          URL.revokeObjectURL(url);
+
+          // Update Information Pills
+          metaDimensions.textContent = `${targetW} × ${targetH} px`;
+          metaScale.textContent = `Scale: ${scaleFactor}x`;
+
+          // Estimate PNG size via canvas data URL length
+          try {
+            const dataUrl = previewCanvas.toDataURL('image/png');
+            const approxBytes = Math.round((dataUrl.length - 22) * 0.75);
+            metaEstSize.textContent = `Est. ~${formatBytes(approxBytes)}`;
+          } catch (e) {
+            metaEstSize.textContent = `~PNG HD`;
+          }
+
+          isRasterizing = false;
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          isRasterizing = false;
+        };
+
+        img.src = url;
+      }
+
+      // --- Dimension Sync & Scale Logic ---
+      function applyScale(scale) {
+        scaleFactor = scale;
+        scaleBtns.forEach(btn => {
+          btn.classList.toggle('active', parseInt(btn.getAttribute('data-scale'), 10) === scale);
+        });
+
+        customWidth = Math.round(baseWidth * scale);
+        customHeight = Math.round(baseHeight * scale);
+
+        inputWidth.value = customWidth;
+        inputHeight.value = customHeight;
+
+        renderCanvas();
+      }
+
+      scaleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const s = parseInt(btn.getAttribute('data-scale'), 10);
+          applyScale(s);
+        });
+      });
+
+      // Aspect Ratio Lock Toggle
+      btnLockAspect.addEventListener('click', () => {
+        isAspectLocked = !isAspectLocked;
+        btnLockAspect.classList.toggle('locked', isAspectLocked);
+      });
+
+      // Width / Height Manual Changes
+      inputWidth.addEventListener('input', () => {
+        const w = parseInt(inputWidth.value, 10);
+        if (isNaN(w) || w <= 0) return;
+        customWidth = w;
+
+        if (isAspectLocked && baseWidth > 0) {
+          const ratio = baseHeight / baseWidth;
+          customHeight = Math.round(w * ratio);
+          inputHeight.value = customHeight;
+        }
+        renderCanvas();
+      });
+
+      inputHeight.addEventListener('input', () => {
+        const h = parseInt(inputHeight.value, 10);
+        if (isNaN(h) || h <= 0) return;
+        customHeight = h;
+
+        if (isAspectLocked && baseHeight > 0) {
+          const ratio = baseWidth / baseHeight;
+          customWidth = Math.round(h * ratio);
+          inputWidth.value = customWidth;
+        }
+        renderCanvas();
+      });
+
+      // Background Selector
+      btnBgTransparent.addEventListener('click', () => {
+        bgMode = 'transparent';
+        btnBgTransparent.classList.add('active');
+        btnBgColor.classList.remove('active');
+        bgColorControls.classList.remove('show');
+        renderCanvas();
+      });
+
+      btnBgColor.addEventListener('click', () => {
+        bgMode = 'color';
+        btnBgColor.classList.add('active');
+        btnBgTransparent.classList.remove('active');
+        bgColorControls.classList.add('show');
+        renderCanvas();
+      });
+
+      nativeBgColor.addEventListener('input', (e) => {
+        bgColor = e.target.value;
+        hexBgColor.value = bgColor.toUpperCase();
+        renderCanvas();
+      });
+
+      hexBgColor.addEventListener('change', () => {
+        let val = hexBgColor.value.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+          bgColor = val;
+        } else if (/^[0-9a-fA-F]{6}$/.test(val)) {
+          bgColor = '#' + val;
+          hexBgColor.value = bgColor;
+        }
+        nativeBgColor.value = bgColor;
+        renderCanvas();
+      });
+
+      colorPresetDots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          bgColor = dot.getAttribute('data-col');
+          nativeBgColor.value = bgColor;
+          hexBgColor.value = bgColor.toUpperCase();
+          renderCanvas();
+        });
+      });
+
+      // --- File Upload & Drag-and-Drop ---
+      btnBrowse.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+
+      dropZone.addEventListener('click', () => fileInput.click());
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('drag-active');
+        });
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      function handleFile(file) {
+        if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+          showToast('Please upload a valid .svg file.');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          const ok = loadNewSvg(content, file.name, file.size);
+          if (ok) {
+            const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+            showToast((I18N[activeLang] || I18N.en).loadedFileToast);
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      btnClearFile.addEventListener('click', () => {
+        fileBanner.style.display = 'none';
+        fileInput.value = '';
+        loadNewSvg(SAMPLE_SVGS.badge, 'vantorkit-badge.svg', 0);
+      });
+
+      // --- Raw Code Input & Samples ---
+      let rawDebounce = null;
+      rawSvgInput.addEventListener('input', () => {
+        clearTimeout(rawDebounce);
+        rawDebounce = setTimeout(() => {
+          const text = rawSvgInput.value.trim();
+          if (text) {
+            loadNewSvg(text, 'custom-vector.svg', 0);
+          }
+        }, 300);
+      });
+
+      sampleChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const key = chip.getAttribute('data-sample');
+          if (SAMPLE_SVGS[key]) {
+            loadNewSvg(SAMPLE_SVGS[key], `${key}.svg`, 0);
+          }
+        });
+      });
+
+      // --- Export Actions ---
+      // 1. Download PNG
+      btnDownloadPng.addEventListener('click', () => {
+        if (!previewCanvas) return;
+        const dataUrl = previewCanvas.toDataURL('image/png');
+        const exportName = activeFileName.replace(/\.svg$/i, '') + '-raster.png';
+        triggerDownload(dataUrl, exportName);
+
+        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+        showToast((I18N[activeLang] || I18N.en).pngDownloadToast);
+      });
+
+      // 2. Copy Image to System Clipboard
+      btnCopyClipboard.addEventListener('click', async () => {
+        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[activeLang] || I18N.en;
+
+        if (!navigator.clipboard || !window.ClipboardItem) {
+          showToast(dict.copyErrorToast);
+          return;
+        }
+
+        try {
+          previewCanvas.toBlob(async (blob) => {
+            if (!blob) {
+              showToast(dict.copyErrorToast);
+              return;
+            }
+            try {
+              await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': blob })
+              ]);
+              showToast(dict.copiedToast);
+            } catch (err) {
+              console.error('Clipboard write failed:', err);
+              showToast(dict.copyErrorToast);
+            }
+          }, 'image/png');
+        } catch (e) {
+          showToast(dict.copyErrorToast);
+        }
+      });
+
+      // 3. Reset All to Default
+      btnResetAll.addEventListener('click', () => {
+        fileBanner.style.display = 'none';
+        fileInput.value = '';
+        bgMode = 'transparent';
+        btnBgTransparent.classList.add('active');
+        btnBgColor.classList.remove('active');
+        bgColorControls.classList.remove('show');
+        isAspectLocked = true;
+        btnLockAspect.classList.add('locked');
+        scaleFactor = 2;
+        loadNewSvg(SAMPLE_SVGS.badge, 'vantorkit-badge.svg', 0);
+        applyScale(2);
+      });
+
+      // --- Language Switcher Logic ---
+      function toggleLangMenu(force) {
+        const isExpanded = force !== undefined ? force : !langDropdown.classList.contains('active');
+        langDropdown.classList.toggle('active', isExpanded);
+        langToggleBtn.setAttribute('aria-expanded', isExpanded);
+      }
+
+      if (langToggleBtn) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleLangMenu();
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (langDropdown && !langDropdown.contains(e.target)) {
+          toggleLangMenu(false);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && langDropdown && langDropdown.classList.contains('active')) {
+          toggleLangMenu(false);
+          langToggleBtn.focus();
+        }
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.getAttribute('data-lang');
+          if (lang && I18N[lang]) {
+            setLanguage(lang);
+            toggleLangMenu(false);
+          }
+        });
+      });
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        localStorage.setItem('vantorkit_lang', lang);
+
+        const dict = I18N[lang];
+        const isRtl = lang === 'ar';
+
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        if (currentLangLabel) {
+          currentLangLabel.textContent = LANG_LABELS[lang] || 'English';
+        }
+
+        langOptions.forEach(opt => {
+          opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+        });
+
+        // Translate data-i18n elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            if (key === 'pageTitle') {
+              el.innerHTML = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
+        });
+
+        updateModeTabPill();
+      }
+
+      // --- Initialization ---
+      const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(savedLang);
+      loadNewSvg(SAMPLE_SVGS.badge, 'vantorkit-badge.svg', 0);
+      applyScale(2);
+
+    })();
+  </script>
+</body>
+</html>
