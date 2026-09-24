@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compound Interest Calculator — Investment Growth Simulator | VantorKit</title>
+  <meta name="description" content="Calculate compound interest and investment growth in real time. Simulate monthly contributions, compare compounding frequencies, view interactive charts, and export amortization schedules.">
+  <meta name="keywords" content="compound interest calculator, investment calculator, future value calculator, interest growth, rule of 72, financial planning, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/compound-interest.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Compound Interest Calculator — Investment Growth Simulator | VantorKit">
+  <meta property="og:description" content="Simulate investment growth, deposits, and compound frequencies with interactive visual charts and year-by-year schedules. 100% free and client-side.">
+  <meta property="og:url" content="https://vantorkit.com/tools/compound-interest.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Compound Interest Calculator | VantorKit">
+  <meta name="twitter:description" content="Simulate compound interest and investment growth in real time with interactive Chart.js graphs.">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Structured Data: WebApplication, FinancialApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Compound Interest Calculator",
+        "url": "https://vantorkit.com/tools/compound-interest.html",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Interactive compound interest calculator and investment growth simulator featuring customizable contributions, visual stacked growth charts, and annual breakdown schedules."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is compound interest and how does it differ from simple interest?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Simple interest is paid only on the initial principal. Compound interest earns interest on both the initial principal and the accumulated interest from previous periods, creating exponential wealth growth over time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the Rule of 72?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Rule of 72 is a quick financial mental formula used to estimate how many years it will take to double an investment at a fixed annual interest rate. Divide 72 by the annual interest rate (e.g. 72 / 8% = 9 years to double)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How often should interest compound for maximum growth?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The more frequently interest is compounded (e.g., daily or monthly compared to annually), the higher the effective annual yield, because interest begins earning returns sooner."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --input-bg: #0c0e15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.25rem 1.5rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 0.95rem;
+      background: rgba(15, 18, 28, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateX(-3px);
+    }
+
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+    }
+
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Header */
+    header {
+      padding: 2.25rem 1.5rem 2.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 5px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.4px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    /* Simulator Two-Column Layout */
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 992px) {
+      .calculator-layout {
+        grid-template-columns: 420px 1fr;
+      }
+    }
+
+    /* Input Card */
+    .inputs-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-reset-inputs {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.2s ease;
+    }
+
+    .btn-reset-inputs:hover {
+      color: #fff;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .form-label {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 1rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.2s ease;
+      min-height: 48px;
+    }
+
+    .form-input.has-prefix {
+      padding-left: 2.25rem;
+    }
+
+    .form-input.has-suffix {
+      padding-right: 2.5rem;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      min-height: 48px;
+      transition: all 0.2s ease;
+    }
+
+    .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    /* Slider styling */
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .range-slider {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .slider-number {
+      width: 76px;
+      padding: 0.5rem 0.6rem;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-align: center;
+      outline: none;
+    }
+
+    .slider-number:focus {
+      border-color: var(--accent);
+    }
+
+    /* Output Section */
+    .outputs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* KPI Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 600px) {
+      .kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card.featured {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: linear-gradient(135deg, rgba(15, 18, 28, 0.9) 0%, rgba(20, 28, 48, 0.9) 100%);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .kpi-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #3b82f6, #a855f7);
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .kpi-value.text-accent {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .kpi-value.text-green {
+      color: #34d399;
+    }
+
+    .kpi-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Breakdown Bar */
+    .ratio-bar-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .ratio-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .ratio-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.35rem;
+    }
+
+    .ratio-dot.principal {
+      background: #38bdf8;
+    }
+
+    .ratio-dot.interest {
+      background: #a855f7;
+    }
+
+    .ratio-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .ratio-fill-principal {
+      height: 100%;
+      background: #38bdf8;
+      transition: width 0.3s ease;
+    }
+
+    .ratio-fill-interest {
+      height: 100%;
+      background: #a855f7;
+      transition: width 0.3s ease;
+    }
+
+    /* Visual Chart Card */
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .chart-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .chart-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action {
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+    }
+
+    .btn-action.copied {
+      color: var(--success);
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .chart-canvas-wrapper {
+      position: relative;
+      height: 320px;
+      width: 100%;
+    }
+
+    /* Schedule Table Section */
+    .schedule-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      margin-bottom: 3.5rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .schedule-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .table-responsive {
+      max-height: 420px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.88rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    th {
+      background: #0b0e17;
+      color: var(--text-main);
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--card-border);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #fff;
+    }
+
+    td.text-white {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    td.text-green {
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    /* SEO & Content Section */
+    .info-section {
+      border-top: 1px solid var(--card-border);
+      padding-top: 3.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+    }
+
+    .info-header h2 {
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 0.85rem;
+    }
+
+    .formula-display {
+      background: #090a0f;
+      border: 1px solid var(--card-border);
+      border-left: 3px solid var(--accent);
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #93c5fd;
+      overflow-x: auto;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .top-nav, .inputs-card, .btn-action, .chart-actions, .info-section, footer, .toast {
+        display: none !important;
+      }
+      .calculator-layout {
+        display: block !important;
+      }
+      .kpi-card, .chart-card, .schedule-card {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        color: #000 !important;
+      }
+      .kpi-value, .kpi-value.text-accent, .kpi-value.text-green {
+        color: #000 !important;
+        -webkit-text-fill-color: initial !important;
+      }
+      th {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+      }
+      td {
+        color: #333 !important;
+      }
+      .table-responsive {
+        max-height: none !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.15rem;
+      }
+      p.subtitle {
+        font-size: 0.98rem;
+      }
+      .kpi-value {
+        font-size: 1.5rem;
+      }
+      .chart-canvas-wrapper {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Back Link -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>← Back to Tools</span>
+    </a>
+    
+    <a href="/" class="nav-brand">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vGradLeftCI" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="vGradRightCI" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#818cf8" />
+            <stop offset="100%" stop-color="#c084fc" />
+          </linearGradient>
+          <linearGradient id="vGradCenterCI" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" />
+            <stop offset="100%" stop-color="#a855f7" />
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftCI)" />
+        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightCI)" />
+        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterCI)" />
+        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+      </svg>
+      <span>Vantor<span>Kit</span></span>
+    </a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+      <span>Math &amp; Finance • Client-Side Simulation • Zero Refresh</span>
+    </div>
+    <h1>Compound Interest <span>Calculator</span></h1>
+    <p class="subtitle">Simulate future portfolio growth, recurring monthly deposits, and compounding frequencies in real time with interactive charts and year-by-year amortization schedules.</p>
+  </header>
+
+  <main>
+    <!-- Simulator Grid Layout -->
+    <div class="calculator-layout">
+
+      <!-- Left Input Parameters Panel -->
+      <section class="inputs-card" aria-label="Investment Inputs">
+        <div class="card-heading">
+          <span class="card-title">Investment Parameters</span>
+          <button type="button" class="btn-reset-inputs" id="btnResetDefaults" title="Reset to standard defaults">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Initial Principal -->
+        <div class="form-group">
+          <label class="form-label" for="inputPrincipal">
+            <span>Initial Investment (Principal)</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">$</span>
+            <input type="number" id="inputPrincipal" class="form-input has-prefix" value="10000" min="0" step="500">
+          </div>
+        </div>
+
+        <!-- Monthly Contribution -->
+        <div class="form-group">
+          <label class="form-label" for="inputMonthly">
+            <span>Monthly Contribution</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">$</span>
+            <input type="number" id="inputMonthly" class="form-input has-prefix" value="500" min="0" step="50">
+          </div>
+        </div>
+
+        <!-- Annual Interest Rate -->
+        <div class="form-group">
+          <label class="form-label" for="inputRate">
+            <span>Estimated Annual Return Rate</span>
+          </label>
+          <div class="input-wrapper">
+            <input type="number" id="inputRate" class="form-input has-suffix" value="7.5" min="0" max="100" step="0.1">
+            <span class="input-suffix">%</span>
+          </div>
+        </div>
+
+        <!-- Investment Horizon (Years) Slider + Sync Number -->
+        <div class="form-group">
+          <label class="form-label">
+            <span>Investment Horizon</span>
+            <span id="yearsLabel" style="color:#60a5fa; font-weight:700;">20 Years</span>
+          </label>
+          <div class="slider-container">
+            <div class="slider-row">
+              <input type="range" id="yearsSlider" class="range-slider" min="1" max="50" value="20" step="1">
+              <input type="number" id="yearsInput" class="slider-number" min="1" max="50" value="20">
+            </div>
+          </div>
+        </div>
+
+        <!-- Compounding Frequency -->
+        <div class="form-group">
+          <label class="form-label" for="selectFrequency">
+            <span>Compounding Frequency</span>
+          </label>
+          <select id="selectFrequency" class="form-select">
+            <option value="12" selected>Monthly (12/yr)</option>
+            <option value="365">Daily (365/yr)</option>
+            <option value="4">Quarterly (4/yr)</option>
+            <option value="2">Semi-Annually (2/yr)</option>
+            <option value="1">Annually (1/yr)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Right Output & Chart Panel -->
+      <section class="outputs-container" aria-label="Calculation Results">
+        
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card featured">
+            <span class="kpi-label">Future Investment Value</span>
+            <div class="kpi-value text-accent" id="kpiFutureValue">$0</div>
+            <div class="kpi-meta" id="kpiFutureMeta">Over 20 years</div>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-label">Total Principal Invested</span>
+            <div class="kpi-value" id="kpiTotalPrincipal">$0</div>
+            <div class="kpi-meta" id="kpiPrincipalMeta">Initial + contributions</div>
+          </div>
+
+          <div class="kpi-card">
+            <span class="kpi-label">Total Interest Earned</span>
+            <div class="kpi-value text-green" id="kpiTotalInterest">$0</div>
+            <div class="kpi-meta" id="kpiInterestMeta">Growth earnings</div>
+          </div>
+        </div>
+
+        <!-- Ratio Breakdown Progress Bar -->
+        <div class="ratio-bar-wrap">
+          <div class="ratio-bar-header">
+            <span><span class="ratio-dot principal"></span>Principal: <strong id="ratioPrincipalText">0%</strong></span>
+            <span><span class="ratio-dot interest"></span>Interest: <strong id="ratioInterestText">0%</strong></span>
+          </div>
+          <div class="ratio-track">
+            <div class="ratio-fill-principal" id="ratioFillPrincipal" style="width: 50%;"></div>
+            <div class="ratio-fill-interest" id="ratioFillInterest" style="width: 50%;"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Growth Chart -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Portfolio Accumulation Over Time</span>
+            <div class="chart-actions">
+              <button type="button" class="btn-action" id="btnCopySummary">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Summary</span>
+              </button>
+              <button type="button" class="btn-action" id="btnPrintReport">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                <span>Print / PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="chart-canvas-wrapper">
+            <canvas id="growthChart"></canvas>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- Annual Schedule Table Card -->
+    <section class="schedule-card" aria-label="Year by Year Amortization Schedule">
+      <div class="schedule-header">
+        <span class="schedule-title">Annual Amortization &amp; Growth Schedule</span>
+        <span style="font-size:0.85rem; color:var(--text-muted);">Year-by-year compounding trajectory</span>
+      </div>
+
+      <div class="table-responsive">
+        <table id="scheduleTable">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Starting Balance</th>
+              <th>Annual Deposits</th>
+              <th>Interest Earned</th>
+              <th>Ending Balance</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleTableBody">
+            <!-- Dynamic Schedule Rows Inserted Here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SEO Educational Guide -->
+    <article class="info-section" aria-labelledby="guide-heading">
+      <div class="info-header">
+        <h2 id="guide-heading">The Mathematics of Compounding: Formula &amp; Strategic Insights</h2>
+        <p>Understand how time, regular deposits, and compounding frequencies interact to accelerate exponential portfolio growth.</p>
+      </div>
+
+      <!-- 3 Feature Explanations -->
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <h3>The Compound Interest Formula</h3>
+          <p>Compound interest applies returns to both your initial principal and previous earnings.</p>
+          <div class="formula-display">A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]</div>
+          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">Where <strong>P</strong> is principal, <strong>r</strong> is annual rate, <strong>n</strong> is compounding frequency, <strong>t</strong> is years, and <strong>PMT</strong> is regular monthly contribution.</p>
+        </div>
+
+        <div class="guide-card">
+          <h3>The Rule of 72 Shortcut</h3>
+          <p>Estimate how many years it will take for your investment to double at a given annual interest rate without complex logarithms.</p>
+          <div class="formula-display">Years to Double ≈ 72 ÷ Annual Return Rate</div>
+          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">For instance, an investment generating 9% annually will double approximately every 8 years (72 ÷ 9 = 8 years).</p>
+        </div>
+
+        <div class="guide-card">
+          <h3>The Exponential Advantage of Time</h3>
+          <p>Because returns compound exponentially, starting 5 to 10 years earlier produces vastly superior wealth than saving larger sums later.</p>
+          <div class="formula-display">Growth = Principal × (Multiplier)^Time</div>
+          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">Consistent dollar-cost averaging shields you from market timing while harnessing the compounding curve.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="info-header" style="margin-bottom: 2rem;">
+        <h2>Frequently Asked Questions</h2>
+        <p>Essential insights for mastering investment calculations and wealth accumulation.</p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>How does compounding frequency affect my final returns?</h4>
+          <p>The more frequently an investment compounds (e.g. daily vs. annually), the faster your accumulated earnings start generating their own returns. While the difference between monthly and daily compounding is modest, the jump from annual to monthly compounding is significant over multi-decade horizons.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Does this calculator account for taxes and inflation?</h4>
+          <p>This model calculates nominal gross returns. To simulate real purchasing power, you can adjust your expected annual interest rate downward by the projected inflation rate (e.g. subtracting 2.5% inflation from a 9% return yields a 6.5% real rate).</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>What is the difference between APR and APY?</h4>
+          <p>APR (Annual Percentage Rate) reflects the nominal stated interest rate without compounding. APY (Annual Percentage Yield) represents the actual annual return achieved once compounding frequency is taken into account.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How are monthly contributions calculated with different compounding intervals?</h4>
+          <p>Our simulation applies standard financial compounding mechanics. For frequencies matching deposits (monthly), returns compound 12 times a year. For alternative frequencies, an effective equivalent periodic yield is accurately computed.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Copied to clipboard</span>
+  </div>
+
+  <!-- Footer matching index.html -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+  </footer>
+
+  <!-- Simulation & Visualization Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- DOM Elements ---
+      const inputPrincipal = document.getElementById('inputPrincipal');
+      const inputMonthly = document.getElementById('inputMonthly');
+      const inputRate = document.getElementById('inputRate');
+      const yearsSlider = document.getElementById('yearsSlider');
+      const yearsInput = document.getElementById('yearsInput');
+      const yearsLabel = document.getElementById('yearsLabel');
+      const selectFrequency = document.getElementById('selectFrequency');
+      const btnResetDefaults = document.getElementById('btnResetDefaults');
+
+      const kpiFutureValue = document.getElementById('kpiFutureValue');
+      const kpiFutureMeta = document.getElementById('kpiFutureMeta');
+      const kpiTotalPrincipal = document.getElementById('kpiTotalPrincipal');
+      const kpiPrincipalMeta = document.getElementById('kpiPrincipalMeta');
+      const kpiTotalInterest = document.getElementById('kpiTotalInterest');
+      const kpiInterestMeta = document.getElementById('kpiInterestMeta');
+
+      const ratioPrincipalText = document.getElementById('ratioPrincipalText');
+      const ratioInterestText = document.getElementById('ratioInterestText');
+      const ratioFillPrincipal = document.getElementById('ratioFillPrincipal');
+      const ratioFillInterest = document.getElementById('ratioFillInterest');
+
+      const scheduleTableBody = document.getElementById('scheduleTableBody');
+      const btnCopySummary = document.getElementById('btnCopySummary');
+      const btnPrintReport = document.getElementById('btnPrintReport');
+
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      let toastTimer = null;
+
+      let chartInstance = null;
+
+      // --- Format Currency ---
+      function formatMoney(amount, decimals = 2) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }).format(amount);
+      }
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      // --- Financial Math Engine ---
+      // Calculates future value given P, monthly contribution PMT, annual rate r, frequency n, and years t
+      function computeFutureValue(P, PMT, r, n, t) {
+        if (t === 0) return { fv: P, principal: P, interest: 0 };
+
+        if (r === 0) {
+          const principal = P + (PMT * 12 * t);
+          return { fv: principal, principal: principal, interest: 0 };
+        }
+
+        // Future Value of Principal: P * (1 + r/n)^(n*t)
+        const principalFV = P * Math.pow(1 + (r / n), n * t);
+
+        // Effective annual rate: EAR = (1 + r/n)^n - 1
+        // Effective monthly rate: rm = (1 + EAR)^(1/12) - 1
+        const ear = Math.pow(1 + (r / n), n) - 1;
+        const rm = Math.pow(1 + ear, 1 / 12) - 1;
+
+        // Future Value of Monthly Stream: PMT * [((1 + rm)^(12*t) - 1) / rm]
+        const monthlyFV = PMT * ((Math.pow(1 + rm, 12 * t) - 1) / rm);
+
+        const totalFV = principalFV + monthlyFV;
+        const totalPrincipal = P + (PMT * 12 * t);
+        const totalInterest = Math.max(0, totalFV - totalPrincipal);
+
+        return {
+          fv: totalFV,
+          principal: totalPrincipal,
+          interest: totalInterest
+        };
+      }
+
+      // --- Simulation & UI Update ---
+      function runSimulation() {
+        const P = Math.max(0, parseFloat(inputPrincipal.value) || 0);
+        const PMT = Math.max(0, parseFloat(inputMonthly.value) || 0);
+        const ratePercent = Math.max(0, parseFloat(inputRate.value) || 0);
+        const r = ratePercent / 100;
+        const t = Math.max(1, parseInt(yearsInput.value, 10) || 1);
+        const n = parseInt(selectFrequency.value, 10) || 12;
+
+        yearsLabel.textContent = `${t} Year${t > 1 ? 's' : ''}`;
+
+        // Compute End Result
+        const finalResult = computeFutureValue(P, PMT, r, n, t);
+
+        kpiFutureValue.textContent = formatMoney(finalResult.fv, 2);
+        kpiFutureMeta.textContent = `At year ${t} (${ratePercent}% return)`;
+
+        kpiTotalPrincipal.textContent = formatMoney(finalResult.principal, 2);
+        kpiPrincipalMeta.textContent = `$${formatMoney(P, 0)} base + $${formatMoney(PMT * 12 * t, 0)} deposits`;
+
+        kpiTotalInterest.textContent = formatMoney(finalResult.interest, 2);
+        kpiInterestMeta.textContent = `${finalResult.fv > 0 ? ((finalResult.interest / finalResult.fv) * 100).toFixed(1) : 0}% of portfolio`;
+
+        // Ratio Bar
+        const principalPct = finalResult.fv > 0 ? (finalResult.principal / finalResult.fv) * 100 : 100;
+        const interestPct = finalResult.fv > 0 ? (finalResult.interest / finalResult.fv) * 100 : 0;
+
+        ratioPrincipalText.textContent = `${principalPct.toFixed(1)}%`;
+        ratioInterestText.textContent = `${interestPct.toFixed(1)}%`;
+        ratioFillPrincipal.style.width = `${principalPct}%`;
+        ratioFillInterest.style.width = `${interestPct}%`;
+
+        // Generate Year-by-Year Schedule & Chart Datasets
+        const labels = [];
+        const principalData = [];
+        const interestData = [];
+        const scheduleRows = [];
+
+        // Year 0 Base
+        labels.push('Start');
+        principalData.push(Math.round(P));
+        interestData.push(0);
+
+        let prevBalance = P;
+
+        for (let yr = 1; yr <= t; yr++) {
+          const yrResult = computeFutureValue(P, PMT, r, n, yr);
+          const annualDeposits = PMT * 12;
+          const interestEarned = yrResult.fv - prevBalance - annualDeposits;
+
+          labels.push(`Yr ${yr}`);
+          principalData.push(Math.round(yrResult.principal));
+          interestData.push(Math.round(yrResult.interest));
+
+          scheduleRows.push({
+            year: yr,
+            start: prevBalance,
+            deposits: annualDeposits,
+            interest: Math.max(0, interestEarned),
+            end: yrResult.fv
+          });
+
+          prevBalance = yrResult.fv;
+        }
+
+        // Render Table Body
+        scheduleTableBody.innerHTML = scheduleRows.map(row => `
+          <tr>
+            <td class="text-white">Year ${row.year}</td>
+            <td>${formatMoney(row.start, 2)}</td>
+            <td>${formatMoney(row.deposits, 2)}</td>
+            <td class="text-green">+${formatMoney(row.interest, 2)}</td>
+            <td class="text-white">${formatMoney(row.end, 2)}</td>
+          </tr>
+        `).join('');
+
+        // Render Chart.js
+        updateChart(labels, principalData, interestData);
+      }
+
+      // --- Chart.js Visualization ---
+      function updateChart(labels, principalData, interestData) {
+        const ctx = document.getElementById('growthChart').getContext('2d');
+
+        if (!chartInstance) {
+          chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'Principal Invested',
+                  data: principalData,
+                  backgroundColor: 'rgba(56, 189, 248, 0.4)',
+                  borderColor: '#38bdf8',
+                  borderWidth: 2,
+                  fill: true,
+                  pointRadius: 2,
+                  pointHoverRadius: 5,
+                  tension: 0.25
+                },
+                {
+                  label: 'Interest Earned',
+                  data: interestData,
+                  backgroundColor: 'rgba(168, 85, 247, 0.45)',
+                  borderColor: '#a855f7',
+                  borderWidth: 2,
+                  fill: true,
+                  pointRadius: 2,
+                  pointHoverRadius: 5,
+                  tension: 0.25
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                mode: 'index',
+                intersect: false
+              },
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: {
+                    color: '#94a3b8',
+                    font: {
+                      family: "'Plus Jakarta Sans', sans-serif",
+                      weight: 600,
+                      size: 12
+                    },
+                    boxWidth: 14
+                  }
+                },
+                tooltip: {
+                  backgroundColor: 'rgba(11, 14, 23, 0.95)',
+                  titleColor: '#fff',
+                  bodyColor: '#e2e8f0',
+                  borderColor: 'rgba(255, 255, 255, 0.1)',
+                  borderWidth: 1,
+                  padding: 12,
+                  boxPadding: 6,
+                  callbacks: {
+                    label: function (context) {
+                      return `${context.dataset.label}: $${new Intl.NumberFormat('en-US').format(context.raw)}`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  stacked: true,
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.05)'
+                  },
+                  ticks: {
+                    color: '#94a3b8',
+                    font: { size: 11 }
+                  }
+                },
+                y: {
+                  stacked: true,
+                  grid: {
+                    color: 'rgba(255, 255, 255, 0.05)'
+                  },
+                  ticks: {
+                    color: '#94a3b8',
+                    font: { size: 11 },
+                    callback: function (val) {
+                      if (val >= 1000000) return '$' + (val / 1000000).toFixed(1) + 'M';
+                      if (val >= 1000) return '$' + (val / 1000).toFixed(0) + 'k';
+                      return '$' + val;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        } else {
+          chartInstance.data.labels = labels;
+          chartInstance.data.datasets[0].data = principalData;
+          chartInstance.data.datasets[1].data = interestData;
+          chartInstance.update('none'); // Update without full redraw glitch
+        }
+      }
+
+      // --- Synchronize Years Range & Number Input ---
+      yearsSlider.addEventListener('input', () => {
+        yearsInput.value = yearsSlider.value;
+        runSimulation();
+      });
+
+      yearsInput.addEventListener('input', () => {
+        let val = parseInt(yearsInput.value, 10);
+        if (isNaN(val)) val = 1;
+        if (val > 50) val = 50;
+        if (val < 1) val = 1;
+        yearsSlider.value = val;
+        runSimulation();
+      });
+
+      // Inputs event listeners
+      [inputPrincipal, inputMonthly, inputRate, selectFrequency].forEach(el => {
+        el.addEventListener('input', runSimulation);
+        el.addEventListener('change', runSimulation);
+      });
+
+      // Reset Defaults
+      btnResetDefaults.addEventListener('click', () => {
+        inputPrincipal.value = '10000';
+        inputMonthly.value = '500';
+        inputRate.value = '7.5';
+        yearsSlider.value = '20';
+        yearsInput.value = '20';
+        selectFrequency.value = '12';
+        runSimulation();
+        showToast('Reset to default values');
+      });
+
+      // Copy Summary
+      btnCopySummary.addEventListener('click', () => {
+        const P = parseFloat(inputPrincipal.value) || 0;
+        const PMT = parseFloat(inputMonthly.value) || 0;
+        const rate = inputRate.value;
+        const years = yearsInput.value;
+        const freqText = selectFrequency.options[selectFrequency.selectedIndex].text;
+
+        const summaryText = [
+          'VantorKit Compound Interest Summary:',
+          `• Initial Principal: ${formatMoney(P, 2)}`,
+          `• Monthly Contribution: ${formatMoney(PMT, 2)}`,
+          `• Annual Return Rate: ${rate}%`,
+          `• Investment Horizon: ${years} Years`,
+          `• Compounding Frequency: ${freqText}`,
+          '----------------------------------------',
+          `• Future Balance: ${kpiFutureValue.textContent}`,
+          `• Total Principal Invested: ${kpiTotalPrincipal.textContent}`,
+          `• Total Interest Earned: ${kpiTotalInterest.textContent}`,
+          'Simulated locally via VantorKit (https://vantorkit.com)'
+        ].join('\n');
+
+        function indicateCopied() {
+          const originalHTML = btnCopySummary.innerHTML;
+          btnCopySummary.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Copied!</span>
+          `;
+          btnCopySummary.classList.add('copied');
+          showToast('Summary copied to clipboard!');
+          setTimeout(() => {
+            btnCopySummary.innerHTML = originalHTML;
+            btnCopySummary.classList.remove('copied');
+          }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(summaryText).then(indicateCopied).catch(() => {
+            fallbackCopy(summaryText, indicateCopied);
+          });
+        } else {
+          fallbackCopy(summaryText, indicateCopied);
+        }
+      });
+
+      function fallbackCopy(text, cb) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          cb();
+        } catch (e) {
+          console.error('Copy failed:', e);
+        }
+        document.body.removeChild(ta);
+      }
+
+      // Print / PDF Report
+      btnPrintReport.addEventListener('click', () => {
+        window.print();
+      });
+
+      // Initial execution
+      runSimulation();
+    })();
+  </script>
+</body>
+</html>
