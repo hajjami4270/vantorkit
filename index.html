@@ -449,7 +449,7 @@
 
     .search-box {
       width: 100%;
-      padding: 0.95rem 1.2rem 0.95rem 3.1rem;
+      padding: 0.95rem 3.6rem 0.95rem 3.1rem;
       border-radius: 14px;
       border: 1px solid var(--card-border);
       background: rgba(14, 18, 28, 0.85);
@@ -472,9 +472,40 @@
       color: var(--accent);
     }
 
+    .search-kbd {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 3px 7px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      font-family: inherit;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+
+    .search-kbd:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border-color: rgba(96, 165, 250, 0.4);
+    }
+
     .search-clear {
       position: absolute;
-      right: 1rem;
+      right: 0.9rem;
       top: 50%;
       transform: translateY(-50%);
       background: rgba(255, 255, 255, 0.1);
@@ -503,13 +534,18 @@
     }
 
     html[dir="rtl"] .search-box {
-      padding-left: 1.2rem;
+      padding-left: 3.6rem;
       padding-right: 3.1rem;
+    }
+
+    html[dir="rtl"] .search-kbd {
+      right: auto;
+      left: 0.85rem;
     }
 
     html[dir="rtl"] .search-clear {
       right: auto;
-      left: 1rem;
+      left: 0.9rem;
     }
 
     /* Main Container */
@@ -914,6 +950,7 @@
     <div class="search-wrapper">
       <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       <input type="text" id="toolSearch" class="search-box" placeholder="Search 23 tools (e.g. percentage, pdf, counter)..." autocomplete="off" spellcheck="false">
+      <kbd class="search-kbd" id="searchKbd" title="Press ⌘K or Ctrl+K to search">⌘K</kbd>
       <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
   </header>
@@ -1924,6 +1961,7 @@
 
       const searchInput = document.getElementById('toolSearch');
       const searchClear = document.getElementById('searchClear');
+      const searchKbd = document.getElementById('searchKbd');
       const categoryBtns = document.querySelectorAll('.category-btn');
       const cards = document.querySelectorAll('.tool-card');
       const noResultsBox = document.getElementById('noResultsBox');
@@ -2035,11 +2073,13 @@
         const activeCat = document.querySelector('.category-btn.active').dataset.cat;
         let visibleCount = 0;
 
-        // Toggle clear search button
+        // Toggle clear search button and ⌘K badge
         if (query.length > 0) {
           searchClear.style.display = 'flex';
+          if (searchKbd) searchKbd.style.display = 'none';
         } else {
           searchClear.style.display = 'none';
+          if (searchKbd) searchKbd.style.display = 'inline-flex';
         }
 
         cards.forEach(card => {
@@ -2075,6 +2115,12 @@
 
       searchInput.addEventListener('input', filterTools);
 
+      if (searchKbd) {
+        searchKbd.addEventListener('click', () => {
+          searchInput.focus();
+        });
+      }
+
       searchClear.addEventListener('click', () => {
         searchInput.value = '';
         filterTools();
@@ -2097,10 +2143,14 @@
         });
       });
 
-      // Keyboard Shortcut (Press '/' to focus search)
+      // Keyboard Shortcuts (Cmd+K / Ctrl+K and '/' to open & focus search)
       document.addEventListener('keydown', (e) => {
-        if (e.key === '/' && document.activeElement !== searchInput && !['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) {
+        const isCmdOrCtrlK = (e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K');
+        const isSlash = e.key === '/' && document.activeElement !== searchInput && !['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase());
+
+        if (isCmdOrCtrlK || isSlash) {
           e.preventDefault();
+          searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
           searchInput.focus();
           searchInput.select();
         } else if (e.key === 'Escape' && document.activeElement === searchInput) {
