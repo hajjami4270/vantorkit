@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV to JSON &amp; JSON to CSV Converter — Free Online Tool | VantorKit</title>
+  <meta name="description" content="Free, fast, and secure CSV to JSON and JSON to CSV converter. Client-side processing with zero server uploads, auto-delimiter detection, nested JSON flattening, and RFC 4180 compliance.">
+  <meta name="keywords" content="csv to json, json to csv, csv converter, json converter, flatten json to csv, online csv converter, data converter, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/csv-json-converter.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CSV to JSON &amp; JSON to CSV Converter — Free Online Tool | VantorKit">
+  <meta property="og:description" content="Convert CSV to JSON and JSON to CSV instantly in your browser. 100% private, client-side data conversion with zero logs.">
+  <meta property="og:url" content="https://vantorkit.com/tools/csv-json-converter.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSV to JSON &amp; JSON to CSV Converter | VantorKit">
+  <meta name="twitter:description" content="Instant bidirectional CSV and JSON conversion. 100% client-side privacy.">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Schema.org Structured Data: SoftwareApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit CSV to JSON & JSON to CSV Converter",
+        "url": "https://vantorkit.com/tools/csv-json-converter.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "High-performance client-side bidirectional CSV and JSON converter with automatic delimiter detection, nested JSON flattening, and RFC 4180 compliance."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my CSV or JSON data uploaded to any server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All conversion logic runs entirely on your local machine within your browser's JavaScript engine. No file contents, text, or metadata are ever transmitted across the internet."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does nested JSON conversion to CSV work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The converter automatically flattens deep object hierarchies into dot-notation column headers (for example, user.address.city). Arrays are serialized cleanly so no data is lost."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the CSV parser support commas and quotes inside cells?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The parser strictly adheres to the RFC 4180 standard. Any cell containing delimiters, line breaks, or double quotes is properly enclosed and unescaped."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --editor-bg: #0b0e17;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.25rem 1.5rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 0.95rem;
+      background: rgba(15, 18, 28, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateX(-3px);
+    }
+
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+    }
+
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Header */
+    header {
+      padding: 2.25rem 1.5rem 2.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 5px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.4px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1300px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-switcher-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-tabs {
+      display: inline-flex;
+      background: rgba(14, 18, 28, 0.85);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+    }
+
+    .mode-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.25rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-tab:hover {
+      color: #fff;
+    }
+
+    .mode-tab.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(168, 85, 247, 0.25) 100%);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    .swap-mode-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--badge-text);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .swap-mode-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Notification Banner */
+    .alert-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .alert-banner.error {
+      display: flex;
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .alert-banner.warning {
+      display: flex;
+      background: var(--warning-bg);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+    }
+
+    .alert-content {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .alert-close {
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+
+    .alert-close:hover {
+      opacity: 1;
+    }
+
+    /* Options Bar */
+    .options-bar {
+      background: rgba(14, 18, 28, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 0.85rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .options-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .option-select {
+      background: #090a0f;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.35rem 0.65rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .option-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .option-checkbox {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #090a0f;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-grid;
+      place-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .option-checkbox:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .option-checkbox:checked::before {
+      content: "";
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .option-checkbox:focus-visible {
+      outline: 2px solid var(--accent);
+    }
+
+    .quick-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action-small {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--card-border);
+      background: rgba(22, 27, 42, 0.7);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-small:hover {
+      color: #fff;
+      border-color: rgba(96, 165, 250, 0.4);
+      background: var(--card-hover);
+    }
+
+    /* Dual Editor Grid */
+    .converter-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 992px) {
+      .converter-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .editor-pane {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(14px);
+      transition: border-color 0.2s ease;
+    }
+
+    .editor-pane.drag-over {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+
+    .editor-header {
+      padding: 0.85rem 1.25rem;
+      background: rgba(11, 14, 23, 0.8);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .editor-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .editor-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .editor-btn {
+      background: rgba(25, 30, 45, 0.7);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .editor-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+    }
+
+    .editor-btn.btn-copy.copied {
+      color: var(--success);
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .editor-btn.btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .editor-btn.btn-primary:hover {
+      background: #2563eb;
+    }
+
+    /* Textareas */
+    .editor-body {
+      position: relative;
+      flex: 1;
+      display: flex;
+      min-height: 380px;
+    }
+
+    .code-textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      padding: 1.15rem;
+      background: var(--editor-bg);
+      border: none;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      white-space: pre;
+      overflow-wrap: normal;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+
+    .code-textarea:focus {
+      background: #080a11;
+    }
+
+    /* Drop Overlay for File Upload */
+    .file-input-hidden {
+      display: none;
+    }
+
+    .editor-footer {
+      padding: 0.65rem 1.25rem;
+      background: rgba(11, 14, 23, 0.8);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .editor-stats {
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* SEO & Content Section */
+    .info-section {
+      border-top: 1px solid var(--card-border);
+      padding-top: 3.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+    }
+
+    .info-header h2 {
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Comparison Table */
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 3.5rem;
+      overflow-x: auto;
+      backdrop-filter: blur(12px);
+    }
+
+    .table-container h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .table-container p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #090c15;
+      color: var(--text-main);
+      padding: 0.85rem 1rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-muted);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-main);
+    }
+
+    td strong {
+      color: #fff;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.15rem;
+      }
+      p.subtitle {
+        font-size: 0.95rem;
+      }
+      .options-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .code-textarea {
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Back Link -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span>← Back to Tools</span>
+    </a>
+    
+    <a href="/" class="nav-brand">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vGradLeftC" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="vGradRightC" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#818cf8" />
+            <stop offset="100%" stop-color="#c084fc" />
+          </linearGradient>
+          <linearGradient id="vGradCenterC" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" />
+            <stop offset="100%" stop-color="#a855f7" />
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftC)" />
+        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightC)" />
+        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterC)" />
+        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+      </svg>
+      <span>Vantor<span>Kit</span></span>
+    </a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>PDF &amp; Files • Client-Side • Zero Server Uploads</span>
+    </div>
+    <h1 id="pageTitle">CSV to JSON / <span>JSON to CSV</span></h1>
+    <p class="subtitle" id="pageSubtitle">Seamlessly convert tabular CSV records to structured JSON and flatten nested JSON back into clean CSV files. Fast, private, RFC 4180 compliant.</p>
+  </header>
+
+  <main>
+    <!-- Mode Switcher Tabs -->
+    <div class="mode-switcher-wrap">
+      <div class="mode-tabs" role="tablist">
+        <button type="button" class="mode-tab active" id="tabCsvToJson" role="tab" aria-selected="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>CSV to JSON</span>
+        </button>
+        <button type="button" class="mode-tab" id="tabJsonToCsv" role="tab" aria-selected="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span>JSON to CSV</span>
+        </button>
+      </div>
+
+      <button type="button" class="swap-mode-btn" id="btnSwapMode" title="Swap input and output mode">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+        <span>Swap Mode</span>
+      </button>
+    </div>
+
+    <!-- Alert / Warning Banner -->
+    <div class="alert-banner" id="alertBanner" role="alert">
+      <div class="alert-content">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span id="alertMsg">Warning message will appear here.</span>
+      </div>
+      <button type="button" class="alert-close" id="alertClose" aria-label="Dismiss alert">&times;</button>
+    </div>
+
+    <!-- Mode Options Bar -->
+    <div class="options-bar" id="optionsBar">
+      <!-- Options for CSV to JSON -->
+      <div class="options-group" id="csvOptionsGroup">
+        <label class="option-item" for="csvDelimiter">
+          <span>Delimiter:</span>
+          <select id="csvDelimiter" class="option-select">
+            <option value="auto" selected>Auto-Detect</option>
+            <option value=",">Comma (,)</option>
+            <option value=";">Semicolon (;)</option>
+            <option value="&#9;">Tab (\t)</option>
+            <option value="|">Pipe (|)</option>
+          </select>
+        </label>
+
+        <label class="option-item">
+          <input type="checkbox" id="csvHasHeaders" class="option-checkbox" checked>
+          <span>First row is header</span>
+        </label>
+
+        <label class="option-item">
+          <input type="checkbox" id="csvParseTypes" class="option-checkbox" checked>
+          <span>Parse numbers &amp; booleans</span>
+        </label>
+
+        <label class="option-item" for="jsonFormat">
+          <span>Output Format:</span>
+          <select id="jsonFormat" class="option-select">
+            <option value="pretty" selected>Pretty (2 spaces)</option>
+            <option value="minify">Minified</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Options for JSON to CSV -->
+      <div class="options-group" id="jsonOptionsGroup" style="display: none;">
+        <label class="option-item" for="jsonOutDelimiter">
+          <span>Output Delimiter:</span>
+          <select id="jsonOutDelimiter" class="option-select">
+            <option value="," selected>Comma (,)</option>
+            <option value=";">Semicolon (;)</option>
+            <option value="&#9;">Tab (\t)</option>
+            <option value="|">Pipe (|)</option>
+          </select>
+        </label>
+
+        <label class="option-item">
+          <input type="checkbox" id="jsonIncludeHeaders" class="option-checkbox" checked>
+          <span>Include header row</span>
+        </label>
+
+        <label class="option-item">
+          <input type="checkbox" id="jsonFlatten" class="option-checkbox" checked>
+          <span>Auto-flatten nested objects</span>
+        </label>
+      </div>
+
+      <!-- Quick Global Actions -->
+      <div class="quick-actions-bar">
+        <button type="button" class="btn-action-small" id="btnLoadSample">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+          <span>Load Sample</span>
+        </button>
+        <button type="button" class="btn-action-small" id="btnClearAll">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dual Editor Grid -->
+    <div class="converter-grid">
+
+      <!-- Left Input Pane -->
+      <section class="editor-pane" id="inputPane">
+        <div class="editor-header">
+          <span class="editor-title" id="inputTitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span id="inputLabel">CSV Source Data</span>
+          </span>
+
+          <div class="editor-controls">
+            <input type="file" id="fileUploadInput" class="file-input-hidden" accept=".csv,.json,.txt">
+            <button type="button" class="editor-btn" id="btnUploadFile" title="Upload file from your computer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Upload File</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-body">
+          <textarea id="sourceInput" class="code-textarea" placeholder="Paste your CSV data here or drag &amp; drop a file..." spellcheck="false"></textarea>
+        </div>
+
+        <div class="editor-footer">
+          <div class="editor-stats">
+            <span id="inLinesCount">0 lines</span>
+            <span id="inCharsCount">0 chars</span>
+          </div>
+          <span id="inSize">0 B</span>
+        </div>
+      </section>
+
+      <!-- Right Output Pane -->
+      <section class="editor-pane" id="outputPane">
+        <div class="editor-header">
+          <span class="editor-title" id="outputTitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span id="outputLabel">JSON Result</span>
+          </span>
+
+          <div class="editor-controls">
+            <button type="button" class="editor-btn btn-copy" id="btnCopyOutput">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+            <button type="button" class="editor-btn btn-primary" id="btnDownloadOutput">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Download</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="editor-body">
+          <textarea id="outputResult" class="code-textarea" readonly placeholder="Converted output will appear here in real time..." spellcheck="false"></textarea>
+        </div>
+
+        <div class="editor-footer">
+          <div class="editor-stats">
+            <span id="outRecordsCount">0 records</span>
+            <span id="outCharsCount">0 chars</span>
+          </div>
+          <span id="outSize">0 B</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- SEO Informational & Format Guide Section -->
+    <article class="info-section" aria-labelledby="guide-heading">
+      <div class="info-header">
+        <h2 id="guide-heading">Comprehensive CSV vs. JSON Format Guide</h2>
+        <p>Learn how tabular flat-file CSV structures compare with hierarchical JavaScript Object Notation, and when to leverage each for optimal system performance.</p>
+      </div>
+
+      <!-- 3 Feature & Architecture Cards -->
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>100% Client-Side Privacy</span>
+          </h3>
+          <p>Every single byte is parsed in-memory inside your browser via Web API FileReader and JavaScript V8. Your proprietary spreadsheets, customer records, and API payloads are never uploaded, logged, or cached on any remote server.</p>
+        </div>
+
+        <div class="guide-card">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Smart Auto-Flattening</span>
+          </h3>
+          <p>When converting deeply nested JSON trees to CSV tables, our recursive parser flattens child objects into dot-notation columns (e.g. <code>user.address.postalCode</code>) so no relational hierarchy is lost.</p>
+        </div>
+
+        <div class="guide-card">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>RFC 4180 Standard Support</span>
+          </h3>
+          <p>Full support for escaped double-quotes (<code>""</code>), multi-line cell values, and automatic delimiter detection across commas, semicolons, tabs (TSV), and pipe-delimited data.</p>
+        </div>
+      </div>
+
+      <!-- Comparison Reference Table -->
+      <div class="table-container">
+        <h3>Feature Matrix: CSV vs. JSON</h3>
+        <p>A technical comparison between Comma-Separated Values and JavaScript Object Notation.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Evaluation Metric</th>
+              <th>CSV (Comma-Separated Values)</th>
+              <th>JSON (JavaScript Object Notation)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary Architecture</strong></td>
+              <td>Two-dimensional flat tabular rows and columns</td>
+              <td>Hierarchical tree with nested objects &amp; arrays</td>
+            </tr>
+            <tr>
+              <td><strong>File Weight &amp; Overhead</strong></td>
+              <td>Extremely lightweight (no repeated field keys)</td>
+              <td>Slightly heavier due to repetitive key strings</td>
+            </tr>
+            <tr>
+              <td><strong>Type System</strong></td>
+              <td>Untyped raw text (inferred by parser)</td>
+              <td>Explicit types (string, number, boolean, null)</td>
+            </tr>
+            <tr>
+              <td><strong>Industry Ecosystem</strong></td>
+              <td>Excel, Google Sheets, SQL DB bulk exports, BI tools</td>
+              <td>REST APIs, NoSQL databases, modern web apps</td>
+            </tr>
+            <tr>
+              <td><strong>Streamability</strong></td>
+              <td>Easily line-chunked and streamed line-by-line</td>
+              <td>Requires full parsing of root tree unless NDJSON</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="info-header" style="margin-bottom: 2rem;">
+        <h2>Frequently Asked Questions</h2>
+        <p>Common questions regarding conversion accuracy, data privacy, and handling complex files.</p>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>Is my confidential financial or customer data safe here?</h4>
+          <p>Absolutely. VantorKit executes all parsing, transformation, and download operations client-side in your own browser sandbox. Disconnect your internet connection after opening this page, and the tool continues to convert files with 100% functionality.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>What happens if my CSV contains commas or line breaks inside a cell?</h4>
+          <p>Our parser conforms to RFC 4180. Cells enclosed in double quotes containing commas, tabs, or newlines are recognized as a single cell rather than dividing the row prematurely.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Can I convert TSV (Tab-Separated) or Semicolon-Separated files?</h4>
+          <p>Yes. By default, the Delimiter is set to "Auto-Detect", which analyzes the first few rows to discover whether tabs, semicolons, or pipes are used. You can also explicitly lock the delimiter via the dropdown.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How large of a file can I process?</h4>
+          <p>Because processing runs locally on your browser's V8 engine, you can comfortably process files of 20MB to 50MB (hundreds of thousands of rows) without encountering server timeout limits or upload caps.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Copied to clipboard</span>
+  </div>
+
+  <!-- Footer matching index.html -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+  </footer>
+
+  <!-- Real-Time Bidirectional Conversion Engine -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Pre-packaged Sample Data ---
+      const SAMPLES = {
+        csv: `id,name,role,department,salary,active\n101,"Alice Johnson",Lead Engineer,Engineering,135000,true\n102,"Bob Smith",Product Designer,Design,115000,true\n103,"Charlie Davis",Data Scientist,Analytics,128000,false\n104,"Diana Prince",VP Marketing,Marketing,150000,true\n105,"Evan Wright",DevOps Architect,Infrastructure,142000,true`,
+        json: `[\n  {\n    "id": 101,\n    "name": "Alice Johnson",\n    "role": "Lead Engineer",\n    "contact": {\n      "email": "alice@example.com",\n      "city": "San Francisco"\n    },\n    "salary": 135000,\n    "active": true\n  },\n  {\n    "id": 102,\n    "name": "Bob Smith",\n    "role": "Product Designer",\n    "contact": {\n      "email": "bob@example.com",\n      "city": "New York"\n    },\n    "salary": 115000,\n    "active": true\n  },\n  {\n    "id": 103,\n    "name": "Charlie Davis",\n    "role": "Data Scientist",\n    "contact": {\n      "email": "charlie@example.com",\n      "city": "Chicago"\n    },\n    "salary": 128000,\n    "active": false\n  }\n]`
+      };
+
+      // --- State ---
+      let currentMode = 'csv-to-json'; // 'csv-to-json' | 'json-to-csv'
+      let toastTimer = null;
+
+      // --- DOM Elements ---
+      const tabCsvToJson = document.getElementById('tabCsvToJson');
+      const tabJsonToCsv = document.getElementById('tabJsonToCsv');
+      const btnSwapMode = document.getElementById('btnSwapMode');
+
+      const csvOptionsGroup = document.getElementById('csvOptionsGroup');
+      const jsonOptionsGroup = document.getElementById('jsonOptionsGroup');
+
+      const csvDelimiter = document.getElementById('csvDelimiter');
+      const csvHasHeaders = document.getElementById('csvHasHeaders');
+      const csvParseTypes = document.getElementById('csvParseTypes');
+      const jsonFormat = document.getElementById('jsonFormat');
+
+      const jsonOutDelimiter = document.getElementById('jsonOutDelimiter');
+      const jsonIncludeHeaders = document.getElementById('jsonIncludeHeaders');
+      const jsonFlatten = document.getElementById('jsonFlatten');
+
+      const sourceInput = document.getElementById('sourceInput');
+      const outputResult = document.getElementById('outputResult');
+      const inputPane = document.getElementById('inputPane');
+
+      const inputLabel = document.getElementById('inputLabel');
+      const outputLabel = document.getElementById('outputLabel');
+
+      const alertBanner = document.getElementById('alertBanner');
+      const alertMsg = document.getElementById('alertMsg');
+      const alertClose = document.getElementById('alertClose');
+
+      const btnLoadSample = document.getElementById('btnLoadSample');
+      const btnClearAll = document.getElementById('btnClearAll');
+      const btnCopyOutput = document.getElementById('btnCopyOutput');
+      const btnDownloadOutput = document.getElementById('btnDownloadOutput');
+      const btnUploadFile = document.getElementById('btnUploadFile');
+      const fileUploadInput = document.getElementById('fileUploadInput');
+
+      const inLinesCount = document.getElementById('inLinesCount');
+      const inCharsCount = document.getElementById('inCharsCount');
+      const inSize = document.getElementById('inSize');
+
+      const outRecordsCount = document.getElementById('outRecordsCount');
+      const outCharsCount = document.getElementById('outCharsCount');
+      const outSize = document.getElementById('outSize');
+
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+
+      // --- Helpers ---
+      function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+
+      function showToast(message) {
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      function showAlert(msg, isError = true) {
+        alertMsg.textContent = msg;
+        alertBanner.className = 'alert-banner ' + (isError ? 'error' : 'warning');
+      }
+
+      function hideAlert() {
+        alertBanner.style.display = 'none';
+        alertBanner.className = 'alert-banner';
+      }
+
+      alertClose.addEventListener('click', hideAlert);
+
+      // --- Delimiter Auto-Detection ---
+      function detectDelimiter(text) {
+        const delimiters = [',', ';', '\t', '|'];
+        const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0).slice(0, 8);
+        if (lines.length === 0) return ',';
+
+        let bestDelim = ',';
+        let maxCount = -1;
+
+        for (const d of delimiters) {
+          let counts = [];
+          for (const line of lines) {
+            let count = 0;
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              if (line[i] === '"') inQuotes = !inQuotes;
+              else if (!inQuotes && line[i] === d) count++;
+            }
+            counts.push(count);
+          }
+          const sum = counts.reduce((a, b) => a + b, 0);
+          const avg = sum / counts.length;
+          // Reward consistent row delimiter count
+          const isConsistent = counts.every(c => c === counts[0] && c > 0);
+          const score = isConsistent ? avg * 2 : avg;
+
+          if (score > maxCount) {
+            maxCount = score;
+            bestDelim = d;
+          }
+        }
+
+        return maxCount > 0 ? bestDelim : ',';
+      }
+
+      // --- RFC 4180 Compliant CSV Parser ---
+      function parseCSV(text, delimiter = ',', hasHeaders = true, parseTypes = true) {
+        if (!text || !text.trim()) return [];
+
+        const rows = [];
+        let currentRow = [];
+        let currentVal = '';
+        let inQuotes = false;
+        let i = 0;
+
+        while (i < text.length) {
+          const char = text[i];
+          const nextChar = text[i + 1];
+
+          if (inQuotes) {
+            if (char === '"' && nextChar === '"') {
+              currentVal += '"';
+              i += 2;
+            } else if (char === '"') {
+              inQuotes = false;
+              i++;
+            } else {
+              currentVal += char;
+              i++;
+            }
+          } else {
+            if (char === '"') {
+              inQuotes = true;
+              i++;
+            } else if (char === delimiter) {
+              currentRow.push(currentVal.trim());
+              currentVal = '';
+              i++;
+            } else if (char === '\r') {
+              if (nextChar === '\n') i++;
+              currentRow.push(currentVal.trim());
+              rows.push(currentRow);
+              currentRow = [];
+              currentVal = '';
+              i++;
+            } else if (char === '\n') {
+              currentRow.push(currentVal.trim());
+              rows.push(currentRow);
+              currentRow = [];
+              currentVal = '';
+              i++;
+            } else {
+              currentVal += char;
+              i++;
+            }
+          }
+        }
+
+        currentRow.push(currentVal.trim());
+        if (currentRow.some(c => c !== '')) {
+          rows.push(currentRow);
+        }
+
+        if (rows.length === 0) return [];
+
+        function parseTypedValue(val) {
+          if (!parseTypes) return val;
+          if (val === '') return null;
+          const lower = val.toLowerCase();
+          if (lower === 'true') return true;
+          if (lower === 'false') return false;
+          if (lower === 'null') return null;
+          if (!isNaN(val) && val.trim() !== '') {
+            const num = Number(val);
+            if (Number.isFinite(num)) return num;
+          }
+          return val;
+        }
+
+        if (hasHeaders) {
+          const rawHeaders = rows[0];
+          const headers = rawHeaders.map((h, idx) => (h && h.length > 0 ? h : `column_${idx + 1}`));
+          const dataRows = rows.slice(1);
+
+          return dataRows.map(row => {
+            const obj = {};
+            headers.forEach((header, idx) => {
+              obj[header] = idx < row.length ? parseTypedValue(row[idx]) : null;
+            });
+            return obj;
+          });
+        } else {
+          return rows.map(row => row.map(parseTypedValue));
+        }
+      }
+
+      // --- Nested JSON Flattening ---
+      function flattenObject(obj, prefix = '') {
+        const result = {};
+        for (const key in obj) {
+          if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+          const propName = prefix ? `${prefix}.${key}` : key;
+          const val = obj[key];
+          if (val !== null && typeof val === 'object' && !Array.isArray(val) && !(val instanceof Date)) {
+            Object.assign(result, flattenObject(val, propName));
+          } else if (Array.isArray(val)) {
+            result[propName] = JSON.stringify(val);
+          } else {
+            result[propName] = val;
+          }
+        }
+        return result;
+      }
+
+      // --- JSON to CSV Serializer ---
+      function jsonToCSV(jsonText, delimiter = ',', includeHeaders = true, shouldFlatten = true) {
+        if (!jsonText || !jsonText.trim()) return '';
+
+        let parsed;
+        try {
+          parsed = JSON.parse(jsonText);
+        } catch (err) {
+          throw new Error('Invalid JSON syntax: ' + err.message);
+        }
+
+        let array = [];
+        if (Array.isArray(parsed)) {
+          array = parsed;
+        } else if (typeof parsed === 'object' && parsed !== null) {
+          array = [parsed];
+        } else {
+          throw new Error('Input must be a JSON array of objects or a single JSON object.');
+        }
+
+        if (array.length === 0) return '';
+
+        const processedList = array.map(item => {
+          if (typeof item === 'object' && item !== null) {
+            return shouldFlatten ? flattenObject(item) : item;
+          }
+          return { value: item };
+        });
+
+        const headers = [];
+        const headerSet = new Set();
+        for (const item of processedList) {
+          for (const key of Object.keys(item)) {
+            if (!headerSet.has(key)) {
+              headerSet.add(key);
+              headers.push(key);
+            }
+          }
+        }
+
+        function escapeCell(val) {
+          if (val === null || val === undefined) return '';
+          let str = typeof val === 'object' ? JSON.stringify(val) : String(val);
+          if (str.includes(delimiter) || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+            return `"${str.replace(/"/g, '""')}"`;
+          }
+          return str;
+        }
+
+        const lines = [];
+        if (includeHeaders) {
+          lines.push(headers.map(escapeCell).join(delimiter));
+        }
+
+        for (const item of processedList) {
+          const row = headers.map(header => escapeCell(item[header] !== undefined ? item[header] : ''));
+          lines.push(row.join(delimiter));
+        }
+
+        return lines.join('\n');
+      }
+
+      // --- Conversion Orchestration ---
+      function runConversion() {
+        hideAlert();
+        const inputVal = sourceInput.value;
+
+        // Update input stats
+        const inBytes = new Blob([inputVal]).size;
+        const inLines = inputVal ? inputVal.split(/\r?\n/).length : 0;
+        inLinesCount.textContent = `${inLines} lines`;
+        inCharsCount.textContent = `${inputVal.length} chars`;
+        inSize.textContent = formatBytes(inBytes);
+
+        if (!inputVal.trim()) {
+          outputResult.value = '';
+          outRecordsCount.textContent = '0 records';
+          outCharsCount.textContent = '0 chars';
+          outSize.textContent = '0 B';
+          return;
+        }
+
+        try {
+          if (currentMode === 'csv-to-json') {
+            // Determine delimiter
+            let delim = csvDelimiter.value;
+            if (delim === 'auto') {
+              delim = detectDelimiter(inputVal);
+            }
+
+            const parsedObj = parseCSV(
+              inputVal,
+              delim,
+              csvHasHeaders.checked,
+              csvParseTypes.checked
+            );
+
+            const isMinify = jsonFormat.value === 'minify';
+            const formattedJson = isMinify ? JSON.stringify(parsedObj) : JSON.stringify(parsedObj, null, 2);
+
+            outputResult.value = formattedJson;
+
+            // Update output stats
+            const outBytes = new Blob([formattedJson]).size;
+            const records = Array.isArray(parsedObj) ? parsedObj.length : 1;
+            outRecordsCount.textContent = `${records} records`;
+            outCharsCount.textContent = `${formattedJson.length} chars`;
+            outSize.textContent = formatBytes(outBytes);
+
+          } else {
+            // JSON to CSV
+            const delim = jsonOutDelimiter.value;
+            const resultCSV = jsonToCSV(
+              inputVal,
+              delim,
+              jsonIncludeHeaders.checked,
+              jsonFlatten.checked
+            );
+
+            outputResult.value = resultCSV;
+
+            // Update output stats
+            const outBytes = new Blob([resultCSV]).size;
+            const lines = resultCSV ? resultCSV.split(/\r?\n/).length : 0;
+            const records = jsonIncludeHeaders.checked && lines > 1 ? lines - 1 : lines;
+            outRecordsCount.textContent = `${records} rows`;
+            outCharsCount.textContent = `${resultCSV.length} chars`;
+            outSize.textContent = formatBytes(outBytes);
+          }
+        } catch (err) {
+          showAlert(err.message, true);
+          outputResult.value = '';
+          outRecordsCount.textContent = 'Error';
+          outCharsCount.textContent = '0 chars';
+          outSize.textContent = '0 B';
+        }
+      }
+
+      // --- Switch Mode Handler ---
+      function switchMode(newMode) {
+        if (currentMode === newMode) return;
+        currentMode = newMode;
+
+        if (newMode === 'csv-to-json') {
+          tabCsvToJson.classList.add('active');
+          tabCsvToJson.setAttribute('aria-selected', 'true');
+          tabJsonToCsv.classList.remove('active');
+          tabJsonToCsv.setAttribute('aria-selected', 'false');
+
+          csvOptionsGroup.style.display = 'flex';
+          jsonOptionsGroup.style.display = 'none';
+
+          inputLabel.textContent = 'CSV Source Data';
+          outputLabel.textContent = 'JSON Result';
+          sourceInput.placeholder = 'Paste your CSV data here or drag & drop a file...';
+        } else {
+          tabJsonToCsv.classList.add('active');
+          tabJsonToCsv.setAttribute('aria-selected', 'true');
+          tabCsvToJson.classList.remove('active');
+          tabCsvToJson.setAttribute('aria-selected', 'false');
+
+          jsonOptionsGroup.style.display = 'flex';
+          csvOptionsGroup.style.display = 'none';
+
+          inputLabel.textContent = 'JSON Source Data';
+          outputLabel.textContent = 'CSV Result';
+          sourceInput.placeholder = 'Paste your JSON data here or drag & drop a file...';
+        }
+
+        runConversion();
+      }
+
+      tabCsvToJson.addEventListener('click', () => switchMode('csv-to-json'));
+      tabJsonToCsv.addEventListener('click', () => switchMode('json-to-csv'));
+
+      btnSwapMode.addEventListener('click', () => {
+        const nextMode = currentMode === 'csv-to-json' ? 'json-to-csv' : 'csv-to-json';
+        // If there is converted output, place it into source input
+        const currentOutput = outputResult.value;
+        if (currentOutput.trim()) {
+          sourceInput.value = currentOutput;
+        }
+        switchMode(nextMode);
+      });
+
+      // --- Event Listeners for Live Updates ---
+      sourceInput.addEventListener('input', runConversion);
+
+      [csvDelimiter, csvHasHeaders, csvParseTypes, jsonFormat, jsonOutDelimiter, jsonIncludeHeaders, jsonFlatten].forEach(el => {
+        el.addEventListener('change', runConversion);
+      });
+
+      // --- Load Sample Action ---
+      btnLoadSample.addEventListener('click', () => {
+        if (currentMode === 'csv-to-json') {
+          sourceInput.value = SAMPLES.csv;
+        } else {
+          sourceInput.value = SAMPLES.json;
+        }
+        runConversion();
+        showToast('Sample data loaded!');
+      });
+
+      // --- Clear All Action ---
+      btnClearAll.addEventListener('click', () => {
+        sourceInput.value = '';
+        outputResult.value = '';
+        hideAlert();
+        runConversion();
+        sourceInput.focus();
+      });
+
+      // --- Copy to Clipboard Action ---
+      btnCopyOutput.addEventListener('click', () => {
+        const out = outputResult.value;
+        if (!out) return;
+
+        function indicateSuccess() {
+          const origHTML = btnCopyOutput.innerHTML;
+          btnCopyOutput.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Copied!</span>
+          `;
+          btnCopyOutput.classList.add('copied');
+          showToast('Output copied to clipboard!');
+          setTimeout(() => {
+            btnCopyOutput.innerHTML = origHTML;
+            btnCopyOutput.classList.remove('copied');
+          }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(out).then(indicateSuccess).catch(() => {
+            fallbackCopy(out, indicateSuccess);
+          });
+        } else {
+          fallbackCopy(out, indicateSuccess);
+        }
+      });
+
+      function fallbackCopy(text, cb) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          cb();
+        } catch (e) {
+          console.error('Copy failed', e);
+        }
+        document.body.removeChild(ta);
+      }
+
+      // --- Download Output Action ---
+      btnDownloadOutput.addEventListener('click', () => {
+        const out = outputResult.value;
+        if (!out) return;
+
+        const isJson = currentMode === 'csv-to-json';
+        const mime = isJson ? 'application/json;charset=utf-8' : 'text/csv;charset=utf-8';
+        const filename = isJson ? 'converted-data.json' : 'converted-data.csv';
+
+        const blob = new Blob([out], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`Downloaded ${filename}`);
+      });
+
+      // --- File Upload & Drag & Drop ---
+      btnUploadFile.addEventListener('click', () => {
+        fileUploadInput.click();
+      });
+
+      function handleFile(file) {
+        if (!file) return;
+        const name = file.name.toLowerCase();
+
+        // Smart mode auto-detection based on file extension
+        if (name.endsWith('.json') && currentMode !== 'json-to-csv') {
+          switchMode('json-to-csv');
+        } else if ((name.endsWith('.csv') || name.endsWith('.tsv')) && currentMode !== 'csv-to-json') {
+          switchMode('csv-to-json');
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          sourceInput.value = e.target.result;
+          runConversion();
+          showToast(`Loaded ${file.name}`);
+        };
+        reader.onerror = () => {
+          showAlert('Failed to read uploaded file.', true);
+        };
+        reader.readAsText(file);
+      }
+
+      fileUploadInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          handleFile(e.target.files[0]);
+          fileUploadInput.value = '';
+        }
+      });
+
+      // Drag & Drop onto Input Pane
+      ['dragenter', 'dragover'].forEach(eventName => {
+        inputPane.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          inputPane.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        inputPane.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          inputPane.classList.remove('drag-over');
+        });
+      });
+
+      inputPane.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      // --- Initial Load with Sample ---
+      sourceInput.value = SAMPLES.csv;
+      runConversion();
+    })();
+  </script>
+</body>
+</html>
