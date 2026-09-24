@@ -3,75 +3,464 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VantorKit</title>
+  <title>VantorKit — Free Fast Online Utility Tools</title>
+  <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files.">
   <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #12141c;
+      --card-border: #1e2230;
+      --card-hover: #262b3d;
+      --text-main: #f4f4f5;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --badge-bg: #1e293b;
+      --badge-text: #60a5fa;
+    }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     }
+
     body {
-      background: #0a0a0c;
-      color: #ffffff;
+      background-color: var(--bg);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
     }
-    .badge {
+
+    header {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid var(--card-border);
+      background: radial-gradient(circle at 50% 0%, #1e1e38 0%, transparent 70%);
+    }
+
+    .brand-badge {
       display: inline-block;
-      padding: 6px 16px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      font-size: 13px;
-      color: #a1a1aa;
-      margin-bottom: 24px;
+      margin-bottom: 1rem;
       letter-spacing: 0.5px;
     }
+
     h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-      background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    p {
-      color: #71717a;
-      font-size: 1.15rem;
-      max-width: 520px;
-      line-height: 1.6;
-      margin-bottom: 32px;
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
     }
-    .status {
+
+    .search-wrapper {
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .categories-bar {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #10b981;
-      font-size: 14px;
-      font-weight: 500;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
     }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
+
+    .category-btn {
+      padding: 0.5rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .category-btn.active, .category-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .tool-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--badge-text);
+      letter-spacing: 0.5px;
+    }
+
+    .tool-badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      background: #064e3b;
+      color: #34d399;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .tool-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .tool-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
-  <span class="badge">vantorkit.com</span>
-  <h1>Welcome to VantorKit</h1>
-  <p>The platform is officially deployed and connected. Development phase is now in progress.</p>
-  <div class="status">
-    <span class="dot"></span> System Live & Operational
-  </div>
+
+  <header>
+    <div class="brand-badge">Client-Side • Privacy-First • No Logs</div>
+    <h1>Vantor<span>Kit</span></h1>
+    <p class="subtitle">Fast, accessible, browser-based tools designed for developers, creators, and professionals.</p>
+    <div class="search-wrapper">
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 21 tools (e.g. percentage, pdf, counter)...">
+    </div>
+  </header>
+
+  <main>
+    <div class="categories-bar">
+      <button class="category-btn active" data-cat="all">All Tools</button>
+      <button class="category-btn" data-cat="math">Math & Finance</button>
+      <button class="category-btn" data-cat="files">PDF & Files</button>
+      <button class="category-btn" data-cat="images">Images</button>
+      <button class="category-btn" data-cat="text">Text Tools</button>
+      <button class="category-btn" data-cat="everyday">Everyday</button>
+    </div>
+
+    <div class="tools-grid" id="toolsGrid">
+
+      <!-- Math -->
+      <a href="/tools/percentage-calculator.html" class="tool-card" data-category="math">
+        <div>
+          <div class="tool-meta">
+            <span class="tool-category">Math & Finance</span>
+            <span class="tool-badge">Popular</span>
+          </div>
+          <div class="tool-title">Percentage Calculator</div>
+          <div class="tool-desc">Quickly calculate increases, decreases, differences, and standard percentages.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="math">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
+          <div class="tool-title">Compound Interest</div>
+          <div class="tool-desc">Simulate investment growth, deposits, and compound frequencies over time.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="math">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
+          <div class="tool-title">Loan & Amortization</div>
+          <div class="tool-desc">Calculate monthly installments, interest breakdown, and repayment schedules.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="math">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
+          <div class="tool-title">Discount & Sales Tax</div>
+          <div class="tool-desc">Find final price savings, discount margins, and applicable sales taxes.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="math">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
+          <div class="tool-title">GPA & Grade Calculator</div>
+          <div class="tool-desc">Compute cumulative semester GPA and weighted scale grades instantly.</div>
+        </div>
+      </a>
+
+      <!-- PDF & Files -->
+      <a href="#" class="tool-card" data-category="files">
+        <div>
+          <div class="tool-meta">
+            <span class="tool-category">PDF & Files</span>
+            <span class="tool-badge">High Value</span>
+          </div>
+          <div class="tool-title">CSV to JSON / JSON to CSV</div>
+          <div class="tool-desc">Convert data structures back and forth with custom delimiter support.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="files">
+        <div>
+          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
+          <div class="tool-title">PDF Merge</div>
+          <div class="tool-desc">Combine multiple PDF documents entirely in your browser securely.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="files">
+        <div>
+          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
+          <div class="tool-title">PDF Split & Extract</div>
+          <div class="tool-desc">Extract selected page ranges or separate individual pages locally.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="files">
+        <div>
+          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
+          <div class="tool-title">Base64 File Encoder</div>
+          <div class="tool-desc">Encode documents and binary assets into data URIs and raw Base64 strings.</div>
+        </div>
+      </a>
+
+      <!-- Images -->
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">Color Palette Extractor</div>
+          <div class="tool-desc">Extract primary and complementary hex palette codes from any uploaded image.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">SVG to PNG Converter</div>
+          <div class="tool-desc">Rasterize SVG vector illustrations to transparent, high-res PNG formats.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">Image Resizer & Crop</div>
+          <div class="tool-desc">Adjust image pixel dimensions, preserve aspect ratios, and optimize weights.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">Image to Base64</div>
+          <div class="tool-desc">Convert PNG, JPG, or SVG to embeddable HTML/CSS inline data sources.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">WEBP Converter</div>
+          <div class="tool-desc">Transform WEBP files to standard PNG and JPG formats on the fly.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="images">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Images</span></div>
+          <div class="tool-title">Multi-Size Favicon Builder</div>
+          <div class="tool-desc">Generate standard 16x16, 32x32, and apple-touch icons from an icon asset.</div>
+        </div>
+      </a>
+
+      <!-- Everyday -->
+      <a href="#" class="tool-card" data-category="everyday">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
+          <div class="tool-title">Date Difference & Workdays</div>
+          <div class="tool-desc">Calculate total days, business working days, and weekends between dates.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="everyday">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
+          <div class="tool-title">QR Code Generator</div>
+          <div class="tool-desc">Create custom vector QR codes for URLs, WiFi credentials, and contact cards.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="everyday">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
+          <div class="tool-title">Age & Milestone Calculator</div>
+          <div class="tool-desc">Compute exact age in years, months, and hours with countdown milestones.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="everyday">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
+          <div class="tool-title">Password Generator & Entropy</div>
+          <div class="tool-desc">Generate cryptographically secure passwords with entropy strength scoring.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="everyday">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
+          <div class="tool-title">Time Zone Meeting Planner</div>
+          <div class="tool-desc">Compare overlapping business hours across major global timezones.</div>
+        </div>
+      </a>
+
+      <!-- Text -->
+      <a href="#" class="tool-card" data-category="text">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
+          <div class="tool-title">Word & Character Counter</div>
+          <div class="tool-desc">Track real-time character counts, words, reading durations, and paragraph stats.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="text">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
+          <div class="tool-title">Markdown Previewer</div>
+          <div class="tool-desc">Write Markdown with side-by-side formatted preview and instant HTML export.</div>
+        </div>
+      </a>
+
+      <a href="#" class="tool-card" data-category="text">
+        <div>
+          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
+          <div class="tool-title">URL Slug Generator</div>
+          <div class="tool-desc">Sanitize titles into clean, SEO-optimized URL slugs removing stop words.</div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally.</p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('toolSearch');
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const cards = document.querySelectorAll('.tool-card');
+
+    function filterTools() {
+      const query = searchInput.value.toLowerCase().trim();
+      const activeCat = document.querySelector('.category-btn.active').dataset.cat;
+
+      cards.forEach(card => {
+        const title = card.querySelector('.tool-title').innerText.toLowerCase();
+        const desc = card.querySelector('.tool-desc').innerText.toLowerCase();
+        const category = card.dataset.category;
+
+        const matchesQuery = title.includes(query) || desc.includes(query);
+        const matchesCategory = (activeCat === 'all' || category === activeCat);
+
+        if (matchesQuery && matchesCategory) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', filterTools);
+
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterTools();
+      });
+    });
+  </script>
 </body>
 </html>
