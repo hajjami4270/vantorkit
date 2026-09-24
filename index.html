@@ -282,9 +282,114 @@
 
     /* Header & Hero */
     header {
-      padding: 4rem 1.5rem 3rem;
+      padding: 4.5rem 1.5rem 3.5rem;
       text-align: center;
       position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle Animated Gradient Mesh Background (Purple / Blue Radial Glow) */
+    .hero-mesh-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      max-width: 1100px;
+      height: 100%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      opacity: 0.9;
+    }
+
+    .mesh-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      -webkit-filter: blur(80px);
+      will-change: transform;
+      pointer-events: none;
+    }
+
+    /* Soft Purple Radial Glow */
+    .orb-purple {
+      width: 460px;
+      height: 380px;
+      top: 10%;
+      left: 15%;
+      background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.16) 0%, rgba(147, 51, 234, 0.05) 50%, transparent 75%);
+      animation: meshFloatPurple 20s ease-in-out infinite alternate;
+    }
+
+    /* Soft Blue Radial Glow */
+    .orb-blue {
+      width: 500px;
+      height: 400px;
+      top: 18%;
+      right: 12%;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.18) 0%, rgba(37, 99, 235, 0.06) 50%, transparent 75%);
+      animation: meshFloatBlue 24s ease-in-out infinite alternate;
+    }
+
+    /* Subtle Indigo Accent */
+    .orb-indigo {
+      width: 380px;
+      height: 300px;
+      bottom: 5%;
+      left: 40%;
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.13) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 75%);
+      animation: meshFloatIndigo 28s ease-in-out infinite alternate;
+    }
+
+    @keyframes meshFloatPurple {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translate3d(40px, -25px, 0) scale(1.08) rotate(12deg);
+      }
+      100% {
+        transform: translate3d(-30px, 20px, 0) scale(0.94) rotate(-8deg);
+      }
+    }
+
+    @keyframes meshFloatBlue {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+      }
+      50% {
+        transform: translate3d(-35px, 30px, 0) scale(1.1) rotate(-15deg);
+      }
+      100% {
+        transform: translate3d(25px, -20px, 0) scale(0.92) rotate(10deg);
+      }
+    }
+
+    @keyframes meshFloatIndigo {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      50% {
+        transform: translate3d(25px, 25px, 0) scale(1.06);
+      }
+      100% {
+        transform: translate3d(-25px, -15px, 0) scale(0.95);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-orb {
+        animation: none !important;
+      }
+    }
+
+    .brand-badge,
+    h1,
+    p.subtitle,
+    .search-wrapper {
+      position: relative;
+      z-index: 1;
     }
 
     .brand-badge {
@@ -792,6 +897,13 @@
 
   <!-- Hero Section -->
   <header>
+    <!-- Subtle Animated Gradient Mesh Background -->
+    <div class="hero-mesh-bg" aria-hidden="true">
+      <div class="mesh-orb orb-purple"></div>
+      <div class="mesh-orb orb-blue"></div>
+      <div class="mesh-orb orb-indigo"></div>
+    </div>
+
     <div class="brand-badge" id="heroBadge" data-i18n="brandBadge">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <span>Client-Side • Privacy-First • No Logs</span>
