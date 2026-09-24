@@ -145,11 +145,20 @@
     }
 
     .nav-brand {
-      font-size: 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.2rem;
       font-weight: 800;
       text-decoration: none;
       color: var(--text-main);
       letter-spacing: -0.02em;
+    }
+
+    .nav-brand svg {
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
     }
 
     .nav-brand span {
@@ -781,7 +790,30 @@
       </svg>
       <span>← Back to All Tools</span>
     </a>
-    <a href="/" class="nav-brand">Vantor<span>Kit</span></a>
+    <a href="/" class="nav-brand">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="vGradLeftTool" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="vGradRightTool" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#818cf8" />
+            <stop offset="100%" stop-color="#c084fc" />
+          </linearGradient>
+          <linearGradient id="vGradCenterTool" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#60a5fa" />
+            <stop offset="100%" stop-color="#a855f7" />
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+        <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftTool)" />
+        <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightTool)" />
+        <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterTool)" />
+        <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+      </svg>
+      <span>Vantor<span>Kit</span></span>
+    </a>
   </div>
 
   <!-- Header -->

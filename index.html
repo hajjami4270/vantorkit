@@ -1,63 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VantorKit — Free Fast Online Utility Tools</title>
-  <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files.">
+  <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files. 100% client-side with zero logs.">
+  <link rel="canonical" href="https://vantorkit.com/">
+
+  <!-- Google Fonts: Plus Jakarta Sans for Latin, Cairo for Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #090a0f;
-      --card-bg: #12141c;
-      --card-border: #1e2230;
-      --card-hover: #262b3d;
-      --text-main: #f4f4f5;
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.15);
-      --badge-bg: #1e293b;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --badge-bg: rgba(30, 41, 59, 0.7);
       --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --nav-height: 72px;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     body {
       background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    header {
-      padding: 3rem 1.5rem 2rem;
-      text-align: center;
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--nav-height);
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
-      background: radial-gradient(circle at 50% 0%, #1e1e38 0%, transparent 70%);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 38px;
+      height: 38px;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    .brand-link:hover .brand-logo-svg {
+      transform: scale(1.05) rotate(-3deg);
+    }
+
+    .brand-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .badge-tools-count {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(30, 41, 59, 0.5);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+    }
+
+    @media (min-width: 680px) {
+      .badge-tools-count {
+        display: inline-flex;
+      }
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .globe-icon {
+      color: var(--badge-text);
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides for navbar */
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    /* Header & Hero */
+    header {
+      padding: 4rem 1.5rem 3rem;
+      text-align: center;
+      position: relative;
     }
 
     .brand-badge {
-      display: inline-block;
-      padding: 4px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 5px 16px;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--badge-text);
       background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
       border-radius: 999px;
-      margin-bottom: 1rem;
-      letter-spacing: 0.5px;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     h1 {
-      font-size: 2.75rem;
+      font-size: 3.25rem;
       font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.75rem;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+      line-height: 1.15;
     }
 
     h1 span {
@@ -68,42 +319,104 @@
 
     p.subtitle {
       color: var(--text-muted);
-      font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto 1.5rem;
+      font-size: 1.15rem;
+      max-width: 650px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
     }
 
+    /* Search Box */
     .search-wrapper {
-      max-width: 480px;
+      max-width: 540px;
       margin: 0 auto;
       position: relative;
     }
 
+    .search-icon {
+      position: absolute;
+      left: 1.15rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+
     .search-box {
       width: 100%;
-      padding: 0.85rem 1.2rem;
-      border-radius: 12px;
+      padding: 0.95rem 1.2rem 0.95rem 3.1rem;
+      border-radius: 14px;
       border: 1px solid var(--card-border);
-      background: var(--card-bg);
+      background: rgba(14, 18, 28, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       color: #fff;
       font-size: 1rem;
       outline: none;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 
     .search-box:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 3px var(--accent-glow), 0 12px 30px rgba(0, 0, 0, 0.45);
+      background: rgba(18, 23, 36, 0.95);
     }
 
+    .search-box:focus + .search-icon {
+      color: var(--accent);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-muted);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s ease;
+    }
+
+    .search-clear:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    /* RTL Search Position Overrides */
+    html[dir="rtl"] .search-icon {
+      left: auto;
+      right: 1.15rem;
+    }
+
+    html[dir="rtl"] .search-box {
+      padding-left: 1.2rem;
+      padding-right: 3.1rem;
+    }
+
+    html[dir="rtl"] .search-clear {
+      right: auto;
+      left: 1rem;
+    }
+
+    /* Main Container */
     main {
       flex: 1;
-      max-width: 1200px;
+      max-width: 1240px;
       width: 100%;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 1.5rem 1.5rem 4rem;
     }
 
+    /* Category Filter Bar */
     .categories-bar {
       display: flex;
       flex-wrap: wrap;
@@ -113,354 +426,1582 @@
     }
 
     .category-btn {
-      padding: 0.5rem 1rem;
-      background: var(--card-bg);
+      padding: 0.55rem 1.1rem;
+      background: rgba(15, 18, 28, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
-    .category-btn.active, .category-btn:hover {
+    .category-btn:hover {
+      color: #fff;
+      border-color: rgba(96, 165, 250, 0.4);
+      background: var(--card-hover);
+      transform: translateY(-2px);
+    }
+
+    .category-btn.active {
       color: #fff;
       border-color: var(--accent);
-      background: var(--card-hover);
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(168, 85, 247, 0.2) 100%);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
+    /* Tools Grid */
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.25rem;
     }
 
     .tool-card {
       background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1.25rem;
+      border-radius: 16px;
+      padding: 1.35rem;
       text-decoration: none;
       color: inherit;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .tool-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
       background: var(--card-hover);
-      box-shadow: 0 8px 24px var(--accent-glow);
+      box-shadow: 0 16px 36px -8px var(--accent-glow), 0 0 0 1px rgba(96, 165, 250, 0.2);
+    }
+
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
     }
 
     .tool-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.75rem;
+      gap: 0.5rem;
     }
 
-    .tool-category {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--badge-text);
-      letter-spacing: 0.5px;
+    .tool-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      transition: all 0.2s ease;
+    }
+
+    .tool-card:hover .tool-icon-wrap {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(96, 165, 250, 0.3);
+      color: #93c5fd;
+      transform: scale(1.05);
     }
 
     .tool-badge {
       font-size: 0.7rem;
-      padding: 2px 8px;
-      background: #064e3b;
-      color: #34d399;
+      padding: 3px 9px;
       border-radius: 999px;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .tool-badge.popular {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .tool-badge.high-value {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(192, 132, 252, 0.3);
+    }
+
+    .tool-badge.live {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .tool-category {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--badge-text);
+      letter-spacing: 0.6px;
     }
 
     .tool-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.35;
+      margin-top: 0.2rem;
     }
 
     .tool-desc {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
-      line-height: 1.4;
-      flex: 1;
+      line-height: 1.5;
+      margin-top: 0.35rem;
     }
 
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .card-arrow {
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .tool-card:hover .card-arrow {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    html[dir="rtl"] .tool-card:hover .card-arrow {
+      transform: translateX(-4px) rotate(180deg);
+    }
+
+    html[dir="rtl"] .card-arrow svg {
+      transform: rotate(180deg);
+    }
+
+    /* No Results State */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      display: none;
+    }
+
+    .no-results-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+
+    .no-results-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .no-results-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-reset-search {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-reset-search:hover {
+      background: #2563eb;
+    }
+
+    /* Footer */
     footer {
       border-top: 1px solid var(--card-border);
       text-align: center;
-      padding: 2rem 1.5rem;
+      padding: 2.5rem 1.5rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+      margin-top: auto;
+    }
+
+    footer p {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.35rem;
+      }
+      p.subtitle {
+        font-size: 1rem;
+      }
+      header {
+        padding: 2.75rem 1rem 2rem;
+      }
+      main {
+        padding: 1rem 1rem 3rem;
+      }
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Modern SaaS Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="brand-link" aria-label="VantorKit Home">
+        <!-- Sleek Custom Geometric 'V' SVG Logo -->
+        <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+            <filter id="vGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.35"/>
+            </filter>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <g filter="url(#vGlow)">
+            <!-- Left Wing -->
+            <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+            <!-- Right Wing -->
+            <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+            <!-- Central Geometric Diamond Node -->
+            <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+            <!-- Apex Vertex -->
+            <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+          </g>
+        </svg>
+
+        <span class="brand-name">Vantor<span>Kit</span></span>
+        <span class="brand-tag">v1.0</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Live Tool Count Pill -->
+        <div class="badge-tools-count">
+          <span class="pulse-dot"></span>
+          <span id="navToolCount" data-i18n="toolsCount">23 Tools Available</span>
+        </div>
+
+        <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+            <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span id="currentLangLabel">English</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="lang-menu" id="langMenu" role="menu">
+            <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇺🇸</span>
+                <span>English</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇸🇦</span>
+                <span>العربية</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇫🇷</span>
+                <span>Français</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="it" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇮🇹</span>
+                <span>Italiano</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
   <header>
-    <div class="brand-badge">Client-Side • Privacy-First • No Logs</div>
+    <div class="brand-badge" id="heroBadge" data-i18n="brandBadge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Client-Side • Privacy-First • No Logs</span>
+    </div>
     <h1>Vantor<span>Kit</span></h1>
-    <p class="subtitle">Fast, accessible, browser-based tools designed for developers, creators, and professionals.</p>
+    <p class="subtitle" id="heroSubtitle" data-i18n="heroSubtitle">Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.</p>
+    
     <div class="search-wrapper">
-      <input type="text" id="toolSearch" class="search-box" placeholder="Search 21 tools (e.g. percentage, pdf, counter)...">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 23 tools (e.g. percentage, pdf, counter)..." autocomplete="off" spellcheck="false">
+      <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
   </header>
 
   <main>
-    <div class="categories-bar">
-      <button class="category-btn active" data-cat="all">All Tools</button>
-      <button class="category-btn" data-cat="math">Math & Finance</button>
-      <button class="category-btn" data-cat="files">PDF & Files</button>
-      <button class="category-btn" data-cat="images">Images</button>
-      <button class="category-btn" data-cat="text">Text Tools</button>
-      <button class="category-btn" data-cat="everyday">Everyday</button>
+    <!-- Categories Filter Pills -->
+    <div class="categories-bar" id="categoriesBar">
+      <button type="button" class="category-btn active" data-cat="all">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span data-i18n="cat_all">All Tools</span>
+      </button>
+      <button type="button" class="category-btn" data-cat="math">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+        <span data-i18n="cat_math">Math &amp; Finance</span>
+      </button>
+      <button type="button" class="category-btn" data-cat="files">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span data-i18n="cat_files">PDF &amp; Files</span>
+      </button>
+      <button type="button" class="category-btn" data-cat="images">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span data-i18n="cat_images">Images</span>
+      </button>
+      <button type="button" class="category-btn" data-cat="text">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+        <span data-i18n="cat_text">Text Tools</span>
+      </button>
+      <button type="button" class="category-btn" data-cat="everyday">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span data-i18n="cat_everyday">Everyday</span>
+      </button>
     </div>
 
+    <!-- Dynamic Tools Grid -->
     <div class="tools-grid" id="toolsGrid">
 
-      <!-- Math -->
-      <a href="/tools/percentage-calculator.html" class="tool-card" data-category="math">
-        <div>
+      <!-- Math 1: Percentage Calculator (LIVE) -->
+      <a href="/tools/percentage-calculator.html" class="tool-card" data-tool-id="percentage-calculator" data-category="math">
+        <div class="card-top">
           <div class="tool-meta">
-            <span class="tool-category">Math & Finance</span>
-            <span class="tool-badge">Popular</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+            </div>
+            <span class="tool-badge popular" data-i18n="badge_popular">Popular</span>
           </div>
-          <div class="tool-title">Percentage Calculator</div>
-          <div class="tool-desc">Quickly calculate increases, decreases, differences, and standard percentages.</div>
+          <div>
+            <div class="tool-category" data-i18n="cat_math">Math &amp; Finance</div>
+            <div class="tool-title" data-tool-field="title">Percentage Calculator</div>
+            <div class="tool-desc" data-tool-field="desc">Quickly calculate increases, decreases, differences, and standard percentages.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="math">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
-          <div class="tool-title">Compound Interest</div>
-          <div class="tool-desc">Simulate investment growth, deposits, and compound frequencies over time.</div>
-        </div>
-      </a>
-
-      <a href="#" class="tool-card" data-category="math">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
-          <div class="tool-title">Loan & Amortization</div>
-          <div class="tool-desc">Calculate monthly installments, interest breakdown, and repayment schedules.</div>
-        </div>
-      </a>
-
-      <a href="#" class="tool-card" data-category="math">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
-          <div class="tool-title">Discount & Sales Tax</div>
-          <div class="tool-desc">Find final price savings, discount margins, and applicable sales taxes.</div>
-        </div>
-      </a>
-
-      <a href="#" class="tool-card" data-category="math">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Math & Finance</span></div>
-          <div class="tool-title">GPA & Grade Calculator</div>
-          <div class="tool-desc">Compute cumulative semester GPA and weighted scale grades instantly.</div>
-        </div>
-      </a>
-
-      <!-- PDF & Files -->
-      <a href="#" class="tool-card" data-category="files">
-        <div>
+      <!-- Math 2: Compound Interest -->
+      <a href="#" class="tool-card" data-tool-id="compound-interest" data-category="math">
+        <div class="card-top">
           <div class="tool-meta">
-            <span class="tool-category">PDF & Files</span>
-            <span class="tool-badge">High Value</span>
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
           </div>
-          <div class="tool-title">CSV to JSON / JSON to CSV</div>
-          <div class="tool-desc">Convert data structures back and forth with custom delimiter support.</div>
+          <div>
+            <div class="tool-category" data-i18n="cat_math">Math &amp; Finance</div>
+            <div class="tool-title" data-tool-field="title">Compound Interest</div>
+            <div class="tool-desc" data-tool-field="desc">Simulate investment growth, deposits, and compound frequencies over time.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="files">
-        <div>
-          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
-          <div class="tool-title">PDF Merge</div>
-          <div class="tool-desc">Combine multiple PDF documents entirely in your browser securely.</div>
+      <!-- Math 3: Loan & Amortization -->
+      <a href="#" class="tool-card" data-tool-id="loan-amortization" data-category="math">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_math">Math &amp; Finance</div>
+            <div class="tool-title" data-tool-field="title">Loan &amp; Amortization</div>
+            <div class="tool-desc" data-tool-field="desc">Calculate monthly installments, interest breakdown, and repayment schedules.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="files">
-        <div>
-          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
-          <div class="tool-title">PDF Split & Extract</div>
-          <div class="tool-desc">Extract selected page ranges or separate individual pages locally.</div>
+      <!-- Math 4: Discount & Sales Tax -->
+      <a href="#" class="tool-card" data-tool-id="discount-sales-tax" data-category="math">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_math">Math &amp; Finance</div>
+            <div class="tool-title" data-tool-field="title">Discount &amp; Sales Tax</div>
+            <div class="tool-desc" data-tool-field="desc">Find final price savings, discount margins, and applicable sales taxes.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="files">
-        <div>
-          <div class="tool-meta"><span class="tool-category">PDF & Files</span></div>
-          <div class="tool-title">Base64 File Encoder</div>
-          <div class="tool-desc">Encode documents and binary assets into data URIs and raw Base64 strings.</div>
+      <!-- Math 5: GPA & Grade Calculator -->
+      <a href="#" class="tool-card" data-tool-id="gpa-calculator" data-category="math">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_math">Math &amp; Finance</div>
+            <div class="tool-title" data-tool-field="title">GPA &amp; Grade Calculator</div>
+            <div class="tool-desc" data-tool-field="desc">Compute cumulative semester GPA and weighted scale grades instantly.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <!-- Images -->
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">Color Palette Extractor</div>
-          <div class="tool-desc">Extract primary and complementary hex palette codes from any uploaded image.</div>
+      <!-- Files 1: CSV to JSON / JSON to CSV -->
+      <a href="#" class="tool-card" data-tool-id="csv-json" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <span class="tool-badge high-value" data-i18n="badge_high_value">High Value</span>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">CSV to JSON / JSON to CSV</div>
+            <div class="tool-desc" data-tool-field="desc">Convert data structures back and forth with custom delimiter support.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">SVG to PNG Converter</div>
-          <div class="tool-desc">Rasterize SVG vector illustrations to transparent, high-res PNG formats.</div>
+      <!-- Files 2: PDF Merge -->
+      <a href="#" class="tool-card" data-tool-id="pdf-merge" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 4v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path><path d="M4 8h2v14H4z"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">PDF Merge</div>
+            <div class="tool-desc" data-tool-field="desc">Combine multiple PDF documents entirely in your browser securely.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">Image Resizer & Crop</div>
-          <div class="tool-desc">Adjust image pixel dimensions, preserve aspect ratios, and optimize weights.</div>
+      <!-- Files 3: PDF Split & Extract -->
+      <a href="#" class="tool-card" data-tool-id="pdf-split" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">PDF Split &amp; Extract</div>
+            <div class="tool-desc" data-tool-field="desc">Extract selected page ranges or separate individual pages locally.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">Image to Base64</div>
-          <div class="tool-desc">Convert PNG, JPG, or SVG to embeddable HTML/CSS inline data sources.</div>
+      <!-- Files 4: Base64 File Encoder -->
+      <a href="#" class="tool-card" data-tool-id="base64-file-encoder" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">Base64 File Encoder</div>
+            <div class="tool-desc" data-tool-field="desc">Encode documents and binary assets into data URIs and raw Base64 strings.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">WEBP Converter</div>
-          <div class="tool-desc">Transform WEBP files to standard PNG and JPG formats on the fly.</div>
+      <!-- Images 1: Color Palette Extractor -->
+      <a href="#" class="tool-card" data-tool-id="color-palette-extractor" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">Color Palette Extractor</div>
+            <div class="tool-desc" data-tool-field="desc">Extract primary and complementary hex palette codes from any uploaded image.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="images">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Images</span></div>
-          <div class="tool-title">Multi-Size Favicon Builder</div>
-          <div class="tool-desc">Generate standard 16x16, 32x32, and apple-touch icons from an icon asset.</div>
+      <!-- Images 2: SVG to PNG Converter -->
+      <a href="#" class="tool-card" data-tool-id="svg-png-converter" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">SVG to PNG Converter</div>
+            <div class="tool-desc" data-tool-field="desc">Rasterize SVG vector illustrations to transparent, high-res PNG formats.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <!-- Everyday -->
-      <a href="#" class="tool-card" data-category="everyday">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
-          <div class="tool-title">Date Difference & Workdays</div>
-          <div class="tool-desc">Calculate total days, business working days, and weekends between dates.</div>
+      <!-- Images 3: Image Resizer & Crop -->
+      <a href="#" class="tool-card" data-tool-id="image-resizer-crop" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">Image Resizer &amp; Crop</div>
+            <div class="tool-desc" data-tool-field="desc">Adjust image pixel dimensions, preserve aspect ratios, and optimize weights.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="everyday">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
-          <div class="tool-title">QR Code Generator</div>
-          <div class="tool-desc">Create custom vector QR codes for URLs, WiFi credentials, and contact cards.</div>
+      <!-- Images 4: Image to Base64 -->
+      <a href="#" class="tool-card" data-tool-id="image-to-base64" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">Image to Base64</div>
+            <div class="tool-desc" data-tool-field="desc">Convert PNG, JPG, or SVG to embeddable HTML/CSS inline data sources.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="everyday">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
-          <div class="tool-title">Age & Milestone Calculator</div>
-          <div class="tool-desc">Compute exact age in years, months, and hours with countdown milestones.</div>
+      <!-- Images 5: WEBP Converter -->
+      <a href="#" class="tool-card" data-tool-id="webp-converter" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">WEBP Converter</div>
+            <div class="tool-desc" data-tool-field="desc">Transform WEBP files to standard PNG and JPG formats on the fly.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="everyday">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
-          <div class="tool-title">Password Generator & Entropy</div>
-          <div class="tool-desc">Generate cryptographically secure passwords with entropy strength scoring.</div>
+      <!-- Images 6: Multi-Size Favicon Builder -->
+      <a href="#" class="tool-card" data-tool-id="favicon-builder" data-category="images">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_images">Images</div>
+            <div class="tool-title" data-tool-field="title">Multi-Size Favicon Builder</div>
+            <div class="tool-desc" data-tool-field="desc">Generate standard 16x16, 32x32, and apple-touch icons from an icon asset.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="everyday">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Everyday</span></div>
-          <div class="tool-title">Time Zone Meeting Planner</div>
-          <div class="tool-desc">Compare overlapping business hours across major global timezones.</div>
+      <!-- Everyday 1: Date Difference & Workdays -->
+      <a href="#" class="tool-card" data-tool-id="date-difference" data-category="everyday">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_everyday">Everyday</div>
+            <div class="tool-title" data-tool-field="title">Date Difference &amp; Workdays</div>
+            <div class="tool-desc" data-tool-field="desc">Calculate total days, business working days, and weekends between dates.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <!-- Text -->
-      <a href="#" class="tool-card" data-category="text">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
-          <div class="tool-title">Word & Character Counter</div>
-          <div class="tool-desc">Track real-time character counts, words, reading durations, and paragraph stats.</div>
+      <!-- Everyday 2: QR Code Generator -->
+      <a href="#" class="tool-card" data-tool-id="qr-code-generator" data-category="everyday">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="3" height="3"></rect><rect x="18" y="14" width="3" height="3"></rect><rect x="14" y="18" width="7" height="3"></rect></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_everyday">Everyday</div>
+            <div class="tool-title" data-tool-field="title">QR Code Generator</div>
+            <div class="tool-desc" data-tool-field="desc">Create custom vector QR codes for URLs, WiFi credentials, and contact cards.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="text">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
-          <div class="tool-title">Markdown Previewer</div>
-          <div class="tool-desc">Write Markdown with side-by-side formatted preview and instant HTML export.</div>
+      <!-- Everyday 3: Age & Milestone Calculator -->
+      <a href="#" class="tool-card" data-tool-id="age-milestone-calculator" data-category="everyday">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_everyday">Everyday</div>
+            <div class="tool-title" data-tool-field="title">Age &amp; Milestone Calculator</div>
+            <div class="tool-desc" data-tool-field="desc">Compute exact age in years, months, and hours with countdown milestones.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
 
-      <a href="#" class="tool-card" data-category="text">
-        <div>
-          <div class="tool-meta"><span class="tool-category">Text Tools</span></div>
-          <div class="tool-title">URL Slug Generator</div>
-          <div class="tool-desc">Sanitize titles into clean, SEO-optimized URL slugs removing stop words.</div>
+      <!-- Everyday 4: Password Generator & Entropy -->
+      <a href="#" class="tool-card" data-tool-id="password-generator" data-category="everyday">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_everyday">Everyday</div>
+            <div class="tool-title" data-tool-field="title">Password Generator &amp; Entropy</div>
+            <div class="tool-desc" data-tool-field="desc">Generate cryptographically secure passwords with entropy strength scoring.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
       </a>
+
+      <!-- Everyday 5: Time Zone Meeting Planner -->
+      <a href="#" class="tool-card" data-tool-id="timezone-meeting-planner" data-category="everyday">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_everyday">Everyday</div>
+            <div class="tool-title" data-tool-field="title">Time Zone Meeting Planner</div>
+            <div class="tool-desc" data-tool-field="desc">Compare overlapping business hours across major global timezones.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Text 1: Word & Character Counter -->
+      <a href="#" class="tool-card" data-tool-id="word-counter" data-category="text">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_text">Text Tools</div>
+            <div class="tool-title" data-tool-field="title">Word &amp; Character Counter</div>
+            <div class="tool-desc" data-tool-field="desc">Track real-time character counts, words, reading durations, and paragraph stats.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Text 2: Markdown Previewer -->
+      <a href="#" class="tool-card" data-tool-id="markdown-previewer" data-category="text">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_text">Text Tools</div>
+            <div class="tool-title" data-tool-field="title">Markdown Previewer</div>
+            <div class="tool-desc" data-tool-field="desc">Write Markdown with side-by-side formatted preview and instant HTML export.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Text 3: URL Slug Generator -->
+      <a href="#" class="tool-card" data-tool-id="url-slug-generator" data-category="text">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_text">Text Tools</div>
+            <div class="tool-title" data-tool-field="title">URL Slug Generator</div>
+            <div class="tool-desc" data-tool-field="desc">Sanitize titles into clean, SEO-optimized URL slugs removing stop words.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Empty Search Results Placeholder -->
+      <div class="no-results" id="noResultsBox">
+        <div class="no-results-icon">🔍</div>
+        <div class="no-results-title" data-i18n="noResultsTitle">No tools found</div>
+        <div class="no-results-desc" data-i18n="noResultsDesc">No tools matching your search criteria. Try a different keyword or category.</div>
+        <button type="button" class="btn-reset-search" id="btnResetSearch" data-i18n="btnResetSearch">Reset Search</button>
+      </div>
 
     </div>
   </main>
 
   <footer>
-    <p>&copy; 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally.</p>
+    <p id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
   </footer>
 
+  <!-- Complete Multi-Language (i18n) Engine & Interactive Filtering -->
   <script>
-    const searchInput = document.getElementById('toolSearch');
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    const cards = document.querySelectorAll('.tool-card');
+    (function () {
+      'use strict';
 
-    function filterTools() {
-      const query = searchInput.value.toLowerCase().trim();
-      const activeCat = document.querySelector('.category-btn.active').dataset.cat;
+      // --- Complete Translation Dictionary (4 Languages) ---
+      const TRANSLATIONS = {
+        en: {
+          langLabel: "English",
+          toolsCount: "23 Tools Available",
+          brandBadge: "Client-Side • Privacy-First • No Logs",
+          heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
+          searchPlaceholder: "Search 23 tools (e.g. percentage, pdf, counter)...",
+          noResultsTitle: "No tools found",
+          noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
+          btnResetSearch: "Reset Search",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.",
+          cat_all: "All Tools",
+          cat_math: "Math & Finance",
+          cat_files: "PDF & Files",
+          cat_images: "Images",
+          cat_text: "Text Tools",
+          cat_everyday: "Everyday",
+          badge_popular: "Popular",
+          badge_high_value: "High Value",
+          badge_live: "Live Now",
+          tools: {
+            "percentage-calculator": {
+              title: "Percentage Calculator",
+              desc: "Quickly calculate increases, decreases, differences, and standard percentages."
+            },
+            "compound-interest": {
+              title: "Compound Interest",
+              desc: "Simulate investment growth, deposits, and compound frequencies over time."
+            },
+            "loan-amortization": {
+              title: "Loan & Amortization",
+              desc: "Calculate monthly installments, interest breakdown, and repayment schedules."
+            },
+            "discount-sales-tax": {
+              title: "Discount & Sales Tax",
+              desc: "Find final price savings, discount margins, and applicable sales taxes."
+            },
+            "gpa-calculator": {
+              title: "GPA & Grade Calculator",
+              desc: "Compute cumulative semester GPA and weighted scale grades instantly."
+            },
+            "csv-json": {
+              title: "CSV to JSON / JSON to CSV",
+              desc: "Convert data structures back and forth with custom delimiter support."
+            },
+            "pdf-merge": {
+              title: "PDF Merge",
+              desc: "Combine multiple PDF documents entirely in your browser securely."
+            },
+            "pdf-split": {
+              title: "PDF Split & Extract",
+              desc: "Extract selected page ranges or separate individual pages locally."
+            },
+            "base64-file-encoder": {
+              title: "Base64 File Encoder",
+              desc: "Encode documents and binary assets into data URIs and raw Base64 strings."
+            },
+            "color-palette-extractor": {
+              title: "Color Palette Extractor",
+              desc: "Extract primary and complementary hex palette codes from any uploaded image."
+            },
+            "svg-png-converter": {
+              title: "SVG to PNG Converter",
+              desc: "Rasterize SVG vector illustrations to transparent, high-res PNG formats."
+            },
+            "image-resizer-crop": {
+              title: "Image Resizer & Crop",
+              desc: "Adjust image pixel dimensions, preserve aspect ratios, and optimize weights."
+            },
+            "image-to-base64": {
+              title: "Image to Base64",
+              desc: "Convert PNG, JPG, or SVG to embeddable HTML/CSS inline data sources."
+            },
+            "webp-converter": {
+              title: "WEBP Converter",
+              desc: "Transform WEBP files to standard PNG and JPG formats on the fly."
+            },
+            "favicon-builder": {
+              title: "Multi-Size Favicon Builder",
+              desc: "Generate standard 16x16, 32x32, and apple-touch icons from an icon asset."
+            },
+            "date-difference": {
+              title: "Date Difference & Workdays",
+              desc: "Calculate total days, business working days, and weekends between dates."
+            },
+            "qr-code-generator": {
+              title: "QR Code Generator",
+              desc: "Create custom vector QR codes for URLs, WiFi credentials, and contact cards."
+            },
+            "age-milestone-calculator": {
+              title: "Age & Milestone Calculator",
+              desc: "Compute exact age in years, months, and hours with countdown milestones."
+            },
+            "password-generator": {
+              title: "Password Generator & Entropy",
+              desc: "Generate cryptographically secure passwords with entropy strength scoring."
+            },
+            "timezone-meeting-planner": {
+              title: "Time Zone Meeting Planner",
+              desc: "Compare overlapping business hours across major global timezones."
+            },
+            "word-counter": {
+              title: "Word & Character Counter",
+              desc: "Track real-time character counts, words, reading durations, and paragraph stats."
+            },
+            "markdown-previewer": {
+              title: "Markdown Previewer",
+              desc: "Write Markdown with side-by-side formatted preview and instant HTML export."
+            },
+            "url-slug-generator": {
+              title: "URL Slug Generator",
+              desc: "Sanitize titles into clean, SEO-optimized URL slugs removing stop words."
+            }
+          }
+        },
+        ar: {
+          langLabel: "العربية",
+          toolsCount: "23 أداة متاحة",
+          brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
+          heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
+          searchPlaceholder: "ابحث في 23 أداة (مثل النسبة المئوية، PDF، العداد)...",
+          noResultsTitle: "لم يتم العثور على نتائج",
+          noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
+          btnResetSearch: "إعادة ضبط البحث",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك.",
+          cat_all: "جميع الأدوات",
+          cat_math: "الرياضيات والمالية",
+          cat_files: "PDF والملفات",
+          cat_images: "الصور",
+          cat_text: "أدوات النصوص",
+          cat_everyday: "أدوات يومية",
+          badge_popular: "شائع",
+          badge_high_value: "قيمة عالية",
+          badge_live: "متاح الآن",
+          tools: {
+            "percentage-calculator": {
+              title: "حاسبة النسبة المئوية",
+              desc: "احسب الزيادة والنقصان والفرق والنسب المئوية القياسية بدقة وسرعة وبدون تحديث للصفحة."
+            },
+            "compound-interest": {
+              title: "الفائدة المركبة",
+              desc: "حاكي نمو الاستثمارات والإيداعات المنتظمة وتكرار تراكم العوائد عبر الزمن."
+            },
+            "loan-amortization": {
+              title: "القروض وجدول الاستهلاك",
+              desc: "احسب الأقساط الشهرية وتفاصيل الفوائد وجداول السداد الكاملة بمنتهى السهولة."
+            },
+            "discount-sales-tax": {
+              title: "الخصومات وضريبة المبيعات",
+              desc: "احسب السعر النهائي بعد التخفيض، وقيمة التوفير الإجمالية، وضريبة المبيعات المطبقة."
+            },
+            "gpa-calculator": {
+              title: "حاسبة المعدل التراكمي",
+              desc: "احسب المعدل الفصلي والتراكمي والدرجات الموزونة بدقة لجميع الأنظمة الأكاديمية."
+            },
+            "csv-json": {
+              title: "تحويل CSV إلى JSON والعكس",
+              desc: "حوّل هياكل البيانات بين النسقين بكل سلاسة مع دعم الفواصل والمحددات المخصصة."
+            },
+            "pdf-merge": {
+              title: "دمج ملفات PDF",
+              desc: "اجمع عدة مستندات PDF في ملف واحد منظم بأمان تام داخل متصفحك."
+            },
+            "pdf-split": {
+              title: "تقسيم واستخراج صفحات PDF",
+              desc: "استخرج نطاقات صفحات محددة أو افصل كل صفحة كملف مستقل محلياً على جهازك."
+            },
+            "base64-file-encoder": {
+              title: "تشفير الملفات بـ Base64",
+              desc: "حوّل المستندات والملفات الثنائية إلى صيغ data URI وسلاسل نصية Base64."
+            },
+            "color-palette-extractor": {
+              title: "استخراج لوحة الألوان",
+              desc: "استخرج أكواد ألوان Hex الأساسية والمتكاملة والمتناسقة من أي صورة ترفعها."
+            },
+            "svg-png-converter": {
+              title: "تحويل SVG إلى PNG",
+              desc: "حوّل الرسومات المتجهة SVG إلى صور PNG شفافة وعالية الدقة والوضوح."
+            },
+            "image-resizer-crop": {
+              title: "تعديل أبعاد وقص الصور",
+              desc: "عدّل أبعاد الصور بالبكسل مع الحفاظ على التناسب وخفض الحجم دون فقدان الجودة."
+            },
+            "image-to-base64": {
+              title: "تحويل الصورة إلى Base64",
+              desc: "حوّل صور PNG وJPG وSVG إلى كود مضمن لصفحات HTML وCSS مباشرة."
+            },
+            "webp-converter": {
+              title: "محول صيغ WEBP",
+              desc: "حوّل ملفات WEBP الحديثة إلى صيغ PNG وJPG القياسية بلمح البصر."
+            },
+            "favicon-builder": {
+              title: "منشئ أيقونات Favicon المتعددة",
+              desc: "أنشئ حزم الأيقونات بمقاسات 16x16 و32x32 وأيقونات Apple Touch من أي صورة."
+            },
+            "date-difference": {
+              title: "فرق التواريخ وأيام العمل",
+              desc: "احسب عدد الأيام الإجمالية وأيام العمل الرسمية وعطلات نهاية الأسبوع بين تاريخين."
+            },
+            "qr-code-generator": {
+              title: "مولد رموز QR Code",
+              desc: "أنشئ رموز استجابة سريعة للروابط وبيانات شبكات Wi-Fi وبطاقات جهات الاتصال."
+            },
+            "age-milestone-calculator": {
+              title: "حاسبة العمر والمحطات الزمنية",
+              desc: "احسب عمرك الدقيق بالسنوات والأشهر والساعات مع عد تنازلي للمناسبات القادمة."
+            },
+            "password-generator": {
+              title: "مولد كلمات المرور وقوة التشفير",
+              desc: "أنشئ كلمات مرور مشفرة وفائقة الأمان مع قياس دقيق لمستوى الإنتروبيا والقوة."
+            },
+            "timezone-meeting-planner": {
+              title: "مخطط الاجتماعات عبر المناطق الزمنية",
+              desc: "قارن ساعات العمل المشتركة بين مختلف العواصم والمناطق الزمنية العالمية."
+            },
+            "word-counter": {
+              title: "عداد الكلمات والأحرف",
+              desc: "تابع عدد الأحرف والكلمات ووقت القراءة المقدر وإحصائيات الفقرات بشكل فوري."
+            },
+            "markdown-previewer": {
+              title: "محرر ومعاين Markdown",
+              desc: "اكتب بلغة Markdown مع معاينة منسقة جنباً إلى جنب وتصدير فوري لكود HTML."
+            },
+            "url-slug-generator": {
+              title: "مولد روابط URL المختصرة (Slug)",
+              desc: "حوّل العناوين إلى روابط أنيقة ومتوافقة مع محركات البحث SEO مع تنظيف الرموز."
+            }
+          }
+        },
+        fr: {
+          langLabel: "Français",
+          toolsCount: "23 Outils Disponibles",
+          brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
+          heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
+          searchPlaceholder: "Rechercher parmi 23 outils (ex: pourcentage, pdf, compteur)...",
+          noResultsTitle: "Aucun outil trouvé",
+          noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
+          btnResetSearch: "Réinitialiser la recherche",
+          footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur.",
+          cat_all: "Tous les Outils",
+          cat_math: "Maths & Finance",
+          cat_files: "PDF & Fichiers",
+          cat_images: "Images",
+          cat_text: "Outils Texte",
+          cat_everyday: "Quotidien",
+          badge_popular: "Populaire",
+          badge_high_value: "Haute Valeur",
+          badge_live: "Disponible",
+          tools: {
+            "percentage-calculator": {
+              title: "Calculateur de Pourcentage",
+              desc: "Calculez rapidement les hausses, baisses, écarts et pourcentages standards en temps réel."
+            },
+            "compound-interest": {
+              title: "Intérêts Composés",
+              desc: "Simulez la croissance des investissements, dépôts et fréquences de capitalisation."
+            },
+            "loan-amortization": {
+              title: "Prêts & Amortissement",
+              desc: "Calculez les mensualités, la répartition des intérêts et les échéanciers complets."
+            },
+            "discount-sales-tax": {
+              title: "Remise & Taxe de Vente",
+              desc: "Trouvez les économies sur prix final, les marges de remise et taxes de vente."
+            },
+            "gpa-calculator": {
+              title: "Calculateur de Moyenne & Notes",
+              desc: "Calculez votre moyenne semestrielle cumulative et vos notes pondérées instantanément."
+            },
+            "csv-json": {
+              title: "CSV vers JSON / JSON vers CSV",
+              desc: "Convertissez vos structures de données dans les deux sens avec séparateurs personnalisés."
+            },
+            "pdf-merge": {
+              title: "Fusionner des PDF",
+              desc: "Combinez plusieurs documents PDF en toute sécurité directement dans votre navigateur."
+            },
+            "pdf-split": {
+              title: "Diviser & Extraire PDF",
+              desc: "Extrayez des plages de pages ou séparez chaque page individuellement en local."
+            },
+            "base64-file-encoder": {
+              title: "Encodeur de Fichiers Base64",
+              desc: "Encodez documents et fichiers binaires en URI de données et chaînes Base64."
+            },
+            "color-palette-extractor": {
+              title: "Extracteur de Palette de Couleurs",
+              desc: "Extrayez les codes hexadécimaux dominants et complémentaires de toute image téléversée."
+            },
+            "svg-png-converter": {
+              title: "Convertisseur SVG vers PNG",
+              desc: "Pixellisez vos illustrations vectorielles SVG en images PNG transparentes haute résolution."
+            },
+            "image-resizer-crop": {
+              title: "Redimensionner & Rogner l'Image",
+              desc: "Ajustez les dimensions en pixels, conservez le ratio d'aspect et optimisez le poids."
+            },
+            "image-to-base64": {
+              title: "Image vers Base64",
+              desc: "Convertissez PNG, JPG ou SVG en sources de données inline pour HTML/CSS."
+            },
+            "webp-converter": {
+              title: "Convertisseur WEBP",
+              desc: "Transformez instantanément les fichiers WEBP en formats standard PNG et JPG."
+            },
+            "favicon-builder": {
+              title: "Générateur de Favicon Multi-Tailles",
+              desc: "Générez les formats standards 16x16, 32x32 et apple-touch depuis une image."
+            },
+            "date-difference": {
+              title: "Différence de Dates & Jours Ouvrés",
+              desc: "Calculez le nombre total de jours, jours ouvrés et week-ends entre deux dates."
+            },
+            "qr-code-generator": {
+              title: "Générateur de Code QR",
+              desc: "Créez des codes QR vectoriels personnalisés pour URLs, accès Wi-Fi et fiches contact."
+            },
+            "age-milestone-calculator": {
+              title: "Calculateur d'Âge & Jalons",
+              desc: "Calculez votre âge exact en années, mois et heures avec compte à rebours."
+            },
+            "password-generator": {
+              title: "Générateur de Mots de Passe & Entropie",
+              desc: "Générez des mots de passe cryptographiquement sûrs avec évaluation d'entropie."
+            },
+            "timezone-meeting-planner": {
+              title: "Planificateur de Réunions Fuseaux Horaires",
+              desc: "Comparez les heures de travail qui se chevauchent à travers les fuseaux horaires mondiaux."
+            },
+            "word-counter": {
+              title: "Compteur de Mots & Caractères",
+              desc: "Suivez en temps réel le nombre de caractères, mots, temps de lecture et paragraphes."
+            },
+            "markdown-previewer": {
+              title: "Prévisualiseur Markdown",
+              desc: "Rédigez en Markdown avec rendu côte à côte et export HTML instantané."
+            },
+            "url-slug-generator": {
+              title: "Générateur de Slug d'URL",
+              desc: "Transformez vos titres en slugs d'URL propres et optimisés pour le SEO."
+            }
+          }
+        },
+        it: {
+          langLabel: "Italiano",
+          toolsCount: "23 Strumenti Disponibili",
+          brandBadge: "Lato Client • Massima Privacy • Nessun Log",
+          heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
+          searchPlaceholder: "Cerca tra 23 strumenti (es: percentuale, pdf, contatore)...",
+          noResultsTitle: "Nessun risultato",
+          noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
+          btnResetSearch: "Azzera ricerca",
+          footerText: "© 2026 VantorKit. Utilità web veloci, private e gratuite. Tutte le elaborazioni vengono eseguite localmente nel tuo browser.",
+          cat_all: "Tutti gli Strumenti",
+          cat_math: "Matematica & Finanza",
+          cat_files: "PDF & File",
+          cat_images: "Immagini",
+          cat_text: "Strumenti Testo",
+          cat_everyday: "Quotidiano",
+          badge_popular: "Popolare",
+          badge_high_value: "Alto Valore",
+          badge_live: "Disponibile",
+          tools: {
+            "percentage-calculator": {
+              title: "Calcolatore di Percentuale",
+              desc: "Calcola rapidamente aumenti, diminuzioni, differenze e percentuali standard in tempo reale."
+            },
+            "compound-interest": {
+              title: "Interesse Composto",
+              desc: "Simula la crescita degli investimenti, depositi e frequenze di capitalizzazione nel tempo."
+            },
+            "loan-amortization": {
+              title: "Prestiti & Ammortamento",
+              desc: "Calcola le rate mensili, ripartizione degli interessi e piani di rimborso completi."
+            },
+            "discount-sales-tax": {
+              title: "Sconto & Tasse di Vendita",
+              desc: "Calcola il risparmio sul prezzo finale, margini di sconto e imposte applicabili."
+            },
+            "gpa-calculator": {
+              title: "Calcolatore Media & Voti",
+              desc: "Calcola la media ponderata degli esami e i punteggi accademici all'istante."
+            },
+            "csv-json": {
+              title: "Da CSV a JSON / Da JSON a CSV",
+              desc: "Converti strutture dati avanti e indietro con supporto per delimitatori personalizzati."
+            },
+            "pdf-merge": {
+              title: "Unisci PDF",
+              desc: "Combina più documenti PDF interamente nel tuo browser in totale sicurezza."
+            },
+            "pdf-split": {
+              title: "Dividi ed Estrai PDF",
+              desc: "Estrai intervalli di pagine selezionati o separa singole pagine localmente."
+            },
+            "base64-file-encoder": {
+              title: "Codificatore File Base64",
+              desc: "Codifica documenti e risorse binarie in URI dati e stringhe Base64 grezze."
+            },
+            "color-palette-extractor": {
+              title: "Estrattore di Palette Colori",
+              desc: "Estrai codici esadecimali primari e complementari da qualsiasi immagine caricata."
+            },
+            "svg-png-converter": {
+              title: "Convertitore da SVG a PNG",
+              desc: "Rasterizza illustrazioni vettoriali SVG in formati PNG trasparenti ad alta risoluzione."
+            },
+            "image-resizer-crop": {
+              title: "Ridimensiona & Ritaglia Immagine",
+              desc: "Regola le dimensioni in pixel, mantieni le proporzioni e ottimizza il peso."
+            },
+            "image-to-base64": {
+              title: "Da Immagine a Base64",
+              desc: "Converti PNG, JPG o SVG in sorgenti dati inline incorporabili in HTML/CSS."
+            },
+            "webp-converter": {
+              title: "Convertitore WEBP",
+              desc: "Trasforma al volo file WEBP nei formati standard PNG e JPG."
+            },
+            "favicon-builder": {
+              title: "Generatore di Favicon Multi-Dimensione",
+              desc: "Genera icone standard 16x16, 32x32 e apple-touch a partire da un'icona."
+            },
+            "date-difference": {
+              title: "Differenza Date & Giorni Lavorativi",
+              desc: "Calcola giorni totali, giorni lavorativi aziendali e weekend tra date."
+            },
+            "qr-code-generator": {
+              title: "Generatore di Codici QR",
+              desc: "Crea codici QR vettoriali personalizzati per URL, credenziali WiFi e contatti."
+            },
+            "age-milestone-calculator": {
+              title: "Calcolatore Età & Traguardi",
+              desc: "Calcola l'età esatta in anni, mesi e ore con conto alla rovescia per gli eventi."
+            },
+            "password-generator": {
+              title: "Generatore di Password & Entropia",
+              desc: "Genera password crittograficamente sicure con punteggio di entropia e robustezza."
+            },
+            "timezone-meeting-planner": {
+              title: "Pianificatore Riunioni Fusi Orari",
+              desc: "Confronta le ore lavorative sovrapposte nei principali fusi orari globali."
+            },
+            "word-counter": {
+              title: "Conteggio Parole & Caratteri",
+              desc: "Monitora in tempo reale caratteri, parole, tempi di lettura stimati e paragrafi."
+            },
+            "markdown-previewer": {
+              title: "Anteprima Markdown",
+              desc: "Scrivi Markdown con anteprima affiancata ed esportazione HTML istantanea."
+            },
+            "url-slug-generator": {
+              title: "Generatore di Slug URL",
+              desc: "Pulisci i titoli in slug URL ottimizzati per la SEO rimuovendo parole superflue."
+            }
+          }
+        }
+      };
 
-      cards.forEach(card => {
-        const title = card.querySelector('.tool-title').innerText.toLowerCase();
-        const desc = card.querySelector('.tool-desc').innerText.toLowerCase();
-        const category = card.dataset.category;
+      // --- State & DOM References ---
+      const htmlRoot = document.getElementById('htmlRoot');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
 
-        const matchesQuery = title.includes(query) || desc.includes(query);
-        const matchesCategory = (activeCat === 'all' || category === activeCat);
+      const searchInput = document.getElementById('toolSearch');
+      const searchClear = document.getElementById('searchClear');
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const cards = document.querySelectorAll('.tool-card');
+      const noResultsBox = document.getElementById('noResultsBox');
+      const btnResetSearch = document.getElementById('btnResetSearch');
 
-        if (matchesQuery && matchesCategory) {
-          card.style.display = 'flex';
+      let currentLang = 'en';
+
+      // --- Language Switcher Logic ---
+      function setLanguage(lang) {
+        if (!TRANSLATIONS[lang]) lang = 'en';
+        currentLang = lang;
+        localStorage.setItem('vantorkit_lang', lang);
+
+        const dict = TRANSLATIONS[lang];
+
+        // Update html lang and dir
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        // Update Button label and active state
+        currentLangLabel.textContent = dict.langLabel;
+        langOptions.forEach(opt => {
+          if (opt.dataset.lang === lang) {
+            opt.classList.add('active');
+          } else {
+            opt.classList.remove('active');
+          }
+        });
+
+        // Update static UI elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) {
+            if (el.tagName === 'INPUT') {
+              el.placeholder = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
+        });
+
+        // Update Search Placeholder
+        searchInput.placeholder = dict.searchPlaceholder;
+
+        // Update All Tool Cards Titles and Descriptions
+        cards.forEach(card => {
+          const toolId = card.dataset.toolId;
+          if (dict.tools && dict.tools[toolId]) {
+            const titleEl = card.querySelector('[data-tool-field="title"]');
+            const descEl = card.querySelector('[data-tool-field="desc"]');
+            if (titleEl) titleEl.textContent = dict.tools[toolId].title;
+            if (descEl) descEl.textContent = dict.tools[toolId].desc;
+          }
+
+          // Update Category label inside card
+          const cat = card.dataset.category;
+          const catLabelEl = card.querySelector('.tool-category');
+          if (catLabelEl && dict['cat_' + cat]) {
+            catLabelEl.textContent = dict['cat_' + cat];
+          }
+
+          // Update Badge if exists
+          const badgeEl = card.querySelector('.tool-badge');
+          if (badgeEl) {
+            if (badgeEl.classList.contains('popular')) badgeEl.textContent = dict.badge_popular;
+            else if (badgeEl.classList.contains('high-value')) badgeEl.textContent = dict.badge_high_value;
+            else if (badgeEl.classList.contains('live')) badgeEl.textContent = dict.badge_live;
+          }
+        });
+
+        // Re-filter search results with updated language content
+        filterTools();
+      }
+
+      // Toggle Language Menu
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = langMenu.classList.contains('open');
+        if (isOpen) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
         } else {
-          card.style.display = 'none';
+          langMenu.classList.add('open');
+          langToggleBtn.setAttribute('aria-expanded', 'true');
         }
       });
-    }
 
-    searchInput.addEventListener('input', filterTools);
-
-    categoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        categoryBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        filterTools();
+      // Handle Option Selection
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const selectedLang = opt.dataset.lang;
+          setLanguage(selectedLang);
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        });
       });
-    });
+
+      // Close menu on outside click
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('langDropdown').contains(e.target)) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // --- Search & Category Filtering ---
+      function filterTools() {
+        const query = searchInput.value.toLowerCase().trim();
+        const activeCat = document.querySelector('.category-btn.active').dataset.cat;
+        let visibleCount = 0;
+
+        // Toggle clear search button
+        if (query.length > 0) {
+          searchClear.style.display = 'flex';
+        } else {
+          searchClear.style.display = 'none';
+        }
+
+        cards.forEach(card => {
+          const toolId = card.dataset.toolId;
+          const title = card.querySelector('[data-tool-field="title"]').innerText.toLowerCase();
+          const desc = card.querySelector('[data-tool-field="desc"]').innerText.toLowerCase();
+          const category = card.dataset.category;
+
+          // Also match English keywords so users can search in English even when on AR/FR/IT
+          let enKeywords = '';
+          if (TRANSLATIONS.en.tools[toolId]) {
+            enKeywords = TRANSLATIONS.en.tools[toolId].title.toLowerCase() + ' ' + TRANSLATIONS.en.tools[toolId].desc.toLowerCase();
+          }
+
+          const matchesQuery = query === '' || title.includes(query) || desc.includes(query) || enKeywords.includes(query);
+          const matchesCategory = (activeCat === 'all' || category === activeCat);
+
+          if (matchesQuery && matchesCategory) {
+            card.style.display = 'flex';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Show/hide no results box
+        if (visibleCount === 0) {
+          noResultsBox.style.display = 'block';
+        } else {
+          noResultsBox.style.display = 'none';
+        }
+      }
+
+      searchInput.addEventListener('input', filterTools);
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        filterTools();
+        searchInput.focus();
+      });
+
+      btnResetSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        document.querySelector('.category-btn[data-cat="all"]').classList.add('active');
+        filterTools();
+        searchInput.focus();
+      });
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterTools();
+        });
+      });
+
+      // Keyboard Shortcut (Press '/' to focus search)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== searchInput && !['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+          searchInput.value = '';
+          filterTools();
+          searchInput.blur();
+        }
+      });
+
+      // --- Initialization ---
+      const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(savedLang);
+    })();
   </script>
 </body>
 </html>
