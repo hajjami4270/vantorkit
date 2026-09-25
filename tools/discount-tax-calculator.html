@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discount &amp; Sales Tax Calculator — Final Price &amp; Savings | VantorKit</title>
+  <meta name="description" content="Calculate discount savings, stacked promo codes, and sales tax or VAT in real-time. Includes visual price breakdown, reverse calculator mode, and itemized receipt export. 100% client-side and private.">
+  <meta name="keywords" content="discount calculator, sales tax calculator, final price calculator, vat calculator, stacked discount, reverse discount calculator, percentage off, shopping savings, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Discount &amp; Sales Tax Calculator — Final Price &amp; Savings | VantorKit">
+  <meta property="og:description" content="Instant client-side discount, stacked promo code, and sales tax calculation. See total savings, net discount %, and visual cost breakdown.">
+  <meta property="og:url" content="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Discount &amp; Sales Tax Calculator | VantorKit">
+  <meta name="twitter:description" content="Calculate discounts, stacked promo codes, sales tax, and reverse original sticker prices. 100% free and private.">
+
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Discount & Sales Tax Calculator",
+        "url": "https://vantorkit.com/tools/discount-tax-calculator.html",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side discount and sales tax calculator. Compute percentage or fixed cash discounts, stacked promo codes, sales tax and VAT, visual price breakdown, and reverse original sticker price."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How are stacked discounts calculated by retail stores?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Retailers do not simply add percentages together. If an item has a 20% store discount and you apply an extra 10% VIP coupon, the 10% is applied to the already-discounted price. For a $100 item, it drops to $80 first, then 10% off $80 is $8, making the final price $72 (a net 28% discount, not 30%)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is sales tax calculated before or after applying discounts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In the vast majority of jurisdictions, sales tax is calculated on the discounted subtotal (the actual price paid by the customer). If a retailer provides an instant store discount or manufacturer coupon, tax is applied to the net sale price."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the reverse calculator mode work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The reverse mode works backwards from your final receipt amount. It removes the tax rate to find the pre-tax subtotal, then divides by (1 - discount rate) to accurately determine what the original retail sticker price was before the sale."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between US Sales Tax and VAT (Value Added Tax)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In the United States, sales tax is added at the point of sale and varies by state, county, and city. In the UK, European Union, and Middle East, VAT is a consumption tax that is often included in the shelf sticker price, though businesses track the pre-tax subtotal and VAT component separately."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --chart-savings: #10b981;
+      --chart-subtotal: #3b82f6;
+      --chart-tax: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: 70px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 600;
+      transition: all .2s ease;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+    }
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+    .nav-brand span span {
+      color: var(--accent);
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown { position: relative; }
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .45rem .85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 600;
+      transition: all .2s ease;
+    }
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .globe-icon { color: var(--badge-text); }
+    .chevron-icon { transition: transform .2s ease; color: var(--text-muted); }
+    .lang-btn[aria-expanded="true"] .chevron-icon { transform: rotate(180deg); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, .96);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: .4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 1000;
+    }
+    .lang-menu.show { display: flex; }
+    .lang-option {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: .5rem .75rem;
+      text-align: left;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all .15s ease;
+    }
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* RTL Adjustments */
+    html[dir="rtl"] {
+      font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+    }
+    html[dir="rtl"] * {
+      font-family: inherit;
+    }
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem 4rem;
+    }
+
+    /* Header Section */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--badge-text);
+      margin-bottom: .85rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.tool-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Calculator Mode Switcher Tabs */
+    .calc-mode-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .calc-mode-switch {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 4px;
+      backdrop-filter: blur(12px);
+    }
+    .calc-mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: .6rem 1.4rem;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .calc-mode-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Main Dual Grid Layout */
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 960px) {
+      .calculator-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Calculator Cards */
+    .calc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: .85rem;
+    }
+    .card-title-left {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .card-title-left svg { color: var(--accent); }
+
+    /* Currency Select Small Dropdown */
+    .currency-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .currency-select {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .currency-select:focus { border-color: var(--accent); }
+
+    /* Form Groups */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .form-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .form-label-sub {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Currency / Number Input Box with Floating Symbol */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1.05rem;
+      pointer-events: none;
+    }
+    html[dir="rtl"] .input-prefix {
+      left: auto;
+      right: 14px;
+    }
+    .calc-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: .75rem 1rem .75rem 2.4rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      outline: none;
+      transition: all .2s ease;
+    }
+    html[dir="rtl"] .calc-input {
+      padding: .75rem 2.4rem .75rem 1rem;
+    }
+    .calc-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Preset Chips */
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .preset-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .preset-chip:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .preset-chip.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Range Sliders */
+    .range-wrap {
+      width: 100%;
+      margin: 4px 0;
+    }
+    .range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+    }
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 16px rgba(59, 130, 246, 0.9);
+    }
+    .range-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+      cursor: pointer;
+    }
+
+    /* Segmented Control for % vs $ */
+    .segmented-control {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2px;
+    }
+    .seg-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 3px 10px;
+      font-size: .8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .seg-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Stacked Discount Box */
+    .stacked-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--card-border);
+      border-radius: 14px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      transition: all .2s ease;
+    }
+    .stacked-box.active {
+      border-style: solid;
+      border-color: rgba(168, 85, 247, 0.4);
+      background: rgba(168, 85, 247, 0.04);
+    }
+    .stacked-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .stacked-title {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .stacked-title svg { color: var(--accent-secondary); }
+
+    /* Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .2s;
+      border-radius: 20px;
+    }
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider-toggle {
+      background-color: var(--accent-secondary);
+    }
+    input:checked + .slider-toggle:before {
+      transform: translateX(16px);
+    }
+
+    .stacked-content {
+      display: none;
+      flex-direction: column;
+      gap: .65rem;
+      padding-top: .5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .stacked-content.show { display: flex; }
+
+    /* Right Column: Output Dashboard & Receipt */
+    .dashboard-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Grand Total Hero Card */
+    .final-price-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(59, 130, 246, 0.12) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 25px rgba(16, 185, 129, 0.15);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-price-card::after {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .final-label {
+      font-size: .88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      margin-bottom: .35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .final-badge {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+    .final-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.75rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: .35rem;
+      background: linear-gradient(135deg, #ffffff 0%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .final-desc {
+      font-size: .85rem;
+      color: var(--text-muted);
+    }
+
+    /* Metric Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 540px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+    }
+    .metric-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      backdrop-filter: blur(14px);
+    }
+    .metric-box-label {
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      margin-bottom: .35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .metric-box-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .2rem;
+    }
+    .metric-box-sub {
+      font-size: .78rem;
+      color: var(--text-muted);
+    }
+
+    /* Stacked Visual Bar */
+    .visual-breakdown-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.4rem;
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .breakdown-header {
+      font-size: .9rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .stacked-bar-container {
+      height: 28px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      width: 100%;
+    }
+    .bar-seg {
+      height: 100%;
+      transition: width .3s ease;
+      position: relative;
+    }
+    .bar-seg.seg-subtotal { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+    .bar-seg.seg-savings { background: linear-gradient(90deg, #10b981, #34d399); }
+    .bar-seg.seg-tax { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+    .bar-legend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+      font-size: .78rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: .75rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .dot-subtotal { background: #3b82f6; }
+    .dot-savings { background: #10b981; }
+    .dot-tax { background: #f59e0b; }
+    .legend-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Itemized Digital Receipt Card */
+    .receipt-card {
+      background: rgba(10, 14, 24, 0.85);
+      border: 1px dashed var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      position: relative;
+    }
+    .receipt-title {
+      font-size: .88rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px dashed var(--card-border);
+      padding-bottom: .6rem;
+    }
+    .receipt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .85rem;
+      color: var(--text-muted);
+    }
+    .receipt-row.subtotal-row {
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      padding-top: .5rem;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+    .receipt-row.total-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: .6rem;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    .receipt-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #fff;
+    }
+    .receipt-val.negative { color: #34d399; }
+    .receipt-val.positive { color: #fbbf24; }
+
+    .receipt-actions {
+      display: flex;
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+    .btn-receipt {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .5rem;
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      transition: all .15s ease;
+    }
+    .btn-receipt:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Reverse Mode Section */
+    .reverse-container {
+      display: none;
+    }
+    .reverse-container.active {
+      display: grid;
+    }
+
+    /* SEO & Educational Guide Section */
+    .info-section {
+      margin-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (min-width: 768px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #fff;
+    }
+    .guide-card-title svg { color: var(--accent); }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, .96);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, .85);
+    }
+
+    /* Print View Styles */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .top-nav, .calc-mode-bar, .info-section, footer, .toast, .chips-row, .range-wrap, .receipt-actions {
+        display: none !important;
+      }
+      .calc-card, .final-price-card, .metric-box, .receipt-card, .visual-breakdown-card {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        color: #000 !important;
+      }
+      .final-amount, .metric-box-val, .receipt-val {
+        color: #000 !important;
+        -webkit-text-fill-color: initial !important;
+      }
+      .calculator-layout { grid-template-columns: 1fr 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">&#8592; Back to Tools</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.85rem">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en"><span>English</span><span>🇺🇸</span></button>
+          <button type="button" class="lang-option" data-lang="ar"><span>العربية</span><span>🇸🇦</span></button>
+          <button type="button" class="lang-option" data-lang="fr"><span>Français</span><span>🇫🇷</span></button>
+          <button type="button" class="lang-option" data-lang="it"><span>Italiano</span><span>🇮🇹</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="badgePill">Client-Side • Privacy-First • No Logs</span>
+      </div>
+      <h1 data-i18n="toolTitle">Discount &amp; Sales Tax Calculator</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Calculate final price savings, stacked promo codes, and sales tax or VAT with live interactive breakdowns and reverse original price estimation.</p>
+    </header>
+
+    <!-- Calculator Mode Tabs -->
+    <div class="calc-mode-bar">
+      <div class="calc-mode-switch">
+        <button type="button" class="calc-mode-btn active" id="tabStandard" data-i18n="tabStandard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+          Standard Calculator
+        </button>
+        <button type="button" class="calc-mode-btn" id="tabReverse" data-i18n="tabReverse">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          Reverse Calculator (Work Backwards)
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode 1: Standard Calculator Grid -->
+    <div class="calculator-layout" id="standardLayout">
+
+      <!-- Left Column: Inputs -->
+      <div class="calc-card">
+        <div class="card-title">
+          <div class="card-title-left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            <span data-i18n="panelInputTitle">Pricing &amp; Discounts</span>
+          </div>
+          <!-- Currency Picker -->
+          <div class="currency-select-wrap">
+            <select class="currency-select" id="currencySelect" aria-label="Currency">
+              <option value="$" selected>$ USD / CAD</option>
+              <option value="€">€ EUR</option>
+              <option value="£">£ GBP</option>
+              <option value="د.إ">د.إ AED</option>
+              <option value="¥">¥ JPY/CNY</option>
+              <option value="₹">₹ INR</option>
+              <option value="A$">A$ AUD</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 1. Original Price -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="lblOrigPrice">Original Sticker Price</span>
+            <span class="form-label-sub" data-i18n="subOrigPrice">Before discounts</span>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefix1">$</span>
+            <input type="number" class="calc-input" id="inputOrigPrice" value="100.00" min="0" step="any">
+          </div>
+          <div class="chips-row">
+            <button type="button" class="preset-chip" data-orig="25">$25</button>
+            <button type="button" class="preset-chip" data-orig="50">$50</button>
+            <button type="button" class="preset-chip active" data-orig="100">$100</button>
+            <button type="button" class="preset-chip" data-orig="250">$250</button>
+            <button type="button" class="preset-chip" data-orig="500">$500</button>
+          </div>
+        </div>
+
+        <!-- 2. Primary Discount -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="lblPrimaryDiscount">Primary Discount</span>
+            <div class="segmented-control">
+              <button type="button" class="seg-btn active" id="btnDiscountPercent" data-mode="percent">% Off</button>
+              <button type="button" class="seg-btn" id="btnDiscountFixed" data-mode="fixed"><span id="segCurrSymbol">$</span> Off</button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="discountUnitPrefix">%</span>
+            <input type="number" class="calc-input" id="inputDiscount" value="20" min="0" step="any">
+          </div>
+          <div class="range-wrap" id="discountRangeWrap">
+            <input type="range" class="range-slider" id="sliderDiscount" min="0" max="90" value="20" step="1">
+          </div>
+          <div class="chips-row" id="discountChipsPercent">
+            <button type="button" class="preset-chip" data-disc="10">10%</button>
+            <button type="button" class="preset-chip" data-disc="15">15%</button>
+            <button type="button" class="preset-chip active" data-disc="20">20%</button>
+            <button type="button" class="preset-chip" data-disc="30">30%</button>
+            <button type="button" class="preset-chip" data-disc="50">50%</button>
+            <button type="button" class="preset-chip" data-disc="70">70%</button>
+          </div>
+          <div class="chips-row" id="discountChipsFixed" style="display:none;">
+            <button type="button" class="preset-chip" data-fixed="5">$5</button>
+            <button type="button" class="preset-chip" data-fixed="10">$10</button>
+            <button type="button" class="preset-chip" data-fixed="20">$20</button>
+            <button type="button" class="preset-chip" data-fixed="50">$50</button>
+          </div>
+        </div>
+
+        <!-- 3. Stacked / Extra Discount (Collapsible) -->
+        <div class="stacked-box" id="stackedBox">
+          <div class="stacked-header" id="stackedToggle">
+            <div class="stacked-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span data-i18n="lblStackedTitle">Stacked Extra Discount (VIP / Promo)</span>
+            </div>
+            <div class="switch">
+              <input type="checkbox" id="stackedCheck">
+              <span class="slider-toggle"></span>
+            </div>
+          </div>
+          <div class="stacked-content" id="stackedContent">
+            <div class="form-label-row">
+              <span data-i18n="lblExtraRate">Additional Discount Rate</span>
+              <span class="form-label-sub" data-i18n="subStackedCompound">Compounded after 1st discount</span>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-prefix">%</span>
+              <input type="number" class="calc-input" id="inputExtraDiscount" value="10" min="0" max="90" step="any">
+            </div>
+            <div class="chips-row">
+              <button type="button" class="preset-chip" data-extra="5">5% VIP</button>
+              <button type="button" class="preset-chip active" data-extra="10">10% Promo</button>
+              <button type="button" class="preset-chip" data-extra="15">15% Member</button>
+              <button type="button" class="preset-chip" data-extra="20">20% Bonus</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Sales Tax / VAT -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="lblTaxRate">Sales Tax / VAT Rate</span>
+            <span class="form-label-sub" id="taxModeLabel" data-i18n="subTaxApplied">Applied to discounted subtotal</span>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix">%</span>
+            <input type="number" class="calc-input" id="inputTaxRate" value="8.25" min="0" max="50" step="any">
+          </div>
+          <div class="range-wrap">
+            <input type="range" class="range-slider" id="sliderTax" min="0" max="30" value="8.25" step="0.25">
+          </div>
+          <div class="chips-row">
+            <button type="button" class="preset-chip" data-tax="0">0% Exempt</button>
+            <button type="button" class="preset-chip" data-tax="5">5%</button>
+            <button type="button" class="preset-chip active" data-tax="8.25">8.25% US Avg</button>
+            <button type="button" class="preset-chip" data-tax="10">10%</button>
+            <button type="button" class="preset-chip" data-tax="15">15% VAT</button>
+            <button type="button" class="preset-chip" data-tax="20">20% UK/EU</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Outputs, Visual Bar & Receipt -->
+      <div class="dashboard-col">
+
+        <!-- Final Price Hero Display -->
+        <div class="final-price-card">
+          <div class="final-label">
+            <span data-i18n="lblFinalPrice">Final Amount to Pay</span>
+            <span class="final-badge" id="badgeNetDiscount">20% Net Off</span>
+          </div>
+          <div class="final-amount" id="dispFinalPrice">$86.60</div>
+          <div class="final-desc" id="dispFinalSummary">Includes discounts and $6.60 estimated sales tax.</div>
+        </div>
+
+        <!-- 2 Column Key Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-box-label">
+              <span data-i18n="lblTotalSavings">Total Savings</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <div class="metric-box-val" id="dispTotalSavings" style="color:#34d399;">$20.00</div>
+            <div class="metric-box-sub" id="dispSavingsPct">Saved 20.0% of retail price</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-box-label">
+              <span data-i18n="lblTaxAmount">Estimated Tax</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <div class="metric-box-val" id="dispTaxAmount" style="color:#fbbf24;">$6.60</div>
+            <div class="metric-box-sub" id="dispPreTaxSubtotal">Subtotal: $80.00</div>
+          </div>
+        </div>
+
+        <!-- Visual Stacked Bar -->
+        <div class="visual-breakdown-card">
+          <div class="breakdown-header">
+            <span data-i18n="lblVisualBreakdown">Price Share Breakdown</span>
+            <span style="font-size:.78rem;color:var(--text-muted);" id="dispBreakdownPct">Savings vs Subtotal vs Tax</span>
+          </div>
+          <div class="stacked-bar-container">
+            <div class="bar-seg seg-savings" id="barSavings" style="width: 20%;" title="Savings"></div>
+            <div class="bar-seg seg-subtotal" id="barSubtotal" style="width: 73.4%;" title="Subtotal"></div>
+            <div class="bar-seg seg-tax" id="barTax" style="width: 6.6%;" title="Tax"></div>
+          </div>
+          <div class="bar-legend">
+            <div class="legend-item">
+              <span class="legend-dot dot-savings"></span>
+              <span data-i18n="legSavings">Discount:</span>
+              <span class="legend-val" id="legSavingsVal">$20.00 (20%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot dot-subtotal"></span>
+              <span data-i18n="legSubtotal">Subtotal:</span>
+              <span class="legend-val" id="legSubtotalVal">$80.00 (73%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot dot-tax"></span>
+              <span data-i18n="legTax">Tax:</span>
+              <span class="legend-val" id="legTaxVal">$6.60 (7%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Itemized Receipt Summary -->
+        <div class="receipt-card">
+          <div class="receipt-title">
+            <span data-i18n="lblReceiptTitle">Itemized Checkout Receipt</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <div class="receipt-row">
+            <span data-i18n="recOrigPrice">Original Sticker Price:</span>
+            <span class="receipt-val" id="recOrigVal">$100.00</span>
+          </div>
+          <div class="receipt-row">
+            <span id="recDiscLabel" data-i18n="recPrimaryDisc">Primary Discount (20%):</span>
+            <span class="receipt-val negative" id="recDiscVal">-$20.00</span>
+          </div>
+          <div class="receipt-row" id="recStackedRow" style="display:none;">
+            <span id="recStackedLabel" data-i18n="recStackedDisc">Stacked VIP Discount (10%):</span>
+            <span class="receipt-val negative" id="recStackedVal">-$8.00</span>
+          </div>
+          <div class="receipt-row subtotal-row">
+            <span data-i18n="recSubtotal">Discounted Subtotal:</span>
+            <span class="receipt-val" id="recSubtotalVal">$80.00</span>
+          </div>
+          <div class="receipt-row">
+            <span id="recTaxLabel" data-i18n="recTax">Sales Tax (8.25%):</span>
+            <span class="receipt-val positive" id="recTaxVal">+$6.60</span>
+          </div>
+          <div class="receipt-row total-row">
+            <span data-i18n="recTotal">Total Amount Due:</span>
+            <span class="receipt-val" id="recTotalVal" style="color:#34d399;">$86.60</span>
+          </div>
+
+          <div class="receipt-actions">
+            <button type="button" class="btn-receipt" id="btnCopyReceipt" data-i18n="btnCopyReceipt">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Receipt
+            </button>
+            <button type="button" class="btn-receipt" id="btnPrintReceipt" data-i18n="btnPrintReceipt">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              Print / PDF
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Mode 2: Reverse Calculator Grid ("Work Backwards") -->
+    <div class="calculator-layout reverse-container" id="reverseLayout">
+
+      <!-- Left Column: Reverse Inputs -->
+      <div class="calc-card">
+        <div class="card-title">
+          <div class="card-title-left">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span data-i18n="revPanelTitle">Reverse Discount Solver</span>
+          </div>
+        </div>
+
+        <p style="color:var(--text-muted);font-size:.88rem;line-height:1.6;" data-i18n="revHelpText">
+          Know how much you paid at checkout and the discount percentage? Enter your receipt numbers below to uncover the original sticker price.
+        </p>
+
+        <!-- Final Paid -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="revLblFinalPaid">Final Total Amount Paid</span>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefixRev">$</span>
+            <input type="number" class="calc-input" id="revInputFinal" value="86.60" min="0" step="any">
+          </div>
+          <div class="chips-row">
+            <button type="button" class="preset-chip" data-revpaid="50">$50</button>
+            <button type="button" class="preset-chip active" data-revpaid="86.60">$86.60</button>
+            <button type="button" class="preset-chip" data-revpaid="100">$100</button>
+            <button type="button" class="preset-chip" data-revpaid="200">$200</button>
+          </div>
+        </div>
+
+        <!-- Known Discount % -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="revLblDiscount">Known Discount Rate (%)</span>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix">%</span>
+            <input type="number" class="calc-input" id="revInputDiscount" value="20" min="0" max="99" step="any">
+          </div>
+          <div class="chips-row">
+            <button type="button" class="preset-chip" data-revdisc="10">10%</button>
+            <button type="button" class="preset-chip active" data-revdisc="20">20%</button>
+            <button type="button" class="preset-chip" data-revdisc="25">25%</button>
+            <button type="button" class="preset-chip" data-revdisc="30">30%</button>
+            <button type="button" class="preset-chip" data-revdisc="50">50%</button>
+          </div>
+        </div>
+
+        <!-- Known Tax Rate % -->
+        <div class="form-group">
+          <div class="form-label-row">
+            <span data-i18n="revLblTax">Known Sales Tax Rate (%)</span>
+          </div>
+          <div class="input-wrapper">
+            <span class="input-prefix">%</span>
+            <input type="number" class="calc-input" id="revInputTax" value="8.25" min="0" max="50" step="any">
+          </div>
+          <div class="chips-row">
+            <button type="button" class="preset-chip" data-revtax="0">0%</button>
+            <button type="button" class="preset-chip" data-revtax="5">5%</button>
+            <button type="button" class="preset-chip active" data-revtax="8.25">8.25%</button>
+            <button type="button" class="preset-chip" data-revtax="10">10%</button>
+            <button type="button" class="preset-chip" data-revtax="20">20%</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Reverse Outputs -->
+      <div class="dashboard-col">
+
+        <!-- Reverse Original Sticker Price Card -->
+        <div class="final-price-card">
+          <div class="final-label">
+            <span data-i18n="revLblOriginalSticker">Original Sticker Price Was</span>
+            <span class="final-badge" id="revBadgeDiscount">20% Off</span>
+          </div>
+          <div class="final-amount" id="revDispOrigPrice">$100.00</div>
+          <div class="final-desc" id="revDispSummary">You saved $20.00 on the original price.</div>
+        </div>
+
+        <!-- Reverse Metric Boxes -->
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-box-label">
+              <span data-i18n="lblTotalSavings">Discount Amount</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <div class="metric-box-val" id="revDispSavings" style="color:#34d399;">$20.00</div>
+            <div class="metric-box-sub" data-i18n="revSubPreTaxSavings">Direct price reduction</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-box-label">
+              <span data-i18n="lblTaxAmount">Tax Included In Paid</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <div class="metric-box-val" id="revDispTax" style="color:#fbbf24;">$6.60</div>
+            <div class="metric-box-sub" id="revDispPreTaxSub">Pre-tax subtotal: $80.00</div>
+          </div>
+        </div>
+
+        <!-- Reverse Explanatory Card -->
+        <div class="receipt-card">
+          <div class="receipt-title">
+            <span data-i18n="revMathTitle">Mathematical Derivation</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </div>
+          <div class="receipt-row">
+            <span data-i18n="revFormula1">Pre-Tax Subtotal = Paid / (1 + Tax)</span>
+            <span class="receipt-val" id="revValFormula1">$80.00</span>
+          </div>
+          <div class="receipt-row">
+            <span data-i18n="revFormula2">Original Price = Subtotal / (1 - Discount)</span>
+            <span class="receipt-val" id="revValFormula2">$100.00</span>
+          </div>
+          <div class="receipt-row total-row">
+            <span data-i18n="revNetBenefit">Total Financial Benefit:</span>
+            <span class="receipt-val" id="revValNetBenefit" style="color:#34d399;">$20.00</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SEO & Educational Guide Section -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="guideHeading">Smart Shopping: Understanding Discounts &amp; Sales Taxes</h2>
+        <p data-i18n="guideSubheading">Master the financial formulas behind retail sales, multi-coupon stacking, and reverse pricing calculations.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span data-i18n="g1Title">The Truth About Stacked Discounts</span>
+          </div>
+          <p data-i18n="g1Desc">Shoppers often assume that stacking a 20% sale with an extra 20% coupon equals 40% off. In retail point-of-sale systems, discounts are compounded: the second discount applies to the remaining balance. A $100 item drops to $80, and 20% of $80 is $16, resulting in a $64 final price (36% net discount, not 40%).</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span data-i18n="g2Title">Sales Tax vs. VAT Rules</span>
+          </div>
+          <p data-i18n="g2Desc">US sales taxes are added at checkout on the discounted subtotal. In contrast, European and Middle Eastern VAT (typically 15%–20%) is legally included in the shelf display price. Our calculator gives you full visibility into both pre-tax value and the exact tax dollars incurred.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span data-i18n="g3Title">100% Confidential In-Browser</span>
+          </div>
+          <p data-i18n="g3Desc">Your budgets, purchase amounts, and pricing analyses remain strictly private. Calculations run 100% on your device inside your browser's local JavaScript runtime. No prices or receipts are ever transmitted to any server or logged in cookies.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">How do I calculate a percentage discount manually?</h4>
+          <p data-i18n="faq1A">To calculate a discount, multiply the original price by the discount percentage divided by 100 (Savings = Price × Rate / 100), then subtract that savings from the original price. For example, 30% off $80 is: $80 × 0.30 = $24 savings, leaving a $56 price.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">Why is tax calculated after discount instead of before?</h4>
+          <p data-i18n="faq2A">Most state and local tax authorities require sales tax to be levied solely on the gross receipt of the sale (the amount the consumer actually tenders). Store-sponsored discounts lower the taxable basis, saving you money on both the product and the tax.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I find the original price if I only have the receipt?</h4>
+          <p data-i18n="faq3A">Use our Reverse Calculator mode! First, divide the final total by (1 + tax rate) to isolate the subtotal. Then divide the subtotal by (1 - discount rate). If you paid $90 after a 10% discount with 0% tax, the original price was $90 / 0.90 = $100.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can I use this for international currencies?</h4>
+          <p data-i18n="faq4A">Yes! Select your preferred currency ($ USD, € EUR, £ GBP, د.إ AED, ¥ JPY, ₹ INR, CAD, AUD) from the currency dropdown at the top of the pricing card. The math applies universally across all fiat currencies.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastBox">Receipt copied to clipboard!</div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Client-Side, Privacy-First Productivity &amp; Developer Tools. All financial calculations run locally in your browser.</p>
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       VantorKit Discount & Sales Tax Calculation Engine
+       100% Client-Side with Multi-Language Support
+       ========================================================================== */
+
+    const TRANSLATIONS = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "Client-Side • Privacy-First • No Logs",
+        toolTitle: "Discount & Sales Tax Calculator",
+        toolSubtitle: "Calculate final price savings, stacked promo codes, and sales tax or VAT with live interactive breakdowns and reverse original price estimation.",
+        tabStandard: "Standard Calculator",
+        tabReverse: "Reverse Calculator (Work Backwards)",
+        panelInputTitle: "Pricing & Discounts",
+        lblOrigPrice: "Original Sticker Price",
+        subOrigPrice: "Before discounts",
+        lblPrimaryDiscount: "Primary Discount",
+        lblStackedTitle: "Stacked Extra Discount (VIP / Promo)",
+        lblExtraRate: "Additional Discount Rate",
+        subStackedCompound: "Compounded after 1st discount",
+        lblTaxRate: "Sales Tax / VAT Rate",
+        subTaxApplied: "Applied to discounted subtotal",
+        lblFinalPrice: "Final Amount to Pay",
+        lblTotalSavings: "Total Savings",
+        lblTaxAmount: "Estimated Tax",
+        lblVisualBreakdown: "Price Share Breakdown",
+        legSavings: "Discount:",
+        legSubtotal: "Subtotal:",
+        legTax: "Tax:",
+        lblReceiptTitle: "Itemized Checkout Receipt",
+        recOrigPrice: "Original Sticker Price:",
+        recPrimaryDisc: "Primary Discount:",
+        recStackedDisc: "Stacked VIP Discount:",
+        recSubtotal: "Discounted Subtotal:",
+        recTax: "Sales Tax:",
+        recTotal: "Total Amount Due:",
+        btnCopyReceipt: "Copy Receipt",
+        btnPrintReceipt: "Print / PDF",
+        revPanelTitle: "Reverse Discount Solver",
+        revHelpText: "Know how much you paid at checkout and the discount percentage? Enter your receipt numbers below to uncover the original sticker price.",
+        revLblFinalPaid: "Final Total Amount Paid",
+        revLblDiscount: "Known Discount Rate (%)",
+        revLblTax: "Known Sales Tax Rate (%)",
+        revLblOriginalSticker: "Original Sticker Price Was",
+        revSubPreTaxSavings: "Direct price reduction",
+        revMathTitle: "Mathematical Derivation",
+        revFormula1: "Pre-Tax Subtotal = Paid / (1 + Tax)",
+        revFormula2: "Original Price = Subtotal / (1 - Discount)",
+        revNetBenefit: "Total Financial Benefit:",
+        guideHeading: "Smart Shopping: Understanding Discounts & Sales Taxes",
+        guideSubheading: "Master the financial formulas behind retail sales, multi-coupon stacking, and reverse pricing calculations.",
+        g1Title: "The Truth About Stacked Discounts",
+        g1Desc: "Shoppers often assume that stacking a 20% sale with an extra 20% coupon equals 40% off. In retail point-of-sale systems, discounts are compounded: the second discount applies to the remaining balance. A $100 item drops to $80, and 20% of $80 is $16, resulting in a $64 final price (36% net discount, not 40%).",
+        g2Title: "Sales Tax vs. VAT Rules",
+        g2Desc: "US sales taxes are added at checkout on the discounted subtotal. In contrast, European and Middle Eastern VAT (typically 15%–20%) is legally included in the shelf display price. Our calculator gives you full visibility into both pre-tax value and the exact tax dollars incurred.",
+        g3Title: "100% Confidential In-Browser",
+        g3Desc: "Your budgets, purchase amounts, and pricing analyses remain strictly private. Calculations run 100% on your device inside your browser's local JavaScript runtime. No prices or receipts are ever transmitted to any server or logged in cookies.",
+        faq1Q: "How do I calculate a percentage discount manually?",
+        faq1A: "To calculate a discount, multiply the original price by the discount percentage divided by 100 (Savings = Price × Rate / 100), then subtract that savings from the original price. For example, 30% off $80 is: $80 × 0.30 = $24 savings, leaving a $56 price.",
+        faq2Q: "Why is tax calculated after discount instead of before?",
+        faq2A: "Most state and local tax authorities require sales tax to be levied solely on the gross receipt of the sale (the amount the consumer actually tenders). Store-sponsored discounts lower the taxable basis, saving you money on both the product and the tax.",
+        faq3Q: "How do I find the original price if I only have the receipt?",
+        faq3A: "Use our Reverse Calculator mode! First, divide the final total by (1 + tax rate) to isolate the subtotal. Then divide the subtotal by (1 - discount rate). If you paid $90 after a 10% discount with 0% tax, the original price was $90 / 0.90 = $100.",
+        faq4Q: "Can I use this for international currencies?",
+        faq4A: "Yes! Select your preferred currency ($ USD, € EUR, £ GBP, د.إ AED, ¥ JPY, ₹ INR, CAD, AUD) from the currency dropdown at the top of the pricing card. The math applies universally across all fiat currencies.",
+        toastCopied: "Receipt summary copied to clipboard!",
+        toastReverseCopied: "Reverse calculation copied to clipboard!"
+      },
+      ar: {
+        backLink: "← العودة إلى الأدوات",
+        badgePill: "على جهازك 100% • خصوصية تامة • دون خوادم",
+        toolTitle: "حاسبة الخصم وضريبة المبيعات",
+        toolSubtitle: "احسب التوفير النهائي والخصومات الإضافية المتراكمة وضريبة المبيعات أو القيمة المضافة فورياً مع خيار الحساب العكسي للسعر الأصلي.",
+        tabStandard: "الحاسبة القياسية",
+        tabReverse: "الحساب العكسي (من الإجمالي للسعر الأصلي)",
+        panelInputTitle: "الأسعار والخصومات",
+        lblOrigPrice: "السعر الأصلي للمنتج",
+        subOrigPrice: "قبل تطبيق أي خصم",
+        lblPrimaryDiscount: "الخصم الأساسي",
+        lblStackedTitle: "خصم إضافي متراكم (كود ترويجي / VIP)",
+        lblExtraRate: "نسبة الخصم الإضافي",
+        subStackedCompound: "يُحسب تراكمياً بعد الخصم الأول",
+        lblTaxRate: "نسبة الضريبة / القيمة المضافة",
+        subTaxApplied: "تُطبق على المبلغ بعد الخصم",
+        lblFinalPrice: "المبلغ النهائي للدفع",
+        lblTotalSavings: "إجمالي التوفير",
+        lblTaxAmount: "الضريبة التقديرية",
+        lblVisualBreakdown: "توزيع عناصر السعر",
+        legSavings: "الخصم:",
+        legSubtotal: "قبل الضريبة:",
+        legTax: "الضريبة:",
+        lblReceiptTitle: "فاتورة الحساب المفصلة",
+        recOrigPrice: "السعر الأصلي:",
+        recPrimaryDisc: "الخصم الأساسي:",
+        recStackedDisc: "الخصم الإضافي:",
+        recSubtotal: "المجموع بعد الخصم:",
+        recTax: "ضريبة المبيعات:",
+        recTotal: "المبلغ الإجمالي المستحق:",
+        btnCopyReceipt: "نسخ الفاتورة",
+        btnPrintReceipt: "طباعة / PDF",
+        revPanelTitle: "الحساب العكسي للسعر الأصلي",
+        revHelpText: "هل تعرف ما دفعته عند الدفع مع نسبة الخصم؟ أدخل بيانات الفاتورة لمعرفة السعر الأصلي للمنتج قبل الخصم.",
+        revLblFinalPaid: "إجمالي المبلغ المدفوع",
+        revLblDiscount: "نسبة الخصم المعروفة (%)",
+        revLblTax: "نسبة الضريبة المعروفة (%)",
+        revLblOriginalSticker: "السعر الأصلي كان",
+        revSubPreTaxSavings: "قيمة الخصم المباشر",
+        revMathTitle: "المعادلة الرياضية العكسية",
+        revFormula1: "المبلغ قبل الضريبة = المدفوع ÷ (1 + الضريبة)",
+        revFormula2: "السعر الأصلي = المجموع ÷ (1 - الخصم)",
+        revNetBenefit: "إجمالي الاستفادة المالية:",
+        guideHeading: "التسوق الذكي: فهم الخصومات وضريبة المبيعات",
+        guideSubheading: "تعرف على المعادلات المالية المطبقة في المتاجر وكيفية احتساب الخصومات المتراكمة والحساب العكسي.",
+        g1Title: "حقيقة الخصومات المتراكمة",
+        g1Desc: "يعتقد البعض أن خصم 20% مع كود إضافي 20% يعني 40%، ولكن المتاجر تطبق الخصم التراكمي المركب: 100 تصبح 80، ثم 20% من 80 هي 16، ليصبح السعر النهائي 64 (توفير 36% وليس 40%).",
+        g2Title: "الضريبة المضافة مقابل ضريبة المبيعات",
+        g2Desc: "في الولايات المتحدة تضاف الضريبة عند الدفع على المبلغ المخفض. بينما في العديد من الدول تكون ضريبة القيمة المضافة مشمولة في السعر المعلن. توفر الحاسبة تفصيلاً دقيقاً لكلا الحالتين.",
+        g3Title: "سرية تامة 100% داخل المتصفح",
+        g3Desc: "جميع الحسابات تجري محلياً على جهازك دون إرسال أي أرقام أو فواتير إلى خوادم خارجية حفاظاً على خصوصيتك المالية الكاملة.",
+        faq1Q: "كيف أحسب نسبة الخصم يدوياً؟",
+        faq1A: "اضرب السعر الأصلي بنسبة الخصم مقسومة على 100، ثم اطرح الناتج من السعر الأصلي (مثال: خصم 30% من 80 هو 80 × 0.30 = 24، السعر بعد الخصم 56).",
+        faq2Q: "لماذا تُحسب الضريبة بعد الخصم؟",
+        faq2A: "لأن القوانين الضريبية تفرض الضريبة على المبلغ الحقيقي الذي يدفعه المستهلك للبائع وليس السعر الافتراضي القديم.",
+        faq3Q: "كيف أعرف السعر الأصلي من الفاتورة النهائية؟",
+        faq3A: "استخدم وضع الحساب العكسي: اقسم المبلغ المدفوع على (1 + نسبة الضريبة) لعزل الضريبة، ثم اقسم الناتج على (1 - نسبة الخصم).",
+        faq4Q: "هل تدعم الحاسبة العملات المختلفة؟",
+        faq4A: "نعم، يمكنك اختيار عملتك المفضلة (الدولار، اليورو، الجنيه الإسترليني، الدرهم الإماراتي، الين، الروبية وغيرها) من القائمة المنسدلة.",
+        toastCopied: "تم نسخ ملخص الفاتورة إلى الحافظة!",
+        toastReverseCopied: "تم نسخ تفاصيل الحساب العكسي!"
+      },
+      fr: {
+        backLink: "← Retour aux Outils",
+        badgePill: "Côté Client • Confidentialité Totale • Zéro Log",
+        toolTitle: "Calculateur de Remise & Taxe de Vente",
+        toolSubtitle: "Calculez vos économies réelles, remises cumulées et taxes de vente ou TVA avec répartition visuelle interactive et calcul inversé.",
+        tabStandard: "Calculateur Standard",
+        tabReverse: "Calcul Inversé (Prix d'Origine)",
+        panelInputTitle: "Prix & Remises",
+        lblOrigPrice: "Prix Initial d'Origine",
+        subOrigPrice: "Avant toute remise",
+        lblPrimaryDiscount: "Remise Principale",
+        lblStackedTitle: "Remise Supplémentaire Cumulée (VIP / Promo)",
+        lblExtraRate: "Taux de Remise Additionnelle",
+        subStackedCompound: "Calculé après la première remise",
+        lblTaxRate: "Taux de Taxe / TVA",
+        subTaxApplied: "Appliqué au sous-total remisé",
+        lblFinalPrice: "Montant Final à Payer",
+        lblTotalSavings: "Économies Totales",
+        lblTaxAmount: "Taxe Estimée",
+        lblVisualBreakdown: "Répartition des Coûts",
+        legSavings: "Remise:",
+        legSubtotal: "Sous-total:",
+        legTax: "Taxe:",
+        lblReceiptTitle: "Ticket de Caisse Détaillé",
+        recOrigPrice: "Prix d'Origine:",
+        recPrimaryDisc: "Remise Principale:",
+        recStackedDisc: "Remise VIP Cumulée:",
+        recSubtotal: "Sous-total Remisé:",
+        recTax: "Taxe de Vente:",
+        recTotal: "Total Dû:",
+        btnCopyReceipt: "Copier le Ticket",
+        btnPrintReceipt: "Imprimer / PDF",
+        revPanelTitle: "Résolution Inverse du Prix d'Origine",
+        revHelpText: "Vous connaissez le montant payé en caisse et le pourcentage de remise ? Entrez vos données pour retrouver le prix d'origine.",
+        revLblFinalPaid: "Montant Total Payé",
+        revLblDiscount: "Taux de Remise Connu (%)",
+        revLblTax: "Taux de Taxe Connu (%)",
+        revLblOriginalSticker: "Le Prix d'Origine Était",
+        revSubPreTaxSavings: "Réduction directe",
+        revMathTitle: "Démonstration Mathématique",
+        revFormula1: "Sous-total Hors Taxe = Payé / (1 + Taxe)",
+        revFormula2: "Prix Initial = Sous-total / (1 - Remise)",
+        revNetBenefit: "Bénéfice Financier Global:",
+        guideHeading: "Achat Malin : Comprendre Remises et Taxes",
+        guideSubheading: "Maîtrisez les formules financières de la vente au détail et le calcul inversé des prix étiquettes.",
+        g1Title: "La Réalité des Remises Cumulées",
+        g1Desc: "Deux remises de 20% ne font pas 40%. La seconde s'applique sur le montant déjà réduit. Pour 100 €, le prix passe à 80 €, puis -20% sur 80 € donne 64 € (soit 36% d'économie réelle, pas 40%).",
+        g2Title: "Taxe de Vente vs. TVA",
+        g2Desc: "Aux États-Unis, la taxe s'ajoute en caisse sur le prix remisé. En Europe, la TVA est souvent incluse sur l'étiquette. Ce calculateur vous permet de visualiser les deux composantes en toute clarté.",
+        g3Title: "Confidentialité 100% Locale",
+        g3Desc: "Aucune information de prix ou de reçu ne quitte votre ordinateur. Tout le traitement s'exécute localement dans votre navigateur web sans aucun serveur externe.",
+        faq1Q: "Comment calculer une remise en pourcentage manuellement ?",
+        faq1A: "Multipliez le prix par le taux divisé par 100, puis soustrayez ce montant du prix initial (Exemple : 30% sur 80 € = 80 × 0,30 = 24 € d'économie, soit 56 €).",
+        faq2Q: "Pourquoi la taxe s'applique-t-elle après la remise ?",
+        faq2A: "Les lois fiscales taxent uniquement le montant réellement payé par le consommateur, vous faisant ainsi économiser à la fois sur le produit et sur la taxe.",
+        faq3Q: "Comment retrouver le prix initial à partir du ticket ?",
+        faq3A: "Divisez le total payé par (1 + taxe) pour obtenir le sous-total, puis divisez par (1 - remise).",
+        faq4Q: "Puis-je changer de devise ?",
+        faq4A: "Oui, sélectionnez la devise de votre choix ($, €, £, د.إ, ¥, ₹) dans le menu déroulant en haut de la carte.",
+        toastCopied: "Ticket de caisse copié dans le presse-papier !",
+        toastReverseCopied: "Calcul inversé copié dans le presse-papier !"
+      },
+      it: {
+        backLink: "← Torna agli Strumenti",
+        badgePill: "Lato Client • Massima Privacy • Zero Log",
+        toolTitle: "Calcolatore Sconto & Tasse di Vendita",
+        toolSubtitle: "Calcola il risparmio reale, sconti cumulativi e imposte di vendita o IVA con scomposizione visiva e calcolo inverso del prezzo originario.",
+        tabStandard: "Calcolatore Standard",
+        tabReverse: "Calcolo Inverso (Prezzo Iniziale)",
+        panelInputTitle: "Prezzi & Sconti",
+        lblOrigPrice: "Prezzo di Listino Originale",
+        subOrigPrice: "Prima degli sconti",
+        lblPrimaryDiscount: "Sconto Principale",
+        lblStackedTitle: "Sconto Extra Cumulativo (VIP / Promo)",
+        lblExtraRate: "Percentuale di Sconto Extra",
+        subStackedCompound: "Applicato dopo il primo sconto",
+        lblTaxRate: "Aliquota Fiscale / IVA",
+        subTaxApplied: "Applicata al subtotale scontato",
+        lblFinalPrice: "Prezzo Finale da Pagare",
+        lblTotalSavings: "Risparmio Totale",
+        lblTaxAmount: "Imposta Stimata",
+        lblVisualBreakdown: "Scomposizione del Prezzo",
+        legSavings: "Sconto:",
+        legSubtotal: "Subtotale:",
+        legTax: "Imposta:",
+        lblReceiptTitle: "Scontrino Dettagliato",
+        recOrigPrice: "Prezzo di Listino:",
+        recPrimaryDisc: "Sconto Principale:",
+        recStackedDisc: "Sconto VIP Cumulativo:",
+        recSubtotal: "Subtotale Scontato:",
+        recTax: "Tassa di Vendita:",
+        recTotal: "Totale da Pagare:",
+        btnCopyReceipt: "Copia Scontrino",
+        btnPrintReceipt: "Stampa / PDF",
+        revPanelTitle: "Calcolo Inverso del Prezzo Iniziale",
+        revHelpText: "Sai quanto hai pagato alla cassa e la percentuale di sconto? Inserisci i dati per scoprire il prezzo originale di cartellino.",
+        revLblFinalPaid: "Importo Finale Pagato",
+        revLblDiscount: "Percentuale di Sconto Nota (%)",
+        revLblTax: "Aliquota Fiscale Nota (%)",
+        revLblOriginalSticker: "Il Prezzo Originale Era",
+        revSubPreTaxSavings: "Riduzione diretta del prezzo",
+        revMathTitle: "Derivazione Matematica",
+        revFormula1: "Subtotale Imponibile = Pagato / (1 + Imposta)",
+        revFormula2: "Prezzo Originale = Subtotale / (1 - Sconto)",
+        revNetBenefit: "Vantaggio Finanziario Totale:",
+        guideHeading: "Acquisti Intelligenti: Comprendere Sconti e Imposte",
+        guideSubheading: "Padroneggia le formule finanziarie del commercio al dettaglio e il calcolo inverso dei prezzi.",
+        g1Title: "La Verità sugli Sconti Cumulativi",
+        g1Desc: "Due sconti del 20% non equivalgono al 40%. Il secondo si applica sul prezzo già ridotto: 100 € scende a 80 €, e il 20% di 80 € è 16 €, portando il prezzo a 64 € (sconto effettivo del 36%, non del 40%).",
+        g2Title: "Tasse di Vendita vs. IVA",
+        g2Desc: "Negli USA le imposte si applicano alla cassa sul totale scontato, mentre in Europa l'IVA è inclusa nel prezzo esposto. Questo strumento rende trasparenti entrambe le componenti.",
+        g3Title: "Riservatezza 100% nel Browser",
+        g3Desc: "I tuoi importi rimangono privati. Tutti i calcoli sono eseguiti localmente nel browser senza trasmissione di dati a server esterni.",
+        faq1Q: "Come si calcola uno sconto percentuale manualmente?",
+        faq1A: "Moltiplica il prezzo originale per la percentuale divisa per 100, quindi sottrai il risultato dal prezzo (Es: 30% di 80 € = 80 × 0,30 = 24 € di risparmio, prezzo finale 56 €).",
+        faq2Q: "Perché le tasse si calcolano dopo lo sconto?",
+        faq2A: "Le normative fiscali impongono l'applicazione dell'imposta sul corrispettivo effettivamente pagato, permettendo di risparmiare sia sul bene sia sull'imposta.",
+        faq3Q: "Come si risale al prezzo iniziale dallo scontrino?",
+        faq3A: "Dividi il totale pagato per (1 + aliquota fiscale) per isolare l'imponibile, poi dividi per (1 - percentuale sconto).",
+        faq4Q: "Posso utilizzare valute diverse?",
+        faq4A: "Sì, seleziona la valuta desiderata ($, €, £, د.إ, ¥, ₹) nel menu a tendina in alto.",
+        toastCopied: "Riepilogo scontrino copiato negli appunti!",
+        toastReverseCopied: "Calcolo inverso copiato negli appunti!"
+      }
+    };
+
+    let currentLang = 'en';
+    let currencySymbol = '$';
+    let discountMode = 'percent'; // 'percent' or 'fixed'
+    let isStackedActive = false;
+    let currentTab = 'standard'; // 'standard' or 'reverse'
+
+    function initLanguage() {
+      const stored = localStorage.getItem('vantorkit_lang');
+      if (stored && TRANSLATIONS[stored]) {
+        currentLang = stored;
+      }
+      applyLanguage(currentLang);
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      const menu = document.getElementById('langMenu');
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        toggleBtn.setAttribute('aria-expanded', !expanded);
+        menu.classList.toggle('show');
+      });
+
+      document.addEventListener('click', () => {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('show');
+      });
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          if (lang && TRANSLATIONS[lang]) {
+            currentLang = lang;
+            localStorage.setItem('vantorkit_lang', lang);
+            applyLanguage(lang);
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            menu.classList.remove('show');
+            calculateStandard();
+            calculateReverse();
+          }
+        });
+      });
+    }
+
+    function applyLanguage(lang) {
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      const html = document.getElementById('htmlRoot');
+      html.setAttribute('lang', lang);
+      html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+      });
+
+      const langNames = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      document.getElementById('currentLangLabel').textContent = langNames[lang] || 'English';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+          el.innerHTML = t[key];
+        }
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    function formatCurrency(num) {
+      const formatted = Math.abs(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      if (num < 0) {
+        return `-${currencySymbol}${formatted}`;
+      }
+      return `${currencySymbol}${formatted}`;
+    }
+
+    /* ==========================================================================
+       Calculation Logic: Standard Mode
+       ========================================================================== */
+
+    const inputOrigPrice = document.getElementById('inputOrigPrice');
+    const inputDiscount = document.getElementById('inputDiscount');
+    const sliderDiscount = document.getElementById('sliderDiscount');
+    const inputExtraDiscount = document.getElementById('inputExtraDiscount');
+    const inputTaxRate = document.getElementById('inputTaxRate');
+    const sliderTax = document.getElementById('sliderTax');
+    const currencySelect = document.getElementById('currencySelect');
+    const stackedCheck = document.getElementById('stackedCheck');
+    const stackedBox = document.getElementById('stackedBox');
+    const stackedContent = document.getElementById('stackedContent');
+
+    const dispFinalPrice = document.getElementById('dispFinalPrice');
+    const dispFinalSummary = document.getElementById('dispFinalSummary');
+    const badgeNetDiscount = document.getElementById('badgeNetDiscount');
+    const dispTotalSavings = document.getElementById('dispTotalSavings');
+    const dispSavingsPct = document.getElementById('dispSavingsPct');
+    const dispTaxAmount = document.getElementById('dispTaxAmount');
+    const dispPreTaxSubtotal = document.getElementById('dispPreTaxSubtotal');
+
+    const barSavings = document.getElementById('barSavings');
+    const barSubtotal = document.getElementById('barSubtotal');
+    const barTax = document.getElementById('barTax');
+    const legSavingsVal = document.getElementById('legSavingsVal');
+    const legSubtotalVal = document.getElementById('legSubtotalVal');
+    const legTaxVal = document.getElementById('legTaxVal');
+
+    const recOrigVal = document.getElementById('recOrigVal');
+    const recDiscLabel = document.getElementById('recDiscLabel');
+    const recDiscVal = document.getElementById('recDiscVal');
+    const recStackedRow = document.getElementById('recStackedRow');
+    const recStackedLabel = document.getElementById('recStackedLabel');
+    const recStackedVal = document.getElementById('recStackedVal');
+    const recSubtotalVal = document.getElementById('recSubtotalVal');
+    const recTaxLabel = document.getElementById('recTaxLabel');
+    const recTaxVal = document.getElementById('recTaxVal');
+    const recTotalVal = document.getElementById('recTotalVal');
+
+    function calculateStandard() {
+      const origPrice = Math.max(0, parseFloat(inputOrigPrice.value) || 0);
+      const discountVal = Math.max(0, parseFloat(inputDiscount.value) || 0);
+      const extraDiscountPct = Math.max(0, parseFloat(inputExtraDiscount.value) || 0);
+      const taxRate = Math.max(0, parseFloat(inputTaxRate.value) || 0);
+
+      let primaryDiscountAmount = 0;
+      if (discountMode === 'percent') {
+        primaryDiscountAmount = origPrice * (discountVal / 100);
+      } else {
+        primaryDiscountAmount = Math.min(discountVal, origPrice);
+      }
+
+      const priceAfterPrimary = Math.max(0, origPrice - primaryDiscountAmount);
+
+      let stackedDiscountAmount = 0;
+      if (isStackedActive && extraDiscountPct > 0) {
+        stackedDiscountAmount = priceAfterPrimary * (extraDiscountPct / 100);
+      }
+
+      const discountedSubtotal = Math.max(0, priceAfterPrimary - stackedDiscountAmount);
+      const totalSavings = primaryDiscountAmount + stackedDiscountAmount;
+      const netSavingsPct = origPrice > 0 ? (totalSavings / origPrice) * 100 : 0;
+
+      const taxAmount = discountedSubtotal * (taxRate / 100);
+      const finalPrice = discountedSubtotal + taxAmount;
+
+      // Update Hero Outputs
+      dispFinalPrice.textContent = formatCurrency(finalPrice);
+      badgeNetDiscount.textContent = `${netSavingsPct.toFixed(1)}% Net Off`;
+      dispFinalSummary.textContent = `Includes ${formatCurrency(totalSavings)} total savings and ${formatCurrency(taxAmount)} estimated tax.`;
+
+      // Update Metric Cards
+      dispTotalSavings.textContent = formatCurrency(totalSavings);
+      dispSavingsPct.textContent = `Saved ${netSavingsPct.toFixed(1)}% of sticker price`;
+      dispTaxAmount.textContent = formatCurrency(taxAmount);
+      dispPreTaxSubtotal.textContent = `Subtotal: ${formatCurrency(discountedSubtotal)}`;
+
+      // Update Visual Stacked Bar
+      const totalBarBasis = origPrice + taxAmount;
+      if (totalBarBasis > 0) {
+        const pctSavings = (totalSavings / totalBarBasis) * 100;
+        const pctSubtotal = (discountedSubtotal / totalBarBasis) * 100;
+        const pctTax = (taxAmount / totalBarBasis) * 100;
+
+        barSavings.style.width = `${pctSavings.toFixed(1)}%`;
+        barSubtotal.style.width = `${pctSubtotal.toFixed(1)}%`;
+        barTax.style.width = `${pctTax.toFixed(1)}%`;
+
+        legSavingsVal.textContent = `${formatCurrency(totalSavings)} (${pctSavings.toFixed(0)}%)`;
+        legSubtotalVal.textContent = `${formatCurrency(discountedSubtotal)} (${pctSubtotal.toFixed(0)}%)`;
+        legTaxVal.textContent = `${formatCurrency(taxAmount)} (${pctTax.toFixed(0)}%)`;
+      } else {
+        barSavings.style.width = '0%';
+        barSubtotal.style.width = '100%';
+        barTax.style.width = '0%';
+      }
+
+      // Update Receipt
+      recOrigVal.textContent = formatCurrency(origPrice);
+      if (discountMode === 'percent') {
+        recDiscLabel.textContent = `Primary Discount (${discountVal}%):`;
+      } else {
+        recDiscLabel.textContent = `Primary Discount (${formatCurrency(discountVal)}):`;
+      }
+      recDiscVal.textContent = `-${formatCurrency(primaryDiscountAmount)}`;
+
+      if (isStackedActive && extraDiscountPct > 0) {
+        recStackedRow.style.display = 'flex';
+        recStackedLabel.textContent = `Stacked VIP Discount (${extraDiscountPct}%):`;
+        recStackedVal.textContent = `-${formatCurrency(stackedDiscountAmount)}`;
+      } else {
+        recStackedRow.style.display = 'none';
+      }
+
+      recSubtotalVal.textContent = formatCurrency(discountedSubtotal);
+      recTaxLabel.textContent = `Sales Tax (${taxRate}%):`;
+      recTaxVal.textContent = `+${formatCurrency(taxAmount)}`;
+      recTotalVal.textContent = formatCurrency(finalPrice);
+    }
+
+    /* ==========================================================================
+       Calculation Logic: Reverse Mode
+       ========================================================================== */
+
+    const revInputFinal = document.getElementById('revInputFinal');
+    const revInputDiscount = document.getElementById('revInputDiscount');
+    const revInputTax = document.getElementById('revInputTax');
+    const revDispOrigPrice = document.getElementById('revDispOrigPrice');
+    const revBadgeDiscount = document.getElementById('revBadgeDiscount');
+    const revDispSummary = document.getElementById('revDispSummary');
+    const revDispSavings = document.getElementById('revDispSavings');
+    const revDispTax = document.getElementById('revDispTax');
+    const revDispPreTaxSub = document.getElementById('revDispPreTaxSub');
+    const revValFormula1 = document.getElementById('revValFormula1');
+    const revValFormula2 = document.getElementById('revValFormula2');
+    const revValNetBenefit = document.getElementById('revValNetBenefit');
+
+    function calculateReverse() {
+      const paid = Math.max(0, parseFloat(revInputFinal.value) || 0);
+      const discountPct = Math.min(99.9, Math.max(0, parseFloat(revInputDiscount.value) || 0));
+      const taxRate = Math.max(0, parseFloat(revInputTax.value) || 0);
+
+      // 1. Remove tax to find pre-tax subtotal
+      const subtotal = paid / (1 + (taxRate / 100));
+      const taxPaid = paid - subtotal;
+
+      // 2. Undo discount to find original price: subtotal = orig * (1 - disc/100)
+      let origPrice = 0;
+      if (discountPct < 100) {
+        origPrice = subtotal / (1 - (discountPct / 100));
+      }
+      const savings = Math.max(0, origPrice - subtotal);
+
+      revDispOrigPrice.textContent = formatCurrency(origPrice);
+      revBadgeDiscount.textContent = `${discountPct}% Off`;
+      revDispSummary.textContent = `You saved ${formatCurrency(savings)} on the original sticker price.`;
+
+      revDispSavings.textContent = formatCurrency(savings);
+      revDispTax.textContent = formatCurrency(taxPaid);
+      revDispPreTaxSub.textContent = `Pre-tax subtotal: ${formatCurrency(subtotal)}`;
+
+      revValFormula1.textContent = formatCurrency(subtotal);
+      revValFormula2.textContent = formatCurrency(origPrice);
+      revValNetBenefit.textContent = formatCurrency(savings);
+    }
+
+    /* ==========================================================================
+       Event Listeners & UI Binding
+       ========================================================================== */
+
+    function setupEventListeners() {
+      // Tab switcher
+      const tabStandard = document.getElementById('tabStandard');
+      const tabReverse = document.getElementById('tabReverse');
+      const standardLayout = document.getElementById('standardLayout');
+      const reverseLayout = document.getElementById('reverseLayout');
+
+      tabStandard.addEventListener('click', () => {
+        currentTab = 'standard';
+        tabStandard.classList.add('active');
+        tabReverse.classList.remove('active');
+        standardLayout.style.display = 'grid';
+        reverseLayout.classList.remove('active');
+      });
+
+      tabReverse.addEventListener('click', () => {
+        currentTab = 'reverse';
+        tabReverse.classList.add('active');
+        tabStandard.classList.remove('active');
+        standardLayout.style.display = 'none';
+        reverseLayout.classList.add('active');
+        calculateReverse();
+      });
+
+      // Currency Select
+      currencySelect.addEventListener('change', (e) => {
+        currencySymbol = e.target.value;
+        document.getElementById('currPrefix1').textContent = currencySymbol;
+        document.getElementById('currPrefixRev').textContent = currencySymbol;
+        document.getElementById('segCurrSymbol').textContent = currencySymbol;
+        if (discountMode === 'fixed') {
+          document.getElementById('discountUnitPrefix').textContent = currencySymbol;
+        }
+        calculateStandard();
+        calculateReverse();
+      });
+
+      // Original Price Input & Presets
+      inputOrigPrice.addEventListener('input', calculateStandard);
+      document.querySelectorAll('[data-orig]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-orig]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          inputOrigPrice.value = chip.getAttribute('data-orig');
+          calculateStandard();
+        });
+      });
+
+      // Discount Mode Toggle (% vs $)
+      const btnDiscountPercent = document.getElementById('btnDiscountPercent');
+      const btnDiscountFixed = document.getElementById('btnDiscountFixed');
+      const discountUnitPrefix = document.getElementById('discountUnitPrefix');
+      const discountRangeWrap = document.getElementById('discountRangeWrap');
+      const discountChipsPercent = document.getElementById('discountChipsPercent');
+      const discountChipsFixed = document.getElementById('discountChipsFixed');
+
+      btnDiscountPercent.addEventListener('click', () => {
+        discountMode = 'percent';
+        btnDiscountPercent.classList.add('active');
+        btnDiscountFixed.classList.remove('active');
+        discountUnitPrefix.textContent = '%';
+        discountRangeWrap.style.display = 'block';
+        discountChipsPercent.style.display = 'flex';
+        discountChipsFixed.style.display = 'none';
+        inputDiscount.value = sliderDiscount.value || '20';
+        calculateStandard();
+      });
+
+      btnDiscountFixed.addEventListener('click', () => {
+        discountMode = 'fixed';
+        btnDiscountFixed.classList.add('active');
+        btnDiscountPercent.classList.remove('active');
+        discountUnitPrefix.textContent = currencySymbol;
+        discountRangeWrap.style.display = 'none';
+        discountChipsPercent.style.display = 'none';
+        discountChipsFixed.style.display = 'flex';
+        inputDiscount.value = '20';
+        calculateStandard();
+      });
+
+      // Discount Input & Slider
+      inputDiscount.addEventListener('input', () => {
+        if (discountMode === 'percent') {
+          sliderDiscount.value = inputDiscount.value;
+        }
+        calculateStandard();
+      });
+      sliderDiscount.addEventListener('input', () => {
+        inputDiscount.value = sliderDiscount.value;
+        calculateStandard();
+      });
+
+      document.querySelectorAll('[data-disc]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-disc]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          inputDiscount.value = chip.getAttribute('data-disc');
+          sliderDiscount.value = chip.getAttribute('data-disc');
+          calculateStandard();
+        });
+      });
+
+      document.querySelectorAll('[data-fixed]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-fixed]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          inputDiscount.value = chip.getAttribute('data-fixed');
+          calculateStandard();
+        });
+      });
+
+      // Stacked Discount Toggle
+      stackedCheck.addEventListener('change', (e) => {
+        isStackedActive = e.target.checked;
+        stackedBox.classList.toggle('active', isStackedActive);
+        stackedContent.classList.toggle('show', isStackedActive);
+        calculateStandard();
+      });
+
+      inputExtraDiscount.addEventListener('input', calculateStandard);
+      document.querySelectorAll('[data-extra]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-extra]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          inputExtraDiscount.value = chip.getAttribute('data-extra');
+          calculateStandard();
+        });
+      });
+
+      // Tax Rate Input & Slider & Presets
+      inputTaxRate.addEventListener('input', () => {
+        sliderTax.value = inputTaxRate.value;
+        calculateStandard();
+      });
+      sliderTax.addEventListener('input', () => {
+        inputTaxRate.value = sliderTax.value;
+        calculateStandard();
+      });
+      document.querySelectorAll('[data-tax]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-tax]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          inputTaxRate.value = chip.getAttribute('data-tax');
+          sliderTax.value = chip.getAttribute('data-tax');
+          calculateStandard();
+        });
+      });
+
+      // Reverse Mode Listeners
+      revInputFinal.addEventListener('input', calculateReverse);
+      revInputDiscount.addEventListener('input', calculateReverse);
+      revInputTax.addEventListener('input', calculateReverse);
+
+      document.querySelectorAll('[data-revpaid]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-revpaid]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          revInputFinal.value = chip.getAttribute('data-revpaid');
+          calculateReverse();
+        });
+      });
+
+      document.querySelectorAll('[data-revdisc]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-revdisc]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          revInputDiscount.value = chip.getAttribute('data-revdisc');
+          calculateReverse();
+        });
+      });
+
+      document.querySelectorAll('[data-revtax]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('[data-revtax]').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          revInputTax.value = chip.getAttribute('data-revtax');
+          calculateReverse();
+        });
+      });
+
+      // Copy Receipt Button
+      document.getElementById('btnCopyReceipt').addEventListener('click', () => {
+        const origPrice = parseFloat(inputOrigPrice.value) || 0;
+        const discountVal = parseFloat(inputDiscount.value) || 0;
+        const taxRate = parseFloat(inputTaxRate.value) || 0;
+
+        let txt = `=== VANTORKIT CHECKOUT RECEIPT ===\n`;
+        txt += `Original Price:      ${recOrigVal.textContent}\n`;
+        txt += `${recDiscLabel.textContent.padEnd(21)} ${recDiscVal.textContent}\n`;
+        if (isStackedActive) {
+          txt += `${recStackedLabel.textContent.padEnd(21)} ${recStackedVal.textContent}\n`;
+        }
+        txt += `Discounted Subtotal: ${recSubtotalVal.textContent}\n`;
+        txt += `Sales Tax (${taxRate}%):     ${recTaxVal.textContent}\n`;
+        txt += `-----------------------------------\n`;
+        txt += `TOTAL AMOUNT DUE:    ${recTotalVal.textContent}\n`;
+        txt += `TOTAL SAVINGS:       ${dispTotalSavings.textContent} (${badgeNetDiscount.textContent})\n`;
+        txt += `===================================`;
+
+        navigator.clipboard.writeText(txt).then(() => {
+          showToast(TRANSLATIONS[currentLang]?.toastCopied || 'Receipt summary copied to clipboard!');
+        }).catch(() => {
+          showToast('Failed to copy to clipboard.');
+        });
+      });
+
+      // Print Button
+      document.getElementById('btnPrintReceipt').addEventListener('click', () => {
+        window.print();
+      });
+    }
+
+    // Initialize Tool
+    document.addEventListener('DOMContentLoaded', () => {
+      initLanguage();
+      setupEventListeners();
+      calculateStandard();
+      calculateReverse();
+    });
+  </script>
+</body>
+</html>
