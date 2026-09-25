@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit</title>
+  <meta name="description" content="Convert PDF files to editable Word (.docx) documents entirely in your browser. 100% private, client-side processing — no file uploads, no server, zero data transmission.">
+  <meta name="keywords" content="pdf to word, pdf to docx, convert pdf to word online, free pdf converter, client side pdf word, private pdf tool, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit">
+  <meta property="og:description" content="Convert PDF documents to editable Word .docx files instantly in your browser. 100% private with zero uploads.">
+  <meta property="og:url" content="https://vantorkit.com/tools/pdf-to-word.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit">
+  <meta name="twitter:description" content="Convert PDF to Word (.docx) locally with zero server uploads. Text-based PDFs only.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- pdf.js — Text extraction engine -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- docx.js — .docx generation library -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+  <script>if(!window.docx){document.write('<script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"><\/script>');}</script>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit PDF to Word Converter",
+        "url": "https://vantorkit.com/tools/pdf-to-word.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Client-side PDF to Word converter using pdf.js and docx.js. No file uploads to any server."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Is my PDF uploaded to any server?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The entire conversion runs locally in your browser. Your files never leave your computer." }},
+          { "@type": "Question", "name": "What PDFs work best with this tool?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Text-based PDFs created by word processors. Scanned PDFs store pages as images and require an OCR step first." }},
+          { "@type": "Question", "name": "Does it preserve tables and formatting?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The converter detects column-aligned text and generates Word tables. Complex layouts are approximated as structured paragraphs." }}
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root{--bg:#07090e;--card-bg:rgba(15,18,28,0.7);--card-border:rgba(255,255,255,0.08);--card-hover:rgba(26,32,48,0.85);--text-main:#f8fafc;--text-muted:#94a3b8;--accent:#3b82f6;--accent-secondary:#a855f7;--accent-glow:rgba(59,130,246,0.2);--badge-bg:rgba(30,41,59,0.7);--badge-text:#60a5fa;--success:#10b981;--success-bg:rgba(16,185,129,0.15);--danger:#ef4444;--danger-bg:rgba(239,68,68,0.15);--warning:#f59e0b;--warning-bg:rgba(245,158,11,0.15)}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    html[dir="rtl"] *{font-family:'Cairo','Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+    body{background-color:var(--bg);background-image:radial-gradient(circle at 50% 0%,rgba(59,130,246,.14) 0%,transparent 60%),radial-gradient(circle at 85% 20%,rgba(168,85,247,.08) 0%,transparent 50%),radial-gradient(circle at 15% 40%,rgba(14,165,233,.06) 0%,transparent 45%);background-attachment:fixed;color:var(--text-main);min-height:100vh;display:flex;flex-direction:column;line-height:1.5}
+    .top-nav{max-width:1200px;margin:0 auto;width:100%;padding:1.25rem 1.5rem 0.5rem;display:flex;justify-content:space-between;align-items:center}
+    .back-link{display:inline-flex;align-items:center;gap:.5rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;font-weight:600;padding:.5rem .95rem;background:rgba(15,18,28,.8);border:1px solid var(--card-border);border-radius:10px;transition:all .2s ease;backdrop-filter:blur(12px)}
+    .back-link:hover{color:#fff;border-color:var(--accent);background:var(--card-hover);transform:translateX(-3px)}
+    html[dir="rtl"] .back-link:hover{transform:translateX(3px)}
+    .nav-brand{display:inline-flex;align-items:center;gap:.65rem;font-size:1.25rem;font-weight:800;text-decoration:none;color:var(--text-main);letter-spacing:-.03em}
+    .nav-brand svg{width:32px;height:32px;filter:drop-shadow(0 0 8px rgba(59,130,246,.4))}
+    .nav-brand span span{background:linear-gradient(135deg,#60a5fa 0%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .lang-dropdown{position:relative}
+    .lang-btn{display:inline-flex;align-items:center;gap:.5rem;background:rgba(22,27,42,.8);border:1px solid var(--card-border);color:var(--text-main);padding:.45rem .85rem;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .2s ease}
+    .lang-btn:hover,.lang-btn[aria-expanded="true"]{border-color:var(--accent);background:var(--card-hover);box-shadow:0 0 12px var(--accent-glow)}
+    .globe-icon{color:var(--badge-text)}.chevron-icon{transition:transform .2s ease;color:var(--text-muted)}
+    .lang-btn[aria-expanded="true"] .chevron-icon{transform:rotate(180deg)}
+    .lang-menu{position:absolute;top:calc(100% + 8px);right:0;width:170px;background:rgba(14,18,28,.95);border:1px solid var(--card-border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:12px;padding:.4rem;box-shadow:0 12px 30px rgba(0,0,0,.6);display:none;flex-direction:column;gap:.2rem;z-index:200}
+    .lang-menu.open{display:flex;animation:menuFadeIn .15s ease-out}
+    @keyframes menuFadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .lang-option{display:flex;align-items:center;justify-content:space-between;width:100%;padding:.55rem .75rem;border:none;background:transparent;color:var(--text-muted);border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s ease;text-align:left}
+    .lang-option:hover{background:rgba(59,130,246,.15);color:#fff}
+    .lang-option.active{background:rgba(59,130,246,.2);color:#60a5fa}
+    .lang-option .check-icon{display:none;color:#60a5fa}.lang-option.active .check-icon{display:block}
+    .lang-item-content{display:flex;align-items:center;gap:.5rem}
+    html[dir="rtl"] .lang-menu{right:auto;left:0}
+    html[dir="rtl"] .lang-option{text-align:right}
+    header{padding:1.5rem 1.5rem 1rem;text-align:center;position:relative}
+    .brand-badge{display:inline-flex;align-items:center;gap:.4rem;padding:5px 16px;font-size:.8rem;font-weight:600;color:var(--badge-text);background:var(--badge-bg);border:1px solid rgba(96,165,250,.2);border-radius:999px;margin-bottom:.75rem;letter-spacing:.4px}
+    h1{font-size:2.35rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.4rem;line-height:1.2}
+    h1 span{background:linear-gradient(135deg,#60a5fa 0%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    p.subtitle{color:var(--text-muted);font-size:1rem;max-width:680px;margin:0 auto;line-height:1.5}
+    main{flex:1;max-width:1080px;width:100%;margin:0 auto;padding:.5rem 1.5rem 2.5rem}
+    .dropzone{background:rgba(15,18,28,.6);border:2px dashed rgba(255,255,255,.15);border-radius:20px;padding:2.25rem 1.5rem;text-align:center;cursor:pointer;transition:all .25s ease;position:relative;overflow:hidden;backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.35);margin-bottom:1.25rem}
+    .dropzone:hover,.dropzone.drag-active{border-color:var(--accent);background:rgba(22,28,44,.75);box-shadow:0 0 30px var(--accent-glow);transform:translateY(-2px)}
+    .dropzone-icon{width:52px;height:52px;margin:0 auto .85rem;background:rgba(59,130,246,.15);border:1px solid rgba(96,165,250,.3);border-radius:14px;display:flex;align-items:center;justify-content:center;color:#60a5fa;transition:transform .2s ease}
+    .dropzone:hover .dropzone-icon{transform:scale(1.08);background:rgba(59,130,246,.25)}
+    .dropzone-title{font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+    .dropzone-subtitle{font-size:.9rem;color:var(--text-muted);max-width:460px;margin:0 auto 1.15rem}
+    .dropzone-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.6rem;background:var(--accent);color:#fff;border-radius:12px;font-size:.95rem;font-weight:600;border:none;cursor:pointer;box-shadow:0 4px 15px rgba(59,130,246,.4);transition:all .2s ease}
+    .dropzone-btn:hover{background:#2563eb;transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.6)}
+    .hidden-file-input{display:none}
+    .disclaimer-banner{display:flex;align-items:flex-start;gap:.75rem;background:var(--warning-bg);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:.85rem 1.1rem;margin-bottom:1.5rem;font-size:.88rem;color:#fbbf24;line-height:1.5}
+    .disclaimer-banner svg{flex-shrink:0;margin-top:1px}
+    html[dir="rtl"] .disclaimer-banner{text-align:right}
+    .file-card{display:none;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;backdrop-filter:blur(12px)}
+    .file-card.visible{display:block}
+    .file-card-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+    .file-icon-wrap{width:48px;height:48px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#f87171;flex-shrink:0}
+    .file-info-name{font-size:1rem;font-weight:700;color:#fff;word-break:break-all}
+    .file-info-meta{font-size:.82rem;color:var(--text-muted);margin-top:.15rem}
+    .file-meta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+    .meta-pill{display:inline-flex;align-items:center;gap:.4rem;background:var(--badge-bg);border:1px solid var(--card-border);color:var(--badge-text);font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px}
+    .scanned-warning{display:none;align-items:flex-start;gap:.75rem;background:var(--danger-bg);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:.85rem 1.1rem;margin-top:1rem;font-size:.88rem;color:#fca5a5;line-height:1.5}
+    .scanned-warning.visible{display:flex}
+    .scanned-warning svg{flex-shrink:0;margin-top:1px}
+    .preview-section{display:none;margin-bottom:1.5rem}
+    .preview-section.visible{display:block}
+    .preview-header{font-size:.88rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+    .canvas-wrap{background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;display:inline-block;max-width:100%}
+    #previewCanvas{display:block;max-width:100%;height:auto;border-radius:13px}
+    .convert-card{display:none;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:1.35rem 1.5rem;margin-bottom:1.5rem;backdrop-filter:blur(12px)}
+    .convert-card.visible{display:block}
+    .convert-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .convert-text-title{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+    .convert-text-desc{font-size:.85rem;color:var(--text-muted)}
+    .btn-convert{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1.75rem;background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;border:none;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(59,130,246,.4);transition:all .22s ease;white-space:nowrap}
+    .btn-convert:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.5)}
+    .btn-convert:disabled{opacity:.55;cursor:not-allowed}
+    .btn-clear{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.1rem;background:rgba(22,27,42,.8);border:1px solid var(--card-border);color:var(--text-muted);border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s ease}
+    .btn-clear:hover{color:var(--danger);border-color:var(--danger)}
+    .progress-container{display:none;flex-direction:column;gap:.5rem;margin-top:1rem}
+    .progress-info{display:flex;justify-content:space-between;font-size:.85rem;color:var(--text-muted)}
+    .progress-track{background:rgba(255,255,255,.06);border-radius:999px;height:6px;overflow:hidden}
+    .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#a855f7);border-radius:999px;transition:width .4s cubic-bezier(.16,1,.3,1)}
+    .success-card{display:none;background:var(--card-bg);border:1px solid rgba(16,185,129,.3);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;backdrop-filter:blur(12px);box-shadow:0 0 30px rgba(16,185,129,.08)}
+    .success-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem}
+    .success-icon-badge{width:44px;height:44px;background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--success);flex-shrink:0}
+    .success-title{font-size:1.1rem;font-weight:800;color:#fff}
+    .success-subtitle{font-size:.88rem;color:var(--text-muted)}
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.85rem;margin-bottom:1.5rem}
+    .stat-box{background:rgba(11,15,23,.8);border:1px solid var(--card-border);border-radius:10px;padding:.85rem 1rem}
+    .stat-label{font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.25rem}
+    .stat-value{font-size:1.25rem;font-weight:800;color:#fff}
+    .stat-value.text-green{color:#34d399}
+    .success-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem}
+    .btn-download{padding:.75rem 1.6rem;background:var(--success);color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 4px 15px rgba(16,185,129,.35);transition:all .2s ease}
+    .btn-download:hover{background:#059669;transform:translateY(-1px)}
+    .btn-convert-another{padding:.75rem 1.25rem;background:rgba(22,27,42,.8);border:1px solid var(--card-border);color:#fff;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.5rem;transition:all .2s ease}
+    .btn-convert-another:hover{border-color:var(--accent);background:var(--card-hover)}
+    .info-section{margin-top:2rem;border-top:1px solid var(--card-border);padding-top:2.5rem}
+    .info-header{text-align:center;margin-bottom:2rem}
+    .info-header h2{font-size:1.65rem;font-weight:800;color:#fff;margin-bottom:.5rem}
+    .info-header p{color:var(--text-muted);max-width:620px;margin:0 auto;font-size:.95rem}
+    .guide-grid{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:2.5rem}
+    @media(min-width:640px){.guide-grid{grid-template-columns:repeat(3,1fr)}}
+    .guide-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:1.35rem;backdrop-filter:blur(12px)}
+    .guide-card-title{font-size:1rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;color:#fff}
+    .guide-card p{color:var(--text-muted);font-size:.9rem;line-height:1.6}
+    .faq-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-bottom:3.5rem}
+    @media(min-width:768px){.faq-grid{grid-template-columns:repeat(2,1fr)}}
+    .faq-item{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:1.4rem;backdrop-filter:blur(12px)}
+    .faq-item h4{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.5rem}
+    .faq-item p{font-size:.9rem;color:var(--text-muted);line-height:1.6}
+    .toast{position:fixed;bottom:24px;right:24px;background:rgba(18,24,38,.95);color:#fff;border:1px solid var(--accent);padding:.75rem 1.25rem;border-radius:10px;font-size:.88rem;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.6);transform:translateY(100px);opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);z-index:1000;pointer-events:none;display:flex;align-items:center;gap:.5rem;max-width:320px}
+    html[dir="rtl"] .toast{right:auto;left:24px}
+    .toast.show{transform:translateY(0);opacity:1}
+    footer{border-top:1px solid var(--card-border);text-align:center;padding:2.5rem 1.5rem;color:var(--text-muted);font-size:.88rem;background:rgba(7,9,14,.85)}
+    @media(max-width:640px){h1{font-size:2rem}.convert-row{flex-direction:column;align-items:flex-start}.btn-convert{width:100%;justify-content:center}}
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">&#8592; Back to Tools</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.85rem">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>&#127482;&#127480;</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>&#127480;&#127462;</span><span>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>&#127467;&#127479;</span><span>Fran&#231;ais</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>&#127470;&#127481;</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span data-i18n="brandBadge">PDF &amp; Files &#8226; 100% Client-Side &#8226; Zero Cloud Uploads</span>
+    </div>
+    <h1 id="pageTitle">PDF to <span>Word Converter</span></h1>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Extract text from PDF documents and export a structured .docx file entirely in your browser. No uploads. Total privacy.</p>
+  </header>
+
+  <main>
+    <!-- Drop Zone -->
+    <div class="dropzone" id="dropZone">
+      <input type="file" id="fileInput" class="hidden-file-input" accept="application/pdf,.pdf">
+      <div class="dropzone-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+      </div>
+      <div class="dropzone-title" data-i18n="dropTitle">Drop Your PDF Here</div>
+      <div class="dropzone-subtitle" data-i18n="dropSubtitle">Drag &amp; drop a PDF file, or click Browse to select. Processed 100% locally &#8212; never uploaded to any server.</div>
+      <button type="button" class="dropzone-btn" id="btnBrowse">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <span data-i18n="btnBrowse">Browse PDF File</span>
+      </button>
+    </div>
+
+    <!-- Disclaimer Banner (below upload area) -->
+    <div class="disclaimer-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span data-i18n="disclaimerText">Best results with text-based PDFs. Scanned documents, multi-column layouts, and complex tables may not convert with 100% fidelity. For scanned documents, OCR is required first.</span>
+    </div>
+
+    <!-- File Info Card -->
+    <div class="file-card" id="fileCard">
+      <div class="file-card-header">
+        <div class="file-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        </div>
+        <div>
+          <div class="file-info-name" id="fileInfoName">document.pdf</div>
+          <div class="file-info-meta" id="fileInfoMeta">Loading...</div>
+        </div>
+      </div>
+      <div class="file-meta-row" id="fileMetaRow"></div>
+      <div class="scanned-warning" id="scannedWarning">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span data-i18n="scannedWarning">This PDF appears to be scanned or image-based. Very little or no selectable text was detected. The output document may be mostly empty. For best results, use text-based PDFs.</span>
+      </div>
+    </div>
+
+    <!-- First Page Preview -->
+    <div class="preview-section" id="previewSection">
+      <div class="preview-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span data-i18n="previewLabel">First Page Preview</span>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="previewCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Convert Action Card -->
+    <div class="convert-card" id="convertCard">
+      <div class="convert-row">
+        <div>
+          <div class="convert-text-title" data-i18n="convertTitle">Ready to Convert</div>
+          <div class="convert-text-desc" data-i18n="convertDesc">Click to extract text, reconstruct layout, and generate your .docx file.</div>
+        </div>
+        <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+          <button type="button" class="btn-clear" id="btnClear">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span data-i18n="btnClear">Clear</span>
+          </button>
+          <button type="button" class="btn-convert" id="btnConvert">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span data-i18n="btnConvert">Convert to Word (.docx)</span>
+          </button>
+        </div>
+      </div>
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-info">
+          <span id="progressStatus" data-i18n="converting">Extracting text...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+    </div>
+
+    <!-- Success Card -->
+    <div class="success-card" id="successCard">
+      <div class="success-header">
+        <div class="success-icon-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div>
+          <div class="success-title" data-i18n="successTitle">Word Document Generated!</div>
+          <div class="success-subtitle" data-i18n="successSubtitle">Your .docx file is ready to download and edit in Microsoft Word or Google Docs.</div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-label" data-i18n="statPages">Total Pages</div><div class="stat-value" id="statPages">0</div></div>
+        <div class="stat-box"><div class="stat-label" data-i18n="statWords">Words Extracted</div><div class="stat-value text-green" id="statWords">0</div></div>
+        <div class="stat-box"><div class="stat-label" data-i18n="statParagraphs">Paragraphs</div><div class="stat-value" id="statParagraphs">0</div></div>
+        <div class="stat-box"><div class="stat-label" data-i18n="statDocxSize">.docx Size</div><div class="stat-value" id="statDocxSize">0 KB</div></div>
+      </div>
+      <div class="success-actions">
+        <button type="button" class="btn-download" id="btnDownload">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span data-i18n="btnDownload">Download .docx</span>
+        </button>
+        <button type="button" class="btn-convert-another" id="btnConvertAnother">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <span data-i18n="btnConvertAnother">Convert Another</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Info / SEO Section -->
+    <article class="info-section" aria-labelledby="guide-heading">
+      <div class="info-header">
+        <h2 id="guide-heading" data-i18n="guideTitle">How PDF to Word Conversion Works</h2>
+        <p data-i18n="guideSubtitle">Your PDF is parsed entirely in your browser &#8212; no servers, no cloud, no data exposure.</p>
+      </div>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span data-i18n="guideStep1Title">1. Text Extraction</span>
+          </div>
+          <p data-i18n="guideStep1Desc">pdf.js reads each page and extracts text runs with their x/y coordinates and font metrics from the PDF's internal content stream without rendering an image.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            <span data-i18n="guideStep2Title">2. Layout Reconstruction</span>
+          </div>
+          <p data-i18n="guideStep2Desc">Runs are grouped into lines by y-coordinate proximity, then into paragraphs by vertical gap analysis. Column-aligned text is detected and represented as Word tables.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span data-i18n="guideStep3Title">3. .docx Assembly</span>
+          </div>
+          <p data-i18n="guideStep3Desc">docx.js assembles the extracted structure into an Open XML .docx document with styled paragraphs and a page-break between each original PDF page.</p>
+        </div>
+      </div>
+      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item"><h4 data-i18n="faq1Q">Is my PDF uploaded to any server?</h4><p data-i18n="faq1A">No. All processing runs in your browser tab using WebAssembly and JavaScript. Your PDF bytes never leave your device.</p></div>
+        <div class="faq-item"><h4 data-i18n="faq2Q">Why is the output different from my original PDF?</h4><p data-i18n="faq2A">PDF is a fixed-layout format not designed for reflow. The tool approximates the text structure, but pixel-perfect fidelity is impossible without OCR or layout AI.</p></div>
+        <div class="faq-item"><h4 data-i18n="faq3Q">Will scanned PDFs work?</h4><p data-i18n="faq3A">No. Scanned documents store pages as images, not selectable text. This tool requires text-layer PDFs. An OCR step is needed first for scanned documents.</p></div>
+        <div class="faq-item"><h4 data-i18n="faq4Q">Can I convert password-protected PDFs?</h4><p data-i18n="faq4A">Not directly. Remove the password protection first using another tool, then upload the unlocked version here.</p></div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p data-i18n="footerText">&#169; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All processing is performed locally in your browser.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+  (function(){
+    'use strict';
+    if(window.pdfjsLib){
+      pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const I18N={
+      en:{
+        langLabel:'English',backLink:'\u2190 Back to Tools',
+        brandBadge:'PDF & Files \u2022 100% Client-Side \u2022 Zero Cloud Uploads',
+        pageSubtitle:'Extract text from PDF documents and export a structured .docx file entirely in your browser. No uploads. Total privacy.',
+        disclaimerText:'Best results with text-based PDFs. Scanned documents, multi-column layouts, and complex tables may not convert with 100% fidelity. For scanned documents, OCR is required first.',
+        dropTitle:'Drop Your PDF Here',
+        dropSubtitle:'Drag & drop a PDF file, or click Browse to select. Processed 100% locally \u2014 never uploaded to any server.',
+        btnBrowse:'Browse PDF File',
+        scannedWarning:'This PDF appears to be scanned or image-based. Very little or no selectable text was detected. The output document may be mostly empty. For best results, use text-based PDFs.',
+        previewLabel:'First Page Preview',convertTitle:'Ready to Convert',
+        convertDesc:'Click to extract text, reconstruct layout, and generate your .docx file.',
+        btnClear:'Clear',btnConvert:'Convert to Word (.docx)',converting:'Extracting text...',
+        procPage:function(i,t){return 'Processing page '+i+' of '+t+'\u2026';},
+        buildingDoc:'Building Word document\u2026',done:'Done!',
+        successTitle:'Word Document Generated!',
+        successSubtitle:'Your .docx file is ready to download and edit in Microsoft Word or Google Docs.',
+        statPages:'Total Pages',statWords:'Words Extracted',statParagraphs:'Paragraphs',statDocxSize:'.docx Size',
+        btnDownload:'Download .docx',btnConvertAnother:'Convert Another',
+        guideTitle:'How PDF to Word Conversion Works',
+        guideSubtitle:'Your PDF is parsed entirely in your browser \u2014 no servers, no cloud, no data exposure.',
+        guideStep1Title:'1. Text Extraction',
+        guideStep1Desc:"pdf.js reads each page and extracts text runs with their x/y coordinates and font metrics from the PDF's internal content stream without rendering an image.",
+        guideStep2Title:'2. Layout Reconstruction',
+        guideStep2Desc:'Runs are grouped into lines by y-coordinate proximity, then into paragraphs by vertical gap analysis. Column-aligned text is detected and represented as Word tables.',
+        guideStep3Title:'3. .docx Assembly',
+        guideStep3Desc:'docx.js assembles the extracted structure into an Open XML .docx document with styled paragraphs and a page-break between each original PDF page.',
+        faqTitle:'Frequently Asked Questions',
+        faq1Q:'Is my PDF uploaded to any server?',faq1A:'No. All processing runs in your browser tab using WebAssembly and JavaScript. Your PDF bytes never leave your device.',
+        faq2Q:'Why is the output different from my original PDF?',faq2A:'PDF is a fixed-layout format not designed for reflow. The tool approximates the text structure, but pixel-perfect fidelity is impossible without OCR or layout AI.',
+        faq3Q:'Will scanned PDFs work?',faq3A:'No. Scanned documents store pages as images, not selectable text. This tool requires text-layer PDFs. An OCR step is needed first.',
+        faq4Q:'Can I convert password-protected PDFs?',faq4A:'Not directly. Remove the password protection first, then upload the unlocked version here.',
+        footerText:'\u00a9 2026 VantorKit. Fast, Private & Free Web Utilities. All processing is performed locally in your browser.',
+        toastConverted:'\u2705 .docx ready for download!',toastDownload:'\u2b07\ufe0f Downloading your document\u2026',
+        toastCleared:'\u{1f5d1}\ufe0f File cleared.',toastLibErr:'\u26a0\ufe0f Libraries not yet loaded. Please wait.',toastNoFile:'\u{1f4c4} Please select a PDF file first.'
+      },
+      ar:{
+        langLabel:'\u0627\u0644\u0639\u0631\u0628\u064a\u0629',backLink:'\u2190 \u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0623\u062f\u0648\u0627\u062a',
+        brandBadge:'PDF \u0648\u0627\u0644\u0645\u0644\u0641\u0627\u062a \u2022 \u0645\u0639\u0627\u0644\u062c\u0629 \u0645\u062d\u0644\u064a\u0629 100% \u2022 \u0644\u0627 \u0631\u0641\u0639 \u0644\u0644\u0645\u0644\u0641\u0627\u062a',
+        pageSubtitle:'\u0627\u0633\u062a\u062e\u0631\u062c \u0627\u0644\u0646\u0635\u0648\u0635 \u0645\u0646 \u0645\u0644\u0641\u0627\u062a PDF \u0648\u0635\u062f\u0651\u0631\u0647\u0627 \u0643\u0645\u0644\u0641 .docx \u062f\u0627\u062e\u0644 \u0645\u062a\u0635\u0641\u062d\u0643 \u062a\u0645\u0627\u0645\u0627\u064b. \u0628\u062f\u0648\u0646 \u0631\u0641\u0639. \u062e\u0635\u0648\u0635\u064a\u0629 \u0643\u0627\u0645\u0644\u0629.',
+        disclaimerText:'\u0623\u0641\u0636\u0644 \u0627\u0644\u0646\u062a\u0627\u0626\u062c \u0645\u0639 \u0645\u0644\u0641\u0627\u062a PDF \u0627\u0644\u0646\u0635\u064a\u0629. \u0642\u062f \u0644\u0627 \u062a\u064f\u062d\u0648\u0651\u0644 \u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a \u0627\u0644\u0645\u0645\u0633\u0648\u062d\u0629 \u0636\u0648\u0626\u064a\u0627\u064b \u0648\u0627\u0644\u062a\u062e\u0637\u064a\u0637\u0627\u062a \u0645\u062a\u0639\u062f\u062f\u0629 \u0627\u0644\u0623\u0639\u0645\u062f\u0629 \u0648\u0627\u0644\u062c\u062f\u0627\u0648\u0644 \u0627\u0644\u0645\u0639\u0642\u062f\u0629 \u0628\u062f\u0642\u0629 100%. \u0644\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a \u0627\u0644\u0645\u0645\u0633\u0648\u062d\u0629 \u0636\u0648\u0626\u064a\u0627\u064b\u060c \u064a\u0644\u0632\u0645 OCR \u0623\u0648\u0644\u0627\u064b.',
+        dropTitle:'\u0623\u0633\u0642\u0637 \u0645\u0644\u0641 PDF \u0647\u0646\u0627',
+        dropSubtitle:'\u0627\u0633\u062d\u0628 \u0648\u0623\u0641\u0644\u062a \u0645\u0644\u0641 PDF\u060c \u0623\u0648 \u0627\u0646\u0642\u0631 \u0644\u0644\u0627\u062e\u062a\u064a\u0627\u0631. \u062a\u062a\u0645 \u0627\u0644\u0645\u0639\u0627\u0644\u062c\u0629 \u0645\u062d\u0644\u064a\u0627\u064b 100%.',
+        btnBrowse:'\u0627\u062e\u062a\u0631 \u0645\u0644\u0641 PDF',
+        scannedWarning:'\u064a\u0628\u062f\u0648 \u0623\u0646 \u0647\u0630\u0627 \u0627\u0644\u0645\u0644\u0641 \u0645\u0645\u0633\u0648\u062d \u0636\u0648\u0626\u064a\u0627\u064b. \u062a\u0645 \u0627\u0644\u0643\u0634\u0641 \u0639\u0646 \u0646\u0635 \u0642\u0644\u064a\u0644 \u0623\u0648 \u0645\u0639\u062f\u0648\u0645. \u0642\u062f \u064a\u0643\u0648\u0646 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0646\u0627\u062a\u062c \u0641\u0627\u0631\u063a\u0627\u064b.',
+        previewLabel:'\u0645\u0639\u0627\u064a\u0646\u0629 \u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u0623\u0648\u0644\u0649',convertTitle:'\u062c\u0627\u0647\u0632 \u0644\u0644\u062a\u062d\u0648\u064a\u0644',
+        convertDesc:'\u0627\u0646\u0642\u0631 \u0644\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0627\u0644\u0646\u0635 \u0648\u0625\u0646\u0634\u0627\u0621 \u0645\u0644\u0641 .docx.',
+        btnClear:'\u0645\u0633\u062d',btnConvert:'\u062a\u062d\u0648\u064a\u0644 \u0625\u0644\u0649 Word (.docx)',converting:'\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0627\u0644\u0646\u0635\u0648\u0635...',
+        procPage:function(i,t){return '\u062c\u0627\u0631\u064a \u0645\u0639\u0627\u0644\u062c\u0629 \u0627\u0644\u0635\u0641\u062d\u0629 '+i+' \u0645\u0646 '+t+'\u2026';},
+        buildingDoc:'\u062c\u0627\u0631\u064a \u0628\u0646\u0627\u0621 \u0645\u0633\u062a\u0646\u062f Word\u2026',done:'\u0627\u0643\u062a\u0645\u0644!',
+        successTitle:'\u062a\u0645 \u0625\u0646\u0634\u0627\u0621 \u0645\u0633\u062a\u0646\u062f Word!',
+        successSubtitle:'\u0645\u0644\u0641 .docx \u062c\u0627\u0647\u0632 \u0644\u0644\u062a\u0646\u0632\u064a\u0644.',
+        statPages:'\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0635\u0641\u062d\u0627\u062a',statWords:'\u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0645\u0633\u062a\u062e\u0631\u062c\u0629',statParagraphs:'\u0627\u0644\u0641\u0642\u0631\u0627\u062a',statDocxSize:'\u062d\u062c\u0645 .docx',
+        btnDownload:'\u062a\u0646\u0632\u064a\u0644 .docx',btnConvertAnother:'\u062a\u062d\u0648\u064a\u0644 \u0645\u0644\u0641 \u0622\u062e\u0631',
+        guideTitle:'\u0643\u064a\u0641 \u064a\u0639\u0645\u0644 \u0627\u0644\u062a\u062d\u0648\u064a\u0644',guideSubtitle:'\u064a\u062a\u0645 \u062a\u062d\u0644\u064a\u0644 \u0645\u0644\u0641 PDF \u0628\u0627\u0644\u0643\u0627\u0645\u0644 \u062f\u0627\u062e\u0644 \u0645\u062a\u0635\u0641\u062d\u0643.',
+        guideStep1Title:'1. \u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0627\u0644\u0646\u0635',guideStep1Desc:'\u064a\u0642\u0631\u0623 pdf.js \u0643\u0644 \u0635\u0641\u062d\u0629 \u0648\u064a\u0633\u062a\u062e\u0631\u062c \u0627\u0644\u0646\u0635\u0648\u0635 \u0645\u0639 \u0625\u062d\u062f\u0627\u062b\u064a\u0627\u062a\u0647\u0627.',
+        guideStep2Title:'2. \u0625\u0639\u0627\u062f\u0629 \u0628\u0646\u0627\u0621 \u0627\u0644\u062a\u062e\u0637\u064a\u0637',guideStep2Desc:'\u064a\u062a\u0645 \u062a\u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0635\u0648\u0635 \u0641\u064a \u0623\u0633\u0637\u0631 \u062b\u0645 \u0641\u0642\u0631\u0627\u062a.',
+        guideStep3Title:'3. \u0628\u0646\u0627\u0621 \u0645\u0644\u0641 .docx',guideStep3Desc:'\u062a\u062c\u0645\u0639 \u0645\u0643\u062a\u0628\u0629 docx.js \u0627\u0644\u0628\u0646\u064a\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u0631\u062c\u0629 \u0641\u064a \u0645\u0633\u062a\u0646\u062f .docx.',
+        faqTitle:'\u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0634\u0627\u0626\u0639\u0629',
+        faq1Q:'\u0647\u0644 \u064a\u064f\u0631\u0641\u0639 \u0645\u0644\u0641 PDF \u0625\u0644\u0649 \u0623\u064a \u062e\u0627\u062f\u0645\u061f',faq1A:'\u0644\u0627. \u062a\u0639\u0645\u0644 \u062c\u0645\u064a\u0639 \u0627\u0644\u0639\u0645\u0644\u064a\u0627\u062a \u0641\u064a \u0645\u062a\u0635\u0641\u062d\u0643.',
+        faq2Q:'\u0644\u0645\u0627\u0630\u0627 \u064a\u062e\u062a\u0644\u0641 \u0627\u0644\u0646\u0627\u062a\u062c\u061f',faq2A:'PDF \u0635\u064a\u063a\u0629 \u062a\u062e\u0637\u064a\u0637 \u062b\u0627\u0628\u062a. \u062a\u064f\u0642\u0631\u0651\u0628 \u0627\u0644\u0623\u062f\u0627\u0629 \u0627\u0644\u0628\u0646\u064a\u0629 \u0627\u0644\u0646\u0635\u064a\u0629.',
+        faq3Q:'\u0647\u0644 \u062a\u0639\u0645\u0644 \u0627\u0644\u0623\u062f\u0627\u0629 \u0645\u0639 \u0645\u0644\u0641\u0627\u062a PDF \u0627\u0644\u0645\u0645\u0633\u0648\u062d\u0629\u061f',faq3A:'\u0644\u0627. \u062a\u062e\u0632\u0646 \u0627\u0644\u0635\u0648\u0631 \u0643\u0635\u0648\u0631. \u062a\u062d\u062a\u0627\u062c \u0623\u0648\u0644\u0627\u064b \u0625\u0644\u0649 OCR.',
+        faq4Q:'\u0647\u0644 \u064a\u0645\u0643\u0646 \u062a\u062d\u0648\u064a\u0644 \u0645\u0644\u0641\u0627\u062a \u0645\u062d\u0645\u064a\u0629\u061f',faq4A:'\u0644\u064a\u0633 \u0645\u0628\u0627\u0634\u0631\u0629. \u0623\u0632\u0644 \u0627\u0644\u062d\u0645\u0627\u064a\u0629 \u0623\u0648\u0644\u0627\u064b.',
+        footerText:'\u00a9 2026 VantorKit. \u0623\u062f\u0648\u0627\u062a \u0648\u064a\u0628 \u0633\u0631\u064a\u0639\u0629 \u0648\u0645\u062c\u0627\u0646\u064a\u0629.',
+        toastConverted:'\u2705 \u0645\u0644\u0641 .docx \u062c\u0627\u0647\u0632!',toastDownload:'\u2b07\ufe0f \u062c\u0627\u0631\u064a \u0627\u0644\u062a\u0646\u0632\u064a\u0644\u2026',
+        toastCleared:'\u{1f5d1}\ufe0f \u062a\u0645 \u0627\u0644\u0645\u0633\u062d.',toastLibErr:'\u26a0\ufe0f \u0627\u0644\u0645\u0643\u062a\u0628\u0627\u062a \u0644\u0645 \u062a\u064f\u062d\u0645\u0651\u0644 \u0628\u0639\u062f.',toastNoFile:'\u{1f4c4} \u064a\u0631\u062c\u0649 \u0627\u062e\u062a\u064a\u0627\u0631 \u0645\u0644\u0641 PDF \u0623\u0648\u0644\u0627\u064b.'
+      },
+      fr:{
+        langLabel:'Fran\u00e7ais',backLink:'\u2190 Retour aux Outils',
+        brandBadge:'PDF & Fichiers \u2022 100% C\u00f4t\u00e9 Client \u2022 Z\u00e9ro Upload Cloud',
+        pageSubtitle:'Extrayez le texte de vos PDF et exportez un fichier .docx structur\u00e9 enti\u00e8rement dans votre navigateur. Z\u00e9ro upload. Confidentialit\u00e9 totale.',
+        disclaimerText:'Meilleurs r\u00e9sultats avec des PDF textuels. Les documents scann\u00e9s, les mises en page multicolonnes et les tableaux complexes peuvent ne pas \u00eatre convertis avec une fid\u00e9lit\u00e9 de 100%. Une \u00e9tape OCR est requise pour les documents scann\u00e9s.',
+        dropTitle:'D\u00e9posez Votre PDF Ici',
+        dropSubtitle:'Glissez-d\u00e9posez un fichier PDF ou cliquez pour s\u00e9lectionner. Traitement 100% local.',
+        btnBrowse:'Parcourir le Fichier PDF',
+        scannedWarning:'Ce PDF semble \u00eatre scann\u00e9 ou bas\u00e9 sur des images. Tr\u00e8s peu de texte d\u00e9tect\u00e9.',
+        previewLabel:"Aper\u00e7u de la Premi\u00e8re Page",convertTitle:'Pr\u00eat \u00e0 Convertir',
+        convertDesc:'Cliquez pour extraire le texte et g\u00e9n\u00e9rer votre fichier .docx.',
+        btnClear:'Effacer',btnConvert:'Convertir en Word (.docx)',converting:'Extraction du texte\u2026',
+        procPage:function(i,t){return 'Traitement de la page '+i+' sur '+t+'\u2026';},
+        buildingDoc:'Construction du document Word\u2026',done:'Termin\u00e9 !',
+        successTitle:'Document Word G\u00e9n\u00e9r\u00e9 !',
+        successSubtitle:'Votre fichier .docx est pr\u00eat \u00e0 t\u00e9l\u00e9charger.',
+        statPages:'Pages Total',statWords:'Mots Extraits',statParagraphs:'Paragraphes',statDocxSize:'Taille .docx',
+        btnDownload:'T\u00e9l\u00e9charger .docx',btnConvertAnother:'Convertir un autre',
+        guideTitle:'Comment Fonctionne la Conversion PDF vers Word',
+        guideSubtitle:'Votre PDF est analys\u00e9 enti\u00e8rement dans votre navigateur.',
+        guideStep1Title:'1. Extraction du Texte',guideStep1Desc:'pdf.js lit chaque page et extrait les fragments de texte avec leurs coordonn\u00e9es.',
+        guideStep2Title:'2. Reconstruction de la Mise en Page',guideStep2Desc:'Les fragments sont regroup\u00e9s en lignes par proximit\u00e9 y, puis en paragraphes.',
+        guideStep3Title:'3. Assemblage .docx',guideStep3Desc:"docx.js assemble la structure extraite en un document Open XML .docx.",
+        faqTitle:'Questions Fr\u00e9quentes',
+        faq1Q:'Mon PDF est-il upload\u00e9 sur un serveur ?',faq1A:"Non. Tout le traitement s'effectue dans votre navigateur.",
+        faq2Q:'Pourquoi le r\u00e9sultat diff\u00e8re-t-il du PDF original ?',faq2A:"Le PDF est un format \u00e0 mise en page fixe. L'outil approxime la structure du texte.",
+        faq3Q:'Les PDF scann\u00e9s fonctionnent-ils ?',faq3A:"Non. Les documents scann\u00e9s stockent les pages comme images. Une \u00e9tape OCR est n\u00e9cessaire.",
+        faq4Q:'Puis-je convertir des PDF prot\u00e9g\u00e9s ?',faq4A:"Pas directement. Supprimez d'abord la protection.",
+        footerText:'\u00a9 2026 VantorKit. Utilitaires web rapides, priv\u00e9s et gratuits.',
+        toastConverted:'\u2705 Fichier .docx pr\u00eat !',toastDownload:'\u2b07\ufe0f T\u00e9l\u00e9chargement\u2026',
+        toastCleared:'\u{1f5d1}\ufe0f Fichier effac\u00e9.',toastLibErr:'\u26a0\ufe0f Biblioth\u00e8ques pas encore charg\u00e9es.',toastNoFile:"\u{1f4c4} Veuillez d'abord s\u00e9lectionner un fichier PDF."
+      },
+      it:{
+        langLabel:'Italiano',backLink:'\u2190 Torna agli Strumenti',
+        brandBadge:'PDF & File \u2022 100% Lato Client \u2022 Zero Upload Cloud',
+        pageSubtitle:'Estrai testo da PDF e genera un file .docx strutturato interamente nel tuo browser. Nessun upload. Privacy totale.',
+        disclaimerText:'Migliori risultati con PDF basati su testo. Documenti scansionati, layout a pi\u00f9 colonne e tabelle complesse potrebbero non convertirsi con una fedelt\u00e0 al 100%. Per i documenti scansionati \u00e8 necessario prima un passaggio OCR.',
+        dropTitle:'Trascina il Tuo PDF Qui',
+        dropSubtitle:'Trascina un file PDF o clicca per selezionare. Elaborazione 100% locale.',
+        btnBrowse:'Sfoglia File PDF',
+        scannedWarning:'Questo PDF sembra scansionato. Pochissimo testo selezionabile rilevato.',
+        previewLabel:'Anteprima Prima Pagina',convertTitle:'Pronto per Convertire',
+        convertDesc:'Clicca per estrarre il testo e generare il file .docx.',
+        btnClear:'Cancella',btnConvert:'Converti in Word (.docx)',converting:'Estrazione testo\u2026',
+        procPage:function(i,t){return 'Elaborazione pagina '+i+' di '+t+'\u2026';},
+        buildingDoc:'Costruzione documento Word\u2026',done:'Completato!',
+        successTitle:'Documento Word Generato!',
+        successSubtitle:'Il tuo file .docx \u00e8 pronto per il download.',
+        statPages:'Pagine Totali',statWords:'Parole Estratte',statParagraphs:'Paragrafi',statDocxSize:'Dimensione .docx',
+        btnDownload:'Scarica .docx',btnConvertAnother:'Converti un altro',
+        guideTitle:'Come Funziona la Conversione PDF in Word',
+        guideSubtitle:'Il tuo PDF viene analizzato interamente nel browser.',
+        guideStep1Title:'1. Estrazione del Testo',guideStep1Desc:'pdf.js legge ogni pagina ed estrae frammenti di testo con coordinate x/y.',
+        guideStep2Title:'2. Ricostruzione del Layout',guideStep2Desc:'I frammenti sono raggruppati in righe per prossimit\u00e0 y, poi in paragrafi.',
+        guideStep3Title:'3. Assemblaggio .docx',guideStep3Desc:'docx.js assembla la struttura estratta in un documento Open XML .docx.',
+        faqTitle:'Domande Frequenti',
+        faq1Q:'Il mio PDF viene caricato su un server?',faq1A:"No. Tutta l'elaborazione avviene nel browser.",
+        faq2Q:'Perch\u00e9 il risultato \u00e8 diverso dal PDF originale?',faq2A:"Il PDF \u00e8 un formato a layout fisso. Lo strumento approssima la struttura del testo.",
+        faq3Q:'Funziona con PDF scansionati?',faq3A:'No. I documenti scansionati memorizzano le pagine come immagini. Serve prima un passaggio OCR.',
+        faq4Q:'Posso convertire PDF protetti da password?',faq4A:'Non direttamente. Rimuovi prima la protezione.',
+        footerText:'\u00a9 2026 VantorKit. Utilit\u00e0 web veloci, private e gratuite.',
+        toastConverted:'\u2705 File .docx pronto!',toastDownload:'\u2b07\ufe0f Download in corso\u2026',
+        toastCleared:'\u{1f5d1}\ufe0f File eliminato.',toastLibErr:'\u26a0\ufe0f Librerie non ancora caricate.',toastNoFile:'\u{1f4c4} Seleziona prima un file PDF.'
+      }
+    };
+    const htmlRoot=document.getElementById('htmlRoot');
+    const langToggleBtn=document.getElementById('langToggleBtn');
+    const langMenu=document.getElementById('langMenu');
+    const currentLangLabel=document.getElementById('currentLangLabel');
+    const langOptions=document.querySelectorAll('.lang-option');
+    const dropZone=document.getElementById('dropZone');
+    const fileInput=document.getElementById('fileInput');
+    const btnBrowse=document.getElementById('btnBrowse');
+    const fileCard=document.getElementById('fileCard');
+    const fileInfoName=document.getElementById('fileInfoName');
+    const fileInfoMeta=document.getElementById('fileInfoMeta');
+    const fileMetaRow=document.getElementById('fileMetaRow');
+    const scannedWarning=document.getElementById('scannedWarning');
+    const previewSection=document.getElementById('previewSection');
+    const previewCanvas=document.getElementById('previewCanvas');
+    const convertCard=document.getElementById('convertCard');
+    const btnConvert=document.getElementById('btnConvert');
+    const btnClear=document.getElementById('btnClear');
+    const progressContainer=document.getElementById('progressContainer');
+    const progressBar=document.getElementById('progressBar');
+    const progressStatus=document.getElementById('progressStatus');
+    const progressPercent=document.getElementById('progressPercent');
+    const successCard=document.getElementById('successCard');
+    const statPages=document.getElementById('statPages');
+    const statWords=document.getElementById('statWords');
+    const statParagraphs=document.getElementById('statParagraphs');
+    const statDocxSize=document.getElementById('statDocxSize');
+    const btnDownload=document.getElementById('btnDownload');
+    const btnConvertAnother=document.getElementById('btnConvertAnother');
+    const toastEl=document.getElementById('toast');
+    const toastMsg=document.getElementById('toastMsg');
+
+    let currentLang='en',currentFile=null,pdfDoc=null,docxBlobUrl=null,docxBytes=null;
+    let totalWordCount=0,totalParaCount=0;
+
+    function dict(){return I18N[currentLang]||I18N.en;}
+    function formatBytes(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(2)+' MB';}
+    var toastTimer;
+    function showToast(msg,dur){dur=dur||2800;toastMsg.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('show');},dur);}
+    function updateProgress(pct,status){progressBar.style.width=pct+'%';progressPercent.textContent=pct+'%';progressStatus.textContent=status;}
+
+    function setLanguage(lang){
+      if(!I18N[lang])lang='en';
+      currentLang=lang;
+      localStorage.setItem('vantorkit_lang',lang);
+      var d=I18N[lang];
+      htmlRoot.setAttribute('lang',lang);
+      htmlRoot.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+      currentLangLabel.textContent=d.langLabel;
+      langOptions.forEach(function(o){o.classList.toggle('active',o.dataset.lang===lang);});
+      document.querySelectorAll('[data-i18n]').forEach(function(el){
+        var k=el.dataset.i18n;
+        if(d[k]&&typeof d[k]==='string')el.textContent=d[k];
+      });
+    }
+
+    langToggleBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=langMenu.classList.contains('open');
+      langMenu.classList.toggle('open',!open);
+      langToggleBtn.setAttribute('aria-expanded',String(!open));
+    });
+    langOptions.forEach(function(o){
+      o.addEventListener('click',function(){setLanguage(o.dataset.lang);langMenu.classList.remove('open');langToggleBtn.setAttribute('aria-expanded','false');});
+    });
+    document.addEventListener('click',function(e){
+      if(!document.getElementById('langDropdown').contains(e.target)){langMenu.classList.remove('open');langToggleBtn.setAttribute('aria-expanded','false');}
+    });
+
+    btnBrowse.addEventListener('click',function(){fileInput.click();});
+    fileInput.addEventListener('change',function(e){
+      if(e.target.files&&e.target.files.length>0){handleFile(e.target.files[0]);fileInput.value='';}
+    });
+    ['dragenter','dragover'].forEach(function(ev){
+      dropZone.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();dropZone.classList.add('drag-active');});
+    });
+    ['dragleave','drop'].forEach(function(ev){
+      dropZone.addEventListener(ev,function(e){e.preventDefault();e.stopPropagation();dropZone.classList.remove('drag-active');});
+    });
+    dropZone.addEventListener('drop',function(e){
+      var f=e.dataTransfer&&e.dataTransfer.files;
+      if(f&&f.length>0){
+        var p=Array.from(f).find(function(x){return x.type==='application/pdf'||x.name.toLowerCase().endsWith('.pdf');});
+        if(p)handleFile(p);
+      }
+    });
+
+    function handleFile(file){
+      if(!file||(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf'))){showToast('\u26a0\ufe0f Please upload a valid PDF file.');return;}
+      resetState();
+      currentFile=file;
+      fileInfoName.textContent=file.name;
+      fileInfoMeta.textContent=formatBytes(file.size);
+      file.arrayBuffer().then(function(ab){
+        return pdfjsLib.getDocument({data:ab}).promise;
+      }).then(function(pdf){
+        pdfDoc=pdf;
+        var pc=pdf.numPages;
+        fileMetaRow.innerHTML='<span class="meta-pill">\ud83d\udcc4 PDF</span><span class="meta-pill">'+pc+' page'+(pc!==1?'s':'')+'</span><span class="meta-pill">'+formatBytes(file.size)+'</span>';
+        var sampleChars=0,samplePages=Math.min(3,pc),promises=[];
+        for(var i=1;i<=samplePages;i++){promises.push(pdf.getPage(i).then(function(pg){return pg.getTextContent();}).then(function(tc){tc.items.forEach(function(it){sampleChars+=(it.str||'').trim().length;});}));}
+        return Promise.all(promises).then(function(){
+          if(sampleChars/samplePages<30)scannedWarning.classList.add('visible');
+          fileCard.classList.add('visible');
+          return renderPreview(pdf);
+        });
+      }).then(function(){
+        convertCard.classList.add('visible');
+      }).catch(function(err){
+        console.error(err);showToast('\u274c Failed to read PDF: '+(err.message||'Unknown error'));
+      });
+    }
+
+    function renderPreview(pdf){
+      return pdf.getPage(1).then(function(page){
+        var vp=page.getViewport({scale:1});
+        var tw=Math.min(760,window.innerWidth-60);
+        var sc=tw/vp.width;
+        var sv=page.getViewport({scale:sc});
+        previewCanvas.width=sv.width;previewCanvas.height=sv.height;
+        var ctx=previewCanvas.getContext('2d');
+        return page.render({canvasContext:ctx,viewport:sv}).promise;
+      }).then(function(){
+        previewSection.classList.add('visible');
+      }).catch(function(e){console.warn('Preview failed:',e);});
+    }
+
+    function reconstructLayout(items,viewportHeight){
+      if(!items||items.length===0)return[];
+      var runs=items.map(function(it){
+        var fn=it.fontName||'';
+        var isBold=/bold|black|heavy|demi/i.test(fn);
+        var isItalic=/italic|oblique/i.test(fn);
+        var h=it.height||(it.transform?Math.abs(it.transform[0]||it.transform[3]||12):12);
+        var w=it.width||(it.str?it.str.length*(h*0.5):10);
+        return{
+          str:it.str||'',
+          x:it.transform?Math.round(it.transform[4]):0,
+          y:viewportHeight-(it.transform?it.transform[5]:0),
+          width:w,
+          height:h,
+          bold:isBold,
+          italic:isItalic
+        };
+      }).filter(function(r){return r.str.trim().length>0;});
+
+      if(runs.length===0)return[];
+      runs.sort(function(a,b){return a.y-b.y||a.x-b.x;});
+
+      var avgH=runs.reduce(function(s,r){return s+r.height;},0)/runs.length;
+      var lt=Math.max(avgH*0.5,4);
+      var lines=[],cl=[runs[0]],ly=runs[0].y;
+      for(var i=1;i<runs.length;i++){
+        var r=runs[i];
+        if(Math.abs(r.y-ly)<=lt){
+          cl.push(r);
+        }else{
+          lines.push(cl);
+          cl=[r];
+          ly=r.y;
+        }
+      }
+      if(cl.length>0)lines.push(cl);
+
+      var validLines=lines.map(function(ln){
+        ln.sort(function(a,b){return a.x-b.x;});
+        var lineText=ln.map(function(r){return r.str;}).join(' ').replace(/\s+/g,' ').trim();
+        return{
+          text:lineText,
+          y:ln[0].y,
+          height:ln.reduce(function(acc,r){return Math.max(acc,r.height);},0),
+          runs:ln
+        };
+      }).filter(function(l){return l.text.length>0;});
+
+      if(validLines.length===0)return[];
+
+      var lys=validLines.map(function(l){return l.y;});
+      var gaps=[];
+      for(var j=1;j<lys.length;j++){
+        var g=lys[j]-lys[j-1];
+        if(g>0)gaps.push(g);
+      }
+      var lineSpacings=gaps.filter(function(g){return g<=avgH*1.6;});
+      var normalSpacing=lineSpacings.length>0?(lineSpacings.reduce(function(a,b){return a+b;},0)/lineSpacings.length):(avgH*1.25);
+      var pt=Math.max(normalSpacing*1.35,avgH*1.4);
+
+      var paragraphs=[],cpLines=[validLines[0]];
+      for(var k=1;k<validLines.length;k++){
+        var gap=validLines[k].y-validLines[k-1].y;
+        if(gap>=pt){
+          paragraphs.push(cpLines);
+          cpLines=[validLines[k]];
+        }else{
+          cpLines.push(validLines[k]);
+        }
+      }
+      if(cpLines.length>0)paragraphs.push(cpLines);
+
+      return paragraphs.map(function(pLines){
+        var text=pLines.map(function(l){return l.text;}).join(' ').replace(/\s+/g,' ').trim();
+        var maxH=pLines.reduce(function(acc,l){return Math.max(acc,l.height);},0);
+        var anyBold=pLines.some(function(l){return l.runs.some(function(r){return r.bold;});});
+        var anyItalic=pLines.some(function(l){return l.runs.some(function(r){return r.italic;});});
+        var wc=text.split(/\s+/).length;
+        var isArabic=/[\u0600-\u06FF]/.test(text);
+        var isShort=text.length<90&&wc<=12;
+        var hasPeriod=/[.?!]$/.test(text);
+        var isAllCaps=text.length>3&&text===text.toUpperCase()&&/[A-Za-z]/.test(text);
+        var isNumbered=/^(\d+[\.\)]|\b(Section|Chapter|Part|Article)\b)/i.test(text);
+        var isHeading=isShort&&!hasPeriod&&(isAllCaps||isNumbered||maxH>avgH*1.15||(wc<=6&&!text.includes(',')));
+
+        return{
+          text:text,
+          maxHeight:maxH,
+          bold:anyBold||isHeading,
+          italic:anyItalic,
+          isHeading:isHeading,
+          isArabic:isArabic
+        };
+      });
+    }
+
+    function detectTable(items,viewportHeight){
+      if(!items||items.length<6)return null;
+      var runs=items.map(function(it){
+        var h=it.height||12;
+        var w=it.width||(it.str?it.str.length*(h*0.5):10);
+        return{
+          str:(it.str||'').trim(),
+          x:it.transform?Math.round(it.transform[4]):0,
+          y:viewportHeight-(it.transform?it.transform[5]:0),
+          width:w,
+          height:h
+        };
+      }).filter(function(r){return r.str.length>0;});
+
+      if(runs.length<6)return null;
+      var avgH=runs.reduce(function(s,r){return s+r.height;},0)/runs.length;
+      var lt=Math.max(avgH*0.5,4);
+      runs.sort(function(a,b){return a.y-b.y||a.x-b.x;});
+
+      var rowMap=new Map();
+      runs.forEach(function(r){
+        var assigned=false;
+        rowMap.forEach(function(v,ry){
+          if(!assigned&&Math.abs(r.y-ry)<=lt){v.push(r);assigned=true;}
+        });
+        if(!assigned)rowMap.set(r.y,[r]);
+      });
+
+      var rawRows=Array.from(rowMap.values());
+      if(rawRows.length<2)return null;
+
+      // Group close runs on each row into unified cells (prevent sentence words being treated as columns)
+      var mergedRows=rawRows.map(function(row){
+        row.sort(function(a,b){return a.x-b.x;});
+        var cells=[];
+        var cur=null;
+        row.forEach(function(r){
+          if(!cur){
+            cur={str:r.str,x:r.x,width:r.width,y:r.y};
+          }else{
+            var gap=r.x-(cur.x+cur.width);
+            if(gap<22){
+              cur.str+=' '+r.str;
+              cur.width=(r.x+r.width)-cur.x;
+            }else{
+              cells.push(cur);
+              cur={str:r.str,x:r.x,width:r.width,y:r.y};
+            }
+          }
+        });
+        if(cur)cells.push(cur);
+        return cells;
+      });
+
+      var allX=[];
+      mergedRows.forEach(function(row){row.forEach(function(c){allX.push(c.x);});});
+      allX.sort(function(a,b){return a-b;});
+
+      var columns=[];
+      allX.forEach(function(x){
+        var last=columns[columns.length-1];
+        if(last===undefined||(x-last)>28)columns.push(x);
+      });
+
+      if(columns.length<2||columns.length>8)return null;
+
+      var colHits=columns.map(function(colX){
+        return mergedRows.filter(function(row){
+          return row.some(function(cell){return Math.abs(cell.x-colX)<=28;});
+        }).length;
+      });
+      var allColsConsistent=colHits.every(function(hits){return hits>=Math.min(2,mergedRows.length);});
+      if(!allColsConsistent)return null;
+
+      var multiColRows=mergedRows.filter(function(row){
+        var matched=new Set();
+        row.forEach(function(cell){
+          var ci=columns.findIndex(function(cx){return Math.abs(cell.x-cx)<=28;});
+          if(ci>=0)matched.add(ci);
+        });
+        return matched.size>=2;
+      });
+      if(multiColRows.length/mergedRows.length<0.6)return null;
+
+      return mergedRows.map(function(row){
+        var cells=new Array(columns.length).fill('');
+        row.forEach(function(cell){
+          var ci=columns.findIndex(function(cx){return Math.abs(cell.x-cx)<=28;});
+          if(ci>=0)cells[ci]=(cells[ci]?cells[ci]+' ':'')+cell.str;
+        });
+        return cells;
+      });
+    }
+
+    btnConvert.addEventListener('click',function(){
+      if(!currentFile||!pdfDoc){showToast(dict().toastNoFile);return;}
+      if(!window.docx){showToast(dict().toastLibErr);return;}
+      btnConvert.disabled=true;
+      progressContainer.style.display='flex';
+      successCard.style.display='none';
+      var D=docx;
+      var docChildren=[];
+      var pageCount=pdfDoc.numPages;
+      totalWordCount=0;totalParaCount=0;
+
+      var pagePromise=Promise.resolve();
+      for(var pn=1;pn<=pageCount;pn++){
+        (function(pageNum){
+          pagePromise=pagePromise.then(function(){
+            var pct=Math.round(5+((pageNum-1)/pageCount)*80);
+            updateProgress(pct,dict().procPage(pageNum,pageCount));
+            return pdfDoc.getPage(pageNum);
+          }).then(function(page){
+            var vp=page.getViewport({scale:1});
+            return page.getTextContent().then(function(tc){
+              var items=tc.items;
+              var td=detectTable(items,vp.height);
+              if(td&&td.length>=2){
+                var nc=td[0].length;
+                var trows=td.map(function(rowCells,ri){
+                  return new D.TableRow({
+                    children:rowCells.map(function(ct){
+                      var isAr=/[\u0600-\u06FF]/.test(ct);
+                      return new D.TableCell({
+                        children:[new D.Paragraph({
+                          children:[new D.TextRun({text:ct.trim()||' ',bold:ri===0,size:20,rightToLeft:isAr})],
+                          bidirectional:isAr,
+                          spacing:{after:60}
+                        })],
+                        width:{size:Math.floor(9000/nc),type:D.WidthType.DXA}
+                      });
+                    })
+                  });
+                });
+                docChildren.push(new D.Table({rows:trows,width:{size:9000,type:D.WidthType.DXA}}));
+                var words=td.flat().join(' ').split(/\s+/).filter(Boolean).length;
+                totalWordCount+=words;totalParaCount+=td.length;
+              }else{
+                var paras=reconstructLayout(items,vp.height);
+                if(paras.length===0){
+                  docChildren.push(new D.Paragraph({children:[new D.TextRun({text:'',size:22})],spacing:{after:200}}));
+                }else{
+                  paras.forEach(function(p){
+                    var tr=typeof p==='string'?p.trim():(p.text||'').trim();
+                    if(!tr)return;
+                    var wc=tr.split(/\s+/).length;
+                    totalWordCount+=wc;totalParaCount+=1;
+                    var isH=p.isHeading!==undefined?p.isHeading:(tr.length<80&&wc<=10&&!/[.?!]$/.test(tr));
+                    var isAr=p.isArabic!==undefined?p.isArabic:/[\u0600-\u06FF]/.test(tr);
+                    docChildren.push(new D.Paragraph({
+                      children:[new D.TextRun({
+                        text:tr,
+                        bold:isH||p.bold,
+                        italics:p.italic,
+                        size:isH?26:22,
+                        rightToLeft:isAr
+                      })],
+                      heading:isH?D.HeadingLevel.HEADING_2:undefined,
+                      bidirectional:isAr,
+                      alignment:isAr?D.AlignmentType.RIGHT:undefined,
+                      spacing:{after:isH?160:120,before:isH?200:0}
+                    }));
+                  });
+                }
+              }
+              if(pageNum<pageCount)docChildren.push(new D.Paragraph({children:[new D.PageBreak()]}));
+            });
+          });
+        })(pn);
+      }
+
+      pagePromise.then(function(){
+        updateProgress(90,dict().buildingDoc);
+        var doc=new D.Document({
+          creator:'VantorKit PDF to Word',
+          title:currentFile.name.replace(/\.pdf$/i,''),
+          sections:[{children:docChildren}]
+        });
+        updateProgress(95,dict().buildingDoc);
+        if(D.Packer&&D.Packer.toBlob){
+          return D.Packer.toBlob(doc).catch(function(){
+            return D.Packer.toBase64String(doc).then(function(b64){
+              var byteChars=atob(b64);
+              var byteNumbers=new Array(byteChars.length);
+              for(var i=0;i<byteChars.length;i++)byteNumbers[i]=byteChars.charCodeAt(i);
+              return new Blob([new Uint8Array(byteNumbers)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+            });
+          });
+        }else{
+          return D.Packer.toBase64String(doc).then(function(b64){
+            var byteChars=atob(b64);
+            var byteNumbers=new Array(byteChars.length);
+            for(var i=0;i<byteChars.length;i++)byteNumbers[i]=byteChars.charCodeAt(i);
+            return new Blob([new Uint8Array(byteNumbers)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+          });
+        }
+      }).then(function(blob){
+        docxBytes=blob;
+        if(docxBlobUrl)URL.revokeObjectURL(docxBlobUrl);
+        docxBlobUrl=URL.createObjectURL(blob);
+        updateProgress(100,dict().done);
+        statPages.textContent=pageCount;
+        statWords.textContent=totalWordCount.toLocaleString();
+        statParagraphs.textContent=totalParaCount.toLocaleString();
+        statDocxSize.textContent=formatBytes(blob.size);
+        successCard.style.display='block';
+        successCard.scrollIntoView({behavior:'smooth',block:'nearest'});
+        triggerDownload(docxBlobUrl,currentFile.name.replace(/\.pdf$/i,'.docx'));
+        showToast(dict().toastConverted,3500);
+      }).catch(function(err){
+        console.error(err);showToast('\u274c Conversion failed: '+(err.message||'Unknown error'));
+      }).finally(function(){
+        btnConvert.disabled=false;
+        setTimeout(function(){progressContainer.style.display='none';progressBar.style.width='0%';},900);
+      });
+    });
+
+    function triggerDownload(url,filename){var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+
+    btnDownload.addEventListener('click',function(){
+      if(docxBlobUrl&&currentFile){triggerDownload(docxBlobUrl,currentFile.name.replace('.pdf','.docx'));showToast(dict().toastDownload);}
+    });
+
+    function resetState(){
+      currentFile=null;pdfDoc=null;
+      if(docxBlobUrl){URL.revokeObjectURL(docxBlobUrl);docxBlobUrl=null;}
+      docxBytes=null;totalWordCount=0;totalParaCount=0;
+      fileCard.classList.remove('visible');scannedWarning.classList.remove('visible');
+      previewSection.classList.remove('visible');convertCard.classList.remove('visible');
+      successCard.style.display='none';progressContainer.style.display='none';
+      progressBar.style.width='0%';fileMetaRow.innerHTML='';btnConvert.disabled=false;
+      var ctx=previewCanvas.getContext('2d');ctx.clearRect(0,0,previewCanvas.width,previewCanvas.height);
+    }
+
+    btnClear.addEventListener('click',function(){resetState();showToast(dict().toastCleared);});
+    btnConvertAnother.addEventListener('click',function(){resetState();showToast(dict().toastCleared);});
+
+    var savedLang=localStorage.getItem('vantorkit_lang')||'en';
+    setLanguage(savedLang);
+  })();
+  </script>
+</body>
+</html>

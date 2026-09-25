@@ -932,7 +932,7 @@
         <!-- Live Tool Count Pill -->
         <div class="badge-tools-count">
           <span class="pulse-dot"></span>
-          <span id="navToolCount" data-i18n="toolsCount">23 Tools Available</span>
+          <span id="navToolCount" data-i18n="toolsCount">24 Tools Available</span>
         </div>
 
         <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
@@ -996,7 +996,7 @@
     
     <div class="search-wrapper">
       <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="text" id="toolSearch" class="search-box" placeholder="Search 23 tools (e.g. percentage, pdf, counter)..." autocomplete="off" spellcheck="false">
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 24 tools (e.g. percentage, pdf, counter)..." autocomplete="off" spellcheck="false">
       <kbd class="search-kbd" id="searchKbd" title="Press ⌘K or Ctrl+K to search">⌘K</kbd>
       <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
@@ -1208,7 +1208,28 @@
         </div>
       </a>
 
-      <!-- Files 4: Base64 File Encoder -->
+      <!-- Files 4: PDF to Word Converter -->
+      <a href="/tools/pdf-to-word.html" class="tool-card" data-tool-id="pdf-to-word" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">PDF to Word Converter</div>
+            <div class="tool-desc" data-tool-field="desc">Export PDF text content as editable .docx files with layout reconstruction, entirely in your browser.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Files 5: Base64 File Encoder -->
       <a href="#" class="tool-card" data-tool-id="base64-file-encoder" data-category="files">
         <div class="card-top">
           <div class="tool-meta">
@@ -1547,10 +1568,10 @@
       const TRANSLATIONS = {
         en: {
           langLabel: "English",
-          toolsCount: "23 Tools Available",
+          toolsCount: "24 Tools Available",
           brandBadge: "Client-Side • Privacy-First • No Logs",
           heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
-          searchPlaceholder: "Search 23 tools (e.g. percentage, pdf, counter)...",
+          searchPlaceholder: "Search 24 tools (e.g. percentage, pdf, counter)...",
           noResultsTitle: "No tools found",
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
@@ -1596,6 +1617,10 @@
             "pdf-split": {
               title: "PDF Split & Extract",
               desc: "Extract selected page ranges or separate individual pages locally."
+            },
+            "pdf-to-word": {
+              title: "PDF to Word Converter",
+              desc: "Export PDF text content as editable .docx files with layout reconstruction, entirely in your browser."
             },
             "base64-file-encoder": {
               title: "Base64 File Encoder",
@@ -1661,10 +1686,10 @@
         },
         ar: {
           langLabel: "العربية",
-          toolsCount: "23 أداة متاحة",
+          toolsCount: "24 أداة متاحة",
           brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
           heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
-          searchPlaceholder: "ابحث في 23 أداة (مثل النسبة المئوية، PDF، العداد)...",
+          searchPlaceholder: "ابحث في 24 أداة (مثل النسبة المئوية، PDF، العداد)...",
           noResultsTitle: "لم يتم العثور على نتائج",
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
@@ -1710,6 +1735,10 @@
             "pdf-split": {
               title: "تقسيم واستخراج صفحات PDF",
               desc: "استخرج نطاقات صفحات محددة أو افصل كل صفحة كملف مستقل محلياً على جهازك."
+            },
+            "pdf-to-word": {
+              title: "تحويل PDF إلى Word",
+              desc: "صدّر محتوى PDF النصي كملفات .docx قابلة للتحرير مع إعادة بناء التخطيط داخل متصفحك."
             },
             "base64-file-encoder": {
               title: "تشفير الملفات بـ Base64",
@@ -1775,10 +1804,10 @@
         },
         fr: {
           langLabel: "Français",
-          toolsCount: "23 Outils Disponibles",
+          toolsCount: "24 Outils Disponibles",
           brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
           heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
-          searchPlaceholder: "Rechercher parmi 23 outils (ex: pourcentage, pdf, compteur)...",
+          searchPlaceholder: "Rechercher parmi 24 outils (ex: pourcentage, pdf, compteur)...",
           noResultsTitle: "Aucun outil trouvé",
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
@@ -1824,6 +1853,10 @@
             "pdf-split": {
               title: "Diviser & Extraire PDF",
               desc: "Extrayez des plages de pages ou séparez chaque page individuellement en local."
+            },
+            "pdf-to-word": {
+              title: "Convertisseur PDF vers Word",
+              desc: "Exportez le contenu textuel d'un PDF en fichier .docx éditable avec reconstruction de mise en page."
             },
             "base64-file-encoder": {
               title: "Encodeur de Fichiers Base64",
@@ -1889,10 +1922,10 @@
         },
         it: {
           langLabel: "Italiano",
-          toolsCount: "23 Strumenti Disponibili",
+          toolsCount: "24 Strumenti Disponibili",
           brandBadge: "Lato Client • Massima Privacy • Nessun Log",
           heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
-          searchPlaceholder: "Cerca tra 23 strumenti (es: percentuale, pdf, contatore)...",
+          searchPlaceholder: "Cerca tra 24 strumenti (es: percentuale, pdf, contatore)...",
           noResultsTitle: "Nessun risultato",
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
@@ -1938,6 +1971,10 @@
             "pdf-split": {
               title: "Dividi ed Estrai PDF",
               desc: "Estrai intervalli di pagine selezionati o separa singole pagine localmente."
+            },
+            "pdf-to-word": {
+              title: "Convertitore PDF in Word",
+              desc: "Esporta il contenuto testuale del PDF come file .docx modificabile con ricostruzione del layout."
             },
             "base64-file-encoder": {
               title: "Codificatore File Base64",
