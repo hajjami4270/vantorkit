@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word &amp; Character Counter — Real-Time Text Analysis &amp; Keyword Density | VantorKit</title>
+  <meta name="description" content="Free real-time word counter, character counter, sentence and paragraph analyzer with keyword density, reading time, speaking time, and case converter. 100% client-side privacy.">
+  <meta name="keywords" content="word counter, character counter, letter counter, reading time calculator, speaking time, keyword density analyzer, case converter, title case, sentence case, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/word-counter.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Word &amp; Character Counter — Real-Time Text Analysis | VantorKit">
+  <meta property="og:description" content="Count words, characters, sentences, paragraphs, and reading times in real-time. Includes case converter and keyword density analyzer. 100% private.">
+  <meta property="og:url" content="https://vantorkit.com/tools/word-counter.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Word &amp; Character Counter — Real-Time Text Analysis | VantorKit">
+  <meta name="twitter:description" content="Real-time client-side word count, character count, keyword density, reading/speaking duration, and text case conversion.">
+
+  <!-- Fonts: Cairo (Arabic), Plus Jakarta Sans (UI & Text), JetBrains Mono (Numbers/Metrics) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Word & Character Counter",
+        "url": "https://vantorkit.com/tools/word-counter.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Free client-side word counter and character counter with real-time reading time, speaking duration, keyword density analysis, case transformation, and social media character limit tracking."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my text uploaded or stored on any server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All text parsing, counting, and transformations execute 100% locally inside your web browser. Your text, private notes, and sensitive drafts never leave your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How are reading and speaking times calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Reading time is calculated using the international standard silent reading benchmark of 200 words per minute (WPM). Speaking time is based on the average conversational presentation pace of 130 words per minute."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is keyword density and why does it matter for SEO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Keyword density represents the percentage of times a specific term appears relative to total word count. Maintaining a density between 1% and 2.5% helps search engines understand page relevance without triggering search stuffing penalties."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the counter support Arabic and other non-Latin scripts?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The counting engine uses Unicode-aware whitespace and punctuation regexes that accurately segment words, sentences, and paragraphs in Arabic, French, Italian, and other languages."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Nav */
+    .top-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1.25rem 1.5rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 600;
+      padding: .5rem .95rem;
+      background: rgba(15, 18, 28, .8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      transition: all .2s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+      transform: translateX(-3px);
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(3px);
+    }
+
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text-main);
+      letter-spacing: -.03em;
+    }
+
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, .4));
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lang-dropdown { position: relative; }
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(22, 27, 42, .8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .45rem .85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 600;
+      transition: all .2s ease;
+    }
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .globe-icon { color: var(--badge-text); }
+    .chevron-icon { transition: transform .2s ease; color: var(--text-muted); }
+    .lang-btn[aria-expanded="true"] .chevron-icon { transform: rotate(180deg); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, .95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: .4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      display: none;
+      flex-direction: column;
+      gap: .2rem;
+      z-index: 200;
+    }
+    .lang-menu.open { display: flex; animation: menuFadeIn .15s ease-out; }
+    @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: .55rem .75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+      text-align: left;
+    }
+    .lang-option:hover { background: rgba(59, 130, 246, .15); color: #fff; }
+    .lang-option.active { background: rgba(59, 130, 246, .2); color: #60a5fa; }
+    .lang-option .check-icon { display: none; color: #60a5fa; }
+    .lang-option.active .check-icon { display: block; }
+    .lang-item-content { display: flex; align-items: center; gap: .5rem; }
+    html[dir="rtl"] .lang-menu { right: auto; left: 0; }
+    html[dir="rtl"] .lang-option { text-align: right; }
+
+    /* Header */
+    header {
+      padding: 1.5rem 1.5rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: 5px 16px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, .2);
+      border-radius: 999px;
+      margin-bottom: .75rem;
+      letter-spacing: .4px;
+    }
+    h1 {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      margin-bottom: .4rem;
+      line-height: 1.2;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: .5rem 1.5rem 2.5rem;
+    }
+
+    /* Live Stat Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: .85rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.15rem 1.35rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(96, 165, 250, 0.35);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #a855f7);
+      opacity: 0.7;
+    }
+    .metric-label {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: .35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: .25rem;
+    }
+    .metric-sub {
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+    .metric-val-colored {
+      background: linear-gradient(135deg, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Editor Card */
+    .editor-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.4rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+    .editor-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: .85rem;
+    }
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .82rem;
+      font-weight: 700;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 4px 11px;
+      border-radius: 999px;
+    }
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseDot 1.8s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .editor-tools {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .45rem .85rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .tool-btn:hover {
+      color: #fff;
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.15);
+    }
+    .tool-btn.danger:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+    .tool-btn.success-copy {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .textarea-wrap {
+      position: relative;
+    }
+    .text-editor {
+      width: 100%;
+      min-height: 280px;
+      background: rgba(9, 12, 19, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      color: var(--text-main);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .text-editor:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+    .text-editor::placeholder {
+      color: #475569;
+    }
+
+    /* Transformation Toolbar */
+    .transform-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .transform-btn {
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: .82rem;
+      font-weight: 700;
+      padding: .45rem .85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+    }
+    .transform-btn:hover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      transform: translateY(-1px);
+    }
+    .sample-btn {
+      margin-left: auto;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      color: #60a5fa;
+    }
+    html[dir="rtl"] .sample-btn {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    /* Dual Column Auxiliary Workspace */
+    .aux-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 840px) {
+      .aux-grid { grid-template-columns: 1.15fr 1fr; }
+    }
+
+    .aux-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .aux-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.15rem;
+    }
+    .aux-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .aux-title svg { color: var(--accent); }
+
+    /* Keyword Density Table */
+    .stop-word-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .stop-word-toggle input { cursor: pointer; }
+
+    .density-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+    .density-empty {
+      font-size: .88rem;
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .density-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .85rem;
+    }
+    .density-word-box {
+      min-width: 100px;
+      max-width: 140px;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .density-badge {
+      font-size: .75rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border-radius: 4px;
+      padding: 1px 6px;
+    }
+    .density-word-text {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .density-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .density-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #a855f7);
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+    .density-stats {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 80px;
+      text-align: right;
+    }
+    html[dir="rtl"] .density-stats { text-align: left; }
+
+    /* Social / Constraints List */
+    .constraints-list {
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+    }
+    .constraint-item {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .constraint-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .84rem;
+    }
+    .constraint-name {
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .constraint-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: .82rem;
+      color: var(--text-muted);
+    }
+    .constraint-count.over {
+      color: #f87171;
+    }
+    .constraint-track {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .constraint-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width .25s ease, background-color .25s ease;
+    }
+    .constraint-fill.over {
+      background: #ef4444;
+    }
+
+    /* SEO & Educational Guide Section */
+    .info-section {
+      margin-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom:.5rem;
+    }
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (min-width: 640px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.35rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #fff;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, .95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      max-width: 340px;
+    }
+    html[dir="rtl"] .toast { right: auto; left: 24px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size:.88rem;
+      background: rgba(7, 9, 14, .85);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .editor-top-bar { flex-direction: column; align-items: flex-start; }
+      .sample-btn { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">&#8592; Back to Tools</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.85rem">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>&#127482;&#127480;</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>&#127480;&#127462;</span><span>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>&#127467;&#127479;</span><span>Fran&#231;ais</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>&#127470;&#127481;</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="15" y1="12" x2="3" y2="12"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+      <span data-i18n="brandBadge">Text Tools &#8226; 100% Client-Side &#8226; Real-Time Analytics</span>
+    </div>
+    <h1 id="pageTitle">Word &amp; <span>Character Counter</span></h1>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Count words, characters, sentences, paragraphs, and reading times in real-time. Transform case, clean excess whitespace, and inspect keyword density with zero cloud uploads.</p>
+  </header>
+
+  <main>
+
+    <!-- Metrics Dashboard Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">
+          <span data-i18n="statWords">Total Words</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="metric-value metric-val-colored" id="statWords">0</div>
+        <div class="metric-sub" id="statAvgWordLen" data-i18n="statAvgWordLen">0.0 avg char/word</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">
+          <span data-i18n="statChars">Characters</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+        </div>
+        <div class="metric-value" id="statChars">0</div>
+        <div class="metric-sub" id="statCharsNoSpaces">0 without spaces</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">
+          <span data-i18n="statSentences">Sentences</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <div class="metric-value" id="statSentences">0</div>
+        <div class="metric-sub" id="statAvgWordsSentence">0.0 words/sentence</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">
+          <span data-i18n="statParagraphs">Paragraphs</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        </div>
+        <div class="metric-value" id="statParagraphs">0</div>
+        <div class="metric-sub" id="statReadingEase">Reading Ease: —</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">
+          <span data-i18n="statReadingTime">Reading Time</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="metric-value" id="statReadingTime">0s</div>
+        <div class="metric-sub" id="statSpeakingTime">Speech: 0s (130 wpm)</div>
+      </div>
+    </div>
+
+    <!-- Editor Main Card -->
+    <div class="editor-card">
+      <div class="editor-top-bar">
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span data-i18n="liveAnalysis">Live Analysis Active</span>
+        </div>
+        <div class="editor-tools">
+          <button type="button" class="tool-btn" id="btnPaste" title="Paste text from clipboard" data-i18n="btnPaste">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            <span>Paste</span>
+          </button>
+          <button type="button" class="tool-btn" id="btnCopyText" title="Copy text to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="copyTextLabel" data-i18n="btnCopy">Copy Text</span>
+          </button>
+          <button type="button" class="tool-btn danger" id="btnClear" title="Clear text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span data-i18n="btnClear">Clear</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="textarea-wrap">
+        <textarea id="textInput" class="text-editor" placeholder="Type or paste your text here to analyze words, characters, sentences, reading duration, and keyword density in real-time..." spellcheck="true" autocomplete="off"></textarea>
+      </div>
+
+      <!-- Transformation Toolbar -->
+      <div class="transform-toolbar">
+        <button type="button" class="transform-btn" id="btnUpper" title="Convert to ALL UPPERCASE">UPPERCASE</button>
+        <button type="button" class="transform-btn" id="btnLower" title="Convert to all lowercase">lowercase</button>
+        <button type="button" class="transform-btn" id="btnTitleCase" title="Capitalize Each Word">Title Case</button>
+        <button type="button" class="transform-btn" id="btnSentenceCase" title="Capitalize First Word of Sentences">Sentence case</button>
+        <button type="button" class="transform-btn" id="btnCleanSpaces" title="Clean multiple spaces, trailing whitespace, and blank lines">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <span data-i18n="btnClean">Clean Spaces</span>
+        </button>
+        <button type="button" class="transform-btn sample-btn" id="btnLoadSample" title="Load sample article text">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span data-i18n="btnLoadSample">Load Sample Text</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dual Auxiliary Workspace: Keyword Density & Social Constraints -->
+    <div class="aux-grid">
+
+      <!-- Keyword Density Card -->
+      <div class="aux-card">
+        <div class="aux-header">
+          <div class="aux-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            <span data-i18n="densityTitle">Top Keywords &amp; Density</span>
+          </div>
+          <label class="stop-word-toggle">
+            <input type="checkbox" id="chkFilterStopWords" checked>
+            <span data-i18n="chkStopWords">Filter Stop Words</span>
+          </label>
+        </div>
+        <div class="density-list" id="densityList">
+          <div class="density-empty" data-i18n="densityEmpty">Start typing or paste text to inspect top keyword frequencies.</div>
+        </div>
+      </div>
+
+      <!-- Social & Platform Character Limits -->
+      <div class="aux-card">
+        <div class="aux-header">
+          <div class="aux-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <span data-i18n="limitsTitle">Social &amp; SEO Limits</span>
+          </div>
+        </div>
+        <div class="constraints-list">
+          <!-- X / Twitter -->
+          <div class="constraint-item" data-limit="280">
+            <div class="constraint-top">
+              <span class="constraint-name">X (Twitter)</span>
+              <span class="constraint-count" id="limitX">0 / 280</span>
+            </div>
+            <div class="constraint-track"><div class="constraint-fill" id="fillX" style="width:0%"></div></div>
+          </div>
+          <!-- SEO Title -->
+          <div class="constraint-item" data-limit="60">
+            <div class="constraint-top">
+              <span class="constraint-name">Google SEO Title</span>
+              <span class="constraint-count" id="limitTitle">0 / 60</span>
+            </div>
+            <div class="constraint-track"><div class="constraint-fill" id="fillTitle" style="width:0%"></div></div>
+          </div>
+          <!-- SEO Meta Description -->
+          <div class="constraint-item" data-limit="160">
+            <div class="constraint-top">
+              <span class="constraint-name">SEO Meta Description</span>
+              <span class="constraint-count" id="limitMeta">0 / 160</span>
+            </div>
+            <div class="constraint-track"><div class="constraint-fill" id="fillMeta" style="width:0%"></div></div>
+          </div>
+          <!-- Instagram Caption -->
+          <div class="constraint-item" data-limit="2200">
+            <div class="constraint-top">
+              <span class="constraint-name">Instagram Caption</span>
+              <span class="constraint-count" id="limitInsta">0 / 2,200</span>
+            </div>
+            <div class="constraint-track"><div class="constraint-fill" id="fillInsta" style="width:0%"></div></div>
+          </div>
+          <!-- LinkedIn Post -->
+          <div class="constraint-item" data-limit="3000">
+            <div class="constraint-top">
+              <span class="constraint-name">LinkedIn Post</span>
+              <span class="constraint-count" id="limitLinkedIn">0 / 3,000</span>
+            </div>
+            <div class="constraint-track"><div class="constraint-fill" id="fillLinkedIn" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SEO & Educational Guide Section -->
+    <article class="info-section" aria-labelledby="guide-heading">
+      <div class="info-header">
+        <h2 id="guide-heading" data-i18n="guideHeading">How Word Count &amp; Reading Pace Work</h2>
+        <p data-i18n="guideSub">Professional benchmarks for writers, marketers, speechmakers, and content creators.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span data-i18n="guide1Title">1. Reading &amp; Speaking Speeds</span>
+          </div>
+          <p data-i18n="guide1Desc">Average adult silent reading pace sits at 200–250 words per minute. For spoken speeches, presentations, or video voiceovers, professional speakers maintain a measured cadence of 130–150 words per minute.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            <span data-i18n="guide2Title">2. Keyword Density Best Practice</span>
+          </div>
+          <p data-i18n="guide2Desc">Search engine algorithms evaluate keyword relevance without favoring artificial stuffing. Aim for primary keyword densities between 1.0% and 2.5% to ensure strong topical authority while preserving natural readability.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span data-i18n="guide3Title">3. Zero Data Upload Guarantee</span>
+          </div>
+          <p data-i18n="guide3Desc">Unlike remote cloud counters, every character typed in VantorKit stays in local memory. Confidential drafts, legal contracts, and unpublished manuscripts are never stored or transmitted to external servers.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Does this tool save or upload my text?</h4>
+          <p data-i18n="faq1A">No. All character analysis and keyword counts run purely in client-side JavaScript. Nothing is sent over the internet or logged to any database.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What counts as a word?</h4>
+          <p data-i18n="faq2A">Any continuous string of alphanumeric characters separated by whitespace or punctuation is counted as a word. Hyphenated compound words like 'client-side' count as a single token.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How are sentences identified?</h4>
+          <p data-i18n="faq3A">Sentences are segmented by terminal punctuation marks (periods, exclamation points, question marks, and Arabic question marks) followed by whitespace or line breaks.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">What does the Clean Spaces button do?</h4>
+          <p data-i18n="faq4A">Clean Spaces removes redundant multiple spaces, converts tabs to spaces, trims line-ending spaces, and collapses excessive empty blank lines into neat paragraph breaks.</p>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p data-i18n="footerText">&#169; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All processing is performed locally in your browser.</p>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // Multilingual stop words to filter out common grammar words from keyword density
+    const STOP_WORDS = new Set([
+      // English
+      'the','be','to','of','and','a','in','that','have','i','it','for','not','on','with',
+      'he','as','you','do','at','this','but','his','by','from','they','we','say','her',
+      'she','or','an','will','my','one','all','would','there','their','what','so','up',
+      'out','if','about','who','get','which','go','me','when','make','can','like','time',
+      'no','just','him','know','take','people','into','year','your','good','some','could',
+      'them','see','other','than','then','now','look','only','come','its','over','think',
+      'also','back','after','use','two','how','our','work','first','well','way','even',
+      'new','want','because','any','these','give','day','most','us','is','are','was',
+      'were','been','has','had','more','very','much','such',
+      // French
+      'le','la','les','de','du','des','un','une','et','en','que','qui','dans','ce','pour',
+      'pas','sur','se','plus','par','avec','tout','faire','son','autre','on','mais','nous',
+      'comme','ou','si','leur','elle','deux','même','aussi','votre','notre','sont','est',
+      // Italian
+      'il','la','le','gli','uno','una','di','da','con','su','per','tra','fra','ma','che',
+      'chi','cui','non','se','come','quando','dove','perché','io','tu','lui','lei','noi',
+      'voi','loro','questo','quello','sono','era','stato','del','della','dei',
+      // Arabic
+      'في','من','على','إلى','عن','مع','هذا','هذه','تم','أن','إن','كان','كانت','هو','هي',
+      'هم','هن','لا','ما','لم','لن','كل','بعد','قبل','غير','حيث','أو','ثم','حتى','قد',
+      'بين','خلال','نحو','ذلك','تلك','عبر','عند','كما','فإن','التي','الذي','الذين'
+    ]);
+
+    const I18N = {
+      en: {
+        langLabel: 'English',
+        backLink: '\u2190 Back to Tools',
+        brandBadge: 'Text Tools \u2022 100% Client-Side \u2022 Real-Time Analytics',
+        pageSubtitle: 'Count words, characters, sentences, paragraphs, and reading times in real-time. Transform case, clean excess whitespace, and inspect keyword density with zero cloud uploads.',
+        statWords: 'Total Words',
+        statChars: 'Characters',
+        statSentences: 'Sentences',
+        statParagraphs: 'Paragraphs',
+        statReadingTime: 'Reading Time',
+        statAvgWordLen: 'avg char/word',
+        statReadingEase: 'Reading Ease: ',
+        liveAnalysis: 'Live Analysis Active',
+        btnPaste: 'Paste',
+        btnCopy: 'Copy Text',
+        btnCopied: 'Copied!',
+        btnClear: 'Clear',
+        btnClean: 'Clean Spaces',
+        btnLoadSample: 'Load Sample Text',
+        densityTitle: 'Top Keywords & Density',
+        chkStopWords: 'Filter Stop Words',
+        densityEmpty: 'Start typing or paste text to inspect top keyword frequencies.',
+        limitsTitle: 'Social & SEO Limits',
+        guideHeading: 'How Word Count & Reading Pace Work',
+        guideSub: 'Professional benchmarks for writers, marketers, speechmakers, and content creators.',
+        guide1Title: '1. Reading & Speaking Speeds',
+        guide1Desc: 'Average adult silent reading pace sits at 200–250 words per minute. For spoken speeches, presentations, or video voiceovers, professional speakers maintain a measured cadence of 130–150 words per minute.',
+        guide2Title: '2. Keyword Density Best Practice',
+        guide2Desc: 'Search engine algorithms evaluate keyword relevance without favoring artificial stuffing. Aim for primary keyword densities between 1.0% and 2.5% to ensure strong topical authority while preserving natural readability.',
+        guide3Title: '3. Zero Data Upload Guarantee',
+        guide3Desc: 'Unlike remote cloud counters, every character typed in VantorKit stays in local memory. Confidential drafts, legal contracts, and unpublished manuscripts are never stored or transmitted to external servers.',
+        faqTitle: 'Frequently Asked Questions',
+        faq1Q: 'Does this tool save or upload my text?',
+        faq1A: 'No. All character analysis and keyword counts run purely in client-side JavaScript. Nothing is sent over the internet or logged to any database.',
+        faq2Q: 'What counts as a word?',
+        faq2A: "Any continuous string of alphanumeric characters separated by whitespace or punctuation is counted as a word. Hyphenated compound words like 'client-side' count as a single token.",
+        faq3Q: 'How are sentences identified?',
+        faq3A: 'Sentences are segmented by terminal punctuation marks (periods, exclamation points, question marks, and Arabic question marks) followed by whitespace or line breaks.',
+        faq4Q: 'What does the Clean Spaces button do?',
+        faq4A: 'Clean Spaces removes redundant multiple spaces, converts tabs to spaces, trims line-ending spaces, and collapses excessive empty blank lines into neat paragraph breaks.',
+        footerText: '\u00a9 2026 VantorKit. Fast, Private & Free Web Utilities. All processing is performed locally in your browser.',
+        toastCopied: '\u2705 Text copied to clipboard!',
+        toastCleared: '\u{1f5d1}\ufe0f Text cleared.',
+        toastCleaned: '\u2728 Spaces and lines formatted!',
+        toastSample: '\u{1f4d6} Sample article text loaded.'
+      },
+      ar: {
+        langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
+        backLink: '\u2190 \u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0623\u062f\u0648\u0627\u062a',
+        brandBadge: '\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0646\u0635\u0648\u0635 \u2022 \u0645\u0639\u0627\u0644\u062c\u0629 \u0645\u062d\u0644\u064a\u0629 100% \u2022 \u062a\u062d\u0644\u064a\u0644 \u0641\u0648\u0631\u064a',
+        pageSubtitle: '\u0627\u062d\u0633\u0628 \u0639\u062f\u062f \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0648\u0627\u0644\u0623\u062d\u0631\u0641 \u0648\u0627\u0644\u062c\u0645\u0644 \u0648\u0627\u0644\u0641\u0642\u0631\u0627\u062a \u0648\u0648\u0642\u062a \u0627\u0644\u0642\u0631\u0627\u0621\u0629 \u0645\u0628\u0627\u0634\u0631\u0629. \u062a\u062d\u0648\u064a\u0644 \u062d\u0627\u0644\u0629 \u0627\u0644\u0623\u062d\u0631\u0641 \u0648\u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u062f\u0648\u0646 \u0631\u0641\u0639 \u0623\u064a \u0628\u064a\u0627\u0646\u0627\u062a.',
+        statWords: '\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0643\u0644\u0645\u0627\u062a',
+        statChars: '\u0627\u0644\u0623\u062d\u0631\u0641',
+        statSentences: '\u0627\u0644\u062c\u0645\u0644',
+        statParagraphs: '\u0627\u0644\u0641\u0642\u0631\u0627\u062a',
+        statReadingTime: '\u0648\u0642\u062a \u0627\u0644\u0642\u0631\u0627\u0621\u0629',
+        statAvgWordLen: '\u0645\u062a\u0648\u0633\u0637 \u062d\u0631\u0641/\u0643\u0644\u0645\u0629',
+        statReadingEase: '\u0633\u0647\u0648\u0644\u0629 \u0627\u0644\u0642\u0631\u0627\u0621\u0629: ',
+        liveAnalysis: '\u0627\u0644\u062a\u062d\u0644\u064a\u0644 \u0627\u0644\u0645\u0628\u0627\u0634\u0631 \u0646\u0634\u0637',
+        btnPaste: '\u0644\u0635\u0642',
+        btnCopy: '\u0646\u0633\u062e \u0627\u0644\u0646\u0635',
+        btnCopied: '\u062a\u0645 \u0627\u0644\u0646\u0633\u062e!',
+        btnClear: '\u0645\u0633\u062d',
+        btnClean: '\u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a',
+        btnLoadSample: '\u0646\u0635 \u062a\u062c\u0631\u064a\u0628\u064a',
+        densityTitle: '\u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0623\u0643\u062b\u0631 \u062a\u0643\u0631\u0627\u0631\u0627\u064b \u0648\u0627\u0644\u0643\u062b\u0627\u0641\u0629',
+        chkStopWords: '\u062a\u062c\u0627\u0647\u0644 \u062d\u0631\u0648\u0641 \u0627\u0644\u0631\u0628\u0637',
+        densityEmpty: '\u0627\u0628\u062f\u0623 \u0628\u0627\u0644\u0643\u062a\u0627\u0628\u0629 \u0623\u0648 \u0627\u0644\u0644\u0635\u0642 \u0644\u0639\u0631\u0636 \u062a\u062d\u0644\u064a\u0644 \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0645\u0641\u062a\u0627\u062d\u064a\u0629.',
+        limitsTitle: '\u062d\u062f\u0648\u062f \u0627\u0644\u0645\u0646\u0635\u0627\u062a \u0648\u0627\u0644\u0634\u0628\u0643\u0627\u062a',
+        guideHeading: '\u0643\u064a\u0641 \u064a\u0639\u0645\u0644 \u062d\u0633\u0627\u0628 \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0648\u0633\u0631\u0639\u0629 \u0627\u0644\u0642\u0631\u0627\u0621\u0629',
+        guideSub: '\u0645\u0639\u0627\u064a\u064a\u0631 \u0627\u062d\u062a\u0631\u0627\u0641\u064a\u0629 \u0644\u0644\u0643\u062a\u0627\u0628 \u0648\u0627\u0644\u0645\u0633\u0648\u0642\u064a\u0646 \u0648\u0635\u0646\u0627\u0639 \u0627\u0644\u0645\u062d\u062a\u0648\u0649.',
+        guide1Title: '1. \u0633\u0631\u0639\u0629 \u0627\u0644\u0642\u0631\u0627\u0621\u0629 \u0648\u0627\u0644\u0625\u0644\u0642\u0627\u0621',
+        guide1Desc: '\u064a\u0628\u0644\u063a \u0645\u062a\u0648\u0633\u0637 \u0627\u0644\u0642\u0631\u0627\u0621\u0629 \u0627\u0644\u0635\u0627\u0645\u062a\u0629 \u0644\u0644\u0628\u0627\u0644\u063a\u064a\u0646 200 \u0625\u0644\u0649 250 \u0643\u0644\u0645\u0629 \u0628\u0627\u0644\u062f\u0642\u064a\u0642\u0629\u060c \u0628\u064a\u0646\u0645\u0627 \u064a\u0628\u0644\u063a \u0645\u0639\u062f\u0644 \u0627\u0644\u0625\u0644\u0642\u0627\u0621 \u0648\u0627\u0644\u062e\u0637\u0627\u0628\u0629 130 \u0625\u0644\u0649 150 \u0643\u0644\u0645\u0629 \u0628\u0627\u0644\u062f\u0642\u064a\u0642\u0629.',
+        guide2Title: '2. \u0643\u062b\u0627\u0641\u0629 \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0645\u0641\u062a\u0627\u062d\u064a\u0629 (SEO)',
+        guide2Desc: '\u062a\u064f\u0641\u0636\u0644 \u0645\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0628\u062d\u062b \u0643\u062b\u0627\u0641\u0629 \u0628\u064a\u0646 1% \u0648 2.5% \u0644\u0644\u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629 \u0644\u062a\u062c\u0646\u0628 \u0627\u0644\u062d\u0634\u0648 \u063a\u064a\u0631 \u0627\u0644\u0637\u0628\u064a\u0639\u064a.',
+        guide3Title: '3. \u062e\u0635\u0648\u0635\u064a\u0629 \u0645\u062d\u0644\u064a\u0629 \u0643\u0627\u0645\u0644\u0629',
+        guide3Desc: '\u0639\u0644\u0649 \u0639\u0643\u0633 \u0627\u0644\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0633\u062d\u0627\u0628\u064a\u0629\u060c \u064a\u0628\u0642\u0649 \u0646\u0635\u0643 \u062f\u0627\u062e\u0644 \u0630\u0627\u0643\u0631\u0629 \u0645\u062a\u0635\u0641\u062d\u0643 \u062f\u0648\u0646 \u0623\u0646 \u064a\u063a\u0627\u062f\u0631 \u062c\u0647\u0627\u0632\u0643 \u0625\u0637\u0644\u0627\u0642\u0627\u064b.',
+        faqTitle: '\u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0634\u0627\u0626\u0639\u0629',
+        faq1Q: '\u0647\u0644 \u064a\u062a\u0645 \u062d\u0641\u0638 \u0623\u0648 \u0631\u0641\u0639 \u0646\u0635\u064a \u0625\u0644\u0649 \u062e\u0648\u0627\u062f\u0645\u061f',
+        faq1A: '\u0644\u0627. \u062a\u062a\u0645 \u062c\u0645\u064a\u0639 \u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u062a\u062d\u0644\u064a\u0644 \u0645\u062d\u0644\u064a\u0627\u064b 100% \u062f\u0627\u062e\u0644 \u0645\u062a\u0635\u0641\u062d\u0643.',
+        faq2Q: '\u0645\u0627 \u0627\u0644\u0630\u064a \u064a\u064f\u0639\u062a\u0628\u0631 \u0643\u0644\u0645\u0629\u061f',
+        faq2A: '\u0623\u064a \u062a\u062a\u0627\u0628\u0639 \u0645\u0646 \u0627\u0644\u0623\u062d\u0631\u0641 \u062a\u0641\u0635\u0644\u0647 \u0645\u0633\u0627\u0641\u0627\u062a \u0623\u0648 \u0639\u0644\u0627\u0645\u0627\u062a \u062a\u0631\u0642\u064a\u0645 \u064a\u064f\u062d\u0633\u0628 \u0643\u0644\u0645\u0629 \u0648\u0627\u062d\u062f\u0629.',
+        faq3Q: '\u0643\u064a\u0641 \u064a\u062a\u0645 \u062a\u062d\u062f\u064a\u062f \u0627\u0644\u062c\u0645\u0644\u061f',
+        faq3A: '\u064a\u062a\u0645 \u062a\u062d\u062f\u064a\u062f \u0627\u0644\u062c\u0645\u0644 \u0639\u0628\u0631 \u0639\u0644\u0627\u0645\u0627\u062a \u0627\u0644\u0648\u0642\u0641 \u0645\u062b\u0644 \u0627\u0644\u0646\u0642\u0637\u0629 \u0648\u0639\u0644\u0627\u0645\u0629 \u0627\u0644\u0627\u0633\u062a\u0641\u0647\u0627\u0645 \u0648\u0627\u0644\u062a\u0639\u062c\u0628.',
+        faq4Q: '\u0645\u0627\u0630\u0627 \u064a\u0641\u0639\u0644 \u0632\u0631 \u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a\u061f',
+        faq4A: '\u064a\u0632\u064a\u0644 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0627\u0644\u0645\u0632\u062f\u0648\u062c\u0629 \u0648\u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0641\u064a \u0646\u0647\u0627\u064a\u0629 \u0627\u0644\u0633\u0637\u0648\u0631 \u0648\u064a\u062f\u0645\u062c \u0627\u0644\u0633\u0637\u0648\u0631 \u0627\u0644\u0641\u0627\u0631\u063a\u0629 \u0627\u0644\u0645\u062a\u062a\u0627\u0644\u064a\u0629.',
+        footerText: '\u00a9 2026 VantorKit. \u0623\u062f\u0648\u0627\u062a \u0648\u064a\u0628 \u0633\u0631\u064a\u0639\u0629\u060c \u062e\u0627\u0635\u0629 \u0648\u0645\u062c\u0627\u0646\u064a\u0629.',
+        toastCopied: '\u2705 \u062a\u0645 \u0646\u0633\u062e \u0627\u0644\u0646\u0635 \u0625\u0644\u0649 \u0627\u0644\u062d\u0627\u0641\u0638\u0629!',
+        toastCleared: '\u{1f5d1}\ufe0f \u062a\u0645 \u0645\u0633\u062d \u0627\u0644\u0646\u0635.',
+        toastCleaned: '\u2728 \u062a\u0645 \u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0648\u0627\u0644\u0633\u0637\u0648\u0631!',
+        toastSample: '\u{1f4d6} \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.'
+      },
+      fr: {
+        langLabel: 'Fran\u00e7ais',
+        backLink: '\u2190 Retour aux Outils',
+        brandBadge: 'Outils Texte \u2022 100% C\u00f4t\u00e9 Client \u2022 Analyse en Direct',
+        pageSubtitle: 'Comptez les mots, caract\u00e8res, phrases, paragraphes et temps de lecture en direct. Convertissez la casse et analysez la densit\u00e9 sans aucun upload.',
+        statWords: 'Total Mots',
+        statChars: 'Caract\u00e8res',
+        statSentences: 'Phrases',
+        statParagraphs: 'Paragraphes',
+        statReadingTime: 'Temps de Lecture',
+        statAvgWordLen: 'caract\u00e8res/mot en moyenne',
+        statReadingEase: 'Lisibilit\u00e9: ',
+        liveAnalysis: 'Analyse en Direct Active',
+        btnPaste: 'Coller',
+        btnCopy: 'Copier',
+        btnCopied: 'Copi\u00e9 !',
+        btnClear: 'Effacer',
+        btnClean: 'Nettoyer espaces',
+        btnLoadSample: 'Texte d\u2019exemple',
+        densityTitle: 'Mots-Cl\u00e9s & Densit\u00e9',
+        chkStopWords: 'Filtrer mots vides',
+        densityEmpty: 'Saisissez du texte pour voir la fr\u00e9quence des mots-cl\u00e9s.',
+        limitsTitle: 'Limites R\u00e9seaux & SEO',
+        guideHeading: 'Comment Fonctionnent le D\u00e9compte et la Vitesse de Lecture',
+        guideSub: 'Normes professionnelles pour r\u00e9dacteurs, orateurs et cr\u00e9ateurs.',
+        guide1Title: '1. Vitesses de Lecture & Parole',
+        guide1Desc: 'La lecture silencieuse tourne autour de 200 \u00e0 250 mots/minute. Pour une pr\u00e9sentation orale ou un podcast, le d\u00e9bit moyen se situe \u00e0 130–150 mots/minute.',
+        guide2Title: '2. Bonnes Pratiques de Densit\u00e9 SEO',
+        guide2Desc: 'Une densit\u00e9 de 1% \u00e0 2,5% pour les mots-cl\u00e9s principaux optimise la pertinence sans risque de p\u00e9nalit\u00e9 de bourrage de mots-cl\u00e9s.',
+        guide3Title: '3. Confidentialit\u00e9 100% Locale',
+        guide3Desc: 'Vos brouillons confidentiels, manuscrits et contrats ne quittent jamais votre machine. Tout est calcul\u00e9 en local.',
+        faqTitle: 'Foire Aux Questions',
+        faq1Q: 'Mon texte est-il enregistr\u00e9 sur un serveur ?',
+        faq1A: "Non. Tout s'ex\u00e9cute en JavaScript dans votre navigateur, sans aucun stockage externe.",
+        faq2Q: "Qu'est-ce qui est consid\u00e9r\u00e9 comme un mot ?",
+        faq2A: "Toute s\u00e9quence de caract\u00e8res s\u00e9par\u00e9e par des espaces ou de la ponctuation est comptabilis\u00e9e comme un mot.",
+        faq3Q: 'Comment les phrases sont-elles d\u00e9tect\u00e9es ?',
+        faq3A: 'Par la ponctuation terminale (. ! ?) suivie d’un espace ou d’un saut de ligne.',
+        faq4Q: 'Que fait le bouton Nettoyer ?',
+        faq4A: 'Il supprime les espaces doubles, les tabulations superflues et r\u00e9duit les lignes vides excessives.',
+        footerText: '\u00a9 2026 VantorKit. Utilitaires web rapides, priv\u00e9s et gratuits.',
+        toastCopied: '\u2705 Texte copi\u00e9 !',
+        toastCleared: '\u{1f5d1}\ufe0f Texte effac\u00e9.',
+        toastCleaned: '\u2728 Espaces et lignes nettoy\u00e9s !',
+        toastSample: '\u{1f4d6} Texte d\u2019exemple charg\u00e9.'
+      },
+      it: {
+        langLabel: 'Italiano',
+        backLink: '\u2190 Torna agli Strumenti',
+        brandBadge: 'Strumenti Testo \u2022 100% Lato Client \u2022 Analisi in Tempo Reale',
+        pageSubtitle: 'Conta parole, caratteri, frasi, paragrafi e tempi di lettura in tempo reale. Converti maiuscole/minuscole e controlla la densit\u00e0 delle parole chiave.',
+        statWords: 'Totale Parole',
+        statChars: 'Caratteri',
+        statSentences: 'Frasi',
+        statParagraphs: 'Paragrafi',
+        statReadingTime: 'Tempo di Lettura',
+        statAvgWordLen: 'media caratteri/parola',
+        statReadingEase: 'Leggibilit\u00e0: ',
+        liveAnalysis: 'Analisi in Tempo Reale Attiva',
+        btnPaste: 'Incolla',
+        btnCopy: 'Copia',
+        btnCopied: 'Copiato!',
+        btnClear: 'Cancella',
+        btnClean: 'Pulisci spazi',
+        btnLoadSample: 'Testo di esempio',
+        densityTitle: 'Parole Chiave & Densit\u00e0',
+        chkStopWords: 'Filtra stop words',
+        densityEmpty: 'Inizia a digitare o incolla del testo per vedere le parole pi\u00f9 frequenti.',
+        limitsTitle: 'Limiti Social & SEO',
+        guideHeading: 'Come Funzionano il Conteggio Parole e il Ritmo di Lettura',
+        guideSub: 'Riferimenti professionali per scrittori, copywriter e oratori.',
+        guide1Title: '1. Velocit\u00e0 di Lettura & Discorso',
+        guide1Desc: 'La lettura silenziosa media per un adulto \u00e8 di 200–250 parole al minuto. Per un discorso o podcast il ritmo scende a 130–150 parole al minuto.',
+        guide2Title: '2. Densit\u00e0 Parole Chiave SEO',
+        guide2Desc: 'Una densit\u00e0 dell’1%–2,5% per le parole chiave primarie garantisce rilevanza senza rischiare penalizzazioni per sovraottimizzazione.',
+        guide3Title: '3. Massima Privacy Locale',
+        guide3Desc: 'A differenza dei contatori cloud, nessun testo lascia mai il tuo browser. I tuoi documenti rimangono privati al 100%.',
+        faqTitle: 'Domande Frequenti',
+        faq1Q: 'Il mio testo viene salvato su un server?',
+        faq1A: 'No. Tutta l’elaborazione avviene in locale nel tuo browser.',
+        faq2Q: 'Cosa viene considerato una parola?',
+        faq2A: 'Qualsiasi sequenza di caratteri alfanumerici separata da spazi o punteggiatura.',
+        faq3Q: 'Come vengono identificate le frasi?',
+        faq3A: 'Dalla punteggiatura finale (. ! ?) seguita da spazio o a capo.',
+        faq4Q: 'Cosa fa il pulsante Pulisci Spazi?',
+        faq4A: 'Rimuove spazi doppi, spazi a fine riga e collassa righe vuote superflue.',
+        footerText: '\u00a9 2026 VantorKit. Utilit\u00e0 web veloci, private e gratuite.',
+        toastCopied: '\u2705 Testo copiato negli appunti!',
+        toastCleared: '\u{1f5d1}\ufe0f Testo cancellato.',
+        toastCleaned: '\u2728 Spazi e righe ripuliti!',
+        toastSample: '\u{1f4d6} Testo di esempio caricato.'
+      }
+    };
+
+    // DOM Elements
+    const htmlRoot = document.getElementById('htmlRoot');
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const langMenu = document.getElementById('langMenu');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    const langOptions = document.querySelectorAll('.lang-option');
+
+    const textInput = document.getElementById('textInput');
+    const btnPaste = document.getElementById('btnPaste');
+    const btnCopyText = document.getElementById('btnCopyText');
+    const copyTextLabel = document.getElementById('copyTextLabel');
+    const btnClear = document.getElementById('btnClear');
+    const btnUpper = document.getElementById('btnUpper');
+    const btnLower = document.getElementById('btnLower');
+    const btnTitleCase = document.getElementById('btnTitleCase');
+    const btnSentenceCase = document.getElementById('btnSentenceCase');
+    const btnCleanSpaces = document.getElementById('btnCleanSpaces');
+    const btnLoadSample = document.getElementById('btnLoadSample');
+
+    const statWords = document.getElementById('statWords');
+    const statChars = document.getElementById('statChars');
+    const statCharsNoSpaces = document.getElementById('statCharsNoSpaces');
+    const statSentences = document.getElementById('statSentences');
+    const statParagraphs = document.getElementById('statParagraphs');
+    const statReadingTime = document.getElementById('statReadingTime');
+    const statSpeakingTime = document.getElementById('statSpeakingTime');
+    const statAvgWordLen = document.getElementById('statAvgWordLen');
+    const statAvgWordsSentence = document.getElementById('statAvgWordsSentence');
+    const statReadingEase = document.getElementById('statReadingEase');
+
+    const chkFilterStopWords = document.getElementById('chkFilterStopWords');
+    const densityList = document.getElementById('densityList');
+
+    const limitX = document.getElementById('limitX');
+    const fillX = document.getElementById('fillX');
+    const limitTitle = document.getElementById('limitTitle');
+    const fillTitle = document.getElementById('fillTitle');
+    const limitMeta = document.getElementById('limitMeta');
+    const fillMeta = document.getElementById('fillMeta');
+    const limitInsta = document.getElementById('limitInsta');
+    const fillInsta = document.getElementById('fillInsta');
+    const limitLinkedIn = document.getElementById('limitLinkedIn');
+    const fillLinkedIn = document.getElementById('fillLinkedIn');
+
+    const toastEl = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+
+    let currentLang = 'en';
+
+    function dict() { return I18N[currentLang] || I18N.en; }
+
+    let toastTimer;
+    function showToast(msg, dur) {
+      dur = dur || 2500;
+      toastMsg.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, dur);
+    }
+
+    function formatDuration(totalSeconds) {
+      if (totalSeconds < 60) return totalSeconds + 's';
+      const m = Math.floor(totalSeconds / 60);
+      const s = totalSeconds % 60;
+      return s > 0 ? (m + 'm ' + s + 's') : (m + 'm');
+    }
+
+    // Main text analysis function
+    function updateMetrics() {
+      const text = textInput.value || '';
+      const chars = text.length;
+      const charsNoSpaces = text.replace(/\s/g, '').length;
+
+      // Words count (unicode-friendly)
+      const trimmed = text.trim();
+      const wordsArr = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+      const words = wordsArr.length;
+
+      // Sentences: period, exclamation, question mark, or arabic question mark
+      const sentencesArr = trimmed ? text.split(/[.!?؟]+(?:\s+|$)/).filter(function(s) { return s.trim().length > 0; }) : [];
+      const sentences = sentencesArr.length;
+
+      // Paragraphs: non-empty chunks separated by newlines
+      const parasArr = text.split(/\n+/).filter(function(p) { return p.trim().length > 0; });
+      const paragraphs = parasArr.length;
+
+      // Reading (200 wpm) & Speaking (130 wpm)
+      const readSec = Math.round((words / 200) * 60);
+      const speakSec = Math.round((words / 130) * 60);
+
+      // Average word length
+      const avgWordLength = words > 0 ? (charsNoSpaces / words).toFixed(1) : '0.0';
+      const avgWordsPerSentence = sentences > 0 ? (words / sentences).toFixed(1) : '0.0';
+
+      // Simple Flesch reading ease estimation
+      let readingEaseStr = '—';
+      if (words >= 15 && sentences >= 1) {
+        // approximate syllables: count vowels in words
+        let totalSyllables = 0;
+        wordsArr.forEach(function(w) {
+          const match = w.match(/[aeiouyàáâäèéêëìíîïòóôöùúûü]/gi);
+          totalSyllables += match ? Math.max(1, match.length) : 1;
+        });
+        const asl = words / sentences;
+        const asw = totalSyllables / words;
+        const score = 206.835 - (1.015 * asl) - (84.6 * asw);
+        if (score >= 80) readingEaseStr = 'Very Easy';
+        else if (score >= 65) readingEaseStr = 'Easy';
+        else if (score >= 50) readingEaseStr = 'Standard';
+        else if (score >= 30) readingEaseStr = 'Difficult';
+        else readingEaseStr = 'Very Academic';
+      }
+
+      // Render stats
+      statWords.textContent = words.toLocaleString();
+      statChars.textContent = chars.toLocaleString();
+      statCharsNoSpaces.textContent = charsNoSpaces.toLocaleString() + ' without spaces';
+      statSentences.textContent = sentences.toLocaleString();
+      statParagraphs.textContent = paragraphs.toLocaleString();
+      statReadingTime.textContent = formatDuration(readSec);
+      statSpeakingTime.textContent = 'Speech: ' + formatDuration(speakSec) + ' (130 wpm)';
+      statAvgWordLen.textContent = avgWordLength + ' avg char/word';
+      statAvgWordsSentence.textContent = avgWordsPerSentence + ' words/sentence';
+      statReadingEase.textContent = dict().statReadingEase + readingEaseStr;
+
+      // Update Social / SEO constraints
+      updateConstraint(chars, 280, limitX, fillX);
+      updateConstraint(chars, 60, limitTitle, fillTitle);
+      updateConstraint(chars, 160, limitMeta, fillMeta);
+      updateConstraint(chars, 2200, limitInsta, fillInsta);
+      updateConstraint(chars, 3000, limitLinkedIn, fillLinkedIn);
+
+      // Update Keyword density
+      updateKeywordDensity(wordsArr);
+    }
+
+    function updateConstraint(current, limit, labelEl, fillEl) {
+      labelEl.textContent = current.toLocaleString() + ' / ' + limit.toLocaleString();
+      const pct = Math.min(100, Math.round((current / limit) * 100));
+      fillEl.style.width = pct + '%';
+
+      if (current > limit) {
+        labelEl.classList.add('over');
+        fillEl.classList.add('over');
+      } else {
+        labelEl.classList.remove('over');
+        fillEl.classList.remove('over');
+      }
+    }
+
+    function updateKeywordDensity(wordsArr) {
+      if (wordsArr.length === 0) {
+        densityList.innerHTML = '<div class="density-empty">' + dict().densityEmpty + '</div>';
+        return;
+      }
+
+      const filterStop = chkFilterStopWords.checked;
+      const cleanTokens = wordsArr.map(function(w) {
+        return w.toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+      }).filter(function(w) {
+        return w.length > 1;
+      });
+
+      const counts = {};
+      let validCount = 0;
+
+      cleanTokens.forEach(function(w) {
+        if (filterStop && STOP_WORDS.has(w)) return;
+        counts[w] = (counts[w] || 0) + 1;
+        validCount++;
+      });
+
+      const sorted = Object.keys(counts).map(function(k) {
+        return { word: k, count: counts[k] };
+      }).sort(function(a, b) {
+        return b.count - a.count;
+      }).slice(0, 6);
+
+      if (sorted.length === 0) {
+        densityList.innerHTML = '<div class="density-empty">' + dict().densityEmpty + '</div>';
+        return;
+      }
+
+      const maxCount = sorted[0].count;
+      densityList.innerHTML = '';
+
+      sorted.forEach(function(item, idx) {
+        const percent = ((item.count / wordsArr.length) * 100).toFixed(1);
+        const barWidth = Math.min(100, Math.round((item.count / maxCount) * 100));
+
+        const row = document.createElement('div');
+        row.className = 'density-item';
+        row.innerHTML =
+          '<div class="density-word-box">' +
+            '<span class="density-badge">#' + (idx + 1) + '</span>' +
+            '<span class="density-word-text" title="' + escapeHtml(item.word) + '">' + escapeHtml(item.word) + '</span>' +
+          '</div>' +
+          '<div class="density-bar-wrap">' +
+            '<div class="density-bar-fill" style="width:' + barWidth + '%"></div>' +
+          '</div>' +
+          '<div class="density-stats">' + item.count + ' (' + percent + '%)</div>';
+        densityList.appendChild(row);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Transformations
+    btnUpper.addEventListener('click', function() {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toUpperCase();
+      updateMetrics();
+      showToast('Transformed to UPPERCASE');
+    });
+
+    btnLower.addEventListener('click', function() {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toLowerCase();
+      updateMetrics();
+      showToast('Transformed to lowercase');
+    });
+
+    btnTitleCase.addEventListener('click', function() {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toLowerCase().replace(/(?:^|\s|[(\[{/\\-])\S/g, function(c) {
+        return c.toUpperCase();
+      });
+      updateMetrics();
+      showToast('Transformed to Title Case');
+    });
+
+    btnSentenceCase.addEventListener('click', function() {
+      if (!textInput.value) return;
+      textInput.value = textInput.value.toLowerCase().replace(/(^\s*|[.!?؟]\s+)([a-z\u00E0-\u00FF\u0100-\u017F\u0600-\u06FF])/g, function(m, p1, p2) {
+        return p1 + p2.toUpperCase();
+      });
+      updateMetrics();
+      showToast('Transformed to Sentence case');
+    });
+
+    btnCleanSpaces.addEventListener('click', function() {
+      if (!textInput.value) return;
+      // Collapse multiple spaces or tabs into one, trim end of lines, collapse 3+ newlines to 2
+      textInput.value = textInput.value
+        .replace(/[^\S\r\n]+/g, ' ')
+        .replace(/[^\S\r\n]+$/gm, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+      updateMetrics();
+      showToast(dict().toastCleaned);
+    });
+
+    // Sample Text
+    btnLoadSample.addEventListener('click', function() {
+      textInput.value = "Content strategy and search engine optimization depend fundamentally on high-quality writing, balanced keyword density, and clear narrative structure.\n\nWhen readers land on your webpage, they expect immediate value without friction. Average adult reading speed sits at approximately 200 to 250 words per minute. If an article takes four minutes to read, it should deliver actionable insights within 800 words.\n\nDigital tools like VantorKit calculate character lengths, sentences, and speaking durations completely client-side in the browser. Zero bytes leave your machine, guaranteeing that sensitive product plans, legal agreements, and corporate announcements remain private.";
+      updateMetrics();
+      showToast(dict().toastSample);
+    });
+
+    // Clear
+    btnClear.addEventListener('click', function() {
+      textInput.value = '';
+      updateMetrics();
+      textInput.focus();
+      showToast(dict().toastCleared);
+    });
+
+    // Copy Text
+    btnCopyText.addEventListener('click', function() {
+      if (!textInput.value) return;
+      copyToClipboard(textInput.value);
+      btnCopyText.classList.add('success-copy');
+      copyTextLabel.textContent = dict().btnCopied;
+      showToast(dict().toastCopied);
+      setTimeout(function() {
+        btnCopyText.classList.remove('success-copy');
+        copyTextLabel.textContent = dict().btnCopy;
+      }, 2000);
+    });
+
+    // Paste
+    btnPaste.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          if (text) {
+            textInput.value = text;
+            updateMetrics();
+            showToast('Pasted from clipboard');
+          }
+        }).catch(function() {
+          textInput.focus();
+          showToast('Please press Ctrl+V to paste');
+        });
+      } else {
+        textInput.focus();
+        showToast('Please press Ctrl+V to paste');
+      }
+    });
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(function() {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    // Input event
+    textInput.addEventListener('input', updateMetrics);
+    chkFilterStopWords.addEventListener('change', updateMetrics);
+
+    // Language handling
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      currentLang = lang;
+      localStorage.setItem('vantorkit_lang', lang);
+      const d = I18N[lang];
+
+      htmlRoot.setAttribute('lang', lang);
+      htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      currentLangLabel.textContent = d.langLabel;
+
+      langOptions.forEach(function(o) {
+        o.classList.toggle('active', o.dataset.lang === lang);
+      });
+
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        const k = el.dataset.i18n;
+        if (d[k] && typeof d[k] === 'string') el.textContent = d[k];
+      });
+
+      updateMetrics();
+    }
+
+    langToggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const open = langMenu.classList.contains('open');
+      langMenu.classList.toggle('open', !open);
+      langToggleBtn.setAttribute('aria-expanded', String(!open));
+    });
+
+    langOptions.forEach(function(o) {
+      o.addEventListener('click', function() {
+        setLanguage(o.dataset.lang);
+        langMenu.classList.remove('open');
+        langToggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('langDropdown').contains(e.target)) {
+        langMenu.classList.remove('open');
+        langToggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Initialize
+    const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(savedLang);
+    updateMetrics();
+  })();
+  </script>
+</body>
+</html>
