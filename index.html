@@ -996,7 +996,7 @@
     
     <div class="search-wrapper">
       <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="text" id="toolSearch" class="search-box" placeholder="Search 24 tools (e.g. percentage, pdf, counter)..." autocomplete="off" spellcheck="false">
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 25 tools (e.g. percentage, pdf, diff)..." autocomplete="off" spellcheck="false">
       <kbd class="search-kbd" id="searchKbd" title="Press ⌘K or Ctrl+K to search">⌘K</kbd>
       <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
@@ -1544,6 +1544,27 @@
         </div>
       </a>
 
+      <!-- Text 4: Text Diff & Compare -->
+      <a href="/tools/text-diff.html" class="tool-card" data-tool-id="text-diff" data-category="text">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"></path><path d="M4 20L21 3"></path><path d="M21 16v5h-5"></path><path d="M15 15l6 6"></path><path d="M4 4l5 5"></path></svg>
+            </div>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_text">Text Tools</div>
+            <div class="tool-title" data-tool-field="title">Text Diff &amp; Compare</div>
+            <div class="tool-desc" data-tool-field="desc">Compare two text snippets side-by-side or inline with visual additions and deletions highlights.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
       <!-- Empty Search Results Placeholder -->
       <div class="no-results" id="noResultsBox">
         <div class="no-results-icon">🔍</div>
@@ -1568,10 +1589,10 @@
       const TRANSLATIONS = {
         en: {
           langLabel: "English",
-          toolsCount: "24 Tools Available",
+          toolsCount: "25 Tools Available",
           brandBadge: "Client-Side • Privacy-First • No Logs",
           heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
-          searchPlaceholder: "Search 24 tools (e.g. percentage, pdf, counter)...",
+          searchPlaceholder: "Search 25 tools (e.g. percentage, pdf, diff)...",
           noResultsTitle: "No tools found",
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
@@ -1681,15 +1702,19 @@
             "url-slug-generator": {
               title: "URL Slug Generator",
               desc: "Sanitize titles into clean, SEO-optimized URL slugs removing stop words."
+            },
+            "text-diff": {
+              title: "Text Diff & Compare",
+              desc: "Compare two text snippets side-by-side or inline with visual additions and deletions highlights."
             }
           }
         },
         ar: {
           langLabel: "العربية",
-          toolsCount: "24 أداة متاحة",
+          toolsCount: "25 أداة متاحة",
           brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
           heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
-          searchPlaceholder: "ابحث في 24 أداة (مثل النسبة المئوية، PDF، العداد)...",
+          searchPlaceholder: "ابحث في 25 أداة (مثل النسبة المئوية، PDF، المقارنة)...",
           noResultsTitle: "لم يتم العثور على نتائج",
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
@@ -1799,15 +1824,19 @@
             "url-slug-generator": {
               title: "مولد روابط URL المختصرة (Slug)",
               desc: "حوّل العناوين إلى روابط أنيقة ومتوافقة مع محركات البحث SEO مع تنظيف الرموز."
+            },
+            "text-diff": {
+              title: "مقارنة النصوص وتحديد الفروقات",
+              desc: "قارن بين نصين جنباً إلى جنب أو بشكل مدمج مع تمييز دقيق للإضافات والحذف."
             }
           }
         },
         fr: {
           langLabel: "Français",
-          toolsCount: "24 Outils Disponibles",
+          toolsCount: "25 Outils Disponibles",
           brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
           heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
-          searchPlaceholder: "Rechercher parmi 24 outils (ex: pourcentage, pdf, compteur)...",
+          searchPlaceholder: "Rechercher parmi 25 outils (ex: pourcentage, pdf, diff)...",
           noResultsTitle: "Aucun outil trouvé",
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
@@ -1917,15 +1946,19 @@
             "url-slug-generator": {
               title: "Générateur de Slug d'URL",
               desc: "Transformez vos titres en slugs d'URL propres et optimisés pour le SEO."
+            },
+            "text-diff": {
+              title: "Comparateur de Texte (Diff)",
+              desc: "Comparez deux textes côte à côte ou en ligne avec surbrillance des ajouts et suppressions."
             }
           }
         },
         it: {
           langLabel: "Italiano",
-          toolsCount: "24 Strumenti Disponibili",
+          toolsCount: "25 Strumenti Disponibili",
           brandBadge: "Lato Client • Massima Privacy • Nessun Log",
           heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
-          searchPlaceholder: "Cerca tra 24 strumenti (es: percentuale, pdf, contatore)...",
+          searchPlaceholder: "Cerca tra 25 strumenti (es: percentuale, pdf, diff)...",
           noResultsTitle: "Nessun risultato",
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
@@ -2035,6 +2068,10 @@
             "url-slug-generator": {
               title: "Generatore di Slug URL",
               desc: "Pulisci i titoli in slug URL ottimizzati per la SEO rimuovendo parole superflue."
+            },
+            "text-diff": {
+              title: "Confronto Testo & Diff",
+              desc: "Confronta due testi affiancati o in linea con evidenziazione visiva di aggiunte e rimozioni."
             }
           }
         }
