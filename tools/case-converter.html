@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Converter &amp; URL Slugifier — Free Online Text Case &amp; Slug Tool | VantorKit</title>
+  <meta name="description" content="Free online case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs. 100% client-side.">
+  <meta name="keywords" content="case converter, url slugifier, slug generator, camelcase converter, snake case, pascalcase, kebab case, title case, uppercase, lowercase, text tools, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/case-converter.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Case Converter &amp; URL Slugifier — Free Online Text Case Tool | VantorKit">
+  <meta property="og:description" content="Instant text transformation tool for developers and writers. Convert between camelCase, snake_case, Title Case, kebab-case, and generate clean SEO URL slugs.">
+  <meta property="og:url" content="https://vantorkit.com/tools/case-converter.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Converter &amp; URL Slugifier — VantorKit">
+  <meta name="twitter:description" content="Free client-side case converter and SEO slug generator. 100% private in-browser text transformation.">
+
+  <!-- Fonts: Cairo (Arabic), Plus Jakarta Sans (UI & Text), JetBrains Mono (Code/Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Case Converter & URL Slugifier",
+        "url": "https://vantorkit.com/tools/case-converter.html",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Free client-side case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud logging."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my text sent to any server during conversion?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All text parsing, case transformations, and slug creations execute 100% locally in your web browser. Your private notes, code snippets, and confidential drafts never leave your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between camelCase, snake_case, and kebab-case?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "camelCase joins words with the first letter of each subsequent word capitalized (common in JavaScript). snake_case separates words with underscores (common in Python and SQL). kebab-case separates words with hyphens (standard for URLs and CSS classes)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the URL Slugifier handle accented characters and special symbols?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The slug engine uses Unicode NFD normalization to strip diacritics (e.g. converting 'é' to 'e' and 'ñ' to 'n'), removes unsafe URL characters, and replaces spaces with clean hyphens or underscores."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I chain multiple transformations together?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Use the 'Swap with Input' button to send the converted output back to the input field, allowing you to easily combine multiple transformations."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: 70px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 600;
+      transition: all .2s ease;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+    }
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+    .nav-brand span span {
+      color: var(--accent);
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown { position: relative; }
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .45rem .85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 600;
+      transition: all .2s ease;
+    }
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .globe-icon { color: var(--badge-text); }
+    .chevron-icon { transition: transform .2s ease; color: var(--text-muted); }
+    .lang-btn[aria-expanded="true"] .chevron-icon { transform: rotate(180deg); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, .96);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: .4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      display: none;
+      flex-direction: column;
+      gap: .2rem;
+      z-index: 200;
+    }
+    .lang-menu.open { display: flex; animation: menuFadeIn .15s ease-out; }
+    @keyframes menuFadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: .55rem .75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+      text-align: left;
+    }
+    .lang-option:hover { background: rgba(59, 130, 246, .15); color: #fff; }
+    .lang-option.active { background: rgba(59, 130, 246, .2); color: #60a5fa; }
+    .lang-option .check-icon { display: none; color: #60a5fa; }
+    .lang-option.active .check-icon { display: block; }
+    .lang-item-content { display: flex; align-items: center; gap: .5rem; }
+    html[dir="rtl"] .lang-menu { right: auto; left: 0; }
+    html[dir="rtl"] .lang-option { text-align: right; }
+
+    /* Header */
+    header {
+      padding: 1.5rem 1.5rem 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: 5px 16px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, .2);
+      border-radius: 999px;
+      margin-bottom: .75rem;
+      letter-spacing: .4px;
+    }
+    h1 {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      margin-bottom: .4rem;
+      line-height: 1.2;
+    }
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1350px;
+      width: 100%;
+      margin: 0 auto;
+      padding: .5rem 1.25rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Dual Input & Output Workspace */
+    .io-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px) {
+      .io-workspace { grid-template-columns: 1fr; }
+    }
+
+    .io-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .io-header {
+      padding: .75rem 1.15rem;
+      background: rgba(14, 18, 28, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .io-title {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .active-preset-badge {
+      font-size: .72rem;
+      font-weight: 700;
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .io-stats {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .76rem;
+      color: var(--text-muted);
+    }
+
+    .io-textarea {
+      width: 100%;
+      height: 220px;
+      background: #090d16;
+      border: none;
+      outline: none;
+      padding: 1.15rem;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: .95rem;
+      line-height: 1.65;
+      resize: vertical;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .io-textarea::placeholder {
+      color: #475569;
+      font-style: italic;
+    }
+
+    .io-footer {
+      padding: .65rem 1.15rem;
+      background: rgba(11, 15, 25, 0.95);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-io {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .4rem .75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      border-radius: 7px;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-io:hover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+    }
+    .btn-io.danger:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: var(--danger-bg);
+    }
+    .btn-io.primary {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-color: #3b82f6;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+    }
+    .btn-io.primary:hover {
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.45);
+      filter: brightness(1.1);
+    }
+    .btn-io.copied {
+      background: #10b981 !important;
+      border-color: #10b981 !important;
+      color: #fff !important;
+    }
+
+    /* Transformation Presets Hub Card */
+    .presets-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .preset-section-title {
+      font-size: .88rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .85rem;
+      letter-spacing: .3px;
+    }
+    .preset-section-title svg {
+      color: var(--accent);
+    }
+
+    .preset-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: .65rem;
+    }
+
+    .preset-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .25rem;
+      padding: .65rem .85rem;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all .2s ease;
+      text-align: left;
+    }
+    html[dir="rtl"] .preset-btn {
+      text-align: right;
+      align-items: flex-start;
+    }
+    .preset-btn:hover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2);
+    }
+    .preset-btn.active {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .preset-name {
+      font-size: .84rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .preset-example {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    /* URL Slugifier Box */
+    .slugifier-box {
+      background: rgba(9, 13, 22, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .slug-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .slug-field {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .slug-field label {
+      font-size: .76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .slug-input, .slug-select {
+      background: #060910;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: .45rem .75rem;
+      border-radius: 8px;
+      font-size: .84rem;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: border-color .15s ease;
+    }
+    .slug-input:focus, .slug-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .slug-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .slug-check {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .slug-check input {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .slug-preview-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      background: #05070d;
+      border: 1px solid var(--card-border);
+      padding: .75rem 1rem;
+      border-radius: 10px;
+    }
+    .slug-preview-label {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--badge-text);
+      white-space: nowrap;
+    }
+    .slug-preview-text {
+      flex: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+      color: #34d399;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* SEO & Educational Guide Section */
+    .info-section {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+
+    /* Reference Table */
+    .cheatsheet-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2.5rem;
+      overflow-x: auto;
+    }
+    .cheatsheet-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .cheatsheet-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    .cheatsheet-table th, .cheatsheet-table td {
+      border: 1px solid var(--card-border);
+      padding: .65rem 1rem;
+      text-align: left;
+    }
+    html[dir="rtl"] .cheatsheet-table th, html[dir="rtl"] .cheatsheet-table td {
+      text-align: right;
+    }
+    .cheatsheet-table th {
+      background: rgba(59, 130, 246, 0.12);
+      color: #fff;
+      font-weight: 700;
+    }
+    .cheatsheet-table code {
+      font-family: 'JetBrains Mono', monospace;
+      color: #38bdf8;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Guide Grid */
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (min-width: 768px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #fff;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, .96);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      max-width: 360px;
+    }
+    html[dir="rtl"] .toast { right: auto; left: 24px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, .85);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 1.95rem; }
+      .preset-btn-grid { grid-template-columns: repeat(2, 1fr); }
+      .slug-controls-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">&#8592; Back to Tools</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.85rem">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>&#127482;&#127480;</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>&#127480;&#127462;</span><span>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>&#127467;&#127479;</span><span>Fran&#231;ais</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>&#127470;&#127481;</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+      <span data-i18n="brandBadge">Text Tools &#8226; 100% Client-Side &#8226; Instant String &amp; Slug Transformations</span>
+    </div>
+    <h1 id="pageTitle">Case Converter &amp; <span>URL Slugifier</span></h1>
+    <p class="subtitle" id="pageSubtitle" data-i18n="pageSubtitle">Convert text cases between camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud uploads.</p>
+  </header>
+
+  <main>
+
+    <!-- Dual Input & Output Workspaces -->
+    <div class="io-workspace">
+      <!-- Input Card -->
+      <div class="io-card">
+        <div class="io-header">
+          <div class="io-title">
+            <span data-i18n="lblInputText">Input Text</span>
+          </div>
+          <div class="io-stats" id="inputStats">0 lines &#8226; 0 words &#8226; 0 chars</div>
+        </div>
+        <textarea id="inputText" class="io-textarea" placeholder="Type or paste your text here..." spellcheck="false" autocomplete="off"></textarea>
+        <div class="io-footer">
+          <div class="btn-group">
+            <button type="button" class="btn-io" id="btnPaste" title="Paste text from clipboard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+              <span data-i18n="btnPaste">Paste</span>
+            </button>
+            <button type="button" class="btn-io" id="btnSample" title="Load sample demonstration text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span data-i18n="btnSample">Sample</span>
+            </button>
+          </div>
+          <button type="button" class="btn-io danger" id="btnClear" title="Clear input text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span data-i18n="btnClear">Clear</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Output Card -->
+      <div class="io-card">
+        <div class="io-header">
+          <div class="io-title">
+            <span data-i18n="lblOutputResult">Converted Result</span>
+            <span class="active-preset-badge" id="activePresetBadge">UPPERCASE</span>
+          </div>
+          <div class="io-stats" id="outputStats">0 lines &#8226; 0 words &#8226; 0 chars</div>
+        </div>
+        <textarea id="outputText" class="io-textarea" placeholder="Transformed output appears here..." readonly spellcheck="false" autocomplete="off"></textarea>
+        <div class="io-footer">
+          <div class="btn-group">
+            <button type="button" class="btn-io" id="btnSwap" title="Swap output back to input to chain transformations">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"></path></svg>
+              <span data-i18n="btnSwap">&#8646; Swap with Input</span>
+            </button>
+            <button type="button" class="btn-io" id="btnDownload" title="Download converted text as .txt file">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownload">.txt</span>
+            </button>
+          </div>
+          <button type="button" class="btn-io primary" id="btnCopyResult" title="Copy converted result to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="copyResultLabel" data-i18n="btnCopy">Copy Result</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presets Control Center Card -->
+    <div class="presets-card">
+
+      <!-- Section 1: Editorial Styles -->
+      <div>
+        <div class="preset-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span data-i18n="secEditorial">Editorial &amp; Writing Presets</span>
+        </div>
+        <div class="preset-btn-grid">
+          <button type="button" class="preset-btn active" data-preset="upper">
+            <span class="preset-name">UPPERCASE</span>
+            <span class="preset-example">HELLO WORLD EXAMPLE</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="lower">
+            <span class="preset-name">lowercase</span>
+            <span class="preset-example">hello world example</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="title">
+            <span class="preset-name">Title Case</span>
+            <span class="preset-example">Hello World of Science</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="sentence">
+            <span class="preset-name">Sentence case</span>
+            <span class="preset-example">Hello world. Next sentence.</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="capitalized">
+            <span class="preset-name">Capitalized Words</span>
+            <span class="preset-example">Hello World Example</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="alternating">
+            <span class="preset-name">aLtErNaTiNg cAsE</span>
+            <span class="preset-example">hElLo wOrLd eXaMpLe</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 2: Developer & Code Styles -->
+      <div>
+        <div class="preset-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span data-i18n="secDeveloper">Developer &amp; Code Presets</span>
+        </div>
+        <div class="preset-btn-grid">
+          <button type="button" class="preset-btn" data-preset="camel">
+            <span class="preset-name">camelCase</span>
+            <span class="preset-example">helloWorldExample</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="pascal">
+            <span class="preset-name">PascalCase</span>
+            <span class="preset-example">HelloWorldExample</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="snake">
+            <span class="preset-name">snake_case</span>
+            <span class="preset-example">hello_world_example</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="kebab">
+            <span class="preset-name">kebab-case</span>
+            <span class="preset-example">hello-world-example</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="constant">
+            <span class="preset-name">CONSTANT_CASE</span>
+            <span class="preset-example">HELLO_WORLD_EXAMPLE</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="dot">
+            <span class="preset-name">dot.case</span>
+            <span class="preset-example">hello.world.example</span>
+          </button>
+          <button type="button" class="preset-btn" data-preset="path">
+            <span class="preset-name">path/case</span>
+            <span class="preset-example">hello/world/example</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 3: Dedicated URL Slugifier -->
+      <div>
+        <div class="preset-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          <span data-i18n="secSlugifier">Dedicated SEO URL Slugifier</span>
+        </div>
+        <div class="slugifier-box">
+          <div class="slug-controls-grid">
+            <div class="slug-field">
+              <label for="slugSeparator" data-i18n="lblSeparator">Separator:</label>
+              <select id="slugSeparator" class="slug-select">
+                <option value="-">Hyphen (-)</option>
+                <option value="_">Underscore (_)</option>
+                <option value=".">Dot (.)</option>
+                <option value="/">Slash (/)</option>
+              </select>
+            </div>
+            <div class="slug-field">
+              <label for="slugPrefix" data-i18n="lblPrefix">Prefix (Optional):</label>
+              <input type="text" id="slugPrefix" class="slug-input" placeholder="/blog/">
+            </div>
+            <div class="slug-field">
+              <label for="slugSuffix" data-i18n="lblSuffix">Suffix (Optional):</label>
+              <input type="text" id="slugSuffix" class="slug-input" placeholder=".html">
+            </div>
+          </div>
+
+          <div class="slug-checkbox-row">
+            <label class="slug-check">
+              <input type="checkbox" id="chkSlugLower" checked>
+              <span data-i18n="chkSlugLower">Lowercase Output</span>
+            </label>
+            <label class="slug-check">
+              <input type="checkbox" id="chkStripDiacritics" checked>
+              <span data-i18n="chkStripDiacritics">Remove Accents (é &rarr; e)</span>
+            </label>
+            <label class="slug-check">
+              <input type="checkbox" id="chkStopWords">
+              <span data-i18n="chkStopWords">Filter Stop Words (a, the, in...)</span>
+            </label>
+            <button type="button" class="btn-io primary" id="btnApplySlug" style="margin-left:auto">
+              <span data-i18n="btnGenerateSlug">Apply URL Slug</span>
+            </button>
+          </div>
+
+          <div class="slug-preview-row">
+            <span class="slug-preview-label" data-i18n="lblLiveSlugPreview">Live Slug Preview:</span>
+            <span class="slug-preview-text" id="slugPreviewText">building-next-gen-web-utilities</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Quick String Cleanup Utilities -->
+      <div>
+        <div class="preset-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+          <span data-i18n="secCleaners">Quick String Cleanup Utilities</span>
+        </div>
+        <div class="btn-group">
+          <button type="button" class="btn-io" id="btnCleanSpaces">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span data-i18n="btnCleanSpaces">Clean Extra Spaces</span>
+          </button>
+          <button type="button" class="btn-io" id="btnRemoveNewlines">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 10 4 15 9 20"></polyline><path d="M20 4v7a4 4 0 0 1-4 4H4"></path></svg>
+            <span data-i18n="btnRemoveNewlines">Remove Line Breaks</span>
+          </button>
+          <button type="button" class="btn-io" id="btnStripHtml">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span data-i18n="btnStripHtml">Strip HTML Tags</span>
+          </button>
+          <button type="button" class="btn-io" id="btnReverse">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span data-i18n="btnReverse">Reverse Text</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SEO & Educational Guide Section -->
+    <article class="info-section" aria-labelledby="guide-heading">
+      <div class="info-header">
+        <h2 id="guide-heading" data-i18n="guideHeading">Code Naming Conventions &amp; URL Slug Optimization</h2>
+        <p data-i18n="guideSub">Best practices for software architectures, database schemas, and search engine optimization.</p>
+      </div>
+
+      <!-- Reference Table -->
+      <div class="cheatsheet-card">
+        <div class="cheatsheet-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span data-i18n="cheatTitle">Developer Case Style Guide</span>
+        </div>
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th data-i18n="thCase">Case Format</th>
+              <th data-i18n="thExample">Example</th>
+              <th data-i18n="thUsage">Standard Use Cases</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>camelCase</strong></td>
+              <td><code>userProfileSettings</code></td>
+              <td>JavaScript, TypeScript, Java, and Swift variables &amp; function identifiers</td>
+            </tr>
+            <tr>
+              <td><strong>PascalCase</strong></td>
+              <td><code>UserProfileSettings</code></td>
+              <td>Classes, React/Vue components, TypeScript interfaces, C# structures</td>
+            </tr>
+            <tr>
+              <td><strong>snake_case</strong></td>
+              <td><code>user_profile_settings</code></td>
+              <td>Python variables, SQL table &amp; column names, Ruby methods, JSON keys</td>
+            </tr>
+            <tr>
+              <td><strong>kebab-case</strong></td>
+              <td><code>user-profile-settings</code></td>
+              <td>SEO URL slugs, CSS class names, HTML attributes, REST endpoint paths</td>
+            </tr>
+            <tr>
+              <td><strong>CONSTANT_CASE</strong></td>
+              <td><code>USER_PROFILE_SETTINGS</code></td>
+              <td>Global constants, environment variables (.env), Enum values</td>
+            </tr>
+            <tr>
+              <td><strong>Title Case</strong></td>
+              <td><code>User Profile Settings</code></td>
+              <td>Headings, articles, book titles, UI navigation menus (Chicago / AP style)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Educational Pillars -->
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span data-i18n="guide1Title">1. Why URL Slugs Matter for SEO</span>
+          </div>
+          <p data-i18n="guide1Desc">Clean, descriptive, hyphen-separated URLs give search engines immediate context about your page content. Removing redundant stop words (like 'and', 'the', 'in') keeps URLs short and improves organic click-through rates.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+            <span data-i18n="guide2Title">2. Diacritics &amp; Universal Normalization</span>
+          </div>
+          <p data-i18n="guide2Desc">Accented Latin characters (such as é, ñ, ü, ç) cause URL encoding issues (%C3%A9). Our engine normalizes Unicode via NFD to automatically convert diacritics into plain ASCII equivalents, avoiding ugly percent-encoded URLs.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span data-i18n="guide3Title">3. Zero-Cloud Privacy Guarantee</span>
+          </div>
+          <p data-i18n="guide3Desc">Your proprietary source code, draft article titles, and confidential project names are processed 100% locally in your browser memory. Nothing is ever sent to external cloud servers or stored in remote databases.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Does this tool upload or store my text on any server?</h4>
+          <p data-i18n="faq1A">Never. All conversions, case formats, and slug generations run strictly inside client-side JavaScript in your local browser sandbox.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What is AP / Chicago Title Case?</h4>
+          <p data-i18n="faq2A">Title Case capitalizes all major words (nouns, verbs, adjectives, adverbs) while keeping minor articles and prepositions (like 'a', 'the', 'in', 'of') lowercase unless they are the first or last word of the title.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I generate an SEO-friendly URL slug?</h4>
+          <p data-i18n="faq3A">Paste your article title, select your separator (hyphens '-' are recommended by Google), enable 'Remove Accents' and 'Filter Stop Words', then click 'Apply URL Slug'.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can I chain multiple transformations?</h4>
+          <p data-i18n="faq4A">Yes! Click the 'Swap with Input' button to transfer the converted result back into the input field and apply another transformation preset.</p>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p data-i18n="footerText">&#169; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All processing is performed locally in your browser.</p>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    const SAMPLE_TEXT = "Building Next-Gen Web Utilities: Éléments of Modern SEO & API Architecture in 2026!";
+
+    const STOP_WORDS = new Set([
+      'a','an','the','and','or','but','in','on','at','to','for','of','with','by',
+      'is','are','was','were','it','its','as','from','into','about'
+    ]);
+
+    const MINOR_WORDS = new Set([
+      'a','an','the','and','but','or','for','nor','on','at','to','from','by','with','in','of','as'
+    ]);
+
+    // Internationalization dictionary
+    const I18N = {
+      en: {
+        langLabel: 'English',
+        backLink: '\u2190 Back to Tools',
+        brandBadge: 'Text Tools \u2022 100% Client-Side \u2022 Instant String & Slug Transformations',
+        pageSubtitle: 'Convert text cases between camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud uploads.',
+        lblInputText: 'Input Text',
+        lblOutputResult: 'Converted Result',
+        btnPaste: 'Paste',
+        btnSample: 'Sample',
+        btnClear: 'Clear',
+        btnSwap: '\u21c6 Swap with Input',
+        btnDownload: '.txt',
+        btnCopy: 'Copy Result',
+        btnCopied: 'Copied!',
+        secEditorial: 'Editorial & Writing Presets',
+        secDeveloper: 'Developer & Code Presets',
+        secSlugifier: 'Dedicated SEO URL Slugifier',
+        secCleaners: 'Quick String Cleanup Utilities',
+        lblSeparator: 'Separator:',
+        lblPrefix: 'Prefix (Optional):',
+        lblSuffix: 'Suffix (Optional):',
+        chkSlugLower: 'Lowercase Output',
+        chkStripDiacritics: 'Remove Accents (é \u2192 e)',
+        chkStopWords: 'Filter Stop Words (a, the, in...)',
+        btnGenerateSlug: 'Apply URL Slug',
+        lblLiveSlugPreview: 'Live Slug Preview:',
+        btnCleanSpaces: 'Clean Extra Spaces',
+        btnRemoveNewlines: 'Remove Line Breaks',
+        btnStripHtml: 'Strip HTML Tags',
+        btnReverse: 'Reverse Text',
+        guideHeading: 'Code Naming Conventions & URL Slug Optimization',
+        guideSub: 'Best practices for software architectures, database schemas, and search engine optimization.',
+        cheatTitle: 'Developer Case Style Guide',
+        thCase: 'Case Format',
+        thExample: 'Example',
+        thUsage: 'Standard Use Cases',
+        guide1Title: '1. Why URL Slugs Matter for SEO',
+        guide1Desc: 'Clean, descriptive, hyphen-separated URLs give search engines immediate context about your page content. Removing redundant stop words keeps URLs short and improves organic click-through rates.',
+        guide2Title: '2. Diacritics & Universal Normalization',
+        guide2Desc: 'Accented Latin characters cause URL encoding issues (%C3%A9). Our engine normalizes Unicode via NFD to automatically convert diacritics into plain ASCII equivalents.',
+        guide3Title: '3. Zero-Cloud Privacy Guarantee',
+        guide3Desc: 'Your proprietary source code, draft article titles, and confidential project names are processed 100% locally in your browser memory. Nothing is ever sent to external cloud servers.',
+        faqTitle: 'Frequently Asked Questions',
+        faq1Q: 'Does this tool upload or store my text on any server?',
+        faq1A: 'Never. All conversions, case formats, and slug generations run strictly inside client-side JavaScript in your local browser sandbox.',
+        faq2Q: 'What is AP / Chicago Title Case?',
+        faq2A: 'Title Case capitalizes all major words (nouns, verbs, adjectives, adverbs) while keeping minor articles and prepositions lowercase unless they are the first or last word.',
+        faq3Q: 'How do I generate an SEO-friendly URL slug?',
+        faq3A: 'Paste your article title, select your separator (hyphens \'-\' are recommended by Google), enable \'Remove Accents\' and \'Filter Stop Words\', then click \'Apply URL Slug\'.',
+        faq4Q: 'Can I chain multiple transformations?',
+        faq4A: 'Yes! Click the \'Swap with Input\' button to transfer the converted result back into the input field and apply another transformation preset.',
+        footerText: '\u00a9 2026 VantorKit. Fast, Private & Free Web Utilities. All processing is performed locally in your browser.',
+        toastCopied: '\u2705 Converted text copied to clipboard!',
+        toastCleared: '\ud83d\uddd1\ufe0f Input text cleared.',
+        toastSample: '\ud83d\udcd6 Demonstration sample text loaded.',
+        toastSwapped: '\u21c4 Output swapped back to input!',
+        toastDownloaded: '\ud83d\udce5 Downloading converted.txt...',
+        toastApplied: '\u2728 Transformation applied!'
+      },
+      ar: {
+        langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
+        backLink: '\u2192 \u0627\u0644\u0639\u0648\u062f\u0629 \u0644\u0644\u0623\u062f\u0648\u0627\u062a',
+        brandBadge: '\u0623\u062f\u0648\u0627\u062a \u0627\u0644\u0646\u0635\u0648\u0635 \u2022 100% \u0645\u062d\u0644\u064a\u0627\u064b \u2022 \u062a\u062d\u0648\u064a\u0644 \u062d\u0627\u0644\u0627\u062a \u0627\u0644\u0623\u062d\u0631\u0641 \u0648\u062a\u0648\u0644\u064a\u062f \u0627\u0644\u0631\u0648\u0627\u0628\u0637',
+        pageSubtitle: '\u062a\u062d\u0648\u064a\u0644 \u062d\u0627\u0644\u0627\u062a \u0627\u0644\u0623\u062d\u0631\u0641 \u0628\u064a\u0646 camelCase \u0648snake_case \u0648kebab-case \u0648Title Case \u0648\u0625\u0646\u0634\u0627\u0621 \u0631\u0648\u0627\u0628\u0637 URL \u0645\u062a\u0648\u0627\u0641\u0642\u0629 \u0645\u0639 \u0645\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0628\u062d\u062b SEO \u062f\u0648\u0646 \u0623\u064a \u062a\u0633\u062c\u064a\u0644 \u0633\u062d\u0627\u0628\u064a.',
+        lblInputText: '\u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u062f\u062e\u0644',
+        lblOutputResult: '\u0627\u0644\u0646\u062a\u064a\u062c\u0629 \u0627\u0644\u0645\u062d\u0648\u0644\u0629',
+        btnPaste: '\u0644\u0635\u0642',
+        btnSample: '\u0646\u0645\u0648\u0630\u062c',
+        btnClear: '\u0645\u0633\u062d',
+        btnSwap: '\u21c6 \u062a\u0628\u062f\u064a\u0644 \u0645\u0639 \u0627\u0644\u0645\u062f\u062e\u0644',
+        btnDownload: '.txt',
+        btnCopy: '\u0646\u0633\u062e \u0627\u0644\u0646\u062a\u064a\u062c\u0629',
+        btnCopied: '\u062a\u0645 \u0627\u0644\u0646\u0633\u062e!',
+        secEditorial: '\u062a\u0646\u0633\u064a\u0642\u0627\u062a \u0627\u0644\u062a\u062d\u0631\u064a\u0631 \u0648\u0627\u0644\u0643\u062a\u0627\u0628\u0629',
+        secDeveloper: '\u062a\u0646\u0633\u064a\u0642\u0627\u062a \u0627\u0644\u0628\u0631\u0645\u062c\u0629 \u0648\u0627\u0644\u0645\u0637\u0648\u0631\u064a\u0646',
+        secSlugifier: '\u0645\u0648\u0644\u062f \u0631\u0648\u0627\u0628\u0637 URL \u0644\u0640 SEO',
+        secCleaners: '\u0623\u062f\u0648\u0627\u062a \u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0646\u0635\u0648\u0635 \u0627\u0644\u0633\u0631\u064a\u0639\u0629',
+        lblSeparator: '\u0627\u0644\u0641\u0627\u0635\u0644:',
+        lblPrefix: '\u0628\u0627\u062f\u0626\u0629 (\u0627\u062e\u062a\u064a\u0627\u0631\u064a):',
+        lblSuffix: '\u0644\u0627\u062d\u0642\u0629 (\u0627\u062e\u062a\u064a\u0627\u0631\u064a):',
+        chkSlugLower: '\u0623\u062d\u0631\u0641 \u0635\u063a\u064a\u0631\u0629',
+        chkStripDiacritics: '\u0625\u0632\u0627\u0644\u0629 \u0627\u0644\u062d\u0631\u0643\u0627\u062a (\u00e9 \u2192 e)',
+        chkStopWords: '\u062d\u0630\u0641 \u0643\u0644\u0645\u0627\u062a \u0627\u0644\u0631\u0628\u0637 (a, the, in...)',
+        btnGenerateSlug: '\u062a\u0637\u0628\u064a\u0642 \u0631\u0627\u0628\u0637 URL',
+        lblLiveSlugPreview: '\u0645\u0639\u0627\u064a\u0646\u0629 \u0644\u062d\u0638\u064a\u0629 \u0644\u0644\u0631\u0627\u0628\u0637:',
+        btnCleanSpaces: '\u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0627\u0644\u0632\u0627\u0626\u062f\u0629',
+        btnRemoveNewlines: '\u0625\u0632\u0627\u0644\u0629 \u0641\u0648\u0627\u0635\u0644 \u0627\u0644\u0623\u0633\u0637\u0631',
+        btnStripHtml: '\u062d\u0630\u0641 \u0648\u0633\u0648\u0645 HTML',
+        btnReverse: '\u0639\u0643\u0633 \u0627\u0644\u0646\u0635',
+        guideHeading: '\u0623\u0646\u0645\u0627\u0637 \u0627\u0644\u062a\u0633\u0645\u064a\u0629 \u0627\u0644\u0628\u0631\u0645\u062c\u064a\u0629 \u0648\u062a\u062d\u0633\u064a\u0646 \u0631\u0648\u0627\u0628\u0637 SEO',
+        guideSub: '\u0623\u0641\u0636\u0644 \u0627\u0644\u0645\u0645\u0627\u0631\u0633\u0627\u062a \u0644\u0644\u0645\u0637\u0648\u0631\u064a\u0646 \u0648\u0642\u0648\u0627\u0639\u062f \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0648\u0645\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0628\u062d\u062b.',
+        cheatTitle: '\u062f\u0644\u064a\u0644 \u062d\u0627\u0644\u0627\u062a \u0627\u0644\u0623\u062d\u0631\u0641 \u0644\u0644\u0645\u0637\u0648\u0631\u064a\u0646',
+        thCase: '\u0646\u0645\u0637 \u0627\u0644\u062d\u0627\u0644\u0629',
+        thExample: '\u0645\u062b\u0627\u0644',
+        thUsage: '\u062d\u0627\u0644\u0627\u062a \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0634\u0627\u0626\u0639\u0629',
+        guide1Title: '1. \u0623\u0647\u0645\u064a\u0629 \u0631\u0648\u0627\u0628\u0637 URL \u0644\u0640 SEO',
+        guide1Desc: '\u062a\u0645\u0646\u062d \u0627\u0644\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0641\u0635\u0648\u0644\u0629 \u0628\u0634\u0631\u0637\u0627\u062a \u0645\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0628\u062d\u062b \u0633\u064a\u0627\u0642\u0627\u064b \u0641\u0648\u0631\u064a\u0627\u064b \u0639\u0646 \u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0635\u0641\u062d\u0629 \u0648\u062a\u0631\u0641\u0639 \u0646\u0633\u0628\u0629 \u0627\u0644\u0646\u0642\u0631.',
+        guide2Title: '2. \u0625\u0632\u0627\u0644\u0629 \u0627\u0644\u062d\u0631\u0643\u0627\u062a \u0648\u062a\u0648\u062d\u064a\u062f \u0627\u0644\u062a\u0631\u0645\u064a\u0632',
+        guide2Desc: '\u062a\u0633\u0628\u0628 \u0627\u0644\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0644\u0627\u062a\u064a\u0646\u064a\u0629 \u0645\u0634\u0627\u0643\u0644 \u0641\u064a \u062a\u0631\u0645\u064a\u0632 \u0627\u0644\u0639\u0646\u0627\u0648\u064a\u0646\u060c \u0648\u064a\u0642\u0648\u0645 \u0645\u062d\u0631\u0643\u0646\u0627 \u0628\u062a\u062d\u0648\u064a\u0644\u0647\u0627 \u062a\u0644\u0642\u0627\u0626\u064a\u0627\u064b \u0625\u0644\u0649 \u0623\u062d\u0631\u0641 ASCII \u0628\u0633\u064a\u0637\u0629.',
+        guide3Title: '3. \u062e\u0635\u0648\u0635\u064a\u0629 \u0645\u062d\u0644\u064a\u0629 100%',
+        guide3Desc: '\u0643\u0627\u0641\u0629 \u0639\u0645\u0644\u064a\u0627\u062a \u062a\u062d\u0648\u064a\u0644 \u0627\u0644\u0646\u0635\u0648\u0635 \u062a\u062a\u0645 \u062f\u0627\u062e\u0644 \u0630\u0627\u0643\u0631\u0629 \u0645\u062a\u0635\u0641\u062d\u0643 \u0645\u0628\u0627\u0634\u0631\u0629 \u062f\u0648\u0646 \u0625\u0631\u0633\u0627\u0644 \u0623\u064a \u0628\u064a\u0627\u0646\u0627\u062a \u0644\u0623\u064a \u062e\u0627\u062f\u0645.',
+        faqTitle: '\u0627\u0644\u0623\u0633\u0626\u0644\u0629 \u0627\u0644\u0634\u0627\u0626\u0639\u0629',
+        faq1Q: '\u0647\u0644 \u064a\u062a\u0645 \u062d\u0641\u0638 \u0646\u0635\u0648\u0635\u064a \u0639\u0644\u0649 \u0623\u064a \u062e\u0627\u062f\u0645\u061f',
+        faq1A: '\u0644\u0627 \u062a\u0645\u0627\u0645\u0627\u064b. \u062c\u0645\u064a\u0639 \u0627\u0644\u062a\u062d\u0648\u064a\u0644\u0627\u062a \u062a\u0639\u0645\u0644 \u062f\u0627\u062e\u0644 \u0645\u062a\u0635\u0641\u062d\u0643 \u0641\u0642\u0637.',
+        faq2Q: '\u0645\u0627 \u0647\u0648 \u0646\u0638\u0627\u0645 Title Case (AP / Chicago)\u061f',
+        faq2A: '\u064a\u0628\u062f\u0623 \u0643\u0644 \u0643\u0644\u0645\u0629 \u0631\u0626\u064a\u0633\u064a\u0629 \u0628\u062d\u0631\u0641 \u0643\u0628\u064a\u0631 \u0645\u0639 \u0625\u0628\u0642\u0627\u0621 \u062d\u0631\u0648\u0641 \u0627\u0644\u062c\u0631 \u0648\u0627\u0644\u0631\u0628\u0637 \u0627\u0644\u0642\u0635\u064a\u0631\u0629 \u0628\u0623\u062d\u0631\u0641 \u0635\u063a\u064a\u0631\u0629.',
+        faq3Q: '\u0643\u064a\u0641 \u0623\u0646\u0634\u0626 \u0631\u0627\u0628\u0637 URL \u0645\u062a\u0648\u0627\u0641\u0642\u0627\u064b \u0645\u0639 SEO\u061f',
+        faq3A: '\u0627\u0644\u0635\u0642 \u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0645\u0642\u0627\u0644\u060c \u062d\u062f\u062f \u0627\u0644\u0641\u0627\u0635\u0644 \u0627\u0644\u0645\u0641\u0636\u0644 (-) \u0648\u0641\u0639\u0651\u0644 \u062d\u0630\u0641 \u0627\u0644\u062d\u0631\u0643\u0627\u062a \u062b\u0645 \u0627\u0646\u0642\u0631 \u0639\u0644\u0649 \'تطبيق رابط URL\'.',
+        faq4Q: '\u0647\u0644 \u064a\u0645\u0643\u0646\u0646\u064a \u062a\u0637\u0628\u064a\u0642 \u0639\u062f\u0629 \u062a\u062d\u0648\u064a\u0644\u0627\u062a \u0645\u062a\u062a\u0627\u0644\u064a\u0629\u061f',
+        faq4A: '\u0646\u0639\u0645! \u0627\u0633\u062a\u062e\u062f\u0645 \u0632\u0631 \'\u062a\u0628\u062f\u064a\u0644 \u0645\u0639 \u0627\u0644\u0645\u062f\u062e\u0644\' \u0644\u0646\u0642\u0644 \u0627\u0644\u0646\u062a\u064a\u062c\u0629 \u0625\u0644\u0649 \u062d\u0642\u0644 \u0627\u0644\u0625\u062f\u062e\u0627\u0644 \u0648\u062a\u0637\u0628\u064a\u0642 \u062a\u062d\u0648\u064a\u0644 \u0622\u062e\u0631.',
+        footerText: '\u00a9 2026 VantorKit. \u0623\u062f\u0648\u0627\u062a \u0648\u064a\u0628 \u0633\u0631\u064a\u0639\u0629 \u0648\u0622\u0645\u0646\u0629 \u0648\u0645\u062c\u0627\u0646\u064a\u0629. \u0643\u0627\u0641\u0629 \u0627\u0644\u0639\u0645\u0644\u064a\u0627\u062a \u062a\u062c\u0631\u064a \u0645\u062d\u0644\u064a\u0627\u064b.',
+        toastCopied: '\u2705 \u062a\u0645 \u0646\u0633\u062e \u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u062d\u0648\u0644 \u0625\u0644\u0649 \u0627\u0644\u062d\u0627\u0641\u0638\u0629!',
+        toastCleared: '\ud83d\uddd1\ufe0f \u062a\u0645 \u0645\u0633\u062d \u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u062f\u062e\u0644.',
+        toastSample: '\ud83d\udcd6 \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.',
+        toastSwapped: '\u21c4 \u062a\u0645 \u0646\u0642\u0644 \u0627\u0644\u0646\u062a\u064a\u062c\u0629 \u0625\u0644\u0649 \u062d\u0642\u0644 \u0627\u0644\u0625\u062f\u062e\u0627\u0644!',
+        toastDownloaded: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 converted.txt...',
+        toastApplied: '\u2728 \u062a\u0645 \u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u062a\u062d\u0648\u064a\u0644!'
+      },
+      fr: {
+        langLabel: 'Fran\u00e7ais',
+        backLink: '\u2190 Retour aux outils',
+        brandBadge: 'Outils Texte \u2022 100% C\u00f4t\u00e9 Client \u2022 Conversion de Casse & Slugs URL',
+        pageSubtitle: 'Convertissez instantan\u00e9ment vos textes en camelCase, snake_case, PascalCase, kebab-case, Title Case et g\u00e9n\u00e9rez des slugs d\'URL optimis\u00e9s pour le SEO.',
+        lblInputText: 'Texte Source',
+        lblOutputResult: 'R\u00e9sultat Converti',
+        btnPaste: 'Coller',
+        btnSample: 'Exemple',
+        btnClear: 'Effacer',
+        btnSwap: '\u21c6 Inverser avec l\'entr\u00e9e',
+        btnDownload: '.txt',
+        btnCopy: 'Copier le R\u00e9sultat',
+        btnCopied: 'Copi\u00e9 !',
+        secEditorial: 'Styles R\u00e9dactionnels & Litt\u00e9raires',
+        secDeveloper: 'Styles Code & D\u00e9veloppement',
+        secSlugifier: 'G\u00e9n\u00e9rateur de Slugs URL SEO',
+        secCleaners: 'Utilitaires de Nettoyage de Cha\u00eenes',
+        lblSeparator: 'S\u00e9parateur :',
+        lblPrefix: 'Pr\u00e9fixe (Optionnel) :',
+        lblSuffix: 'Suffixe (Optionnel) :',
+        chkSlugLower: 'Sortie en minuscules',
+        chkStripDiacritics: 'Supprimer accents (\u00e9 \u2192 e)',
+        chkStopWords: 'Filtrer mots vides (le, la, et...)',
+        btnGenerateSlug: 'Appliquer le Slug URL',
+        lblLiveSlugPreview: 'Aper\u00e7u direct du Slug :',
+        btnCleanSpaces: 'Nettoyer espaces superflus',
+        btnRemoveNewlines: 'Supprimer retours \u00e0 la ligne',
+        btnStripHtml: 'Supprimer balises HTML',
+        btnReverse: 'Inverser le texte',
+        guideHeading: 'Conventions de Nommage & Optimisation des Slugs URL',
+        guideSub: 'Bonnes pratiques pour le d\u00e9veloppement logiciel, les bases de donn\u00e9es et le SEO.',
+        cheatTitle: 'Guide des Styles de Casse pour D\u00e9veloppeurs',
+        thCase: 'Format de Casse',
+        thExample: 'Exemple',
+        thUsage: 'Cas d\'usage types',
+        guide1Title: '1. Pourquoi les Slugs URL sont cruciaux pour le SEO',
+        guide1Desc: 'Des URLs claires s\u00e9par\u00e9es par des tirets facilitent l\'indexation par les moteurs de recherche et renforcent le taux de clic.',
+        guide2Title: '2. Normalisation et suppression des accents',
+        guide2Desc: 'Les lettres accentu\u00e9es g\u00e9n\u00e8rent des encodages illisibles (%C3%A9). Notre moteur convertit proprement les diacritiques en caract\u00e8res ASCII.',
+        guide3Title: '3. Confidentialit\u00e9 Absolue 100% C\u00f4t\u00e9 Client',
+        guide3Desc: 'Vos codes sources et textes confidentiels ne quittent jamais votre navigateur. Aucune donn\u00e9e n\'est transmise \u00e0 des serveurs externes.',
+        faqTitle: 'Foire Aux Questions',
+        faq1Q: 'Mes textes sont-ils envoy\u00e9s \u00e0 un serveur ?',
+        faq1A: 'Non. Toutes les transformations s\'ex\u00e9cutent localement dans votre navigateur.',
+        faq2Q: 'Qu\'est-ce que le format Title Case ?',
+        faq2A: 'Title Case met en majuscule les mots principaux tout en laissant les petits articles et pr\u00e9positions en minuscules.',
+        faq3Q: 'Comment cr\u00e9er un slug SEO propre ?',
+        faq3A: 'Collez votre titre, activez la suppression des accents et cliquez sur \'Appliquer le Slug URL\'.',
+        faq4Q: 'Puis-je encha\u00eener plusieurs conversions ?',
+        faq4A: 'Oui ! Cliquez sur \'Inverser avec l\'entr\u00e9e\' pour r\u00e9injecter le r\u00e9sultat converti et lui appliquer un nouveau style.',
+        footerText: '\u00a9 2026 VantorKit. Utilitaires web rapides, priv\u00e9s et gratuits.',
+        toastCopied: '\u2705 R\u00e9sultat copi\u00e9 dans le presse-papiers !',
+        toastCleared: '\ud83d\uddd1\ufe0f Texte source effac\u00e9.',
+        toastSample: '\ud83d\udcd6 Texte d\'exemple charg\u00e9.',
+        toastSwapped: '\u21c4 R\u00e9sultat r\u00e9inject\u00e9 en entr\u00e9e !',
+        toastDownloaded: '\ud83d\udce5 T\u00e9l\u00e9chargement de converted.txt...',
+        toastApplied: '\u2728 Transformation appliqu\u00e9e !'
+      },
+      it: {
+        langLabel: 'Italiano',
+        backLink: '\u2190 Torna agli strumenti',
+        brandBadge: 'Strumenti Testo \u2022 100% Lato Client \u2022 Convertitore di Maiuscole & Slug URL',
+        pageSubtitle: 'Converti formati di testo tra camelCase, snake_case, PascalCase, kebab-case, Title Case e genera slug URL ottimizzati per la SEO.',
+        lblInputText: 'Testo di Origine',
+        lblOutputResult: 'Risultato Convertito',
+        btnPaste: 'Incolla',
+        btnSample: 'Esempio',
+        btnClear: 'Cancella',
+        btnSwap: '\u21c6 Inverti con input',
+        btnDownload: '.txt',
+        btnCopy: 'Copia Risultato',
+        btnCopied: 'Copiato!',
+        secEditorial: 'Stili Editoriali & Scrittura',
+        secDeveloper: 'Stili per Programmatori & Codice',
+        secSlugifier: 'Generatore Slug URL per SEO',
+        secCleaners: 'Utilit\u00e0 di Pulizia Stringhe',
+        lblSeparator: 'Separatore:',
+        lblPrefix: 'Prefisso (Opzionale):',
+        lblSuffix: 'Suffisso (Opzionale):',
+        chkSlugLower: 'Output in minuscolo',
+        chkStripDiacritics: 'Rimuovi accenti (\u00e9 \u2192 e)',
+        chkStopWords: 'Filtra parole vuote (il, la, di...)',
+        btnGenerateSlug: 'Applica Slug URL',
+        lblLiveSlugPreview: 'Anteprima Slug in tempo reale:',
+        btnCleanSpaces: 'Pulisci spazi extra',
+        btnRemoveNewlines: 'Rimuovi interruzioni di riga',
+        btnStripHtml: 'Rimuovi tag HTML',
+        btnReverse: 'Inverti testo',
+        guideHeading: 'Convenzioni di Denominazione & Ottimizzazione Slug URL',
+        guideSub: 'Best practice per sviluppatori software, database e motori di ricerca.',
+        cheatTitle: 'Guida agli Stili di Notazione per Sviluppatori',
+        thCase: 'Stile Notazione',
+        thExample: 'Esempio',
+        thUsage: 'Casi d\'uso standard',
+        guide1Title: '1. Perch\u00e9 gli Slug URL contano per la SEO',
+        guide1Desc: 'URL chiari e separati da trattini consentono ai motori di ricerca di comprendere immediatamente il tema della pagina.',
+        guide2Title: '2. Normalizzazione e rimozione degli accenti',
+        guide2Desc: 'I caratteri accentati creano indirizzi poco leggibili (%C3%A9). Il nostro motore converte automaticamente i diacritici in ASCII.',
+        guide3Title: '3. Privacy 100% Lato Client',
+        guide3Desc: 'Tutti i tuoi testi e codici restano confinati nella memoria locale del tuo browser senza alcun invio a server esterni.',
+        faqTitle: 'Domande Frequenti',
+        faq1Q: 'I miei testi vengono caricati su un server?',
+        faq1A: 'No. Tutte le conversioni avvengono sul tuo dispositivo in JavaScript.',
+        faq2Q: 'Cos\'\u00e8 il Title Case?',
+        faq2A: 'Title Case rende maiuscole le parole principali mantenendo minuscole preposizioni e articoli brevi.',
+        faq3Q: 'Come genero uno slug URL valido?',
+        faq3A: 'Incolla il titolo, scegli il separatore e clicca \'Applica Slug URL\'.',
+        faq4Q: 'Posso concatenare pi\u00f9 trasformazioni?',
+        faq4A: 'Certamente! Usa \'Inverti con input\' per riutilizzare l\'output come nuovo input.',
+        footerText: '\u00a9 2026 VantorKit. Utilit\u00e0 web veloci, private e gratuite.',
+        toastCopied: '\u2705 Risultato copiato negli appunti!',
+        toastCleared: '\ud83d\uddd1\ufe0f Testo cancellato.',
+        toastSample: '\ud83d\udcd6 Testo di esempio caricato.',
+        toastSwapped: '\u21c4 Risultato trasferito in input!',
+        toastDownloaded: '\ud83d\udce5 Download di converted.txt in corso...',
+        toastApplied: '\u2728 Trasformazione applicata!'
+      }
+    };
+
+    // DOM Elements
+    const htmlRoot = document.getElementById('htmlRoot');
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const langMenu = document.getElementById('langMenu');
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    const langOptions = document.querySelectorAll('.lang-option');
+
+    const inputText = document.getElementById('inputText');
+    const outputText = document.getElementById('outputText');
+    const inputStats = document.getElementById('inputStats');
+    const outputStats = document.getElementById('outputStats');
+    const activePresetBadge = document.getElementById('activePresetBadge');
+
+    const btnPaste = document.getElementById('btnPaste');
+    const btnSample = document.getElementById('btnSample');
+    const btnClear = document.getElementById('btnClear');
+    const btnSwap = document.getElementById('btnSwap');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnCopyResult = document.getElementById('btnCopyResult');
+    const copyResultLabel = document.getElementById('copyResultLabel');
+
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    // Slug controls
+    const slugSeparator = document.getElementById('slugSeparator');
+    const slugPrefix = document.getElementById('slugPrefix');
+    const slugSuffix = document.getElementById('slugSuffix');
+    const chkSlugLower = document.getElementById('chkSlugLower');
+    const chkStripDiacritics = document.getElementById('chkStripDiacritics');
+    const chkStopWords = document.getElementById('chkStopWords');
+    const btnApplySlug = document.getElementById('btnApplySlug');
+    const slugPreviewText = document.getElementById('slugPreviewText');
+
+    // Cleaner buttons
+    const btnCleanSpaces = document.getElementById('btnCleanSpaces');
+    const btnRemoveNewlines = document.getElementById('btnRemoveNewlines');
+    const btnStripHtml = document.getElementById('btnStripHtml');
+    const btnReverse = document.getElementById('btnReverse');
+
+    const toastEl = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+
+    let currentLang = 'en';
+    let activePreset = 'upper';
+
+    function dict() { return I18N[currentLang] || I18N.en; }
+
+    let toastTimer;
+    function showToast(msg, dur) {
+      dur = dur || 2400;
+      toastMsg.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, dur);
+    }
+
+    // Helper: Words tokenizer for developer cases
+    function splitWords(str) {
+      const clean = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      return clean
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+        .replace(/[^\w\s-]/g, ' ')
+        .trim()
+        .split(/[\s_-]+/)
+        .filter(Boolean);
+    }
+
+    // Transformations Library
+    const TRANSFORMATIONS = {
+      upper: function(str) {
+        return str.toUpperCase();
+      },
+      lower: function(str) {
+        return str.toLowerCase();
+      },
+      title: function(str) {
+        return str.split('\n').map(function(line) {
+          const tokens = line.split(/(\s+)/);
+          const nonSpace = tokens.filter(function(w) { return !/^\s+$/.test(w) && w.length > 0; });
+          const first = nonSpace[0];
+          const last = nonSpace[nonSpace.length - 1];
+
+          return tokens.map(function(w) {
+            if (/^\s+$/.test(w) || w.length === 0) return w;
+            const lower = w.toLowerCase();
+            if (w !== first && w !== last && MINOR_WORDS.has(lower)) {
+              return lower;
+            }
+            return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+          }).join('');
+        }).join('\n');
+      },
+      sentence: function(str) {
+        return str.toLowerCase().replace(/(^\s*|[.!?؟]\s+)([a-z\u00E0-\u00FF\u0100-\u017F\u0600-\u06FF])/g, function(m, p1, p2) {
+          return p1 + p2.toUpperCase();
+        });
+      },
+      capitalized: function(str) {
+        return str.toLowerCase().replace(/(?:^|\s|[(\[{/\\-])\S/g, function(c) {
+          return c.toUpperCase();
+        });
+      },
+      alternating: function(str) {
+        let upper = false;
+        return Array.from(str).map(function(c) {
+          if (/[a-zA-Z\u00C0-\u017F]/.test(c)) {
+            upper = !upper;
+            return upper ? c.toUpperCase() : c.toLowerCase();
+          }
+          return c;
+        }).join('');
+      },
+      camel: function(str) {
+        const words = splitWords(str);
+        return words.map(function(w, i) {
+          return i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join('');
+      },
+      pascal: function(str) {
+        const words = splitWords(str);
+        return words.map(function(w) {
+          return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+        }).join('');
+      },
+      snake: function(str) {
+        return splitWords(str).map(function(w) { return w.toLowerCase(); }).join('_');
+      },
+      kebab: function(str) {
+        return splitWords(str).map(function(w) { return w.toLowerCase(); }).join('-');
+      },
+      constant: function(str) {
+        return splitWords(str).map(function(w) { return w.toUpperCase(); }).join('_');
+      },
+      dot: function(str) {
+        return splitWords(str).map(function(w) { return w.toLowerCase(); }).join('.');
+      },
+      path: function(str) {
+        return splitWords(str).map(function(w) { return w.toLowerCase(); }).join('/');
+      }
+    };
+
+    // Slugifier Engine Function
+    function generateSlug(str) {
+      let text = str;
+      if (chkStripDiacritics.checked) {
+        text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      }
+      if (chkSlugLower.checked) {
+        text = text.toLowerCase();
+      }
+
+      // Strip non-alphanumeric except spaces, underscores, hyphens
+      text = text.replace(/[^a-zA-Z0-9\s_-]/g, ' ').trim();
+      let tokens = text.split(/[\s_-]+/).filter(Boolean);
+
+      if (chkStopWords.checked) {
+        tokens = tokens.filter(function(t) { return !STOP_WORDS.has(t.toLowerCase()); });
+      }
+
+      const sep = slugSeparator.value || '-';
+      let slug = tokens.join(sep);
+
+      const prefix = slugPrefix.value.trim();
+      const suffix = slugSuffix.value.trim();
+
+      if (prefix) {
+        slug = prefix.replace(/\/+$/, '') + '/' + slug.replace(/^\/+/, '');
+      }
+      if (suffix) {
+        if (!slug.endsWith(suffix)) slug = slug + suffix;
+      }
+      return slug;
+    }
+
+    // Update Stats Display
+    function getStats(text) {
+      const lines = text ? text.split('\n').length : 0;
+      const words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+      const chars = text.length;
+      return lines + ' lines \u2022 ' + words + ' words \u2022 ' + chars + ' chars';
+    }
+
+    function updateLive() {
+      const val = inputText.value;
+      inputStats.textContent = getStats(val);
+
+      if (!val) {
+        outputText.value = '';
+        outputStats.textContent = '0 lines \u2022 0 words \u2022 0 chars';
+        slugPreviewText.textContent = '...';
+        return;
+      }
+
+      // Update slug preview
+      slugPreviewText.textContent = generateSlug(val) || '...';
+
+      // If active preset is a standard preset, transform output
+      if (activePreset === 'slug') {
+        outputText.value = generateSlug(val);
+      } else if (TRANSFORMATIONS[activePreset]) {
+        outputText.value = TRANSFORMATIONS[activePreset](val);
+      }
+      outputStats.textContent = getStats(outputText.value);
+    }
+
+    // Presets Click Handler
+    presetBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        presetBtns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        activePreset = btn.dataset.preset;
+        activePresetBadge.textContent = btn.querySelector('.preset-name').textContent;
+        updateLive();
+        showToast(dict().toastApplied, 1500);
+      });
+    });
+
+    // Slug Controls Event Listeners
+    [slugSeparator, slugPrefix, slugSuffix, chkSlugLower, chkStripDiacritics, chkStopWords].forEach(function(el) {
+      el.addEventListener('input', function() {
+        if (activePreset === 'slug') {
+          updateLive();
+        } else {
+          slugPreviewText.textContent = generateSlug(inputText.value) || '...';
+        }
+      });
+      el.addEventListener('change', function() {
+        if (activePreset === 'slug') {
+          updateLive();
+        } else {
+          slugPreviewText.textContent = generateSlug(inputText.value) || '...';
+        }
+      });
+    });
+
+    btnApplySlug.addEventListener('click', function() {
+      presetBtns.forEach(function(b) { b.classList.remove('active'); });
+      activePreset = 'slug';
+      activePresetBadge.textContent = 'SEO URL Slug';
+      updateLive();
+      showToast(dict().toastApplied, 1500);
+    });
+
+    // Cleanup Utility Actions
+    btnCleanSpaces.addEventListener('click', function() {
+      if (!inputText.value) return;
+      inputText.value = inputText.value
+        .replace(/[^\S\r\n]+/g, ' ')
+        .replace(/^[^\S\r\n]+|[^\S\r\n]+$/gm, '')
+        .trim();
+      updateLive();
+      showToast(dict().toastApplied);
+    });
+
+    btnRemoveNewlines.addEventListener('click', function() {
+      if (!inputText.value) return;
+      inputText.value = inputText.value.replace(/\r?\n+/g, ' ').trim();
+      updateLive();
+      showToast(dict().toastApplied);
+    });
+
+    btnStripHtml.addEventListener('click', function() {
+      if (!inputText.value) return;
+      inputText.value = inputText.value
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"');
+      updateLive();
+      showToast(dict().toastApplied);
+    });
+
+    btnReverse.addEventListener('click', function() {
+      if (!inputText.value) return;
+      inputText.value = Array.from(inputText.value).reverse().join('');
+      updateLive();
+      showToast(dict().toastApplied);
+    });
+
+    // Paste Action
+    btnPaste.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          if (text) {
+            inputText.value = text;
+            updateLive();
+            showToast('Pasted from clipboard');
+          }
+        }).catch(function() {
+          inputText.focus();
+          showToast('Press Ctrl+V to paste');
+        });
+      } else {
+        inputText.focus();
+        showToast('Press Ctrl+V to paste');
+      }
+    });
+
+    // Sample Text
+    btnSample.addEventListener('click', function() {
+      inputText.value = SAMPLE_TEXT;
+      updateLive();
+      showToast(dict().toastSample);
+    });
+
+    // Clear Action
+    btnClear.addEventListener('click', function() {
+      inputText.value = '';
+      updateLive();
+      inputText.focus();
+      showToast(dict().toastCleared);
+    });
+
+    // Swap Action
+    btnSwap.addEventListener('click', function() {
+      if (!outputText.value) return;
+      inputText.value = outputText.value;
+      updateLive();
+      showToast(dict().toastSwapped);
+    });
+
+    // Download Action
+    btnDownload.addEventListener('click', function() {
+      const val = outputText.value;
+      if (!val) return;
+      const blob = new Blob([val], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'converted.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 200);
+      showToast(dict().toastDownloaded);
+    });
+
+    // Copy Result Action
+    btnCopyResult.addEventListener('click', function() {
+      const val = outputText.value;
+      if (!val) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).catch(function() {
+          fallbackCopy(val);
+        });
+      } else {
+        fallbackCopy(val);
+      }
+
+      btnCopyResult.classList.add('copied');
+      copyResultLabel.textContent = dict().btnCopied;
+      showToast(dict().toastCopied);
+      setTimeout(function() {
+        btnCopyResult.classList.remove('copied');
+        copyResultLabel.textContent = dict().btnCopy;
+      }, 2000);
+    });
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    inputText.addEventListener('input', updateLive);
+
+    // Language handling
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      currentLang = lang;
+      localStorage.setItem('vantorkit_lang', lang);
+      const d = I18N[lang];
+
+      htmlRoot.setAttribute('lang', lang);
+      htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      currentLangLabel.textContent = d.langLabel;
+
+      langOptions.forEach(function(o) {
+        o.classList.toggle('active', o.dataset.lang === lang);
+      });
+
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        const k = el.dataset.i18n;
+        if (d[k] && typeof d[k] === 'string') el.textContent = d[k];
+      });
+
+      updateLive();
+    }
+
+    langToggleBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const open = langMenu.classList.contains('open');
+      langMenu.classList.toggle('open', !open);
+      langToggleBtn.setAttribute('aria-expanded', String(!open));
+    });
+
+    langOptions.forEach(function(o) {
+      o.addEventListener('click', function() {
+        setLanguage(o.dataset.lang);
+        langMenu.classList.remove('open');
+        langToggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('langDropdown').contains(e.target)) {
+        langMenu.classList.remove('open');
+        langToggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Initialize with sample demonstration
+    const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(savedLang);
+
+    inputText.value = SAMPLE_TEXT;
+    updateLive();
+
+  })();
+  </script>
+</body>
+</html>
