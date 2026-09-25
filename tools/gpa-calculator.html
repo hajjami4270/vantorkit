@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPA &amp; Grade Calculator — Semester &amp; Cumulative GPA | VantorKit</title>
+  <meta name="description" content="Calculate semester and cumulative GPA with standard 4.0, weighted 5.0, and percentage scales. Includes academic standing honors, CSV export, and print reports. 100% private and client-side.">
+  <meta name="keywords" content="gpa calculator, grade calculator, college gpa, cumulative gpa calculator, weighted gpa, 4.0 scale gpa, high school gpa, credit hours calculator, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/gpa-calculator.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="GPA &amp; Grade Calculator — Semester &amp; Cumulative GPA | VantorKit">
+  <meta property="og:description" content="Free client-side GPA calculator. Calculate semester and cumulative GPA on 4.0 and 5.0 scales with credit hours and honors badges.">
+  <meta property="og:url" content="https://vantorkit.com/tools/gpa-calculator.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GPA &amp; Grade Calculator | VantorKit">
+  <meta name="twitter:description" content="Fast, private GPA calculator for college and high school students. 4.0 & 5.0 scales with CSV export and print view.">
+
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit GPA & Grade Calculator",
+        "url": "https://vantorkit.com/tools/gpa-calculator.html",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side GPA and Grade Calculator. Compute semester and cumulative GPA across standard 4.0, weighted 5.0, and percentage scales with credit hour weighting and Dean's list honor determinations."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How is a semester GPA calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Semester GPA is calculated by multiplying each course's grade points by its credit hours to determine Quality Points, summing all quality points, and dividing by the total number of credit hours attempted (GPA = Total Quality Points / Total Credits)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between weighted and unweighted GPA?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "An unweighted GPA measures academic performance on a standard 4.0 scale regardless of course difficulty. A weighted GPA gives extra points (often +0.5 for Honors and +1.0 for Advanced Placement / IB courses) on a 5.0 scale to reflect rigor."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do prior credits impact cumulative GPA?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cumulative GPA blends past academic history with current semester results. Prior quality points (Prior GPA × Prior Credits) are added to current semester quality points and divided by all completed credits combined."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my grades or student data uploaded to any server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. VantorKit complies strictly with student privacy best practices (aligned with FERPA principles). 100% of calculations execute locally in your web browser. Nothing is sent across the internet."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: 70px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 600;
+      transition: all .2s ease;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+    }
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+    .nav-brand span span {
+      color: var(--accent);
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown { position: relative; }
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .45rem .85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: .84rem;
+      font-weight: 600;
+      transition: all .2s ease;
+    }
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .globe-icon { color: var(--badge-text); }
+    .chevron-icon { transition: transform .2s ease; color: var(--text-muted); }
+    .lang-btn[aria-expanded="true"] .chevron-icon { transform: rotate(180deg); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, .96);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: .4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 1000;
+    }
+    .lang-menu.show { display: flex; }
+    .lang-option {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: .5rem .75rem;
+      text-align: left;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all .15s ease;
+    }
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* RTL Adjustments */
+    html[dir="rtl"] {
+      font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+    }
+    html[dir="rtl"] * {
+      font-family: inherit;
+    }
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem 4rem;
+    }
+
+    /* Header Section */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--badge-text);
+      margin-bottom: .85rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.tool-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Scale Switcher & Options Bar */
+    .scale-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: .85rem 1.25rem;
+      backdrop-filter: blur(12px);
+    }
+    .scale-selector-wrap {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .scale-label {
+      font-size: .86rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .segmented-scale {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 2px;
+    }
+    .scale-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 4px 12px;
+      font-size: .82rem;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .scale-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .scale-actions {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .45rem .85rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      transition: all .15s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Dual Grid Layout */
+    .gpa-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 960px) {
+      .gpa-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Card Panels */
+    .gpa-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: .85rem;
+    }
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .panel-title svg { color: var(--accent); }
+
+    /* Cumulative Toggle Box */
+    .cumul-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--card-border);
+      border-radius: 12px;
+      padding: .9rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      transition: all .2s ease;
+    }
+    .cumul-box.active {
+      border-style: solid;
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.04);
+    }
+    .cumul-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .cumul-title {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .2s;
+      border-radius: 20px;
+    }
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider-toggle { background-color: var(--accent); }
+    input:checked + .slider-toggle:before { transform: translateX(16px); }
+
+    .cumul-inputs {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      padding-top: .5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .cumul-inputs.show { display: grid; }
+    @media (max-width: 500px) {
+      .cumul-inputs { grid-template-columns: 1fr; }
+    }
+
+    /* Form Fields */
+    .field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .field-label {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .calc-input {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: .55rem .75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+      outline: none;
+      transition: all .2s ease;
+      width: 100%;
+    }
+    .calc-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Courses Table / Rows */
+    .courses-container {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+    .course-row-header {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 38px;
+      gap: .5rem;
+      padding: 0 .4rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .course-row-header.weighted {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 38px;
+    }
+    @media (max-width: 640px) {
+      .course-row-header { display: none; }
+    }
+
+    .course-row {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr 1fr 38px;
+      gap: .5rem;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .5rem;
+      transition: all .15s ease;
+    }
+    .course-row.weighted {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 38px;
+    }
+    .course-row:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    @media (max-width: 640px) {
+      .course-row {
+        grid-template-columns: 1fr 1fr;
+        padding: .85rem;
+        gap: .65rem;
+      }
+      .course-row.weighted {
+        grid-template-columns: 1fr 1fr;
+      }
+      .course-row input.course-name {
+        grid-column: 1 / -1;
+      }
+      .course-row .btn-del-row {
+        grid-column: 1 / -1;
+        justify-self: end;
+      }
+    }
+
+    .course-select {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: .55rem .6rem;
+      border-radius: 8px;
+      font-size: .88rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      cursor: pointer;
+      width: 100%;
+      transition: border-color .2s;
+    }
+    .course-select:focus { border-color: var(--accent); }
+
+    .btn-del-row {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s ease;
+    }
+    .btn-del-row:hover {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: .5rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .btn-add-course {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.25rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      transition: all .2s ease;
+    }
+    .btn-add-course:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* Right Column: Dashboard & Visual Radial Ring */
+    .dashboard-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Hero Score Card */
+    .gpa-score-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.5) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .gpa-score-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* SVG Radial Ring */
+    .ring-container {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: .5rem 0 1rem;
+    }
+    .ring-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+    .ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.06);
+      stroke-width: 12;
+    }
+    .ring-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 351.86;
+      stroke-dashoffset: 351.86;
+      transition: stroke-dashoffset .5s ease, stroke .3s ease;
+    }
+    .ring-inner-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .ring-gpa-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+    .ring-scale-max {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Honor Standing Badge */
+    .standing-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: .84rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+
+    /* Metric Grid */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .metric-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      backdrop-filter: blur(14px);
+    }
+    .metric-box-title {
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      margin-bottom: .35rem;
+    }
+    .metric-box-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .metric-box-sub {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: .2rem;
+    }
+
+    /* Output Actions Card */
+    .actions-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+    .btn-action-full {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .65rem 1rem;
+      border-radius: 10px;
+      font-size: .86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .btn-action-full:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    /* SEO & Educational Guide Section */
+    .info-section {
+      margin-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (min-width: 768px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #fff;
+    }
+    .guide-card-title svg { color: var(--accent); }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, .96);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, .85);
+    }
+
+    /* Print Styles */
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .top-nav, .scale-bar, .info-section, footer, .toast, .table-actions, .actions-card, .btn-del-row {
+        display: none !important;
+      }
+      .gpa-panel, .gpa-score-card, .metric-box, .course-row {
+        background: #fff !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        color: #000 !important;
+      }
+      .ring-gpa-val, .metric-box-val, .calc-input, .course-select {
+        color: #000 !important;
+        -webkit-text-fill-color: initial !important;
+      }
+      .gpa-layout { grid-template-columns: 1fr 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">&#8592; Back to Tools</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:.85rem">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en"><span>English</span><span>🇺🇸</span></button>
+          <button type="button" class="lang-option" data-lang="ar"><span>العربية</span><span>🇸🇦</span></button>
+          <button type="button" class="lang-option" data-lang="fr"><span>Français</span><span>🇫🇷</span></button>
+          <button type="button" class="lang-option" data-lang="it"><span>Italiano</span><span>🇮🇹</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="badgePill">Client-Side • Privacy-First • No Logs</span>
+      </div>
+      <h1 data-i18n="toolTitle">GPA &amp; Grade Calculator</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Compute semester and cumulative grade point averages across standard 4.0, weighted 5.0, and percentage grading scales with zero server telemetry.</p>
+    </header>
+
+    <!-- Scale & Quick Bar -->
+    <div class="scale-bar">
+      <div class="scale-selector-wrap">
+        <span class="scale-label" data-i18n="lblGradingScale">Grading Scale:</span>
+        <div class="segmented-scale">
+          <button type="button" class="scale-btn active" data-scale="4.0">Standard 4.0</button>
+          <button type="button" class="scale-btn" data-scale="5.0">Weighted 5.0 (AP/Honors)</button>
+          <button type="button" class="scale-btn" data-scale="percentage">Percentage (0-100%)</button>
+        </div>
+      </div>
+
+      <div class="scale-actions">
+        <button type="button" class="btn-secondary" id="btnLoadSample" data-i18n="btnLoadSample">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Load Demo Semester
+        </button>
+        <button type="button" class="btn-secondary" id="btnClearCourses" data-i18n="btnClearCourses">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Dual Layout -->
+    <div class="gpa-layout">
+
+      <!-- Left Column: Courses Table & Cumulative Box -->
+      <div class="gpa-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+            <span data-i18n="panelCoursesTitle">Semester Course Work</span>
+          </div>
+        </div>
+
+        <!-- Optional Cumulative GPA Accordion -->
+        <div class="cumul-box" id="cumulBox">
+          <div class="cumul-header" id="cumulToggle">
+            <div class="cumul-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              <span data-i18n="lblCumulativeToggle">Include Prior Cumulative GPA</span>
+            </div>
+            <div class="switch">
+              <input type="checkbox" id="cumulCheck">
+              <span class="slider-toggle"></span>
+            </div>
+          </div>
+          <div class="cumul-inputs" id="cumulInputs">
+            <div class="field-wrap">
+              <span class="field-label" data-i18n="lblPriorGpa">Prior Cumulative GPA</span>
+              <input type="number" class="calc-input" id="inputPriorGpa" value="3.60" min="0" max="5.0" step="0.01">
+            </div>
+            <div class="field-wrap">
+              <span class="field-label" data-i18n="lblPriorCredits">Prior Credits Completed</span>
+              <input type="number" class="calc-input" id="inputPriorCredits" value="45" min="0" max="250" step="1">
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Column Headers -->
+        <div class="course-row-header" id="rowHeader">
+          <span data-i18n="thCourse">Course Name (Optional)</span>
+          <span data-i18n="thGrade">Grade</span>
+          <span data-i18n="thCredits">Credits</span>
+          <span></span>
+        </div>
+
+        <!-- Dynamic Course Rows Container -->
+        <div class="courses-container" id="coursesList">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Table Actions -->
+        <div class="table-actions">
+          <button type="button" class="btn-add-course" id="btnAddCourse" data-i18n="btnAddCourse">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Course
+          </button>
+          <span style="font-size:.8rem;color:var(--text-muted);" id="lblAutoSaveNotice" data-i18n="lblAutoSave">Autosaved to browser storage</span>
+        </div>
+      </div>
+
+      <!-- Right Column: Results Dashboard -->
+      <div class="dashboard-col">
+
+        <!-- Score Ring Card -->
+        <div class="gpa-score-card">
+          <div class="standing-badge" id="dispStandingBadge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            <span id="dispStandingText">Summa Cum Laude / Dean's List</span>
+          </div>
+
+          <!-- Radial Progress Ring -->
+          <div class="ring-container">
+            <svg class="ring-svg" viewBox="0 0 128 128">
+              <circle class="ring-bg" cx="64" cy="64" r="56" />
+              <circle class="ring-progress" id="ringProgress" cx="64" cy="64" r="56" />
+            </svg>
+            <div class="ring-inner-text">
+              <span class="ring-gpa-val" id="dispSemesterGpa">3.88</span>
+              <span class="ring-scale-max" id="dispScaleMax">/ 4.00</span>
+            </div>
+          </div>
+
+          <p style="font-size:.88rem;color:var(--text-muted);" data-i18n="lblSemesterGpaTitle">Semester Grade Point Average</p>
+        </div>
+
+        <!-- 2 Column Key Metrics -->
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-box-title" data-i18n="lblTotalCredits">Total Credits</div>
+            <div class="metric-box-val" id="dispTotalCredits">15.0</div>
+            <div class="metric-box-sub" id="dispCourseCount">5 Courses Attempted</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-box-title" data-i18n="lblCumulativeGpa">Cumulative GPA</div>
+            <div class="metric-box-val" id="dispCumulativeGpa" style="color:#60a5fa;">3.67</div>
+            <div class="metric-box-sub" id="dispCumulativeCredits">60.0 Total Credits</div>
+          </div>
+        </div>
+
+        <!-- Action Card (Save, CSV, Print) -->
+        <div class="actions-card">
+          <button type="button" class="btn-action-full" id="btnExportCsv" data-i18n="btnExportCsv">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export Schedule as CSV
+          </button>
+          <button type="button" class="btn-action-full" id="btnPrintReport" data-i18n="btnPrintReport">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print Clean Report (PDF)
+          </button>
+          <button type="button" class="btn-action-full" id="btnSaveStorage" data-i18n="btnSaveStorage">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            Save Grades to Device
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SEO & Educational Guide Section -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="guideHeading">Academic GPA Standards &amp; Calculation Formulas</h2>
+        <p data-i18n="guideSubheading">Learn how quality points, weighted course credits, and cumulative averages are determined across universities and high schools.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span data-i18n="g1Title">Quality Points &amp; Credit Weighting</span>
+          </div>
+          <p data-i18n="g1Desc">Courses with more credit hours have a proportionally higher impact on your GPA. A 4-credit calculus course with an A provides 16 quality points (4.0 × 4), whereas a 1-credit lab with an A yields only 4 quality points. Your final GPA equals total quality points divided by total attempted credits.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span data-i18n="g2Title">Weighted 5.0 vs Unweighted 4.0</span>
+          </div>
+          <p data-i18n="g2Desc">Standard 4.0 grading treats all courses equally. Weighted 5.0 scales reward academic rigor by granting +0.5 points for Honors and +1.0 point for AP, IB, or Dual Enrollment college-level courses, helping students maintain a competitive admissions profile.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span data-i18n="g3Title">FERPA-Grade Local Privacy</span>
+          </div>
+          <p data-i18n="g3Desc">Student grades, transcripts, and course records are confidential. VantorKit processes all math locally within your browser sandbox. No grades are transmitted across networks, uploaded to databases, or logged in tracking analytics.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">What GPA is required for Dean's List or Latin Honors?</h4>
+          <p data-i18n="faq1A">While specific thresholds vary by institution, general standards require: Dean's List (3.50+), Cum Laude (3.50 - 3.74), Magna Cum Laude (3.75 - 3.89), and Summa Cum Laude (3.90 - 4.00).</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">How does Cumulative GPA work with prior semesters?</h4>
+          <p data-i18n="faq2A">Cumulative GPA is not a simple average of semester GPAs. It weighs total credit volume. The formula is: ((Prior GPA × Prior Credits) + (Current Semester Quality Points)) / (Prior Credits + Current Credits).</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do Pass/Fail or Withdrawn (W) courses affect my GPA?</h4>
+          <p data-i18n="faq3A">Pass/Fail and Withdrawn courses generally do not factor into GPA calculations, as they award credit toward graduation without contributing quality points or affecting your grade point average.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can I save my grades and revisit them later?</h4>
+          <p data-i18n="faq4A">Yes! Your course list automatically saves to your browser's local storage. When you return to VantorKit on the same device, your semester courses and cumulative inputs will be restored immediately.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastBox">Grades saved successfully</div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Client-Side, Privacy-First Productivity &amp; Developer Tools. All academic calculations run locally in your browser.</p>
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       VantorKit GPA & Grade Calculation Engine
+       100% Client-Side with Multi-Scale & Cumulative Support
+       ========================================================================== */
+
+    const TRANSLATIONS = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "Client-Side • Privacy-First • No Logs",
+        toolTitle: "GPA & Grade Calculator",
+        toolSubtitle: "Compute semester and cumulative grade point averages across standard 4.0, weighted 5.0, and percentage grading scales with zero server telemetry.",
+        lblGradingScale: "Grading Scale:",
+        btnLoadSample: "Load Demo Semester",
+        btnClearCourses: "Clear",
+        panelCoursesTitle: "Semester Course Work",
+        lblCumulativeToggle: "Include Prior Cumulative GPA",
+        lblPriorGpa: "Prior Cumulative GPA",
+        lblPriorCredits: "Prior Credits Completed",
+        thCourse: "Course Name (Optional)",
+        thGrade: "Grade",
+        thCredits: "Credits",
+        thWeight: "Weight",
+        btnAddCourse: "Add Course",
+        lblAutoSave: "Autosaved to browser storage",
+        lblSemesterGpaTitle: "Semester Grade Point Average",
+        lblTotalCredits: "Total Credits",
+        lblCumulativeGpa: "Cumulative GPA",
+        btnExportCsv: "Export Schedule as CSV",
+        btnPrintReport: "Print Clean Report (PDF)",
+        btnSaveStorage: "Save Grades to Device",
+        guideHeading: "Academic GPA Standards & Calculation Formulas",
+        guideSubheading: "Learn how quality points, weighted course credits, and cumulative averages are determined across universities and high schools.",
+        g1Title: "Quality Points & Credit Weighting",
+        g1Desc: "Courses with more credit hours have a proportionally higher impact on your GPA. A 4-credit calculus course with an A provides 16 quality points (4.0 × 4), whereas a 1-credit lab with an A yields only 4 quality points. Your final GPA equals total quality points divided by total attempted credits.",
+        g2Title: "Weighted 5.0 vs Unweighted 4.0",
+        g2Desc: "Standard 4.0 grading treats all courses equally. Weighted 5.0 scales reward academic rigor by granting +0.5 points for Honors and +1.0 point for AP, IB, or Dual Enrollment college-level courses, helping students maintain a competitive admissions profile.",
+        g3Title: "FERPA-Grade Local Privacy",
+        g3Desc: "Student grades, transcripts, and course records are confidential. VantorKit processes all math locally within your browser sandbox. No grades are transmitted across networks, uploaded to databases, or logged in tracking analytics.",
+        faq1Q: "What GPA is required for Dean's List or Latin Honors?",
+        faq1A: "While specific thresholds vary by institution, general standards require: Dean's List (3.50+), Cum Laude (3.50 - 3.74), Magna Cum Laude (3.75 - 3.89), and Summa Cum Laude (3.90 - 4.00).",
+        faq2Q: "How does Cumulative GPA work with prior semesters?",
+        faq2A: "Cumulative GPA is not a simple average of semester GPAs. It weighs total credit volume. The formula is: ((Prior GPA × Prior Credits) + (Current Semester Quality Points)) / (Prior Credits + Current Credits).",
+        faq3Q: "How do Pass/Fail or Withdrawn (W) courses affect my GPA?",
+        faq3A: "Pass/Fail and Withdrawn courses generally do not factor into GPA calculations, as they award credit toward graduation without contributing quality points or affecting your grade point average.",
+        faq4Q: "Can I save my grades and revisit them later?",
+        faq4A: "Yes! Your course list automatically saves to your browser's local storage. When you return to VantorKit on the same device, your semester courses and cumulative inputs will be restored immediately.",
+        toastSaved: "Grades saved to local storage!",
+        toastCleared: "Courses reset.",
+        toastCsv: "CSV report downloaded successfully!"
+      },
+      ar: {
+        backLink: "← العودة إلى الأدوات",
+        badgePill: "على جهازك 100% • خصوصية تامة • دون خوادم",
+        toolTitle: "حاسبة المعدل التراكمي والدرجات",
+        toolSubtitle: "احسب المعدل الفصلي والتراكمي بدقة عبر مقاييس 4.0 القياسي و 5.0 الموزون والنسبة المئوية مع حفظ الخصوصية بالكامل.",
+        lblGradingScale: "نظام التقييم:",
+        btnLoadSample: "تحميل فصل تجريبي",
+        btnClearCourses: "مسح",
+        panelCoursesTitle: "مقررات الفصل الدراسي",
+        lblCumulativeToggle: "تضمين المعدل التراكمي السابق",
+        lblPriorGpa: "المعدل التراكمي السابق",
+        lblPriorCredits: "الساعات المكتسبة السابقة",
+        thCourse: "اسم المقرر (اختياري)",
+        thGrade: "الدرجة",
+        thCredits: "الساعات",
+        thWeight: "المستوى",
+        btnAddCourse: "إضافة مقرر",
+        lblAutoSave: "حفظ تلقائي في المتصفح",
+        lblSemesterGpaTitle: "المعدل الفصلي الحالي",
+        lblTotalCredits: "إجمالي الساعات",
+        lblCumulativeGpa: "المعدل التراكمي",
+        btnExportCsv: "تصدير السجل كملف CSV",
+        btnPrintReport: "طباعة التقرير (PDF)",
+        btnSaveStorage: "حفظ الدرجات على الجهاز",
+        guideHeading: "معايير حساب المعدل الأكاديمي والمعادلات الرياضية",
+        guideSubheading: "تعرف على كيفية احتساب نقاط الجودة وتأثير الساعات المعتمدة في الجامعات والمدارس الثانوية.",
+        g1Title: "نقاط الجودة ووزن الساعات",
+        g1Desc: "المقررات ذات الساعات الأكثر يكون لها تأثير أكبر على المعدل. مقرر 4 ساعات بتقدير ممتاز يمنح 16 نقطة، بينما مقرر ساعة واحدة يمنح 4 نقاط. المعدل = مجموع النقاط مقسوماً على مجموع الساعات.",
+        g2Title: "المقياس الموزون 5.0 مقابل 4.0",
+        g2Desc: "المقياس 4.0 يعامل جميع المواد بالتساوي، بينما المقياس الموزون 5.0 يمنح نقاطاً إضافية لمقررات الشرف والمستوى المتقدم AP لمكافأة الجهد الإضافي للطلاب.",
+        g3Title: "خصوصية محلية تامة 100%",
+        g3Desc: "سجلات الطلاب وسجلات الدرجات سرية تماماً. تنفذ جميع العمليات داخل متصفحك دون إرسال أي درجة أو معلومة إلى أي خادم خارجي.",
+        faq1Q: "ما هو المعدل المطلوب لمراتب الشرف أو قائمة العميد؟",
+        faq1A: "تتطلب المعايير الشائعة: قائمة العميد (3.50 فما فوق)، مرتبة الشرف الثانية (3.75 - 3.89)، ومرتبة الشرف الأولى (3.90 - 4.00).",
+        faq2Q: "كيف يتأثر المعدل التراكمي بالفصول السابقة؟",
+        faq2A: "المعدل التراكمي يراعي حجم الساعات المكتملة: ((المعدل السابق × الساعات السابقة) + نقاط الفصل الحالي) ÷ (إجمالي الساعات السابقة والحالية).",
+        faq3Q: "كيف تؤثر مواد ناجح/راسب على المعدل؟",
+        faq3A: "مقررات ناجح/راسب تحتسب كساعات تخرج فقط ولا تدخل ضمن حساب المعدل الفصلي أو التراكمي.",
+        faq4Q: "هل يمكنني حفظ المقررات والعودة لاحقاً؟",
+        faq4A: "نعم، تحفظ قائمة المقررات تلقائياً على جهازك محلياً وتستعاد فور فتح الصفحة مرة أخرى.",
+        toastSaved: "تم حفظ المقررات بنجاح!",
+        toastCleared: "تمت إعادة تعيين المقررات.",
+        toastCsv: "تم تصدير ملف CSV بنجاح!"
+      },
+      fr: {
+        backLink: "← Retour aux Outils",
+        badgePill: "Côté Client • Confidentialité Totale • Zéro Log",
+        toolTitle: "Calculateur de Moyenne & Notes (GPA)",
+        toolSubtitle: "Calculez votre moyenne semestrielle et cumulative sur l'échelle 4.0, pondérée 5.0 ou en pourcentage en toute confidentialité.",
+        lblGradingScale: "Échelle de Notation :",
+        btnLoadSample: "Charger Exemple Démo",
+        btnClearCourses: "Effacer",
+        panelCoursesTitle: "Cours du Semestre",
+        lblCumulativeToggle: "Inclure Moyenne Cumulative Antérieure",
+        lblPriorGpa: "Moyenne Cumulative Antérieure",
+        lblPriorCredits: "Crédits Antérieurs Validés",
+        thCourse: "Nom du Cours (Optionnel)",
+        thGrade: "Note",
+        thCredits: "Crédits",
+        thWeight: "Niveau",
+        btnAddCourse: "Ajouter un Cours",
+        lblAutoSave: "Sauvegarde locale automatique",
+        lblSemesterGpaTitle: "Moyenne du Semestre (GPA)",
+        lblTotalCredits: "Crédits Totaux",
+        lblCumulativeGpa: "GPA Cumulatif",
+        btnExportCsv: "Exporter le Relevé en CSV",
+        btnPrintReport: "Imprimer le Relevé (PDF)",
+        btnSaveStorage: "Sauvegarder les Notes",
+        guideHeading: "Normes Universitaires & Formules du GPA",
+        guideSubheading: "Comprenez la pondération des crédits et l'impact des cours avancés sur vos relevés académiques.",
+        g1Title: "Points Qualité & Pondération",
+        g1Desc: "Chaque cours impacte votre moyenne selon son nombre de crédits. Un cours de 4 crédits avec note A apporte 16 points qualité, contre 4 points pour un cours de 1 crédit. La moyenne = points qualité totaux / crédits tentés.",
+        g2Title: "Échelle 5.0 Pondérée vs 4.0 Standard",
+        g2Desc: "L'échelle 4.0 évalue tous les cours de la même manière. L'échelle 5.0 valorise l'exigence des cours avancés (Honors, AP) en attribuant des points supplémentaires.",
+        g3Title: "Confidentialité Étudiante 100% Locale",
+        g3Desc: "Vos notes et relevés sont strictement confidentiels. VantorKit effectue tous les calculs localement sans aucun transfert de données vers un serveur distant.",
+        faq1Q: "Quelle moyenne pour figurer sur la Liste du Doyen ?",
+        faq1A: "Généralement, une moyenne de 3.50+ donne accès à la Dean's List, 3.75+ pour Magna Cum Laude et 3.90+ pour Summa Cum Laude.",
+        faq2Q: "Comment est calculée la moyenne cumulative ?",
+        faq2A: "La formule pondère tous les crédits passés et actuels : ((GPA Antérieur × Crédits Antérieurs) + Points Qualité du Semestre) / Crédits Totaux.",
+        faq3Q: "Les mentions Réussi/Échoué impactent-elles le GPA ?",
+        faq3A: "Non, ces cours valident des crédits pour l'obtention du diplôme mais ne modifient pas la moyenne générale.",
+        faq4Q: "Puis-je retrouver mes cours plus tard ?",
+        faq4A: "Oui, la liste des cours est sauvegardée dans le stockage local de votre navigateur et rechargée automatiquement.",
+        toastSaved: "Notes sauvegardées localement !",
+        toastCleared: "Liste des cours réinitialisée.",
+        toastCsv: "Fichier CSV téléchargé avec succès !"
+      },
+      it: {
+        backLink: "← Torna agli Strumenti",
+        badgePill: "Lato Client • Massima Privacy • Zero Log",
+        toolTitle: "Calcolatore Media & Voti Accademici",
+        toolSubtitle: "Calcola la media ponderata degli esami, GPA su scala 4.0, 5.0 o in percentuale con supporto crediti e media cumulativa.",
+        lblGradingScale: "Scala di Valutazione:",
+        btnLoadSample: "Carica Semestre Demo",
+        btnClearCourses: "Cancella",
+        panelCoursesTitle: "Corsi del Semestre",
+        lblCumulativeToggle: "Includi Media Precedente",
+        lblPriorGpa: "GPA Cumulativo Precedente",
+        lblPriorCredits: "Crediti Precedenti Acquisiti",
+        thCourse: "Nome Corso (Opzionale)",
+        thGrade: "Voto",
+        thCredits: "Crediti (CFU)",
+        thWeight: "Tipologia",
+        btnAddCourse: "Aggiungi Corso",
+        lblAutoSave: "Salvataggio automatico nel browser",
+        lblSemesterGpaTitle: "Media Ponderata Semestre",
+        lblTotalCredits: "Crediti Totali",
+        lblCumulativeGpa: "GPA Cumulativo",
+        btnExportCsv: "Esporta Libretto in CSV",
+        btnPrintReport: "Stampa Prospetto (PDF)",
+        btnSaveStorage: "Salva Voti sul Dispositivo",
+        guideHeading: "Formule e Criteri del Calcolo Accademico",
+        guideSubheading: "Scopri come i crediti formativi (CFU) pesano sulla media e determinano le lodi accademiche.",
+        g1Title: "Punteggi Qualità & Ponderazione CFU",
+        g1Desc: "La media ponderata moltiplica il voto di ciascun esame per i rispettivi CFU. Un esame da 9 CFU ha un peso triplo rispetto a uno da 3 CFU sul conteggio finale.",
+        g2Title: "Scala 4.0 vs Scala Ponderata 5.0",
+        g2Desc: "La scala internazionale 4.0 è il riferimento accademico standard. Le scale a 5.0 assegnano punti extra per corsi avanzati, honors o internazionali.",
+        g3Title: "Riservatezza Totale per gli Studenti",
+        g3Desc: "I tuoi voti non vengono mai inviati a server esterni né tracciati da cookies. Tutto viene calcolato sul tuo dispositivo.",
+        faq1Q: "Quali requisiti servono per le lodi accademiche?",
+        faq1A: "Negli standard internazionali, una media superiore a 3.75 garantisce le menzioni d'onore e la Dean's List (3.50+).",
+        faq2Q: "Come si calcola la media cumulativa?",
+        faq2A: "Si sommano tutti i punti qualità precedenti e attuali e si dividono per la somma totale di tutti i crediti formativi.",
+        faq3Q: "Gli esami di idoneità incidono sul voto di laurea?",
+        faq3A: "Le idoneità assegnano CFU utili al piano di studi ma non concorrono alla determinazione del punteggio di media.",
+        faq4Q: "Posso salvare il piano esami per la prossima volta?",
+        faq4A: "Sì, i dati vengono conservati nella memoria del browser e saranno disponibili alla prossima apertura della pagina.",
+        toastSaved: "Voti salvati con successo!",
+        toastCleared: "Lista esami azzerata.",
+        toastCsv: "File CSV esportato correttamente!"
+      }
+    };
+
+    let currentLang = 'en';
+    let currentScale = '4.0'; // '4.0', '5.0', 'percentage'
+    let isCumulativeActive = false;
+
+    // Grade points mapping for 4.0 scale
+    const SCALE_4_0 = [
+      { label: "A+ (4.0)", value: 4.0 },
+      { label: "A  (4.0)", value: 4.0 },
+      { label: "A- (3.7)", value: 3.7 },
+      { label: "B+ (3.3)", value: 3.3 },
+      { label: "B  (3.0)", value: 3.0 },
+      { label: "B- (2.7)", value: 2.7 },
+      { label: "C+ (2.3)", value: 2.3 },
+      { label: "C  (2.0)", value: 2.0 },
+      { label: "C- (1.7)", value: 1.7 },
+      { label: "D+ (1.3)", value: 1.3 },
+      { label: "D  (1.0)", value: 1.0 },
+      { label: "D- (0.7)", value: 0.7 },
+      { label: "F  (0.0)", value: 0.0 }
+    ];
+
+    // Grade points mapping for 5.0 scale
+    const SCALE_5_0 = [
+      { label: "A+ (5.0)", value: 5.0 },
+      { label: "A  (5.0)", value: 5.0 },
+      { label: "A- (4.7)", value: 4.7 },
+      { label: "B+ (4.3)", value: 4.3 },
+      { label: "B  (4.0)", value: 4.0 },
+      { label: "B- (3.7)", value: 3.7 },
+      { label: "C+ (3.3)", value: 3.3 },
+      { label: "C  (3.0)", value: 3.0 },
+      { label: "C- (2.7)", value: 2.7 },
+      { label: "D+ (2.3)", value: 2.3 },
+      { label: "D  (2.0)", value: 2.0 },
+      { label: "D- (1.7)", value: 1.7 },
+      { label: "F  (0.0)", value: 0.0 }
+    ];
+
+    let courses = [];
+
+    function initLanguage() {
+      const stored = localStorage.getItem('vantorkit_lang');
+      if (stored && TRANSLATIONS[stored]) {
+        currentLang = stored;
+      }
+      applyLanguage(currentLang);
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      const menu = document.getElementById('langMenu');
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+        toggleBtn.setAttribute('aria-expanded', !expanded);
+        menu.classList.toggle('show');
+      });
+
+      document.addEventListener('click', () => {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('show');
+      });
+
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const lang = btn.getAttribute('data-lang');
+          if (lang && TRANSLATIONS[lang]) {
+            currentLang = lang;
+            localStorage.setItem('vantorkit_lang', lang);
+            applyLanguage(lang);
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            menu.classList.remove('show');
+            calculateGpa();
+          }
+        });
+      });
+    }
+
+    function applyLanguage(lang) {
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      const html = document.getElementById('htmlRoot');
+      html.setAttribute('lang', lang);
+      html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+      });
+
+      const langNames = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      document.getElementById('currentLangLabel').textContent = langNames[lang] || 'English';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+          el.innerHTML = t[key];
+        }
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastBox');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    /* ==========================================================================
+       Course Management & Calculation Engine
+       ========================================================================== */
+
+    const coursesList = document.getElementById('coursesList');
+    const dispSemesterGpa = document.getElementById('dispSemesterGpa');
+    const dispScaleMax = document.getElementById('dispScaleMax');
+    const dispStandingBadge = document.getElementById('dispStandingBadge');
+    const dispStandingText = document.getElementById('dispStandingText');
+    const dispTotalCredits = document.getElementById('dispTotalCredits');
+    const dispCourseCount = document.getElementById('dispCourseCount');
+    const dispCumulativeGpa = document.getElementById('dispCumulativeGpa');
+    const dispCumulativeCredits = document.getElementById('dispCumulativeCredits');
+    const ringProgress = document.getElementById('ringProgress');
+
+    const cumulBox = document.getElementById('cumulBox');
+    const cumulCheck = document.getElementById('cumulCheck');
+    const cumulInputs = document.getElementById('cumulInputs');
+    const inputPriorGpa = document.getElementById('inputPriorGpa');
+    const inputPriorCredits = document.getElementById('inputPriorCredits');
+
+    function createCourseItem(name = '', grade = 4.0, credits = 3, weight = 'regular') {
+      return {
+        id: 'c_' + Math.random().toString(36).substr(2, 9),
+        name,
+        grade,
+        credits,
+        weight
+      };
+    }
+
+    function renderCourseRow(course) {
+      const row = document.createElement('div');
+      row.className = `course-row ${currentScale === '5.0' ? 'weighted' : ''}`;
+      row.id = course.id;
+
+      // 1. Course Name Input
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.className = 'calc-input course-name';
+      nameInput.placeholder = 'e.g. Calculus I';
+      nameInput.value = course.name;
+      nameInput.addEventListener('input', (e) => {
+        course.name = e.target.value;
+        saveToLocalStorage(false);
+      });
+
+      // 2. Grade Input or Select
+      let gradeEl;
+      if (currentScale === 'percentage') {
+        gradeEl = document.createElement('input');
+        gradeEl.type = 'number';
+        gradeEl.className = 'calc-input';
+        gradeEl.placeholder = '0 - 100%';
+        gradeEl.min = '0';
+        gradeEl.max = '100';
+        gradeEl.value = course.grade >= 0 && course.grade <= 100 && course.grade > 4.5 ? course.grade : 92;
+        course.grade = parseFloat(gradeEl.value);
+        gradeEl.addEventListener('input', (e) => {
+          course.grade = Math.min(100, Math.max(0, parseFloat(e.target.value) || 0));
+          calculateGpa();
+        });
+      } else {
+        gradeEl = document.createElement('select');
+        gradeEl.className = 'course-select';
+        const scaleOpts = currentScale === '5.0' ? SCALE_5_0 : SCALE_4_0;
+        scaleOpts.forEach(opt => {
+          const optEl = document.createElement('option');
+          optEl.value = opt.value;
+          optEl.textContent = opt.label;
+          if (Math.abs(opt.value - course.grade) < 0.05) {
+            optEl.selected = true;
+          }
+          gradeEl.appendChild(optEl);
+        });
+        gradeEl.addEventListener('change', (e) => {
+          course.grade = parseFloat(e.target.value);
+          calculateGpa();
+        });
+      }
+
+      // 3. Weight Select (Only for 5.0 scale)
+      let weightEl = null;
+      if (currentScale === '5.0') {
+        weightEl = document.createElement('select');
+        weightEl.className = 'course-select';
+        weightEl.innerHTML = `
+          <option value="regular">Regular (+0.0)</option>
+          <option value="honors">Honors (+0.5)</option>
+          <option value="ap">AP / IB (+1.0)</option>
+        `;
+        weightEl.value = course.weight || 'regular';
+        weightEl.addEventListener('change', (e) => {
+          course.weight = e.target.value;
+          calculateGpa();
+        });
+      }
+
+      // 4. Credits Input
+      const creditsInput = document.createElement('input');
+      creditsInput.type = 'number';
+      creditsInput.className = 'calc-input';
+      creditsInput.min = '0.5';
+      creditsInput.max = '12';
+      creditsInput.step = '0.5';
+      creditsInput.value = course.credits || 3;
+      creditsInput.addEventListener('input', (e) => {
+        course.credits = Math.max(0.5, parseFloat(e.target.value) || 0.5);
+        calculateGpa();
+      });
+
+      // 5. Delete Button
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn-del-row';
+      delBtn.title = 'Delete course';
+      delBtn.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      `;
+      delBtn.addEventListener('click', () => {
+        courses = courses.filter(c => c.id !== course.id);
+        row.remove();
+        calculateGpa();
+        saveToLocalStorage(false);
+      });
+
+      row.appendChild(nameInput);
+      row.appendChild(gradeEl);
+      if (weightEl) row.appendChild(weightEl);
+      row.appendChild(creditsInput);
+      row.appendChild(delBtn);
+
+      return row;
+    }
+
+    function renderAllCourses() {
+      coursesList.innerHTML = '';
+      const header = document.getElementById('rowHeader');
+      if (currentScale === '5.0') {
+        header.className = 'course-row-header weighted';
+        header.innerHTML = `
+          <span data-i18n="thCourse">${TRANSLATIONS[currentLang]?.thCourse || 'Course Name'}</span>
+          <span data-i18n="thGrade">${TRANSLATIONS[currentLang]?.thGrade || 'Grade'}</span>
+          <span data-i18n="thWeight">${TRANSLATIONS[currentLang]?.thWeight || 'Weight'}</span>
+          <span data-i18n="thCredits">${TRANSLATIONS[currentLang]?.thCredits || 'Credits'}</span>
+          <span></span>
+        `;
+      } else {
+        header.className = 'course-row-header';
+        header.innerHTML = `
+          <span data-i18n="thCourse">${TRANSLATIONS[currentLang]?.thCourse || 'Course Name'}</span>
+          <span data-i18n="thGrade">${TRANSLATIONS[currentLang]?.thGrade || 'Grade'}</span>
+          <span data-i18n="thCredits">${TRANSLATIONS[currentLang]?.thCredits || 'Credits'}</span>
+          <span></span>
+        `;
+      }
+
+      courses.forEach(course => {
+        coursesList.appendChild(renderCourseRow(course));
+      });
+      calculateGpa();
+    }
+
+    function percentageToGradePoints(pct) {
+      if (pct >= 93) return 4.0;
+      if (pct >= 90) return 3.7;
+      if (pct >= 87) return 3.3;
+      if (pct >= 83) return 3.0;
+      if (pct >= 80) return 2.7;
+      if (pct >= 77) return 2.3;
+      if (pct >= 73) return 2.0;
+      if (pct >= 70) return 1.7;
+      if (pct >= 67) return 1.3;
+      if (pct >= 65) return 1.0;
+      return 0.0;
+    }
+
+    function calculateGpa() {
+      let totalQualityPoints = 0;
+      let totalSemesterCredits = 0;
+
+      courses.forEach(course => {
+        let pts = 0;
+        if (currentScale === 'percentage') {
+          pts = percentageToGradePoints(course.grade);
+        } else {
+          pts = parseFloat(course.grade) || 0;
+          if (currentScale === '5.0') {
+            if (course.weight === 'honors') pts = Math.min(5.0, pts + 0.5);
+            else if (course.weight === 'ap') pts = Math.min(5.0, pts + 1.0);
+          }
+        }
+        const cr = parseFloat(course.credits) || 0;
+        totalQualityPoints += pts * cr;
+        totalSemesterCredits += cr;
+      });
+
+      const maxScaleNum = currentScale === '5.0' ? 5.0 : 4.0;
+      dispScaleMax.textContent = `/ ${maxScaleNum.toFixed(2)}`;
+
+      const semesterGpa = totalSemesterCredits > 0 ? (totalQualityPoints / totalSemesterCredits) : 0;
+      dispSemesterGpa.textContent = semesterGpa.toFixed(2);
+      dispTotalCredits.textContent = totalSemesterCredits.toFixed(1);
+      dispCourseCount.textContent = `${courses.length} Courses Attempted`;
+
+      // Update SVG radial ring (circumference is 2 * PI * 56 ≈ 351.86)
+      const circumference = 351.86;
+      const gpaRatio = Math.min(1.0, semesterGpa / maxScaleNum);
+      const offset = circumference - (gpaRatio * circumference);
+      ringProgress.style.strokeDashoffset = offset;
+
+      // Color coding & Academic Standing
+      let badgeText = "Good Standing";
+      let ringColor = "#3b82f6";
+      let badgeColor = "rgba(59, 130, 246, 0.15)";
+      let textColor = "#60a5fa";
+
+      const normGpa = (semesterGpa / maxScaleNum) * 4.0; // Normalized to 4.0 standard
+
+      if (normGpa >= 3.90) {
+        badgeText = "Summa Cum Laude / Dean's List 🏆";
+        ringColor = "#10b981";
+        badgeColor = "rgba(16, 185, 129, 0.15)";
+        textColor = "#34d399";
+      } else if (normGpa >= 3.75) {
+        badgeText = "Magna Cum Laude / High Honors 🌟";
+        ringColor = "#10b981";
+        badgeColor = "rgba(16, 185, 129, 0.15)";
+        textColor = "#34d399";
+      } else if (normGpa >= 3.50) {
+        badgeText = "Cum Laude / Dean's List 🎖️";
+        ringColor = "#3b82f6";
+        badgeColor = "rgba(59, 130, 246, 0.15)";
+        textColor = "#60a5fa";
+      } else if (normGpa >= 3.00) {
+        badgeText = "Good Academic Standing 👍";
+        ringColor = "#3b82f6";
+        badgeColor = "rgba(59, 130, 246, 0.15)";
+        textColor = "#60a5fa";
+      } else if (normGpa >= 2.00) {
+        badgeText = "Satisfactory Progress ℹ️";
+        ringColor = "#f59e0b";
+        badgeColor = "rgba(245, 158, 11, 0.15)";
+        textColor = "#fbbf24";
+      } else if (normGpa > 0) {
+        badgeText = "Academic Review Needed ⚠️";
+        ringColor = "#ef4444";
+        badgeColor = "rgba(239, 68, 68, 0.15)";
+        textColor = "#f87171";
+      } else {
+        badgeText = "No Courses Added";
+        ringColor = "rgba(255, 255, 255, 0.1)";
+        badgeColor = "rgba(255, 255, 255, 0.05)";
+        textColor = "var(--text-muted)";
+      }
+
+      ringProgress.style.stroke = ringColor;
+      dispStandingBadge.style.background = badgeColor;
+      dispStandingBadge.style.color = textColor;
+      dispStandingText.textContent = badgeText;
+
+      // Cumulative Calculation
+      if (isCumulativeActive) {
+        const priorGpa = parseFloat(inputPriorGpa.value) || 0;
+        const priorCredits = parseFloat(inputPriorCredits.value) || 0;
+        const totalCreditsCombined = priorCredits + totalSemesterCredits;
+        const priorQualityPoints = priorGpa * priorCredits;
+        const cumulativeGpa = totalCreditsCombined > 0 
+          ? ((priorQualityPoints + totalQualityPoints) / totalCreditsCombined) 
+          : 0;
+
+        dispCumulativeGpa.textContent = cumulativeGpa.toFixed(2);
+        dispCumulativeCredits.textContent = `${totalCreditsCombined.toFixed(1)} Total Credits`;
+      } else {
+        dispCumulativeGpa.textContent = semesterGpa.toFixed(2);
+        dispCumulativeCredits.textContent = `${totalSemesterCredits.toFixed(1)} Semester Credits`;
+      }
+
+      saveToLocalStorage(false);
+    }
+
+    function saveToLocalStorage(showFeedback = true) {
+      try {
+        const payload = {
+          scale: currentScale,
+          cumulativeActive: isCumulativeActive,
+          priorGpa: inputPriorGpa.value,
+          priorCredits: inputPriorCredits.value,
+          courses
+        };
+        localStorage.setItem('vantorkit_gpa_data', JSON.stringify(payload));
+        if (showFeedback) {
+          showToast(TRANSLATIONS[currentLang]?.toastSaved || 'Grades saved to local storage!');
+        }
+      } catch (e) {
+        console.error('Local storage save failed:', e);
+      }
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const data = localStorage.getItem('vantorkit_gpa_data');
+        if (data) {
+          const parsed = JSON.parse(data);
+          if (parsed.scale) {
+            currentScale = parsed.scale;
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+              btn.classList.toggle('active', btn.getAttribute('data-scale') === currentScale);
+            });
+          }
+          if (parsed.cumulativeActive !== undefined) {
+            isCumulativeActive = parsed.cumulativeActive;
+            cumulCheck.checked = isCumulativeActive;
+            cumulBox.classList.toggle('active', isCumulativeActive);
+            cumulInputs.classList.toggle('show', isCumulativeActive);
+          }
+          if (parsed.priorGpa) inputPriorGpa.value = parsed.priorGpa;
+          if (parsed.priorCredits) inputPriorCredits.value = parsed.priorCredits;
+          if (Array.isArray(parsed.courses) && parsed.courses.length > 0) {
+            courses = parsed.courses;
+            renderAllCourses();
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Local storage load error:', e);
+      }
+      loadDemoSemester();
+    }
+
+    function loadDemoSemester() {
+      courses = [
+        createCourseItem('Calculus I', 4.0, 4, 'ap'),
+        createCourseItem('Computer Science 101', 4.0, 4, 'honors'),
+        createCourseItem('English Composition', 3.7, 3, 'regular'),
+        createCourseItem('Physics with Lab', 3.3, 4, 'honors'),
+        createCourseItem('Public Speaking', 4.0, 2, 'regular')
+      ];
+      renderAllCourses();
+    }
+
+    /* ==========================================================================
+       Event Listeners & Action Buttons
+       ========================================================================== */
+
+    function setupEventListeners() {
+      // Scale Buttons
+      document.querySelectorAll('.scale-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentScale = btn.getAttribute('data-scale');
+          renderAllCourses();
+        });
+      });
+
+      // Add Course
+      document.getElementById('btnAddCourse').addEventListener('click', () => {
+        const newCourse = createCourseItem('', 4.0, 3, 'regular');
+        courses.push(newCourse);
+        coursesList.appendChild(renderCourseRow(newCourse));
+        calculateGpa();
+      });
+
+      // Cumulative Checkbox & Inputs
+      cumulCheck.addEventListener('change', (e) => {
+        isCumulativeActive = e.target.checked;
+        cumulBox.classList.toggle('active', isCumulativeActive);
+        cumulInputs.classList.toggle('show', isCumulativeActive);
+        calculateGpa();
+      });
+      inputPriorGpa.addEventListener('input', calculateGpa);
+      inputPriorCredits.addEventListener('input', calculateGpa);
+
+      // Load Sample Demo
+      document.getElementById('btnLoadSample').addEventListener('click', () => {
+        loadDemoSemester();
+        showToast('Demo semester loaded!');
+      });
+
+      // Clear Courses
+      document.getElementById('btnClearCourses').addEventListener('click', () => {
+        if (confirm('Clear all course grades and start fresh?')) {
+          courses = [createCourseItem('', 4.0, 3, 'regular')];
+          renderAllCourses();
+          showToast(TRANSLATIONS[currentLang]?.toastCleared || 'Courses reset.');
+        }
+      });
+
+      // Save to Device Button
+      document.getElementById('btnSaveStorage').addEventListener('click', () => {
+        saveToLocalStorage(true);
+      });
+
+      // Export as CSV
+      document.getElementById('btnExportCsv').addEventListener('click', () => {
+        if (courses.length === 0) return;
+        let csv = 'Course Name,Grade,Credits,Quality Points\n';
+        courses.forEach(c => {
+          const pts = currentScale === 'percentage' ? percentageToGradePoints(c.grade) : c.grade;
+          const qPoints = (pts * c.credits).toFixed(2);
+          csv += `"${(c.name || 'Untitled Course').replace(/"/g, '""')}",${c.grade},${c.credits},${qPoints}\n`;
+        });
+        csv += `\n"Total Credits",,${dispTotalCredits.textContent},\n`;
+        csv += `"Semester GPA",,${dispSemesterGpa.textContent},\n`;
+        if (isCumulativeActive) {
+          csv += `"Cumulative GPA",,${dispCumulativeGpa.textContent},\n`;
+        }
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `vantorkit-gpa-report-${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        showToast(TRANSLATIONS[currentLang]?.toastCsv || 'CSV report downloaded!');
+      });
+
+      // Print Report
+      document.getElementById('btnPrintReport').addEventListener('click', () => {
+        window.print();
+      });
+    }
+
+    // Initialize Tool
+    document.addEventListener('DOMContentLoaded', () => {
+      initLanguage();
+      setupEventListeners();
+      loadFromLocalStorage();
+    });
+  </script>
+</body>
+</html>
