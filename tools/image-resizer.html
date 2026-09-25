@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit</title>
+  <meta name="description" content="Resize and crop images locally in your browser. Custom pixel dimensions, aspect ratio presets (1:1, 16:9, 9:16, 4:5), WEBP/JPG/PNG conversion, and quality compression with zero server uploads.">
+  <meta name="keywords" content="image resizer, crop image online, photo resizer, aspect ratio cropper, convert image to webp, compress jpg, client side image editor, free image tool, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/image-resizer.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit">
+  <meta property="og:description" content="100% private in-browser image resizing and cropping. Adjust pixel dimensions, lock aspect ratios, and optimize file weight instantly.">
+  <meta property="og:url" content="https://vantorkit.com/tools/image-resizer.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit">
+  <meta name="twitter:description" content="Resize, crop, and compress images with visual aspect ratio presets. 100% client-side with zero cloud uploads.">
+
+  <!-- Google Fonts: Cairo for Arabic, Plus Jakarta Sans for Latin, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Image Resizer & Crop",
+        "url": "https://vantorkit.com/tools/image-resizer.html",
+        "applicationCategory": "PhotoEditorApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side image resizing, cropping, and compression tool. Supports custom pixel dimensions, percentage scaling presets, visual aspect ratio overlays (1:1, 16:9, 9:16, 4:5), and multi-format export (JPG, PNG, WEBP) with zero server uploads."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my images uploaded to any remote server during resizing or cropping?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The entire editing, cropping, and compression pipeline runs 100% locally inside your browser using the HTML5 Canvas 2D engine. Your photos, banners, and confidential graphics never leave your computer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does bicubic image smoothing maintain sharpness when downscaling?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "VantorKit applies high-quality bicubic interpolation and stepped multi-pass downsampling. This prevents pixel aliasing, jagged edges, and moiré patterns, producing crisp web graphics even when scaling down from 4K resolutions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which social media aspect ratio presets are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The tool includes one-click presets for 1:1 (Square for Instagram and profile avatars), 16:9 (Landscape for YouTube and X banners), 9:16 (Vertical for Instagram Stories, TikTok, and YouTube Shorts), 4:5 (Portrait for Instagram feed posts), and Freeform for custom dimensions."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What format should I export (WEBP vs JPG vs PNG)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "For web applications and modern sites, WEBP offers the best compression with 30-50% smaller file sizes than JPG. JPG is recommended for universal compatibility with older software, while PNG is best for illustrations requiring lossless clarity or transparent alpha channels."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I copy the processed image directly to my clipboard?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Click the 'Copy Image to Clipboard' button to write the processed bitmap directly into your operating system clipboard, ready to paste into Slack, Figma, Word, or Photoshop."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(-2px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-brand svg {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.75rem;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      background: rgba(45, 55, 75, 0.8);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #0f131f;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.35rem;
+      min-width: 145px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      z-index: 100;
+      display: none;
+      backdrop-filter: blur(16px);
+    }
+
+    .lang-dropdown.active .lang-menu {
+      display: block;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #60a5fa;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] * {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .file-banner {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .file-banner-left {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .dimensions-row {
+      direction: rtl;
+    }
+
+    html[dir="rtl"] .actions-grid {
+      direction: rtl;
+    }
+
+    /* Header Section */
+    header {
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(96, 165, 250, 0.2);
+      border-radius: 9999px;
+      color: var(--badge-text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto 4rem;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* App 2-Column Layout */
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (min-width: 980px) {
+      .editor-grid {
+        grid-template-columns: 1.15fr 1fr;
+        gap: 2.25rem;
+      }
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.85rem;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Drag & Drop Zone */
+    .drop-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(10, 14, 24, 0.4);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .drop-zone:hover, .drop-zone.drag-active {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+    }
+
+    .drop-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      color: #60a5fa;
+      transition: transform 0.2s ease;
+    }
+
+    .drop-zone:hover .drop-icon-wrap {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .drop-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.35rem;
+    }
+
+    .drop-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .btn-choose-file {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-choose-file:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    /* Samples Row */
+    .samples-bar {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .samples-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .sample-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .sample-pill:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(96, 165, 250, 0.3);
+      color: #93c5fd;
+      transform: translateY(-1px);
+    }
+
+    /* Active File Banner */
+    .file-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(14, 20, 32, 0.85);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 0.65rem 1rem;
+      margin-top: 1rem;
+    }
+
+    .file-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      overflow: hidden;
+    }
+
+    .file-type-badge {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .file-meta-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 240px;
+    }
+
+    .file-meta-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .btn-clear-file {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .btn-clear-file:hover {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Interactive Canvas & Visual Cropper Viewport */
+    .viewport-container {
+      margin-top: 1.5rem;
+      position: relative;
+      width: 100%;
+      min-height: 280px;
+      max-height: 440px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: #090c14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .viewport-canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 440px;
+      object-fit: contain;
+      border-radius: 12px;
+      cursor: default;
+    }
+
+    /* Viewport Status & Control Bar */
+    .viewport-status-bar {
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(14, 18, 28, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.82rem;
+    }
+
+    .status-crop-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    .crop-badge-highlight {
+      font-family: 'JetBrains Mono', monospace;
+      color: #60a5fa;
+      font-weight: 700;
+    }
+
+    .btn-reset-crop {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reset-crop:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Right Column: Controls Hub */
+    .controls-section {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .section-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-label-sub {
+      color: #60a5fa;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: none;
+    }
+
+    /* Aspect Ratio Presets */
+    .aspect-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+      gap: 0.45rem;
+    }
+
+    .aspect-btn {
+      padding: 0.5rem 0.5rem;
+      background: rgba(10, 14, 23, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      transition: all 0.2s ease;
+    }
+
+    .aspect-btn:hover {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .aspect-btn.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(168, 85, 247, 0.22) 100%);
+      color: #fff;
+      border-color: rgba(96, 165, 250, 0.5);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .aspect-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .aspect-btn.active .aspect-sub {
+      color: #93c5fd;
+    }
+
+    /* Dimensions Inputs Row */
+    .dimensions-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .dim-input-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .dim-field-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .dim-input-box {
+      display: flex;
+      align-items: center;
+      background: rgba(10, 14, 23, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.5rem 0.75rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .dim-input-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .dim-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .dim-unit {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-left: 0.3rem;
+    }
+
+    .btn-lock-aspect {
+      margin-top: 1.3rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-lock-aspect:hover {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .btn-lock-aspect.locked {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: rgba(96, 165, 250, 0.4);
+      color: #60a5fa;
+    }
+
+    /* Percentage Scale Presets */
+    .scale-presets-bar {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.65rem;
+    }
+
+    .scale-btn {
+      flex: 1;
+      padding: 0.35rem 0.45rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .scale-btn:hover {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(96, 165, 250, 0.3);
+    }
+
+    .scale-btn.active {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: rgba(96, 165, 250, 0.5);
+      color: #93c5fd;
+    }
+
+    /* Format & Quality Controls */
+    .format-pills-group {
+      display: flex;
+      background: rgba(10, 14, 23, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .format-btn {
+      flex: 1;
+      padding: 0.5rem 0.6rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s ease;
+    }
+
+    .format-btn:hover {
+      color: #fff;
+    }
+
+    .format-btn.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35) 0%, rgba(168, 85, 247, 0.25) 100%);
+      color: #fff;
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Slider Container */
+    .slider-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .quality-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    /* Estimated File Size Card */
+    .estimate-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(14, 20, 32, 0.9);
+      border: 1px solid rgba(96, 165, 250, 0.25);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .estimate-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .estimate-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .estimate-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: 0.4rem;
+    }
+
+    /* Action Buttons */
+    .actions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn-action-primary {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-action-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-action-secondary {
+      flex: 1;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.84rem;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(96, 165, 250, 0.3);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Info / Features Section */
+    .info-section {
+      max-width: 1240px;
+      margin: 4.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 3rem;
+    }
+
+    .info-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      margin-bottom: 1.1rem;
+    }
+
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .faq-item {
+      background: rgba(14, 18, 28, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 24, 38, 0.95);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+      border-radius: 12px;
+      padding: 0.75rem 1.4rem;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.25rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2.2rem; }
+      p.subtitle { font-size: 0.98rem; }
+      .app-card { padding: 1.35rem; }
+      .dimensions-row { flex-direction: column; align-items: stretch; }
+      .btn-lock-aspect { align-self: center; margin-top: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Back Link & Language Switcher -->
+  <div class="top-nav">
+    <a href="/" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+    
+    <div style="display: flex; align-items: center; gap: 0.85rem;">
+      <a href="/" class="nav-brand">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeftIRC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRightIRC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+            <linearGradient id="vGradCenterIRC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeftIRC)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRightIRC)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenterIRC)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <header>
+    <div class="brand-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg>
+      <span data-i18n="brandBadge">Images &amp; Vector • 100% Client-Side • In-Browser Resampling</span>
+    </div>
+    <h1 data-i18n="pageTitle">Image Resizer <span>&amp; Crop</span></h1>
+    <p class="subtitle" data-i18n="pageSubtitle">Adjust dimensions, lock aspect ratios, and crop photos with precision overlays. Convert to WEBP, JPG, or PNG and compress weights with zero server uploads.</p>
+  </header>
+
+  <!-- Main Tool Workspace -->
+  <main>
+    <div class="editor-grid">
+
+      <!-- Left Column: Source Image & Interactive Crop Viewport -->
+      <div class="app-card">
+        <div class="card-title-row">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span data-i18n="sourceTitle">Visual Workspace</span>
+          </div>
+          <span class="card-badge" data-i18n="badgeLocal">100% Private</span>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Drop Image Here or Click to Upload">
+          <div class="drop-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <div class="drop-title" data-i18n="dropTitle">Drop an Image Here or Click to Browse</div>
+          <div class="drop-desc" data-i18n="dropDesc">Supports PNG, JPG, JPEG, and WEBP (processed 100% in your browser)</div>
+          <button type="button" class="btn-choose-file" id="btnBrowse">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span data-i18n="btnBrowse">Choose Image File</span>
+          </button>
+          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+        </div>
+
+        <!-- Quick Samples Bar -->
+        <div class="samples-bar">
+          <span class="samples-label" data-i18n="lblSamples">Load Sample:</span>
+          <button type="button" class="sample-pill" data-sample="landscape">
+            <span>🌄</span>
+            <span data-i18n="sampleLandscape">Landscape 16:9</span>
+          </button>
+          <button type="button" class="sample-pill" data-sample="portrait">
+            <span>📸</span>
+            <span data-i18n="samplePortrait">Portrait 4:5</span>
+          </button>
+          <button type="button" class="sample-pill" data-sample="square">
+            <span>📐</span>
+            <span data-i18n="sampleSquare">Product 1:1</span>
+          </button>
+        </div>
+
+        <!-- Active File Meta Banner -->
+        <div class="file-banner" id="fileBanner">
+          <div class="file-banner-left">
+            <span class="file-type-badge" id="fileTypeBadge">PNG</span>
+            <div>
+              <div class="file-meta-name" id="fileName">sample-landscape.png</div>
+              <div class="file-meta-sub" id="fileDimensions">1920 × 1080 px • 1.2 MB</div>
+            </div>
+          </div>
+          <button type="button" class="btn-clear-file" id="btnClearFile" data-i18n="btnClearFile">Reset</button>
+        </div>
+
+        <!-- Visual Canvas & Interactive Cropper Viewport -->
+        <div class="viewport-container" id="viewportContainer">
+          <canvas class="viewport-canvas" id="viewportCanvas"></canvas>
+        </div>
+
+        <!-- Viewport Controls & Crop Status Bar -->
+        <div class="viewport-status-bar">
+          <div class="status-crop-info">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></svg>
+            <span data-i18n="cropAreaLabel">Crop Box:</span>
+            <span class="crop-badge-highlight" id="cropBoxDimensions">1920 × 1080 px</span>
+          </div>
+          <button type="button" class="btn-reset-crop" id="btnResetCrop" data-i18n="btnResetCrop">Full Image (Reset Crop)</button>
+        </div>
+      </div>
+
+      <!-- Right Column: Resize Engine & Export Controls -->
+      <div class="app-card">
+        <div class="card-title-row">
+          <div class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            <span data-i18n="controlsTitle">Resize &amp; Output Settings</span>
+          </div>
+          <span class="card-badge" id="activePresetBadge">Original (100%)</span>
+        </div>
+
+        <div class="controls-section">
+          <!-- 1. Aspect Ratio Crop Presets -->
+          <div>
+            <div class="section-label">
+              <span data-i18n="lblAspectPresets">Crop Aspect Ratio</span>
+              <span class="section-label-sub" id="activeAspectLabel">Freeform</span>
+            </div>
+            <div class="aspect-pills-grid" id="aspectGrid">
+              <button type="button" class="aspect-btn active" data-aspect="free">
+                <span>Freeform</span>
+                <span class="aspect-sub" data-i18n="aspectFree">Custom</span>
+              </button>
+              <button type="button" class="aspect-btn" data-aspect="1:1">
+                <span>1:1</span>
+                <span class="aspect-sub" data-i18n="aspectSquare">Square</span>
+              </button>
+              <button type="button" class="aspect-btn" data-aspect="16:9">
+                <span>16:9</span>
+                <span class="aspect-sub" data-i18n="aspectVideo">Landscape</span>
+              </button>
+              <button type="button" class="aspect-btn" data-aspect="9:16">
+                <span>9:16</span>
+                <span class="aspect-sub" data-i18n="aspectStory">Story/Reel</span>
+              </button>
+              <button type="button" class="aspect-btn" data-aspect="4:5">
+                <span>4:5</span>
+                <span class="aspect-sub" data-i18n="aspectFeed">Portrait Feed</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Target Dimensions (Width / Height) -->
+          <div>
+            <div class="section-label">
+              <span data-i18n="lblDimensions">Target Dimensions</span>
+              <span class="section-label-sub" id="aspectLockNotice">Aspect Ratio Locked</span>
+            </div>
+            <div class="dimensions-row">
+              <div class="dim-input-wrap">
+                <label class="dim-field-label" for="inputWidth" data-i18n="lblWidth">Width</label>
+                <div class="dim-input-box">
+                  <input type="number" id="inputWidth" class="dim-input" value="1920" min="1" max="12000">
+                  <span class="dim-unit">px</span>
+                </div>
+              </div>
+
+              <!-- Lock Aspect Toggle -->
+              <button type="button" class="btn-lock-aspect locked" id="btnLockAspect" title="Lock or Unlock Aspect Ratio" aria-label="Lock Aspect Ratio">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              </button>
+
+              <div class="dim-input-wrap">
+                <label class="dim-field-label" for="inputHeight" data-i18n="lblHeight">Height</label>
+                <div class="dim-input-box">
+                  <input type="number" id="inputHeight" class="dim-input" value="1080" min="1" max="12000">
+                  <span class="dim-unit">px</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Scale Percentage Buttons -->
+            <div class="scale-presets-bar">
+              <button type="button" class="scale-btn" data-scale="0.25">25%</button>
+              <button type="button" class="scale-btn" data-scale="0.5">50%</button>
+              <button type="button" class="scale-btn" data-scale="0.75">75%</button>
+              <button type="button" class="scale-btn active" data-scale="1">100%</button>
+              <button type="button" class="scale-btn" data-scale="2">200%</button>
+            </div>
+          </div>
+
+          <!-- 3. Output Format (JPG, PNG, WEBP) -->
+          <div>
+            <div class="section-label">
+              <span data-i18n="lblFormat">Export Format</span>
+              <span class="section-label-sub" id="formatHint">Modern &amp; Lightweight</span>
+            </div>
+            <div class="format-pills-group" id="formatGroup">
+              <button type="button" class="format-btn active" data-format="image/webp">WEBP</button>
+              <button type="button" class="format-btn" data-format="image/jpeg">JPG</button>
+              <button type="button" class="format-btn" data-format="image/png">PNG</button>
+            </div>
+          </div>
+
+          <!-- 4. Quality Slider -->
+          <div class="slider-wrap" id="qualityWrap">
+            <div class="slider-header">
+              <span data-i18n="lblQuality">Compression Quality</span>
+              <span id="qualityValDisplay" style="color: #60a5fa; font-family: 'JetBrains Mono', monospace;">85% (High Quality)</span>
+            </div>
+            <input type="range" id="qualitySlider" class="quality-slider" min="10" max="100" value="85" step="1">
+          </div>
+        </div>
+
+        <!-- Real-Time Output Estimate Card -->
+        <div class="estimate-card">
+          <div>
+            <div class="estimate-title" data-i18n="lblEstSize">Estimated Output Size</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);" id="originalWeightDisplay">Original: ~1.2 MB</div>
+          </div>
+          <div>
+            <span class="estimate-val" id="estSizeDisplay">~180 KB</span>
+            <span class="estimate-sub" id="reductionDisplay">(-85%)</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-grid">
+          <button type="button" class="btn-action-primary" id="btnDownload">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="btnDownload">Download Processed Image</span>
+          </button>
+          
+          <div class="btn-action-row">
+            <button type="button" class="btn-action-secondary" id="btnCopyClipboard">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span data-i18n="btnCopyClipboard">Copy to Clipboard</span>
+            </button>
+            <button type="button" class="btn-action-secondary" id="btnResetAll">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              <span data-i18n="btnReset">Reset All</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Technical Guide & SEO Section -->
+  <section class="info-section">
+    <div class="info-header">
+      <h2 data-i18n="guideHeading">Precision In-Browser Resampling &amp; Compression</h2>
+      <p data-i18n="guideSubheading">Learn how HTML5 Canvas 2D engines perform high-fidelity downsampling, aspect ratio preservation, and next-generation file optimization without cloud intermediaries.</p>
+    </div>
+
+    <div class="guide-cards-grid">
+      <div class="guide-card">
+        <div class="guide-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        </div>
+        <h3 data-i18n="card1Title">Bicubic Resampling &amp; Density</h3>
+        <p data-i18n="card1Desc">When scaling down large camera captures or 4K wallpapers, standard nearest-neighbor algorithms produce jagged edges and moiré artifacts. VantorKit activates browser-native bicubic interpolation for pristine, smooth gradients at any scale.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        </div>
+        <h3 data-i18n="card2Title">Next-Gen WEBP Compression</h3>
+        <p data-i18n="card2Desc">WEBP utilizes predictive macroblock coding to achieve 30% to 50% smaller file sizes compared to legacy JPEG images at equivalent visual quality. Exporting directly to WEBP boosts Google PageSpeed and Core Web Vitals (LCP).</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 data-i18n="card3Title">100% In-Memory Sandbox Privacy</h3>
+        <p data-i18n="card3Desc">Your personal photographs, proprietary corporate assets, and unreleased designs are never transmitted across any network or uploaded to cloud storage buckets. All pixels are processed in your device's private RAM buffer.</p>
+      </div>
+    </div>
+
+    <!-- FAQ Grid -->
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span data-i18n="faq1Q">Why should I resize and crop images locally in my browser?</span>
+        </h4>
+        <p data-i18n="faq1A">Local browser processing eliminates the wait times and bandwidth costs of uploading multi-megabyte files to remote servers. It also provides guaranteed data sovereignty, ensuring your private photos are never logged or stored by third parties.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span data-i18n="faq2Q">How does aspect ratio locking work?</span>
+        </h4>
+        <p data-i18n="faq2A">When aspect ratio lock is enabled, typing a new width automatically recalculates the exact height to prevent stretching or squishing. You can toggle the lock off at any time if you specifically require non-proportional stretching.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span data-i18n="faq3Q">How do social media aspect ratio presets work?</span>
+        </h4>
+        <p data-i18n="faq3A">Selecting 1:1, 16:9, 9:16, or 4:5 instantly snaps the visual crop overlay to industry-standard dimensions for Instagram, YouTube, TikTok, and web banners. You can slide the crop box to center the best part of your subject.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span data-i18n="faq4Q">Which format is best for transparent images?</span>
+        </h4>
+        <p data-i18n="faq4A">If your source image has transparent backgrounds, export to PNG (lossless) or WEBP (lossy or lossless with alpha channel). JPG does not support alpha transparency and will fill transparent areas with solid white or black.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+  </footer>
+
+  <!-- Toast Notification Feedback -->
+  <div class="toast" id="toast">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <!-- Image Resizer & Cropper Engine Script -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Multi-Language (i18n) Translations ---
+      const I18N = {
+        en: {
+          backLink: "← Back to Tools",
+          brandBadge: "Images & Vector • 100% Client-Side • In-Browser Resampling",
+          pageTitle: "Image Resizer <span>&amp; Crop</span>",
+          pageSubtitle: "Adjust dimensions, lock aspect ratios, and crop photos with precision overlays. Convert to WEBP, JPG, or PNG and compress weights with zero server uploads.",
+          sourceTitle: "Visual Workspace",
+          badgeLocal: "100% Private",
+          dropTitle: "Drop an Image Here or Click to Browse",
+          dropDesc: "Supports PNG, JPG, JPEG, and WEBP (processed 100% in your browser)",
+          btnBrowse: "Choose Image File",
+          lblSamples: "Load Sample:",
+          sampleLandscape: "Landscape 16:9",
+          samplePortrait: "Portrait 4:5",
+          sampleSquare: "Product 1:1",
+          btnClearFile: "Reset",
+          cropAreaLabel: "Crop Box:",
+          btnResetCrop: "Full Image (Reset Crop)",
+          controlsTitle: "Resize & Output Settings",
+          lblAspectPresets: "Crop Aspect Ratio",
+          aspectFree: "Custom",
+          aspectSquare: "Square",
+          aspectVideo: "Landscape",
+          aspectStory: "Story/Reel",
+          aspectFeed: "Portrait Feed",
+          lblDimensions: "Target Dimensions",
+          aspectLockNotice: "Aspect Ratio Locked",
+          lblWidth: "Width",
+          lblHeight: "Height",
+          lblFormat: "Export Format",
+          formatHint: "Modern & Lightweight",
+          lblQuality: "Compression Quality",
+          lblEstSize: "Estimated Output Size",
+          btnDownload: "Download Processed Image",
+          btnCopyClipboard: "Copy to Clipboard",
+          btnReset: "Reset All",
+          guideHeading: "Precision In-Browser Resampling & Compression",
+          guideSubheading: "Learn how HTML5 Canvas 2D engines perform high-fidelity downsampling, aspect ratio preservation, and next-generation file optimization without cloud intermediaries.",
+          card1Title: "Bicubic Resampling & Density",
+          card1Desc: "When scaling down large camera captures or 4K wallpapers, standard nearest-neighbor algorithms produce jagged edges and moiré artifacts. VantorKit activates browser-native bicubic interpolation for pristine, smooth gradients at any scale.",
+          card2Title: "Next-Gen WEBP Compression",
+          card2Desc: "WEBP utilizes predictive macroblock coding to achieve 30% to 50% smaller file sizes compared to legacy JPEG images at equivalent visual quality. Exporting directly to WEBP boosts Google PageSpeed and Core Web Vitals (LCP).",
+          card3Title: "100% In-Memory Sandbox Privacy",
+          card3Desc: "Your personal photographs, proprietary corporate assets, and unreleased designs are never transmitted across any network or uploaded to cloud storage buckets. All pixels are processed in your device's private RAM buffer.",
+          faq1Q: "Why should I resize and crop images locally in my browser?",
+          faq1A: "Local browser processing eliminates the wait times and bandwidth costs of uploading multi-megabyte files to remote servers. It also provides guaranteed data sovereignty, ensuring your private photos are never logged or stored by third parties.",
+          faq2Q: "How does aspect ratio locking work?",
+          faq2A: "When aspect ratio lock is enabled, typing a new width automatically recalculates the exact height to prevent stretching or squishing. You can toggle the lock off at any time if you specifically require non-proportional stretching.",
+          faq3Q: "How do social media aspect ratio presets work?",
+          faq3A: "Selecting 1:1, 16:9, 9:16, or 4:5 instantly snaps the visual crop overlay to industry-standard dimensions for Instagram, YouTube, TikTok, and web banners. You can slide the crop box to center the best part of your subject.",
+          faq4Q: "Which format is best for transparent images?",
+          faq4A: "If your source image has transparent backgrounds, export to PNG (lossless) or WEBP (lossy or lossless with alpha channel). JPG does not support alpha transparency and will fill transparent areas with solid white or black.",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.",
+          // Toast Feedback Strings
+          downloadToast: "Processed image downloaded successfully!",
+          copySuccessToast: "Image copied to clipboard!",
+          copyErrorToast: "Could not copy image to clipboard in this browser.",
+          resetToast: "All settings reset to defaults.",
+          sampleLoadedToast: "Sample image loaded successfully!"
+        },
+        ar: {
+          backLink: "← العودة إلى الأدوات",
+          brandBadge: "الصور والرسومات • محلي 100% في المتصفح • إعادة تشكيل دقيقة",
+          pageTitle: "تعديل أبعاد <span>وقص الصور</span>",
+          pageSubtitle: "عدّل أبعاد الصور بالبكسل مع قفل نسب التناسب والقص التفاعلي بدقة عالية. حوّل إلى WEBP و JPG و PNG مع تحكم بضغط الحجم وبدون أي رفع للسيرفر.",
+          sourceTitle: "مساحة العمل البصرية",
+          badgeLocal: "خصوصية 100%",
+          dropTitle: "اسحب صورة هنا أو انقر للاختيار",
+          dropDesc: "يدعم PNG و JPG و JPEG و WEBP (معالجة محلية بالكامل في متصفحك)",
+          btnBrowse: "اختر ملف صورة",
+          lblSamples: "تحميل عينة:",
+          sampleLandscape: "أفقي 16:9",
+          samplePortrait: "عمودي 4:5",
+          sampleSquare: "مربع 1:1",
+          btnClearFile: "إعادة تعيين",
+          cropAreaLabel: "مربع القص:",
+          btnResetCrop: "كامل الصورة (إلغاء القص)",
+          controlsTitle: "إعدادات الأبعاد والتصدير",
+          lblAspectPresets: "نسبة أبعاد القص",
+          aspectFree: "مخصص",
+          aspectSquare: "مربع",
+          aspectVideo: "أفقي فيديو",
+          aspectStory: "ستوري/ريلز",
+          aspectFeed: "منشور عمودي",
+          lblDimensions: "الأبعاد المستهدفة",
+          aspectLockNotice: "نسبة التناسب مقفلة",
+          lblWidth: "العرض",
+          lblHeight: "الارتفاع",
+          lblFormat: "صيغة التصدير",
+          formatHint: "حديثة وخفيفة الحجم",
+          lblQuality: "جودة الضغط",
+          lblEstSize: "الحجم التقديري الناتج",
+          btnDownload: "تنزيل الصورة المعالجة",
+          btnCopyClipboard: "نسخ إلى الحافظة",
+          btnReset: "إعادة ضبط الكل",
+          guideHeading: "إعادة تشكيل وضغط فائق الدقة داخل المتصفح",
+          guideSubheading: "تعرف على كيفية قيام محركات Canvas 2D بإعادة تشكيل البكسلات والحفاظ على التناسب وخفض الحجم دون الحاجة لأي خوادم سحابية.",
+          card1Title: "إعادة تشكيل تكعيبية ثنائية متقدمة",
+          card1Desc: "عند تصغير الصور الكبيرة بدقة 4K، تؤدي الطرق التقليدية لتشوهات وتعرجات بصرية. يطبق VantorKit خوارزميات ترشيح متقدمة لضمان نعومة الحواف والتدرجات.",
+          card2Title: "ضغط حديث بصيغة WEBP",
+          card2Desc: "توفر صيغة WEBP الحديثة ضغطاً متقدماً يخفض حجم الصور بنسبة 30% إلى 50% مقارنة بصيغة JPEG مع الحفاظ على نفس الوضوح، مما يسرع تحميل المواقع.",
+          card3Title: "خصوصية 100% داخل الذاكرة المحلية",
+          card3Desc: "تتم معالجة صورك الشخصية وملفات عملائك الحساسة فقط داخل ذاكرة المتصفح المعزولة عبر Canvas API دون إرسال أي بايت عبر الإنترنت.",
+          faq1Q: "لماذا أعدل أبعاد الصور وأقصها محلياً في المتصفح؟",
+          faq1A: "توفر المعالجة المحلية سرعة فائقة دون انتظار الرفع والتنزيل، وتعمل بدون إنترنت، وتضمن بقاء صورك وملفاتك الحساسة سرية تماماً على جهازك الشخصي.",
+          faq2Q: "كيف يعمل قفل نسبة التناسب؟",
+          faq2A: "عند تفعيل قفل التناسب، يتم حساب الارتفاع آلياً عند إدخال العرض الجديد والعكس صحيح لمنع تمدد الصورة أو تشوه أبعادها.",
+          faq3Q: "كيف تعمل قوالب القص لشبكات التواصل الاجتماعي؟",
+          faq3A: "يضبط اختيار 1:1 أو 16:9 أو 9:16 أو 4:5 إطار القص فوراً وفقاً للمقاييس المعتمدة في إنستغرام ويوتيوب وتيك توك مع إمكانية تحريك الإطار بحرية.",
+          faq4Q: "ما هي الصيغة الأنسب للصور الشفافة؟",
+          faq4A: "إذا كانت الصورة تحتوي على خلفية شفافة، اختر تصديرها بصيغة PNG أو WEBP، بينما تحول صيغة JPG المساحات الشفافة إلى خلفية بيضاء أو سوداء.",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك.",
+          downloadToast: "تم تنزيل الصورة المعالجة بنجاح!",
+          copySuccessToast: "تم نسخ الصورة إلى الحافظة!",
+          copyErrorToast: "تعذر نسخ الصورة إلى الحافظة في هذا المتصفح.",
+          resetToast: "تمت إعادة ضبط جميع الإعدادات للوضع الافتراضي.",
+          sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!"
+        },
+        fr: {
+          backLink: "← Retour aux Outils",
+          brandBadge: "Images & Vecteurs • 100% Côté Client • Rééchantillonnage Local",
+          pageTitle: "Redimensionner <span>&amp; Rogner l'Image</span>",
+          pageSubtitle: "Ajustez les dimensions, verrouillez les proportions et rognez vos photos avec précision. Convertissez en WEBP, JPG ou PNG et optimisez le poids sans aucun serveur.",
+          sourceTitle: "Espace de Travail Visuel",
+          badgeLocal: "100% Privé",
+          dropTitle: "Déposez une image ici ou cliquez pour parcourir",
+          dropDesc: "Prend en charge PNG, JPG, JPEG et WEBP (traité localement)",
+          btnBrowse: "Choisir un Fichier Image",
+          lblSamples: "Charger un exemple :",
+          sampleLandscape: "Paysage 16:9",
+          samplePortrait: "Portrait 4:5",
+          sampleSquare: "Produit 1:1",
+          btnClearFile: "Réinitialiser",
+          cropAreaLabel: "Zone de Rognage :",
+          btnResetCrop: "Image Entière (Réinitialiser Rognage)",
+          controlsTitle: "Paramètres de Taille &amp; Sortie",
+          lblAspectPresets: "Ratio de Rognage",
+          aspectFree: "Personnalisé",
+          aspectSquare: "Carré",
+          aspectVideo: "Paysage",
+          aspectStory: "Story/Reel",
+          aspectFeed: "Portrait Feed",
+          lblDimensions: "Dimensions Cibles",
+          aspectLockNotice: "Ratio d'Aspect Verrouillé",
+          lblWidth: "Largeur",
+          lblHeight: "Hauteur",
+          lblFormat: "Format d'Exportation",
+          formatHint: "Moderne &amp; Léger",
+          lblQuality: "Qualité de Compression",
+          lblEstSize: "Taille de Sortie Estimée",
+          btnDownload: "Télécharger l'Image Traitée",
+          btnCopyClipboard: "Copier dans le Presse-papiers",
+          btnReset: "Tout Réinitialiser",
+          guideHeading: "Rééchantillonnage et Compression Précis en Navigateur",
+          guideSubheading: "Découvrez comment le moteur Canvas 2D effectue un sous-échantillonnage de haute fidélité et une compression optimale sans intermédiaire cloud.",
+          card1Title: "Rééchantillonnage Bicubique & Densité",
+          card1Desc: "Lors de la réduction de photos 4K, les algorithmes basiques génèrent du crénelage. VantorKit applique une interpolation bicubique native pour des dégradés lisses et nets.",
+          card2Title: "Compression Nouvelle Génération WEBP",
+          card2Desc: "Le format WEBP permet de réduire la taille des fichiers de 30% à 50% par rapport au JPEG avec une qualité visuelle identique, accélérant considérablement le chargement des pages web.",
+          card3Title: "Confidentialité 100% en Mémoire Sandboxée",
+          card3Desc: "Vos photographies et visuels d'entreprise ne sont jamais transmis sur le réseau. Tous les traitements s'exécutent strictement dans la mémoire vive de votre navigateur.",
+          faq1Q: "Pourquoi redimensionner et rogner les images localement ?",
+          faq1A: "Le traitement local élimine les temps d'attente de transfert vers un serveur distant, fonctionne sans connexion et garantit une confidentialité totale.",
+          faq2Q: "Comment fonctionne le verrouillage du ratio d'aspect ?",
+          faq2A: "Lorsque le verrouillage est actif, modifier la largeur ajuste automatiquement la hauteur proportionnellement afin d'éviter toute déformation.",
+          faq3Q: "Comment fonctionnent les préréglages pour réseaux sociaux ?",
+          faq3A: "Les boutons 1:1, 16:9, 9:16 et 4:5 ajustent instantanément le cadre aux formats standards d'Instagram, YouTube, TikTok et des bannières web.",
+          faq4Q: "Quel format choisir pour conserver la transparence ?",
+          faq4A: "Si votre image comporte de la transparence, choisissez PNG (sans perte) ou WEBP. Le format JPG ne supporte pas l'alpha et remplira le fond en blanc.",
+          footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur.",
+          downloadToast: "Image traitée téléchargée avec succès !",
+          copySuccessToast: "Image copiée dans le presse-papiers !",
+          copyErrorToast: "Impossible de copier l'image dans ce navigateur.",
+          resetToast: "Paramètres réinitialisés aux valeurs par défaut.",
+          sampleLoadedToast: "Image exemple chargée avec succès !"
+        },
+        it: {
+          backLink: "← Torna agli Strumenti",
+          brandBadge: "Immagini & Vettori • 100% Lato Client • Ricampionamento nel Browser",
+          pageTitle: "Ridimensiona <span>&amp; Ritaglia Immagine</span>",
+          pageSubtitle: "Regola le dimensioni in pixel, blocca le proporzioni e ritaglia le foto con precisione. Converti in WEBP, JPG o PNG e comprimi il peso senza server.",
+          sourceTitle: "Area di Lavoro Visiva",
+          badgeLocal: "100% Privato",
+          dropTitle: "Trascina un'immagine qui o clicca per sfogliare",
+          dropDesc: "Supporta PNG, JPG, JPEG e WEBP (elaborazione 100% nel browser)",
+          btnBrowse: "Scegli File Immagine",
+          lblSamples: "Carica Esempio:",
+          sampleLandscape: "Panoramica 16:9",
+          samplePortrait: "Ritratto 4:5",
+          sampleSquare: "Prodotto 1:1",
+          btnClearFile: "Ripristina",
+          cropAreaLabel: "Riquadro Ritaglio:",
+          btnResetCrop: "Immagine Intera (Azzera Ritaglio)",
+          controlsTitle: "Impostazioni Dimensioni &amp; Output",
+          lblAspectPresets: "Proporzioni Ritaglio",
+          aspectFree: "Personalizzato",
+          aspectSquare: "Quadrato",
+          aspectVideo: "Panoramico",
+          aspectStory: "Story/Reel",
+          aspectFeed: "Ritratto Feed",
+          lblDimensions: "Dimensioni Destinazione",
+          aspectLockNotice: "Proporzioni Bloccate",
+          lblWidth: "Larghezza",
+          lblHeight: "Altezza",
+          lblFormat: "Formato Esportazione",
+          formatHint: "Moderno &amp; Leggero",
+          lblQuality: "Qualità di Compressione",
+          lblEstSize: "Dimensione File Stimata",
+          btnDownload: "Scarica Immagine Elaborata",
+          btnCopyClipboard: "Copia negli Appunti",
+          btnReset: "Azzera Tutto",
+          guideHeading: "Ricampionamento e Compressione Precisi nel Browser",
+          guideSubheading: "Scopri come i motori Canvas 2D eseguono ricampionamenti ad alta fedeltà e compressioni avanzate senza intermediari cloud.",
+          card1Title: "Ricampionamento Bicubico & Densità",
+          card1Desc: "Nella riduzione di fotografie ad alta risoluzione 4K, gli algoritmi semplici creano sgranature. VantorKit utilizza l'interpolazione bicubica nativa per contorni nitidi e sfumature pulite.",
+          card2Title: "Compressione WEBP di Nuova Generazione",
+          card2Desc: "Il formato WEBP riduce il peso dei file dal 30% al 50% rispetto al JPEG a parità di qualità percepita, ottimizzando i tempi di caricamento e i punteggi Core Web Vitals.",
+          card3Title: "Privacy 100% nella Memoria Sandbox",
+          card3Desc: "Le tue fotografie personali e i tuoi progetti grafici non vengono mai trasferiti in rete. Ogni pixel viene elaborato esclusivamente nella memoria RAM locale del tuo dispositivo.",
+          faq1Q: "Perché ridimensionare e ritagliare le immagini localmente?",
+          faq1A: "L'elaborazione locale nel browser azzera i tempi di caricamento verso server esterni, funziona offline e garantisce la massima riservatezza per i tuoi file.",
+          faq2Q: "Come funziona il blocco delle proporzioni?",
+          faq2A: "Quando il blocco proporzioni è attivo, modificando la larghezza viene calcolata automaticamente l'altezza corretta, prevenendo schiacciamenti o distorsioni.",
+          faq3Q: "Come funzionano i preset per social network?",
+          faq3A: "Selezionando 1:1, 16:9, 9:16 o 4:5 il riquadro di ritaglio si imposta istantaneamente sui formati standard per Instagram, YouTube, TikTok e banner web.",
+          faq4Q: "Qual è il formato ideale per immagini trasparenti?",
+          faq4A: "Se la tua immagine ha uno sfondo trasparente, esporta in PNG o WEBP. Il formato JPG non supporta la trasparenza e riempirà le aree vuote di bianco.",
+          footerText: "© 2026 VantorKit. Utilità web veloci, private e gratuite. Tutte le elaborazioni vengono eseguite localmente nel tuo browser.",
+          downloadToast: "Immagine elaborata scaricata con successo!",
+          copySuccessToast: "Immagine copiata negli appunti!",
+          copyErrorToast: "Impossibile copiare l'immagine in questo browser.",
+          resetToast: "Tutte le impostazioni sono state ripristinate.",
+          sampleLoadedToast: "Immagine di esempio caricata con successo!"
+        }
+      };
+
+      const LANG_LABELS = {
+        en: "English",
+        ar: "العربية",
+        fr: "Français",
+        it: "Italiano"
+      };
+
+      // --- Curated Generative Sample Graphics (High Res Data URLs) ---
+      // 1. Landscape 16:9 (1920x1080)
+      const SVG_SAMPLE_LANDSCAPE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+        <defs>
+          <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="%230f172a"/>
+            <stop offset="40%" stop-color="%231e1b4b"/>
+            <stop offset="70%" stop-color="%233b0764"/>
+            <stop offset="90%" stop-color="%23ea580c"/>
+            <stop offset="100%" stop-color="%23fbbf24"/>
+          </linearGradient>
+          <radialGradient id="sun1" cx="0.5" cy="0.65" r="0.4">
+            <stop offset="0%" stop-color="%23ffffff"/>
+            <stop offset="30%" stop-color="%23fef08a"/>
+            <stop offset="70%" stop-color="%23f97316"/>
+            <stop offset="100%" stop-color="%23c026d3" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="sea1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="%23ea580c"/>
+            <stop offset="30%" stop-color="%236b21a8"/>
+            <stop offset="100%" stop-color="%23020617"/>
+          </linearGradient>
+        </defs>
+        <rect width="1920" height="740" fill="url(%23sky1)"/>
+        <circle cx="960" cy="580" r="280" fill="url(%23sun1)"/>
+        <circle cx="960" cy="580" r="140" fill="%23fef08a"/>
+        <!-- Mountains -->
+        <polygon points="0,740 380,480 760,740" fill="%232e1065" opacity="0.9"/>
+        <polygon points="520,740 960,420 1400,740" fill="%233b0764" opacity="0.85"/>
+        <polygon points="1200,740 1620,490 1920,740" fill="%231e1b4b" opacity="0.95"/>
+        <rect y="730" width="1920" height="350" fill="url(%23sea1)"/>
+        <!-- Reflection -->
+        <ellipse cx="960" cy="770" rx="300" ry="12" fill="%23fde047" opacity="0.6"/>
+        <ellipse cx="960" cy="810" rx="240" ry="9" fill="%23fb923c" opacity="0.5"/>
+        <ellipse cx="960" cy="860" rx="180" ry="7" fill="%23f97316" opacity="0.4"/>
+      </svg>`;
+
+      // 2. Portrait 4:5 (1080x1350)
+      const SVG_SAMPLE_PORTRAIT = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+        <defs>
+          <linearGradient id="pBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="%23111827"/>
+            <stop offset="50%" stop-color="%231e1b4b"/>
+            <stop offset="100%" stop-color="%23311042"/>
+          </linearGradient>
+          <linearGradient id="neonGlow" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="%2306b6d4"/>
+            <stop offset="50%" stop-color="%233b82f6"/>
+            <stop offset="100%" stop-color="%23a855f7"/>
+          </linearGradient>
+          <linearGradient id="goldHex" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="%23f59e0b"/>
+            <stop offset="100%" stop-color="%23ec4899"/>
+          </linearGradient>
+        </defs>
+        <rect width="1080" height="1350" fill="url(%23pBg)"/>
+        <!-- Concentric Cyber Rings -->
+        <circle cx="540" cy="675" r="380" fill="none" stroke="url(%23neonGlow)" stroke-width="4" opacity="0.5"/>
+        <circle cx="540" cy="675" r="320" fill="none" stroke="url(%23goldHex)" stroke-width="2" stroke-dasharray="10,14" opacity="0.6"/>
+        <circle cx="540" cy="675" r="240" fill="url(%23neonGlow)" opacity="0.25"/>
+        <!-- Silhouette Portrait Hexagon -->
+        <polygon points="540,420 740,535 740,765 540,880 340,765 340,535" fill="%230f172a" stroke="url(%23neonGlow)" stroke-width="6"/>
+        <polygon points="540,470 690,555 690,725 540,810 390,725 390,555" fill="url(%23goldHex)" opacity="0.85"/>
+        <circle cx="540" cy="640" r="60" fill="%23ffffff"/>
+      </svg>`;
+
+      // 3. Square Product 1:1 (1200x1200)
+      const SVG_SAMPLE_SQUARE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200">
+        <defs>
+          <radialGradient id="sqBg" cx="0.5" cy="0.4" r="0.6">
+            <stop offset="0%" stop-color="%231e293b"/>
+            <stop offset="60%" stop-color="%230f172a"/>
+            <stop offset="100%" stop-color="%23020617"/>
+          </radialGradient>
+          <linearGradient id="cube1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="%2338bdf8"/>
+            <stop offset="100%" stop-color="%231d4ed8"/>
+          </linearGradient>
+          <linearGradient id="cube2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="%23818cf8"/>
+            <stop offset="100%" stop-color="%236366f1"/>
+          </linearGradient>
+          <linearGradient id="cube3" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="%23c084fc"/>
+            <stop offset="100%" stop-color="%239333ea"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="1200" fill="url(%23sqBg)"/>
+        <!-- Pedestal -->
+        <ellipse cx="600" cy="850" rx="360" ry="70" fill="%230b0f19" stroke="rgba(59,130,246,0.3)" stroke-width="2"/>
+        <ellipse cx="600" cy="850" rx="260" ry="45" fill="rgba(59,130,246,0.15)"/>
+        <!-- Isometric 3D Floating Cube Product -->
+        <!-- Top Face -->
+        <polygon points="600,320 840,440 600,560 360,440" fill="url(%23cube1)"/>
+        <!-- Left Face -->
+        <polygon points="360,440 600,560 600,820 360,700" fill="url(%23cube2)"/>
+        <!-- Right Face -->
+        <polygon points="600,560 840,440 840,700 600,820" fill="url(%23cube3)"/>
+      </svg>`;
+
+      // --- State ---
+      let loadedImage = null;
+      let activeFileName = "sample-landscape.png";
+      let activeFileBytes = 1250000;
+
+      // Crop rectangle (in original image coordinates)
+      let cropRect = { x: 0, y: 0, w: 1920, h: 1080 };
+      let activeAspectMode = 'free'; // 'free' | '1:1' | '16:9' | '9:16' | '4:5'
+
+      // Resize target dimensions (px)
+      let targetWidth = 1920;
+      let targetHeight = 1080;
+      let isAspectLocked = true;
+
+      // Output settings
+      let exportFormat = 'image/webp'; // 'image/webp' | 'image/jpeg' | 'image/png'
+      let exportQuality = 0.85;
+
+      // Interaction state for canvas cropper
+      let dragHandle = null; // 'move' | 'tl' | 'tr' | 'bl' | 'br' | null
+      let dragStartMouse = { x: 0, y: 0 };
+      let dragStartCrop = { x: 0, y: 0, w: 0, h: 0 };
+      let toastTimer = null;
+      let estimateDebounceTimer = null;
+
+      // --- DOM Elements ---
+      const htmlRoot = document.getElementById('htmlRoot');
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const btnBrowse = document.getElementById('btnBrowse');
+      const samplePills = document.querySelectorAll('.sample-pill');
+      const fileBanner = document.getElementById('fileBanner');
+      const fileTypeBadge = document.getElementById('fileTypeBadge');
+      const fileName = document.getElementById('fileName');
+      const fileDimensions = document.getElementById('fileDimensions');
+      const btnClearFile = document.getElementById('btnClearFile');
+
+      const viewportContainer = document.getElementById('viewportContainer');
+      const viewportCanvas = document.getElementById('viewportCanvas');
+      const cropBoxDimensions = document.getElementById('cropBoxDimensions');
+      const btnResetCrop = document.getElementById('btnResetCrop');
+
+      const aspectBtns = document.querySelectorAll('.aspect-btn');
+      const activeAspectLabel = document.getElementById('activeAspectLabel');
+      const activePresetBadge = document.getElementById('activePresetBadge');
+
+      const inputWidth = document.getElementById('inputWidth');
+      const inputHeight = document.getElementById('inputHeight');
+      const btnLockAspect = document.getElementById('btnLockAspect');
+      const scaleBtns = document.querySelectorAll('.scale-btn');
+
+      const formatBtns = document.querySelectorAll('.format-btn');
+      const qualityWrap = document.getElementById('qualityWrap');
+      const qualitySlider = document.getElementById('qualitySlider');
+      const qualityValDisplay = document.getElementById('qualityValDisplay');
+      const formatHint = document.getElementById('formatHint');
+
+      const originalWeightDisplay = document.getElementById('originalWeightDisplay');
+      const estSizeDisplay = document.getElementById('estSizeDisplay');
+      const reductionDisplay = document.getElementById('reductionDisplay');
+
+      const btnDownload = document.getElementById('btnDownload');
+      const btnCopyClipboard = document.getElementById('btnCopyClipboard');
+      const btnResetAll = document.getElementById('btnResetAll');
+
+      const langDropdown = document.getElementById('langDropdown');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+
+      // --- Helper Utilities ---
+      function formatBytes(bytes) {
+        if (!bytes || isNaN(bytes) || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      function getActiveDict() {
+        const lang = localStorage.getItem('vantorkit_lang') || 'en';
+        return I18N[lang] || I18N.en;
+      }
+
+      // --- Image Loading & Initialization ---
+      function loadImage(src, name = 'custom-image.png', sizeBytes = 1200000) {
+        const img = new Image();
+        img.onload = () => {
+          loadedImage = img;
+          activeFileName = name;
+          activeFileBytes = sizeBytes;
+
+          const origW = img.naturalWidth || img.width;
+          const origH = img.naturalHeight || img.height;
+
+          // Initialize crop to full image
+          cropRect = { x: 0, y: 0, w: origW, h: origH };
+          targetWidth = origW;
+          targetHeight = origH;
+
+          inputWidth.value = targetWidth;
+          inputHeight.value = targetHeight;
+
+          // Update banner
+          fileBanner.style.display = 'flex';
+          fileName.textContent = activeFileName;
+          fileDimensions.textContent = `${origW} × ${origH} px • ${formatBytes(activeFileBytes)}`;
+          const ext = activeFileName.split('.').pop().toUpperCase();
+          fileTypeBadge.textContent = ext.length <= 4 ? ext : 'IMG';
+          originalWeightDisplay.textContent = `Original: ~${formatBytes(activeFileBytes)}`;
+
+          // Reset aspect ratio pill to freeform
+          setAspectPreset('free');
+          setScalePreset(1);
+
+          drawViewport();
+          scheduleEstimateSize();
+        };
+        img.src = src;
+      }
+
+      // --- Aspect Ratio Presets ---
+      function setAspectPreset(aspect) {
+        activeAspectMode = aspect;
+        aspectBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-aspect') === aspect);
+        });
+
+        if (!loadedImage) return;
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+
+        let ratio = null;
+        if (aspect === '1:1') ratio = 1;
+        else if (aspect === '16:9') ratio = 16 / 9;
+        else if (aspect === '9:16') ratio = 9 / 16;
+        else if (aspect === '4:5') ratio = 4 / 5;
+
+        if (ratio !== null) {
+          // Fit largest crop box with this aspect ratio inside image
+          let newW = origW;
+          let newH = Math.round(newW / ratio);
+
+          if (newH > origH) {
+            newH = origH;
+            newW = Math.round(newH * ratio);
+          }
+
+          const newX = Math.round((origW - newW) / 2);
+          const newY = Math.round((origH - newH) / 2);
+
+          cropRect = { x: newX, y: newY, w: newW, h: newH };
+          targetWidth = newW;
+          targetHeight = newH;
+          inputWidth.value = targetWidth;
+          inputHeight.value = targetHeight;
+        }
+
+        activeAspectLabel.textContent = aspect.toUpperCase();
+        drawViewport();
+        scheduleEstimateSize();
+      }
+
+      aspectBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          setAspectPreset(btn.getAttribute('data-aspect'));
+        });
+      });
+
+      // --- Canvas Overlay & Cropper Drawing ---
+      function drawViewport() {
+        if (!loadedImage) return;
+
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+
+        // Container bounds
+        const containerW = viewportContainer.clientWidth || 640;
+        const maxH = 440;
+
+        // Scale image to fit container nicely
+        const scale = Math.min(containerW / origW, maxH / origH, 1);
+        const displayW = Math.round(origW * scale);
+        const displayH = Math.round(origH * scale);
+
+        viewportCanvas.width = displayW;
+        viewportCanvas.height = displayH;
+
+        const ctx = viewportCanvas.getContext('2d');
+        ctx.clearRect(0, 0, displayW, displayH);
+
+        // 1. Draw base image
+        ctx.drawImage(loadedImage, 0, 0, displayW, displayH);
+
+        // 2. Draw Translucent Scrim
+        ctx.fillStyle = 'rgba(7, 9, 14, 0.72)';
+        ctx.fillRect(0, 0, displayW, displayH);
+
+        // Convert crop coordinates from image-space to canvas display-space
+        const cX = Math.round((cropRect.x / origW) * displayW);
+        const cY = Math.round((cropRect.y / origH) * displayH);
+        const cW = Math.round((cropRect.w / origW) * displayW);
+        const cH = Math.round((cropRect.h / origH) * displayH);
+
+        // 3. Clear Scrim inside Crop Box (reveal full bright image)
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(cX, cY, cW, cH);
+        ctx.clip();
+        ctx.drawImage(loadedImage, 0, 0, displayW, displayH);
+
+        // 4. Subtle Rule-of-Thirds Grid inside crop area
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        // Verticals
+        ctx.moveTo(cX + cW / 3, cY);
+        ctx.lineTo(cX + cW / 3, cY + cH);
+        ctx.moveTo(cX + (cW * 2) / 3, cY);
+        ctx.lineTo(cX + (cW * 2) / 3, cY + cH);
+        // Horizontals
+        ctx.moveTo(cX, cY + cH / 3);
+        ctx.lineTo(cX + cW, cY + cH / 3);
+        ctx.moveTo(cX, cY + (cH * 2) / 3);
+        ctx.lineTo(cX + cW, cY + (cH * 2) / 3);
+        ctx.stroke();
+        ctx.restore();
+
+        // 5. Crop Box Border with Glowing Outline
+        ctx.strokeStyle = '#60a5fa';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cX, cY, cW, cH);
+
+        // 6. Corner Handles (Tactile White Knobs with Shadow)
+        const handleSize = 10;
+        const corners = [
+          { x: cX, y: cY },
+          { x: cX + cW, y: cY },
+          { x: cX, y: cY + cH },
+          { x: cX + cW, y: cY + cH }
+        ];
+
+        corners.forEach(pt => {
+          ctx.fillStyle = '#ffffff';
+          ctx.strokeStyle = '#2563eb';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, handleSize / 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        // Update crop badge in UI
+        cropBoxDimensions.textContent = `${Math.round(cropRect.w)} × ${Math.round(cropRect.h)} px`;
+      }
+
+      // --- Interactive Cropper Dragging & Resizing ---
+      function getCanvasCoords(e) {
+        const rect = viewportCanvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      function getCropDisplayBounds() {
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+        const dW = viewportCanvas.width;
+        const dH = viewportCanvas.height;
+
+        return {
+          x: (cropRect.x / origW) * dW,
+          y: (cropRect.y / origH) * dH,
+          w: (cropRect.w / origW) * dW,
+          h: (cropRect.h / origH) * dH,
+          scaleX: origW / dW,
+          scaleY: origH / dH
+        };
+      }
+
+      viewportCanvas.addEventListener('mousedown', (e) => {
+        if (!loadedImage) return;
+        const mouse = getCanvasCoords(e);
+        const b = getCropDisplayBounds();
+        const hitRadius = 14;
+
+        // Check corner handles
+        if (Math.hypot(mouse.x - b.x, mouse.y - b.y) <= hitRadius) dragHandle = 'tl';
+        else if (Math.hypot(mouse.x - (b.x + b.w), mouse.y - b.y) <= hitRadius) dragHandle = 'tr';
+        else if (Math.hypot(mouse.x - b.x, mouse.y - (b.y + b.h)) <= hitRadius) dragHandle = 'bl';
+        else if (Math.hypot(mouse.x - (b.x + b.w), mouse.y - (b.y + b.h)) <= hitRadius) dragHandle = 'br';
+        else if (mouse.x >= b.x && mouse.x <= b.x + b.w && mouse.y >= b.y && mouse.y <= b.y + b.h) {
+          dragHandle = 'move';
+        } else {
+          dragHandle = null;
+        }
+
+        if (dragHandle) {
+          dragStartMouse = { x: e.clientX, y: e.clientY };
+          dragStartCrop = { ...cropRect };
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!dragHandle || !loadedImage) return;
+
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+        const dW = viewportCanvas.width;
+        const dH = viewportCanvas.height;
+        const scaleX = origW / dW;
+        const scaleY = origH / dH;
+
+        const dx = (e.clientX - dragStartMouse.x) * scaleX;
+        const dy = (e.clientY - dragStartMouse.y) * scaleY;
+
+        let newX = dragStartCrop.x;
+        let newY = dragStartCrop.y;
+        let newW = dragStartCrop.w;
+        let newH = dragStartCrop.h;
+
+        // Determine aspect constraint
+        let aspect = null;
+        if (activeAspectMode === '1:1') aspect = 1;
+        else if (activeAspectMode === '16:9') aspect = 16 / 9;
+        else if (activeAspectMode === '9:16') aspect = 9 / 16;
+        else if (activeAspectMode === '4:5') aspect = 4 / 5;
+
+        if (dragHandle === 'move') {
+          newX = Math.min(Math.max(0, dragStartCrop.x + dx), origW - dragStartCrop.w);
+          newY = Math.min(Math.max(0, dragStartCrop.y + dy), origH - dragStartCrop.h);
+        } else if (dragHandle === 'br') {
+          newW = Math.max(50, Math.min(origW - dragStartCrop.x, dragStartCrop.w + dx));
+          if (aspect) {
+            newH = Math.round(newW / aspect);
+            if (newY + newH > origH) {
+              newH = origH - newY;
+              newW = Math.round(newH * aspect);
+            }
+          } else {
+            newH = Math.max(50, Math.min(origH - dragStartCrop.y, dragStartCrop.h + dy));
+          }
+        } else if (dragHandle === 'bl') {
+          const maxLeft = dragStartCrop.x + dragStartCrop.w - 50;
+          newX = Math.max(0, Math.min(maxLeft, dragStartCrop.x + dx));
+          newW = dragStartCrop.w - (newX - dragStartCrop.x);
+          if (aspect) {
+            newH = Math.round(newW / aspect);
+            if (newY + newH > origH) {
+              newH = origH - newY;
+              newW = Math.round(newH * aspect);
+              newX = dragStartCrop.x + dragStartCrop.w - newW;
+            }
+          } else {
+            newH = Math.max(50, Math.min(origH - dragStartCrop.y, dragStartCrop.h + dy));
+          }
+        } else if (dragHandle === 'tr') {
+          newW = Math.max(50, Math.min(origW - dragStartCrop.x, dragStartCrop.w + dx));
+          const maxTop = dragStartCrop.y + dragStartCrop.h - 50;
+          newY = Math.max(0, Math.min(maxTop, dragStartCrop.y + dy));
+          newH = dragStartCrop.h - (newY - dragStartCrop.y);
+          if (aspect) {
+            newH = Math.round(newW / aspect);
+            newY = dragStartCrop.y + dragStartCrop.h - newH;
+            if (newY < 0) {
+              newY = 0;
+              newH = dragStartCrop.y + dragStartCrop.h;
+              newW = Math.round(newH * aspect);
+            }
+          }
+        } else if (dragHandle === 'tl') {
+          const maxLeft = dragStartCrop.x + dragStartCrop.w - 50;
+          const maxTop = dragStartCrop.y + dragStartCrop.h - 50;
+          newX = Math.max(0, Math.min(maxLeft, dragStartCrop.x + dx));
+          newY = Math.max(0, Math.min(maxTop, dragStartCrop.y + dy));
+          newW = dragStartCrop.w - (newX - dragStartCrop.x);
+          newH = dragStartCrop.h - (newY - dragStartCrop.y);
+          if (aspect) {
+            newH = Math.round(newW / aspect);
+            newY = dragStartCrop.y + dragStartCrop.h - newH;
+            if (newY < 0) {
+              newY = 0;
+              newH = dragStartCrop.y + dragStartCrop.h;
+              newW = Math.round(newH * aspect);
+              newX = dragStartCrop.x + dragStartCrop.w - newW;
+            }
+          }
+        }
+
+        cropRect = {
+          x: Math.round(newX),
+          y: Math.round(newY),
+          w: Math.round(newW),
+          h: Math.round(newH)
+        };
+
+        // Update resize dimension inputs
+        targetWidth = cropRect.w;
+        targetHeight = cropRect.h;
+        inputWidth.value = targetWidth;
+        inputHeight.value = targetHeight;
+
+        drawViewport();
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (dragHandle) {
+          dragHandle = null;
+          scheduleEstimateSize();
+        }
+      });
+
+      // Hover cursor indicator
+      viewportCanvas.addEventListener('mousemove', (e) => {
+        if (dragHandle || !loadedImage) return;
+        const mouse = getCanvasCoords(e);
+        const b = getCropDisplayBounds();
+        const hit = 12;
+
+        if (Math.hypot(mouse.x - b.x, mouse.y - b.y) <= hit) viewportCanvas.style.cursor = 'nwse-resize';
+        else if (Math.hypot(mouse.x - (b.x + b.w), mouse.y - b.y) <= hit) viewportCanvas.style.cursor = 'nesw-resize';
+        else if (Math.hypot(mouse.x - b.x, mouse.y - (b.y + b.h)) <= hit) viewportCanvas.style.cursor = 'nesw-resize';
+        else if (Math.hypot(mouse.x - (b.x + b.w), mouse.y - (b.y + b.h)) <= hit) viewportCanvas.style.cursor = 'nwse-resize';
+        else if (mouse.x >= b.x && mouse.x <= b.x + b.w && mouse.y >= b.y && mouse.y <= b.y + b.h) {
+          viewportCanvas.style.cursor = 'move';
+        } else {
+          viewportCanvas.style.cursor = 'default';
+        }
+      });
+
+      // Reset crop to full image
+      btnResetCrop.addEventListener('click', () => {
+        if (!loadedImage) return;
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+        cropRect = { x: 0, y: 0, w: origW, h: origH };
+        targetWidth = origW;
+        targetHeight = origH;
+        inputWidth.value = targetWidth;
+        inputHeight.value = targetHeight;
+        setAspectPreset('free');
+        setScalePreset(1);
+        drawViewport();
+        scheduleEstimateSize();
+      });
+
+      // --- Resize Dimensions & Percentage Presets ---
+      // Lock Aspect Ratio Toggle
+      btnLockAspect.addEventListener('click', () => {
+        isAspectLocked = !isAspectLocked;
+        btnLockAspect.classList.toggle('locked', isAspectLocked);
+        const lockNotice = document.getElementById('aspectLockNotice');
+        if (lockNotice) {
+          lockNotice.textContent = isAspectLocked ? "Aspect Ratio Locked" : "Aspect Ratio Unlocked";
+        }
+      });
+
+      // Width input change
+      inputWidth.addEventListener('input', () => {
+        const val = parseInt(inputWidth.value, 10);
+        if (isNaN(val) || val <= 0) return;
+        targetWidth = val;
+
+        if (isAspectLocked && cropRect.w > 0) {
+          const ratio = cropRect.h / cropRect.w;
+          targetHeight = Math.round(val * ratio);
+          inputHeight.value = targetHeight;
+        }
+
+        clearActiveScalePresets();
+        scheduleEstimateSize();
+      });
+
+      // Height input change
+      inputHeight.addEventListener('input', () => {
+        const val = parseInt(inputHeight.value, 10);
+        if (isNaN(val) || val <= 0) return;
+        targetHeight = val;
+
+        if (isAspectLocked && cropRect.h > 0) {
+          const ratio = cropRect.w / cropRect.h;
+          targetWidth = Math.round(val * ratio);
+          inputWidth.value = targetWidth;
+        }
+
+        clearActiveScalePresets();
+        scheduleEstimateSize();
+      });
+
+      // Percentage Scaling Presets (25%, 50%, 75%, 100%, 200%)
+      function setScalePreset(multiplier) {
+        scaleBtns.forEach(btn => {
+          btn.classList.toggle('active', parseFloat(btn.getAttribute('data-scale')) === multiplier);
+        });
+
+        targetWidth = Math.round(cropRect.w * multiplier);
+        targetHeight = Math.round(cropRect.h * multiplier);
+        inputWidth.value = targetWidth;
+        inputHeight.value = targetHeight;
+
+        activePresetBadge.textContent = `${Math.round(multiplier * 100)}% (${targetWidth}×${targetHeight})`;
+        scheduleEstimateSize();
+      }
+
+      function clearActiveScalePresets() {
+        scaleBtns.forEach(btn => btn.classList.remove('active'));
+        activePresetBadge.textContent = `Custom (${targetWidth}×${targetHeight})`;
+      }
+
+      scaleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          setScalePreset(parseFloat(btn.getAttribute('data-scale')));
+        });
+      });
+
+      // --- Format & Quality Settings ---
+      formatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          formatBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          exportFormat = btn.getAttribute('data-format');
+
+          if (exportFormat === 'image/png') {
+            qualityWrap.style.opacity = '0.5';
+            qualitySlider.disabled = true;
+            qualityValDisplay.textContent = 'Lossless (100%)';
+            formatHint.textContent = 'Lossless Transparency';
+          } else {
+            qualityWrap.style.opacity = '1';
+            qualitySlider.disabled = false;
+            updateQualityDisplay();
+            formatHint.textContent = exportFormat === 'image/webp' ? 'Modern & Lightweight' : 'Universal Compatibility';
+          }
+
+          scheduleEstimateSize();
+        });
+      });
+
+      qualitySlider.addEventListener('input', () => {
+        exportQuality = parseInt(qualitySlider.value, 10) / 100;
+        updateQualityDisplay();
+        scheduleEstimateSize();
+      });
+
+      function updateQualityDisplay() {
+        const pct = Math.round(exportQuality * 100);
+        let tag = 'Normal';
+        if (pct >= 90) tag = 'Ultra';
+        else if (pct >= 80) tag = 'High Quality';
+        else if (pct >= 60) tag = 'Balanced';
+        else tag = 'Maximum Compression';
+        qualityValDisplay.textContent = `${pct}% (${tag})`;
+      }
+
+      // --- Offscreen Canvas Render for Export & Size Estimation ---
+      function createProcessedCanvas() {
+        if (!loadedImage) return null;
+
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = targetWidth;
+        offCanvas.height = targetHeight;
+        const ctx = offCanvas.getContext('2d');
+
+        // High quality smoothing
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        // Draw cropped area to target dimensions
+        ctx.drawImage(
+          loadedImage,
+          cropRect.x, cropRect.y, cropRect.w, cropRect.h,
+          0, 0, targetWidth, targetHeight
+        );
+
+        return offCanvas;
+      }
+
+      // Real-time estimated size calculation
+      function scheduleEstimateSize() {
+        clearTimeout(estimateDebounceTimer);
+        estimateDebounceTimer = setTimeout(computeEstimatedSize, 250);
+      }
+
+      function computeEstimatedSize() {
+        const off = createProcessedCanvas();
+        if (!off) return;
+
+        try {
+          off.toBlob((blob) => {
+            if (!blob) return;
+            const bytes = blob.size;
+            estSizeDisplay.textContent = `~${formatBytes(bytes)}`;
+
+            if (activeFileBytes > 0) {
+              const diff = ((bytes - activeFileBytes) / activeFileBytes) * 100;
+              if (diff < 0) {
+                reductionDisplay.textContent = `(${Math.round(diff)}% smaller)`;
+                reductionDisplay.style.color = '#34d399';
+              } else {
+                reductionDisplay.textContent = `(+${Math.round(diff)}% larger)`;
+                reductionDisplay.style.color = '#94a3b8';
+              }
+            }
+          }, exportFormat, exportQuality);
+        } catch (e) {
+          estSizeDisplay.textContent = '~Estimated';
+        }
+      }
+
+      // --- Download & Clipboard Actions ---
+      btnDownload.addEventListener('click', () => {
+        const off = createProcessedCanvas();
+        if (!off) return;
+
+        off.toBlob((blob) => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+          const extMap = {
+            'image/webp': 'webp',
+            'image/jpeg': 'jpg',
+            'image/png': 'png'
+          };
+          const ext = extMap[exportFormat] || 'webp';
+          const baseName = activeFileName.replace(/\.[^/.]+$/, "");
+          const downloadName = `${baseName}-${targetWidth}x${targetHeight}.${ext}`;
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = downloadName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          showToast(getActiveDict().downloadToast);
+        }, exportFormat, exportQuality);
+      });
+
+      btnCopyClipboard.addEventListener('click', () => {
+        const off = createProcessedCanvas();
+        if (!off) return;
+
+        if (!navigator.clipboard || !window.ClipboardItem) {
+          showToast(getActiveDict().copyErrorToast);
+          return;
+        }
+
+        off.toBlob((blob) => {
+          if (!blob) {
+            showToast(getActiveDict().copyErrorToast);
+            return;
+          }
+          try {
+            navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]).then(() => {
+              showToast(getActiveDict().copySuccessToast);
+            }).catch(() => {
+              showToast(getActiveDict().copyErrorToast);
+            });
+          } catch (e) {
+            showToast(getActiveDict().copyErrorToast);
+          }
+        }, 'image/png'); // Standard clipboard requires PNG format
+      });
+
+      // Reset All
+      btnResetAll.addEventListener('click', () => {
+        if (!loadedImage) return;
+        const origW = loadedImage.naturalWidth || loadedImage.width;
+        const origH = loadedImage.naturalHeight || loadedImage.height;
+
+        cropRect = { x: 0, y: 0, w: origW, h: origH };
+        targetWidth = origW;
+        targetHeight = origH;
+        inputWidth.value = targetWidth;
+        inputHeight.value = targetHeight;
+
+        isAspectLocked = true;
+        btnLockAspect.classList.add('locked');
+
+        exportFormat = 'image/webp';
+        formatBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-format') === 'image/webp'));
+        qualityWrap.style.opacity = '1';
+        qualitySlider.disabled = false;
+        qualitySlider.value = 85;
+        exportQuality = 0.85;
+        updateQualityDisplay();
+
+        setAspectPreset('free');
+        setScalePreset(1);
+
+        showToast(getActiveDict().resetToast);
+      });
+
+      // --- File Upload & Drag-and-Drop ---
+      btnBrowse.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+
+      dropZone.addEventListener('click', () => fileInput.click());
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('drag-active');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('drag-active');
+        });
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      function handleFile(file) {
+        if (!file.type.startsWith('image/')) {
+          showToast('Please upload a valid image file (PNG, JPG, WEBP).');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          loadImage(e.target.result, file.name, file.size);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      btnClearFile.addEventListener('click', () => {
+        fileInput.value = '';
+        loadImage(SVG_SAMPLE_LANDSCAPE, 'sample-landscape.png', 1250000);
+      });
+
+      // Quick Sample Buttons
+      samplePills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const sampleKey = pill.getAttribute('data-sample');
+          if (sampleKey === 'portrait') {
+            loadImage(SVG_SAMPLE_PORTRAIT, 'sample-portrait.png', 980000);
+          } else if (sampleKey === 'square') {
+            loadImage(SVG_SAMPLE_SQUARE, 'sample-product.png', 850000);
+          } else {
+            loadImage(SVG_SAMPLE_LANDSCAPE, 'sample-landscape.png', 1250000);
+          }
+          showToast(getActiveDict().sampleLoadedToast);
+        });
+      });
+
+      window.addEventListener('resize', drawViewport);
+
+      // --- Multi-Language Switcher Logic ---
+      function toggleLangMenu(force) {
+        const isExpanded = force !== undefined ? force : !langDropdown.classList.contains('active');
+        langDropdown.classList.toggle('active', isExpanded);
+        langToggleBtn.setAttribute('aria-expanded', isExpanded);
+      }
+
+      if (langToggleBtn) {
+        langToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleLangMenu();
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        if (langDropdown && !langDropdown.contains(e.target)) {
+          toggleLangMenu(false);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && langDropdown && langDropdown.classList.contains('active')) {
+          toggleLangMenu(false);
+          langToggleBtn.focus();
+        }
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.getAttribute('data-lang');
+          if (lang && I18N[lang]) {
+            setLanguage(lang);
+            toggleLangMenu(false);
+          }
+        });
+      });
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        localStorage.setItem('vantorkit_lang', lang);
+
+        const dict = I18N[lang];
+        const isRtl = lang === 'ar';
+
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        if (currentLangLabel) {
+          currentLangLabel.textContent = LANG_LABELS[lang] || 'English';
+        }
+
+        langOptions.forEach(opt => {
+          opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+        });
+
+        // Translate all data-i18n elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            if (key === 'pageTitle') {
+              el.innerHTML = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
+        });
+      }
+
+      // --- Initialization ---
+      const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+      setLanguage(savedLang);
+      loadImage(SVG_SAMPLE_LANDSCAPE, 'sample-landscape.png', 1250000);
+
+    })();
+  </script>
+</body>
+</html>
