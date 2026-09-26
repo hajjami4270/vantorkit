@@ -16,7 +16,7 @@
   </script>
 
   <title>Word &amp; Character Counter — Real-Time Text Analysis &amp; Keyword Density | VantorKit</title>
-  <meta name="description" content="Free real-time word counter, character counter, sentence and paragraph analyzer with keyword density, reading time, speaking time, and case converter. 100% client-side privacy.">
+  <meta name="description" content="Count words, characters, sentences, and paragraphs in real time. Analyze keyword density, reading time, and speaking duration with 100% privacy.">
   <meta name="keywords" content="word counter, character counter, letter counter, reading time calculator, speaking time, keyword density analyzer, case converter, title case, sentence case, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/word-counter.html">
 
@@ -1246,7 +1246,7 @@
       </div>
 
       <div class="textarea-wrap">
-        <textarea id="textInput" class="text-editor" placeholder="Type or paste your text here to analyze words, characters, sentences, reading duration, and keyword density in real-time..." spellcheck="true" autocomplete="off"></textarea>
+        <textarea id="textInput" class="text-editor" placeholder="Type or paste your text here to analyze words, characters, sentences, reading duration, and keyword density in real-time..." spellcheck="true" autocomplete="off" aria-label="Text editor content to count and analyze"></textarea>
       </div>
 
       <!-- Transformation Toolbar -->
@@ -1277,7 +1277,7 @@
             <span data-i18n="densityTitle">Top Keywords &amp; Density</span>
           </div>
           <label class="stop-word-toggle">
-            <input type="checkbox" id="chkFilterStopWords" checked>
+            <input type="checkbox" id="chkFilterStopWords" checked aria-label="Filter common stop words from keyword density">
             <span data-i18n="chkStopWords">Filter Stop Words</span>
           </label>
         </div>
@@ -1706,9 +1706,9 @@
       const chars = text.length;
       const charsNoSpaces = text.replace(/\s/g, '').length;
 
-      // Words count (unicode-friendly)
+      // Words count (unicode-friendly, filtering out punctuation-only and symbol-only tokens)
       const trimmed = text.trim();
-      const wordsArr = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
+      const wordsArr = trimmed ? trimmed.split(/\s+/).filter(function(w) { return /[\p{L}\p{N}]/u.test(w); }) : [];
       const words = wordsArr.length;
 
       // Sentences: period, exclamation, question mark, or arabic question mark

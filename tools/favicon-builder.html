@@ -16,7 +16,7 @@
   </script>
 
   <title>Multi-Size Favicon Builder — Generate ICO, PNG &amp; Webmanifest | VantorKit</title>
-  <meta name="description" content="Free online Favicon Generator. Create 16x16, 32x32, 48x48, Apple Touch Icon (180x180), Android Chrome (192x192 &amp; 512x512) and standard favicon.ico with zero server uploads.">
+  <meta name="description" content="Generate multi-size favicons (16x16 to 512x512) and Apple Touch Icons directly in your browser. Download ICO and PNG packages with zero uploads.">
   <meta name="keywords" content="favicon generator, favicon builder, multi-size favicon, ico generator, apple touch icon, pwa icons, android chrome icon, site.webmanifest, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/favicon-builder.html">
 
@@ -1333,7 +1333,7 @@
           <span data-i18n="pasteHint">Or paste directly from clipboard</span>
           <span class="kbd-shortcut">Ctrl+V / ⌘V</span>
         </div>
-        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/*">
+        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/*" aria-label="Upload source image for favicon generation">
       </div>
     </div>
 
@@ -1387,7 +1387,7 @@
               <span data-i18n="ctrlPadding">Inner Padding / Breathing Room</span>
             </div>
             <div class="slider-row">
-              <input type="range" class="slider-input" id="paddingSlider" min="0" max="35" value="10" step="1">
+              <input type="range" class="slider-input" id="paddingSlider" min="0" max="35" value="10" step="1" aria-label="Favicon padding percentage slider">
               <span class="slider-val" id="paddingVal">10%</span>
             </div>
           </div>
@@ -1412,8 +1412,8 @@
               
               <!-- Custom Hex -->
               <div class="custom-color-wrap">
-                <input type="color" id="customColorPicker" value="#ffffff">
-                <input type="text" class="custom-hex-input" id="customHexInput" value="#FFFFFF" maxlength="7" spellcheck="false">
+                <input type="color" id="customColorPicker" value="#ffffff" aria-label="Custom background color picker">
+                <input type="text" class="custom-hex-input" id="customHexInput" value="#FFFFFF" maxlength="7" spellcheck="false" aria-label="Custom background hex code">
               </div>
             </div>
           </div>
@@ -1425,8 +1425,8 @@
               <span data-i18n="ctrlThemeColor">Browser Bar &amp; PWA Theme Color</span>
             </div>
             <div class="custom-color-wrap" style="width:fit-content;">
-              <input type="color" id="themeColorPicker" value="#ffffff">
-              <input type="text" class="custom-hex-input" id="themeHexInput" value="#FFFFFF" maxlength="7" spellcheck="false">
+              <input type="color" id="themeColorPicker" value="#ffffff" aria-label="Browser theme color picker">
+              <input type="text" class="custom-hex-input" id="themeHexInput" value="#FFFFFF" maxlength="7" spellcheck="false" aria-label="Browser theme color hex code">
             </div>
           </div>
         </div>
@@ -1557,7 +1557,7 @@
           </div>
 
           <div class="code-snippet-box">
-            <textarea class="code-content" id="codeContent" readonly spellcheck="false"></textarea>
+            <textarea class="code-content" id="codeContent" readonly spellcheck="false" aria-label="HTML favicon meta tags snippet"></textarea>
             <div class="code-actions-bar">
               <button type="button" class="btn-copy-code" id="btnCopySnippet">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>

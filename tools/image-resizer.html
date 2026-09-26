@@ -16,7 +16,7 @@
   </script>
 
   <title>Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit</title>
-  <meta name="description" content="Resize and crop images locally in your browser. Custom pixel dimensions, aspect ratio presets (1:1, 16:9, 9:16, 4:5), WEBP/JPG/PNG conversion, and quality compression with zero server uploads.">
+  <meta name="description" content="Resize and crop images locally in your browser. Custom pixel dimensions, aspect ratio presets, and format conversion with zero cloud uploads.">
   <meta name="keywords" content="image resizer, crop image online, photo resizer, aspect ratio cropper, convert image to webp, compress jpg, client side image editor, free image tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-resizer.html">
 
@@ -1563,7 +1563,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span data-i18n="btnBrowse">Choose Image File</span>
           </button>
-          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" style="display: none;" aria-label="Upload image to resize">
         </div>
 
         <!-- Quick Samples Bar -->
@@ -1710,7 +1710,7 @@
               <span data-i18n="lblQuality">Compression Quality</span>
               <span id="qualityValDisplay" style="color: #60a5fa; font-family: 'JetBrains Mono', monospace;">85% (High Quality)</span>
             </div>
-            <input type="range" id="qualitySlider" class="quality-slider" min="10" max="100" value="85" step="1">
+            <input type="range" id="qualitySlider" class="quality-slider" min="10" max="100" value="85" step="1" aria-label="Output image quality slider">
           </div>
         </div>
 

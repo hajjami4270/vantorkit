@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SVG to PNG Converter — Free High-Res Vector Rasterizer | VantorKit</title>
-  <meta name="description" content="Convert SVG vector images to high-resolution PNG format locally in your browser. Scale up to 8x ultra-HD, customize dimensions, transparent or solid backgrounds with zero server uploads.">
+  <meta name="description" content="Convert SVG vector images to high-resolution PNG format in your browser. Scale up to 8x ultra-HD with transparent backgrounds and zero uploads.">
   <meta name="keywords" content="svg to png, convert svg to png, vector to png, high res svg converter, rasterize svg, transparent png, client side image converter, free svg tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/svg-to-png.html">
 
@@ -1619,7 +1619,7 @@
         <!-- Mode 1: Drag & Drop Zone -->
         <div id="panelUpload">
           <div class="dropzone" id="dropZone">
-            <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml">
+            <input type="file" id="fileInput" class="hidden-file-input" accept=".svg,image/svg+xml" aria-label="Upload SVG file to convert">
             <div class="dropzone-icon">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
             </div>
@@ -1649,7 +1649,7 @@
 
         <!-- Mode 2: Raw Code Paste -->
         <div id="panelPaste" class="raw-code-panel">
-          <textarea id="rawSvgInput" class="raw-textarea" placeholder="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>&#10;  <circle cx='50' cy='50' r='40' fill='#3b82f6'/>&#10;</svg>" spellcheck="false"></textarea>
+          <textarea id="rawSvgInput" class="raw-textarea" placeholder="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' aria-label="Raw SVG code markup">&#10;  <circle cx='50' cy='50' r='40' fill='#3b82f6'/>&#10;</svg>" spellcheck="false"></textarea>
           <div class="samples-row">
             <span class="samples-label" data-i18n="lblSamples">Quick Samples:</span>
             <button type="button" class="sample-chip" data-sample="badge">VantorKit Badge</button>
@@ -1725,7 +1725,7 @@
           <div class="color-swatch-wrap">
             <input type="color" id="nativeBgColor" class="color-input-native" value="#ffffff" aria-label="Pick color">
           </div>
-          <input type="text" id="hexBgColor" class="color-hex-text" value="#FFFFFF" maxlength="7" spellcheck="false">
+          <input type="text" id="hexBgColor" class="color-hex-text" value="#FFFFFF" maxlength="7" spellcheck="false" aria-label="Custom background color hex code">
           <div class="color-preset-pills">
             <button type="button" class="color-preset-dot" data-col="#ffffff" title="White" style="background:#ffffff;"></button>
             <button type="button" class="color-preset-dot" data-col="#000000" title="Pure Black" style="background:#000000;"></button>

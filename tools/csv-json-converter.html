@@ -16,7 +16,7 @@
   </script>
 
   <title>CSV to JSON &amp; JSON to CSV Converter — Free Online Tool | VantorKit</title>
-  <meta name="description" content="Free, fast, and secure CSV to JSON and JSON to CSV converter. Client-side processing with zero server uploads, auto-delimiter detection, nested JSON flattening, and RFC 4180 compliance.">
+  <meta name="description" content="Convert CSV to JSON and JSON to CSV in your browser. Fast RFC 4180 parsing with delimiter auto-detection, nested flattening, and zero uploads.">
   <meta name="keywords" content="csv to json, json to csv, csv converter, json converter, flatten json to csv, online csv converter, data converter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/csv-json-converter.html">
 
@@ -1364,12 +1364,12 @@
         </label>
 
         <label class="option-item">
-          <input type="checkbox" id="csvHasHeaders" class="option-checkbox" checked>
+          <input type="checkbox" id="csvHasHeaders" class="option-checkbox" checked aria-label="First row contains column headers">
           <span data-i18n="csvOptHeaders">First row is header</span>
         </label>
 
         <label class="option-item">
-          <input type="checkbox" id="csvParseTypes" class="option-checkbox" checked>
+          <input type="checkbox" id="csvParseTypes" class="option-checkbox" checked aria-label="Automatically parse numbers and booleans">
           <span data-i18n="csvOptParseTypes">Parse numbers &amp; booleans</span>
         </label>
 
@@ -1395,12 +1395,12 @@
         </label>
 
         <label class="option-item">
-          <input type="checkbox" id="jsonIncludeHeaders" class="option-checkbox" checked>
+          <input type="checkbox" id="jsonIncludeHeaders" class="option-checkbox" checked aria-label="Include header row in CSV output">
           <span data-i18n="jsonOptHeaders">Include header row</span>
         </label>
 
         <label class="option-item">
-          <input type="checkbox" id="jsonFlatten" class="option-checkbox" checked>
+          <input type="checkbox" id="jsonFlatten" class="option-checkbox" checked aria-label="Auto-flatten nested JSON objects">
           <span data-i18n="jsonOptFlatten">Auto-flatten nested objects</span>
         </label>
       </div>
@@ -1430,7 +1430,7 @@
           </span>
 
           <div class="editor-controls">
-            <input type="file" id="fileUploadInput" class="file-input-hidden" accept=".csv,.json,.txt">
+            <input type="file" id="fileUploadInput" class="file-input-hidden" accept=".csv,.json,.txt" aria-label="Upload CSV or JSON file">
             <button type="button" class="editor-btn" id="btnUploadFile" title="Upload file from your computer">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
               <span data-i18n="btnUploadFile">Upload File</span>
@@ -1439,7 +1439,7 @@
         </div>
 
         <div class="editor-body">
-          <textarea id="sourceInput" class="code-textarea" placeholder="Paste your CSV data here or drag &amp; drop a file..." spellcheck="false"></textarea>
+          <textarea id="sourceInput" class="code-textarea" placeholder="Paste your CSV data here or drag &amp; drop a file..." spellcheck="false" aria-label="Source CSV or JSON data"></textarea>
         </div>
 
         <div class="editor-footer">
@@ -1472,7 +1472,7 @@
         </div>
 
         <div class="editor-body">
-          <textarea id="outputResult" class="code-textarea" readonly placeholder="Converted output will appear here in real time..." spellcheck="false"></textarea>
+          <textarea id="outputResult" class="code-textarea" readonly placeholder="Converted output will appear here in real time..." spellcheck="false" aria-label="Converted CSV or JSON result"></textarea>
         </div>
 
         <div class="editor-footer">
@@ -1746,6 +1746,7 @@
         let currentRow = [];
         let currentVal = '';
         let inQuotes = false;
+        let wasQuoted = false;
         let i = 0;
 
         while (i < text.length) {
@@ -1766,23 +1767,27 @@
           } else {
             if (char === '"') {
               inQuotes = true;
+              wasQuoted = true;
               i++;
             } else if (char === delimiter) {
-              currentRow.push(currentVal.trim());
+              currentRow.push(wasQuoted ? currentVal : currentVal.trim());
               currentVal = '';
+              wasQuoted = false;
               i++;
             } else if (char === '\r') {
               if (nextChar === '\n') i++;
-              currentRow.push(currentVal.trim());
+              currentRow.push(wasQuoted ? currentVal : currentVal.trim());
               rows.push(currentRow);
               currentRow = [];
               currentVal = '';
+              wasQuoted = false;
               i++;
             } else if (char === '\n') {
-              currentRow.push(currentVal.trim());
+              currentRow.push(wasQuoted ? currentVal : currentVal.trim());
               rows.push(currentRow);
               currentRow = [];
               currentVal = '';
+              wasQuoted = false;
               i++;
             } else {
               currentVal += char;
@@ -1791,7 +1796,7 @@
           }
         }
 
-        currentRow.push(currentVal.trim());
+        currentRow.push(wasQuoted ? currentVal : currentVal.trim());
         if (currentRow.some(c => c !== '')) {
           rows.push(currentRow);
         }
@@ -1800,7 +1805,7 @@
 
         function parseTypedValue(val) {
           if (!parseTypes) return val;
-          if (val === '') return null;
+          if (val === '') return '';
           const lower = val.toLowerCase();
           if (lower === 'true') return true;
           if (lower === 'false') return false;

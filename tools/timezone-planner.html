@@ -16,7 +16,7 @@
   </script>
 
   <title>Time Zone Meeting Planner — 24-Hour Overlap Matrix | VantorKit</title>
-  <meta name="description" content="Plan international team meetings and client calls across multiple time zones. Compare 24-hour visual overlap bars with working hour highlights. 100% private in-browser tool.">
+  <meta name="description" content="Plan international team meetings and client calls across world time zones. Compare 24-hour overlap bars with working hours. 100% private tool.">
   <meta name="keywords" content="timezone meeting planner, world clock meeting planner, time zone converter, time zone overlap, business hours overlap, remote team time converter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/timezone-planner.html">
 
@@ -1153,7 +1153,7 @@
         <!-- Add City Dropdown -->
         <div class="city-add-wrap">
           <svg class="search-icon-inside" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" class="city-search-input" id="citySearchInput" placeholder="Add city (e.g. Casablanca, Tokyo, Dubai)..." autocomplete="off">
+          <input type="text" class="city-search-input" id="citySearchInput" placeholder="Add city (e.g. Casablanca, Tokyo, Dubai)..." autocomplete="off" aria-label="Search city or time zone">
           <div class="city-dropdown-menu" id="cityDropdownMenu"></div>
         </div>
       </div>
@@ -1161,7 +1161,7 @@
       <!-- Time Slider Row -->
       <div class="slider-time-row">
         <span class="control-label" data-i18n="referenceHourLabel">Reference Meeting Hour:</span>
-        <input type="range" class="time-slider" id="hourSlider" min="0" max="23" value="14" step="1">
+        <input type="range" class="time-slider" id="hourSlider" min="0" max="23" value="14" step="1" aria-label="Reference meeting hour slider">
         <span class="slider-time-badge" id="sliderTimeBadge">14:00</span>
         <button type="button" class="btn-action-secondary" id="btnCurrentHour" style="padding:.4rem .85rem;font-size:.8rem;" data-i18n="btnCurrentHour">Current Hour</button>
       </div>

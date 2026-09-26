@@ -16,7 +16,7 @@
   </script>
 
   <title>Case Converter &amp; URL Slugifier — Free Online Text Case &amp; Slug Tool | VantorKit</title>
-  <meta name="description" content="Free online case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs. 100% client-side.">
+  <meta name="description" content="Convert text to UPPERCASE, lowercase, Title Case, camelCase, snake_case, and generate clean SEO URL slugs. Fast, private, and client-side.">
   <meta name="keywords" content="case converter, url slugifier, slug generator, camelcase converter, snake case, pascalcase, kebab case, title case, uppercase, lowercase, text tools, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/case-converter.html">
 
@@ -1166,7 +1166,7 @@
           </div>
           <div class="io-stats" id="inputStats">0 lines &#8226; 0 words &#8226; 0 chars</div>
         </div>
-        <textarea id="inputText" class="io-textarea" placeholder="Type or paste your text here..." spellcheck="false" autocomplete="off"></textarea>
+        <textarea id="inputText" class="io-textarea" placeholder="Type or paste your text here..." spellcheck="false" autocomplete="off" aria-label="Input text for case conversion"></textarea>
         <div class="io-footer">
           <div class="btn-group">
             <button type="button" class="btn-io" id="btnPaste" title="Paste text from clipboard">
@@ -1194,7 +1194,7 @@
           </div>
           <div class="io-stats" id="outputStats">0 lines &#8226; 0 words &#8226; 0 chars</div>
         </div>
-        <textarea id="outputText" class="io-textarea" placeholder="Transformed output appears here..." readonly spellcheck="false" autocomplete="off"></textarea>
+        <textarea id="outputText" class="io-textarea" placeholder="Transformed output appears here..." readonly spellcheck="false" autocomplete="off" aria-label="Converted output text"></textarea>
         <div class="io-footer">
           <div class="btn-group">
             <button type="button" class="btn-io" id="btnSwap" title="Swap output back to input to chain transformations">
@@ -1318,15 +1318,15 @@
 
           <div class="slug-checkbox-row">
             <label class="slug-check">
-              <input type="checkbox" id="chkSlugLower" checked>
+              <input type="checkbox" id="chkSlugLower" checked aria-label="Lowercase slug output">
               <span data-i18n="chkSlugLower">Lowercase Output</span>
             </label>
             <label class="slug-check">
-              <input type="checkbox" id="chkStripDiacritics" checked>
+              <input type="checkbox" id="chkStripDiacritics" checked aria-label="Strip accents and diacritics">
               <span data-i18n="chkStripDiacritics">Remove Accents (é &rarr; e)</span>
             </label>
             <label class="slug-check">
-              <input type="checkbox" id="chkStopWords">
+              <input type="checkbox" id="chkStopWords" aria-label="Remove common stop words">
               <span data-i18n="chkStopWords">Filter Stop Words (a, the, in...)</span>
             </label>
             <button type="button" class="btn-io primary" id="btnApplySlug" style="margin-left:auto">
@@ -1809,11 +1809,10 @@
 
     // Helper: Words tokenizer for developer cases
     function splitWords(str) {
-      const clean = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      return clean
-        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
-        .replace(/[^\w\s-]/g, ' ')
+      return (str || '')
+        .replace(/(\p{Ll}|\p{N})(\p{Lu})/gu, '$1 $2')
+        .replace(/(\p{Lu}+)(\p{Lu}\p{Ll})/gu, '$1 $2')
+        .replace(/[^\p{L}\p{N}\s_-]/gu, ' ')
         .trim()
         .split(/[\s_-]+/)
         .filter(Boolean);
@@ -1895,16 +1894,16 @@
 
     // Slugifier Engine Function
     function generateSlug(str) {
-      let text = str;
+      let text = str || '';
       if (chkStripDiacritics.checked) {
-        text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[\u064B-\u065F\u0670]/g, '');
       }
       if (chkSlugLower.checked) {
         text = text.toLowerCase();
       }
 
-      // Strip non-alphanumeric except spaces, underscores, hyphens
-      text = text.replace(/[^a-zA-Z0-9\s_-]/g, ' ').trim();
+      // Strip non-alphanumeric except spaces, underscores, hyphens (Unicode-aware)
+      text = text.replace(/[^\p{L}\p{N}\s_-]/gu, ' ').trim();
       let tokens = text.split(/[\s_-]+/).filter(Boolean);
 
       if (chkStopWords.checked) {

@@ -16,7 +16,7 @@
   </script>
 
   <title>Text Diff &amp; Compare — Free Online Visual Difference Checker | VantorKit</title>
-  <meta name="description" content="Free online text diff tool. Compare two texts side-by-side or inline with visual additions and deletions highlights. Line, word, and character granularity. 100% client-side privacy.">
+  <meta name="description" content="Compare two texts side-by-side or inline with visual difference highlights. Granular line, word, and character diffs with 100% local privacy.">
   <meta name="keywords" content="text diff, compare text, diff checker, text compare online, difference checker, code diff, word diff, side by side diff, unified diff, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/text-diff.html">
 
@@ -1296,11 +1296,11 @@
         <!-- Toggles -->
         <div class="config-group">
           <label class="toggle-check-label" title="Ignore leading/trailing whitespace changes">
-            <input type="checkbox" id="chkIgnoreWhitespace">
+            <input type="checkbox" id="chkIgnoreWhitespace" aria-label="Ignore whitespace differences">
             <span data-i18n="optIgnoreWhitespace">Ignore Whitespace</span>
           </label>
           <label class="toggle-check-label" title="Case-insensitive comparison">
-            <input type="checkbox" id="chkCaseSensitive" checked>
+            <input type="checkbox" id="chkCaseSensitive" checked aria-label="Case sensitive difference comparison">
             <span data-i18n="optCaseSensitive">Case Sensitive</span>
           </label>
         </div>
@@ -1330,7 +1330,7 @@
             <span data-i18n="paneOriginal">Original Text</span>
             <span class="pane-tag orig" data-i18n="tagOriginal">Old / Before</span>
           </div>
-          <textarea id="origTextarea" class="diff-textarea" placeholder="Paste or type original text here..." spellcheck="false" autocomplete="off"></textarea>
+          <textarea id="origTextarea" class="diff-textarea" placeholder="Paste or type original text here..." spellcheck="false" autocomplete="off" aria-label="Original source text"></textarea>
           <div class="input-footer">
             <span id="origLineCount">0 lines</span>
             <span id="origWordCount">0 words &bull; 0 chars</span>
@@ -1343,7 +1343,7 @@
             <span data-i18n="paneModified">Modified / New Text</span>
             <span class="pane-tag mod" data-i18n="tagModified">New / After</span>
           </div>
-          <textarea id="modTextarea" class="diff-textarea" placeholder="Paste or type modified text here..." spellcheck="false" autocomplete="off"></textarea>
+          <textarea id="modTextarea" class="diff-textarea" placeholder="Paste or type modified text here..." spellcheck="false" autocomplete="off" aria-label="Modified text to compare"></textarea>
           <div class="input-footer">
             <span id="modLineCount">0 lines</span>
             <span id="modWordCount">0 words &bull; 0 chars</span>

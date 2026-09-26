@@ -16,7 +16,7 @@
   </script>
 
   <title>Discount &amp; Sales Tax Calculator — Final Price &amp; Savings | VantorKit</title>
-  <meta name="description" content="Calculate discount savings, stacked promo codes, and sales tax or VAT in real-time. Includes visual price breakdown, reverse calculator mode, and itemized receipt export. 100% client-side and private.">
+  <meta name="description" content="Calculate discounts, stacked promo codes, and sales tax or VAT in real time. Includes price breakdowns and reverse calculations. 100% private.">
   <meta name="keywords" content="discount calculator, sales tax calculator, final price calculator, vat calculator, stacked discount, reverse discount calculator, percentage off, shopping savings, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/discount-tax-calculator.html">
 
@@ -1458,7 +1458,7 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix" id="currPrefix1">$</span>
-            <input type="number" class="calc-input" id="inputOrigPrice" value="100.00" min="0" step="any">
+            <input type="number" class="calc-input" id="inputOrigPrice" value="100.00" min="0" step="any" aria-label="Original item price">
           </div>
           <div class="chips-row">
             <button type="button" class="preset-chip" data-orig="25">$25</button>
@@ -1480,10 +1480,10 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix" id="discountUnitPrefix">%</span>
-            <input type="number" class="calc-input" id="inputDiscount" value="20" min="0" step="any">
+            <input type="number" class="calc-input" id="inputDiscount" value="20" min="0" step="any" aria-label="Discount percentage">
           </div>
           <div class="range-wrap" id="discountRangeWrap">
-            <input type="range" class="range-slider" id="sliderDiscount" min="0" max="90" value="20" step="1">
+            <input type="range" class="range-slider" id="sliderDiscount" min="0" max="90" value="20" step="1" aria-label="Discount percentage slider">
           </div>
           <div class="chips-row" id="discountChipsPercent">
             <button type="button" class="preset-chip" data-disc="10">10%</button>
@@ -1509,7 +1509,7 @@
               <span data-i18n="lblStackedTitle">Stacked Extra Discount (VIP / Promo)</span>
             </div>
             <div class="switch">
-              <input type="checkbox" id="stackedCheck">
+              <input type="checkbox" id="stackedCheck" aria-label="Apply additional stacked discount">
               <span class="slider-toggle"></span>
             </div>
           </div>
@@ -1520,7 +1520,7 @@
             </div>
             <div class="input-wrapper">
               <span class="input-prefix">%</span>
-              <input type="number" class="calc-input" id="inputExtraDiscount" value="10" min="0" max="90" step="any">
+              <input type="number" class="calc-input" id="inputExtraDiscount" value="10" min="0" max="90" step="any" aria-label="Additional stacked discount percentage">
             </div>
             <div class="chips-row">
               <button type="button" class="preset-chip" data-extra="5">5% VIP</button>
@@ -1539,10 +1539,10 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix">%</span>
-            <input type="number" class="calc-input" id="inputTaxRate" value="8.25" min="0" max="50" step="any">
+            <input type="number" class="calc-input" id="inputTaxRate" value="8.25" min="0" max="50" step="any" aria-label="Sales tax percentage">
           </div>
           <div class="range-wrap">
-            <input type="range" class="range-slider" id="sliderTax" min="0" max="30" value="8.25" step="0.25">
+            <input type="range" class="range-slider" id="sliderTax" min="0" max="30" value="8.25" step="0.25" aria-label="Sales tax slider">
           </div>
           <div class="chips-row">
             <button type="button" class="preset-chip" data-tax="0">0% Exempt</button>
@@ -1690,7 +1690,7 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix" id="currPrefixRev">$</span>
-            <input type="number" class="calc-input" id="revInputFinal" value="86.60" min="0" step="any">
+            <input type="number" class="calc-input" id="revInputFinal" value="86.60" min="0" step="any" aria-label="Final price paid">
           </div>
           <div class="chips-row">
             <button type="button" class="preset-chip" data-revpaid="50">$50</button>
@@ -1707,7 +1707,7 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix">%</span>
-            <input type="number" class="calc-input" id="revInputDiscount" value="20" min="0" max="99" step="any">
+            <input type="number" class="calc-input" id="revInputDiscount" value="20" min="0" max="99" step="any" aria-label="Discount percentage applied">
           </div>
           <div class="chips-row">
             <button type="button" class="preset-chip" data-revdisc="10">10%</button>
@@ -1725,7 +1725,7 @@
           </div>
           <div class="input-wrapper">
             <span class="input-prefix">%</span>
-            <input type="number" class="calc-input" id="revInputTax" value="8.25" min="0" max="50" step="any">
+            <input type="number" class="calc-input" id="revInputTax" value="8.25" min="0" max="50" step="any" aria-label="Sales tax rate applied">
           </div>
           <div class="chips-row">
             <button type="button" class="preset-chip" data-revtax="0">0%</button>

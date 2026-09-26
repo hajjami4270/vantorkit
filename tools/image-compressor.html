@@ -16,7 +16,7 @@
   </script>
 
   <title>Image Compressor &amp; WebP Optimizer — Free Client-Side Photo Compression | VantorKit</title>
-  <meta name="description" content="Compress JPG, PNG, WEBP, and AVIF images locally in your browser. Reduce file size by up to 90%, convert to modern WebP, scale dimensions, and compare before/after visual fidelity with zero server uploads.">
+  <meta name="description" content="Compress JPG, PNG, and WebP images locally in your browser. Reduce file size up to 90% while maintaining visual quality with zero server uploads.">
   <meta name="keywords" content="image compressor, webp optimizer, compress image online, client side image compressor, bulk image compression, reduce jpg size, png compressor, avif optimizer, split image comparison, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-compressor.html">
 
@@ -1719,7 +1719,7 @@
             Try Demo Graphic
           </button>
         </div>
-        <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/webp,image/avif">
+        <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/webp,image/avif" aria-label="Upload image to compress">
       </div>
     </section>
 
@@ -1797,7 +1797,7 @@
               <span class="control-value-pill" id="lblQualityValue">80%</span>
             </div>
             <div class="range-wrap">
-              <input type="range" class="range-input" id="qualityRange" min="10" max="100" value="80" step="1">
+              <input type="range" class="range-input" id="qualityRange" min="10" max="100" value="80" step="1" aria-label="Image compression quality slider">
             </div>
             <div class="preset-chips">
               <button type="button" class="preset-chip" data-q="60">60% Min</button>
@@ -1853,15 +1853,15 @@
                   <span data-i18n="toggleResize">Resize Dimensions</span>
                 </div>
                 <div class="switch">
-                  <input type="checkbox" id="resizeToggle">
+                  <input type="checkbox" id="resizeToggle" aria-label="Resize maximum dimensions">
                   <span class="slider-toggle"></span>
                 </div>
               </label>
 
               <div class="dimensions-inputs" id="dimInputsContainer">
-                <input type="number" class="input-box" id="maxWidthInput" placeholder="Max W" min="100" max="8000">
+                <input type="number" class="input-box" id="maxWidthInput" placeholder="Max W" min="100" max="8000" aria-label="Maximum width in pixels">
                 <span class="dim-x">×</span>
-                <input type="number" class="input-box" id="maxHeightInput" placeholder="Max H" min="100" max="8000">
+                <input type="number" class="input-box" id="maxHeightInput" placeholder="Max H" min="100" max="8000" aria-label="Maximum height in pixels">
               </div>
 
               <div class="res-chips" id="resChipsContainer" style="display:none;">

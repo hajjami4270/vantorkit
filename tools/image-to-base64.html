@@ -16,7 +16,7 @@
   </script>
 
   <title>Image to Base64 Converter — Data URI, HTML &amp; CSS Generator | VantorKit</title>
-  <meta name="description" content="Convert images (PNG, JPG, WebP, SVG, GIF, ICO) into Base64 Data URIs, HTML img tags, and CSS background code directly in your browser. 100% client-side with zero server uploads.">
+  <meta name="description" content="Convert PNG, JPG, WebP, and SVG images into Base64 Data URIs, HTML tags, and CSS code directly in your browser. Fast and 100% client-side.">
   <meta name="keywords" content="image to base64, convert image to base64, data uri generator, png to base64, jpg to base64, svg to base64, base64 image encoder, inline image css, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-to-base64.html">
 
@@ -1059,7 +1059,7 @@
           <span data-i18n="pasteHint">Or paste directly from clipboard</span>
           <span class="kbd-shortcut">Ctrl+V / ⌘V</span>
         </div>
-        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/x-icon,image/*">
+        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/x-icon,image/*" aria-label="Upload image to convert to Base64">
       </div>
     </div>
 
@@ -1107,7 +1107,7 @@
         </div>
 
         <div class="snippet-body">
-          <textarea class="code-output" id="snippetOutput" readonly spellcheck="false" placeholder="Base64 output will appear here..."></textarea>
+          <textarea class="code-output" id="snippetOutput" readonly spellcheck="false" placeholder="Base64 output will appear here..." aria-label="Base64 data URI output snippet"></textarea>
         </div>
 
         <div class="snippet-actions-bar">
@@ -1332,7 +1332,7 @@
         backLink: "← Back to Tools",
         badgePill: "100% Client-Side • Zero Cloud Uploads • Instant Encoding",
         toolTitle: "Image to Base64 Converter",
-        toolSubtitle: "Convert PNG, JPG, WebP, SVG, GIF, or ICO into embeddable Base64 Data URIs, HTML <img> tags, and CSS background snippets locally in your browser.",
+        toolSubtitle: "Convert PNG, JPG, WebP, SVG, GIF, or ICO into embeddable Base64 Data URIs, HTML <img alt="Image preview"> tags, and CSS background snippets locally in your browser.",
         dropzoneTitle: "Drag & Drop Image Here",
         dropzoneSub: "Supports PNG, JPG, WebP, SVG, GIF, ICO (Max recommended: 15MB)",
         btnBrowse: "Choose Image File",
@@ -1344,7 +1344,7 @@
         metaBase64Size: "Base64 Size:",
         metaOverhead: "+33.3% Overhead",
         tabDataUri: "Data URI",
-        tabHtml: "HTML <img>",
+        tabHtml: "HTML <img alt="Image preview">",
         tabCss: "CSS Background",
         tabRaw: "Raw Base64",
         btnCopySnippet: "Copy Snippet",
@@ -1377,7 +1377,7 @@
         backLink: "الرجوع إلى الأدوات ←",
         badgePill: "100% محلي في المتصفح • بدون رفع للسحابة • ترميز فوري",
         toolTitle: "محول الصور إلى Base64",
-        toolSubtitle: "حوّل صور PNG أو JPG أو WebP أو SVG أو GIF أو ICO إلى عناوين Data URI وروابط HTML <img> وأكواد خلفيات CSS مباشرة داخل متصفحك.",
+        toolSubtitle: "حوّل صور PNG أو JPG أو WebP أو SVG أو GIF أو ICO إلى عناوين Data URI وروابط HTML <img alt="Image preview"> وأكواد خلفيات CSS مباشرة داخل متصفحك.",
         dropzoneTitle: "اسحب الصورة وأفلتها هنا",
         dropzoneSub: "يدعم PNG و JPG و WebP و SVG و GIF و ICO (الحجم الموصى به: حتى 15 ميجابايت)",
         btnBrowse: "اختيار ملف الصورة",
@@ -1389,7 +1389,7 @@
         metaBase64Size: "حجم Base64:",
         metaOverhead: "+33.3% زيادة في الحجم",
         tabDataUri: "عنوان Data URI",
-        tabHtml: "وسم HTML <img>",
+        tabHtml: "وسم HTML <img alt="Image preview">",
         tabCss: "خلفية CSS",
         tabRaw: "سلسلة Base64 النقية",
         btnCopySnippet: "نسخ الكود",
@@ -1422,7 +1422,7 @@
         backLink: "← Retour aux outils",
         badgePill: "100% Côté Client • Zéro Téléversement Cloud • Encodage Instantané",
         toolTitle: "Convertisseur Image vers Base64",
-        toolSubtitle: "Convertissez PNG, JPG, WebP, SVG, GIF ou ICO en Data URI Base64, balises HTML <img> et arrière-plans CSS directement dans votre navigateur.",
+        toolSubtitle: "Convertissez PNG, JPG, WebP, SVG, GIF ou ICO en Data URI Base64, balises HTML <img alt="Image preview"> et arrière-plans CSS directement dans votre navigateur.",
         dropzoneTitle: "Glissez & Déposez votre image ici",
         dropzoneSub: "Prend en charge PNG, JPG, WebP, SVG, GIF, ICO (Max recommandé: 15 Mo)",
         btnBrowse: "Choisir une Image",
@@ -1434,7 +1434,7 @@
         metaBase64Size: "Taille Base64:",
         metaOverhead: "+33.3% Surcharge",
         tabDataUri: "Data URI",
-        tabHtml: "Balise HTML <img>",
+        tabHtml: "Balise HTML <img alt="Image preview">",
         tabCss: "Arrière-plan CSS",
         tabRaw: "Base64 Brut",
         btnCopySnippet: "Copier l'extrait",
@@ -1467,7 +1467,7 @@
         backLink: "← Torna agli strumenti",
         badgePill: "100% Lato Client • Zero Caricamenti Cloud • Codifica Istantanea",
         toolTitle: "Convertitore da Immagine a Base64",
-        toolSubtitle: "Converti PNG, JPG, WebP, SVG, GIF o ICO in Data URI Base64, tag HTML <img> e sfondi CSS direttamente nel tuo browser.",
+        toolSubtitle: "Converti PNG, JPG, WebP, SVG, GIF o ICO in Data URI Base64, tag HTML <img alt="Image preview"> e sfondi CSS direttamente nel tuo browser.",
         dropzoneTitle: "Trascina e rilascia l'immagine qui",
         dropzoneSub: "Supporta PNG, JPG, WebP, SVG, GIF, ICO (Consigliato max: 15 MB)",
         btnBrowse: "Scegli File Immagine",
@@ -1479,7 +1479,7 @@
         metaBase64Size: "Dimensione Base64:",
         metaOverhead: "+33.3% Sovraccarico",
         tabDataUri: "Data URI",
-        tabHtml: "Tag HTML <img>",
+        tabHtml: "Tag HTML <img alt="Image preview">",
         tabCss: "Sfondo CSS",
         tabRaw: "Base64 Grezzo",
         btnCopySnippet: "Copia Snippet",

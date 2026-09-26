@@ -16,7 +16,7 @@
   </script>
 
   <title>Markdown Live Editor &amp; HTML Converter — Real-Time Split Preview | VantorKit</title>
-  <meta name="description" content="Free online Markdown live editor and HTML converter. Real-time split-screen preview, formatting toolbar, auto-save to browser, code highlighting, and clean HTML/MD export. 100% client-side privacy.">
+  <meta name="description" content="Write and preview Markdown with real-time split screen. Features syntax highlighting, browser auto-save, and instant HTML export. 100% private.">
   <meta name="keywords" content="markdown editor, markdown previewer, markdown to html converter, online markdown editor, live preview markdown, github flavored markdown, markdown table generator, text tools, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/markdown-editor.html">
 
@@ -1417,7 +1417,7 @@
           </div>
 
           <label class="sync-toggle-label" title="Synchronize editor and preview scroll positions">
-            <input type="checkbox" id="chkSyncScroll" checked>
+            <input type="checkbox" id="chkSyncScroll" checked aria-label="Synchronize editor and preview scrolling">
             <span data-i18n="syncScroll">&#9889; Sync Scroll</span>
           </label>
 
@@ -1503,7 +1503,7 @@
             <span data-i18n="paneEditorTitle">Markdown Source</span>
             <span class="pane-badge" id="lineCountBadge">1 line</span>
           </div>
-          <textarea id="markdownTextarea" class="markdown-textarea" placeholder="Write or paste your Markdown here... You can use standard formatting, tables, task lists, and code blocks." spellcheck="false" autocomplete="off"></textarea>
+          <textarea id="markdownTextarea" class="markdown-textarea" placeholder="Write or paste your Markdown here... You can use standard formatting, tables, task lists, and code blocks." spellcheck="false" autocomplete="off" aria-label="Markdown text editor input"></textarea>
         </div>
 
         <!-- Right Pane: Live HTML Preview -->
