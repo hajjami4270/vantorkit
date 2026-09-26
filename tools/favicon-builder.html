@@ -1,0 +1,2574 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Multi-Size Favicon Builder — Generate ICO, PNG &amp; Webmanifest | VantorKit</title>
+  <meta name="description" content="Free online Favicon Generator. Create 16x16, 32x32, 48x48, Apple Touch Icon (180x180), Android Chrome (192x192 &amp; 512x512) and standard favicon.ico with zero server uploads.">
+  <meta name="keywords" content="favicon generator, favicon builder, multi-size favicon, ico generator, apple touch icon, pwa icons, android chrome icon, site.webmanifest, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/favicon-builder.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Multi-Size Favicon Builder — Generate ICO, PNG &amp; Webmanifest | VantorKit">
+  <meta property="og:description" content="Generate crisp, multi-resolution favicons, Apple Touch icons, Android PWA manifests, and cross-platform ICO packages in your browser. 100% private.">
+  <meta property="og:url" content="https://vantorkit.com/tools/favicon-builder.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Multi-Size Favicon Builder | VantorKit">
+  <meta name="twitter:description" content="Create 16x16, 32x32, 48x48, Apple Touch Icon and PWA favicons locally with zero server telemetry.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- JSZip for Client-Side ZIP Packaging -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Multi-Size Favicon Builder",
+        "url": "https://vantorkit.com/tools/favicon-builder.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas API.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side Multi-Size Favicon Builder. Generate 16x16, 32x32, 48x48, Apple Touch Icon (180x180), Android Chrome (192x192, 512x512), standard favicon.ico, and site.webmanifest with one click."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my images or brand logos uploaded to any server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All canvas rendering, image scaling, ICO binary encoding, and ZIP file generation happen 100% locally in your browser memory. Your graphics never touch an external server."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What favicon sizes are included in the generated ZIP package?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The download package includes 16x16, 32x32, 48x48 PNGs, 180x180 Apple Touch Icon, 192x192 and 512x512 Android PWA icons, a valid multi-frame favicon.ico container, and a ready-to-use site.webmanifest."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do modern websites still need a favicon.ico file?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "While modern browsers support PNG and SVG favicons, legacy browsers, search engine scrapers, RSS readers, and bookmarks still request /favicon.ico at the domain root by default."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why shouldn't Apple Touch Icons have transparent backgrounds?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "iOS renders transparent areas of Apple Touch Icons as solid jet black on user home screens. Supplying a solid background color ensures your icon displays cleanly on all Apple devices."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Checkerboard Pattern for Transparency */
+    .checkerboard-bg {
+      background-image: 
+        linear-gradient(45deg, rgba(255,255,255,.06) 25%, transparent 25%), 
+        linear-gradient(-45deg, rgba(255,255,255,.06) 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,.06) 75%), 
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,.06) 75%);
+      background-size: 14px 14px;
+      background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+      background-color: #0c101d;
+    }
+
+    /* Tool Header */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--badge-text);
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .tool-header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tool-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Dropzone */
+    .dropzone-container {
+      margin-bottom: 2rem;
+    }
+    .dropzone {
+      border: 2px dashed rgba(59, 130, 246, 0.35);
+      border-radius: 20px;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+    }
+    .dropzone:hover, .dropzone.drag-active {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 35px var(--accent-glow);
+    }
+    .dropzone-icon-wrap {
+      width: 68px;
+      height: 68px;
+      border-radius: 18px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .dropzone h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .4rem;
+    }
+    .dropzone p {
+      color: var(--text-muted);
+      font-size: .92rem;
+      margin-bottom: 1.5rem;
+    }
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-browse {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .75rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-browse:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-sample {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      padding: .75rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .btn-sample:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .paste-hint {
+      margin-top: 1.25rem;
+      font-size: .82rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .kbd-shortcut {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: #e2e8f0;
+    }
+    #imageFileInput { display: none; }
+
+    /* Builder Workspace (hidden until asset loaded) */
+    .builder-workspace {
+      display: none;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+    .builder-workspace.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Configuration Panel (Interactive Editor) */
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .editor-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Master Preview Box */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      text-align: center;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .master-preview-wrapper {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 1.25rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      transition: all 0.2s ease;
+    }
+    .master-preview-wrapper.shape-squircle {
+      border-radius: 50px;
+    }
+    .master-preview-wrapper.shape-circle {
+      border-radius: 50%;
+    }
+    #masterCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+    .shape-preview-buttons {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.25rem;
+    }
+    .btn-shape {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .4rem .75rem;
+      border-radius: 8px;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      transition: all .15s ease;
+    }
+    .btn-shape:hover, .btn-shape.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      color: #60a5fa;
+    }
+    .asset-stats-badge {
+      font-size: .82rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      padding: .4rem .85rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+    }
+    .asset-stats-badge strong {
+      color: #fff;
+    }
+
+    /* Controls Card */
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .control-group-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .control-group-title svg {
+      color: var(--accent);
+    }
+    .segmented-control {
+      display: flex;
+      background: rgba(8, 11, 18, 0.7);
+      padding: .3rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      gap: .25rem;
+    }
+    .segmented-option {
+      flex: 1;
+      text-align: center;
+      padding: .5rem .8rem;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .segmented-option.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .slider-input {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .slider-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      color: #60a5fa;
+      min-width: 45px;
+      text-align: right;
+    }
+
+    /* Color Swatches */
+    .color-swatches-grid {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .color-swatch-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 2px solid var(--card-border);
+      cursor: pointer;
+      position: relative;
+      transition: all .2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .color-swatch-btn:hover {
+      transform: scale(1.08);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .color-swatch-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .color-swatch-btn.active::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .custom-color-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(8, 11, 18, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .25rem .6rem;
+    }
+    .custom-color-wrap input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+    }
+    .custom-color-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    .custom-color-wrap input[type="color"]::-webkit-color-swatch {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+    }
+    .custom-hex-input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      width: 75px;
+      outline: none;
+    }
+
+    /* Multi-Size Generator Grid */
+    .sizes-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .section-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .section-title-wrap h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+    .section-title-wrap p {
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+    .sizes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 1.25rem;
+    }
+    .size-card {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all .2s ease;
+    }
+    .size-card:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+    .size-preview-box {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .9rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .size-preview-box canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+    }
+    .size-dim-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+    .size-purpose-label {
+      font-size: .75rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+      margin-bottom: .85rem;
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-download-size {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #93c5fd;
+      padding: .45rem .8rem;
+      border-radius: 8px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      width: 100%;
+      justify-content: center;
+      transition: all .15s ease;
+    }
+    .btn-download-size:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Export & Code Dashboard */
+    .export-dashboard {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .export-primary-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .export-cta-group {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      flex-wrap: wrap;
+    }
+    .btn-zip-download {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #fff;
+      border: none;
+      padding: .85rem 1.8rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-zip-download:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-ico-download {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .85rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: .92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+      transition: all .2s ease;
+    }
+    .btn-ico-download:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-reset-tool {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: .8rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-reset-tool:hover {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+    }
+
+    /* Tabs & Code Snippets */
+    .code-tabs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .75rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .code-tabs-nav {
+      display: flex;
+      gap: .5rem;
+    }
+    .code-tab-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .15s ease;
+    }
+    .code-tab-btn.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: #60a5fa;
+    }
+    .code-snippet-box {
+      position: relative;
+      background: rgba(8, 11, 18, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .code-content {
+      width: 100%;
+      height: 180px;
+      background: transparent;
+      border: none;
+      padding: 1.25rem;
+      color: #93c5fd;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      white-space: pre;
+    }
+    .code-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: .75rem 1.25rem;
+      background: rgba(14, 18, 28, 0.7);
+      border-top: 1px solid var(--card-border);
+      gap: .75rem;
+    }
+    .btn-copy-code {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      transition: all .2s ease;
+    }
+    .btn-copy-code:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .btn-copy-code.copied {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+
+    /* Educational Guide & FAQ */
+    .edu-section {
+      margin-top: 3.5rem;
+    }
+    .edu-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .edu-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .edu-header p {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    html[dir="rtl"] .toast-box {
+      right: auto;
+      left: 24px;
+    }
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+    footer p { margin-bottom: .4rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+    }
+
+    .nav-brand span span {
+      color: #3b82f6 !important;
+    }
+
+    .lang-dropdown {
+      position: relative !important;
+      display: inline-block !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.8rem !important;
+      border-radius: 10px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .lang-btn .globe-icon {
+      color: var(--accent, #3b82f6) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn .chevron-icon {
+      transition: transform 0.2s ease !important;
+      opacity: 0.7 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-dropdown.active .lang-btn .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+
+    html[dir="rtl"] .code-actions-bar {
+      justify-content: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-nav">
+    <a href="../index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="badgePill">100% Client-Side • Canvas Powered • Multi-Resolution Packaging</span>
+      </div>
+      <h1 data-i18n="toolTitle">Multi-Size Favicon Builder</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Generate multi-resolution browser favicons (16×16, 32×32, 48×48), Apple Touch icons (180×180), Android PWA assets, and standard cross-platform ICO packages.</p>
+    </header>
+
+    <!-- Upload Dropzone -->
+    <div class="dropzone-container">
+      <div class="dropzone" id="dropZone">
+        <div class="dropzone-icon-wrap">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <h3 data-i18n="dropzoneTitle">Drop Your Logo or Icon Here</h3>
+        <p data-i18n="dropzoneSub">Supports PNG, JPG, SVG, WebP (Square 512×512 px or higher recommended)</p>
+        <div class="dropzone-actions">
+          <button type="button" class="btn-browse" id="btnBrowse" data-i18n="btnBrowse">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Choose Image Asset
+          </button>
+          <button type="button" class="btn-sample" id="btnSample" data-i18n="btnSample">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Load Sample Logo
+          </button>
+        </div>
+        <div class="paste-hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span data-i18n="pasteHint">Or paste directly from clipboard</span>
+          <span class="kbd-shortcut">Ctrl+V / ⌘V</span>
+        </div>
+        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/*">
+      </div>
+    </div>
+
+    <!-- Active Builder Workspace -->
+    <div class="builder-workspace" id="builderWorkspace">
+
+      <!-- Interactive Editor Grid -->
+      <div class="editor-grid">
+        <!-- Master Preview Column -->
+        <div class="preview-card">
+          <div class="master-preview-wrapper checkerboard-bg" id="masterPreviewWrapper">
+            <canvas id="masterCanvas" width="512" height="512"></canvas>
+          </div>
+          <div class="shape-preview-buttons">
+            <button type="button" class="btn-shape active" data-shape="square" title="Square (Default)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
+              <span data-i18n="shapeSquare">Square</span>
+            </button>
+            <button type="button" class="btn-shape" data-shape="squircle" title="iOS Squircle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="8"></rect></svg>
+              <span data-i18n="shapeSquircle">iOS</span>
+            </button>
+            <button type="button" class="btn-shape" data-shape="circle" title="Round Icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
+              <span data-i18n="shapeCircle">Circle</span>
+            </button>
+          </div>
+          <div class="asset-stats-badge">
+            <span data-i18n="sourceResolution">Source:</span> <strong id="statResolution">512 × 512 px</strong>
+          </div>
+        </div>
+
+        <!-- Controls Column -->
+        <div class="controls-card">
+          <!-- Fit / Scaling Mode -->
+          <div>
+            <div class="control-group-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+              <span data-i18n="ctrlScalingMode">Scaling &amp; Fit Mode</span>
+            </div>
+            <div class="segmented-control">
+              <button type="button" class="segmented-option active" data-fit="contain" id="btnFitContain" data-i18n="fitContain">Contain (Fit with Padding)</button>
+              <button type="button" class="segmented-option" data-fit="cover" id="btnFitCover" data-i18n="fitCover">Cover (Fill Square)</button>
+            </div>
+          </div>
+
+          <!-- Padding Slider -->
+          <div id="paddingControlGroup">
+            <div class="control-group-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 3H3v18h18V3zM9 9h6v6H9V9z"></path></svg>
+              <span data-i18n="ctrlPadding">Inner Padding / Breathing Room</span>
+            </div>
+            <div class="slider-row">
+              <input type="range" class="slider-input" id="paddingSlider" min="0" max="35" value="10" step="1">
+              <span class="slider-val" id="paddingVal">10%</span>
+            </div>
+          </div>
+
+          <!-- Background Color -->
+          <div>
+            <div class="control-group-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10"></path></svg>
+              <span data-i18n="ctrlBackground">Icon Background Fill</span>
+            </div>
+            <div class="color-swatches-grid">
+              <!-- Transparent -->
+              <button type="button" class="color-swatch-btn checkerboard-bg active" data-color="transparent" title="Transparent" aria-label="Transparent Background"></button>
+              <!-- White -->
+              <button type="button" class="color-swatch-btn" style="background:#ffffff;" data-color="#ffffff" title="White" aria-label="White Background"></button>
+              <!-- Dark SaaS -->
+              <button type="button" class="color-swatch-btn" style="background:#0a0d14;" data-color="#0a0d14" title="Dark Slate" aria-label="Dark Background"></button>
+              <!-- Pure Black -->
+              <button type="button" class="color-swatch-btn" style="background:#000000;" data-color="#000000" title="Pure Black" aria-label="Black Background"></button>
+              <!-- Blue Brand -->
+              <button type="button" class="color-swatch-btn" style="background:#3b82f6;" data-color="#3b82f6" title="Vibrant Blue" aria-label="Blue Background"></button>
+              
+              <!-- Custom Hex -->
+              <div class="custom-color-wrap">
+                <input type="color" id="customColorPicker" value="#ffffff">
+                <input type="text" class="custom-hex-input" id="customHexInput" value="#FFFFFF" maxlength="7" spellcheck="false">
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Color for manifest/head -->
+          <div>
+            <div class="control-group-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+              <span data-i18n="ctrlThemeColor">Browser Bar &amp; PWA Theme Color</span>
+            </div>
+            <div class="custom-color-wrap" style="width:fit-content;">
+              <input type="color" id="themeColorPicker" value="#ffffff">
+              <input type="text" class="custom-hex-input" id="themeHexInput" value="#FFFFFF" maxlength="7" spellcheck="false">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multi-Size Generator Grid -->
+      <section class="sizes-section">
+        <div class="section-header-row">
+          <div class="section-title-wrap">
+            <h2 data-i18n="sizesTitle">Multi-Resolution Live Previews</h2>
+            <p data-i18n="sizesSub">Precise downsampled canvas outputs rendered for desktop tabs, Apple iOS, and Android PWAs.</p>
+          </div>
+        </div>
+
+        <div class="sizes-grid">
+          <!-- 16x16 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas16" width="16" height="16"></canvas>
+            </div>
+            <div class="size-dim-badge">16 × 16 px</div>
+            <div class="size-purpose-label" data-i18n="size16Label">Classic Browser Tab</div>
+            <button type="button" class="btn-download-size" data-size="16" data-name="favicon-16x16.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+
+          <!-- 32x32 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas32" width="32" height="32"></canvas>
+            </div>
+            <div class="size-dim-badge">32 × 32 px</div>
+            <div class="size-purpose-label" data-i18n="size32Label">Standard Retina Tab</div>
+            <button type="button" class="btn-download-size" data-size="32" data-name="favicon-32x32.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+
+          <!-- 48x48 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas48" width="48" height="48"></canvas>
+            </div>
+            <div class="size-dim-badge">48 × 48 px</div>
+            <div class="size-purpose-label" data-i18n="size48Label">Windows Desktop / Shortcut</div>
+            <button type="button" class="btn-download-size" data-size="48" data-name="favicon-48x48.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+
+          <!-- 180x180 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas180" width="180" height="180"></canvas>
+            </div>
+            <div class="size-dim-badge">180 × 180 px</div>
+            <div class="size-purpose-label" data-i18n="size180Label">Apple Touch Icon (iOS)</div>
+            <button type="button" class="btn-download-size" data-size="180" data-name="apple-touch-icon.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+
+          <!-- 192x192 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas192" width="192" height="192"></canvas>
+            </div>
+            <div class="size-dim-badge">192 × 192 px</div>
+            <div class="size-purpose-label" data-i18n="size192Label">Android Chrome / PWA</div>
+            <button type="button" class="btn-download-size" data-size="192" data-name="android-chrome-192x192.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+
+          <!-- 512x512 -->
+          <div class="size-card">
+            <div class="size-preview-box checkerboard-bg">
+              <canvas id="canvas512" width="512" height="512"></canvas>
+            </div>
+            <div class="size-dim-badge">512 × 512 px</div>
+            <div class="size-purpose-label" data-i18n="size512Label">PWA Splash / High-Res</div>
+            <button type="button" class="btn-download-size" data-size="512" data-name="android-chrome-512x512.png">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadPNG">Download PNG</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Code & Export Dashboard -->
+      <section class="export-dashboard">
+        <div class="export-primary-bar">
+          <div class="export-cta-group">
+            <button type="button" class="btn-zip-download" id="btnDownloadZip">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span data-i18n="btnDownloadZip">Download All as ZIP Package</span>
+            </button>
+            <button type="button" class="btn-ico-download" id="btnDownloadIco">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span data-i18n="btnDownloadIco">Download favicon.ico</span>
+            </button>
+          </div>
+          <button type="button" class="btn-reset-tool" id="btnResetTool">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span data-i18n="btnClearAsset">Reset / Choose Another Asset</span>
+          </button>
+        </div>
+
+        <!-- Snippet Tabs -->
+        <div>
+          <div class="code-tabs-header">
+            <div class="code-tabs-nav">
+              <button type="button" class="code-tab-btn active" data-tab="head" id="tabHead">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                <span data-i18n="tabHead">HTML &lt;head&gt; Snippet</span>
+              </button>
+              <button type="button" class="code-tab-btn" data-tab="manifest" id="tabManifest">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span data-i18n="tabManifest">site.webmanifest</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="code-snippet-box">
+            <textarea class="code-content" id="codeContent" readonly spellcheck="false"></textarea>
+            <div class="code-actions-bar">
+              <button type="button" class="btn-copy-code" id="btnCopySnippet">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="copyBtnText" data-i18n="btnCopyCode">Copy Snippet</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Educational Guide & FAQ Section -->
+    <section class="edu-section">
+      <div class="edu-header">
+        <h2 data-i18n="eduTitle">Modern Favicon Architecture &amp; Best Practices</h2>
+        <p data-i18n="eduSub">Everything you need to know about browser tabs, Apple Touch icons, and PWA manifest configurations.</p>
+      </div>
+
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <h3 data-i18n="guide1Title">Modern Multi-Resolution Standards</h3>
+          <p data-i18n="guide1Desc">Modern browsers prioritize high-DPI 32×32 PNG favicons for tabs and address bars, while legacy systems and search crawlers request <code>/favicon.ico</code> at the root. Providing both ensures universal compatibility.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          </div>
+          <h3 data-i18n="guide2Title">Apple iOS &amp; Safari Web Clips</h3>
+          <p data-i18n="guide2Desc">When users tap "Add to Home Screen" on iPhone or iPad, iOS loads the 180×180 px <code>apple-touch-icon.png</code>. Always avoid transparent backgrounds for iOS icons, as Apple fills transparent areas with jet black.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+          </div>
+          <h3 data-i18n="guide3Title">Android &amp; PWA Web Manifest</h3>
+          <p data-i18n="guide3Desc">Progressive Web Apps (PWAs) and Chrome on Android rely on <code>site.webmanifest</code> with 192×192 and 512×512 icons to display custom splash screens and crisp adaptive app drawer shortcuts.</p>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Are my logos or graphics sent to a remote server?</h4>
+          <p data-i18n="faq1A">Never. The entire favicon generation process runs 100% locally in your web browser using HTML5 Canvas and JSZip. No image data or metadata is ever transmitted over the network.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">Where should I upload the generated favicon files on my site?</h4>
+          <p data-i18n="faq2A">Extract the downloaded ZIP package and upload all files (<code>favicon.ico</code>, PNGs, and <code>site.webmanifest</code>) directly to your website's root directory (e.g. <code>public_html/</code> or web root).</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">Why doesn't my new favicon update immediately in my browser?</h4>
+          <p data-i18n="faq3A">Web browsers cache favicons aggressively. To see your updated favicon immediately, open your website in an Incognito/Private window or perform a hard refresh with Ctrl+F5 (Cmd+Shift+R on Mac).</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">What makes VantorKit's favicon.ico special?</h4>
+          <p data-i18n="faq4A">Our builder packages a genuine multi-resolution binary ICO container containing 16×16, 32×32, and 48×48 frames with full 32-bit alpha transparency for seamless desktop rendering.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Standard Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Free, fast, and 100% private client-side utility tools.</p>
+    <p>Zero cloud logs &bull; Client-side security &bull; No cookies &bull; <a href="../index.html">All Tools</a></p>
+  </footer>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          e.stopPropagation();
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.addEventListener('click', toggleDropdown);
+
+        menu.querySelectorAll('.lang-option').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedLang = btn.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+              if (typeof window.setLanguage === 'function') {
+                window.setLanguage(selectedLang);
+              }
+              closeDropdown();
+            }
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeDropdown();
+        });
+      }
+
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      updateActiveLanguageUI(initialLang);
+      document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+    })();
+  </script>
+
+  <!-- Favicon Builder Logic & i18n Translations -->
+  <script>
+  (function() {
+    // 4-Language Translation Dictionaries
+    const I18N = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "100% Client-Side • Canvas Powered • Multi-Resolution Packaging",
+        toolTitle: "Multi-Size Favicon Builder",
+        toolSubtitle: "Generate multi-resolution browser favicons (16×16, 32×32, 48×48), Apple Touch icons (180×180), Android PWA assets, and standard cross-platform ICO packages.",
+        dropzoneTitle: "Drop Your Logo or Icon Here",
+        dropzoneSub: "Supports PNG, JPG, SVG, WebP (Square 512×512 px or higher recommended)",
+        btnBrowse: "Choose Image Asset",
+        btnSample: "Load Sample Logo",
+        pasteHint: "Or paste directly from clipboard",
+        shapeSquare: "Square",
+        shapeSquircle: "iOS",
+        shapeCircle: "Circle",
+        sourceResolution: "Source:",
+        ctrlScalingMode: "Scaling & Fit Mode",
+        fitContain: "Contain (Fit with Padding)",
+        fitCover: "Cover (Fill Square)",
+        ctrlPadding: "Inner Padding / Breathing Room",
+        ctrlBackground: "Icon Background Fill",
+        ctrlThemeColor: "Browser Bar & PWA Theme Color",
+        sizesTitle: "Multi-Resolution Live Previews",
+        sizesSub: "Precise downsampled canvas outputs rendered for desktop tabs, Apple iOS, and Android PWAs.",
+        size16Label: "Classic Browser Tab",
+        size32Label: "Standard Retina Tab",
+        size48Label: "Windows Desktop / Shortcut",
+        size180Label: "Apple Touch Icon (iOS)",
+        size192Label: "Android Chrome / PWA",
+        size512Label: "PWA Splash / High-Res",
+        btnDownloadPNG: "Download PNG",
+        btnDownloadZip: "Download All as ZIP Package",
+        btnDownloadIco: "Download favicon.ico",
+        btnClearAsset: "Reset / Choose Another Asset",
+        tabHead: "HTML <head> Snippet",
+        tabManifest: "site.webmanifest",
+        btnCopyCode: "Copy Snippet",
+        copiedToast: "Copied to clipboard!",
+        generatingZipToast: "Generating ZIP package, please wait...",
+        zipDownloadedToast: "ZIP package downloaded successfully!",
+        icoDownloadedToast: "favicon.ico downloaded successfully!",
+        eduTitle: "Modern Favicon Architecture & Best Practices",
+        eduSub: "Everything you need to know about browser tabs, Apple Touch icons, and PWA manifest configurations.",
+        guide1Title: "Modern Multi-Resolution Standards",
+        guide1Desc: "Modern browsers prioritize high-DPI 32×32 PNG favicons for tabs and address bars, while legacy systems and search crawlers request /favicon.ico at the root. Providing both ensures universal compatibility.",
+        guide2Title: "Apple iOS & Safari Web Clips",
+        guide2Desc: "When users tap 'Add to Home Screen' on iPhone or iPad, iOS loads the 180×180 px apple-touch-icon.png. Always avoid transparent backgrounds for iOS icons, as Apple fills transparent areas with jet black.",
+        guide3Title: "Android & PWA Web Manifest",
+        guide3Desc: "Progressive Web Apps (PWAs) and Chrome on Android rely on site.webmanifest with 192×192 and 512×512 icons to display custom splash screens and crisp adaptive app drawer shortcuts.",
+        faq1Q: "Are my logos or graphics sent to a remote server?",
+        faq1A: "Never. The entire favicon generation process runs 100% locally in your web browser using HTML5 Canvas and JSZip. No image data or metadata is ever transmitted over the network.",
+        faq2Q: "Where should I upload the generated favicon files on my site?",
+        faq2A: "Extract the downloaded ZIP package and upload all files (favicon.ico, PNGs, and site.webmanifest) directly to your website's root directory (e.g. public_html/ or web root).",
+        faq3Q: "Why doesn't my new favicon update immediately in my browser?",
+        faq3A: "Web browsers cache favicons aggressively. To see your updated favicon immediately, open your website in an Incognito/Private window or perform a hard refresh with Ctrl+F5 (Cmd+Shift+R on Mac).",
+        faq4Q: "What makes VantorKit's favicon.ico special?",
+        faq4A: "Our builder packages a genuine multi-resolution binary ICO container containing 16×16, 32×32, and 48×48 frames with full 32-bit alpha transparency for seamless desktop rendering."
+      },
+      ar: {
+        backLink: "الرجوع إلى الأدوات ←",
+        badgePill: "100% داخل المتصفح • يعتمد على Canvas • حزمة متعددة الدقات",
+        toolTitle: "منشئ أيقونات Favicon المتعددة",
+        toolSubtitle: "أنشئ أيقونات مواقع متعددة الأحجام لتبويبات المتصفح (16×16، 32×32، 48×48)، وأيقونات Apple Touch لأجهزة iOS (180×180)، وتطبيقات PWA، وملف favicon.ico قياسي.",
+        dropzoneTitle: "اسحب وأفلت شعارك أو أيقونتك هنا",
+        dropzoneSub: "يدعم PNG و JPG و SVG و WebP (يُفضل صورة مربعة 512×512 بكسل أو أعلى)",
+        btnBrowse: "اختيار ملف الصورة",
+        btnSample: "تحميل شعار تجريبي",
+        pasteHint: "أو الصق مباشرة من الحافظة",
+        shapeSquare: "مربع",
+        shapeSquircle: "iOS مدور",
+        shapeCircle: "دائري",
+        sourceResolution: "الدقة المصدر:",
+        ctrlScalingMode: "طريقة القياس والملاءمة",
+        fitContain: "احتواء (مع هوامش)",
+        fitCover: "ملء كامل المربع",
+        ctrlPadding: "الهامش الداخلي للصورة",
+        ctrlBackground: "لون خلفية الأيقونة",
+        ctrlThemeColor: "لون سمة المتصفح و PWA",
+        sizesTitle: "معاينة حية لجميع الأحجام",
+        sizesSub: "مخرجات canvas مصغرة بدقة عالية مخصصة لتبويبات سطح المكتب وأجهزة Apple و Android.",
+        size16Label: "تبويب المتصفح الكلاسيكي",
+        size32Label: "تبويب شاشات ريتينا",
+        size48Label: "اختصار سطح مكتب ويندوز",
+        size180Label: "أيقونة Apple Touch (iOS)",
+        size192Label: "أندرويد كروم وتطبيقات PWA",
+        size512Label: "شاشة البداية للتطبيقات بدقة فائقة",
+        btnDownloadPNG: "تحميل PNG",
+        btnDownloadZip: "تحميل الكل في حزمة ZIP",
+        btnDownloadIco: "تحميل favicon.ico",
+        btnClearAsset: "إعادة ضبط / اختيار صورة أخرى",
+        tabHead: "كود HTML <head>",
+        tabManifest: "ملف site.webmanifest",
+        btnCopyCode: "نسخ الكود",
+        copiedToast: "تم النسخ إلى الحافظة بنجاح!",
+        generatingZipToast: "جاري إنشاء ملف ZIP، يرجى الانتظار...",
+        zipDownloadedToast: "تم تحميل حزمة ZIP بنجاح!",
+        icoDownloadedToast: "تم تحميل ملف favicon.ico بنجاح!",
+        eduTitle: "معايير أيقونات Favicon الحديثة وأفضل الممارسات",
+        eduSub: "كل ما تحتاج لمعرفته حول أيقونات التبويبات وأجهزة Apple وتكوينات تطبيقات الويب التقدمية PWA.",
+        guide1Title: "معايير الدقة المتعددة الحديثة",
+        guide1Desc: "تفضل المتصفحات الحديثة أيقونات PNG عالية الدقة 32×32 للتبويبات، بينما تطلب الأنظمة القديمة ومحركات البحث ملف /favicon.ico في الجذر. توفير الاثنين يضمن التوافق الشامل.",
+        guide2Title: "أجهزة Apple iOS ومتصفح سفاري",
+        guide2Desc: "عندما يختار المستخدم 'إضافة إلى الشاشة الرئيسية' على iPhone، يعتمد النظام على apple-touch-icon.png بدقة 180×180. تجنب الخلفيات الشفافة لأن iOS يحولها إلى لون أسود داكن.",
+        guide3Title: "تطبيقات الويب التقدمية PWA وأندرويد",
+        guide3Desc: "يعتمد متصفح كروم على أندرويد وتطبيقات الويب التقدمية على ملف site.webmanifest بأحجام 192×192 و 512×512 لعرض شاشة بداية أنيقة وأيقونة واضحة.",
+        faq1Q: "هل يتم إرسال شعاري أو صوري إلى أي خادم خارجي؟",
+        faq1A: "أبداً. تجري المعالجة وتوليد حزم ZIP وتكوين ملفات ICO بنسبة 100% داخل ذاكرة متصفحك دون رفع أي بيانات.",
+        faq2Q: "أين يجب أن أضع ملفات favicon على موقعي؟",
+        faq2A: "قم بفك ضغط ملف ZIP وضع كافة الملفات الناتجة (favicon.ico وملفات PNG و site.webmanifest) مباشرة في المجلد الرئيسي لموقعك (جذر الموقع web root).",
+        faq3Q: "لماذا لا تظهر الأيقونة الجديدة فوراً في متصفحي؟",
+        faq3A: "تحتفظ المتصفحات بالأيقونات في الذاكرة المخبئية مؤقتاً. لرؤية التغييرات فوراً، افتح نافذة تصفح خفي (Incognito) أو اضغط Ctrl+F5 لتحديث قوي.",
+        faq4Q: "ما الذي يميز ملف favicon.ico الذي يولده VantorKit؟",
+        faq4A: "ينتج أداتنا ملف ICO ثنائي حقيقي متعدد الدقات يضم إطارات 16×16 و 32×32 و 48×48 مع شفافية ألفا 32 بت كاملة لأداء رائع على كافة أنظمة سطح المكتب."
+      },
+      fr: {
+        backLink: "← Retour aux outils",
+        badgePill: "100% Côté Client • Technologie Canvas • Export Multi-Résolution",
+        toolTitle: "Générateur de Favicon Multi-Tailles",
+        toolSubtitle: "Générez des favicons multi-résolutions (16×16, 32×32, 48×48), des icônes Apple Touch (180×180), des icônes PWA Android et des fichiers ICO universels.",
+        dropzoneTitle: "Déposez votre logo ou icône ici",
+        dropzoneSub: "Prend en charge PNG, JPG, SVG, WebP (carré 512×512 px ou plus recommandé)",
+        btnBrowse: "Choisir une image",
+        btnSample: "Charger un logo d'exemple",
+        pasteHint: "Ou collez directement depuis le presse-papiers",
+        shapeSquare: "Carré",
+        shapeSquircle: "iOS Arrondi",
+        shapeCircle: "Cercle",
+        sourceResolution: "Résolution source :",
+        ctrlScalingMode: "Mode de cadrage",
+        fitContain: "Contenir (avec marge)",
+        fitCover: "Remplir tout le carré",
+        ctrlPadding: "Marge interne / Espace",
+        ctrlBackground: "Arrière-plan de l'icône",
+        ctrlThemeColor: "Couleur de thème PWA & barre",
+        sizesTitle: "Aperçus en direct multi-résolutions",
+        sizesSub: "Rendus canvas réduits avec précision pour les onglets, iOS Apple et les PWA Android.",
+        size16Label: "Onglet classique de navigateur",
+        size32Label: "Onglet Retina haute résolution",
+        size48Label: "Raccourci bureau Windows",
+        size180Label: "Apple Touch Icon (iOS)",
+        size192Label: "Android Chrome / PWA",
+        size512Label: "Écran de démarrage PWA haute résolution",
+        btnDownloadPNG: "Télécharger PNG",
+        btnDownloadZip: "Télécharger tout en ZIP",
+        btnDownloadIco: "Télécharger favicon.ico",
+        btnClearAsset: "Réinitialiser / Changer d'image",
+        tabHead: "Extrait HTML <head>",
+        tabManifest: "Fichier site.webmanifest",
+        btnCopyCode: "Copier le code",
+        copiedToast: "Copié dans le presse-papiers !",
+        generatingZipToast: "Génération de l'archive ZIP en cours...",
+        zipDownloadedToast: "Archive ZIP téléchargée avec succès !",
+        icoDownloadedToast: "Fichier favicon.ico téléchargé avec succès !",
+        eduTitle: "Architecture des Favicons Modernes & Bonnes Pratiques",
+        eduSub: "Tout ce que vous devez savoir sur les onglets, les icônes Apple Touch et les manifestes PWA.",
+        guide1Title: "Normes Multi-Résolutions Modernes",
+        guide1Desc: "Les navigateurs récents privilégient les fichiers PNG 32×32 haute résolution, tandis que les anciens systèmes et robots d'indexation demandent /favicon.ico à la racine.",
+        guide2Title: "Apple iOS & Safari Web Clips",
+        guide2Desc: "Lorsque les utilisateurs ajoutent votre site à l'écran d'accueil sur iPhone, iOS utilise apple-touch-icon.png (180×180). Évitez la transparence car Apple affiche un fond noir.",
+        guide3Title: "Android & Manifeste Web PWA",
+        guide3Desc: "Les Progressive Web Apps et Chrome sur Android utilisent le fichier site.webmanifest avec des icônes 192×192 et 512×512 pour un écran de démarrage net.",
+        faq1Q: "Mes images ou logos sont-ils envoyés à un serveur ?",
+        faq1A: "Non, absolument jamais. Toutes les opérations s'exécutent à 100% dans la mémoire locale de votre navigateur via l'API Canvas et JSZip.",
+        faq2Q: "Où dois-je déposer les fichiers sur mon hébergement ?",
+        faq2A: "Décompressez l'archive ZIP et déposez tous les fichiers directement dans le dossier racine de votre site web (ex. public_html/ ou web root).",
+        faq3Q: "Pourquoi le nouveau favicon ne s'affiche-t-il pas immédiatement ?",
+        faq3A: "Les navigateurs mettent fortement en cache les favicons. Ouvrez une fenêtre de navigation privée ou forcez l'actualisation avec Ctrl+F5 (Cmd+Shift+R sur Mac).",
+        faq4Q: "Qu'est-ce qui rend le fichier favicon.ico de VantorKit unique ?",
+        faq4A: "Notre outil assemble un conteneur binaire ICO multi-trames (16×16, 32×32 et 48×48) avec une transparence alpha 32 bits authentique."
+      },
+      it: {
+        backLink: "← Torna agli strumenti",
+        badgePill: "100% Lato Client • Motore Canvas • Pacchetto Multi-Risoluzione",
+        toolTitle: "Generatore di Favicon Multi-Dimensione",
+        toolSubtitle: "Genera favicon per schede desktop (16×16, 32×32, 48×48), icone Apple Touch (180×180), risorse PWA per Android e pacchetti ICO multipiattaforma.",
+        dropzoneTitle: "Trascina qui il tuo logo o icona",
+        dropzoneSub: "Supporta PNG, JPG, SVG, WebP (consigliato quadrato 512×512 px o superiore)",
+        btnBrowse: "Scegli file immagine",
+        btnSample: "Carica logo di esempio",
+        pasteHint: "Oppure incolla direttamente dagli appunti",
+        shapeSquare: "Quadrato",
+        shapeSquircle: "iOS Arrotondato",
+        shapeCircle: "Cerchio",
+        sourceResolution: "Risoluzione sorgente:",
+        ctrlScalingMode: "Modalità di ridimensionamento",
+        fitContain: "Contieni (con spaziatura)",
+        fitCover: "Riempi quadrato intero",
+        ctrlPadding: "Margine interno / Spazio",
+        ctrlBackground: "Colore di sfondo icona",
+        ctrlThemeColor: "Colore tema barra & PWA",
+        sizesTitle: "Anteprime live multi-risoluzione",
+        sizesSub: "Uscite canvas ridotte con precisione per schede desktop, iOS Apple e PWA Android.",
+        size16Label: "Scheda browser classica",
+        size32Label: "Scheda Retina ad alta densità",
+        size48Label: "Scorciatoia desktop Windows",
+        size180Label: "Apple Touch Icon (iOS)",
+        size192Label: "Android Chrome / PWA",
+        size512Label: "Splash screen PWA ad alta risoluzione",
+        btnDownloadPNG: "Scarica PNG",
+        btnDownloadZip: "Scarica tutto in pacchetto ZIP",
+        btnDownloadIco: "Scarica favicon.ico",
+        btnClearAsset: "Reimposta / Scegli un'altra risorsa",
+        tabHead: "Snippet HTML <head>",
+        tabManifest: "File site.webmanifest",
+        btnCopyCode: "Copia snippet",
+        copiedToast: "Copiato negli appunti!",
+        generatingZipToast: "Generazione archivio ZIP in corso...",
+        zipDownloadedToast: "Pacchetto ZIP scaricato con successo!",
+        icoDownloadedToast: "favicon.ico scaricato con successo!",
+        eduTitle: "Architettura delle Favicon Moderne & Best Practice",
+        eduSub: "Tutto ciò che devi sapere su schede browser, icone Apple Touch e manifesti PWA.",
+        guide1Title: "Standard Moderni Multi-Risoluzione",
+        guide1Desc: "I browser moderni danno priorità a file PNG ad alta risoluzione 32×32, mentre i sistemi precedenti e i motori di ricerca cercano /favicon.ico nella root.",
+        guide2Title: "Apple iOS & Safari Web Clips",
+        guide2Desc: "Quando gli utenti aggiungono il sito alla schermata Home su iPhone, iOS utilizza apple-touch-icon.png (180×180). Evita la trasparenza perché Apple inserisce uno sfondo nero.",
+        guide3Title: "Android & Manifesto Web PWA",
+        guide3Desc: "Le Progressive Web App e Chrome su Android utilizzano il file site.webmanifest con icone 192×192 e 512×512 per schermate di avvio nitide.",
+        faq1Q: "I miei loghi o immagini vengono caricati su un server?",
+        faq1A: "Mai. L'intero processo di generazione viene eseguito al 100% in locale nella memoria del tuo browser tramite HTML5 Canvas e JSZip.",
+        faq2Q: "Dove devo caricare i file favicon sul mio sito web?",
+        faq2A: "Estrai l'archivio ZIP e carica tutti i file (favicon.ico, PNG e site.webmanifest) direttamente nella directory root del tuo sito web.",
+        faq3Q: "Perché la nuova favicon non si aggiorna subito nel browser?",
+        faq3A: "I browser mantengono le favicon in cache in modo persistente. Apri una finestra in incognito o esegui un aggiornamento forzato con Ctrl+F5 (Cmd+Shift+R su Mac).",
+        faq4Q: "Cosa rende speciale il file favicon.ico di VantorKit?",
+        faq4A: "Il nostro generatore crea un contenitore binario ICO multi-frame (16×16, 32×32 e 48×48) con autentica trasparenza alfa a 32 bit per tutti i sistemi operativi."
+      }
+    };
+
+    // State Variables
+    let activeLang = 'en';
+    let sourceImage = null;
+    let sourceFileName = 'favicon-source.png';
+    let fitMode = 'contain'; // 'contain' or 'cover'
+    let innerPaddingPercent = 10; // 0 - 35%
+    let backgroundColor = 'transparent'; // 'transparent' or hex
+    let themeColor = '#ffffff';
+    let currentPreviewShape = 'square'; // 'square', 'squircle', 'circle'
+    let activeCodeTab = 'head'; // 'head' or 'manifest'
+
+    const SIZES = [16, 32, 48, 180, 192, 512];
+
+    // DOM Elements
+    const dropZone = document.getElementById('dropZone');
+    const imageFileInput = document.getElementById('imageFileInput');
+    const btnBrowse = document.getElementById('btnBrowse');
+    const btnSample = document.getElementById('btnSample');
+    const builderWorkspace = document.getElementById('builderWorkspace');
+    const masterPreviewWrapper = document.getElementById('masterPreviewWrapper');
+    const masterCanvas = document.getElementById('masterCanvas');
+    const masterCtx = masterCanvas.getContext('2d');
+    const statResolution = document.getElementById('statResolution');
+    const paddingControlGroup = document.getElementById('paddingControlGroup');
+    const paddingSlider = document.getElementById('paddingSlider');
+    const paddingVal = document.getElementById('paddingVal');
+    const customColorPicker = document.getElementById('customColorPicker');
+    const customHexInput = document.getElementById('customHexInput');
+    const themeColorPicker = document.getElementById('themeColorPicker');
+    const themeHexInput = document.getElementById('themeHexInput');
+    const btnDownloadZip = document.getElementById('btnDownloadZip');
+    const btnDownloadIco = document.getElementById('btnDownloadIco');
+    const btnResetTool = document.getElementById('btnResetTool');
+    const codeContent = document.getElementById('codeContent');
+    const btnCopySnippet = document.getElementById('btnCopySnippet');
+    const copyBtnText = document.getElementById('copyBtnText');
+    const tabHead = document.getElementById('tabHead');
+    const tabManifest = document.getElementById('tabManifest');
+    const toastBox = document.getElementById('toastBox');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Toast Notification Utility
+    let toastTimer = null;
+    function showToast(msg) {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastMessage.textContent = msg;
+      toastBox.classList.add('show');
+      toastTimer = setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2500);
+    }
+
+    // Render Canvas at a specific size
+    function renderToCanvas(targetCanvas, width, height) {
+      if (!sourceImage) return;
+      targetCanvas.width = width;
+      targetCanvas.height = height;
+      const ctx = targetCanvas.getContext('2d');
+
+      // Clear
+      ctx.clearRect(0, 0, width, height);
+
+      // Background color
+      if (backgroundColor && backgroundColor !== 'transparent') {
+        ctx.fillStyle = backgroundColor;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      const imgW = sourceImage.width;
+      const imgH = sourceImage.height;
+
+      if (fitMode === 'cover') {
+        // Cover square entirely
+        const scale = Math.max(width / imgW, height / imgH);
+        const drawW = imgW * scale;
+        const drawH = imgH * scale;
+        const drawX = (width - drawW) / 2;
+        const drawY = (height - drawH) / 2;
+        ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
+      } else {
+        // Contain with optional padding
+        const padPx = (innerPaddingPercent / 100) * Math.min(width, height);
+        const availW = Math.max(1, width - padPx * 2);
+        const availH = Math.max(1, height - padPx * 2);
+        const scale = Math.min(availW / imgW, availH / imgH);
+        const drawW = imgW * scale;
+        const drawH = imgH * scale;
+        const drawX = (width - drawW) / 2;
+        const drawY = (height - drawH) / 2;
+        ctx.drawImage(sourceImage, drawX, drawY, drawW, drawH);
+      }
+    }
+
+    // Update all live previews
+    function updateAllCanvases() {
+      if (!sourceImage) return;
+
+      // Master canvas (512x512)
+      renderToCanvas(masterCanvas, 512, 512);
+
+      // Downsampled previews
+      SIZES.forEach(sz => {
+        const c = document.getElementById('canvas' + sz);
+        if (c) {
+          renderToCanvas(c, sz, sz);
+        }
+      });
+
+      // Update background checkerboard / preview styling
+      const previewBoxes = document.querySelectorAll('.size-preview-box');
+      if (backgroundColor === 'transparent') {
+        masterPreviewWrapper.classList.add('checkerboard-bg');
+        masterPreviewWrapper.style.backgroundColor = '';
+        previewBoxes.forEach(b => {
+          b.classList.add('checkerboard-bg');
+          b.style.backgroundColor = '';
+        });
+      } else {
+        masterPreviewWrapper.classList.remove('checkerboard-bg');
+        masterPreviewWrapper.style.backgroundColor = backgroundColor;
+        previewBoxes.forEach(b => {
+          b.classList.remove('checkerboard-bg');
+          b.style.backgroundColor = backgroundColor;
+        });
+      }
+
+      updateCodeSnippets();
+    }
+
+    // Generate HTML <head> snippet
+    function getHeadSnippet() {
+      return `<!-- Standard Favicons -->\n` +
+        `<link rel="icon" type="image/x-icon" href="/favicon.ico">\n` +
+        `<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">\n` +
+        `<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">\n` +
+        `<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">\n\n` +
+        `<!-- Apple iOS Home Screen & Safari Web Clip -->\n` +
+        `<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">\n\n` +
+        `<!-- Android Chrome & PWA Web App Manifest -->\n` +
+        `<link rel="manifest" href="/site.webmanifest">\n` +
+        `<meta name="theme-color" content="${themeColor}">\n` +
+        `<meta name="apple-mobile-web-app-status-bar-style" content="default">`;
+    }
+
+    // Generate site.webmanifest JSON snippet
+    function getManifestSnippet() {
+      const manifest = {
+        name: "My Modern Web Application",
+        short_name: "WebApp",
+        icons: [
+          {
+            src: "/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png"
+          }
+        ],
+        theme_color: themeColor,
+        background_color: backgroundColor === 'transparent' ? '#ffffff' : backgroundColor,
+        display: "standalone",
+        start_url: "/"
+      };
+      return JSON.stringify(manifest, null, 2);
+    }
+
+    function updateCodeSnippets() {
+      if (activeCodeTab === 'head') {
+        codeContent.value = getHeadSnippet();
+      } else {
+        codeContent.value = getManifestSnippet();
+      }
+    }
+
+    // Load Image file
+    function handleImageLoad(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          sourceImage = img;
+          sourceFileName = file.name || 'favicon-source.png';
+          statResolution.textContent = `${img.width} × ${img.height} px`;
+          builderWorkspace.classList.add('active');
+          dropZone.style.display = 'none';
+          updateAllCanvases();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Generate Sample Logo
+    function loadSampleLogo() {
+      const sampleCanvas = document.createElement('canvas');
+      sampleCanvas.width = 512;
+      sampleCanvas.height = 512;
+      const ctx = sampleCanvas.getContext('2d');
+
+      // Modern geometric vibrant gradient
+      const grad = ctx.createLinearGradient(0, 0, 512, 512);
+      grad.addColorStop(0, '#38bdf8');
+      grad.addColorStop(0.5, '#3b82f6');
+      grad.addColorStop(1, '#8b5cf6');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      // Round rect
+      const r = 90;
+      ctx.moveTo(r, 0);
+      ctx.lineTo(512 - r, 0);
+      ctx.quadraticCurveTo(512, 0, 512, r);
+      ctx.lineTo(512, 512 - r);
+      ctx.quadraticCurveTo(512, 512, 512 - r, 512);
+      ctx.lineTo(r, 512);
+      ctx.quadraticCurveTo(0, 512, 0, 512 - r);
+      ctx.lineTo(0, r);
+      ctx.quadraticCurveTo(0, 0, r, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Stylish Emblem inside
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      // V / Shield emblem
+      ctx.moveTo(140, 160);
+      ctx.lineTo(256, 380);
+      ctx.lineTo(372, 160);
+      ctx.lineTo(306, 160);
+      ctx.lineTo(256, 275);
+      ctx.lineTo(206, 160);
+      ctx.closePath();
+      ctx.fill();
+
+      // Accent star
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(256, 160, 24, 0, Math.PI * 2);
+      ctx.fill();
+
+      const img = new Image();
+      img.onload = () => {
+        sourceImage = img;
+        sourceFileName = 'sample-vantorkit-logo.png';
+        statResolution.textContent = `512 × 512 px`;
+        builderWorkspace.classList.add('active');
+        dropZone.style.display = 'none';
+        updateAllCanvases();
+      };
+      img.src = sampleCanvas.toDataURL('image/png');
+    }
+
+    // Convert Canvas to Blob helper
+    function getCanvasBlob(canvas) {
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), 'image/png');
+      });
+    }
+
+    // Convert Canvas to Uint8Array helper
+    async function getCanvasUint8Array(canvas) {
+      const blob = await getCanvasBlob(canvas);
+      const arrayBuffer = await blob.arrayBuffer();
+      return new Uint8Array(arrayBuffer);
+    }
+
+    // Multi-Frame ICO Binary Builder
+    function createIcoFromPngBuffers(pngBuffers) {
+      const count = pngBuffers.length;
+      const headerSize = 6;
+      const dirEntrySize = 16;
+      let offset = headerSize + count * dirEntrySize;
+
+      const totalSize = offset + pngBuffers.reduce((acc, p) => acc + p.buffer.length, 0);
+      const out = new Uint8Array(totalSize);
+      const view = new DataView(out.buffer);
+
+      // ICO Header
+      view.setUint16(0, 0, true); // reserved
+      view.setUint16(2, 1, true); // type 1 = icon
+      view.setUint16(4, count, true); // number of images
+
+      let entryOffset = headerSize;
+      let dataOffset = offset;
+
+      for (let i = 0; i < count; i++) {
+        const item = pngBuffers[i];
+        const w = item.width >= 256 ? 0 : item.width;
+        const h = item.height >= 256 ? 0 : item.height;
+        out[entryOffset + 0] = w;
+        out[entryOffset + 1] = h;
+        out[entryOffset + 2] = 0; // color palette
+        out[entryOffset + 3] = 0; // reserved
+        view.setUint16(entryOffset + 4, 1, true); // color planes
+        view.setUint16(entryOffset + 6, 32, true); // bpp
+        view.setUint32(entryOffset + 8, item.buffer.length, true); // size
+        view.setUint32(entryOffset + 12, dataOffset, true); // offset
+
+        out.set(item.buffer, dataOffset);
+        dataOffset += item.buffer.length;
+        entryOffset += dirEntrySize;
+      }
+      return out;
+    }
+
+    // Trigger Browser Download
+    function triggerDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // Event Listeners: Upload & Drag/Drop
+    btnBrowse.addEventListener('click', () => imageFileInput.click());
+    btnSample.addEventListener('click', loadSampleLogo);
+
+    imageFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        handleImageLoad(e.target.files[0]);
+      }
+    });
+
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('drag-active');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('drag-active');
+      });
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) {
+        handleImageLoad(dt.files[0]);
+      }
+    });
+
+    // Clipboard Paste Listener
+    window.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            handleImageLoad(blob);
+            break;
+          }
+        }
+      }
+    });
+
+    // Fit Mode Segmented Control
+    const btnFitContain = document.getElementById('btnFitContain');
+    const btnFitCover = document.getElementById('btnFitCover');
+
+    btnFitContain.addEventListener('click', () => {
+      fitMode = 'contain';
+      btnFitContain.classList.add('active');
+      btnFitCover.classList.remove('active');
+      paddingControlGroup.style.display = 'block';
+      updateAllCanvases();
+    });
+
+    btnFitCover.addEventListener('click', () => {
+      fitMode = 'cover';
+      btnFitCover.classList.add('active');
+      btnFitContain.classList.remove('active');
+      paddingControlGroup.style.display = 'none';
+      updateAllCanvases();
+    });
+
+    // Padding Slider
+    paddingSlider.addEventListener('input', (e) => {
+      innerPaddingPercent = parseInt(e.target.value, 10);
+      paddingVal.textContent = `${innerPaddingPercent}%`;
+      updateAllCanvases();
+    });
+
+    // Background Color Swatches
+    document.querySelectorAll('.color-swatch-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.color-swatch-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        backgroundColor = btn.getAttribute('data-color');
+        if (backgroundColor !== 'transparent') {
+          customColorPicker.value = backgroundColor;
+          customHexInput.value = backgroundColor.toUpperCase();
+        }
+        updateAllCanvases();
+      });
+    });
+
+    customColorPicker.addEventListener('input', (e) => {
+      document.querySelectorAll('.color-swatch-btn').forEach(b => b.classList.remove('active'));
+      backgroundColor = e.target.value;
+      customHexInput.value = e.target.value.toUpperCase();
+      updateAllCanvases();
+    });
+
+    customHexInput.addEventListener('change', (e) => {
+      let val = e.target.value.trim();
+      if (!val.startsWith('#')) val = '#' + val;
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        document.querySelectorAll('.color-swatch-btn').forEach(b => b.classList.remove('active'));
+        backgroundColor = val;
+        customColorPicker.value = val;
+        updateAllCanvases();
+      }
+    });
+
+    // Theme Color Inputs
+    themeColorPicker.addEventListener('input', (e) => {
+      themeColor = e.target.value;
+      themeHexInput.value = e.target.value.toUpperCase();
+      updateCodeSnippets();
+    });
+
+    themeHexInput.addEventListener('change', (e) => {
+      let val = e.target.value.trim();
+      if (!val.startsWith('#')) val = '#' + val;
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        themeColor = val;
+        themeColorPicker.value = val;
+        updateCodeSnippets();
+      }
+    });
+
+    // Shape Preview Mask Toggles
+    document.querySelectorAll('.btn-shape').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-shape').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const shape = btn.getAttribute('data-shape');
+        currentPreviewShape = shape;
+        masterPreviewWrapper.classList.remove('shape-squircle', 'shape-circle');
+        if (shape === 'squircle') {
+          masterPreviewWrapper.classList.add('shape-squircle');
+        } else if (shape === 'circle') {
+          masterPreviewWrapper.classList.add('shape-circle');
+        }
+      });
+    });
+
+    // Individual PNG Downloads
+    document.querySelectorAll('.btn-download-size').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sz = btn.getAttribute('data-size');
+        const filename = btn.getAttribute('data-name');
+        const canvas = document.getElementById('canvas' + sz);
+        if (canvas) {
+          canvas.toBlob((blob) => {
+            if (blob) triggerDownload(blob, filename);
+          }, 'image/png');
+        }
+      });
+    });
+
+    // Code Snippet Tabs
+    tabHead.addEventListener('click', () => {
+      activeCodeTab = 'head';
+      tabHead.classList.add('active');
+      tabManifest.classList.remove('active');
+      updateCodeSnippets();
+    });
+
+    tabManifest.addEventListener('click', () => {
+      activeCodeTab = 'manifest';
+      tabManifest.classList.add('active');
+      tabHead.classList.remove('active');
+      updateCodeSnippets();
+    });
+
+    // Copy Code Button
+    btnCopySnippet.addEventListener('click', () => {
+      if (!codeContent.value) return;
+      navigator.clipboard.writeText(codeContent.value).then(() => {
+        btnCopySnippet.classList.add('copied');
+        copyBtnText.textContent = "✓ Copied!";
+        showToast(I18N[activeLang]?.copiedToast || "Copied to clipboard!");
+        setTimeout(() => {
+          btnCopySnippet.classList.remove('copied');
+          copyBtnText.textContent = I18N[activeLang]?.btnCopyCode || "Copy Snippet";
+        }, 2000);
+      });
+    });
+
+    // Download favicon.ico Only
+    btnDownloadIco.addEventListener('click', async () => {
+      if (!sourceImage) return;
+      try {
+        const c16 = document.getElementById('canvas16');
+        const c32 = document.getElementById('canvas32');
+        const c48 = document.getElementById('canvas48');
+
+        const [buf16, buf32, buf48] = await Promise.all([
+          getCanvasUint8Array(c16),
+          getCanvasUint8Array(c32),
+          getCanvasUint8Array(c48)
+        ]);
+
+        const icoBytes = createIcoFromPngBuffers([
+          { width: 16, height: 16, buffer: buf16 },
+          { width: 32, height: 32, buffer: buf32 },
+          { width: 48, height: 48, buffer: buf48 }
+        ]);
+
+        const icoBlob = new Blob([icoBytes], { type: 'image/x-icon' });
+        triggerDownload(icoBlob, 'favicon.ico');
+        showToast(I18N[activeLang]?.icoDownloadedToast || "favicon.ico downloaded successfully!");
+      } catch (err) {
+        console.error('ICO generation error:', err);
+      }
+    });
+
+    // Download All as ZIP (using JSZip)
+    btnDownloadZip.addEventListener('click', async () => {
+      if (!sourceImage) return;
+
+      if (!window.JSZip) {
+        showToast("ZIP library is loading, please try again in a moment...");
+        return;
+      }
+
+      showToast(I18N[activeLang]?.generatingZipToast || "Generating ZIP package, please wait...");
+
+      try {
+        const zip = new JSZip();
+
+        // Canvas element references
+        const c16 = document.getElementById('canvas16');
+        const c32 = document.getElementById('canvas32');
+        const c48 = document.getElementById('canvas48');
+        const c180 = document.getElementById('canvas180');
+        const c192 = document.getElementById('canvas192');
+        const c512 = document.getElementById('canvas512');
+
+        // Fetch Blobs in parallel
+        const [b16, b32, b48, b180, b192, b512] = await Promise.all([
+          getCanvasBlob(c16),
+          getCanvasBlob(c32),
+          getCanvasBlob(c48),
+          getCanvasBlob(c180),
+          getCanvasBlob(c192),
+          getCanvasBlob(c512)
+        ]);
+
+        // Add PNG files to ZIP
+        zip.file('favicon-16x16.png', b16);
+        zip.file('favicon-32x32.png', b32);
+        zip.file('favicon-48x48.png', b48);
+        zip.file('apple-touch-icon.png', b180);
+        zip.file('android-chrome-192x192.png', b192);
+        zip.file('android-chrome-512x512.png', b512);
+
+        // Generate multi-frame favicon.ico
+        const [buf16, buf32, buf48] = await Promise.all([
+          b16.arrayBuffer().then(ab => new Uint8Array(ab)),
+          b32.arrayBuffer().then(ab => new Uint8Array(ab)),
+          b48.arrayBuffer().then(ab => new Uint8Array(ab))
+        ]);
+
+        const icoBytes = createIcoFromPngBuffers([
+          { width: 16, height: 16, buffer: buf16 },
+          { width: 32, height: 32, buffer: buf32 },
+          { width: 48, height: 48, buffer: buf48 }
+        ]);
+        zip.file('favicon.ico', icoBytes);
+
+        // Add site.webmanifest
+        zip.file('site.webmanifest', getManifestSnippet());
+
+        // Add integration README
+        const readmeContent = `VantorKit Favicon Package
+=============================
+Generated on: ${new Date().toUTCString()}
+
+INSTALLATION INSTRUCTIONS:
+1. Extract all files from this ZIP archive directly into your website's root directory (e.g. public_html/ or www/):
+   - favicon.ico
+   - favicon-16x16.png
+   - favicon-32x32.png
+   - favicon-48x48.png
+   - apple-touch-icon.png
+   - android-chrome-192x192.png
+   - android-chrome-512x512.png
+   - site.webmanifest
+
+2. Insert the following HTML code inside the <head> ... </head> tags of your pages:
+
+${getHeadSnippet()}
+
+3. Clear your browser cache or open in Incognito to see changes immediately.
+
+Generated with VantorKit Multi-Size Favicon Builder (https://vantorkit.com/tools/favicon-builder.html)
+100% Private, Client-Side Utilities.
+`;
+        zip.file('README.txt', readmeContent);
+
+        // Generate and download ZIP file
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        triggerDownload(zipBlob, 'favicons.zip');
+        showToast(I18N[activeLang]?.zipDownloadedToast || "ZIP package downloaded successfully!");
+      } catch (err) {
+        console.error('ZIP generation error:', err);
+        showToast("Error creating ZIP package. Please download files individually.");
+      }
+    });
+
+    // Reset Workspace
+    btnResetTool.addEventListener('click', () => {
+      sourceImage = null;
+      imageFileInput.value = '';
+      builderWorkspace.classList.remove('active');
+      dropZone.style.display = 'block';
+    });
+
+    // i18n Translation Switcher
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      activeLang = lang;
+      const dict = I18N[lang];
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      updateCodeSnippets();
+    }
+
+    // Expose setLanguage globally for standardized dropdown sync
+    window.setLanguage = setLanguage;
+
+    // Initialization with stored language
+    const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(initialLang);
+
+  })();
+  </script>
+</body>
+</html>
