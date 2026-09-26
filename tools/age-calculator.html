@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Age &amp; Milestone Calculator — Exact Age, Next Birthday &amp; Life Stats | VantorKit</title>
+  <meta name="description" content="Calculate your exact chronological age down to the second with live ticking counters, upcoming birthday countdowns, life milestone markers, and fun biological stats. 100% private.">
+  <meta name="keywords" content="age calculator, exact age calculator, milestone calculator, next birthday countdown, total days lived, heartbeats calculator, zodiac calculator, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/age-calculator.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Age &amp; Milestone Calculator | VantorKit">
+  <meta property="og:description" content="Calculate your exact age in years, months, days, and seconds with live ticking counters, next birthday countdowns, and fun life statistics.">
+  <meta property="og:url" content="https://vantorkit.com/tools/age-calculator.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Age &amp; Milestone Calculator | VantorKit">
+  <meta name="twitter:description" content="Calculate your exact age and life milestones locally in your browser with zero server telemetry.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Age & Milestone Calculator",
+        "url": "https://vantorkit.com/tools/age-calculator.html",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side Age and Milestone Calculator. Compute exact chronological age in years, months, days, hours, and seconds with live ticking counters, birthday countdowns, and life statistics."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does the calculator determine exact chronological age?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The calculator compares your birthdate and time against the current moment (or comparison date) using Gregorian calendar month lengths and leap years, computing exact years, elapsed months, remaining days, hours, and seconds."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my birthdate or personal information stored or tracked?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All age computations, countdowns, and life metrics run 100% locally in your browser memory. Your birthdate is never transmitted to any external server or saved in cookies."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are life milestone markers like the 10,000th day?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A human life reaches its 10,000th day around age 27.4, and its 20,000th day around age 54.7. Our calculator computes the exact calendar dates for these rare milestones."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How are estimated heartbeats and breaths calculated?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Estimates are calculated using standard resting biological averages: approximately 80 heartbeats per minute and 16 breaths per minute over your total elapsed minutes lived."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1140px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Tool Header */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--badge-text);
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .tool-header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tool-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Layout Grid */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .calc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .input-card, .results-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+    }
+    .card-title svg {
+      color: var(--accent);
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: .5rem;
+    }
+    .date-input, .time-input {
+      width: 100%;
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      color: #fff;
+      font-size: .95rem;
+      outline: none;
+      transition: all .2s ease;
+      font-family: inherit;
+    }
+    .date-input:focus, .time-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .date-input::-webkit-calendar-picker-indicator,
+    .time-input::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+      cursor: pointer;
+    }
+
+    /* Preset Buttons */
+    .preset-pills-row {
+      display: flex;
+      gap: .45rem;
+      margin-top: .5rem;
+      flex-wrap: wrap;
+    }
+    .btn-preset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-preset:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Comparison Date Toggle */
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: .6rem 0;
+      color: var(--text-muted);
+      font-size: .85rem;
+      font-weight: 600;
+      user-select: none;
+      border-top: 1px solid var(--card-border);
+      margin-top: 1.5rem;
+    }
+    .collapsible-header:hover {
+      color: #fff;
+    }
+    .collapsible-content {
+      display: none;
+      margin-top: .75rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .collapsible-content.show {
+      display: block;
+    }
+
+    /* Primary Exact Age Hero Card */
+    .hero-age-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.7) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 18px;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .hero-age-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-age-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .5rem;
+    }
+    .hero-age-val {
+      font-size: 2.3rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-ticking-row {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      background: rgba(8, 11, 18, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      color: #93c5fd;
+      margin-bottom: .6rem;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .hero-birth-weekday {
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+
+    /* Next Birthday Countdown Card */
+    .bday-countdown-card {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .bday-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .bday-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .bday-turning-pill {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+      padding: .2rem .65rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    .countdown-timer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .75rem;
+      margin-bottom: .85rem;
+    }
+    .countdown-unit-box {
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .65rem .4rem;
+      text-align: center;
+    }
+    .countdown-unit-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .countdown-unit-label {
+      font-size: .7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-top: .2rem;
+    }
+    .bday-meta-sub {
+      font-size: .82rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Fun Life Metrics Grid */
+    .metrics-grid-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .85rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .life-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .life-metric-card {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.1rem 1rem;
+      transition: all .2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .life-metric-card:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      transform: translateY(-2px);
+    }
+    .metric-icon-title-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .45rem;
+    }
+    .metric-icon {
+      font-size: 1.1rem;
+    }
+    .metric-name {
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .metric-big-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: auto;
+      line-height: 1.2;
+    }
+    .metric-sub-note {
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin-top: .2rem;
+    }
+
+    /* Milestone Markers List */
+    .milestones-box {
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .milestones-header {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .milestones-list {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+    .milestone-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+      padding-bottom: .45rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+    .milestone-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .milestone-label {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .milestone-date-wrap {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .milestone-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #93c5fd;
+    }
+    .milestone-status-tag {
+      font-size: .72rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .milestone-status-tag.past {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .milestone-status-tag.future {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .btn-action-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-action-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-action-primary.copied {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-action-secondary {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .65rem 1.1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    /* Educational Guide & FAQ */
+    .edu-section {
+      margin-top: 3.5rem;
+    }
+    .edu-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .edu-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .edu-header p {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    html[dir="rtl"] .toast-box {
+      right: auto;
+      left: 24px;
+    }
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+    footer p { margin-bottom: .4rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+    }
+
+    .nav-brand span span {
+      color: #3b82f6 !important;
+    }
+
+    .lang-dropdown {
+      position: relative !important;
+      display: inline-block !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.8rem !important;
+      border-radius: 10px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .lang-btn .globe-icon {
+      color: var(--accent, #3b82f6) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn .chevron-icon {
+      transition: transform 0.2s ease !important;
+      opacity: 0.7 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-dropdown.active .lang-btn .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-nav">
+    <a href="../index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        <span data-i18n="badgePill">100% Client-Side • Real-Time Ticking Engine • Zero Server Logs</span>
+      </div>
+      <h1 data-i18n="toolTitle">Age &amp; Milestone Calculator</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Compute your exact chronological age in years, months, days, and seconds with real-time ticking counters, upcoming birthday countdowns, and fun life statistics.</p>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="calc-layout">
+      <!-- Input Column -->
+      <div class="input-card">
+        <h2 class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span data-i18n="birthDetailsTitle">Birthdate Details</span>
+        </h2>
+
+        <!-- Date of Birth -->
+        <div class="form-group">
+          <label class="form-label" for="birthDate" data-i18n="birthDateLabel">Date of Birth</label>
+          <input type="date" class="date-input" id="birthDate">
+          <div class="preset-pills-row">
+            <button type="button" class="btn-preset" data-years-ago="18">18 yrs</button>
+            <button type="button" class="btn-preset" data-years-ago="21">21 yrs</button>
+            <button type="button" class="btn-preset" data-years-ago="25">25 yrs</button>
+            <button type="button" class="btn-preset" data-years-ago="30">30 yrs</button>
+            <button type="button" class="btn-preset" data-years-ago="40">40 yrs</button>
+            <button type="button" class="btn-preset" data-years-ago="50">50 yrs</button>
+            <button type="button" class="btn-preset" data-exact="2000-01-01">2000-01-01</button>
+          </div>
+        </div>
+
+        <!-- Optional Birth Time -->
+        <div class="form-group">
+          <label class="form-label" for="birthTime" data-i18n="birthTimeLabel">Birth Time (Optional)</label>
+          <input type="time" class="time-input" id="birthTime" value="00:00">
+        </div>
+
+        <!-- Collapsible: Compare at Specific Date -->
+        <div class="collapsible-header" id="btnToggleCustomDate">
+          <span data-i18n="customTargetDateLabel">Calculate Age at Specific Date?</span>
+          <svg id="arrowToggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="collapsible-content" id="customDateContent">
+          <div class="form-group" style="margin-top:.75rem;">
+            <label class="form-label" for="targetDate" data-i18n="targetDateLabel">Target Comparison Date</label>
+            <input type="date" class="date-input" id="targetDate">
+            <div class="preset-pills-row">
+              <button type="button" class="btn-preset" id="btnTargetNow" data-i18n="btnTargetNow">Use Current Time (Live)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Column -->
+      <div class="results-container">
+        <!-- Exact Age Hero Card -->
+        <div class="hero-age-card">
+          <div class="hero-age-label" data-i18n="exactAgeLabel">Exact Chronological Age</div>
+          <div class="hero-age-val" id="resExactAgeYears">26 Years, 8 Months, 25 Days</div>
+          <div class="hero-ticking-row">
+            <span class="pulse-dot"></span>
+            <span id="resExactAgeTicking">14 Hours, 22 Minutes, 38 Seconds</span>
+          </div>
+          <div class="hero-birth-weekday" id="resBirthWeekday">Born on a Tuesday</div>
+        </div>
+
+        <!-- Upcoming Birthday Countdown -->
+        <div class="bday-countdown-card">
+          <div class="bday-header-row">
+            <div class="bday-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span data-i18n="nextBdayTitle">Upcoming Birthday Countdown</span>
+            </div>
+            <div class="bday-turning-pill" id="resTurningAge">Turning 27</div>
+          </div>
+
+          <div class="countdown-timer-grid">
+            <div class="countdown-unit-box">
+              <div class="countdown-unit-num" id="resCountDays">00</div>
+              <div class="countdown-unit-label" data-i18n="unitDays">Days</div>
+            </div>
+            <div class="countdown-unit-box">
+              <div class="countdown-unit-num" id="resCountHours">00</div>
+              <div class="countdown-unit-label" data-i18n="unitHours">Hours</div>
+            </div>
+            <div class="countdown-unit-box">
+              <div class="countdown-unit-num" id="resCountMins">00</div>
+              <div class="countdown-unit-label" data-i18n="unitMinutes">Mins</div>
+            </div>
+            <div class="countdown-unit-box">
+              <div class="countdown-unit-num" id="resCountSecs">00</div>
+              <div class="countdown-unit-label" data-i18n="unitSeconds">Secs</div>
+            </div>
+          </div>
+
+          <div class="bday-meta-sub" id="resNextBdayDate">Next birthday falls on Thursday, May 15, 2027</div>
+        </div>
+
+        <!-- Fun Life Metrics Grid -->
+        <div>
+          <div class="metrics-grid-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+            <span data-i18n="lifeMetricsTitle">Life Journey &amp; Biological Estimates</span>
+          </div>
+
+          <div class="life-metrics-grid">
+            <!-- Total Days -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon">📅</span>
+                <span class="metric-name" data-i18n="metricDaysLived">Total Days</span>
+              </div>
+              <div class="metric-big-num" id="metricTotalDays">0</div>
+              <div class="metric-sub-note" data-i18n="metricDaysSub">Days on Earth</div>
+            </div>
+
+            <!-- Total Hours -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon">⏳</span>
+                <span class="metric-name" data-i18n="metricHoursLived">Total Hours</span>
+              </div>
+              <div class="metric-big-num" id="metricTotalHours">0</div>
+              <div class="metric-sub-note" data-i18n="metricHoursSub">Elapsed hours</div>
+            </div>
+
+            <!-- Heartbeats -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon">❤️</span>
+                <span class="metric-name" data-i18n="metricHeartbeats">Heartbeats</span>
+              </div>
+              <div class="metric-big-num" id="metricHeartbeats">0</div>
+              <div class="metric-sub-note" data-i18n="metricHeartbeatsSub">~80 beats/min</div>
+            </div>
+
+            <!-- Breaths -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon">🫁</span>
+                <span class="metric-name" data-i18n="metricBreaths">Breaths Taken</span>
+              </div>
+              <div class="metric-big-num" id="metricBreaths">0</div>
+              <div class="metric-sub-note" data-i18n="metricBreathsSub">~16 breaths/min</div>
+            </div>
+
+            <!-- Sleep -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon">😴</span>
+                <span class="metric-name" data-i18n="metricSleep">Hours Asleep</span>
+              </div>
+              <div class="metric-big-num" id="metricSleep">0</div>
+              <div class="metric-sub-note" data-i18n="metricSleepSub">~8 hrs/day</div>
+            </div>
+
+            <!-- Zodiac Signs -->
+            <div class="life-metric-card">
+              <div class="metric-icon-title-row">
+                <span class="metric-icon" id="zodiacIcon">♈</span>
+                <span class="metric-name" data-i18n="metricZodiac">Astrology</span>
+              </div>
+              <div class="metric-big-num" id="metricZodiacWestern" style="font-size:1.05rem;">Aries</div>
+              <div class="metric-sub-note" id="metricZodiacChinese">Year of the Tiger</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Life Milestone Markers Box -->
+        <div class="milestones-box">
+          <div class="milestones-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span data-i18n="milestonesTitle">Unique Life Milestones</span>
+          </div>
+
+          <div class="milestones-list">
+            <!-- 10,000 Days -->
+            <div class="milestone-item">
+              <span class="milestone-label">
+                <span>🌟</span>
+                <span data-i18n="ms10k">10,000th Day of Life (~27.4 yrs)</span>
+              </span>
+              <div class="milestone-date-wrap">
+                <span class="milestone-date" id="msDate10k">-</span>
+                <span class="milestone-status-tag" id="msTag10k">-</span>
+              </div>
+            </div>
+
+            <!-- 20,000 Days -->
+            <div class="milestone-item">
+              <span class="milestone-label">
+                <span>👑</span>
+                <span data-i18n="ms20k">20,000th Day of Life (~54.7 yrs)</span>
+              </span>
+              <div class="milestone-date-wrap">
+                <span class="milestone-date" id="msDate20k">-</span>
+                <span class="milestone-status-tag" id="msTag20k">-</span>
+              </div>
+            </div>
+
+            <!-- 1 Billion Seconds -->
+            <div class="milestone-item">
+              <span class="milestone-label">
+                <span>⚡</span>
+                <span data-i18n="ms1Billion">1,000,000,000 Seconds (~31.7 yrs)</span>
+              </span>
+              <div class="milestone-date-wrap">
+                <span class="milestone-date" id="msDate1Billion">-</span>
+                <span class="milestone-status-tag" id="msTag1Billion">-</span>
+              </div>
+            </div>
+
+            <!-- Half Birthday -->
+            <div class="milestone-item">
+              <span class="milestone-label">
+                <span>🎂</span>
+                <span data-i18n="msHalfBday">Next Half-Birthday (+6 Months)</span>
+              </span>
+              <div class="milestone-date-wrap">
+                <span class="milestone-date" id="msDateHalfBday">-</span>
+                <span class="milestone-status-tag future" data-i18n="tagUpcoming">Upcoming</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-bar">
+          <button type="button" class="btn-action-primary" id="btnCopySummary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span id="copySummaryText" data-i18n="btnCopySummary">Copy Age Summary</span>
+          </button>
+          <div style="display:flex;gap:.5rem;">
+            <button type="button" class="btn-action-secondary" id="btnPrintCard">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span data-i18n="btnPrint">Print / Save PDF</span>
+            </button>
+            <button type="button" class="btn-action-secondary" id="btnResetTool">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>
+              <span data-i18n="btnReset">Reset</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Educational Guide & FAQ Section -->
+    <section class="edu-section">
+      <div class="edu-header">
+        <h2 data-i18n="eduTitle">Understanding Chronological Age &amp; Milestones</h2>
+        <p data-i18n="eduSub">How calendar variations, leap years, and client-side calculations work together.</p>
+      </div>
+
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          </div>
+          <h3 data-i18n="guide1Title">Chronological vs. Approximate Age</h3>
+          <p data-i18n="guide1Desc">Dividing elapsed days by 365 or 365.25 creates date drift due to varying month lengths (28, 29, 30, and 31 days) and quadrennial leap years. Our engine resolves exact calendar month boundaries to guarantee legal documentation accuracy.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          </div>
+          <h3 data-i18n="guide2Title">The Significance of Life Day Milestones</h3>
+          <p data-i18n="guide2Desc">While annual birthdays are cultural, metric milestones like 10,000 days (~27.4 years) or 1 billion seconds (~31.7 years) provide fascinating quantitative markers of human longevity and personal development.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3 data-i18n="guide3Title">Zero Telemetry &amp; PII Privacy</h3>
+          <p data-i18n="guide3Desc">Your date of birth is sensitive Personally Identifiable Information (PII) frequently exploited in security questions. VantorKit processes all dates exclusively in client-side memory, never transmitting or saving personal data.</p>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Why does entering birth time change the countdown?</h4>
+          <p data-i18n="faq1A">By specifying your exact time of birth (e.g. 08:30 AM), the calculator factors in precise elapsed hours and minutes, offering second-level precision for live ticking counters.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What if I was born on a Leap Day (February 29th)?</h4>
+          <p data-i18n="faq2A">The engine properly accounts for February 29th. In non-leap years, your upcoming birthday countdown accurately targets March 1st (common law convention) or February 28th based on standard calendar alignment.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How are heartbeats and breaths estimated?</h4>
+          <p data-i18n="faq3A">Calculations are based on standard clinical baseline averages: 80 heartbeats per minute and 16 breaths per minute for healthy resting adults, multiplied across your total lived minutes.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can I calculate age for a past or future date?</h4>
+          <p data-i18n="faq4A">Yes! Click 'Calculate Age at Specific Date?' in the input panel to see your exact age at historical events, graduation dates, or future retirement milestones.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Standard Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Free, fast, and 100% private client-side utility tools.</p>
+    <p>Zero cloud logs &bull; Client-side security &bull; No cookies &bull; <a href="../index.html">All Tools</a></p>
+  </footer>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          e.stopPropagation();
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.addEventListener('click', toggleDropdown);
+
+        menu.querySelectorAll('.lang-option').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedLang = btn.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+              if (typeof window.setLanguage === 'function') {
+                window.setLanguage(selectedLang);
+              }
+              closeDropdown();
+            }
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeDropdown();
+        });
+      }
+
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      updateActiveLanguageUI(initialLang);
+      document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+    })();
+  </script>
+
+  <!-- Age Calculator Engine & i18n Logic -->
+  <script>
+  (function() {
+    // 4-Language Translation Dictionaries
+    const I18N = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "100% Client-Side • Real-Time Ticking Engine • Zero Server Logs",
+        toolTitle: "Age & Milestone Calculator",
+        toolSubtitle: "Compute your exact chronological age in years, months, days, and seconds with real-time ticking counters, upcoming birthday countdowns, and fun life statistics.",
+        birthDetailsTitle: "Birthdate Details",
+        birthDateLabel: "Date of Birth",
+        birthTimeLabel: "Birth Time (Optional)",
+        customTargetDateLabel: "Calculate Age at Specific Date?",
+        targetDateLabel: "Target Comparison Date",
+        btnTargetNow: "Use Current Time (Live)",
+        exactAgeLabel: "Exact Chronological Age",
+        nextBdayTitle: "Upcoming Birthday Countdown",
+        unitDays: "Days",
+        unitHours: "Hours",
+        unitMinutes: "Mins",
+        unitSeconds: "Secs",
+        lifeMetricsTitle: "Life Journey & Biological Estimates",
+        metricDaysLived: "Total Days",
+        metricDaysSub: "Days on Earth",
+        metricHoursLived: "Total Hours",
+        metricHoursSub: "Elapsed hours",
+        metricHeartbeats: "Heartbeats",
+        metricHeartbeatsSub: "~80 beats/min",
+        metricBreaths: "Breaths Taken",
+        metricBreathsSub: "~16 breaths/min",
+        metricSleep: "Hours Asleep",
+        metricSleepSub: "~8 hrs/day",
+        metricZodiac: "Astrology",
+        milestonesTitle: "Unique Life Milestones",
+        ms10k: "10,000th Day of Life (~27.4 yrs)",
+        ms20k: "20,000th Day of Life (~54.7 yrs)",
+        ms1Billion: "1,000,000,000 Seconds (~31.7 yrs)",
+        msHalfBday: "Next Half-Birthday (+6 Months)",
+        tagReached: "Completed",
+        tagUpcoming: "Upcoming",
+        btnCopySummary: "Copy Age Summary",
+        btnPrint: "Print / Save PDF",
+        btnReset: "Reset",
+        copiedToast: "Copied to clipboard!",
+        eduTitle: "Understanding Chronological Age & Milestones",
+        eduSub: "How calendar variations, leap years, and client-side calculations work together.",
+        guide1Title: "Chronological vs. Approximate Age",
+        guide1Desc: "Dividing elapsed days by 365 or 365.25 creates date drift due to varying month lengths (28, 29, 30, and 31 days) and quadrennial leap years. Our engine resolves exact calendar month boundaries to guarantee legal documentation accuracy.",
+        guide2Title: "The Significance of Life Day Milestones",
+        guide2Desc: "While annual birthdays are cultural, metric milestones like 10,000 days (~27.4 years) or 1 billion seconds (~31.7 years) provide fascinating quantitative markers of human longevity and personal development.",
+        guide3Title: "Zero Telemetry & PII Privacy",
+        guide3Desc: "Your date of birth is sensitive Personally Identifiable Information (PII) frequently exploited in security questions. VantorKit processes all dates exclusively in client-side memory, never transmitting or saving personal data.",
+        faq1Q: "Why does entering birth time change the countdown?",
+        faq1A: "By specifying your exact time of birth (e.g. 08:30 AM), the calculator factors in precise elapsed hours and minutes, offering second-level precision for live ticking counters.",
+        faq2Q: "What if I was born on a Leap Day (February 29th)?",
+        faq2A: "The engine properly accounts for February 29th. In non-leap years, your upcoming birthday countdown accurately targets March 1st (common law convention) or February 28th based on standard calendar alignment.",
+        faq3Q: "How are heartbeats and breaths estimated?",
+        faq3A: "Calculations are based on standard clinical baseline averages: 80 heartbeats per minute and 16 breaths per minute for healthy resting adults, multiplied across your total lived minutes.",
+        faq4Q: "Can I calculate age for a past or future date?",
+        faq4A: "Yes! Click 'Calculate Age at Specific Date?' in the input panel to see your exact age at historical events, graduation dates, or future retirement milestones."
+      },
+      ar: {
+        backLink: "الرجوع إلى الأدوات ←",
+        badgePill: "100% داخل المتصفح • عداد حي بالثواني • لا سجلات سحابية",
+        toolTitle: "حاسبة العمر والمحطات الحياتية",
+        toolSubtitle: "احسب عمرك الدقيق بالسنين والأشهر والأيام والثواني لحظياً مع عداد حي، وعد تنازلي ليوم ميلادك القادم، وإحصائيات بيولوجية ممتعة.",
+        birthDetailsTitle: "تفاصيل تاريخ الميلاد",
+        birthDateLabel: "تاريخ الميلاد",
+        birthTimeLabel: "وقت الميلاد (اختياري)",
+        customTargetDateLabel: "حساب العمر في تاريخ محدد؟",
+        targetDateLabel: "تاريخ المقارنة المستهدف",
+        btnTargetNow: "الوقت الحالي (حي)",
+        exactAgeLabel: "العمر الزمني الدقيق",
+        nextBdayTitle: "العد التنازلي ليوم ميلادك القادم",
+        unitDays: "يوم",
+        unitHours: "ساعة",
+        unitMinutes: "دقيقة",
+        unitSeconds: "ثانية",
+        lifeMetricsTitle: "محطات الرحلة الحياتية والتقديرات الحيوية",
+        metricDaysLived: "إجمالي الأيام",
+        metricDaysSub: "يوماً على الأرض",
+        metricHoursLived: "إجمالي الساعات",
+        metricHoursSub: "ساعة منقضية",
+        metricHeartbeats: "نبضات القلب",
+        metricHeartbeatsSub: "~80 نبضة/دقيقة",
+        metricBreaths: "الأنفاس المأخوذة",
+        metricBreathsSub: "~16 نفساً/دقيقة",
+        metricSleep: "ساعات النوم",
+        metricSleepSub: "~8 ساعات/يوم",
+        metricZodiac: "الأبراج والفلك",
+        milestonesTitle: "محطات حياة استثنائية",
+        ms10k: "اليوم الـ 10,000 من حياتك (~27.4 سنة)",
+        ms20k: "اليوم الـ 20,000 من حياتك (~54.7 سنة)",
+        ms1Billion: "1,000,000,000 ثانية (~31.7 سنة)",
+        msHalfBday: "نصف عيد الميلاد القادم (+6 أشهر)",
+        tagReached: "تم الوصول",
+        tagUpcoming: "قادم",
+        btnCopySummary: "نسخ ملخص العمر",
+        btnPrint: "طباعة / حفظ PDF",
+        btnReset: "إعادة ضبط",
+        copiedToast: "تم النسخ إلى الحافظة بنجاح!",
+        eduTitle: "فهم حساب العمر الزمني والمحطات",
+        eduSub: "كيف تعمل الفروق التقويمية والسنوات الكبيسة والحسابات المحلية معاً.",
+        guide1Title: "العمر الزمني الحقيقي مقابل التقريبي",
+        guide1Desc: "قسمة الأيام على 365 أو 365.25 تسبب انحرافاً بسبب تباين أطوال الشهور (28، 29، 30، 31 يوماً) والسنوات الكبيسة. يعتمد نظامنا حدود الشهور التقويمية الدقيقة لضمان صحة الوثائق الرسمية.",
+        guide2Title: "أهمية محطات الأيام الحياتية",
+        guide2Desc: "بينما تعد أعياد الميلاد السنوية تقليداً، فإن بلوغ اليوم الـ 10,000 (~27.4 سنة) أو المليار ثانية (~31.7 سنة) يعطي مقياساً رقمياً فريداً لتطور الإنسان وإنجازاته.",
+        guide3Title: "حماية الخصوصية وتشفير البيانات محلياً",
+        guide3Desc: "يعد تاريخ الميلاد معلومة حساسة يتم استغلالها غالباً في أسئلة الأمان. يعالج VantorKit كافة الحسابات في ذاكرة المتصفح فقط دون حفظ أو نقل أي بيانات عبر الإنترنت.",
+        faq1Q: "لماذا يغير إدخال وقت الميلاد العد التنازلي؟",
+        faq1A: "تحديد وقت ميلادك بدقة (مثل 08:30 صباحاً) يتيح للحاسبة احتساب الساعات والدقائق المنقضية بدقة على مستوى الثانية للعداد الحي.",
+        faq2Q: "ماذا لو وُلدت في يوم كبيس (29 فبراير)؟",
+        faq2A: "يتعامل النظام بدقة مع 29 فبراير، وفي السنوات العادية يستهدف العد التنازلي 1 مارس (حسب الأعراف القانونية) بدقة تامة.",
+        faq3Q: "كيف يتم تقدير نبضات القلب والأنفاس؟",
+        faq3A: "تعتمد التقديرات على المعدلات الحيوية الطبيعية لشخص بالغ في حالة راحة: 80 نبضة/دقيقة و 16 نفساً/دقيقة مضروبة في إجمالي الدقائق المعاشة.",
+        faq4Q: "هل يمكنني حساب عمري في تاريخ ماضٍ أو مستقبلي؟",
+        faq4A: "نعم! انقر على 'حساب العمر في تاريخ محدد؟' في لوحة الإدخال لمعرفة عمرك عند التخرج أو التقاعد أو أي مناسبة أخرى."
+      },
+      fr: {
+        backLink: "← Retour aux outils",
+        badgePill: "100% Côté Client • Horloge en Temps Réel • Zéro Télémétrie",
+        toolTitle: "Calculateur d'Âge & Jalons de Vie",
+        toolSubtitle: "Calculez votre âge chronologique exact en années, mois, jours et secondes avec un compteur dynamique, le décompte de votre anniversaire et des statistiques de vie amusantes.",
+        birthDetailsTitle: "Date et Heure de Naissance",
+        birthDateLabel: "Date de naissance",
+        birthTimeLabel: "Heure de naissance (optionnel)",
+        customTargetDateLabel: "Calculer l'âge à une date spécifique ?",
+        targetDateLabel: "Date cible de comparaison",
+        btnTargetNow: "Heure actuelle (en direct)",
+        exactAgeLabel: "Âge Chronologique Exact",
+        nextBdayTitle: "Compte à Rebours du Prochain Anniversaire",
+        unitDays: "Jours",
+        unitHours: "Heures",
+        unitMinutes: "Mins",
+        unitSeconds: "Secs",
+        lifeMetricsTitle: "Parcours de Vie & Estimations Biologiques",
+        metricDaysLived: "Total Jours",
+        metricDaysSub: "Jours sur Terre",
+        metricHoursLived: "Total Heures",
+        metricHoursSub: "Heures vécues",
+        metricHeartbeats: "Battements de Cœur",
+        metricHeartbeatsSub: "~80 bpm",
+        metricBreaths: "Respirations",
+        metricBreathsSub: "~16 resp/min",
+        metricSleep: "Heures de Sommeil",
+        metricSleepSub: "~8 h/jour",
+        metricZodiac: "Astrologie",
+        milestonesTitle: "Jalons de Vie Remarquables",
+        ms10k: "10 000e Jour de Vie (~27,4 ans)",
+        ms20k: "20 000e Jour de Vie (~54,7 ans)",
+        ms1Billion: "1 000 000 000 Secondes (~31,7 ans)",
+        msHalfBday: "Prochain Demi-Anniversaire (+6 mois)",
+        tagReached: "Atteint",
+        tagUpcoming: "À venir",
+        btnCopySummary: "Copier le résumé d'âge",
+        btnPrint: "Imprimer / Sauvegarder PDF",
+        btnReset: "Réinitialiser",
+        copiedToast: "Copié dans le presse-papiers !",
+        eduTitle: "Comprendre l'Âge Chronologique & les Jalons",
+        eduSub: "Comment s'articulent les variations de calendrier, les années bissextiles et le calcul local.",
+        guide1Title: "Âge Chronologique vs Approximatif",
+        guide1Desc: "Diviser par 365 crée un décalage en raison des mois inégaux (28 à 31 jours) et des années bissextiles. Notre calculateur utilise les limites réelles du calendrier pour une exactitude juridique parfaite.",
+        guide2Title: "La Portée des Jalons Quantitatifs",
+        guide2Desc: "Franchir son 10 000e jour de vie (~27,4 ans) ou son milliardième de seconde constitue un repère mathématique fascinant marquant le temps écoulé.",
+        guide3Title: "Zéro Télémétrie & Protection des Données (PII)",
+        guide3Desc: "Votre date de naissance est une donnée sensible. VantorKit exécute l'intégralité des calculs en mémoire locale dans votre navigateur, sans aucun enregistrement ni transfert distant.",
+        faq1Q: "Pourquoi indiquer l'heure de naissance ?",
+        faq1A: "L'heure de naissance permet d'intégrer les heures et minutes réelles pour animer le compteur à la seconde près en temps réel.",
+        faq2Q: "Que se passe-t-il si je suis né un 29 février ?",
+        faq2A: "Les années non bissextiles, le décompte cible le 1er mars conformément aux normes civiles et administratives.",
+        faq3Q: "Comment sont estimés les battements et respirations ?",
+        faq3A: "Les estimations reposent sur des moyennes physiologiques au repos : 80 battements/minute et 16 respirations/minute multipliés par votre temps de vie.",
+        faq4Q: "Puis-je calculer mon âge à une date passée ou future ?",
+        faq4A: "Oui ! Déroulez 'Calculer l'âge à une date spécifique ?' pour connaître votre âge lors d'un événement marquant ou lors de votre retraite."
+      },
+      it: {
+        backLink: "← Torna agli strumenti",
+        badgePill: "100% Lato Client • Orologio in Tempo Reale • Zero Log su Server",
+        toolTitle: "Calcolatore Età & Traguardi di Vita",
+        toolSubtitle: "Calcola la tua età cronologica esatta in anni, mesi, giorni e secondi con un contatore in tempo reale, il conto alla rovescia del compleanno e statistiche biologiche.",
+        birthDetailsTitle: "Dettagli di Nascita",
+        birthDateLabel: "Data di nascita",
+        birthTimeLabel: "Ora di nascita (opzionale)",
+        customTargetDateLabel: "Calcolare l'età a una data specifica?",
+        targetDateLabel: "Data di confronto",
+        btnTargetNow: "Ora attuale (in tempo reale)",
+        exactAgeLabel: "Età Cronologica Esatta",
+        nextBdayTitle: "Conto alla Rovescia Prossimo Compleanno",
+        unitDays: "Giorni",
+        unitHours: "Ore",
+        unitMinutes: "Min",
+        unitSeconds: "Sec",
+        lifeMetricsTitle: "Traguardi di Vita & Stime Biologiche",
+        metricDaysLived: "Giorni Totali",
+        metricDaysSub: "Giorni sulla Terra",
+        metricHoursLived: "Ore Totali",
+        metricHoursSub: "Ore trascorse",
+        metricHeartbeats: "Battiti Cardiaci",
+        metricHeartbeatsSub: "~80 bpm",
+        metricBreaths: "Respiri Fatti",
+        metricBreathsSub: "~16 resp/min",
+        metricSleep: "Ore di Sonno",
+        metricSleepSub: "~8 ore/giorno",
+        metricZodiac: "Astrologia",
+        milestonesTitle: "Traguardi di Vita Significativi",
+        ms10k: "10.000° Giorno di Vita (~27,4 anni)",
+        ms20k: "20.000° Giorno di Vita (~54,7 anni)",
+        ms1Billion: "1.000.000.000 di Secondi (~31,7 anni)",
+        msHalfBday: "Prossimo Mezzo Compleanno (+6 mesi)",
+        tagReached: "Raggiunto",
+        tagUpcoming: "In arrivo",
+        btnCopySummary: "Copia riepilogo età",
+        btnPrint: "Stampa / Salva PDF",
+        btnReset: "Reimposta",
+        copiedToast: "Copiato negli appunti!",
+        eduTitle: "Comprendere l'Età Cronologica & i Traguardi",
+        eduSub: "Come si combinano le variazioni del calendario, gli anni bisestili e l'elaborazione locale.",
+        guide1Title: "Età Cronologica vs Approssimativa",
+        guide1Desc: "Dividere i giorni per 365 crea discrepanze a causa dei mesi irregolari (28-31 giorni) e degli anni bisestili. Il nostro algoritmo rispetta i confini mensili esatti.",
+        guide2Title: "Il Valore dei Traguardi Quantitativi",
+        guide2Desc: "Raggiungere il 10.000° giorno di vita o il miliardesimo di secondo offre una prospettiva affascinante sul tempo vissuto e sullo sviluppo personale.",
+        guide3Title: "Zero Telemetria & Privacy Dati (PII)",
+        guide3Desc: "La data di nascita è un dato personale sensibile. VantorKit elabora tutti i calcoli nella memoria del tuo browser senza inviare dati su server.",
+        faq1Q: "Perché inserire l'ora di nascita?",
+        faq1A: "Specificare l'ora consente di includere ore e minuti precisi per animare il contatore al secondo in tempo reale.",
+        faq2Q: "Cosa succede se sono nato il 29 febbraio?",
+        faq2A: "Negli anni non bisestili, il calcolo punta correttamente al 1° marzo secondo le consuetudini legali.",
+        faq3Q: "Come vengono stimati i battiti e i respiri?",
+        faq3A: "Le stime usano valori medi a riposo: 80 battiti al minuto e 16 respiri al minuto moltiplicati per i minuti totali vissuti.",
+        faq4Q: "Posso calcolare l'età a una data passata o futura?",
+        faq4A: "Sì! Espandi 'Calcolare l'età a una data specifica?' per visualizzare la tua età esatta alla laurea, alle nozze o al pensionamento."
+      }
+    };
+
+    // State Variables
+    let activeLang = 'en';
+    let isLiveTimer = true;
+    let timerInterval = null;
+
+    // DOM Elements
+    const birthDateInput = document.getElementById('birthDate');
+    const birthTimeInput = document.getElementById('birthTime');
+    const btnToggleCustomDate = document.getElementById('btnToggleCustomDate');
+    const customDateContent = document.getElementById('customDateContent');
+    const targetDateInput = document.getElementById('targetDate');
+    const btnTargetNow = document.getElementById('btnTargetNow');
+    const arrowToggle = document.getElementById('arrowToggle');
+
+    const resExactAgeYears = document.getElementById('resExactAgeYears');
+    const resExactAgeTicking = document.getElementById('resExactAgeTicking');
+    const resBirthWeekday = document.getElementById('resBirthWeekday');
+    const resTurningAge = document.getElementById('resTurningAge');
+    const resCountDays = document.getElementById('resCountDays');
+    const resCountHours = document.getElementById('resCountHours');
+    const resCountMins = document.getElementById('resCountMins');
+    const resCountSecs = document.getElementById('resCountSecs');
+    const resNextBdayDate = document.getElementById('resNextBdayDate');
+
+    const metricTotalDays = document.getElementById('metricTotalDays');
+    const metricTotalHours = document.getElementById('metricTotalHours');
+    const metricHeartbeats = document.getElementById('metricHeartbeats');
+    const metricBreaths = document.getElementById('metricBreaths');
+    const metricSleep = document.getElementById('metricSleep');
+    const zodiacIcon = document.getElementById('zodiacIcon');
+    const metricZodiacWestern = document.getElementById('metricZodiacWestern');
+    const metricZodiacChinese = document.getElementById('metricZodiacChinese');
+
+    const msDate10k = document.getElementById('msDate10k');
+    const msTag10k = document.getElementById('msTag10k');
+    const msDate20k = document.getElementById('msDate20k');
+    const msTag20k = document.getElementById('msTag20k');
+    const msDate1Billion = document.getElementById('msDate1Billion');
+    const msTag1Billion = document.getElementById('msTag1Billion');
+    const msDateHalfBday = document.getElementById('msDateHalfBday');
+
+    const btnCopySummary = document.getElementById('btnCopySummary');
+    const copySummaryText = document.getElementById('copySummaryText');
+    const btnPrintCard = document.getElementById('btnPrintCard');
+    const btnResetTool = document.getElementById('btnResetTool');
+    const toastBox = document.getElementById('toastBox');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Toast Notification Utility
+    let toastTimer = null;
+    function showToast(msg) {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastMessage.textContent = msg;
+      toastBox.classList.add('show');
+      toastTimer = setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2500);
+    }
+
+    // Zodiac Definitions
+    function getWesternZodiac(month, day) {
+      const signs = [
+        { name: 'Capricorn', symbol: '♑', endMonth: 1, endDay: 19 },
+        { name: 'Aquarius', symbol: '♒', endMonth: 2, endDay: 18 },
+        { name: 'Pisces', symbol: '♓', endMonth: 3, endDay: 20 },
+        { name: 'Aries', symbol: '♈', endMonth: 4, endDay: 19 },
+        { name: 'Taurus', symbol: '♉', endMonth: 5, endDay: 20 },
+        { name: 'Gemini', symbol: '♊', endMonth: 6, endDay: 20 },
+        { name: 'Cancer', symbol: '♋', endMonth: 7, endDay: 22 },
+        { name: 'Leo', symbol: '♌', endMonth: 8, endDay: 22 },
+        { name: 'Virgo', symbol: '♍', endMonth: 9, endDay: 22 },
+        { name: 'Libra', symbol: '♎', endMonth: 10, endDay: 22 },
+        { name: 'Scorpio', symbol: '♏', endMonth: 11, endDay: 21 },
+        { name: 'Sagittarius', symbol: '♐', endMonth: 12, endDay: 21 },
+        { name: 'Capricorn', symbol: '♑', endMonth: 12, endDay: 31 }
+      ];
+      for (const s of signs) {
+        if (month < s.endMonth || (month === s.endMonth && day <= s.endDay)) {
+          return s;
+        }
+      }
+      return signs[0];
+    }
+
+    const CHINESE_ANIMALS = {
+      en: ['Rat', 'Ox', 'Tiger', 'Rabbit', 'Dragon', 'Snake', 'Horse', 'Goat', 'Monkey', 'Rooster', 'Dog', 'Pig'],
+      ar: ['الفأر', 'الثور', 'النمر', 'الأرنب', 'التنين', 'الأفعى', 'الحصان', 'الخروف', 'القرد', 'الديك', 'الكلب', 'الخنزير'],
+      fr: ['Rat', 'Buffle', 'Tigre', 'Lapin', 'Dragon', 'Serpent', 'Cheval', 'Chèvre', 'Singe', 'Coq', 'Chien', 'Cochon'],
+      it: ['Topo', 'Bufalo', 'Tigre', 'Coniglio', 'Drago', 'Serpente', 'Cavallo', 'Capra', 'Scimmia', 'Gallo', 'Cane', 'Maiale']
+    };
+
+    function getChineseZodiac(year, lang) {
+      const idx = ((year - 4) % 12 + 12) % 12;
+      const list = CHINESE_ANIMALS[lang] || CHINESE_ANIMALS.en;
+      return list[idx];
+    }
+
+    function formatFullDateLocalized(d, lang) {
+      if (!d) return '';
+      const loc = lang === 'ar' ? 'ar-SA' : (lang === 'fr' ? 'fr-FR' : (lang === 'it' ? 'it-IT' : 'en-US'));
+      return new Intl.DateTimeFormat(loc, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).format(d);
+    }
+
+    function formatShortDate(d) {
+      if (!d) return '';
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    // Core Calculation Logic
+    function recalculate() {
+      if (!birthDateInput.value) return;
+
+      const [bY, bM, bD] = birthDateInput.value.split('-').map(Number);
+      const timeVal = birthTimeInput.value || "00:00";
+      const [bHour, bMin] = timeVal.split(':').map(Number);
+
+      const birthDate = new Date(bY, bM - 1, bD, bHour || 0, bMin || 0, 0);
+
+      // Comparison Target Date
+      let targetDate;
+      if (!isLiveTimer && targetDateInput.value) {
+        const [tY, tM, tD] = targetDateInput.value.split('-').map(Number);
+        targetDate = new Date(tY, tM - 1, tD, 23, 59, 59);
+      } else {
+        targetDate = new Date();
+      }
+
+      if (birthDate > targetDate) {
+        resExactAgeYears.textContent = "Birthdate is in the future!";
+        resExactAgeTicking.textContent = "Please pick a date in the past";
+        return;
+      }
+
+      // Exact Age [Years, Months, Days, Hours, Minutes, Seconds]
+      let years = targetDate.getFullYear() - birthDate.getFullYear();
+      let months = targetDate.getMonth() - birthDate.getMonth();
+      let days = targetDate.getDate() - birthDate.getDate();
+      let hours = targetDate.getHours() - birthDate.getHours();
+      let minutes = targetDate.getMinutes() - birthDate.getMinutes();
+      let seconds = targetDate.getSeconds() - birthDate.getSeconds();
+
+      if (seconds < 0) {
+        seconds += 60;
+        minutes--;
+      }
+      if (minutes < 0) {
+        minutes += 60;
+        hours--;
+      }
+      if (hours < 0) {
+        hours += 24;
+        days--;
+      }
+      if (days < 0) {
+        months--;
+        const prevMonthLast = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+        days += prevMonthLast.getDate();
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      // Update Exact Age Display
+      if (activeLang === 'ar') {
+        resExactAgeYears.textContent = `${years} سنة، ${months} شهر، ${days} يوم`;
+        resExactAgeTicking.textContent = `${hours} ساعة، ${minutes} دقيقة، ${seconds} ثانية`;
+        resBirthWeekday.textContent = `وُلدت يوم ${new Intl.DateTimeFormat('ar-SA', { weekday: 'long' }).format(birthDate)}`;
+      } else if (activeLang === 'fr') {
+        resExactAgeYears.textContent = `${years} ans, ${months} mois, ${days} jours`;
+        resExactAgeTicking.textContent = `${hours} heures, ${minutes} minutes, ${seconds} secondes`;
+        resBirthWeekday.textContent = `Né(e) un ${new Intl.DateTimeFormat('fr-FR', { weekday: 'long' }).format(birthDate)}`;
+      } else if (activeLang === 'it') {
+        resExactAgeYears.textContent = `${years} anni, ${months} mesi, ${days} giorni`;
+        resExactAgeTicking.textContent = `${hours} ore, ${minutes} minuti, ${seconds} secondi`;
+        resBirthWeekday.textContent = `Nato/a di ${new Intl.DateTimeFormat('it-IT', { weekday: 'long' }).format(birthDate)}`;
+      } else {
+        resExactAgeYears.textContent = `${years} Year${years === 1 ? '' : 's'}, ${months} Month${months === 1 ? '' : 's'}, ${days} Day${days === 1 ? '' : 's'}`;
+        resExactAgeTicking.textContent = `${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+        resBirthWeekday.textContent = `Born on a ${new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(birthDate)}`;
+      }
+
+      // Next Birthday Countdown
+      let nextBday = new Date(targetDate.getFullYear(), birthDate.getMonth(), birthDate.getDate(), birthDate.getHours(), birthDate.getMinutes(), 0);
+      if (nextBday <= targetDate) {
+        nextBday.setFullYear(targetDate.getFullYear() + 1);
+      }
+      const diffMs = nextBday - targetDate;
+      const countDays = Math.floor(diffMs / 86400000);
+      const countHours = Math.floor((diffMs % 86400000) / 3600000);
+      const countMins = Math.floor((diffMs % 3600000) / 60000);
+      const countSecs = Math.floor((diffMs % 60000) / 1000);
+
+      resCountDays.textContent = String(countDays).padStart(2, '0');
+      resCountHours.textContent = String(countHours).padStart(2, '0');
+      resCountMins.textContent = String(countMins).padStart(2, '0');
+      resCountSecs.textContent = String(countSecs).padStart(2, '0');
+
+      const turning = years + 1;
+      if (activeLang === 'ar') {
+        resTurningAge.textContent = `تبلغ ${turning} عاماً`;
+        resNextBdayDate.textContent = `يوافق عيد الميلاد القادم: ${formatFullDateLocalized(nextBday, activeLang)}`;
+      } else if (activeLang === 'fr') {
+        resTurningAge.textContent = `${turning} ans bientôt`;
+        resNextBdayDate.textContent = `Le prochain anniversaire tombe un ${formatFullDateLocalized(nextBday, activeLang)}`;
+      } else if (activeLang === 'it') {
+        resTurningAge.textContent = `Compirai ${turning} anni`;
+        resNextBdayDate.textContent = `Il prossimo compleanno cadrà di ${formatFullDateLocalized(nextBday, activeLang)}`;
+      } else {
+        resTurningAge.textContent = `Turning ${turning}`;
+        resNextBdayDate.textContent = `Next birthday falls on ${formatFullDateLocalized(nextBday, activeLang)}`;
+      }
+
+      // Totals & Fun Metrics
+      const totalElapsedMs = targetDate - birthDate;
+      const totalDays = Math.floor(totalElapsedMs / 86400000);
+      const totalHours = Math.floor(totalElapsedMs / 3600000);
+      const totalMinutes = Math.floor(totalElapsedMs / 60000);
+
+      metricTotalDays.textContent = totalDays.toLocaleString();
+      metricTotalHours.textContent = totalHours.toLocaleString();
+
+      const estHeartbeats = Math.floor(totalMinutes * 80);
+      metricHeartbeats.textContent = estHeartbeats > 1e9 ? `~${(estHeartbeats / 1e9).toFixed(2)}B` : `~${(estHeartbeats / 1e6).toFixed(1)}M`;
+
+      const estBreaths = Math.floor(totalMinutes * 16);
+      metricBreaths.textContent = estBreaths > 1e9 ? `~${(estBreaths / 1e9).toFixed(2)}B` : `~${(estBreaths / 1e6).toFixed(1)}M`;
+
+      const estSleepHours = Math.floor(totalDays * 8);
+      metricSleep.textContent = `${estSleepHours.toLocaleString()}h`;
+
+      // Astrological Signs
+      const westZodiac = getWesternZodiac(birthDate.getMonth() + 1, birthDate.getDate());
+      const chinZodiac = getChineseZodiac(birthDate.getFullYear(), activeLang);
+      zodiacIcon.textContent = westZodiac.symbol;
+      metricZodiacWestern.textContent = westZodiac.name;
+      metricZodiacChinese.textContent = activeLang === 'ar' ? `عام ${chinZodiac}` : (activeLang === 'fr' ? `Année du ${chinZodiac}` : (activeLang === 'it' ? `Anno del ${chinZodiac}` : `Year of the ${chinZodiac}`));
+
+      // Milestones
+      const day10kDate = new Date(birthDate.getTime() + 10000 * 86400000);
+      const day20kDate = new Date(birthDate.getTime() + 20000 * 86400000);
+      const sec1bDate = new Date(birthDate.getTime() + 1000000000 * 1000);
+
+      // Half Birthday: +6 months from next birthday
+      const halfBday = new Date(nextBday.getTime());
+      halfBday.setMonth(halfBday.getMonth() - 6);
+      if (halfBday <= targetDate) {
+        halfBday.setFullYear(halfBday.getFullYear() + 1);
+      }
+
+      msDate10k.textContent = formatShortDate(day10kDate);
+      msDate20k.textContent = formatShortDate(day20kDate);
+      msDate1Billion.textContent = formatShortDate(sec1bDate);
+      msDateHalfBday.textContent = formatShortDate(halfBday);
+
+      const dict = I18N[activeLang] || I18N.en;
+
+      if (targetDate >= day10kDate) {
+        msTag10k.textContent = dict.tagReached;
+        msTag10k.className = "milestone-status-tag past";
+      } else {
+        msTag10k.textContent = dict.tagUpcoming;
+        msTag10k.className = "milestone-status-tag future";
+      }
+
+      if (targetDate >= day20kDate) {
+        msTag20k.textContent = dict.tagReached;
+        msTag20k.className = "milestone-status-tag past";
+      } else {
+        msTag20k.textContent = dict.tagUpcoming;
+        msTag20k.className = "milestone-status-tag future";
+      }
+
+      if (targetDate >= sec1bDate) {
+        msTag1Billion.textContent = dict.tagReached;
+        msTag1Billion.className = "milestone-status-tag past";
+      } else {
+        msTag1Billion.textContent = dict.tagUpcoming;
+        msTag1Billion.className = "milestone-status-tag future";
+      }
+    }
+
+    // Set Default Initial Date (e.g. 25 years ago)
+    function setInitialDefaults() {
+      const now = new Date();
+      const def = new Date(now.getFullYear() - 25, 4, 15, 8, 30);
+      birthDateInput.value = formatShortDate(def);
+      birthTimeInput.value = "08:30";
+      recalculate();
+
+      // Start live 1-second interval ticker
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (isLiveTimer) {
+          recalculate();
+        }
+      }, 1000);
+    }
+
+    // Event Listeners
+    birthDateInput.addEventListener('change', recalculate);
+    birthDateInput.addEventListener('input', recalculate);
+    birthTimeInput.addEventListener('change', recalculate);
+    birthTimeInput.addEventListener('input', recalculate);
+
+    // Collapsible Custom Target Date
+    btnToggleCustomDate.addEventListener('click', () => {
+      const isOpen = customDateContent.classList.contains('show');
+      if (isOpen) {
+        customDateContent.classList.remove('show');
+        arrowToggle.style.transform = 'rotate(0deg)';
+        isLiveTimer = true;
+        recalculate();
+      } else {
+        customDateContent.classList.add('show');
+        arrowToggle.style.transform = 'rotate(180deg)';
+        if (!targetDateInput.value) {
+          targetDateInput.value = formatShortDate(new Date());
+        }
+        isLiveTimer = false;
+        recalculate();
+      }
+    });
+
+    targetDateInput.addEventListener('change', () => {
+      isLiveTimer = false;
+      recalculate();
+    });
+
+    btnTargetNow.addEventListener('click', () => {
+      targetDateInput.value = '';
+      customDateContent.classList.remove('show');
+      arrowToggle.style.transform = 'rotate(0deg)';
+      isLiveTimer = true;
+      recalculate();
+    });
+
+    // Quick Presets
+    document.querySelectorAll('.btn-preset[data-years-ago]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const yAgo = parseInt(btn.getAttribute('data-years-ago'), 10);
+        const now = new Date();
+        const d = new Date(now.getFullYear() - yAgo, now.getMonth(), now.getDate());
+        birthDateInput.value = formatShortDate(d);
+        recalculate();
+      });
+    });
+
+    document.querySelectorAll('.btn-preset[data-exact]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        birthDateInput.value = btn.getAttribute('data-exact');
+        recalculate();
+      });
+    });
+
+    // Copy Summary Action
+    btnCopySummary.addEventListener('click', () => {
+      const summary = `VantorKit Age & Milestone Summary:
+Exact Age: ${resExactAgeYears.textContent} (${resExactAgeTicking.textContent})
+${resBirthWeekday.textContent}
+Next Birthday: ${resTurningAge.textContent} in ${resCountDays.textContent}d ${resCountHours.textContent}h ${resCountMins.textContent}m
+Total Days Lived: ${metricTotalDays.textContent} Days (${metricTotalHours.textContent} Hours)
+Estimated Heartbeats: ${metricHeartbeats.textContent} | Breaths: ${metricBreaths.textContent}
+Astrology: ${metricZodiacWestern.textContent} • ${metricZodiacChinese.textContent}
+Calculated with VantorKit (https://vantorkit.com/tools/age-calculator.html)`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        btnCopySummary.classList.add('copied');
+        copySummaryText.textContent = "✓ Copied!";
+        showToast(I18N[activeLang]?.copiedToast || "Copied to clipboard!");
+        setTimeout(() => {
+          btnCopySummary.classList.remove('copied');
+          copySummaryText.textContent = I18N[activeLang]?.btnCopySummary || "Copy Age Summary";
+        }, 2000);
+      });
+    });
+
+    // Print / Screenshot View
+    btnPrintCard.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Reset Tool
+    btnResetTool.addEventListener('click', () => {
+      setInitialDefaults();
+      showToast("Reset to defaults");
+    });
+
+    // i18n Translation Switcher
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      activeLang = lang;
+      const dict = I18N[lang];
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      recalculate();
+    }
+
+    // Expose setLanguage globally for standardized dropdown sync
+    window.setLanguage = setLanguage;
+
+    // Initialize
+    setInitialDefaults();
+    const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(initialLang);
+
+  })();
+  </script>
+</body>
+</html>
