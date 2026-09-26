@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <title>Loan &amp; Mortgage Amortization Calculator — Visual Schedule &amp; Early Payoff | VantorKit</title>
   <meta name="description" content="Free loan and mortgage amortization calculator. Estimate monthly payments, total interest, early payoff savings with extra payments, visual donut breakdown, and export CSV schedule. 100% private.">
   <meta name="keywords" content="loan calculator, mortgage calculator, amortization schedule, mortgage amortization, extra payments calculator, early loan payoff, monthly payment calculator, finance tools, vantorkit">
@@ -894,18 +906,273 @@
       .metric-value { font-size: 1.65rem; }
       .calculator-grid { grid-template-columns: 1fr; }
     }
+  
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4)) !important;
+      transition: transform 0.2s ease !important;
+    }
+
+    .nav-brand:hover svg {
+      transform: scale(1.05) !important;
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    /* Standard Glassmorphic Language Switcher */
+    .lang-dropdown {
+      position: relative !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      background: rgba(22, 27, 42, 0.8) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      transition: all 0.2s ease !important;
+      font-family: inherit !important;
+      white-space: nowrap !important;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"],
+    .lang-dropdown.active .lang-btn {
+      border-color: var(--accent, #3b82f6) !important;
+      background: rgba(26, 32, 48, 0.95) !important;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.25) !important;
+    }
+
+    .globe-icon {
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease !important;
+      color: var(--text-muted, #94a3b8) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon,
+    .lang-dropdown.active .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+
   </style>
 </head>
 <body>
 
   <!-- Top Navigation -->
+    <!-- Top Navigation Header -->
   <div class="top-nav">
-    <a href="/" class="back-link" id="backToHome">
+    <a href="../index.html" class="back-link" id="backToHome">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      <span data-i18n="backLink">&#8592; Back to Tools</span>
+      <span data-i18n="backLink">← Back to Tools</span>
     </a>
-    <div style="display:flex;align-items:center;gap:.85rem">
-      <a href="/" class="nav-brand">
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
@@ -920,7 +1187,8 @@
         </svg>
         <span>Vantor<span>Kit</span></span>
       </a>
-      <!-- Language Dropdown -->
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
       <div class="lang-dropdown" id="langDropdown">
         <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
           <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -929,19 +1197,19 @@
         </button>
         <div class="lang-menu" id="langMenu" role="menu">
           <button type="button" class="lang-option active" data-lang="en" role="menuitem">
-            <span class="lang-item-content"><span>&#127482;&#127480;</span><span>English</span></span>
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="ar" role="menuitem">
-            <span class="lang-item-content"><span>&#127480;&#127462;</span><span>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span></span>
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="fr" role="menuitem">
-            <span class="lang-item-content"><span>&#127467;&#127479;</span><span>Fran&#231;ais</span></span>
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="it" role="menuitem">
-            <span class="lang-item-content"><span>&#127470;&#127481;</span><span>Italiano</span></span>
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
         </div>
@@ -1935,5 +2203,124 @@
 
   })();
   </script>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        // Cleanly bind toggle button
+        toggleBtn.onclick = toggleDropdown;
+
+        // Cleanly bind all language options
+        menu.querySelectorAll('.lang-option').forEach(opt => {
+          opt.onclick = function(e) {
+            if (e) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            const selectedLang = opt.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+
+              // Trigger tool translation logic if defined
+              if (typeof setLanguage === 'function') {
+                try { setLanguage(selectedLang); } catch (err) { console.warn(err); }
+              } else if (typeof applyLanguage === 'function') {
+                try { applyLanguage(selectedLang); } catch (err) { console.warn(err); }
+              }
+            }
+            closeDropdown();
+          };
+        });
+
+        // Global click-outside listener
+        document.addEventListener('click', function(e) {
+          if (dropdown && !dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        // Global Escape key listener
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            closeDropdown();
+            toggleBtn.focus();
+          }
+        });
+
+        // Initial apply
+        let savedLang = 'en';
+        try {
+          savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+        } catch (err) {}
+        if (!LANG_NAMES[savedLang]) savedLang = 'en';
+        updateActiveLanguageUI(savedLang);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+      } else {
+        setupDropdownInteractivity();
+      }
+    })();
+  </script>
+
 </body>
 </html>

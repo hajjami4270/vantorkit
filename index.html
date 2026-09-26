@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <title>VantorKit — Free Fast Online Utility Tools</title>
   <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files. 100% client-side with zero logs.">
   <link rel="canonical" href="https://vantorkit.com/">
@@ -218,7 +230,10 @@
       z-index: 200;
     }
 
-    .lang-menu.open {
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
       display: flex;
       animation: menuFadeIn 0.15s ease-out;
     }
