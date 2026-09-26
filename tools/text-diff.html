@@ -39,58 +39,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Text Diff & Compare",
-        "url": "https://vantorkit.com/tools/text-diff.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "description": "Free client-side text diff tool. Compare text, code, or documentation side-by-side or inline with line, word, and character granularity, similarity score, and zero cloud uploads."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Text Diff & Compare",
+      "url": "https://vantorkit.com/tools/text-diff.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is my text uploaded or stored on any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All text parsing, diff calculations, and highlighting execute 100% locally inside your web browser. Proprietary code, confidential contracts, and sensitive documents never leave your computer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between Side-by-Side and Unified views?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Side-by-Side (Split) places the original text on the left and modified text on the right with synchronized alignment. Unified (Inline) displays all changes chronologically in a single continuous stream."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which granularity should I use: Line, Word, or Character?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Line-by-line is best for source code, configuration files, and scripts. Word-by-word is ideal for essays, articles, and legal documents. Character-by-character is optimal for inspecting minor typos, formulas, or cryptographic hashes."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How is the similarity percentage calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Similarity percentage is computed using the Sørensen-Dice coefficient applied to common matching characters divided by the total character count of both versions."
-            }
+      "description": "Free client-side text diff tool. Compare text, code, or documentation side-by-side or inline with line, word, and character granularity, similarity score, and zero cloud uploads."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between split and unified diff view?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Split view displays the original and modified documents side-by-side in dual columns, while unified view displays all changes chronologically in a single continuous stream."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I use character-level diff instead of word-level diff?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Character-level diff is ideal when inspecting minor typographical corrections, code variable renames, or subtle punctuation adjustments within dense technical text."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the diff tool detect moved blocks of text?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standard diff algorithms identify moved blocks as a deletion at the original location followed by an insertion at the new position."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I compare code files with hundreds of lines?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the optimized Myers algorithm processes multi-thousand-line documents and code files smoothly within local browser memory."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1395,60 +1399,416 @@
     </div>
 
     <!-- SEO & Educational Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading" data-i18n="guideHeading">Understanding Text Diff &amp; Comparison Algorithms</h2>
-        <p data-i18n="guideSub">How modern diff engines calculate line, word, and character differences efficiently.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>A text diff checker is a comparison utility that inspects two versions of a document, source code file, or configuration dataset to highlight structural differences. Operating across side-by-side split views or unified inline streams, diff engines identify deleted passages, newly inserted phrases, and unchanged contextual baselines with surgical precision.</p>
+        <p>In software engineering, content revision, contract drafting, and collaborative publishing, tracking exact delta modifications between revisions is essential. Developers verify code pull requests to avoid merge conflicts; legal professionals review clause adjustments between contract iterations; and copy editors inspect proofreading corrections prior to final publication.</p>
+        <p>Manual side-by-side reading frequently misses subtle alterations, such as transposed characters, single-letter typos, or trailing punctuation adjustments. This tool provides an algorithmic comparison engine running directly in your client-side browser, rendering granular line, word, and character differences with zero server latency.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Paste Original and Modified Texts:</strong> Insert your baseline text into the left pane and the updated or revised version into the right pane. The system handles large documents and code snippets.</li>
+          <li><strong>Choose Diff Granularity and View Mode:</strong> Toggle between side-by-side split comparison or unified inline view, and select granularity (line-level, word-level, or character-level) to fit your review needs.</li>
+          <li><strong>Review Highlighted Differences:</strong> Inspect additions highlighted in green and deletions marked in red, review total modified counters, and copy the unified diff report if needed.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Myers Diff Algorithm and Longest Common Subsequence (LCS)</div>
+          <div class="formula-expr"><code>LCS Matrix: L(i, j) = L(i-1, j-1) + 1 if A[i]==B[j] else max(L(i-1, j), L(i, j-1))</code></div>
+        </div>
+        <p>The comparison engine implements Eugene Myers' greedy diff algorithm combined with the Longest Common Subsequence (LCS) matrix model. Texts are tokenized according to the selected granularity (line breaks, whitespace word boundaries, or individual characters). The algorithm models the comparison as an edit graph, calculating the shortest edit script (SES) that transforms sequence A into sequence B with minimum deletion and insertion operations. Unchanged sequences form the anchor baseline, while deletions are flagged in red (<del>) and additions in green (<ins>). Performance is optimized through dynamic programming, delivering instant results even for substantial texts.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Legal Contract Clause Revision Audit</h4>
+            <p>A corporate legal team reviews an amended non-disclosure agreement. Selecting word-level diff reveals that the clause 'shall indemnify within 30 days' was subtly modified to 'may indemnify within 60 days'. The precise word highlight immediately isolates the liability adjustment without re-reading the entire 20-page document.</p>
+          </div>
+          <div class="content-card">
+            <h4>Software Configuration File Refactoring</h4>
+            <p>A DevOps engineer compares staging and production YAML configuration files. Line-level diff quickly pinpoints three mismatched environment port numbers and a modified database connection string across 400 lines of configuration.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Using Line Diff for Subtle Paragraph Edits</h4>
+            <p>Line-level diff flags an entire 100-word paragraph as deleted and replaced if a single comma changes. Switch to word-level or character-level diff to pinpoint the exact localized edit.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring Whitespace and Invisible Line Breaks</h4>
+            <p>Trailing spaces or carriage return differences (CRLF versus LF) can cause lines that appear visually identical to be highlighted as modified. Understand your diff tool's whitespace sensitivity settings.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Pasting Formatted Rich Text Directly</h4>
+            <p>Copying text from rich word processors can introduce invisible curly quotes or non-breaking spaces that differ from plain-text source files, generating false diff artifacts.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All text comparisons, diff matrix computations, and syntax highlights execute entirely within your client-side browser runtime. Sensitive legal documents, proprietary source code, and private drafts are never transmitted to external cloud servers.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>What is the difference between split and unified diff view?</summary>
+            <div class="faq-answer">
+              <p>Split view displays the original and modified documents side-by-side in dual columns, while unified view displays all changes chronologically in a single continuous stream.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>When should I use character-level diff instead of word-level diff?</summary>
+            <div class="faq-answer">
+              <p>Character-level diff is ideal when inspecting minor typographical corrections, code variable renames, or subtle punctuation adjustments within dense technical text.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does the diff tool detect moved blocks of text?</summary>
+            <div class="faq-answer">
+              <p>Standard diff algorithms identify moved blocks as a deletion at the original location followed by an insertion at the new position.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I compare code files with hundreds of lines?</summary>
+            <div class="faq-answer">
+              <p>Yes, the optimized Myers algorithm processes multi-thousand-line documents and code files smoothly within local browser memory.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Text & Developer Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Word & Character Counter</div>
+            <div class="tool-desc">Count words, characters, sentences, reading time, and keyword density in real time.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Markdown Editor & Live Preview</div>
+            <div class="tool-desc">Author Markdown with live formatted split-screen preview and HTML export.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Case Converter & Slug Generator</div>
+            <div class="tool-desc">Transform text between UPPERCASE, lowercase, Title Case, camelCase, and SEO slugs.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="guide-grid">
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            <span data-i18n="guide1Title">1. The LCS &amp; Myers Algorithm</span>
-          </div>
-          <p data-i18n="guide1Desc">The Longest Common Subsequence (LCS) algorithm finds the longest sequence of words or characters that appear in both versions in identical relative order, calculating the minimal set of additions and deletions needed to transform one text into another.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>أداة مقارنة النصوص والفروق (Text Diff) هي أداة متخصصة لفحص نسختين من مستند، أو كود برمجيات، أو ملف إعدادات، لتحديد الفروق النصية بدقة متناهية. وتعمل الأداة بنظام العرض المزدوج جنباً إلى جنب أو العرض الموحد المدمج، لتمييز الفقرات المحذوفة، والعبارات المضافة، والنصوص الأصلية الثابتة.</p>
+        <p>في هندسة البرمجيات، ومراجعة العقود القانونية، والتحرير الصحفي، يُعد تتبع التعديلات بدقة أمراً لا غنى عنه؛ حيث يدقق المبرمجون التعديلات البرمجية لتفادي أخطاء الدمج، ويفحص المحامون التغييرات الدقيقة في بنود الاتفاقيات، ويراجع المحررون التصحيحات قبل النشر النهائي.</p>
+        <p>المقارنة البصرية اليدوية كثيراً ما تغفل عن تعديلات طفيفة مثل استبدال كلمة مفصلية أو تغيير علامة ترقيم. توفر هذه الأداة محرك مقارنة خوارزمي متطور يعمل مباشرة داخل متصفحك، ليوفر تحليلاً فورياً دقيقاً للفروق على مستوى الأسطر، أو الكلمات، أو الأحرف دون الحاجة لنقل أي بيانات.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>الصق النص الأصلي والمعدل:</strong> ضع النص الأصلي في اللوحة اليمنى والنسخة المعدلة في اللوحة اليسرى، حيث تستوعب الأداة الوثائق المطولة والأكواد البرمجية بكفاءة.</li>
+          <li><strong>اختر مستوى التدقيق وطريقة العرض:</strong> اختر بين العرض المقسم جنباً إلى جنب أو العرض الموحد، وحدد مستوى الفحص المطلوب: فحص على مستوى الأسطر، أو الكلمات، أو الأحرف.</li>
+          <li><strong>استعرض الفروق والتعديلات المميزة:</strong> تفحص الإضافات المظللة باللون الأخضر والمحذوفات المظللة باللون الأحمر، مع إمكانية مراجعة إحصاءات التعديلات ونسخ تقرير الفروق.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">خوارزمية Myers ومصفوفة أطول تسلسل مشترك (LCS)</div>
+          <div class="formula-expr"><code>مصفوفة LCS: L(i, j) = L(i-1, j-1) + 1 if A[i]==B[j] else max(L(i-1, j), L(i, j-1))</code></div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
-            <span data-i18n="guide2Title">2. Choosing the Right Granularity</span>
+        <p>يعتمد محرك المقارنة على خوارزمية Myers الشهيرة المدعومة بنموذج أطول تسلسل مشترك (LCS). يُقسم النص إلى وحدات لغوية وفق المستوى المحدد (أسطر، أو كلمات، أو أحرف)، ثم تبني الخوارزمية مسار التحول بأقل عدد ممكن من عمليات الحذف والإضافة. تظل النصوص المتطابقة ثابتة كمرجع، بينما تُميز الأجزاء المحذوفة باللون الأحمر (<del>) والإضافات الجديدة باللون الأخضر (<ins>). وتضمن تقنيات البرمجة الديناميكية معالجة فورية وسلسة حتى للنصوص الطويلة.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تدقيق تعديلات بنود العقود والاتفاقيات القانونية</h4>
+            <p>راجع فريق قانوني مسودة اتفاقية سرية معدلة. باختيار التدقيق على مستوى الكلمات، اتضح أن عبارة 'يلتزم بالسداد خلال 30 يوماً' عُدلت سراً إلى 'يجوز السداد خلال 60 يوماً'، مما كشف التعديل الجوهري فوراً دون الحاجة لقراءة العقد المكون من 20 صفحة بأكمله.</p>
           </div>
-          <p data-i18n="guide2Desc">Line-by-line diff is optimal for source code and structured data where line breaks are meaningful. Word-by-word diff is essential for proofreading legal contracts and essays. Character-by-character reveals subtle typos and minor punctuation changes.</p>
+          <div class="content-card">
+            <h4>مقارنة ملفات إعدادات الخوادم البرمجية</h4>
+            <p>قارن مهندس برمجيات بين ملفي إعدادات YAML لخادم التجربة وخادم الإنتاج. كشف التدقيق السطري سريعاً عن ثلاثة منافذ اتصال متباينة ورابط قاعدة بيانات غير متطابق وسط 400 سطر من التعليمات.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span data-i18n="guide3Title">3. Confidential &amp; Zero-Upload</span>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ استخدام الفحص السطري لتعديلات طفيفة في فقرات طويلة</h4>
+            <p>الفحص على مستوى الأسطر يحدد فقرة كاملة من 100 كلمة كأنها محذوفة ومستبدلة إذا تغيرت فاصلة واحدة فقط. استخدم الفحص على مستوى الكلمات أو الأحرف لتحديد التعديل الموضعي بدقة.</p>
           </div>
-          <p data-i18n="guide3Desc">Unlike online diff services that transmit your data to remote cloud servers, VantorKit processes all diff computations locally inside your web browser. Proprietary code, NDA agreements, and private communications never leave your machine.</p>
+          <div class="content-card">
+            <h4>⚠️ إغفال الفروق غير المرئية في المسافات ونهايات الأسطر</h4>
+            <p>المسافات الإضافية في نهاية الأسطر أو اختلاف ترميز نهاية السطر (CRLF مقابل LF) قد تجعل أسطراً متطابقة ظاهرياً تبدو كأنها معدلة في شاشة المقارنة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ لصق نصوص منسقة تحمل رموزاً خفية</h4>
+            <p>نسخ نصوص من برامج معالجة الكلمات قد ينقل علامات تنصيص مائلة أو مسافات غير قابلة للكسر تختلف عن النصوص البرمجية، مما يولد فروقاً شكلية غير مقصودة.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تُجرى جميع مقارنات النصوص وحسابات مصفوفات الفروق بالكامل داخل متصفحك محلياً. لا يتم إرسال أي وثائق قانونية حساسة أو أكواد برمجية سرية إلى أي خوادم خارجية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>ما هو الفرق بين طريقة العرض المقسمة وطريقة العرض الموحدة؟</summary>
+            <div class="faq-answer">
+              <p>طريقة العرض المقسمة تعرض الوثيقتين جنباً إلى جنب في عمودين متجاورين، بينما تعرض طريقة العرض الموحدة كافة التغييرات بالتسلسل الزمني في عمود واحد.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>متى يفضل استخدام المقارنة على مستوى الأحرف؟</summary>
+            <div class="faq-answer">
+              <p>تُعد المقارنة على مستوى الأحرف مثالية عند تدقيق الأخطاء الإملائية الدقيقة، أو تعديل أسماء المتغيرات البرمجية، أو مراجعة علامات الترقيم.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تستطيع الأداة اكتشاف الفقرات المنقولة من مكان لآخر؟</summary>
+            <div class="faq-answer">
+              <p>تتعامل خوارزميات المقارنة القياسية مع الفقرة المنقولة باعتبارها عملية حذف في الموقع الأصلي تليها عملية إضافة جديدة في الموقع المستهدف.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكن مقارنة نصوص برمجية طويلة تتجاوز آلاف الأسطر؟</summary>
+            <div class="faq-answer">
+              <p>نعم، خوارزمية Myers المحسنة قادرة على معالجة آلاف الأسطر البرمجية بسلاسة وسرعة فائقة داخل ذاكرة المتصفح.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات النصوص والبرمجة ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الكلمات والحروف</div>
+            <div class="tool-desc">عد الكلمات والأحرف وزمن القراءة وتحليل الكلمات المفتاحية في الوقت الفعلي.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">محرر ماركداون مع معاينة حية</div>
+            <div class="tool-desc">كتابة وتنسيق مستندات Markdown مع تصدير HTML وحفظ تلقائي محلي.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">محول حالة الأحرف والروابط</div>
+            <div class="tool-desc">تحويل النصوص بين الحروف الكبيرة والصغيرة وصيغ البرمجة وروابط URL.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4 data-i18n="faq1Q">Does this tool upload my text or files to any server?</h4>
-          <p data-i18n="faq1A">No. All diff comparisons and calculations are executed 100% locally in your browser using client-side JavaScript. No logs or network requests are created.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le comparateur de texte et de code côté client de VantorKit est un moteur d'analyse de différences conçu pour les développeurs, relecteurs juridiques et administrateurs systèmes. Repérer des modifications subtiles entre deux versions d'un contrat ou d'un fichier de configuration s'avère fastidieux à l'œil nu. Cet utilitaire met en évidence les ajouts, suppressions et modifications au niveau de chaque caractère directement dans votre navigateur.</p>
+        <p>S'appuyant sur l'algorithme de Myers, l'outil génère des vues comparatives côte à côte ou unifiées sans qu'aucun document confidentiel ne soit téléversé sur le réseau.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Collez les textes original et modifié:</strong> Insérez le texte de référence dans le volet gauche et la version révisée dans le volet droit. L'outil prend en charge les documents denses et les fichiers de code.</li>
+          <li><strong>Sélectionnez le niveau de comparaison:</strong> Basculez entre vue côte à côte ou flux unifié, et choisissez la granularité d'analyse (par ligne, par mot ou par caractère) selon la finesse requise.</li>
+          <li><strong>Examinez les différences mises en avant:</strong> Visualisez les ajouts en vert et les suppressions en rouge, consultez les compteurs de modifications et copiez le rapport d'écarts au besoin.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Algorithme Myers et Plus Longue Sous-Séquence Commune (LCS)</div>
+          <div class="formula-expr"><code>Matrice LCS : L(i, j) = L(i-1, j-1) + 1 if A[i]==B[j] else max(L(i-1, j), L(i, j-1))</code></div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq2Q">What is the difference between Side-by-Side and Unified views?</h4>
-          <p data-i18n="faq2A">Side-by-Side view displays the original text on the left and the modified text on the right. Unified view combines both into a single chronological stream with '-' and '+' indicators.</p>
+        <p>Le moteur applique l'algorithme glouton d'Eugene Myers couplé au modèle de la plus longue sous-séquence commune (LCS). Le texte est segmenté selon la granularité sélectionnée (sauts de ligne, mots ou caractères). L'algorithme modélise la comparaison sous forme de graphe d'édition afin de déterminer le chemin le plus court transformant la séquence A en séquence B avec un minimum d'opérations. Les séquences préservées servent de points d'ancrage, tandis que les suppressions apparaissent en rouge (<del>) et les ajouts en vert (<ins>). La programmation dynamique assure une exécution fluide même sur des textes étendus.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Audit d'amendement d'un contrat commercial</h4>
+            <p>Une équipe juridique examine une clause de confidentialité modifiée. La comparaison mot à mot révèle que la formule 'indemnisera sous 30 jours' a été subtilement remplacée par 'pourra indemniser sous 60 jours'. Cet écart critique est isolé sans relire l'intégralité des 20 pages.</p>
+          </div>
+          <div class="content-card">
+            <h4>Contrôle de fichiers de configuration serveur</h4>
+            <p>Un ingénieur système compare des fichiers YAML de pré-production et de production. L'analyse par ligne isole rapidement trois ports d'écoute discordants et une chaîne de connexion modifiée au sein de 400 lignes de paramètres.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq3Q">How is the similarity percentage score calculated?</h4>
-          <p data-i18n="faq3A">Similarity is computed based on the ratio of unchanged common characters against the total combined length of both texts.</p>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Utiliser la comparaison par ligne sur de longs paragraphes</h4>
+            <p>La comparaison par ligne marque tout un paragraphe de 100 mots comme supprimé et remplacé si une seule virgule change. Préférez la comparaison par mot ou par caractère pour situer précisément la modification.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignorer les espaces invisibles en fin de ligne</h4>
+            <p>Des espaces résiduels ou des variations de sauts de ligne (CRLF versus LF) peuvent mettre en évidence des lignes qui paraissent visuellement identiques.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Coller du texte enrichi comportant des caractères masqués</h4>
+            <p>Copier du contenu depuis un traitement de texte propriétaire peut insérer des apostrophes courbes ou des espaces insécables qui diffèrent du texte source, créant des faux écarts.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq4Q">Can I export the diff result to share with colleagues?</h4>
-          <p data-i18n="faq4A">Yes! You can copy the unified diff text directly to your clipboard or click 'Export HTML' to download a self-contained, standalone visual diff report.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toutes les comparaisons textuelles, matrices d'écarts et mises en surbrillance sont calculées localement dans votre navigateur. Aucun contrat confidentiel ni extrait de code privé n'est acheminé vers des serveurs distants.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quelle différence distingue la vue scindée de la vue unifiée ?</summary>
+            <div class="faq-answer">
+              <p>La vue scindée présente les textes côte à côte en deux colonnes distinctes, tandis que la vue unifiée regroupe toutes les modifications dans un flux séquentiel unique.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quand privilégier la comparaison par caractère ?</summary>
+            <div class="faq-answer">
+              <p>La comparaison par caractère est idéale pour détecter des corrections typographiques subtiles, des renommages de variables ou des modifications de ponctuation isolées.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>L'outil repère-t-il les déplacements de blocs de texte ?</summary>
+            <div class="faq-answer">
+              <p>Les algorithmes de diff classiques interprètent un bloc déplacé comme une suppression à son point d'origine suivie d'une insertion à son nouvel emplacement.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Peut-on comparer des fichiers comprenant des milliers de lignes ?</summary>
+            <div class="faq-answer">
+              <p>Oui, l'optimisation de l'algorithme Myers permet de comparer des fichiers très volumineux de manière fluide dans la mémoire locale de votre navigateur.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils de texte et utilitaires connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Compteur de Mots et Caractères</div>
+            <div class="tool-desc">Mesurez les mots, caractères, temps de lecture et densité des mots-clés en direct.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Éditeur Markdown avec Rendu Direct</div>
+            <div class="tool-desc">Rédigez du Markdown avec prévisualisation en direct et export HTML rapide.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur de Casse & Slugs</div>
+            <div class="tool-desc">Basculez vos textes entre MAJUSCULES, minuscules, camelCase et slugs d'URL.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il comparatore di testi e codice sorgente lato client di VantorKit è un motore di rilevamento delle differenze ideato per sviluppatori, revisori di contratti e sistemisti. Identificare modifiche minime tra due stesure di un accordo legale o file di configurazione è un'operazione complessa da compiere a vista. Questa applicazione evidenzia inserimenti, cancellazioni e alterazioni di singoli caratteri all'interno del browser.</p>
+        <p>Basato sull'algoritmo di Myers, lo strumento genera viste affiancate o unificate con assoluta velocità e riservatezza senza trasmettere file riservati su server esterni.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Incolla il testo originale e modificato:</strong> Inserisci la versione iniziale nel pannello sinistro e la versione revisionata nel pannello destro. Lo strumento supporta documenti lunghi e frammenti di codice.</li>
+          <li><strong>Scegli modalità di vista e livello di dettaglio:</strong> Passa dalla visualizzazione affiancata a quella unificata e imposta la granularità desiderata (per riga, per parola o per singolo carattere).</li>
+          <li><strong>Esamina le differenze evidenziate:</strong> Verifica gli inserimenti contrassegnati in verde e le rimozioni indicate in rosso, controllando il resoconto analitico delle modifiche.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Algoritmo di Myers e modello della sottosequenza comune più lunga (LCS)</div>
+          <div class="formula-expr"><code>Matrice LCS: L(i, j) = L(i-1, j-1) + 1 if A[i]==B[j] else max(L(i-1, j), L(i, j-1))</code></div>
+        </div>
+        <p>Il motore sfrutta l'algoritmo di Eugene Myers integrato con la matrice della sottosequenza comune più lunga (LCS). Il testo viene suddiviso secondo il criterio scelto (righe, parole o singoli caratteri). L'algoritmo calcola il percorso minimo di trasformazione che converte la sequenza A nella sequenza B con il minor numero di cancellazioni e inserimenti. Le porzioni identiche costituiscono il riferimento fisso, mentre le cancellazioni sono contrassegnate in rosso (<del>) e le aggiunte in verde (<ins>). L'approccio di programmazione dinamica garantisce riscontri immediati anche per file di grandi dimensioni.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Verifica delle revisioni su una clausola legale</h4>
+            <p>Un ufficio legale confronta due bozze di un accordo. Selezionando il confronto per parole, emerge che la dicitura 'dovrà rimborsare entro 30 giorni' è stata trasformata in 'potrà rimborsare entro 60 giorni'. L'evidenziazione immediata individua la variazione senza dover rileggere tutte le pagine.</p>
+          </div>
+          <div class="content-card">
+            <h4>Confronto di file di configurazione tra ambienti</h4>
+            <p>Uno sviluppatore compara due file di configurazione YAML per ambienti di test e produzione. Il controllo per riga individua subito tre porte di connessione disallineate e una stringa di database differente su 400 righe di impostazioni.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Usare il confronto per righe su lunghi paragrafi</h4>
+            <p>La comparazione per riga evidenzia un intero paragrafo di 100 parole come cancellato e riscritto se viene modificata una sola virgola. Scegli il confronto per parola o carattere per isolare la singola modifica.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignorare le spaziature finali e i ritorni a capo</h4>
+            <p>Spaziature invisibili o differenze tra i formati di fine riga (CRLF rispetto a LF) possono far apparire come modificate righe visivamente identiche.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Incollare testo formattato contenente caratteri nascosti</h4>
+            <p>Copiare testi da programmi di videoscrittura può importare virgolette tipografiche o spaziature non canoniche differenti dal testo semplice, generando falsi positivi.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le analisi di confronto e le matrici di calcolo si svolgono unicamente all'interno del tuo browser. Nessun documento confidenziale o codice proprietario viene inoltrato a server esterni.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Qual è la differenza tra vista affiancata e vista unificata?</summary>
+            <div class="faq-answer">
+              <p>La vista affiancata mostra i due testi in due colonne separate poste una accanto all'altra, mentre la vista unificata raccoglie tutte le modifiche in un unico elenco sequenziale.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quando è consigliabile impostare il confronto per caratteri?</summary>
+            <div class="faq-answer">
+              <p>È ideale per individuare piccoli errori ortografici, rinominazioni di singole variabili di codice o minime variazioni di punteggiatura.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Il comparatore rileva se un intero blocco di testo è stato spostato?</summary>
+            <div class="faq-answer">
+              <p>I sistemi di confronto standard interpretano un blocco spostato come una cancellazione nella posizione originale e un inserimento nella nuova collocazione.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È possibile comparare file di codice composti da molte righe?</summary>
+            <div class="faq-answer">
+              <p>Sì, l'algoritmo ottimizzato gestisce documenti di svariate migliaia di righe con rapidità e precisione all'interno della memoria del browser.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di testo e utilità correlate</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Contatore di Parole e Caratteri</div>
+            <div class="tool-desc">Rileva parole, caratteri, tempo di lettura e densità delle parole chiave in tempo reale.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Editor Markdown con Anteprima</div>
+            <div class="tool-desc">Scrivi in Markdown con anteprima in tempo reale ed esportazione HTML immediata.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertitore Maiuscole/Minuscole e Slug</div>
+            <div class="tool-desc">Trasforma testi tra MAIUSCOLO, minuscolo, camelCase e genera slug URL.</div>
+          </a>
         </div>
       </div>
     </article>
-
   </main>
 
   <!-- Footer -->

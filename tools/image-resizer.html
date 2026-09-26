@@ -36,70 +36,54 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Image Resizer & Crop",
-        "url": "https://vantorkit.com/tools/image-resizer.html",
-        "applicationCategory": "PhotoEditorApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side image resizing, cropping, and compression tool. Supports custom pixel dimensions, percentage scaling presets, visual aspect ratio overlays (1:1, 16:9, 9:16, 4:5), and multi-format export (JPG, PNG, WEBP) with zero server uploads."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Image Resizer & Crop",
+      "url": "https://vantorkit.com/tools/image-resizer.html",
+      "applicationCategory": "PhotoEditorApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my images uploaded to any remote server during resizing or cropping?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The entire editing, cropping, and compression pipeline runs 100% locally inside your browser using the HTML5 Canvas 2D engine. Your photos, banners, and confidential graphics never leave your computer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does bicubic image smoothing maintain sharpness when downscaling?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "VantorKit applies high-quality bicubic interpolation and stepped multi-pass downsampling. This prevents pixel aliasing, jagged edges, and moiré patterns, producing crisp web graphics even when scaling down from 4K resolutions."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which social media aspect ratio presets are supported?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The tool includes one-click presets for 1:1 (Square for Instagram and profile avatars), 16:9 (Landscape for YouTube and X banners), 9:16 (Vertical for Instagram Stories, TikTok, and YouTube Shorts), 4:5 (Portrait for Instagram feed posts), and Freeform for custom dimensions."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What format should I export (WEBP vs JPG vs PNG)?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "For web applications and modern sites, WEBP offers the best compression with 30-50% smaller file sizes than JPG. JPG is recommended for universal compatibility with older software, while PNG is best for illustrations requiring lossless clarity or transparent alpha channels."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I copy the processed image directly to my clipboard?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! Click the 'Copy Image to Clipboard' button to write the processed bitmap directly into your operating system clipboard, ready to paste into Slack, Figma, Word, or Photoshop."
-            }
+      "description": "Free client-side image resizing, cropping, and compression tool. Supports custom pixel dimensions, percentage scaling presets, visual aspect ratio overlays (1:1, 16:9, 9:16, 4:5), and multi-format export (JPG, PNG, WEBP) with zero server uploads."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does resizing an image degrade its visual sharpness?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Downscaling using our high-quality bicubic smoothing preserves visual sharpness and frequently increases apparent density. Upscaling beyond original dimensions, however, naturally introduces interpolation softness."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I resize an image while preserving its transparent background?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Simply retain the PNG or WebP export setting. Canvas 2D maintains complete alpha channel transparency during bicubic resampling operations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between image resizing and image compressing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Resizing modifies the physical pixel grid (e.g. from 3000px wide to 1200px wide), whereas compression optimizes the mathematical quantization of color data without necessarily altering pixel dimensions."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1748,6 +1732,388 @@
       </div>
 
     </div>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Image Resizer is an exact pixel and aspect-ratio manipulation engine built directly for web developers, social media managers, and UI designers. Scaling digital imagery requires more than simple geometric stretching; improper resampling creates jagged edges, blurry anti-aliasing artifacts, and skewed proportions that compromise brand presentation. This utility allows you to scale images by exact pixel dimensions, proportional percentages, or standard social platform presets entirely within your local browser environment.</p>
+        <p>Because processing occurs natively on your local graphics hardware without transmitting files across the internet, you can batch-process high-resolution photography, app screenshots, and banner graphics with instantaneous feedback. The tool provides bi-cubic image smoothing, aspect-ratio locking, and dynamic file format selection to deliver pixel-perfect outputs for responsive web layouts and high-DPI displays.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Upload Source Asset:</strong> Drag and drop any PNG, JPEG, SVG, or WebP image into the staging area, or click to pick directly from your local filesystem.</li>
+          <li><strong>Configure Dimension Constraints:</strong> Toggle aspect ratio lock, select a standard preset (e.g., YouTube thumbnail, Instagram square, OpenGraph banner) or input custom pixel widths and heights.</li>
+          <li><strong>Select Format & Export:</strong> Choose your target output format (PNG, JPEG, WebP) and download your newly scaled, high-density asset instantly with zero compression artifacts.</li>
+        </ol>
+        <h2>The Engine & Canvas Graphics Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Canvas 2D ctx.drawImage() Bicubic Resampling</div>
+          <div class="formula-expr"><code>ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)</code></div>
+        </div>
+        <p>Scaling is executed by configuring an HTMLCanvasElement with the target destination width (dw) and height (dh). The browser rasterizer applies hardware-accelerated bicubic interpolation algorithms via imageSmoothingQuality = 'high' to compute pixel color values across fractional sample grids.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>OpenGraph Social Card Generation</h4>
+            <p>Downscaling a 4000×3000 DSLR landscape photograph to exact 1200×630 dimensions with locked focal centering, ensuring pristine link previews on LinkedIn, Twitter, and Facebook.</p>
+          </div>
+          <div class="content-card">
+            <h4>Mobile App Icon Set Preparation</h4>
+            <p>Scaling a 1024×1024 master application artwork down to 512×512, 192×192, and 48×48 variants without losing crisp line contrast or icon legibility.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Disabling Aspect Ratio Lock Carelessly</h4>
+            <p>Modifying width without proportional height adjustments causes unnatural horizontal or vertical stretching; keep the padlock icon toggled on unless cropping deliberately.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Upscaling Low-Resolution Thumbnails</h4>
+            <p>Blowing up a 200px thumbnail into a 2000px hero banner creates heavy pixelation and blur; always resize down from higher resolution source masters.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Choosing Lossy JPEG for Transparent Graphics</h4>
+            <p>Exporting a transparent PNG icon as JPEG replaces the transparent alpha channel with a solid black or white background; preserve PNG or WebP format for transparency.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your graphical assets never touch any remote infrastructure. All pixel transformations and rasterizations happen strictly inside your browser tab utilizing local GPU and CPU memory. Your private company assets, unreleased product mockups, and personal photos remain completely secure and confidential.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Does resizing an image degrade its visual sharpness?</summary>
+            <div class="faq-answer">
+              <p>Downscaling using our high-quality bicubic smoothing preserves visual sharpness and frequently increases apparent density. Upscaling beyond original dimensions, however, naturally introduces interpolation softness.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I resize an image while preserving its transparent background?</summary>
+            <div class="faq-answer">
+              <p>Yes. Simply retain the PNG or WebP export setting. Canvas 2D maintains complete alpha channel transparency during bicubic resampling operations.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the difference between image resizing and image compressing?</summary>
+            <div class="faq-answer">
+              <p>Resizing modifies the physical pixel grid (e.g. from 3000px wide to 1200px wide), whereas compression optimizes the mathematical quantization of color data without necessarily altering pixel dimensions.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Image & Graphic Design Tools</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Image Compressor</div>
+            <div class="tool-desc">Reduce file byte size while keeping pixel dimensions unchanged.</div>
+          </a>
+          <a href="favicon-builder.html" class="related-tool-card">
+            <div class="tool-name">Favicon Builder</div>
+            <div class="tool-desc">Generate multi-size browser favicons and Apple touch icons.</div>
+          </a>
+          <a href="color-palette-extractor.html" class="related-tool-card">
+            <div class="tool-name">Color Palette Extractor</div>
+            <div class="tool-desc">Extract dominant hex color codes from any resized image.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة تغيير أبعاد الصور من فانتور كيت محركاً فائق الدقة لمعالجة أبعاد البكسل ونسب العرض إلى الارتفاع مباشرة داخل المتصفح، وهي مخصصة لمطوري الويب ومديري المنصات الاجتماعية ومصممي الواجهات. إن تغيير قياسات الصور الرقمية يتطلب أكثر من مجرد تمديد هندسي عشوائي؛ فالتحجيم الخاطئ يسبب تشوهات بصرية وتعرجاً في الحواف وتلفاً في نسب الأبعاد يضر بالهوية البصرية. تتيح لك هذه الأداة ضبط الأبعاد بالبكسل الدقيق أو بالنسب المئوية أو وفق قوالب المنصات الرقمية القياسية.</p>
+        <p>نظراً لأن جميع العمليات تنفذ محلياً عبر معالج الرسوميات في جهازك دون نقل الملفات عبر الإنترنت، يمكنك معالجة الصور الفوتوغرافية عالية الدقة ولقطات شاشات التطبيقات والتصاميم الإعلانية باستجابة فورية. تدعم الأداة التنعيم التكعيبي المزدوج وقفل التناسب وتحديد صيغة الإخراج المثالية لضمان جودة استثنائية على شاشات العرض الحديثة.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>رفع الصورة المصدر:</strong> قم بسحب وإفلات أي صورة بصيغة PNG أو JPEG أو SVG أو WebP في مساحة المعالجة أو اضغط لاختيارها من جهازك.</li>
+          <li><strong>تحديد قياسات الأبعاد:</strong> قم بتفعيل قفل نسبة العرض إلى الارتفاع واختر قالباً جاهزاً (مثل يوتيوب أو إنستغرام أو بطاقات OpenGraph) أو أدخل قيم البكسل المطلوبة.</li>
+          <li><strong>اختيار الصيغة وتصدير الملف:</strong> حدد صيغة الإخراج المستهدفة (PNG أو JPEG أو WebP) وحمّل صورتك الجديدة ذات الأبعاد الدقيقة فوراً دون أي تشوهات.</li>
+        </ol>
+        <h2>المحرك البرمجي وتقنيات معالجة الرسوميات</h2>
+        <div class="formula-box">
+          <div class="formula-title">إعادة أخذ العينات التكعيبية عبر ctx.drawImage</div>
+          <div class="formula-expr"><code>ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)</code></div>
+        </div>
+        <p>تتم معالجة التحجيم عبر برمجة عنصر HTMLCanvasElement بأبعاد الوجهة المستهدفة (dw و dh). يُطبّق المتصفح خوارزميات التنعيم التكعيبي المزدوج المسرعة عتادياً عبر ضبط خاصية imageSmoothingQuality إلى 'high' لحساب قيم الألوان.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>إنشاء بطاقات المشاركة لشبكات التواصل</h4>
+            <p>تصغير صورة فوتوغرافية بدقة 4000×3000 بكسل إلى مقاس 1200×630 بكسل مع تثبيت نقطة التركيز، لتظهر معاينات الروابط بجاذبية فائقة على تويتر ولينكد إن وفيسبوك.</p>
+          </div>
+          <div class="content-card">
+            <h4>إعداد حزم أيقونات تطبيقات الهواتف</h4>
+            <p>تحجيم أيقونة رئيسية بقياس 1024×1024 بكسل إلى نسخ فرعية بقياسات 512×512 و192×192 و48×48 بكسل دون المساس بحدة الخطوط أو وضوح الأيقونة.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ تعطيل قفل التناسب الهندسي دون قصد</h4>
+            <p>تغيير العرض مع إهمال تعديل الارتفاع بالتناسب يؤدي لتمدد بشع في ملامح الصورة أو ضغطها؛ احرص على بقاء القفل مفعلاً إلا عند القص المتعمد.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تكبير الصور المصغرة ضعيفة الدقة</h4>
+            <p>محاولة تضخيم صورة مصغرة بقياس 200 بكسل لتصبح 2000 بكسل تؤدي لتشوش شديد؛ ابدأ دائماً بصور ذات دقة أصلية عالية ثم صغرها.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ اختيار صيغة JPEG للصور الشفافة</h4>
+            <p>تصدير صورة ذات خلفية شفافة بصيغة JPEG يحول الشفافية تلقائياً إلى خلفية سوداء أو بيضاء صلبة؛ حافظ على اختيار PNG أو WebP.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>ملفاتك وصورك لا تمر بأي خوادم خارجية إطلاقاً. تتم كل عمليات تحويل البكسلات وتغيير القياسات حصرياً داخل لسان المتصفح بالاعتماد على معالج جهازك المحلي، مما يضمن أماناً مطلقاً لمخططاتك وتصاميمك غير المنشورة وصورك الشخصية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل يؤدي تصغير الصورة إلى تقليل حدتها ووضوحها؟</summary>
+            <div class="faq-answer">
+              <p>على العكس تماماً، فالتصغير باستخدام خوارزميات التنعيم التكعيبي عالي الجودة يزيد من كثافة البكسلات الظاهرية ويمنح الصورة مظهراً أكثر حدة ونقاءً.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكنني تعديل أبعاد صورة مع الاحتفاظ بالخلفية الشفافة؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. اختر تصدير الملف بصيغة PNG أو WebP، حيث تحتفظ لوحة الكانفاس بقناة الشفافية Alpha بالكامل أثناء عملية التحجيم.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما الفرق الأساسي بين تغيير أبعاد الصورة وضغط حجمها؟</summary>
+            <div class="faq-answer">
+              <p>تغيير الأبعاد يعيد بناء شبكة البكسلات الفيزيائية للصورة، بينما ضغط الحجم يركز على تحسين التمثيل الرياضي للألوان لتقليل البايتات دون تغيير الأبعاد.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات الصور والتصميم الجرافيكي ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">ضاغط الصور</div>
+            <div class="tool-desc">تقليص وزن الصور بالبايت مع المحافظة على دقة الأبعاد بالبكسل.</div>
+          </a>
+          <a href="favicon-builder.html" class="related-tool-card">
+            <div class="tool-name">منشئ الأيقونات المفضلة</div>
+            <div class="tool-desc">توليد أيقونات التبويب للمتصفحات بمختلف المقاسات القياسية.</div>
+          </a>
+          <a href="color-palette-extractor.html" class="related-tool-card">
+            <div class="tool-name">مستخرج باليت الألوان</div>
+            <div class="tool-desc">استخراج الأكواد اللونية الأكثر هيمنة من أي صورة بنقرة واحدة.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le redimensionneur d'images côté client de VantorKit est un moteur d'ajustement géométrique au pixel près conçu pour les développeurs web, les gestionnaires de réseaux sociaux et les designers d'interfaces. Modifier l'échelle d'une image exige bien plus qu'une déformation spatiale basique : un rééchantillonnage défaillant produit du crénelage, des flous d'interpolation et des distorsions qui nuisent à l'image de marque. Cet outil vous permet de définir des dimensions exactes en pixels, d'appliquer des pourcentages proportionnels ou de sélectionner des formats prédéfinis au sein de votre navigateur.</p>
+        <p>Puisque les opérations sont exécutées par l'accélérateur graphique local de votre machine sans transit sur internet, vous traitez vos photographies haute résolution et vos captures d'écrans avec une réactivité instantanée. Notre utilitaire intègre un lissage bicubique haute précision, le verrouillage des proportions et la sélection dynamique du format pour fournir des rendus parfaits adaptés aux écrans haute densité.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Déposez votre visuel source:</strong> Glissez votre image PNG, JPEG, SVG ou WebP dans la zone de traitement ou parcourez les dossiers de votre appareil d'un simple clic.</li>
+          <li><strong>Définissez les nouvelles dimensions:</strong> Activez le verrouillage des proportions, sélectionnez un format type (bannière YouTube, carré Instagram, carte OpenGraph) ou saisissez vos valeurs personnalisées.</li>
+          <li><strong>Exportez l'image redimensionnée:</strong> Sélectionnez le format d'exportation cible (PNG, JPEG ou WebP) et téléchargez votre fichier parfaitement ajusté sans altération visuelle.</li>
+        </ol>
+        <h2>Moteur de rendu et traitement graphique Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">Rééchantillonnage bicubique via ctx.drawImage()</div>
+          <div class="formula-expr"><code>ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)</code></div>
+        </div>
+        <p>Le redimensionnement calibre un élément HTMLCanvasElement aux dimensions d'arrivée (dw et dh). Le navigateur applique une interpolation bicubique optimisée par le matériel via imageSmoothingQuality = 'high' afin de recalculer fidèlement les nuances chromatiques.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Création de bannières OpenGraph</h4>
+            <p>Adaptation d'une photo originale de 4000×3000 pixels au format standardisé de 1200×630 pixels avec centrage visuel, assurant des aperçus parfaits lors des partages sur LinkedIn et Twitter.</p>
+          </div>
+          <div class="content-card">
+            <h4>Déclinaison d'icônes d'applications</h4>
+            <p>Mise à l'échelle d'un logo source de 1024×1024 pixels vers des variantes en 512×512, 192×192 et 48×48 pixels sans aucune perte de lisibilité sur les tracés fins.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Désactiver le verrou de proportion</h4>
+            <p>Modifier la largeur sans ajuster la hauteur déforme inévitablement les visages et les objets; conservez le ratio verrouillé sauf cadrage spécifique.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Agrandir des vignettes de faible résolution</h4>
+            <p>Forcer une icône de 200 pixels à occuper 2000 pixels engendre une bouillie floue de gros pixels; partez toujours d'un fichier source de qualité supérieure.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sélectionner JPEG pour des logos transparents</h4>
+            <p>Convertir un logo PNG avec fond transparent en JPEG remplace automatiquement la transparence par un fond noir ou blanc uni; privilégiez PNG ou WebP.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos illustrations ne quittent jamais votre espace de travail. Toutes les opérations de rééchantillonnage s'effectuent strictement dans l'onglet de votre navigateur en sollicitant vos propres composants matériels. Vos maquettes confidentielles et vos photos de famille demeurent totalement imperméables au réseau.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Le redimensionnement altère-t-il la netteté visuelle globale ?</summary>
+            <div class="faq-answer">
+              <p>La réduction dimensionnelle avec notre algorithme bicubique accroît en réalité la densité perçue des détails. En revanche, l'agrandissement au-delà des dimensions natives crée inévitablement un flou d'interpolation.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je redimensionner une image en conservant sa transparence ?</summary>
+            <div class="faq-answer">
+              <p>Oui, sans aucune difficulté. Choisissez simplement le format de sortie PNG ou WebP : le contexte Canvas 2D conserve intégralement les données du canal alpha.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quelle différence distingue le redimensionnement de la compression ?</summary>
+            <div class="faq-answer">
+              <p>Le redimensionnement change la grille géométrique de pixels, tandis que la compression allège le poids en octets en optimisant l'encodage des couleurs sans altérer les dimensions.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils d'image et de design graphique connexes</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compresseur d'images</div>
+            <div class="tool-desc">Allégez le poids en octets de vos fichiers tout en conservant la résolution d'origine.</div>
+          </a>
+          <a href="favicon-builder.html" class="related-tool-card">
+            <div class="tool-name">Générateur de Favicons</div>
+            <div class="tool-desc">Créez les déclinaisons d'icônes pour onglets de navigateurs et raccourcis mobiles.</div>
+          </a>
+          <a href="color-palette-extractor.html" class="related-tool-card">
+            <div class="tool-name">Extracteur de palette de couleurs</div>
+            <div class="tool-desc">Identifiez instantanément les teintes dominantes de n'importe quel visuel.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il ridimensionatore di immagini lato client di VantorKit è un motore di precisione millimetrica per la gestione delle dimensioni in pixel e delle proporzioni geometriche, ideato per sviluppatori web, social media manager e designer. Modificare la scala di un'immagine digitale richiede molto più di una semplice estensione visiva: un ricampionamento errato provoca scalettature, contorni sfocati e deformazioni che danneggiano la reputazione del brand. Questo strumento ti permette di definire valori esatti di pixel, percentuali scalari o preset per i principali social direttamente nel tuo browser.</p>
+        <p>Poiché l'elaborazione viene eseguita localmente dall'hardware grafico del tuo computer senza trasferire file in rete, puoi lavorare su fotografie ad altissima risoluzione e screenshot di applicazioni con un feedback immediato. Lo strumento garantisce interpolazione bicubica, blocco delle proporzioni e selezione libera del formato per schermi ad alta densità.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Carica l'immagine originale:</strong> Trascina qualsiasi file PNG, JPEG, SVG o WebP nell'area di lavoro o selezionalo dalle cartelle del tuo dispositivo.</li>
+          <li><strong>Imposta le nuove dimensioni:</strong> Attiva il blocco delle proporzioni, scegli un preset rapido (es. copertina YouTube, post Instagram, scheda OpenGraph) oppure inserisci i pixel desiderati.</li>
+          <li><strong>Scegli il formato e scarica:</strong> Seleziona il formato finale (PNG, JPEG, WebP) e salva la tua immagine scalata istantaneamente senza artefatti o degradazioni.</li>
+        </ol>
+        <h2>Motore grafico e rendering Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">Interpolazione bicubica tramite ctx.drawImage()</div>
+          <div class="formula-expr"><code>ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)</code></div>
+        </div>
+        <p>La modifica dimensionale avviene allocando un elemento HTMLCanvasElement calibrato sulla larghezza (dw) e altezza (dh) di arrivo. Il rasterizzatore del browser applica l'interpolazione bicubica via hardware con imageSmoothingQuality = 'high' per ricalcolare la resa cromatica.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Generazione card per anteprime social</h4>
+            <p>Adattamento di una foto panoramica da 4000×3000 pixel al formato standard 1200×630 pixel con fuoco centrato, per garantire anteprime impeccabili su LinkedIn e Twitter.</p>
+          </div>
+          <div class="content-card">
+            <h4>Creazione icone per app mobile</h4>
+            <p>Riduzione in scala di una grafica master da 1024×1024 pixel nelle varianti da 512×512, 192×192 e 48×48 pixel conservando contorni definiti e massima leggibilità.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Disattivare il blocco delle proporzioni</h4>
+            <p>Modificare la larghezza trascurando l'altezza altera la fisionomia dell'immagine; mantieni l'icona del lucchetto attiva salvo ritagli intenzionali.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ingrandire miniature a bassa risoluzione</h4>
+            <p>Forzare una miniatura da 200 pixel a una dimensione di 2000 pixel genera forte sfocatura visiva; ridimensiona sempre a partire da file master originali.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Salvare in formato JPEG immagini con trasparenza</h4>
+            <p>Esportare un'icona PNG trasparente in formato JPEG sostituisce il canale alpha con uno sfondo nero o bianco opaco; mantieni il formato PNG o WebP.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>I tuoi file grafici non transitano mai su server remoti. Tutte le trasformazioni di pixel avvengono rigorosamente nella memoria della scheda grafica e della CPU locale del tuo browser. I tuoi progetti grafici aziendali e le fotografie personali rimangono confidenziali e al sicuro da qualsiasi intercettazione.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Il ridimensionamento compromette la nitidezza dell'immagine?</summary>
+            <div class="faq-answer">
+              <p>La riduzione di scala con algoritmo bicubico aumenta la densità visiva percepita, migliorando la compattezza. Al contrario, l'ingrandimento oltre la risoluzione nativa genera inevitabilmente una perdita di dettaglio.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Posso ridimensionare un'immagine mantenendo lo sfondo trasparente?</summary>
+            <div class="faq-answer">
+              <p>Certamente. È sufficiente selezionare il formato PNG o WebP: il contesto Canvas 2D preserva integralmente la trasparenza del canale alpha durante il processo.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la differenza fondamentale tra ridimensionamento e compressione?</summary>
+            <div class="faq-answer">
+              <p>Il ridimensionamento modifica la griglia fisica dei pixel, mentre la compressione riduce il peso in byte ottimizzando la codifica matematica dei colori.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di grafica e fotoritocco correlati</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compressore immagini</div>
+            <div class="tool-desc">Riduci il peso in byte dei file mantenendo invariate le dimensioni in pixel.</div>
+          </a>
+          <a href="favicon-builder.html" class="related-tool-card">
+            <div class="tool-name">Generatore di Favicon</div>
+            <div class="tool-desc">Crea favicon per schede browser e icone touch per smartphone.</div>
+          </a>
+          <a href="color-palette-extractor.html" class="related-tool-card">
+            <div class="tool-name">Estrattore tavolozza colori</div>
+            <div class="tool-desc">Estrai i codici colore dominanti da qualsiasi immagine con un clic.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Technical Guide & SEO Section -->

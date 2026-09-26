@@ -39,58 +39,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Markdown Live Editor & HTML Converter",
-        "url": "https://vantorkit.com/tools/markdown-editor.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "description": "Free client-side Markdown live editor and HTML converter. Split-screen preview, syntax formatting toolbar, local auto-save, synchronized scrolling, and instant HTML export with zero server logging."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Markdown Live Editor & HTML Converter",
+      "url": "https://vantorkit.com/tools/markdown-editor.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is my text or document sent to any external server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All parsing, rendering, auto-saving, and exporting occur 100% locally within your web browser. Your private notes, documentation drafts, and technical articles never leave your machine."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the editor support GitHub-Flavored Markdown (GFM)?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. The editor supports standard CommonMark and GFM extensions, including tables, task lists (checkboxes), strikethrough, syntax code fences, and automatic line breaks."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does auto-save protect against accidental browser closing?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Your work is continuously saved to your browser's local storage in real-time. If you refresh the page or restart your browser, your draft is instantly restored."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do I export my formatted work to HTML or Markdown?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can click 'Copy HTML' to copy clean semantic HTML straight to your clipboard, or use the 'Download .html' and 'Download .md' buttons to save standalone files directly to your device."
-            }
+      "description": "Free client-side Markdown live editor and HTML converter. Split-screen preview, syntax formatting toolbar, local auto-save, synchronized scrolling, and instant HTML export with zero server logging."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What flavor of Markdown does this editor support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The editor adheres to the CommonMark specification with GitHub Flavored Markdown (GFM) extensions, supporting tables, task lists, strikethrough, and fenced code blocks."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my draft saved automatically if I accidentally close the tab?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the editor utilizes browser localStorage to continuously auto-save your draft, restoring your work immediately when you return to the page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I create tables in Markdown?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Define headers separated by pipes (|), add a delimiter row with hyphens (|---|---|), and list subsequent data rows using matching pipe columns."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I export my Markdown directly as clean HTML?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can copy the fully compiled and sanitized HTML markup to your clipboard with a single click for immediate integration into your website or CMS."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1520,125 +1524,417 @@
     </div>
 
     <!-- SEO & Educational Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading" data-i18n="guideHeading">Mastering Markdown &amp; Semantic HTML</h2>
-        <p data-i18n="guideSub">Why developers, technical writers, and content teams choose Markdown for publishing.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>A Markdown editor provides a specialized authoring environment for writing content in plain-text Markdown syntax while viewing real-time rendered HTML side-by-side. Created to enable clean, lightweight document drafting without proprietary word processor bloat, Markdown has become the lingua franca of developer documentation, technical writing, static site generators, and developer platforms like GitHub.</p>
+        <p>Drafting structured technical copy requires formatting headers, code snippets with syntax highlighting, tabular data, task lists, blockquotes, and deep hyperlinking. Traditional authoring tools introduce heavy visual clutter and fragile formatting tags, whereas Markdown maintains pure human readability in raw text while compiling seamlessly into standards-compliant HTML for web publishing.</p>
+        <p>Working without a synchronized live preview often causes formatting oversights, such as broken list indentations or misaligned table pipes. This editor solves that friction by offering dual-pane split rendering, integrated word and character tracking, and automatic local storage persistence directly inside your browser.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Write or Paste Markdown Syntax:</strong> Type directly into the left editor pane using standard CommonMark or GitHub Flavored Markdown syntax, or paste existing markdown drafts from your repositories.</li>
+          <li><strong>Observe Synchronized Live Preview:</strong> Review the rendered HTML document updating in real time in the right pane, featuring styled typography, syntax-highlighted code blocks, and formatted tables.</li>
+          <li><strong>Export Clean HTML or Raw Markdown:</strong> Copy the compiled HTML markup to your clipboard for website integration or download the markdown file locally with all formatting intact.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">CommonMark Parser and Client-Side Sanitization Engine</div>
+          <div class="formula-expr"><code>Render: Markdown → AST → Sanitized HTML  |  Autosave: localStorage.setItem('draft', md)</code></div>
+        </div>
+        <p>The rendering pipeline compiles plain text into HTML through abstract syntax tree (AST) tokenization following the CommonMark and GitHub Flavored Markdown (GFM) specifications. The parser identifies structural blocks (headings, fenced code blocks with language specifiers, blockquotes, ordered/unordered lists, and tables) before processing inline spans (bold, italics, inline code, links, and images). To guarantee security and prevent Cross-Site Scripting (XSS), the generated markup undergoes strict DOM sanitization, neutralizing malicious scripts while preserving valid semantic tags. Real-time document persistence utilizes browser localStorage, automatically retaining your current draft across browser sessions.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Drafting a Technical GitHub Repository README</h4>
+            <p>A software engineer authors documentation for an open-source library. In the left pane, they define installation code blocks ('npm install vantorkit'), configuration JSON tables, and feature checklists. The preview pane renders instant styling and copyable code fences, accelerating repository preparation.</p>
+          </div>
+          <div class="content-card">
+            <h4>Publishing Formatted Articles to a Headless CMS</h4>
+            <p>A technical content creator writes a tutorial incorporating headings, blockquotes, and inline code terms. Once complete, clicking 'Copy HTML' extracts clean semantic markup without extraneous styling classes, ready for instant publication in WordPress, Ghost, or Webflow.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Omitting Blank Lines Before Lists and Code Blocks</h4>
+            <p>CommonMark parsers require a blank line before starting an unordered list or fenced code block. Neglecting this whitespace causes the parser to treat items as continuation lines of the preceding paragraph.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Inconsistent Indentation in Nested Lists</h4>
+            <p>Indenting sub-items with one space or tabs rather than the standard two or four spaces can break list nesting, rendering child bullets as separate top-level paragraphs.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Unescaped Pipe Characters in Markdown Tables</h4>
+            <p>Using the vertical pipe character '|' inside a table cell without escaping it ('\|') splits the cell prematurely, distorting the entire column layout.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All Markdown compilation, live rendering, and draft autosaving occur strictly inside your local browser memory and localStorage. No documentation drafts, code snippets, or unpublished manuscripts are ever sent to remote cloud servers.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>What flavor of Markdown does this editor support?</summary>
+            <div class="faq-answer">
+              <p>The editor adheres to the CommonMark specification with GitHub Flavored Markdown (GFM) extensions, supporting tables, task lists, strikethrough, and fenced code blocks.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Is my draft saved automatically if I accidentally close the tab?</summary>
+            <div class="faq-answer">
+              <p>Yes, the editor utilizes browser localStorage to continuously auto-save your draft, restoring your work immediately when you return to the page.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do I create tables in Markdown?</summary>
+            <div class="faq-answer">
+              <p>Define headers separated by pipes (|), add a delimiter row with hyphens (|---|---|), and list subsequent data rows using matching pipe columns.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I export my Markdown directly as clean HTML?</summary>
+            <div class="faq-answer">
+              <p>Yes, you can copy the fully compiled and sanitized HTML markup to your clipboard with a single click for immediate integration into your website or CMS.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Text & Developer Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Word & Character Counter</div>
+            <div class="tool-desc">Count words, characters, sentences, reading time, and keyword density in real time.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Text Difference Checker</div>
+            <div class="tool-desc">Compare two text versions side-by-side with visual highlights of differences.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Case Converter & Slug Generator</div>
+            <div class="tool-desc">Transform text between UPPERCASE, lowercase, Title Case, camelCase, and SEO slugs.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- Cheat Sheet Reference Table -->
-      <div class="cheatsheet-card">
-        <div class="cheatsheet-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
-          <span data-i18n="cheatTitle">Markdown Syntax Quick Reference</span>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>محرر ماركداون (Markdown) هو بيئة كتابة متخصصة لتحرير النصوص البسيطة بصيغة Markdown مع معاينة مرئية متزامنة لناتج HTML في الوقت الفعلي. وقد ابتُكرت هذه الصيغة لتوفير كتابة نصوص خفيفة ومنظمة دون التعقيدات والرموز الخفية لمعالجات النصوص التقليدية، لتصبح اليوم المعيار العالمي المعتمد لتوثيق المشاريع البرمجية في منصات مثل GitHub وأنظمة إدارة المحتوى الحديثة.</p>
+        <p>تتطلب كتابة المقالات والتوثيقات التقنية تنظيماً مرناً للعناوين، والفقرات البرمجية ذات التمييز اللوني، والجداول، والقوائم النقطية، والاقتباسات. تحافظ لغة Markdown على قراءة النص البسيط بسلاسة فائقة مع تحويله تلقائياً وبأعلى المعايير إلى كود HTML نظيف جاهز للنشر على الويب.</p>
+        <p>الكتابة بدون معاينة حية قد تؤدي إلى أخطاء في محاذاة الجداول أو تداخل القوائم النقطية. يحل هذا المحرر هذه العقبة بتوفير شاشة مقسومة تجمع بين لوحة التحرير والمعاينة الفورية، مع حفظ تلقائي للمسودات محلياً داخل متصفحك.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اكتب أو الصق نص الماركداون:</strong> ابدأ الكتابة في لوحة التحرير اليسرى مستخدماً وسوم Markdown القياسية، أو الصق مسوداتك وتوثيقاتك البرمجية السابقة مباشرة.</li>
+          <li><strong>شاهد المعاينة المرئية المتزامنة:</strong> تابع التحديث الفوري للوثيقة المنسقة في اللوحة المقابلة مع تطبيق الأنماط الجمالية للخطوط، وتنسيق الأكواد، والجداول بصورة فورية.</li>
+          <li><strong>صدر كود HTML أو حمل الملف:</strong> انسخ كود HTML المترجم بضغطة زر واحدة لنشره في موقعك أو نظام إدارتك للمحتوى، أو نزل ملف Markdown الأصلي محفوظاً على جهازك.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">محرك ترجمة CommonMark وتأمين الأكواد محلياً</div>
+          <div class="formula-expr"><code>الترجمة: Markdown → شجرة AST → HTML آمن  |  الحفظ: localStorage.setItem('draft', md)</code></div>
         </div>
-        <table class="cheatsheet-table">
-          <thead>
-            <tr>
-              <th data-i18n="thElement">Element</th>
-              <th data-i18n="thSyntax">Markdown Syntax</th>
-              <th data-i18n="thOutput">HTML Equivalent / Output</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Heading 1–3</strong></td>
-              <td><code># H1</code> &bull; <code>## H2</code> &bull; <code>### H3</code></td>
-              <td><code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;h3&gt;</code> tags</td>
-            </tr>
-            <tr>
-              <td><strong>Bold &amp; Italic</strong></td>
-              <td><code>**bold text**</code> &bull; <code>*italic text*</code></td>
-              <td><code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> tags</td>
-            </tr>
-            <tr>
-              <td><strong>Strikethrough</strong></td>
-              <td><code>~~deleted text~~</code></td>
-              <td><code>&lt;del&gt;deleted text&lt;/del&gt;</code></td>
-            </tr>
-            <tr>
-              <td><strong>Inline Code</strong></td>
-              <td><code>`const x = 42;`</code></td>
-              <td><code>&lt;code&gt;const x = 42;&lt;/code&gt;</code></td>
-            </tr>
-            <tr>
-              <td><strong>Fenced Code Block</strong></td>
-              <td><code>```javascript ... ```</code></td>
-              <td><code>&lt;pre&gt;&lt;code class="language-*"&gt;</code></td>
-            </tr>
-            <tr>
-              <td><strong>Blockquote</strong></td>
-              <td><code>&gt; Quote citation here</code></td>
-              <td><code>&lt;blockquote&gt;&lt;p&gt;Quote citation&lt;/p&gt;&lt;/blockquote&gt;</code></td>
-            </tr>
-            <tr>
-              <td><strong>Hyperlinks</strong></td>
-              <td><code>[VantorKit](https://vantorkit.com)</code></td>
-              <td><code>&lt;a href="..."&gt;VantorKit&lt;/a&gt;</code></td>
-            </tr>
-            <tr>
-              <td><strong>Task Checklist</strong></td>
-              <td><code>- [ ] Pending task</code> &bull; <code>- [x] Done</code></td>
-              <td>Interactive checkbox lists</td>
-            </tr>
-            <tr>
-              <td><strong>GFM Tables</strong></td>
-              <td><code>| Col 1 | Col 2 |</code><br><code>| --- | --- |</code></td>
-              <td>Clean semantic <code>&lt;table&gt;</code></td>
-            </tr>
-          </tbody>
-        </table>
+        <p>يعتمد المحرك على مواصفات CommonMark وGitHub Flavored Markdown لمعالجة النصوص وبناء شجرة البنية اللغوية (AST). يتعرف النظام بدقة على الكتل الهيكلية الكبرى (العناوين، وفقرات الأكواد البرمجية، والجداول، والقوائم) ثم يعالج التنسيقات الداخلية (الخط العريض، والمائل، والروابط). ولضمان الأمان التام ومنع ثغرات XSS، تُمرر النتائج عبر خوارزمية تنقية أمنية تعطل الأكواد الخبيثة وتحافظ على وسوم HTML السليمة. ويتم تفعيل الحفظ التلقائي عبر ذاكرة المتصفح المحلية (localStorage) لاستعادة مسودتك بأمان في أي وقت.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>توثيق مشروع برمجي في ملف README لموقع GitHub</h4>
+            <p>يكتب مطور برمجيات توثيقاً لمكتبته البرمجية. يكتب في لوحة التحرير تعليمات التثبيت ('npm install') وجدولاً بخصائص الإعدادات. تظهر المعاينة الحية الأكواد البرمجية بتنسيق مميز وجداول منظمة جاهزة للنشر.</p>
+          </div>
+          <div class="content-card">
+            <h4>صياغة مقال تقني لنظام إدارة محتوى متقدم</h4>
+            <p>يقوم كاتب تقني بصياغة مقال يتضمن عناوين فرعية وروابط تشعبية واقتباسات. عند الانتهاء، يضغط على 'نسخ HTML' ليحصل على كود نظيف تماماً وخالٍ من الفوضى، ليلصقه مباشرة في ووردبريس أو غوست.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ إهمال ترك سطر فارغ قبل القوائم والأكواد</h4>
+            <p>تتطلب معالجات Markdown وجود سطر فارغ قبل بدء القوائم النقطية أو كتل الأكواد؛ وإهمال هذا الفراغ يجعل النظام يدمج القائمة مع الفقرة السابقة كنص واحد.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ عدم ضبط المسافات في القوائم المتداخلة</h4>
+            <p>استخدام مسافة واحدة بدلاً من المسافات القياسية (مسافتين أو أربع) لتفريع القوائم يربك المحرك، مما يحول العناصر الفرعية إلى فقرات مستقلة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ عدم الهروب من رمز الشرطة الرأسية في الجداول</h4>
+            <p>استخدام الرمز '|' داخل محتوى خلية في جدول الماركداون دون كتابة شرطة الهروب قبله ('\|') يؤدي إلى فصل الخلية عشوائياً وتشويه تخطيط الجدول.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تتم جميع عمليات تحرير وترجمة وحفظ مسودات Markdown كلياً داخل ذاكرة متصفحك المحلية. لا يتم إرسال أي وثائق، أو أكواد برمجية، أو مسودات سرية إلى أي خوادم سحابية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>ما هي معايير Markdown المدعومة في هذا المحرر؟</summary>
+            <div class="faq-answer">
+              <p>يدعم المحرر معيار CommonMark القياسي المعتمد عالمياً، بالإضافة إلى ملحقات GitHub Flavored Markdown (GFM) الداعمة للجداول وقوائم المهام.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يتم حفظ المسودة تلقائياً في حال إغلاق المتصفح؟</summary>
+            <div class="faq-answer">
+              <p>نعم، يستخدم المحرر تقنية التخزين المحلي (localStorage) لحفظ النص باستمرار، لتتمكن من استعادة مسودتك فور فتح الصفحة مجدداً.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يمكنني إنشاء الجداول بلغة الماركداون؟</summary>
+            <div class="faq-answer">
+              <p>تحدد أسماء الأعمدة مفصولة بالشرطة الرأسية (|)، وتضيف صفاً فاصلاً من الشرطات الأفقية (|---|)، ثم تضيف صفوف البيانات بنفس الطريقة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكنني تصدير النص ككود HTML جاهز؟</summary>
+            <div class="faq-answer">
+              <p>نعم، يمكنك بنقرة واحدة نسخ كود HTML الكامل المترجم والمنقى لاستخدامه فوراً في موقعك أو مدونتك الإلكترونية.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات النصوص والبرمجة ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الكلمات والحروف</div>
+            <div class="tool-desc">عد الكلمات والأحرف وزمن القراءة وتحليل الكلمات المفتاحية في الوقت الفعلي.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">أداة مقارنة النصوص والفروق</div>
+            <div class="tool-desc">مقارنة نسختين من النصوص جنباً إلى جنب مع تمييز التعديلات والإضافات.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">محول حالة الأحرف والروابط</div>
+            <div class="tool-desc">تحويل النصوص بين الحروف الكبيرة والصغيرة وصيغ البرمجة وروابط URL.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- Educational Pillars -->
-      <div class="guide-grid">
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <span data-i18n="guide1Title">1. Universal Portability</span>
-          </div>
-          <p data-i18n="guide1Desc">Markdown is plain text that never locks you into proprietary binary formats. It transfers seamlessly across GitHub, GitLab, Notion, Slack, Static Site Generators (Next.js, Astro, Hugo), and headless CMS platforms.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>L'éditeur Markdown avec aperçu en direct de VantorKit est un environnement d'écriture moderne conçu pour les développeurs, rédacteurs techniques et auteurs de documentation. Structurer des articles en Markdown élimine les lourdeurs des traitements de texte traditionnels. Cet utilitaire compile et affiche vos documents balisés avec une réactivité instantanée dans votre navigateur.</p>
+        <p>Grâce à un compilateur local haute fidélité, vous pouvez rédiger vos titres, blocs de code, listes à puces et tableaux avec synchronisation bidirectionnelle du défilement sans qu'aucune ligne de texte ne soit transmise vers des serveurs tiers.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Rédigez ou collez votre texte Markdown:</strong> Écrivez dans le volet de gauche avec la syntaxe standard CommonMark ou collez vos brouillons et fichiers README existants.</li>
+          <li><strong>Visualisez l'aperçu en temps réel:</strong> Observez la mise en page HTML se synchroniser dans le panneau droit, intégrant la typographie soignée, les blocs de code et les tableaux mis en forme.</li>
+          <li><strong>Exportez en HTML ou téléchargez le fichier:</strong> Copiez le code HTML compilé pour votre CMS ou téléchargez le fichier Markdown (.md) directement sur votre poste de travail.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Analyseur CommonMark et moteur de sécurisation DOM</div>
+          <div class="formula-expr"><code>Rendu : Markdown → AST → HTML Sécurisé  |  Sauvegarde : localStorage.setItem('draft', md)</code></div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            <span data-i18n="guide2Title">2. SEO &amp; Clean Semantics</span>
+        <p>Le flux de rendu compile le texte en HTML via la création d'un arbre syntaxique abstrait (AST) conforme aux normes CommonMark et GFM. L'analyseur identifie d'abord les blocs majeurs (titres, blocs de code délimités, citations, tableaux) avant de traiter les styles de texte internes (gras, italique, liens). Pour garantir une sécurité absolue contre les attaques XSS, le code généré subit une désinfection stricte du DOM, neutralisant tout script indésirable tout en préservant les balises HTML valides. La persistance automatique exploite le stockage local du navigateur (localStorage) pour conserver vos écrits d'une session à l'autre.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Rédaction d'un fichier README technique pour GitHub</h4>
+            <p>Un développeur rédige la documentation d'une bibliothèque open-source. Dans le volet gauche, il insère les lignes d'installation ('npm install'), un tableau de configuration et une liste de prérequis. L'aperçu affiche instantanément un rendu fidèle, prêt pour la mise en ligne.</p>
           </div>
-          <p data-i18n="guide2Desc">Converting Markdown produces clean, unpolluted HTML without bloated inline styles or unnecessary wrapper divs. Search engine bots easily index headings, lists, and tables, boosting organic crawlability and accessibility scores.</p>
+          <div class="content-card">
+            <h4>Création d'articles pour un CMS sans tête (Headless)</h4>
+            <p>Un auteur prépare un tutoriel technique avec listes et extraits de code. Une fois la rédaction terminée, un clic sur 'Copier HTML' lui procure un balisage propre et prêt à être injecté dans WordPress, Ghost ou Webflow.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span data-i18n="guide3Title">3. Zero-Cloud Privacy Guarantee</span>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Oublier les lignes vides avant les listes</h4>
+            <p>La spécification CommonMark exige une ligne vide avant d'initier une liste ou un bloc de code. Omettre cet interligne conduit l'analyseur à fusionner les puces dans le paragraphe précédent.</p>
           </div>
-          <p data-i18n="guide3Desc">Your drafts, proprietary source code, and private technical specifications never leave your local browser sandbox. Auto-saving operates via browser localStorage, meaning 100% offline capability with zero remote telemetry.</p>
+          <div class="content-card">
+            <h4>⚠️ Indentation irrégulière dans les sous-listes</h4>
+            <p>Décaler des sous-éléments avec un seul espace au lieu des deux ou quatre espaces requis rompt la hiérarchie de la liste, isolant les sous-puces comme des paragraphes distincts.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Caractère barre verticale non échappé dans un tableau</h4>
+            <p>Utiliser la barre '|' à l'intérieur d'une cellule sans l'échapper ('\|') scinde prématurément la cellule et détruit l'alignement des colonnes du tableau.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toute la compilation Markdown, le rendu dynamique et la sauvegarde automatique s'effectuent exclusivement au sein du navigateur local. Aucun document, code ou brouillon n'est transmis à des serveurs distants.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quelles spécifications de Markdown sont prises en charge ?</summary>
+            <div class="faq-answer">
+              <p>L'éditeur respecte la norme CommonMark enrichie des extensions GitHub Flavored Markdown (GFM), prenant en charge tableaux, listes de tâches et blocs de code.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Mes écrits sont-ils conservés si je ferme mon navigateur ?</summary>
+            <div class="faq-answer">
+              <p>Oui, l'éditeur utilise le stockage local (localStorage) pour sauvegarder automatiquement votre texte, restaurant votre travail dès votre retour.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment structure-t-on un tableau en Markdown ?</summary>
+            <div class="faq-answer">
+              <p>Séparez les en-têtes avec des barres (|), ajoutez une ligne de démarcation (|---|) et poursuivez avec les lignes de données correspondantes.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je exporter directement le résultat en HTML épuré ?</summary>
+            <div class="faq-answer">
+              <p>Oui, un bouton vous permet de copier l'intégralité du balisage HTML généré et sécurisé, prêt pour une intégration directe sur votre site web.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils de texte et utilitaires connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Compteur de Mots et Caractères</div>
+            <div class="tool-desc">Mesurez les mots, caractères, temps de lecture et densité des mots-clés en direct.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Comparateur de Textes (Diff)</div>
+            <div class="tool-desc">Comparez deux versions d'un texte côte à côte avec surlignage des écarts.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur de Casse & Slugs</div>
+            <div class="tool-desc">Basculez vos textes entre MAJUSCULES, minuscules, camelCase et slugs d'URL.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4 data-i18n="faq1Q">Does this tool upload my Markdown or HTML to any server?</h4>
-          <p data-i18n="faq1A">Never. All parsing, rendering, and auto-saving execute strictly inside your local browser memory. No network requests are made with your content.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Un editor Markdown offre un ambiente di scrittura specializzato per redigere testi semplici secondo la sintassi Markdown, visualizzando contemporaneamente il rendering HTML in uno schermo diviso. Ideato per garantire una formattazione leggera e ordinata senza le complessità dei tradizionali word processor, Markdown è diventato lo standard universale per la documentazione tecnica, la scrittura collaborativa e i repository GitHub.</p>
+        <p>Scrivere documentazione professionale richiede di organizzare titoli, blocchi di codice con evidenziazione sintattica, tabelle, citazioni e collegamenti ipertestuali. La sintassi Markdown garantisce una leggibilità perfetta del testo grezzo e si converte nativamente in codice HTML semantico per il web.</p>
+        <p>Lavorare senza un riscontro visivo in tempo reale può generare errori di formattazione, come elenchi disallineati o tabelle spezzate. Questo strumento elimina ogni problema offrendo visualizzazione sincronizzata a due riquadri, conteggio integrato e salvataggio automatico locale nel tuo browser.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Scrivi o incolla il testo in Markdown:</strong> Digita direttamente nel riquadro di sinistra utilizzando la sintassi CommonMark standard o incolla bozze e file README già esistenti.</li>
+          <li><strong>Verifica l'anteprima sincronizzata:</strong> Controlla il documento formattato nel pannello destro che si aggiorna in tempo reale con stili grafici, blocchi di codice e tabelle ordinate.</li>
+          <li><strong>Esporta in HTML o scarica il file:</strong> Copia il codice HTML generato per integrarlo nel tuo CMS oppure scarica il file Markdown (.md) conservando tutte le formattazioni.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Parser CommonMark e procedura di sanificazione DOM</div>
+          <div class="formula-expr"><code>Rendering: Markdown → AST → HTML Sicuro  |  Salvataggio: localStorage.setItem('draft', md)</code></div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq2Q">What happens if I refresh the page or close my tab?</h4>
-          <p data-i18n="faq2A">Your content is protected by real-time local auto-save. When you reopen or refresh the page, your exact Markdown draft is instantly recovered.</p>
+        <p>La procedura compila il testo grezzo in HTML attraverso un albero sintattico astratto (AST) basato sulle specifiche CommonMark e GFM. Il parser individua gli elementi strutturali (titoli, blocchi di codice, citazioni, tabelle) prima di formattare gli stili interni (grassetto, corsivo, link). Per impedire attacchi informatici di tipo XSS, l'HTML generato viene sottoposto a una sanificazione preventiva del DOM, neutralizzando eventuali script malevoli e conservando i tag semantici corretti. Il salvataggio locale sfrutta il meccanismo localStorage del browser, conservando le tue bozze tra le sessioni di navigazione.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Stesura di un file README per un repository GitHub</h4>
+            <p>Uno sviluppatore documenta una nuova libreria software. Nel riquadro sinistro inserisce comandi da terminale ('npm install'), una tabella di opzioni e requisiti. L'anteprima restituisce immediatamente l'aspetto finale, velocizzando la pubblicazione del progetto.</p>
+          </div>
+          <div class="content-card">
+            <h4>Preparazione di articoli per CMS e blog tecnici</h4>
+            <p>Un autore compone un articolo tecnico articolato con sottotitoli ed elenchi. Al termine della scrittura, premendo su 'Copia HTML' ottiene un codice pulito e privo di stili superflui, pronto per l'inserimento in WordPress, Ghost o Webflow.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq3Q">How do I export the preview as an HTML file?</h4>
-          <p data-i18n="faq3A">Click the '.html' download button in the toolbar. VantorKit wraps your content with a clean HTML5 template and triggers an immediate download directly to your disk.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Omissione della riga vuota prima degli elenchi</h4>
+            <p>I parser CommonMark richiedono una riga vuota prima di iniziare un elenco o un blocco di codice; in assenza di questo spazio il testo viene accodato al paragrafo precedente.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Rientri scorretti nelle sottoliste</h4>
+            <p>Annidare sotto-voci con un solo spazio anziché i due o quattro spazi canonici spezza la gerarchia della lista, trasformando gli elementi secondari in paragrafi isolati.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Mancato escape del carattere barra verticale nelle tabelle</h4>
+            <p>Inserire la barra '|' all'interno di una cella senza anteporre una barra rovesciata ('\|') spezza la colonna e disallinea la struttura della tabella.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq4Q">Can I use Tab to indent code and lists?</h4>
-          <p data-i18n="faq4A">Yes! The editor intercepts the Tab key to insert 2 spaces instead of shifting browser focus, and Shift+Tab unindents your selection seamlessly.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le operazioni di scrittura, rendering in tempo reale e salvataggio delle bozze avvengono nella memoria locale del tuo browser. Nessun documento o codice riservato viene mai inviato a server esterni.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quali varianti di Markdown supporta l'editor?</summary>
+            <div class="faq-answer">
+              <p>L'editor segue lo standard CommonMark con estensioni GitHub Flavored Markdown (GFM), gestendo tabelle, elenchi di attività e blocchi di codice.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Il mio testo viene salvato in caso di chiusura della pagina?</summary>
+            <div class="faq-answer">
+              <p>Sì, l'editor impiega il meccanismo localStorage per registrare costantemente la tua bozza, ripristinandola automaticamente al tuo ritorno.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come si costruiscono le tabelle in Markdown?</summary>
+            <div class="faq-answer">
+              <p>Si separano le intestazioni con barre verticali (|), si aggiunge una riga divisoria con trattini (|---|) e si inseriscono le righe di dati corrispondenti.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Posso convertire il testo Markdown in codice HTML pulito?</summary>
+            <div class="faq-answer">
+              <p>Sì, puoi copiare negli appunti l'intero codice HTML compilato e sanificato con un solo clic, pronto per essere pubblicato sul tuo sito.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di testo e utilità correlate</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Contatore di Parole e Caratteri</div>
+            <div class="tool-desc">Rileva parole, caratteri, tempo di lettura e densità delle parole chiave in tempo reale.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Confronto Testi e Differenze (Diff)</div>
+            <div class="tool-desc">Compara due versioni di un testo affiancate con evidenziazione delle modifiche.</div>
+          </a>
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertitore Maiuscole/Minuscole e Slug</div>
+            <div class="tool-desc">Trasforma testi tra MAIUSCOLO, minuscolo, camelCase e genera slug URL.</div>
+          </a>
         </div>
       </div>
     </article>
-
   </main>
 
   <!-- Footer -->

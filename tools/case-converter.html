@@ -36,58 +36,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Case Converter & URL Slugifier",
-        "url": "https://vantorkit.com/tools/case-converter.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "description": "Free client-side case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud logging."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Case Converter & URL Slugifier",
+      "url": "https://vantorkit.com/tools/case-converter.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is my text sent to any server during conversion?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All text parsing, case transformations, and slug creations execute 100% locally in your web browser. Your private notes, code snippets, and confidential drafts never leave your device."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between camelCase, snake_case, and kebab-case?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "camelCase joins words with the first letter of each subsequent word capitalized (common in JavaScript). snake_case separates words with underscores (common in Python and SQL). kebab-case separates words with hyphens (standard for URLs and CSS classes)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does the URL Slugifier handle accented characters and special symbols?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The slug engine uses Unicode NFD normalization to strip diacritics (e.g. converting 'é' to 'e' and 'ñ' to 'n'), removes unsafe URL characters, and replaces spaces with clean hyphens or underscores."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I chain multiple transformations together?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! Use the 'Swap with Input' button to send the converted output back to the input field, allowing you to easily combine multiple transformations."
-            }
+      "description": "Free client-side case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud logging."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between camelCase and PascalCase?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In camelCase, the first word begins with a lowercase letter while subsequent words start with a capital letter (myVariableName). In PascalCase, every word including the first starts with a capital letter (MyClassName)."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the Title Case algorithm handle small words?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The algorithm follows standard editorial rules, keeping minor conjunctions, prepositions, and articles (such as 'and', 'in', 'of', 'the') in lowercase unless they appear as the first or last word of the title."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes a good SEO URL slug?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A clean SEO slug uses only lowercase ASCII alphanumeric characters separated by single hyphens, stripping out accents, special symbols, and trailing punctuation for optimal search engine indexing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert multi-line lists of variables simultaneously?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the converter processes multi-line code blocks and lists, applying the selected casing style across each line while preserving line breaks."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1370,110 +1374,418 @@
     </div>
 
     <!-- SEO & Educational Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading" data-i18n="guideHeading">Code Naming Conventions &amp; URL Slug Optimization</h2>
-        <p data-i18n="guideSub">Best practices for software architectures, database schemas, and search engine optimization.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>A case converter is a typographical and programming string utility that transforms text between capitalization styles, naming conventions, and URL slug formats. In software development, copywriting, content publishing, and database normalization, switching between distinct letter cases is a recurring requirement that prevents syntax errors and ensures brand consistency.</p>
+        <p>Different computational environments demand specific orthographic formats. Modern programming languages enforce strict casing paradigms: camelCase for JavaScript variables, snake_case for Python identifiers and database schemas, PascalCase for classes and TypeScript interfaces, and CONSTANT_CASE for environment flags. Concurrently, digital publishers rely on Title Case algorithms that automatically lowercase grammatical particles while capitalizing major words, alongside clean URL slug generators that sanitize special characters for SEO.</p>
+        <p>Manually converting casing across multi-line datasets or variable names is slow and error-prone. This utility operates entirely inside your client-side browser runtime, providing instant bidirectional transformations and clean URL slug generation with zero network overhead.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Input or Paste Raw Text:</strong> Type or paste your source text, variable names, or titles into the main text area. The system handles single sentences, source code blocks, and multi-line datasets.</li>
+          <li><strong>Select Your Target Casing Format:</strong> Click your desired conversion button: UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case, PascalCase, or SEO Slug.</li>
+          <li><strong>Copy the Transformed String:</strong> Inspect the instant converted output and click the copy button to transfer the formatted string directly into your clipboard for code editors or CMS tools.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">RegEx Boundary Splitting and Diacritic Normalization</div>
+          <div class="formula-expr"><code>Slug = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-')</code></div>
+        </div>
+        <p>Casing transformations execute through two sequential computational phases: tokenization and reconstruction. First, the engine splits compound identifiers using boundary regular expressions /[\s_\-]+|(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/, correctly isolating tokens even from compressed camelCase or PascalCase strings. For Title Case, standard Chicago Manual of Style heuristics capitalize the initial word and all subsequent lexical units while preserving lower case for short prepositions and conjunctions (and, but, for, or, nor, on, at, to, from, by). For URL slug creation, Unicode NFD normalization decomposes accented characters, strips diacritical marks via regex [\u0300-\u036f], replaces non-alphanumeric sequences with hyphens, and trims leading/trailing hyphens.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Refactoring Code Identifiers (camelCase to snake_case)</h4>
+            <p>A developer migrates JavaScript API payloads to a Python backend. Entering 'userProfileData' and 'totalTransactionAmount' and selecting snake_case converts them instantly to 'user_profile_data' and 'total_transaction_amount', eliminating tedious manual refactoring.</p>
+          </div>
+          <div class="content-card">
+            <h4>Generating Clean SEO URL Slugs from Accented Titles</h4>
+            <p>An editor inputs 'Les Éléments Clés de la Sécurité Informatique 2026!'. The slug generator decomposes accents, strips punctuation, and produces 'les-elements-cles-de-la-securite-informatique-2026', ensuring clean, human-readable, and crawlable permalinks.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Naive Title Casing of Minor Prepositions</h4>
+            <p>Capitalizing every word blindly produces unnatural titles like 'The History Of The World'. High-quality title case engines retain lowercase for minor articles and prepositions unless they start the sentence.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Destroying Acronyms in Case Transformations</h4>
+            <p>Converting 'parseXMLDocument' with basic case splitters often mangles the acronym into 'parse_x_m_l_document'. Modern boundary regex preserves consecutive capitals as coherent acronym tokens.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Generating Slugs with Accents or Consecutive Hyphens</h4>
+            <p>Failing to normalize accented vowels creates URL-encoded character strings (like '%C3%A9') that harm search indexing. Always normalize diacritics into clean ASCII characters.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All text transformation algorithms run strictly within your browser's sandboxed JavaScript execution thread. No source text, variable names, or internal documents are ever transmitted across networks or stored on external servers.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>What is the difference between camelCase and PascalCase?</summary>
+            <div class="faq-answer">
+              <p>In camelCase, the first word begins with a lowercase letter while subsequent words start with a capital letter (myVariableName). In PascalCase, every word including the first starts with a capital letter (MyClassName).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How does the Title Case algorithm handle small words?</summary>
+            <div class="faq-answer">
+              <p>The algorithm follows standard editorial rules, keeping minor conjunctions, prepositions, and articles (such as 'and', 'in', 'of', 'the') in lowercase unless they appear as the first or last word of the title.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What makes a good SEO URL slug?</summary>
+            <div class="faq-answer">
+              <p>A clean SEO slug uses only lowercase ASCII alphanumeric characters separated by single hyphens, stripping out accents, special symbols, and trailing punctuation for optimal search engine indexing.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I convert multi-line lists of variables simultaneously?</summary>
+            <div class="faq-answer">
+              <p>Yes, the converter processes multi-line code blocks and lists, applying the selected casing style across each line while preserving line breaks.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Text & Developer Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Word & Character Counter</div>
+            <div class="tool-desc">Count words, characters, sentences, reading time, and keyword density in real time.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Text Difference Checker</div>
+            <div class="tool-desc">Compare two text versions side-by-side with visual highlights of differences.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Markdown Editor & Live Preview</div>
+            <div class="tool-desc">Author Markdown with live formatted split-screen preview and HTML export.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- Reference Table -->
-      <div class="cheatsheet-card">
-        <div class="cheatsheet-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          <span data-i18n="cheatTitle">Developer Case Style Guide</span>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>محول حالة الأحرف والروابط هو أداة متخصصة لتحويل النصوص بين أنماط الأحرف المختلفة، وصيغ التسمية البرمجية، وصياغة الروابط الدائمة (SEO Slugs). وفي مجالات تطوير البرمجيات، والتحرير الصحفي، وإدارة قواعد البيانات، يُعد التحويل بين أنماط التسمية ضرورة دائمة لتفادي الأخطاء البرمجية وضمان التناسق الشكلي.</p>
+        <p>تتطلب البيئات البرمجية المعاصرة صيغاً محددة وصارمة للأسماء؛ مثل camelCase لمتغيرات جافا سكريبت، وsnake_case لأسماء الحقول في بايثون وقواعد البيانات، وPascalCase لتسمية الفئات، وCONSTANT_CASE للثوابت البرمجية. وفي النشر الرقمي، يحتاج المحررون إلى أدوات ذكية لتنسيق عناوين المقالات، وتوليد روابط URL نظيفة خالية من الرموز الخاصة لتحسين التوافق مع محركات البحث.</p>
+        <p>التحويل اليدوي للنصوص البرمجية وقوائم المتغيرات بطيء وعرضة للأخطاء الإملائية. تعمل هذه الأداة كلياً داخل متصفحك المحلي، لتوفر تحويلاً فورياً شاملاً بين كافة الصيغ وتوليد روابط مهيأة لمحركات البحث دون أي تأخير شبكي.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>أدخل النص الأصلي أو المتغيرات:</strong> اكتب أو الصق النص، أو أسماء المتغيرات، أو عناوين المقالات في المساحة المخصصة. يتعامل النظام بكفاءة مع النصوص الفردية والقوائم متعددة الأسطر.</li>
+          <li><strong>اختر النمط المطلوب للتحويل:</strong> انقر على الزر المناسب للنمط المستهدف: أحرف كبيرة (UPPERCASE)، أحرف صغيرة (lowercase)، تنسيق العناوين (Title Case)، camelCase، snake_case، أو رابط مهيأ (Slug).</li>
+          <li><strong>انسخ النتيجة المحولة فوراً:</strong> استعرض النص المحول في نافذة النتائج وانقر على زر النسخ لنقله مباشرة إلى الحافظة لاستخدامه في محرر الأكواد أو نظام إدارة المحتوى.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">تجزئة الفواصل النمطية وتطبيع الحركات والترميز</div>
+          <div class="formula-expr"><code>الرابط = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-')</code></div>
         </div>
-        <table class="cheatsheet-table">
-          <thead>
-            <tr>
-              <th data-i18n="thCase">Case Format</th>
-              <th data-i18n="thExample">Example</th>
-              <th data-i18n="thUsage">Standard Use Cases</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>camelCase</strong></td>
-              <td><code>userProfileSettings</code></td>
-              <td>JavaScript, TypeScript, Java, and Swift variables &amp; function identifiers</td>
-            </tr>
-            <tr>
-              <td><strong>PascalCase</strong></td>
-              <td><code>UserProfileSettings</code></td>
-              <td>Classes, React/Vue components, TypeScript interfaces, C# structures</td>
-            </tr>
-            <tr>
-              <td><strong>snake_case</strong></td>
-              <td><code>user_profile_settings</code></td>
-              <td>Python variables, SQL table &amp; column names, Ruby methods, JSON keys</td>
-            </tr>
-            <tr>
-              <td><strong>kebab-case</strong></td>
-              <td><code>user-profile-settings</code></td>
-              <td>SEO URL slugs, CSS class names, HTML attributes, REST endpoint paths</td>
-            </tr>
-            <tr>
-              <td><strong>CONSTANT_CASE</strong></td>
-              <td><code>USER_PROFILE_SETTINGS</code></td>
-              <td>Global constants, environment variables (.env), Enum values</td>
-            </tr>
-            <tr>
-              <td><strong>Title Case</strong></td>
-              <td><code>User Profile Settings</code></td>
-              <td>Headings, articles, book titles, UI navigation menus (Chicago / AP style)</td>
-            </tr>
-          </tbody>
-        </table>
+        <p>تتم عمليات التحويل عبر مرحلتين أساسيتين: التجزئة الذكية ثم إعادة التركيب. أولاً، يفكك المحرك الكلمات المتصلة بالاعتماد على التعابير النمطية المتقدمة التي تميز الانتقال بين الحروف الصغيرة والكبيرة، مما يعزل الكلمات بدقة حتى من داخل صيغ camelCase المركبة. وفي نمط العناوين، يُطبق النظام القواعد التحريرية القياسية التي تحافظ على الحروف الصغيرة لحروف الجر والعطف ما لم تكن في بداية العنوان. أما لتوليد الروابط الدائمة (Slugs)، فيتم تطبيع الحركات والحروف ذات التشكيل وتحويلها إلى أحرف أساسية واستبدال المسافات والرموز بشرطة موحدة.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>إعادة تسمية المتغيرات البرمجية من camelCase إلى snake_case</h4>
+            <p>يقوم مبرمج بنقل واجهة برمجية من جافا سكريبت إلى بايثون. بإدخال 'userProfileData' واختيار snake_case، تتحول فوراً إلى 'user_profile_data' بدقة تامة، مما يوفر ساعات من التعديل اليدوي الروتيني.</p>
+          </div>
+          <div class="content-card">
+            <h4>توليد رابط URL نظيف وصديق لمحركات البحث</h4>
+            <p>أدخل محرر عنوان مقال يحتوي على علامات ترقيم: 'دليل الأمان السحابي لعام 2026!'. يقوم محول الروابط بإزالة الرموز الخاصة واستبدال الفراغات بشرطات منتظمة لإنتاج رابط نظيف سهل الفهرسة والأرشفة.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ تكبير حروف الجر والعطف في العناوين الإنجليزية</h4>
+            <p>تكبير كافة الكلمات الإنجليزية عشوائياً يعطي مظهراً غير احترافي؛ فالصياغة التحريرية القياسية تُبقي حروف الجر البسيطة (مثل of, in, and) بأحرف صغيرة ما لم تكن في البداية.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تشويه الاختصارات البرمجية عند التحويل</h4>
+            <p>التحويل البسيط لكلمة مثل 'parseXML' قد يفكك الاختصار إلى 'parse_x_m_l'. الخوارزميات المتقدمة تحافظ على تماسك الاختصارات ككتلة واحدة متناسقة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ توليد روابط تحتوي على رموز خاصة أو شرطات متكررة</h4>
+            <p>إهمال تنقية الرموز الخاصة في الروابط يؤدي لظهور رموز مشفرة معقدة (%20) تضر بترتيب الموقع في نتائج البحث. احرص دائماً على روابط نظيفة ذات شرطات مفردة.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تُنفذ جميع خوارزميات تحويل النصوص وصياغة الروابط بالكامل داخل بيئة متصفحك المحلية. لا يتم إرسال أي نصوص، أو أكواد برمجية، أو متغيرات إلى أي خوادم خارجية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>ما هو الفرق بين صيغتي camelCase و PascalCase؟</summary>
+            <div class="faq-answer">
+              <p>في صيغة camelCase تبدأ الكلمة الأولى بحرف صغير وتبدأ الكلمات التالية بحرف كبير (myVariable)، بينما في PascalCase تبدأ كافة الكلمات بما فيها الأولى بحرف كبير (MyClass).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هي صيغة snake_case وأين تُستخدم؟</summary>
+            <div class="faq-answer">
+              <p>صيغة snake_case تكتب الكلمات بحروف صغيرة مفصولة بشرطة سفلية (user_id)، وهي المعيار المعتمد في لغة بايثون وتسمية حقول قواعد البيانات SQL.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما الذي يجعل رابط المقال (Slug) مثالياً لمحركات البحث؟</summary>
+            <div class="faq-answer">
+              <p>الرابط المثالي يتكون من أحرف صغيرة واضحة ومفصولة بشرطات أحادية (-)، مع خلوه التام من علامات الترقيم والحروف المشفرة المعقدة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكن تحويل قوائم متعددة الأسطر في عملية واحدة؟</summary>
+            <div class="faq-answer">
+              <p>نعم، تدعم الأداة معالجة النصوص البرمجية متعددة الأسطر وتطبيق النمط المختار على كل سطر على حدة مع الحفاظ على الترتيب.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات النصوص والبرمجة ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الكلمات والحروف</div>
+            <div class="tool-desc">عد الكلمات والأحرف وزمن القراءة وتحليل الكلمات المفتاحية في الوقت الفعلي.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">أداة مقارنة النصوص والفروق</div>
+            <div class="tool-desc">مقارنة نسختين من النصوص جنباً إلى جنب مع تمييز التعديلات والإضافات.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">محرر ماركداون مع معاينة حية</div>
+            <div class="tool-desc">كتابة وتنسيق مستندات Markdown مع تصدير HTML وحفظ تلقائي محلي.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- Educational Pillars -->
-      <div class="guide-grid">
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            <span data-i18n="guide1Title">1. Why URL Slugs Matter for SEO</span>
-          </div>
-          <p data-i18n="guide1Desc">Clean, descriptive, hyphen-separated URLs give search engines immediate context about your page content. Removing redundant stop words (like 'and', 'the', 'in') keeps URLs short and improves organic click-through rates.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Un convertisseur de casse est un utilitaire typographique et de programmation qui transforme le texte entre différents styles de capitalisation, conventions de nommage et formats de slugs d'URL. En développement logiciel, rédaction web et gestion de bases de données, basculer entre ces formats est indispensable pour respecter les normes de syntaxe et la cohérence de marque.</p>
+        <p>Chaque environnement impose des conventions strictes : camelCase pour les variables JavaScript, snake_case pour les identifiants Python et tables SQL, PascalCase pour les classes objet, et CONSTANT_CASE pour les variables d'environnement. Parallèlement, les éditeurs web s'appuient sur les règles de Title Case pour leurs titres et sur des générateurs de slugs nettoyant les accents pour le référencement naturel.</p>
+        <p>Convertir manuellement des listes de variables ou de longs textes est source d'erreurs d'inattention. Cet outil opère directement dans votre navigateur, assurant des transformations instantanées et la création de slugs d'URL optimisés sans échange réseau.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Saisissez ou collez votre texte:</strong> Collez votre texte source, vos variables de code ou vos titres dans la zone dédiée. L'outil prend en charge les phrases uniques comme les blocs de code multilignes.</li>
+          <li><strong>Sélectionnez le format cible:</strong> Cliquez sur le style désiré : MAJUSCULES, minuscules, Casse de Titre, camelCase, snake_case, kebab-case, PascalCase ou Slug SEO.</li>
+          <li><strong>Copiez le résultat transformé:</strong> Visualisez le texte converti et cliquez sur le bouton de copie pour le transférer immédiatement dans votre presse-papiers pour votre éditeur de code ou CMS.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Segmentation par expressions régulières et normalisation diacritique</div>
+          <div class="formula-expr"><code>Slug = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-')</code></div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
-            <span data-i18n="guide2Title">2. Diacritics &amp; Universal Normalization</span>
+        <p>La transformation s'opère en deux temps : décomposition lexicale et reconstruction. Le moteur isole les composants via des expressions régulières qui détectent les transitions entre minuscules et majuscules, séparant correctement les termes même au sein de chaînes camelCase compactes. Pour le Title Case, les règles éditoriales maintiennent en minuscules les prépositions et conjonctions courtes (de, à, et, ou, en, par). Pour les slugs d'URL, la normalisation Unicode NFD décompose les lettres accentuées, supprime les diacritiques, remplace les caractères non alphanumériques par des tirets et élimine les tirets superflus.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Refactorisation de variables (camelCase vers snake_case)</h4>
+            <p>Un développeur adapte un modèle JavaScript vers Python. En saisissant 'userProfileData' et en sélectionnant snake_case, il obtient instantanément 'user_profile_data', évitant des corrections manuelles répétitives.</p>
           </div>
-          <p data-i18n="guide2Desc">Accented Latin characters (such as é, ñ, ü, ç) cause URL encoding issues (%C3%A9). Our engine normalizes Unicode via NFD to automatically convert diacritics into plain ASCII equivalents, avoiding ugly percent-encoded URLs.</p>
+          <div class="content-card">
+            <h4>Création d'un slug SEO à partir d'un titre accentué</h4>
+            <p>Un rédacteur entre 'Guide Pratique de la Sécurité Web 2026 !'. L'outil décompose les accents et produit 'guide-pratique-de-la-securite-web-2026', assurant un lien lisible et idéal pour l'indexation par les moteurs de recherche.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span data-i18n="guide3Title">3. Zero-Cloud Privacy Guarantee</span>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Mise en majuscule aveugle de tous les mots</h4>
+            <p>Capitaliser chaque mot sans distinction produit des titres maladroits. Les règles éditoriales conservent les petits articles et prépositions en minuscules à l'intérieur du titre.</p>
           </div>
-          <p data-i18n="guide3Desc">Your proprietary source code, draft article titles, and confidential project names are processed 100% locally in your browser memory. Nothing is ever sent to external cloud servers or stored in remote databases.</p>
+          <div class="content-card">
+            <h4>⚠️ Fragmentation des acronymes techniques</h4>
+            <p>Une séparation élémentaire sur 'parseXML' peut morceler l'acronyme en 'parse_x_m_l'. Le moteur préserve les suites de majuscules comme des entités cohérentes.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Génération de slugs avec caractères accentués</h4>
+            <p>Omettre la normalisation diacritique génère des URL avec encodage lourd (ex. '%C3%A9') défavorables au SEO. Veillez toujours à obtenir des slugs nettoyés en pur ASCII.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Tous les algorithmes de conversion et de génération de slugs s'exécutent exclusivement au sein du moteur JavaScript local de votre navigateur. Aucune donnée textuelle n'est transmise ni stockée à distance.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quelle est la différence entre camelCase et PascalCase ?</summary>
+            <div class="faq-answer">
+              <p>En camelCase, le premier mot débute par une minuscule et les mots suivants par une majuscule (maVariable). En PascalCase, chaque mot sans exception commence par une majuscule (MaClasse).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qu'est-ce que le format snake_case et où s'applique-t-il ?</summary>
+            <div class="faq-answer">
+              <p>Le snake_case relie les mots en minuscules par des tirets bas (nom_utilisateur), standard incontournable en Python et pour les colonnes de bases SQL.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qu'est-ce qui caractérise un bon slug d'URL pour le SEO ?</summary>
+            <div class="faq-answer">
+              <p>Un slug optimal utilise exclusivement des caractères alphanumériques minuscules séparés par des tirets simples, sans accents ni ponctuation.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Peut-on convertir des listes multilignes en une seule opération ?</summary>
+            <div class="faq-answer">
+              <p>Oui, l'utilitaire traite les listes et blocs de code sur plusieurs lignes, appliquant le format choisi ligne par ligne tout en conservant les sauts de ligne.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils de texte et utilitaires connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Compteur de Mots et Caractères</div>
+            <div class="tool-desc">Mesurez les mots, caractères, temps de lecture et densité des mots-clés en direct.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Comparateur de Textes (Diff)</div>
+            <div class="tool-desc">Comparez deux versions d'un texte côte à côte avec surlignage des écarts.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Éditeur Markdown avec Rendu Direct</div>
+            <div class="tool-desc">Rédigez du Markdown avec prévisualisation en direct et export HTML rapide.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4 data-i18n="faq1Q">Does this tool upload or store my text on any server?</h4>
-          <p data-i18n="faq1A">Never. All conversions, case formats, and slug generations run strictly inside client-side JavaScript in your local browser sandbox.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Un convertitore di maiuscole e minuscole è un'utilità tipografica e di programmazione che trasforma il testo tra diversi stili di capitalizzazione, convenzioni di denominazione e formati slug per URL. Nello sviluppo software, nella redazione web e nella normalizzazione dei database, passare tra questi formati è fondamentale per prevenire errori di sintassi e garantire coerenza stilistica.</p>
+        <p>I contesti informatici moderni impongono paradigmi precisi: camelCase per le variabili JavaScript, snake_case per il codice Python e gli schemi SQL, PascalCase per le classi e CONSTANT_CASE per le costanti di configurazione. Parallelamente, gli editori digitali utilizzano il Title Case per i titoli degli articoli e generatori di slug che ripuliscono i caratteri speciali a vantaggio della SEO.</p>
+        <p>Modificare manualmente elenchi di variabili o lunghi testi richiede tempo ed espone a sviste. Questo strumento opera interamente all'interno del browser, offrendo conversioni istantanee e generazione di slug puliti senza alcun carico di rete.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Digita o incolla il testo di partenza:</strong> Incolla il testo originale, i nomi delle variabili o i titoli nel riquadro principale. Lo strumento supporta singole frasi e blocchi di codice multilinea.</li>
+          <li><strong>Seleziona il formato desiderato:</strong> Premi il pulsante corrispondente alla conversione voluta: TUTTO MAIUSCOLO, tutto minuscolo, Formato Titolo, camelCase, snake_case, kebab-case, PascalCase o Slug SEO.</li>
+          <li><strong>Copia il risultato ottenuto:</strong> Visualizza all'istante l'output formattato e usa il tasto di copia per trasferirlo negli appunti pronto per l'editor di codice o il CMS.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Scomposizione tramite RegEx e normalizzazione dei segni diacritici</div>
+          <div class="formula-expr"><code>Slug = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-')</code></div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq2Q">What is AP / Chicago Title Case?</h4>
-          <p data-i18n="faq2A">Title Case capitalizes all major words (nouns, verbs, adjectives, adverbs) while keeping minor articles and prepositions (like 'a', 'the', 'in', 'of') lowercase unless they are the first or last word of the title.</p>
+        <p>La conversione si sviluppa in due passaggi: segmentazione ed emissione. Il motore isola le unità lessicali usando espressioni regolari che individuano le transizioni tra minuscole e maiuscole, scomponendo accuratamente anche stringhe camelCase compatte. Per il Title Case, le regole editoriali preservano in minuscolo articoli e preposizioni semplici (di, a, da, in, con, su, per, tra, fra). Per gli slug web, la normalizzazione Unicode NFD disaccoppia i caratteri accentati, cancella i segni diacritici, sostituisce i simboli speciali con trattini singoli e rimuove i trattini alle estremità.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Refactoring di variabili (da camelCase a snake_case)</h4>
+            <p>Un programmatore trasferisce modelli dati da JavaScript a Python. Inserendo 'userProfileData' e cliccando su snake_case, ottiene subito 'user_profile_data', azzerando il lavoro manuale ripetitivo.</p>
+          </div>
+          <div class="content-card">
+            <h4>Creazione di uno slug URL da un titolo con accenti</h4>
+            <p>Un redattore inserisce 'Guida Completa alla Sicurezza Web 2026!'. Lo strumento rimuove la punteggiatura e genera 'guida-completa-alla-sicurezza-web-2026', garantendo un link chiaro e ottimale per i motori di ricerca.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq3Q">How do I generate an SEO-friendly URL slug?</h4>
-          <p data-i18n="faq3A">Paste your article title, select your separator (hyphens '-' are recommended by Google), enable 'Remove Accents' and 'Filter Stop Words', then click 'Apply URL Slug'.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Capitalizzazione indiscriminata di ogni termine</h4>
+            <p>Impostare in maiuscolo ogni parola genera titoli sgraziati. Le regole editoriali corrette mantengono in minuscolo preposizioni e congiunzioni brevi all'interno della frase.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Frammentazione degli acronimi tecnici</h4>
+            <p>Una suddivisione semplicistica su 'parseXML' spezza l'acronimo in 'parse_x_m_l'. Un'espressione regolare raffinata mantiene le maiuscole consecutive come un unico termine coerente.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Generazione di slug con caratteri accentati o codificati</h4>
+            <p>Non normalizzare gli accenti produce URL con sequenze codificate pesanti (%C3%A0) poco gradite dai motori di ricerca. Punta sempre a slug composti da caratteri ASCII puliti.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq4Q">Can I chain multiple transformations?</h4>
-          <p data-i18n="faq4A">Yes! Click the 'Swap with Input' button to transfer the converted result back into the input field and apply another transformation preset.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le procedure di conversione e formattazione avvengono esclusivamente nel contesto protetto del browser locale. Nessun testo o frammento di codice viene inoltrato a server esterni.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Qual è la differenza fondamentale tra camelCase e PascalCase?</summary>
+            <div class="faq-answer">
+              <p>Nel camelCase la prima parola inizia con la lettera minuscola e le successive con la maiuscola (miaVariabile). Nel PascalCase ogni parola inclusa la prima inizia con la maiuscola (MiaClasse).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Che cos'è il formato snake_case e in quali ambiti si utilizza?</summary>
+            <div class="faq-answer">
+              <p>Lo snake_case unisce le parole tutte minuscole mediante un trattino basso (nome_utente), ed è la convenzione standard in Python e per le colonne dei database SQL.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quali requisiti deve avere uno slug ottimizzato per la SEO?</summary>
+            <div class="faq-answer">
+              <p>Uno slug efficace deve contenere unicamente caratteri alfanumerici minuscoli separati da trattini singoli, privo di accenti, simboli e caratteri speciali.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È possibile convertire contemporaneamente elenchi su più righe?</summary>
+            <div class="faq-answer">
+              <p>Sì, l'utility elabora agevolmente elenchi multilinea e porzioni di codice, convertendo ciascuna riga in modo indipendente e mantenendo la struttura del testo.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di testo e utilità correlate</h2>
+        <div class="related-tools-grid">
+          <a href="./word-counter.html" class="related-tool-card">
+            <div class="tool-name">Contatore di Parole e Caratteri</div>
+            <div class="tool-desc">Rileva parole, caratteri, tempo di lettura e densità delle parole chiave in tempo reale.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Confronto Testi e Differenze (Diff)</div>
+            <div class="tool-desc">Compara due versioni di un testo affiancate con evidenziazione delle modifiche.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Editor Markdown con Anteprima</div>
+            <div class="tool-desc">Scrivi in Markdown con anteprima in tempo reale ed esportazione HTML immediata.</div>
+          </a>
         </div>
       </div>
     </article>
-
   </main>
 
   <!-- Footer -->

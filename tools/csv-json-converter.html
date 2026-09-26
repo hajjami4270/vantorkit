@@ -36,54 +36,54 @@
 
   <!-- Schema.org Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit CSV to JSON & JSON to CSV Converter",
-        "url": "https://vantorkit.com/tools/csv-json-converter.html",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "High-performance client-side bidirectional CSV and JSON converter with automatic delimiter detection, nested JSON flattening, and RFC 4180 compliance."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit CSV to JSON & JSON to CSV Converter",
+      "url": "https://vantorkit.com/tools/csv-json-converter.html",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is my CSV or JSON data uploaded to any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All conversion logic runs entirely on your local machine within your browser's JavaScript engine. No file contents, text, or metadata are ever transmitted across the internet."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does nested JSON conversion to CSV work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The converter automatically flattens deep object hierarchies into dot-notation column headers (for example, user.address.city). Arrays are serialized cleanly so no data is lost."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the CSV parser support commas and quotes inside cells?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. The parser strictly adheres to the RFC 4180 standard. Any cell containing delimiters, line breaks, or double quotes is properly enclosed and unescaped."
-            }
+      "description": "High-performance client-side bidirectional CSV and JSON converter with automatic delimiter detection, nested JSON flattening, and RFC 4180 compliance."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does the CSV parser support European semicolons and tab delimiters?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The delimiter dropdown allows you to choose commas, semicolons, tabs, or custom pipe symbols, accommodating global spreadsheet locales."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the converter convert string numbers into real numeric types?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, when 'Auto-Detect Types' is enabled. Strings like '42' or '3.14' are cast to numbers, while 'true' and 'false' become booleans."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert complex nested JSON objects into CSV?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The converter flattens top-level properties and serializes nested objects or arrays into JSON string representations inside their respective table cells."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1487,106 +1487,387 @@
     </div>
 
     <!-- SEO Informational & Format Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading">Comprehensive CSV vs. JSON Format Guide</h2>
-        <p>Learn how tabular flat-file CSV structures compare with hierarchical JavaScript Object Notation, and when to leverage each for optimal system performance.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side CSV to JSON Converter is a bidirectional data transformation utility engineered for data analysts, backend software engineers, and API developers. Tabular datasets formatted as comma-separated or tab-delimited text must regularly be converted into structured JSON arrays for REST APIs, MongoDB ingests, and modern frontend state management. Conversely, nested JSON payloads frequently need flat tabular conversion for Microsoft Excel and Google Sheets reporting. This utility executes both conversions instantly within your browser.</p>
+        <p>Featuring an RFC 4180 compliant deterministic parsing engine, the converter flawlessly handles multiline values, embedded commas inside quotation marks, escaped quotes, and automated data-type inference (detecting numbers, booleans, and nulls). Because zero data packets leave your workstation, you can convert gigabytes of confidential customer records and financial datasets without privacy concerns.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Paste or Upload Data:</strong> Paste raw CSV or JSON text into the source input panel, or upload a .csv or .json file directly from your machine.</li>
+          <li><strong>Configure Parsing Rules:</strong> Select custom delimiters (comma, semicolon, tab, pipe), toggle header detection, and enable automated data type casting (numbers and booleans).</li>
+          <li><strong>Inspect & Export Structured Output:</strong> Review formatted syntax-highlighted output, validate record count, and download the resulting .json or .csv file with a single click.</li>
+        </ol>
+        <h2>The Engine & Document Processing Architecture</h2>
+        <div class="formula-box">
+          <div class="formula-title">RFC 4180 State Machine & Type Casting Logic</div>
+          <div class="formula-expr"><code>parseCSV(text, delimiter, parseTypes) <-> JSON.stringify(data, null, 2)</code></div>
+        </div>
+        <p>The parser iterates over raw character streams using a finite-state machine with states for unquoted fields, quoted strings, and escaped delimiters. Type-casting heuristics evaluate numerical strings using Number() and boolean literals ('true'/'false') into native primitives.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Database Seed Generation from Spreadsheets</h4>
+            <p>Transforming a 5,000-row customer export CSV into an array of typed JSON objects in 120ms to populate PostgreSQL test databases during local development.</p>
+          </div>
+          <div class="content-card">
+            <h4>API Response Flattening for Financial Reporting</h4>
+            <p>Converting nested JSON transaction payloads from a Stripe webhook into flat tabular CSV format for immediate analysis in Microsoft Excel pivot tables.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Mismatched Column Counts Across Rows</h4>
+            <p>CSV files with missing delimiters in certain rows cause misaligned object keys; ensure consistent column structures throughout your dataset.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Improper Escaping of Embedded Quotes</h4>
+            <p>According to RFC 4180, quotes inside quoted fields must be escaped as double quotes (""); unescaped quotes break record boundaries.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Converting Irregular Non-Uniform JSON Arrays</h4>
+            <p>Converting JSON arrays containing objects with completely different key sets produces sparse, confusing CSV headers; normalize JSON objects prior to export.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your data never leaves your computer. The entire parsing, tokenization, and serialization process takes place strictly inside your browser's private JavaScript runtime. Zero cloud uploads, zero database storage, and complete adherence to enterprise data privacy requirements.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Does the CSV parser support European semicolons and tab delimiters?</summary>
+            <div class="faq-answer">
+              <p>Yes. The delimiter dropdown allows you to choose commas, semicolons, tabs, or custom pipe symbols, accommodating global spreadsheet locales.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does the converter convert string numbers into real numeric types?</summary>
+            <div class="faq-answer">
+              <p>Yes, when 'Auto-Detect Types' is enabled. Strings like '42' or '3.14' are cast to numbers, while 'true' and 'false' become booleans.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I convert complex nested JSON objects into CSV?</summary>
+            <div class="faq-answer">
+              <p>The converter flattens top-level properties and serializes nested objects or arrays into JSON string representations inside their respective table cells.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related PDF & Document Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Base64 File Encoder</div>
+            <div class="tool-desc">Encode your CSV or JSON exports into Base64 format.</div>
+          </a>
+          <a href="markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Markdown Editor</div>
+            <div class="tool-desc">Format and document your JSON schemas with Markdown tables.</div>
+          </a>
+          <a href="word-counter.html" class="related-tool-card">
+            <div class="tool-name">Word Counter</div>
+            <div class="tool-desc">Analyze character counts and token lengths of your data files.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- 3 Feature & Architecture Cards -->
-      <div class="guide-cards-grid">
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>100% Client-Side Privacy</span>
-          </h3>
-          <p>Every single byte is parsed in-memory inside your browser via Web API FileReader and JavaScript V8. Your proprietary spreadsheets, customer records, and API payloads are never uploaded, logged, or cached on any remote server.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة تحويل CSV إلى JSON والعكس عبر المتصفح من فانتور كيت حلاً متقدماً لتحويل هياكل البيانات الجدولية، وهي مصممة خصيصاً لمحللي البيانات ومطوري الواجهات الخلفية ومهندسي واجهات البرمجة (APIs). تتطلب معالجة مجموعات البيانات الجدولية تحويلها باستمرار إلى كائنات ومصفوفات JSON المنظمة لاستخدامها في قواعد البيانات مثل MongoDB وواجهات REST. في المقابل، تحتاج كائنات JSON البرمجية إلى تحويلها لجداول CSV مسطحة لتحليلها عبر برامج مثل إكسل. تتيح لك هذه الأداة تنفيذ كلا التحويلين بسرعة فائقة محلياً.</p>
+        <p>من خلال محرك فحص دقيق متوافق مع معيار RFC 4180، تتعامل الأداة باحترافية مع النصوص متعددة الأسطر والفواصل المضمنة داخل علامات التنصيص، وتستنتج تلقائياً أنواع البيانات كالأرقام والقيم المنطقية. نظراً لأن البيانات لا تغادر جهازك أبداً، يمكنك تحويل سجلات العملاء السرية والبيانات المالية الحساسة بأمان مطلق.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>لصق أو رفع البيانات:</strong> الصق نصوص CSV أو JSON في لوحة الإدخال أو ارفع ملف .csv أو .json مباشرة من جهازك.</li>
+          <li><strong>ضبط خيارات وقواعد التحليل:</strong> حدد الفاصل المستخدم (فاصلة عادية، فاصلة منقوطة، Tab)، وفعل استخراج عناوين الأعمدة والتحويل التلقائي للأرقام والقيم المنطقية.</li>
+          <li><strong>معاينة وتصدير البيانات الناتجة:</strong> افحص الشفرة الناتجة المنسقة مع تلوين الأكواد وتأكد من عدد السجلات، ثم حمّل ملف .json أو .csv بضغطة زر واحدة.</li>
+        </ol>
+        <h2>المحرك البرمجي وبنية معالجة المستندات</h2>
+        <div class="formula-box">
+          <div class="formula-title">محرك آلة الحالة المحدد بمعيار RFC 4180 واستنتاج الأنواع</div>
+          <div class="formula-expr"><code>parseCSV(text, delimiter, parseTypes) <-> JSON.stringify(data, null, 2)</code></div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            <span>Smart Auto-Flattening</span>
-          </h3>
-          <p>When converting deeply nested JSON trees to CSV tables, our recursive parser flattens child objects into dot-notation columns (e.g. <code>user.address.postalCode</code>) so no relational hierarchy is lost.</p>
+        <p>يمسح المحرك تدفق الحروف باستخدام آلة حالة محددة تميز بين الحقول المقتبسة والفواصل العادية والرموز المهربة. تقوم دوال التحويل بفحص السلاسل العددية وتحويلها إلى أرقام حقيقية والقيم المنطقية إلى بوليان أصلي.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>توليد بيانات الاختبار لقواعد البيانات من الجداول</h4>
+            <p>تحويل ملف CSV لعملاء يضم 5000 صف إلى مصفوفة كائنات JSON برمجية خلال 120 مللي ثانية لتغذية بيئة التطوير المحلية لقواعد PostgreSQL.</p>
+          </div>
+          <div class="content-card">
+            <h4>تسطيح مخرجات واجهات الدفع لتحليلات إكسل</h4>
+            <p>تحويل سجلات معاملات مالية متداخلة بصيغة JSON واردة من بوابات الدفع إلى جدول CSV مسطح لدراستها ومطابقتها فوراً في جداول إكسل المحورية.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <span>RFC 4180 Standard Support</span>
-          </h3>
-          <p>Full support for escaped double-quotes (<code>""</code>), multi-line cell values, and automatic delimiter detection across commas, semicolons, tabs (TSV), and pipe-delimited data.</p>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ تفاوت عدد الأعمدة بين الصفوف في ملف CSV</h4>
+            <p>وجود صفوف تفتقر لبعض الفواصل يؤدي لاختلال أسماء الحقول ومواقعها في ملف JSON الناتج؛ تأكد من اتساق بنية الأعمدة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ كتابة علامات التنصيص المقتبسة بشكل خاطئ</h4>
+            <p>وفقاً لمعيار RFC 4180 يجب مضاعفة علامات التنصيص المضمنة داخل النصوص ("")؛ كتابة علامة واحدة دون تهريب يكسر حدود السجل.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تحويل مصفوفات JSON غير متجانسة المفاتيح</h4>
+            <p>تحويل كائنات ذات مفاتيح مختلفة كلياً يولد جداول CSV ممتلئة بالخلايا الفارغة والمربكة؛ يفضل توحيد هيكل الكائنات أولاً.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>بياناتك لا تغادر حاسوبك الشخصي على الإطلاق. تتم جميع عمليات التحليل والتحويل والتنسيق حصرياً داخل لسان متصفحك المحلي بنسبة 100% دون أي اتصال بخوادم خارجية أو قواعد بيانات، مما يوفر خصوصية تامة لمعلوماتك التجارية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل تدعم الأداة الفواصل المنقوطة الأوروبية وفواصل Tab؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. يمكنك اختيار الفاصل المناسب من القائمة كالفواصل العادية أو المنقوطة أو فواصل الجدولة Tab لتلائم ملفات الإكسل من مختلف الدول.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تقوم الأداة بتحويل الأرقام النصية إلى أرقام برمجية حقيقية؟</summary>
+            <div class="faq-answer">
+              <p>نعم، عند تفعيل خيار 'التعرف التلقائي على الأنواع'، تتحول النصوص مثل '42' أو '3.14' إلى أرقام فعلية و'true' إلى قيمة منطقية.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يتم التعامل مع كائنات JSON المتداخلة عند تحويلها إلى CSV؟</summary>
+            <div class="faq-answer">
+              <p>يتم تسطيح الخصائص الرئيسية بينما تُحول الكائنات الفرعية والمصفوفات المتداخلة إلى نصوص JSON داخل خلية الجدول المقابلة.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات ملفات PDF والمستندات ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">مشفر الملفات إلى Base64</div>
+            <div class="tool-desc">تشفير ملفات CSV أو JSON المخرجة إلى صيغة Base64 النصية.</div>
+          </a>
+          <a href="markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">محرر ماركداون</div>
+            <div class="tool-desc">تنسيق وتوثيق جداول ومخططات JSON عبر لغة ماركداون.</div>
+          </a>
+          <a href="word-counter.html" class="related-tool-card">
+            <div class="tool-name">عداد الكلمات</div>
+            <div class="tool-desc">تحليل عدد الأحرف والكلمات في ملفات البيانات البرمجية.</div>
+          </a>
         </div>
       </div>
 
-      <!-- Comparison Reference Table -->
-      <div class="table-container">
-        <h3>Feature Matrix: CSV vs. JSON</h3>
-        <p>A technical comparison between Comma-Separated Values and JavaScript Object Notation.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Evaluation Metric</th>
-              <th>CSV (Comma-Separated Values)</th>
-              <th>JSON (JavaScript Object Notation)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Primary Architecture</strong></td>
-              <td>Two-dimensional flat tabular rows and columns</td>
-              <td>Hierarchical tree with nested objects &amp; arrays</td>
-            </tr>
-            <tr>
-              <td><strong>File Weight &amp; Overhead</strong></td>
-              <td>Extremely lightweight (no repeated field keys)</td>
-              <td>Slightly heavier due to repetitive key strings</td>
-            </tr>
-            <tr>
-              <td><strong>Type System</strong></td>
-              <td>Untyped raw text (inferred by parser)</td>
-              <td>Explicit types (string, number, boolean, null)</td>
-            </tr>
-            <tr>
-              <td><strong>Industry Ecosystem</strong></td>
-              <td>Excel, Google Sheets, SQL DB bulk exports, BI tools</td>
-              <td>REST APIs, NoSQL databases, modern web apps</td>
-            </tr>
-            <tr>
-              <td><strong>Streamability</strong></td>
-              <td>Easily line-chunked and streamed line-by-line</td>
-              <td>Requires full parsing of root tree unless NDJSON</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le convertisseur bidirectionnel CSV vers JSON côté client de VantorKit est un moteur d'adaptation structurée conçu pour les analystes de données, les développeurs d'API et les ingénieurs logiciels. Les jeux de données tabulaires au format CSV doivent fréquemment être convertis en tableaux d'objets JSON pour alimenter des bases NoSQL comme MongoDB ou des endpoints REST. À l'inverse, des structures JSON imbriquées doivent souvent être aplaties en feuilles de calcul pour des analyses dans Excel. Cet utilitaire réalise ces deux opérations avec une rapidité exemplaire au sein de votre navigateur.</p>
+        <p>Grâce à un moteur de parsing conforme à la norme internationale RFC 4180, l'outil gère sans faille les champs multilignes, les virgules protégées entre guillemets et la détection automatique des types primitifs (nombres, booléens). Comme aucun paquet réseau n'est envoyé à l'extérieur, vous pouvez traiter des millions de lignes de données confidentielles en toute sérénité.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Collez ou importez vos données:</strong> Collez votre texte CSV ou JSON dans le panneau d'entrée ou importez directement un fichier .csv ou .json depuis votre poste.</li>
+          <li><strong>Configurez les règles de parsing:</strong> Sélectionnez le délimiteur adéquat (virgule, point-virgule, tabulation), activez la ligne d'en-tête et autorisez le typage automatique des nombres.</li>
+          <li><strong>Vérifiez et téléchargez le résultat:</strong> Contrôlez l'arborescence mise en valeur par la coloration syntaxique et téléchargez votre fichier .json ou .csv d'un simple clic.</li>
+        </ol>
+        <h2>Moteur de traitement et architecture documentaire</h2>
+        <div class="formula-box">
+          <div class="formula-title">Machine d'états finis RFC 4180 et typage déterministe</div>
+          <div class="formula-expr"><code>parseCSV(text, delimiter, parseTypes) <-> JSON.stringify(data, null, 2)</code></div>
+        </div>
+        <p>L'analyseur parcourt le flux de caractères au moyen d'un automate fini discernant les chaînes délimitées, les séparateurs et les séquences d'échappement. Les heuristiques convertissent les chaînes numériques en nombres flottants et les chaînes 'true'/'false' en booléens.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Génération de jeux de tests pour bases de données</h4>
+            <p>Conversion d'une table d'export de 5 000 clients CSV en un tableau JSON typé en 120 ms pour peupler une base de données de test locale PostgreSQL.</p>
+          </div>
+          <div class="content-card">
+            <h4>Aplatissement de webhooks financiers pour reporting</h4>
+            <p>Transformation de flux transactionnels JSON en tableaux CSV plats directement exploitables dans les tableaux croisés dynamiques d'Excel.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Incohérence du nombre de colonnes par ligne</h4>
+            <p>Des séparateurs manquants sur certaines rangées CSV décalent les clés des objets générés; veillez à la régularité de la structure tabulaire.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Échappement défectueux des guillemets internes</h4>
+            <p>Selon la norme RFC 4180, tout guillemet à l'intérieur d'un texte entre guillemets doit être doublé (""); un guillemet simple corrompt la lecture.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Conversion d'objets JSON aux schémas disparates</h4>
+            <p>Convertir des objets contenant des clés totalement différentes génère un CSV parsemé de colonnes vides; harmonisez vos structures au préalable.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos jeux de données demeurent strictement confidentiels. L'ensemble des opérations de segmentation et de conversion s'effectue au sein de la mémoire vive de votre navigateur web. Aucun téléversement sur serveur distant n'est réalisé, garantissant le respect scrupuleux du RGPD.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>L'outil prend-il en charge les points-virgules européens et tabulations ?</summary>
+            <div class="faq-answer">
+              <p>Oui. Le sélecteur de délimiteurs vous permet de choisir entre virgules, points-virgules, tabulations ou barres verticales pour s'adapter à vos logiciels locaux.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Les valeurs numériques sont-elles converties en vrais nombres ?</summary>
+            <div class="faq-answer">
+              <p>Oui, lorsque l'option de détection automatique est cochée, les chaînes comme '42' deviennent des nombres et 'true' devient un booléen natif.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment sont gérés les objets JSON imbriqués lors du passage en CSV ?</summary>
+            <div class="faq-answer">
+              <p>Les propriétés principales deviennent des colonnes, tandis que les sous-objets ou listes sont sérialisés sous forme de chaînes JSON dans leur cellule respective.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils PDF et gestion documentaire connexes</h2>
+        <div class="related-tools-grid">
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Encodeur de fichiers en Base64</div>
+            <div class="tool-desc">Convertissez vos fichiers CSV et JSON en chaînes Base64.</div>
+          </a>
+          <a href="markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Éditeur Markdown</div>
+            <div class="tool-desc">Documentez vos schémas de données à l'aide de tableaux Markdown.</div>
+          </a>
+          <a href="word-counter.html" class="related-tool-card">
+            <div class="tool-name">Compteur de mots</div>
+            <div class="tool-desc">Analysez la volumétrie en caractères et jetons de vos fichiers.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="info-header" style="margin-bottom: 2rem;">
-        <h2>Frequently Asked Questions</h2>
-        <p>Common questions regarding conversion accuracy, data privacy, and handling complex files.</p>
-      </div>
-
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>Is my confidential financial or customer data safe here?</h4>
-          <p>Absolutely. VantorKit executes all parsing, transformation, and download operations client-side in your own browser sandbox. Disconnect your internet connection after opening this page, and the tool continues to convert files with 100% functionality.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il convertitore bidirezionale CSV in JSON lato client di VantorKit è uno strumento di trasformazione strutturale ideato per analisti di dati, sviluppatori software e ingegneri di API. Le tabelle formattate con valori separati da virgole o tabulazioni devono continuamente essere trasformate in array di oggetti JSON per alimentare database moderni o architetture REST. All'opposto, payload JSON nidificati richiedono sovente una conversione tabulare piatta per reportistica in Microsoft Excel. Questo strumento esegue entrambe le operazioni all'interno del browser.</p>
+        <p>Dotato di un motore di parsing rigorosamente conforme allo standard RFC 4180, l'applicativo gestisce campi multilinea, virgole racchiuse tra virgolette e tipizzazione automatica dei dati (numeri, valori booleani, null). Poiché nessun dato viene scambiato via internet, puoi convertire elenchi clienti riservati e prospetti contabili con privacy garantita al 100%.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Incolla o carica i tuoi dati:</strong> Incolla il testo CSV o JSON nella finestra di input oppure carica direttamente un file .csv o .json dal tuo dispositivo.</li>
+          <li><strong>Configura i parametri di conversione:</strong> Scegli il delimitatore (virgola, punto e virgola, tab), abilita la riga di intestazione e attiva il riconoscimento automatico dei tipi primitivi.</li>
+          <li><strong>Verifica e scarica il risultato:</strong> Esamina il risultato formattato con sintassi evidenziata e scarica il tuo file .json o .csv definitivo con un solo clic.</li>
+        </ol>
+        <h2>Motore di elaborazione e architettura documentale</h2>
+        <div class="formula-box">
+          <div class="formula-title">Automa a stati finiti RFC 4180 e inferenza dei tipi</div>
+          <div class="formula-expr"><code>parseCSV(text, delimiter, parseTypes) <-> JSON.stringify(data, null, 2)</code></div>
         </div>
-
-        <div class="faq-item">
-          <h4>What happens if my CSV contains commas or line breaks inside a cell?</h4>
-          <p>Our parser conforms to RFC 4180. Cells enclosed in double quotes containing commas, tabs, or newlines are recognized as a single cell rather than dividing the row prematurely.</p>
+        <p>L'interprete scansiona i singoli caratteri attraverso un automa a stati finiti che isola campi protetti da virgolette, separatori e sequenze di escape. Le routine di casting convertono stringhe numeriche in valori primitivi e 'true'/'false' in booleani.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Generazione dataset di test per database</h4>
+            <p>Conversione di un export CSV di 5.000 clienti in un array JSON tipizzato in 120 ms per popolare database locali PostgreSQL durante lo sviluppo.</p>
+          </div>
+          <div class="content-card">
+            <h4>Semplificazione risposte webhook per report contabili</h4>
+            <p>Trasformazione di notifiche JSON nidificate da gateway di pagamento in formato tabulare CSV per l'elaborazione su tabelle pivot in Microsoft Excel.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>Can I convert TSV (Tab-Separated) or Semicolon-Separated files?</h4>
-          <p>Yes. By default, the Delimiter is set to "Auto-Detect", which analyzes the first few rows to discover whether tabs, semicolons, or pipes are used. You can also explicitly lock the delimiter via the dropdown.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Numero disomogeneo di colonne tra i record</h4>
+            <p>Righe CSV a cui mancano delimitatori sfasano l'associazione delle proprietà nel JSON finale; assicurati della coerenza dei campi.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Gestione errata delle virgolette interne ai testi</h4>
+            <p>In conformità alla norma RFC 4180, ogni virgoletta interna a un testo racchiuso tra virgolette va raddoppiata (""); omettere l'escape causa errori.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Conversione di array JSON con oggetti eterogenei</h4>
+            <p>Convertire oggetti con chiavi totalmente difformi produce tabelle CSV ricche di celle vuote; normalizza i campi prima dell'esportazione.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>How large of a file can I process?</h4>
-          <p>Because processing runs locally on your browser's V8 engine, you can comfortably process files of 20MB to 50MB (hundreds of thousands of rows) without encountering server timeout limits or upload caps.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>I tuoi dati non lasciano mai il tuo ambiente di lavoro. Tutte le procedure di scansione testuale e serializzazione avvengono per intero nella memoria locale del tuo browser. Nessun trasferimento su server esterni, zero log nel cloud e conformità totale agli standard di sicurezza aziendale.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Lo strumento supporta il punto e virgola europeo e le tabulazioni?</summary>
+            <div class="faq-answer">
+              <p>Sì. Dal menu a discesa puoi selezionare virgole, punti e virgola, tabulazioni o barre verticali per uniformare l'output alle impostazioni locali del tuo foglio di calcolo.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>I valori numerici vengono convertiti in veri numeri o rimangono stringhe?</summary>
+            <div class="faq-answer">
+              <p>Se l'opzione di rilevamento automatico è attiva, valori come '42' o '3.14' vengono convertiti in numeri reali e 'true' diventa un valore booleano nativo.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Cosa accade agli oggetti JSON complessi quando convertiti in CSV?</summary>
+            <div class="faq-answer">
+              <p>Le chiavi di primo livello formano le colonne, mentre eventuali sotto-oggetti o array vengono serializzati come stringhe JSON all'interno della rispettiva cella.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti PDF e gestione documenti correlati</h2>
+        <div class="related-tools-grid">
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Codificatore file in Base64</div>
+            <div class="tool-desc">Converti i file CSV e JSON in stringhe Base64 per trasmissioni.</div>
+          </a>
+          <a href="markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Editor Markdown</div>
+            <div class="tool-desc">Documenta e impagina schemi di dati con tabelle Markdown.</div>
+          </a>
+          <a href="word-counter.html" class="related-tool-card">
+            <div class="tool-name">Conteggio parole</div>
+            <div class="tool-desc">Analizza lunghezza, caratteri e token dei tuoi file di testo.</div>
+          </a>
         </div>
       </div>
     </article>

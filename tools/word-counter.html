@@ -36,58 +36,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Word & Character Counter",
-        "url": "https://vantorkit.com/tools/word-counter.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "description": "Free client-side word counter and character counter with real-time reading time, speaking duration, keyword density analysis, case transformation, and social media character limit tracking."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Word & Character Counter",
+      "url": "https://vantorkit.com/tools/word-counter.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Is my text uploaded or stored on any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All text parsing, counting, and transformations execute 100% locally inside your web browser. Your text, private notes, and sensitive drafts never leave your device."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How are reading and speaking times calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Reading time is calculated using the international standard silent reading benchmark of 200 words per minute (WPM). Speaking time is based on the average conversational presentation pace of 130 words per minute."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is keyword density and why does it matter for SEO?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Keyword density represents the percentage of times a specific term appears relative to total word count. Maintaining a density between 1% and 2.5% helps search engines understand page relevance without triggering search stuffing penalties."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does the counter support Arabic and other non-Latin scripts?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. The counting engine uses Unicode-aware whitespace and punctuation regexes that accurately segment words, sentences, and paragraphs in Arabic, French, Italian, and other languages."
-            }
+      "description": "Free client-side word counter and character counter with real-time reading time, speaking duration, keyword density analysis, case transformation, and social media character limit tracking."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the word counter calculate reading time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Reading time is calculated by dividing total word count by an average reading speed of 200 words per minute, the standard benchmark for adult silent reading comprehension."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Are hyphenated words counted as one word or multiple words?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Standard word counting treats hyphenated terms as single words unless separated by spaces, matching conventions in major word processing software."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is keyword density and why does it matter?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Keyword density measures the percentage of times a specific word appears relative to total words. Maintaining a healthy density (typically 1-2%) prevents keyword stuffing penalties in search engines."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this counter support Arabic and other non-Latin scripts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the counter utilizes Unicode-aware regex patterns that accurately tokenize characters and words across Arabic, Cyrillic, Chinese, and all standard international scripts."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1341,59 +1345,417 @@
     </div>
 
     <!-- SEO & Educational Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading" data-i18n="guideHeading">How Word Count &amp; Reading Pace Work</h2>
-        <p data-i18n="guideSub">Professional benchmarks for writers, marketers, speechmakers, and content creators.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Word Counter is a comprehensive linguistic analytics utility built for copywriters, novelists, academic scholars, and SEO professionals. Writing effectively for digital platforms requires monitoring word densities, character counts, and structural cadence. This utility delivers instant typographic metrics entirely within your local browser runtime.</p>
+        <p>Unlike traditional text inspection tools that upload your drafts to external servers, this tool analyzes text locally. You can inspect character totals, paragraph counts, syllable distributions, reading times, and keyword frequencies with complete privacy.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Input or Paste Your Text:</strong> Type directly into the main text area or paste content from external documents, emails, or CMS platforms. The tool processes large manuscripts without interface lag.</li>
+          <li><strong>Inspect Real-Time Quantitative Cards:</strong> Examine live counters showing total words, characters with spaces, characters without spaces, sentences, and paragraphs, all updating synchronously with every keystroke.</li>
+          <li><strong>Analyze Reading Time and Keyword Density:</strong> Review estimated silent reading and verbal speaking durations, alongside the sorted keyword frequency table to detect repetitive phrasing and optimize keyword balance.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Unicode Tokenization and Lexical Metrics Engine</div>
+          <div class="formula-expr"><code>Words = Count(\p{L}+)  |  ReadTime = Words / 200 wpm  |  SpeakTime = Words / 130 wpm</code></div>
+        </div>
+        <p>Text segmentation uses Unicode-aware regular expression tokenization. Rather than naive whitespace splitting, the engine identifies word boundaries using the Unicode character class pattern \p{L}+ (matching letters across Latin, Arabic, Cyrillic, and Asian alphabets), ensuring accurate counts regardless of script or formatting. Characters without spaces are computed by filtering out all whitespace code points. Sentence boundaries are detected through terminal punctuation delimiters (.!?) followed by whitespace or string termination. Reading duration is estimated using the cognitive benchmark of 200 words per minute for silent adult reading, while verbal speaking duration assumes an average pace of 130 words per minute for presentations.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Editorial Blog Article and SEO Audit</h4>
+            <p>An author drafts an 1,850-word technical guide. The word counter reveals an estimated reading time of 9.2 minutes and a speaking duration of 14.2 minutes. The keyword frequency table highlights that 'cloud' appears 42 times (2.3% density) and 'security' 28 times (1.5% density), confirming balanced keyword distribution without keyword stuffing.</p>
+          </div>
+          <div class="content-card">
+            <h4>Social Media and Ad Snippet Optimization</h4>
+            <p>A marketer crafts a Google search ad headline and description. The tool confirms the title contains exactly 28 characters (under the 30-character limit) and the meta description has 154 characters with spaces (safely under the 160-character search engine snippet threshold).</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Naive Whitespace Splitting Errors</h4>
+            <p>Relying on basic whitespace splitting counts consecutive spaces, empty lines, and tabs as phantom words. Professional tokenization must filter out empty segments and recognize punctuation boundaries.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring Compound Words and Hyphenation</h4>
+            <p>Hyphenated expressions (such as 'state-of-the-art') can be counted as one or four words depending on style guides. Ensure you know whether your target publication treats hyphenated terms as single lexical units.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Overlooking Punctuation in Character Limits</h4>
+            <p>Character limits on platforms like X or SMS gateways include spaces, emoji, and punctuation. Monitoring characters without spaces alone risks unexpected truncation upon publication.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All text analysis and keyword indexing execute entirely in client-side browser memory. No text snippets, document drafts, or confidential copy are ever transmitted to external servers or logged in remote analytical databases.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How does the word counter calculate reading time?</summary>
+            <div class="faq-answer">
+              <p>Reading time is calculated by dividing total word count by an average reading speed of 200 words per minute, the standard benchmark for adult silent reading comprehension.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Are hyphenated words counted as one word or multiple words?</summary>
+            <div class="faq-answer">
+              <p>Standard word counting treats hyphenated terms as single words unless separated by spaces, matching conventions in major word processing software.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is keyword density and why does it matter?</summary>
+            <div class="faq-answer">
+              <p>Keyword density measures the percentage of times a specific word appears relative to total words. Maintaining a healthy density (typically 1-2%) prevents keyword stuffing penalties in search engines.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does this counter support Arabic and other non-Latin scripts?</summary>
+            <div class="faq-answer">
+              <p>Yes, the counter utilizes Unicode-aware regex patterns that accurately tokenize characters and words across Arabic, Cyrillic, Chinese, and all standard international scripts.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Text & Developer Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Case Converter & Slug Generator</div>
+            <div class="tool-desc">Transform text between UPPERCASE, lowercase, Title Case, camelCase, and SEO slugs.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Text Difference Checker</div>
+            <div class="tool-desc">Compare two text versions side-by-side with visual highlights of changes.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Markdown Editor & Live Preview</div>
+            <div class="tool-desc">Author Markdown with split-screen rendering, HTML export, and auto-save.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="guide-grid">
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span data-i18n="guide1Title">1. Reading &amp; Speaking Speeds</span>
-          </div>
-          <p data-i18n="guide1Desc">Average adult silent reading pace sits at 200–250 words per minute. For spoken speeches, presentations, or video voiceovers, professional speakers maintain a measured cadence of 130–150 words per minute.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>حاسبة الكلمات والحروف هي أداة تحليل نصوص تقيس المعايير الكمية للمحتوى المكتوب في الوقت الفعلي. وبالإضافة إلى عدد الكلمات، يحلل النظام عدد الأحرف (مع وبدون مسافات)، وعدد الجمل، والفقرات، والزمن المقدر للقراءة الصامتة والإلقاء الصوتي، وكثافة تكرار الكلمات المفتاحية.</p>
+        <p>في صناعة المحتوى، والتحرير الصحفي، والترجمة، والتسويق الرقمي، تمثل الحدود الكمية للنصوص معياراً حاسماً؛ حيث تفرض منصات التواصل ومحركات البحث قيوداً صارمة على أطوال العناوين والوصف التعريفي. كما تعتمد الأبحاث الأكاديمية والترجمات على دقة عدد الكلمات في التقييم وحساب التكلفة.</p>
+        <p>التقدير اليدوي أو الاعتماد على معالجات النصوص البسيطة غالباً ما يخطئ في حساب الكلمات بسبب التشكيل، وعلامات الترقيم، أو تداخل المسافات. توفر هذه الأداة محركاً تحليلياً متطوراً يعمل كلياً داخل متصفحك، لتقديم إحصاءات فورية دقيقة وتحليل شامل للنص دون نقل أي بيانات.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>أدخل النص أو الصقه:</strong> اكتب مباشرة في مساحة النص الرئيسية أو الصق المحتوى من مستنداتك الخارجية أو بريدك الإلكتروني، حيث يتعامل النظام مع النصوص الطويلة بسلاسة.</li>
+          <li><strong>تابع المؤشرات والإحصاءات الفورية:</strong> شاهد العدادات الحية التي تُظهر إجمالي الكلمات، والأحرف مع المسافات وبدونها، وعدد الجمل، والفقرات، وتتحدث تلقائياً مع كل حرف تكتبه.</li>
+          <li><strong>حلل زمن القراءة وتكرار الكلمات:</strong> اطلع على التقدير الزمني للقراءة الصامتة والإلقاء الشفهي، واستعرض جدول توزيع الكلمات الأكثر تكراراً لتجنب الحشو وتحسين جودة النص.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">محرك التجزئة اللغوية المعتمد على اليونيكود</div>
+          <div class="formula-expr"><code>الكلمات = Count(\p{L}+)  |  زمن القراءة = الكلمات / 200 دقيقة  |  زمن الإلقاء = الكلمات / 130 دقيقة</code></div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-            <span data-i18n="guide2Title">2. Keyword Density Best Practice</span>
+        <p>تعتمد الأداة على خوارزميات التجزئة المتقدمة باستخدام التعابير النمطية المتوافقة مع معيار اليونيكود العالمي. بدلاً من تقسيم النص عبر المسافات البسيطة، يتعرف المحرك على حدود الكلمات عبر فئة الحروف \p{L}+ التي تشمل الأبجدية العربية، واللاتينية، والآسيوية بدقة متناهية. وتُحسب الأحرف بدون مسافات بفلترة كافة المسافات وفواصل الأسطر. أما الجمل فتُحدد عبر علامات الترقيم الختامية (.!؟). ويُقدر زمن القراءة الصامتة بمعدل 200 كلمة في الدقيقة للبالغين، وزمن الإلقاء الصوتي بمعدل 130 كلمة في الدقيقة.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تحرير مقال ونشره لمحركات البحث</h4>
+            <p>كتب كاتب مقالاً تقنياً من 1,850 كلمة. أظهرت الحاسبة أن زمن القراءة يستغرق 9.2 دقيقة وزمن الإلقاء 14.2 دقيقة. كما أظهر جدول الكلمات المفتاحية تكرار كلمة 'تقنية' 42 مرة (بنسبة 2.3%) وكلمة 'أمان' 28 مرة (بنسبة 1.5%)، مما يؤكد توازناً مثالياً في الكثافة دون حشو.</p>
           </div>
-          <p data-i18n="guide2Desc">Search engine algorithms evaluate keyword relevance without favoring artificial stuffing. Aim for primary keyword densities between 1.0% and 2.5% to ensure strong topical authority while preserving natural readability.</p>
+          <div class="content-card">
+            <h4>ضبط أطوال نصوص الإعلانات ومنصات التواصل</h4>
+            <p>قام مسوق بصياغة عنوان ووصف لإعلان رقمي. أكدت الأداة أن العنوان يتضمن 28 حرفاً (أقل من الحد الأقصى 30)، وأن الوصف التعريفي يحتوي على 154 حرفاً شاملاً المسافات، وهو ما يتطابق مع المعايير المثالية لنتائج البحث.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span data-i18n="guide3Title">3. Zero Data Upload Guarantee</span>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الاعتماد على الفصل البسيط بالمسافات</h4>
+            <p>الفصل البسيط بالمسافات يحتسب المسافات المتكررة والأسطر الفارغة ككلمات وهمية. التجزئة الاحترافية تستبعد الفراغات وتتعرف على الحروف الفعلية.</p>
           </div>
-          <p data-i18n="guide3Desc">Unlike remote cloud counters, every character typed in VantorKit stays in local memory. Confidential drafts, legal contracts, and unpublished manuscripts are never stored or transmitted to external servers.</p>
+          <div class="content-card">
+            <h4>⚠️ إهمال الكلمات المتصلة وحروف العطف</h4>
+            <p>في اللغة العربية، تتصل حروف العطف والجر بالكلمات (مثل 'وبالقلم')، لذا يجب إدراك طريقة التجزئة المتبعة عند مقارنة النتائج مع متطلبات النشر.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تجاهل المسافات وعلامات الترقيم في الحدود المقيدة</h4>
+            <p>الحدود القصوى للأحرف في منصات مثل تويتر تشمل المسافات وعلامات الترقيم والرموز التعبيرية؛ والاعتماد فقط على عدد الحروف المجردة قد يؤدي لاقتصاص النص.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تتم جميع عمليات تحليل النصوص وعد الكلمات كلياً داخل ذاكرة متصفحك المحلية. لا يتم إرسال أي نصوص، أو مسودات، أو مقالات سرية إلى خوادم خارجية أو تسجيلها في أي قواعد بيانات.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف تحسب الأداة زمن القراءة التقديري للنص؟</summary>
+            <div class="faq-answer">
+              <p>يُحسب بقسمة إجمالي عدد الكلمات على متوسط سرعة القراءة الصامتة للإنسان البالغ، وهو 200 كلمة في الدقيقة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تدعم الحاسبة اللغة العربية بدقة تامة؟</summary>
+            <div class="faq-answer">
+              <p>نعم، تستخدم الحاسبة معيار اليونيكود العالمي للتعرف على الحروف والكلمات العربية بدقة متناهية مع معالجة علامات الترقيم والفواصل.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هي كثافة الكلمات المفتاحية ولماذا تُعد مهمة؟</summary>
+            <div class="faq-answer">
+              <p>كثافة الكلمات هي النسبة المئوية لتكرار كلمة معينة مقارنة بإجمالي الكلمات. الحفاظ على نسبة متوازنة (1-2%) يمنع تصنيف المحتوى كحشو غير مرغوب فيه.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما الفرق بين عدد الحروف مع المسافات وبدونها؟</summary>
+            <div class="faq-answer">
+              <p>عدد الحروف الإجمالي يشمل كل حرف ومسافة وفاصلة، بينما عدد الحروف بدون مسافات يستثني الفراغات وفواصل الأسطر لقياس الحجم الصافي للنص.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات النصوص والبرمجة ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">محول حالة الأحرف والروابط</div>
+            <div class="tool-desc">تحويل النصوص بين الحروف الكبيرة والصغيرة وصيغ البرمجة وروابط URL.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">أداة مقارنة النصوص والفروق</div>
+            <div class="tool-desc">مقارنة نسختين من النصوص جنباً إلى جنب مع تمييز التعديلات والإضافات.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">محرر ماركداون مع معاينة حية</div>
+            <div class="tool-desc">كتابة وتنسيق مستندات Markdown مع تصدير HTML وحفظ تلقائي محلي.</div>
+          </a>
         </div>
       </div>
 
-      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4 data-i18n="faq1Q">Does this tool save or upload my text?</h4>
-          <p data-i18n="faq1A">No. All character analysis and keyword counts run purely in client-side JavaScript. Nothing is sent over the internet or logged to any database.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Un compteur de mots est un outil d'analyse textuelle qui mesure les grandeurs quantitatives d'un texte en temps réel. Au-delà du décompte des mots, il évalue le nombre total de caractères (avec et sans espaces), le total des phrases, des paragraphes, le temps de lecture estimé et la densité des mots-clés.</p>
+        <p>Dans la rédaction web, le journalisme, l'édition et le marketing numérique, le respect des contraintes de calibrage conditionne la réussite éditoriale. Les réseaux sociaux et les moteurs de recherche imposent des limites strictes sur les titres et méta-descriptions. De même, les travaux universitaires reposent sur des volumes précis pour la notation.</p>
+        <p>L'estimation manuelle ou les traitements de texte basiques commettent souvent des erreurs face aux apostrophes ou tirets. Cet outil intègre un moteur d'analyse haute performance exécuté au sein de votre navigateur, fournissant des statistiques complètes et une analyse lexicale sans échange réseau.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Saisissez ou collez votre texte:</strong> Rédigez directement dans la zone principale ou collez votre contenu depuis un document externe. L'outil traite les textes volumineux sans latence d'affichage.</li>
+          <li><strong>Consultez les métriques en temps réel:</strong> Observez les compteurs indiquant les mots, caractères avec espaces, caractères sans espaces, phrases et paragraphes, actualisés à chaque frappe de clavier.</li>
+          <li><strong>Analysez le temps de lecture et les mots-clés:</strong> Consultez les durées estimées de lecture silencieuse et d'élocution orale, ainsi que le tableau de fréquence des termes pour optimiser l'équilibre lexical.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Moteur de segmentation lexicale conforme Unicode</div>
+          <div class="formula-expr"><code>Mots = Count(\p{L}+)  |  Lecture = Mots / 200 mpm  |  Élocution = Mots / 130 mpm</code></div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq2Q">What counts as a word?</h4>
-          <p data-i18n="faq2A">Any continuous string of alphanumeric characters separated by whitespace or punctuation is counted as a word. Hyphenated compound words like 'client-side' count as a single token.</p>
+        <p>La segmentation repose sur des expressions régulières compatibles Unicode. Au lieu d'une simple séparation par espaces, le moteur isole les unités lexicales via la classe \p{L}+ (reconnaissant les alphabets latin, arabe et cyrillique), assurant un comptage rigoureux quelle que soit la langue. Les caractères sans espaces sont mesurés par exclusion des séparateurs. Les phrases sont identifiées par la ponctuation finale (.!?) suivie d'un espace. La durée de lecture silencieuse se base sur la moyenne cognitive de 200 mots par minute, et l'élocution orale sur 130 mots par minute.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Calibrage d'article de blog et SEO</h4>
+            <p>Un rédacteur prépare un guide de 1 850 mots. Le compteur indique un temps de lecture de 9,2 minutes et 14,2 minutes d'élocution. Le tableau lexical révèle que 'cloud' apparaît 42 fois (2,3% de densité) et 'sécurité' 28 fois (1,5%), confirmant une répartition harmonieuse sans sur-optimisation.</p>
+          </div>
+          <div class="content-card">
+            <h4>Optimisation de méta-description</h4>
+            <p>Un référenceur rédige une balise SEO. L'outil confirme que le titre compte 28 caractères (sous la limite de 30) et la méta-description 154 caractères avec espaces, s'inscrivant parfaitement dans le gabarit d'affichage des moteurs de recherche.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq3Q">How are sentences identified?</h4>
-          <p data-i18n="faq3A">Sentences are segmented by terminal punctuation marks (periods, exclamation points, question marks, and Arabic question marks) followed by whitespace or line breaks.</p>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Séparation naïve par les espaces</h4>
+            <p>Découper un texte uniquement sur les espaces comptabilise les espaces doubles et sauts de ligne comme des mots fantômes. Une tokenisation rigoureuse élimine les segments vides.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusion sur les mots composés et apostrophes</h4>
+            <p>Selon les règles typographiques, les termes comme 'aujourd'hui' ou les mots avec tirets peuvent être comptabilisés différemment. Vérifiez les conventions applicables à votre projet.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Négliger les espaces dans les limites de caractères</h4>
+            <p>Les contraintes des réseaux sociaux ou SMS incluent toujours les espaces et la ponctuation. Surveiller uniquement les caractères sans espaces expose à des coupures indésirables.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq4Q">What does the Clean Spaces button do?</h4>
-          <p data-i18n="faq4A">Clean Spaces removes redundant multiple spaces, converts tabs to spaces, trims line-ending spaces, and collapses excessive empty blank lines into neat paragraph breaks.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>L'analyse textuelle et l'indexation s'exécutent intégralement dans la mémoire locale de votre navigateur. Aucun texte, document ou extrait confidentiel n'est transmis à des serveurs distants ni enregistré.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment est calculé le temps de lecture estimé ?</summary>
+            <div class="faq-answer">
+              <p>Il est obtenu en divisant le nombre de mots par 200, correspondant à la vitesse moyenne de lecture silencieuse chez l'adulte.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment sont traités les mots avec apostrophe ?</summary>
+            <div class="faq-answer">
+              <p>Le moteur traite les élisions selon les normes typographiques usuelles, isolant les unités lexicales de manière cohérente.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qu'est-ce que la densité des mots-clés ?</summary>
+            <div class="faq-answer">
+              <p>C'est le pourcentage de présence d'un terme par rapport au volume global de mots. Un taux équilibré (1 à 2%) favorise le référencement sans pénalité.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>L'outil prend-il en charge les textes multilingues ?</summary>
+            <div class="faq-answer">
+              <p>Oui, la prise en charge d'Unicode assure une reconnaissance parfaite des caractères latins, arabes, cyrilliques et asiatiques.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils de texte et utilitaires connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur de Casse & Slugs</div>
+            <div class="tool-desc">Basculez vos textes entre MAJUSCULES, minuscules, camelCase et slugs d'URL.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Comparateur de Textes (Diff)</div>
+            <div class="tool-desc">Comparez deux versions d'un texte côte à côte avec surlignage des écarts.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Éditeur Markdown avec Rendu Direct</div>
+            <div class="tool-desc">Rédigez du Markdown avec prévisualisation en direct et export HTML rapide.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Un contatore di parole è uno strumento di analisi testuale che rileva i parametri quantitativi di uno scritto in tempo reale. Oltre al conteggio dei vocaboli, esamina i caratteri totali (con e senza spazi), le frasi, i paragrafi, il tempo stimato di lettura e pronuncia orale, e la densità delle parole chiave.</p>
+        <p>Nella redazione digitale, nel giornalismo e nel marketing, il rispetto dei limiti editoriali è determinante. I social network e i motori di ricerca impongono soglie rigide su titoli e snippet. Allo stesso modo, tesi universitarie e traduzioni professionali si basano su conteggi rigorosi per tariffazione e valutazione.</p>
+        <p>Le stime manuali o i conteggi approssimativi commettono errori con apostrofi e parole composte. Questo strumento integra un motore analitico eseguito interamente nel browser, fornendo metriche precise e una scomposizione lessicale immediata senza trasmettere dati all'esterno.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Digita o incolla il tuo testo:</strong> Scrivi direttamente nell'area di testo o incolla contenuti da documenti esterni. Lo strumento elabora testi ampi senza rallentamenti dell'interfaccia.</li>
+          <li><strong>Consulta i dati quantitativi in tempo reale:</strong> Osserva i contatori che riportano parole, caratteri con e senza spazi, frasi e paragrafi, costantemente sincronizzati a ogni digitazione.</li>
+          <li><strong>Analizza tempi di lettura e densità lessicale:</strong> Verifica i minuti previsti per lettura silenziosa e lettura a voce alta, consultando la tabella dei termini frequenti per ottimizzare il testo.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Motore di segmentazione conforme agli standard Unicode</div>
+          <div class="formula-expr"><code>Parole = Count(\p{L}+)  |  Lettura = Parole / 200 ppm  |  Parlato = Parole / 130 ppm</code></div>
+        </div>
+        <p>La segmentazione adotta espressioni regolari conformi a Unicode. Anziché suddividere banalmente sulle spaziature, il motore identifica le parole tramite la classe \p{L}+ (riconoscendo alfabeti latini, arabi e asiatici), garantendo un calcolo esatto indipendentemente dalla lingua. I caratteri senza spazi si ottengono filtrando i separatori. Le frasi vengono rilevate dalla punteggiatura conclusiva (.!?) seguita da spazio. La stima del tempo di lettura silenziosa assume la velocità media di 200 parole al minuto, mentre la recitazione parlata stima 130 parole al minuto.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Articolo editoriale e verifica SEO</h4>
+            <p>Un autore redige un testo di 1.850 parole. Il contatore indica un tempo di lettura di 9,2 minuti e 14,2 minuti per il parlato. La tabella lessicale rileva che 'cloud' compare 42 volte (densità 2,3%) e 'sicurezza' 28 volte (1,5%), attestando una distribuzione equilibrata senza sovraccarichi.</p>
+          </div>
+          <div class="content-card">
+            <h4>Ottimizzazione di titoli e meta tag</h4>
+            <p>Un copywriter definisce un titolo pubblicitario. Lo strumento conferma che il titolo contiene 28 caratteri (sotto la soglia di 30) e la meta description 154 caratteri spazi compresi, ideale per la visualizzazione sui motori di ricerca.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Suddivisione errata tramite soli spazi</h4>
+            <p>Separare il testo contando solo gli spazi considera spazi multipli e righe vuote come vocaboli effettivi. Una tokenizzazione corretta elimina i vuoti ed estrae le sole parole reali.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Gestione imprecisa di apostrofi e trattini</h4>
+            <p>I termini uniti da trattini o apostrofi possono essere interpretati come un vocabolo singolo o multiplo. Verifica le norme stilistiche della tua testata di riferimento.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Trascurare le spaziature nei limiti di caratteri</h4>
+            <p>I limiti su piattaforme social o messaggistica includono sempre punteggiatura e spazi. Verificare solo i caratteri senza spazi comporta il rischio di troncamento del testo.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le elaborazioni testuali e l'indicizzazione lessicale avvengono nella memoria locale del tuo browser. Nessun testo, articolo o bozza riservata viene inviato a server esterni né memorizzato.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Come viene calcolato il tempo di lettura stimato?</summary>
+            <div class="faq-answer">
+              <p>Si divide il numero totale di parole per 200, velocità media convenzionale per la lettura silenziosa di un adulto.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come vengono conteggiati i vocaboli con apostrofo?</summary>
+            <div class="faq-answer">
+              <p>Il sistema applica le regole tipografiche standard, identificando le unità lessicali in modo accurato e uniforme.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Che cos'è la densità delle parole chiave?</summary>
+            <div class="faq-answer">
+              <p>È il rapporto percentuale tra le occorrenze di una parola e il totale dei vocaboli. Mantenere un valore tra l'1% e il 2% favorisce il posizionamento senza incorrere in penalità.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Lo strumento supporta lingue con alfabeti non latini?</summary>
+            <div class="faq-answer">
+              <p>Sì, il supporto Unicode garantisce il conteggio corretto di testi in caratteri arabi, cirillici, cinesi e di qualsiasi altro idioma internazionale.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di testo e utilità correlate</h2>
+        <div class="related-tools-grid">
+          <a href="./case-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertitore Maiuscole/Minuscole e Slug</div>
+            <div class="tool-desc">Trasforma testi tra MAIUSCOLO, minuscolo, camelCase e genera slug URL.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Confronto Testi e Differenze (Diff)</div>
+            <div class="tool-desc">Compara due versioni di un testo affiancate con evidenziazione delle modifiche.</div>
+          </a>
+          <a href="./markdown-editor.html" class="related-tool-card">
+            <div class="tool-name">Editor Markdown con Anteprima</div>
+            <div class="tool-desc">Scrivi in Markdown con anteprima in tempo reale ed esportazione HTML immediata.</div>
+          </a>
         </div>
       </div>
     </article>
-
   </main>
 
   <!-- Footer -->

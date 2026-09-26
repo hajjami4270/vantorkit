@@ -27,62 +27,54 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit QR Code Generator",
-        "url": "https://vantorkit.com/tools/qr-generator.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side QR Code Generator supporting URLs, Wi-Fi credentials, vCard contacts, emails, and plain text with custom colors, SVG vector export, and instant PNG downloads."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit QR Code Generator",
+      "url": "https://vantorkit.com/tools/qr-generator.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my Wi-Fi passwords and vCard contact details sent to any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The QR Code generation algorithm executes 100% inside your browser memory using client-side JavaScript. Your Wi-Fi network passwords, personal contact numbers, and emails are never logged, uploaded, or transmitted anywhere."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Do generated QR codes expire?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. These are static standard QR codes that contain your data directly encoded within the visual matrix. They never expire, have no scan limits, and do not redirect through third-party servers."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between downloading PNG and SVG?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "PNG is a raster bitmap format perfect for screens, digital presentations, and web usage. SVG is a resolution-independent vector format that can be scaled infinitely without pixelation, ideal for large print banners, packaging, and commercial printing."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which Error Correction Level should I choose?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Level M (15% redundancy) is recommended for most digital and print uses. Level H (30%) offers maximum durability if the QR code might get dirty, scratched, or partially covered."
-            }
+      "description": "Free client-side QR Code Generator supporting URLs, Wi-Fi credentials, vCard contacts, emails, and plain text with custom colors, SVG vector export, and instant PNG downloads."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do these QR codes expire or require a recurring subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. These are permanent, static QR codes. The destination data is encoded directly into the physical module pattern with no intermediate redirect servers."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "What error correction level should I choose?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use Level L (7%) for clean digital screens with long URLs, Level M (15%) for standard flyers, and Level H (30%) for outdoor posters, business cards, or printed merchandise where the code might get smudged."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I print the generated QR code on giant billboards?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Simply export as an SVG (Scalable Vector Graphic). Vector formats can be scaled to any size—from business cards to highway billboards—without losing sharpness."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1853,6 +1845,388 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side QR Code Generator is an ultra-fast matrix barcode synthesis engine built for event organizers, mobile app developers, and marketing professionals. Quick Response (QR) codes connect the physical world to digital experiences by encoding URLs, contact vCards, Wi-Fi credentials, and crypto wallet addresses into high-density 2D optical barcodes. Unlike commercial QR generators that redirect through dynamic tracking URLs or charge recurring subscription fees, this tool generates 100% direct, static QR codes locally.</p>
+        <p>Built on pure JavaScript Galois Field arithmetic and Reed-Solomon algebraic error correction, the generator builds robust 2D matrices that scan reliably even when partially obscured or printed on curved surfaces. You can customize foreground and background colors, apply custom error-correction levels (L, M, Q, H), adjust quiet zone margins, and export razor-sharp SVG or high-resolution PNG graphics ready for print or web deployment.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Enter Target Content:</strong> Type or paste your destination URL, Wi-Fi network credentials, plain text message, or contact vCard information into the input field.</li>
+          <li><strong>Customize Design & Error Correction:</strong> Choose your error correction level (up to 30% damage recovery with Level H), set pixel size, and customize foreground/background theme colors.</li>
+          <li><strong>Export High-Resolution Vector or PNG:</strong> Download your completed QR code immediately as a crisp scalable SVG vector for professional printing or a high-DPI PNG for digital media.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Galois Field GF(2^8) Reed-Solomon Error Correction</div>
+          <div class="formula-expr"><code>G(x) = (x - α^0)(x - α^1)...(x - α^(2t-1)) in GF(256)</code></div>
+        </div>
+        <p>The encoder maps input bytes into mode indicators and bit streams. Reed-Solomon generator polynomials calculate parity codewords using finite field arithmetic in GF(2^8). The matrix is masked using standard penalty evaluations to ensure optimal scanner contrast.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Conference Wi-Fi Access Code Display</h4>
+            <p>Encoding WPA2 wireless network credentials into a branded high-contrast QR code for instant attendee smartphone onboarding with zero manual password typing.</p>
+          </div>
+          <div class="content-card">
+            <h4>Printed Product Packaging Label</h4>
+            <p>Generating a level H (30% error recovery) vector SVG barcode pointing directly to an online product user manual, ensuring scannability even on scratched packaging.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Inverting Color Contrast Incorrectly</h4>
+            <p>Generating dark background QR codes with light modules can confuse legacy barcode scanners; always maintain darker foreground modules than the background.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Overloading Content in Low-Resolution Codes</h4>
+            <p>Encoding excessively long URLs creates ultra-dense matrices with tiny modules that budget phone cameras struggle to focus on; shorten URLs when possible.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Eliminating the Required Quiet Zone Margin</h4>
+            <p>Cropping away the 4-module blank border around the QR code disrupts scanner edge-detection algorithms; preserve the quiet zone.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your URLs, network credentials, and personal messages never leave your device. The optical barcode matrix is computed and drawn entirely within your browser's local memory using HTML5 Canvas and SVG DOM elements. Zero third-party redirects, zero link tracking, and total privacy guaranteed.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Do these QR codes expire or require a recurring subscription?</summary>
+            <div class="faq-answer">
+              <p>No. These are permanent, static QR codes. The destination data is encoded directly into the physical module pattern with no intermediate redirect servers.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What error correction level should I choose?</summary>
+            <div class="faq-answer">
+              <p>Use Level L (7%) for clean digital screens with long URLs, Level M (15%) for standard flyers, and Level H (30%) for outdoor posters, business cards, or printed merchandise where the code might get smudged.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I print the generated QR code on giant billboards?</summary>
+            <div class="faq-answer">
+              <p>Yes. Simply export as an SVG (Scalable Vector Graphic). Vector formats can be scaled to any size—from business cards to highway billboards—without losing sharpness.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Everyday & Productive Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Password Generator</div>
+            <div class="tool-desc">Generate strong passwords to encode into Wi-Fi QR codes.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">SVG to PNG Converter</div>
+            <div class="tool-desc">Rasterize vector QR codes at custom pixel dimensions.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Base64 File Encoder</div>
+            <div class="tool-desc">Encode binary payloads into text data before generating codes.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة توليد رموز الاستجابة السريعة (QR Code) عبر المتصفح من فانتور كيت محركاً بصرياً فائق الدقة لإنشاء الباركود ثنائي الأبعاد، وهي مصممة لمنظمي الفعاليات ومطوري التطبيقات ومديري التسويق الرقمي. تتيح رموز QR ربط العالم المادي بالمنصات الرقمية عبر تشفير عناوين الويب وبيانات شبكات الواي فاي وبطاقات الاتصال الشخصية vCard وعناوين العملات الرقمية داخل مصفوفة بصرية ذكية. بخلاف الخدمات التجارية التي تستخدم روابط إعادة توجيه ديناميكية تنتهي صلاحيتها وتفرض اشتراكات دورية، تُنتج هذه الأداة رموزاً ثابتة ومباشرة ودائمة محلياً.</p>
+        <p>تعتمد الأداة على خوارزميات حقول جالوا الرياضية ونظام ريد-سولومون لتصحيح الأخطاء، مما يضمن قراءة الرمز بدقة حتى لو تعرض للتلف الجزئي أو طُبع على أسطح منحنية. يمكنك تخصيص الألوان ومستويات تصحيح الخطأ (L, M, Q, H) وهوامش الأمان وتصدير الرموز بصيغة SVG المتجهية أو بصيغة PNG عالية الدقة للطباعة أو الاستخدام الرقمي.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>إدخال المحتوى المستهدف:</strong> اكتب أو الصق رابط الموقع، أو بيانات شبكة الواي فاي، أو النص، أو معلومات جهة الاتصال في حقل الإدخال المخصص.</li>
+          <li><strong>تخصيص التصميم وتصحيح الخطأ:</strong> حدد مستوى استعادة الأخطاء (حتى 30% مع المستوى H)، واضبط أبعاد البكسل، ونسق ألوان المقدمة والخلفية لتناسب هويتك.</li>
+          <li><strong>تصدير الرمز المتجهي أو النقطي:</strong> حمّل رمز QR الناتج فوراً بصيغة SVG المتجهية فائقة النقاء للطباعة المطبعية أو بصيغة PNG عالية الدقة للعرض الرقمي.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">حقول جالوا GF(2^8) وخوارزمية ريد-سولومون لتصحيح الأخطاء</div>
+          <div class="formula-expr"><code>G(x) = (x - α^0)(x - α^1)...(x - α^(2t-1)) in GF(256)</code></div>
+        </div>
+        <p>يحول المحرك البيانات إلى تدفقات بتات رقمية. تحسب كثيرات حدود ريد-سولومون بايتات التكافؤ عبر العمليات الحسابية في الحقل المحدود GF(2^8). تُطبق مصفوفات الأقنعة الرياضية لاختيار أفضل نمط يمنح الماسحات البصرية أعلى درجات التباين.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>مشاركة شبكة الواي فاي في المؤتمرات</h4>
+            <p>تشفير بيانات شبكة WPA2 اللاسلكية في رمز QR عالي التباين لتمكين الحضور من الاتصال الفوري بالإنترنت بالهاتف دون الحاجة لكتابة كلمة المرور يدوياً.</p>
+          </div>
+          <div class="content-card">
+            <h4>ملصقات عبوات المنتجات التجارية</h4>
+            <p>توليد رمز متجهي بمستوى تصحيح H يوجه المستهلكين لدليل الاستخدام الرقمي، مما يضمن قراءة الرمز بسلاسة حتى لو تعرض غلاف المنتج للخدش.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ عكس التباين اللوني بشكل غير سليم</h4>
+            <p>استخدام خلفية داكنة مع نقاط باركود فاتحة قد يعطل بعض ماسحات الباركود التقليدية؛ احرص دائماً على أن تكون النقاط أغمق من الخلفية.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تضمين نصوص وروابط طويلة جداً</h4>
+            <p>إدخال روابط طويلة يولد مصفوفة بكسلات بالغة الكثافة يصعب على كاميرات الهواتف التركيز عليها؛ استخدم روابط قصيرة قدر الإمكان.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إلغاء هامش الأمان المحيط بالرمز</h4>
+            <p>قص الإطار الأبيض المحيط بالرمز (Quiet Zone) يربك خوارزميات رصد الحواف في برامج المسح؛ حافظ على هامش 4 بكسلات على الأقل.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>روابطك ومراسلاتك وبيانات شبكاتك الخاصة لا تغادر جهازك الشخصي إطلاقاً. يتم بناء مصفوفة الباركود بالكامل داخل الذاكرة المحلية لمتصفحك عبر تقنيات Canvas وSVG دون أي إعادة توجيه خارجية ودون تسجيل أي بيانات، مما يوفر أماناً وخصوصية تامة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل تنتهي صلاحية رموز QR المولدة عبر هذه الأداة؟</summary>
+            <div class="faq-answer">
+              <p>كلا على الإطلاق. هذه رموز ثابتة ومباشرة (Static QR)، حيث تُخزن البيانات مباشرة داخل التشكيل الهندسي للبكسلات ولا تعتمد على أي خوادم وسيطة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هو مستوى تصحيح الأخطاء الأمثل لاختياره؟</summary>
+            <div class="faq-answer">
+              <p>المستوى L (7%) ممتاز للشاشات والروابط الطويلة، والمستوى M (15%) للمنشورات الورقية العادية، بينما المستوى H (30%) مثالي للملصقات الخارجية التي قد تتعرض للأتربة أو التلف.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكن طباعة الرمز على لوحات إعلانية ضخمة في الشوارع؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. صدّر الرمز بصيغة SVG المتجهية؛ فالملفات المتجهية يمكن تكبيرها لأي مقاس دون أدنى فقدان في الحدة أو النقاء.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات يومية وإنتاجية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">مولد كلمات المرور</div>
+            <div class="tool-desc">توليد كلمات مرور قوية لتشفيرها داخل رموز QR الخاصة بالواي فاي.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">تحويل SVG إلى PNG</div>
+            <div class="tool-desc">تحويل رموز QR المتجهية إلى صور نقطية بأبعاد مخصصة.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">مشفر الملفات إلى Base64</div>
+            <div class="tool-desc">تشفير الملفات والبيانات إلى نصوص قبل توليد الرموز البصرية.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le générateur de codes QR côté client de VantorKit est un moteur de synthèse optique bidimensionnel conçu pour les organisateurs d'événements, les équipes marketing et les développeurs mobiles. Les codes Quick Response (QR) créent une passerelle instantanée entre les supports physiques et les services numériques en encodant des URL, des accès Wi-Fi, des fiches vCard et des clés publiques au sein d'une matrice optique dense. Contrairement aux générateurs commerciaux qui détournent vos flux via des URL de redirection payantes, cet outil produit des codes QR 100% statiques, directs et pérennes directement dans votre navigateur.</p>
+        <p>S'appuyant sur l'arithmétique des corps finis de Galois et l'algorithme de correction d'erreurs Reed-Solomon, le moteur engendre des matrices capables d'être scannées même en cas de salissure ou d'impression sur des surfaces courbes. Vous pouvez personnaliser les contrastes chromatiques, ajuster les niveaux de tolérance aux pannes (L, M, Q, H), paramétrer la zone de silence et exporter en format vectoriel SVG ou matriciel PNG haute définition.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Saisissez vos données cibles:</strong> Renseignez votre adresse web, vos identifiants réseau Wi-Fi, un message textuel ou des coordonnées professionnelles dans le champ de saisie.</li>
+          <li><strong>Personnalisez l'aspect et la robustesse:</strong> Définissez le niveau de recouvrement des erreurs (jusqu'à 30% avec le niveau H), réglez les dimensions et choisissez les teintes de premier plan et d'arrière-plan.</li>
+          <li><strong>Exportez en SVG ou PNG haute définition:</strong> Téléchargez immédiatement votre code QR en vecteur SVG pour l'imprimerie grand format ou en PNG haute résolution pour le web.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Corps de Galois GF(2^8) et correction d'erreur Reed-Solomon</div>
+          <div class="formula-expr"><code>G(x) = (x - α^0)(x - α^1)...(x - α^(2t-1)) in GF(256)</code></div>
+        </div>
+        <p>L'encodeur structure la charge utile en flux binaire. Les polynômes de Reed-Solomon déterminent les octets de redondance au moyen de l'arithmétique dans le corps fini GF(2^8). Un masque de brouillage mathématique est ensuite sélectionné pour maximiser le contraste optique.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Partage sécurisé de Wi-Fi en conférence</h4>
+            <p>Encodage des paramètres WPA2 dans un QR code à fort contraste pour permettre la connexion instantanée des participants sur smartphone sans saisie manuelle.</p>
+          </div>
+          <div class="content-card">
+            <h4>Étiquetage de packaging produit industriel</h4>
+            <p>Création d'un code QR vectoriel SVG au niveau de tolérance H pointant vers une notice en ligne, scannable même si l'emballage subit des rayures lors du transport.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Inverser les contrastes de couleurs</h4>
+            <p>Imprimer des modules clairs sur un fond sombre peut dérouter les lecteurs de codes-barres anciens; assurez-vous que les modules restent plus sombres que le fond.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Surcharger le contenu dans des matrices denses</h4>
+            <p>Encoder des URL trop longues crée des motifs minuscules difficiles à détecter pour les optiques mobiles d'entrée de gamme; privilégiez des adresses concises.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Supprimer la marge périphérique de sécurité</h4>
+            <p>Rogner la zone vierge (Quiet Zone) de 4 modules autour du code empêche le capteur d'isoler les coins de repérage; préservez cet espace neutre.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos liens internet, coordonnées personnelles et mots de passe ne quittent jamais votre machine. La matrice optique est calculée et restituée intégralement dans la mémoire de votre navigateur via les technologies Canvas et SVG. Aucun serveur intermédiaire, aucun traqueur et une confidentialité absolue.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Ces codes QR ont-ils une durée de validité limitée ?</summary>
+            <div class="faq-answer">
+              <p>Non. Ce sont des codes QR statiques permanents. L'information est inscrite physiquement dans la disposition des modules noirs et blancs sans passer par un serveur de redirection.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quel niveau de correction d'erreur convient le mieux ?</summary>
+            <div class="faq-answer">
+              <p>Optez pour le niveau L (7%) pour des affichages sur écrans, le niveau M (15%) pour des dépliants et le niveau H (30%) pour des objets extérieurs ou des cartes de visite susceptibles d'être froissés.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je imprimer le code généré sur des affiches géantes ?</summary>
+            <div class="faq-answer">
+              <p>Oui. Exportez votre visuel au format vectoriel SVG : il pourra être agrandi à l'infini sans la moindre perte de netteté sur n'importe quel support d'affichage publicitaire.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Utilitaires du quotidien et productivité connexes</h2>
+        <div class="related-tools-grid">
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Générateur de mots de passe</div>
+            <div class="tool-desc">Créez des mots de passe robustes à intégrer dans vos QR codes Wi-Fi.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur SVG vers PNG</div>
+            <div class="tool-desc">Transformez vos codes QR vectoriels en images matricielles.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Encodeur de fichiers en Base64</div>
+            <div class="tool-desc">Traduisez vos données brutes avant leur intégration dans des codes optiques.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il generatore di codici QR lato client di VantorKit è un motore di sintesi ottica bidimensionale sviluppato per organizzatori di eventi, sviluppatori di app e responsabili marketing. I codici Quick Response (QR) collegano la realtà fisica al mondo digitale codificando indirizzi web, credenziali Wi-Fi, contatti vCard e indirizzi crittografici all'interno di matrici ottiche ad alta densità. A differenza di molte piattaforme online che applicano reindirizzamenti dinamici a pagamento o tracciamenti invasivi, questo strumento produce codici QR statici e diretti al 100% nel tuo browser.</p>
+        <p>Sfruttando l'algebra dei campi finiti di Galois e la correzione degli errori Reed-Solomon, il motore costruisce grafiche ottiche leggibili anche se parzialmente danneggiate o stampate su superfici curve. Puoi personalizzare i colori di primo piano e sfondo, impostare i livelli di tolleranza ai graffi (L, M, Q, H), calibrare i margini e scaricare file vettoriali SVG o PNG in alta risoluzione pronti per la stampa o l'uso digitale.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Inserisci il contenuto di destinazione:</strong> Digita o incolla l'URL web, i parametri di rete Wi-Fi, un testo informativo o i recapiti del contatto nell'apposito campo.</li>
+          <li><strong>Personalizza stile e tolleranza errori:</strong> Imposta il livello di recupero degli errori (fino al 30% con il livello H), regola i pixel dei moduli e definisci le tonalità cromatiche.</li>
+          <li><strong>Scarica il codice in formato SVG o PNG:</strong> Esporta immediatamente il codice QR in formato vettoriale SVG per la tipografia professionale oppure in PNG ad alta densità per la pubblicazione online.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Campi finiti GF(2^8) e correzione d'errore Reed-Solomon</div>
+          <div class="formula-expr"><code>G(x) = (x - α^0)(x - α^1)...(x - α^(2t-1)) in GF(256)</code></div>
+        </div>
+        <p>Il codificatore converte i dati in sequenze binarie. I polinomi generatori di Reed-Solomon determinano i byte di parità applicando l'algebra nel campo finito GF(2^8). Una maschera di valutazione standard viene applicata per massimizzare la leggibilità ottica.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Condivisione Wi-Fi in sale conferenze</h4>
+            <p>Codifica delle credenziali WPA2 in un codice QR a elevato contrasto per l'accesso immediato da smartphone senza digitazione manuale delle password.</p>
+          </div>
+          <div class="content-card">
+            <h4>Etichettatura packaging per prodotti di consumo</h4>
+            <p>Generazione di un codice vettoriale con livello H (30% di recupero) per il manuale utente online, leggibile anche su confezioni graffiate.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Invertire erroneamente il contrasto cromatico</h4>
+            <p>Generare codici con moduli chiari su sfondo scuro può bloccare i lettori ottici tradizionali; mantieni sempre i moduli più scuri dello sfondo.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Inserire testi eccessivamente lunghi</h4>
+            <p>Testi molto lunghi generano una griglia fittissima che gli smartphone più economici faticano a inquadrare; riduci la lunghezza delle informazioni.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Eliminare il margine di rispetto perimetrale</h4>
+            <p>Rimuovere la cornice vuota di 4 moduli (Quiet Zone) attorno al codice impedisce all'inquadratura di isolare gli angoli di riferimento; preserva il margine.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>I tuoi dati, password e recapiti personali non abbandonano mai il tuo dispositivo. La matrice ottica viene elaborata interamente nella memoria locale del tuo browser tramite Canvas ed elementi SVG. Nessun server di reindirizzamento, nessun cookie di tracciamento e riservatezza garantita.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Questi codici QR hanno una data di scadenza?</summary>
+            <div class="faq-answer">
+              <p>No. Sono codici QR statici e definitivi. I dati sono incorporati direttamente nella disposizione fisica dei moduli senza passare per server intermedi.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quale livello di correzione degli errori è preferibile selezionare?</summary>
+            <div class="faq-answer">
+              <p>Scegli il livello L (7%) per display digitali, il livello M (15%) per volantini cartacei e il livello H (30%) per cartelli esposti all'aperto o biglietti da visita soggetti a usura.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È consentito stampare il codice su manifesti pubblicitari giganti?</summary>
+            <div class="faq-answer">
+              <p>Certamente. Esporta il codice in formato SVG vettoriale: potrai ingrandirlo a qualsiasi scala senza alcuna perdita di definizione o sgranatura.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di uso quotidiano e produttività correlati</h2>
+        <div class="related-tools-grid">
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Generatore di password</div>
+            <div class="tool-desc">Crea chiavi di accesso sicure da inserire nei codici QR del Wi-Fi.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">Convertitore SVG in PNG</div>
+            <div class="tool-desc">Trasforma codici QR vettoriali in immagini raster ad alta densità.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Codificatore file in Base64</div>
+            <div class="tool-desc">Converti file binari prima della generazione dei codici ottici.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Notification Toast -->

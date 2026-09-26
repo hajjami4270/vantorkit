@@ -36,62 +36,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Discount & Sales Tax Calculator",
-        "url": "https://vantorkit.com/tools/discount-tax-calculator.html",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side discount and sales tax calculator. Compute percentage or fixed cash discounts, stacked promo codes, sales tax and VAT, visual price breakdown, and reverse original sticker price."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Discount & Sales Tax Calculator",
+      "url": "https://vantorkit.com/tools/discount-tax-calculator.html",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How are stacked discounts calculated by retail stores?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Retailers do not simply add percentages together. If an item has a 20% store discount and you apply an extra 10% VIP coupon, the 10% is applied to the already-discounted price. For a $100 item, it drops to $80 first, then 10% off $80 is $8, making the final price $72 (a net 28% discount, not 30%)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is sales tax calculated before or after applying discounts?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "In the vast majority of jurisdictions, sales tax is calculated on the discounted subtotal (the actual price paid by the customer). If a retailer provides an instant store discount or manufacturer coupon, tax is applied to the net sale price."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does the reverse calculator mode work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The reverse mode works backwards from your final receipt amount. It removes the tax rate to find the pre-tax subtotal, then divides by (1 - discount rate) to accurately determine what the original retail sticker price was before the sale."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between US Sales Tax and VAT (Value Added Tax)?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "In the United States, sales tax is added at the point of sale and varies by state, county, and city. In the UK, European Union, and Middle East, VAT is a consumption tax that is often included in the shelf sticker price, though businesses track the pre-tax subtotal and VAT component separately."
-            }
+      "description": "Free client-side discount and sales tax calculator. Compute percentage or fixed cash discounts, stacked promo codes, sales tax and VAT, visual price breakdown, and reverse original sticker price."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How are stacked or double discounts calculated on a purchase?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Stacked discounts are applied sequentially: the first percentage reduces the original list price, and the second percentage is calculated on that reduced subtotal, rather than adding both rates together."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Is sales tax calculated before or after applying discounts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In standard commercial and retail practices, sales tax is calculated on the discounted subtotal after all applicable markdowns and promotional coupons have been deducted."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do you calculate the pre-tax price from a total that includes VAT?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Divide the gross total by (1 + (VAT Rate / 100)). For example, if a gross receipt is $115 including a 15% VAT, the pre-tax net price is $115 / 1.15 = $100."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a discount and a rebate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A discount reduces the purchase price immediately at the point of sale, whereas a rebate requires the customer to pay full price upfront and receive a monetary refund later."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1852,6 +1852,420 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Discount & Sales Tax Calculator is a retail pricing engine built for e-commerce entrepreneurs, procurement specialists, and consumers. Calculating final retail prices under stacked promotional discounts and regional sales taxes requires rigorous percentage logic. This utility determines net pricing, savings, and tax liabilities with exact precision entirely in your browser.</p>
+        <p>Supporting single discounts, tiered promotions, fixed cash-back deductions, and local VAT/GST rates, the engine delivers transparent breakdowns of every price component without transmitting commercial transactions over the internet.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Input Starting Base Price:</strong> Enter the catalog list price or gross invoice amount into the primary field. The engine handles decimal currencies, fractional cents, and large commercial order totals.</li>
+          <li><strong>Apply Primary and Stacked Discounts:</strong> Specify your primary discount percentage or fixed monetary deduction, along with optional secondary stacked promotional codes to reflect complex retail promotions.</li>
+          <li><strong>Configure Sales Tax or VAT Rate:</strong> Enter the statutory sales tax or VAT percentage. The tool instantly generates discounted subtotal, total tax collected, net payable total, and total savings achieved.</li>
+        </ol>
+        <h2>The Engine & Formula Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Sequential Discounting and Reverse VAT Formulations</div>
+          <div class="formula-expr"><code>P_sub = P₀ × (1 - d₁) × (1 - d₂)  |  Tax = P_sub × t  |  P_net = P_gross / (1 + t)</code></div>
+        </div>
+        <p>Forward commercial pricing executes sequential multiplicative discounting. Starting from baseline price P₀, applying primary rate d₁ and secondary discount d₂ computes discounted subtotal: P_sub = P₀ × (1 - d₁) × (1 - d₂). Tax is evaluated strictly on the reduced subtotal: Tax = P_sub × t, yielding final customer payable: P_final = P_sub + Tax. For reverse tax extraction, the formula inverts: P_net = P_gross / (1 + t). All monetary steps undergo standard half-up midpoint currency rounding to two decimal places.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Stacked Retail Promotion with Regional Sales Tax</h4>
+            <p>An enterprise purchases computer equipment listed at $1,500.00. The vendor offers a 20% trade discount plus an additional 5% early-payment coupon, subject to an 8.5% state sales tax. Applying sequential discounting: $1,500 × (1 - 0.20) = $1,200.00; applying the 5% coupon: $1,200 × (1 - 0.05) = $1,140.00 subtotal. Adding 8.5% tax ($96.90) yields a final payable amount of $1,236.90, delivering total customer savings of $360.00.</p>
+          </div>
+          <div class="content-card">
+            <h4>Reverse VAT Extraction from Gross Commercial Receipt</h4>
+            <p>A European business traveler receives a hotel invoice showing a gross total of 480.00 € including a standard 20% VAT. To extract the pre-tax expense: Net = 480.00 / (1 + 0.20) = 400.00 €, with exactly 80.00 € isolated as deductible VAT for tax filing.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Linearly Adding Sequential Discount Rates</h4>
+            <p>Combining a 20% discount and a 10% coupon does not equal 30% off. A $100 item discounted 20% drops to $80; 10% off $80 reduces it by $8 to $72 (a net 28% discount, not 30%). Adding rates directly miscalculates invoice totals.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Applying Sales Tax Prior to Discount Reductions</h4>
+            <p>In most legal jurisdictions, sales tax applies only to the net discounted sale price paid by the customer, not the original retail list price. Calculating tax on pre-discount amounts overcharges consumers.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusing Markup with Gross Margin Percentage</h4>
+            <p>A 50% markup on a $100 product sets the retail price at $150, but the resulting gross profit margin is ($50 / $150) = 33.33%, not 50%. Conflating markup and margin produces catastrophic pricing losses.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All calculations run 100% inside your local web browser. Your cart totals, wholesale margins, and tax figures are never transmitted to any external server or saved in third-party tracking databases.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How are stacked or double discounts calculated on a purchase?</summary>
+            <div class="faq-answer">
+              <p>Stacked discounts are applied sequentially: the first percentage reduces the original list price, and the second percentage is calculated on that reduced subtotal, rather than adding both rates together.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Is sales tax calculated before or after applying discounts?</summary>
+            <div class="faq-answer">
+              <p>In standard commercial and retail practices, sales tax is calculated on the discounted subtotal after all applicable markdowns and promotional coupons have been deducted.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do you calculate the pre-tax price from a total that includes VAT?</summary>
+            <div class="faq-answer">
+              <p>Divide the gross total by (1 + (VAT Rate / 100)). For example, if a gross receipt is $115 including a 15% VAT, the pre-tax net price is $115 / 1.15 = $100.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the difference between a discount and a rebate?</summary>
+            <div class="faq-answer">
+              <p>A discount reduces the purchase price immediately at the point of sale, whereas a rebate requires the customer to pay full price upfront and receive a monetary refund later.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Mathematical & Financial Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Percentage Calculator</div>
+            <div class="tool-desc">Compute basic percentages, relative proportions, and percent change rates.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Loan Payment Calculator</div>
+            <div class="tool-desc">Calculate amortized credit payments, interest costs, and payoff schedules.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Compound Interest Calculator</div>
+            <div class="tool-desc">Simulate compound investment growth, wealth trajectories, and returns.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر حاسبة الخصم والضريبة عبر المتصفح من فانتور كيت محركاً تجارياً دقيقاً لتسعير المبيعات، وهي مخصصة لرواد التجارة الإلكترونية ومسؤولي المشتريات والمستهلكين. إن احتساب الأسعار الصافية بعد الخصومات الترويجية المتتالية وضريبة القيمة المضافة يتطلب تطبيق تسلسل حسابي منضبط. تتيح لك هذه الأداة استخراج الأسعار النهائية وقيمة التوفير والالتزام الضريبي بدقة تامة محلياً داخل متصفحك.</p>
+        <p>تدعم الأداة الخصومات الفردية والمتعددة والكوبونات النقدية ونسب الضريبة المختلفة، لتمنحك تفصيلاً واضحاً لكل جزء من السعر دون إرسال أي بيانات تجارية عبر الشبكة.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>أدخل السعر الأساسي الأصلي:</strong> اكتب سعر المنتج المعروض أو إجمالي الفاتورة في الحقل الرئيسي، حيث يتعامل النظام بكفاءة مع الكسور والعملات المختلفة وقيم الفواتير الكبيرة.</li>
+          <li><strong>طبق الخصومات الأساسية والإضافية:</strong> حدد نسبة الخصم الرئيسية أو القيمة النقدية المخصومة، مع إمكانية إضافة خصم ترويجي ثانٍ لحساب العروض الترويجية المركبة بدقة.</li>
+          <li><strong>اضبط معدل الضريبة أو القيمة المضافة:</strong> أدخل نسبة ضريبة المبيعات أو القيمة المضافة لتحصل فوراً على السعر بعد التخفيض، وقيمة الضريبة المحتسبة، والإجمالي النهائي المستحق للدفع، مع بيان إجمالي التوفير.</li>
+        </ol>
+        <h2>محرك الحساب والمعادلات الرياضية</h2>
+        <div class="formula-box">
+          <div class="formula-title">معادلات الخصم المتتابع واحتساب القيمة المضافة العكسية</div>
+          <div class="formula-expr"><code>P_sub = P₀ × (1 - d₁) × (1 - d₂)  |  الضريبة = P_sub × t  |  السعر الصافي = السعر الإجمالي / (1 + t)</code></div>
+        </div>
+        <p>تعتمد الحسابات التجارية على الخصم المتتابع بدلاً من الجمع الحسابي. انطلاقاً من السعر الأصلي P₀، يؤدي تطبيق الخصم الأول d₁ والخصم الثاني d₂ إلى: P_sub = P₀ × (1 - d₁) × (1 - d₂). ثم تُحسب الضريبة حصراً على السعر بعد الخصم: الضريبة = P_sub × t، ليكون المبلغ النهائي: P_final = P_sub + الضريبة. وفي المحاسبة العكسية لاستخراج السعر الصافي من الإجمالي الشامل للضريبة، تُطبق المعادلة: السعر الصافي = السعر الإجمالي / (1 + t). وتُطبق قواعد التقريب المالي لنصف السنت لضمان دقة الفواتير.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>حساب الخصم المزدوج وضريبة المبيعات</h4>
+            <p>اشترت شركة معدات بسعر 1,500.00 دولاراً مع خصم تجاري 20% وقسيمة سداد مبكر 5% وضريبة مبيعات 8.5%. بحساب الخصم المتتابع: 1,500 × 0.80 = 1,200.00 دولاراً، ثم تطبيق خصم 5%: 1,200 × 0.95 = 1,140.00 دولاراً كصافي. وبإضافة الضريبة (96.90 دولاراً)، يصبح الإجمالي النهائي 1,236.90 دولاراً، مع توفير إجمالي قدره 360.00 دولاراً.</p>
+          </div>
+          <div class="content-card">
+            <h4>استخراج القيمة المضافة العكسية من فاتورة تجارية</h4>
+            <p>حصل مسافر على فاتورة فندق بقيمة إجمالية قدرها 480.00 يورو شاملة ضريبة القيمة المضافة بنسبة 20%. لمعرفة السعر الصافي قبل الضريبة: 480.00 / (1 + 0.20) = 400.00 يورو، وبذلك تبلغ الضريبة القابلة للاسترداد 80.00 يورو بدقة.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الجمع المباشر لنسب الخصم المتتابعة</h4>
+            <p>جمع خصم 20% مع خصم 10% لا يعادل خصماً بنسبة 30%؛ فمنتج بقيمة 100 دولار بخصم 20% يصبح 80 دولاراً، وخصم 10% على 80 دولاراً ينقصه بمقدار 8 دولارات ليصبح 72 دولاراً (خصم فعلي 28% وليس 30%). الجمع المباشر يسبب خسائر في التسعير.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ احتساب الضريبة قبل تطبيق الخصم التجاري</h4>
+            <p>في معظم الأنظمة الضريبية، تُفرض الضريبة على السعر الفعلي النهائي بعد الخصم وليس على السعر الأصلي قبل التخفيض. احتساب الضريبة على السعر الأصلي يمثل خطأً نظامياً يُكلف العميل مبالغ غير مستحقة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الخلط بين نسبة زيادة السعر وهامش الربح</h4>
+            <p>زيادة السعر بنسبة 50% على منتج تكلفته 100 دولار تجعل سعر بيعه 150 دولاراً، لكن هامش الربح المحقق هو (50 / 150) = 33.33% وليس 50%. الخلط بين المفهومين يؤدي إلى خسائر فادحة في التسعير.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية والأمان المحلي 100%</h3>
+          <p>تُجرى جميع حسابات الخصومات والضرائب بنسبة 100% داخل متصفحك محلياً. لا يتم إرسال أي أسعار أو فواتير أو بيانات تجارية إلى أي خوادم خارجية، وتُمسح كافة الأرقام فور إغلاق الصفحة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف يتم احتساب الخصومات المتعددة أو المركبة على السلعة؟</summary>
+            <div class="faq-answer">
+              <p>تُطبق الخصومات المركبة بشكل متتابع؛ حيث يُطبق الخصم الأول على السعر الأصلي، ثم يُطبق الخصم الثاني على السعر الناتج بعد الخصم الأول، وليس بجمع النسبتين معاً.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تُحسب ضريبة المبيعات قبل أم بعد تطبيق الخصم التجاري؟</summary>
+            <div class="faq-answer">
+              <p>في المعاملات التجارية المعتمدة، تُحسب ضريبة المبيعات دائماً على السعر الصافي بعد خصم كافة التخفيضات والقسائم الترويجية.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يتم استخراج السعر الصافي من إجمالي يشمل ضريبة القيمة المضافة؟</summary>
+            <div class="faq-answer">
+              <p>يُقسم المبلغ الإجمالي على (1 + (نسبة الضريبة / 100)). مثلاً إذا كان الإجمالي 115 دولاراً والضريبة 15%، فالسعر الصافي قبل الضريبة هو 115 / 1.15 = 100 دولار.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هو الفرق بين الخصم المباشر واسترداد القيمة (Rebate)؟</summary>
+            <div class="faq-answer">
+              <p>الخصم المباشر يقلل سعر الشراء فوراً عند نقطة الدفع، أما استرداد القيمة فيتطلب دفع السعر كاملاً أولاً ثم استرجاع جزء نقدي لاحقاً.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات مالية وحسابية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة النسبة المئوية</div>
+            <div class="tool-desc">حساب النسب المئوية المباشرة، والتغير النسبي، وحصص الأرقام بدقة.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة أقساط القروض</div>
+            <div class="tool-desc">حساب جداول إهلاك القروض وتكلفة الفوائد المصرفية والأقساط.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الفائدة المركبة</div>
+            <div class="tool-desc">محاكاة نمو المدخرات واستثمارات رأس المال بالتراكم الدوري.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le calculateur de remises et taxes côté client de VantorKit est un moteur de tarification conçu pour les commerçants, les acheteurs et les consommateurs. Déterminer le prix final après remises successives et taxes régionales exige un calcul rigoureux. Cet utilitaire calcule le prix net, l'économie réalisée et le montant de la TVA avec une exactitude absolue dans votre navigateur.</p>
+        <p>Prenant en charge remises simples, promotions cumulées et taux de TVA locaux, le moteur détaille chaque composante du prix sans transférer vos données commerciales sur le réseau.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Saisissez le prix initial de référence:</strong> Indiquez le prix catalogue ou le montant brut de la facture dans le champ principal. Le moteur prend en compte les centimes, les décimales et les montants d'envergure.</li>
+          <li><strong>Appliquez les remises simples ou cumulées:</strong> Renseignez le pourcentage de remise principal ou une déduction forfaitaire, avec la possibilité d'ajouter un second code promotionnel en cascade.</li>
+          <li><strong>Configurez le taux de taxe ou de TVA:</strong> Indiquez le taux de TVA applicable. L'outil affiche instantanément le sous-total remisé, la taxe collectée, le montant final net à payer et l'économie globale réalisée.</li>
+        </ol>
+        <h2>Moteur de calcul et formules mathématiques</h2>
+        <div class="formula-box">
+          <div class="formula-title">Calculs en cascade et extraction inverse de TVA</div>
+          <div class="formula-expr"><code>P_sub = P₀ × (1 - d₁) × (1 - d₂)  |  TVA = P_sub × t  |  P_HT = P_TTC / (1 + t)</code></div>
+        </div>
+        <p>La tarification commerciale applique des réductions multiplicatives successives. À partir du prix P₀, l'application d'une première remise d₁ et d'une remise d₂ donne : P_sub = P₀ × (1 - d₁) × (1 - d₂). La taxe s'applique exclusivement sur ce sous-total : TVA = P_sub × t, fixant le prix final : P_final = P_sub + TVA. Pour l'extraction comptable du montant HT depuis un total TTC, la relation s'inverse : P_HT = P_TTC / (1 + t). Les opérations bénéficient d'arrondis monétaires stricts à deux décimales.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Soldes saisonnières et code promo</h4>
+            <p>Application d'un rabais de 30% puis d'un coupon de 10% sur un article à 120€ avec TVA à 20%, donnant un prix final de 90.72€ pour une économie de 44.28€.</p>
+          </div>
+          <div class="content-card">
+            <h4>Facturation B2B et escompte commercial</h4>
+            <p>Calcul d'un devis brut de 4 500€ soumis à 5% d'escompte et 10% de TVA, générant un montant net clair pour le service comptable.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Additionner directement les taux de remise</h4>
+            <p>Cumuler 20% et 10% ne fait pas 30% d'économie. Un article de 100 € remisé de 20% passe à 80 € ; une remise de 10% sur 80 € déduit 8 €, soit un prix de 72 € (28% d'économie réelle, non 30%). Additionner les taux fausse les marges.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Appliquer les taxes avant déduction des remises</h4>
+            <p>Légalement, la TVA s'applique sur le montant effectif payé par le client après déduction des remises, et non sur le prix public de départ. Taxer le montant brut initial pénalise injustement le client.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondre taux de marque et taux de marge</h4>
+            <p>Appliquer un coefficient de 50% sur un coût de 100 € donne un prix de 150 €, mais la marge brute réalisée est de (50 / 150) = 33,33%, non 50%. Confondre ces grandeurs ruine la rentabilité.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>L'ensemble des calculs s'exécute à 100% dans votre navigateur web. Vos montants d'achat, marges et données fiscales ne sont jamais transmis vers des serveurs distants.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment calcule-t-on des remises successives ou cumulées ?</summary>
+            <div class="faq-answer">
+              <p>Les remises cumulées s'appliquent en cascade : le premier pourcentage s'applique au prix initial, puis le second pourcentage est déduit du montant intermédiaire déjà remisé.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>La taxe s'applique-t-elle avant ou après les remises ?</summary>
+            <div class="faq-answer">
+              <p>Dans la pratique comptable et fiscale standard, les taxes sont calculées sur le sous-total net après déduction de l'ensemble des rabais et bons promotionnels.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment retrouver le prix Hors Taxe (HT) à partir d'un montant TTC ?</summary>
+            <div class="faq-answer">
+              <p>Divisez le montant TTC par (1 + (Taux de TVA / 100)). Par exemple, pour un total de 115 € TTC avec une TVA de 15%, le montant HT s'élève à 115 / 1,15 = 100 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quelle est la différence entre une remise immédiate et un remboursement différé ?</summary>
+            <div class="faq-answer">
+              <p>La remise immédiate réduit directement le montant payé en caisse, tandis que le remboursement différé oblige à régler le plein tarif pour être remboursé ultérieurement.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils financiers et mathématiques connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Pourcentage</div>
+            <div class="tool-desc">Calculez les pourcentages simples, les variations et les ratios de marge.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Prêt et Mensualités</div>
+            <div class="tool-desc">Simulez le coût des crédits, les mensualités et le tableau d'amortissement.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calculateur d'Intérêts Composés</div>
+            <div class="tool-desc">Projetez la capitalisation de votre épargne avec versements programmés réguliers.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il calcolatore di sconti e imposte lato client di VantorKit è un motore di calcolo dei prezzi ideato per operatori e-commerce, uffici acquisti e consumatori. Determinare il costo effettivo applicando sconti promozionali combinati e imposte sulle vendite richiede una corretta sequenza. Questa applicazione calcola il prezzo netto, il risparmio ottenuto e l'IVA con la massima precisione nel tuo browser.</p>
+        <p>Supportando sconti singoli, ribassi cumulativi e aliquote IVA, il motore offre trasparenza completa su ogni voce di costo senza trasmettere informazioni di acquisto verso l'esterno.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Inserisci il prezzo di listino iniziale:</strong> Digita il prezzo lordo di partenza nel campo principale. Il sistema elabora frazioni centesimali, valute multiple e totali di ordini commerciali elevati.</li>
+          <li><strong>Applica gli sconti primari e cumulati:</strong> Specifica la percentuale di sconto primaria o una deduzione a valore fisso, con l'opzione di inserire un secondo codice promozionale a cascata.</li>
+          <li><strong>Configura l'aliquota di imposta o IVA:</strong> Indica l'aliquota IVA da applicare per visualizzare istantaneamente il subtotale scontato, l'imposta addebitata, il totale netto dovuto e il risparmio complessivo.</li>
+        </ol>
+        <h2>Motore di calcolo e formule matematiche</h2>
+        <div class="formula-box">
+          <div class="formula-title">Scontistica a cascata e procedura di scorporo IVA</div>
+          <div class="formula-expr"><code>P_sub = P₀ × (1 - d₁) × (1 - d₂)  |  IVA = P_sub × t  |  P_net = P_lordo / (1 + t)</code></div>
+        </div>
+        <p>La prassi commerciale esegue sconti sequenziali moltiplicativi. Partendo dal prezzo iniziale P₀, applicando il primo sconto d₁ e il secondo sconto a cascata d₂ si ottiene: P_sub = P₀ × (1 - d₁) × (1 - d₂). L'imposta viene quindi applicata unicamente sul subtotale scontato: IVA = P_sub × t, definendo il totale finale: P_final = P_sub + IVA. Per le verifiche contabili che richiedono lo scorporo dell'IVA da un totale lordo, la formula si inverte: P_net = P_lordo / (1 + t). Tutti i passaggi adottano arrotondamenti finanziari cautelativi a due decimali.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Saldi stagionali e coupon promozionale</h4>
+            <p>Applicazione di uno sconto del 30% e coupon del 10% su un capo da 120€ con IVA al 22%, determinando un prezzo netto di 92.23€ e un risparmio di 44.17€.</p>
+          </div>
+          <div class="content-card">
+            <h4>Fatturazione commerciale B2B</h4>
+            <p>Calcolo di una fornitura da 4.500€ con sconto cassa del 5% e IVA al 22%, definendo le voci per il reparto contabilità aziendale.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Sommare direttamente le percentuali di sconto</h4>
+            <p>Sommare il 20% e il 10% non fa il 30%. Un articolo da 100 € scontato del 20% scende a 80 €; un ulteriore sconto del 10% su 80 € toglie 8 €, portando il prezzo a 72 € (sconto effettivo del 28%, non del 30%). Sommare le percentuali distorce i margini.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Calcolare le imposte prima di applicare gli sconti</h4>
+            <p>Per legge, l'IVA e le tasse sulle vendite si applicano sull'importo effettivo al netto di sconti promozionali e ribassi. Calcolare l'imposta sul prezzo di listino iniziale sovraccarica ingiustamente il cliente.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondere ricarico percentuale e margine lordo</h4>
+            <p>Un ricarico del 50% su un costo di 100 € porta il prezzo a 150 €, ma il margine lordo è (50 / 150) = 33,33%, non il 50%. Confondere i due valori porta a perdite.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutti i calcoli avvengono al 100% nel browser locale. I totali del carrello, i margini e i dati fiscali non vengono mai trasmessi a server remoti né tracciati.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Come si calcolano gli sconti a cascata o multipli su un articolo?</summary>
+            <div class="faq-answer">
+              <p>Gli sconti a cascata vengono applicati in successione: la prima percentuale riduce il prezzo di listino, e la seconda percentuale viene calcolata sul subtotale già scontato, senza sommare i tassi.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>L'IVA si calcola prima o dopo l'applicazione dello sconto?</summary>
+            <div class="faq-answer">
+              <p>Nelle corrette procedure contabili e fiscali, l'IVA si applica sempre sul subtotale al netto di tutti gli sconti e delle riduzioni promozionali concesse.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come si scorpora l'IVA da un prezzo lordo totale?</summary>
+            <div class="faq-answer">
+              <p>Dividi il totale lordo per (1 + (Aliquota IVA / 100)). Ad esempio, con un lordo di 115 € e IVA al 15%, l'imponibile netto ammonta a 115 / 1,15 = 100 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la differenza sostanziale tra sconto immediato e rimborso (Rebate)?</summary>
+            <div class="faq-answer">
+              <p>Lo sconto immediato riduce il prezzo al momento del pagamento, mentre il rimborso richiede il pagamento dell'intero prezzo con restituzione differita di una quota monetaria.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti finanziari e matematici correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Percentuale</div>
+            <div class="tool-desc">Elabora percentuali immediate, scostamenti e quote proporzionali relative.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Finanziamento e Rata</div>
+            <div class="tool-desc">Verifica piani di ammortamento, quota capitale, interessi e scadenze mensili.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Interesse Composto</div>
+            <div class="tool-desc">Stima la crescita dell'investimento con versamenti periodici e capitalizzazione.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Toast Notification -->

@@ -27,54 +27,54 @@
 
   <!-- Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit PDF Merge",
-        "url": "https://vantorkit.com/tools/pdf-merge.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Secure in-browser client-side PDF combiner that merges multiple PDF documents locally using WebAssembly and Web APIs without transmitting files over the network."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit PDF Merge",
+      "url": "https://vantorkit.com/tools/pdf-merge.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my confidential PDF documents uploaded to any remote server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. The entire PDF merging process runs locally in your browser using pdf-lib and WebAssembly. Your files, pages, and personal data never leave your computer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I reorder PDF files before merging?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. You can drag and drop items in the queue or use the Up and Down arrow buttons to arrange the exact sequence of documents before merging."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is there a limit on file size or page count?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Since processing occurs on your device, you are only limited by your device's memory. You can comfortably merge dozens of files totaling hundreds of pages without subscription limits."
-            }
+      "description": "Secure in-browser client-side PDF combiner that merges multiple PDF documents locally using WebAssembly and Web APIs without transmitting files over the network."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does merging PDFs reduce the quality of vector graphics or text?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The pdf-lib engine performs low-level binary copying of internal PDF content streams. Vector graphics, embedded typography, and layout definitions remain 100% uncompressed and pristine."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a limit on how many PDF files I can merge?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There is no programmatic software limit. The only constraint is your computer's available physical RAM to hold the active document binary buffers simultaneously."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I merge PDF files that have different page dimensions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. PDF standards allow individual pages within the same document to have independent MediaBox dimensions, allowing US Letter, A4, and custom slides to coexist seamlessly."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1535,64 +1535,388 @@
     </div>
 
     <!-- SEO Informational & Privacy Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading">Fast, Secure &amp; Zero-Upload PDF Merging</h2>
-        <p>Learn how local browser-based PDF compilation protects your sensitive legal, medical, and personal documents from data breaches and privacy violations.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side PDF Merger is an enterprise-grade document collation utility engineered for legal practitioners, corporate accountants, and researchers. Merging independent PDF documents into a singular, cohesive dossier traditionally forced professionals to upload sensitive legal briefs, tax filings, and medical reports to third-party cloud servers. This utility executes all PDF object dictionary parsing, page tree reorganization, and cross-reference table rebuilding entirely within your local browser runtime.</p>
+        <p>Powered by client-side WebAssembly and JavaScript binary manipulation via pdf-lib, the merger concatenates multiple PDF files while preserving embedded fonts, vector outlines, form field metadata, and hyperlinked annotations. With instantaneous drag-and-drop reordering, page preview thumbnails, and zero server communication, you can assemble critical corporate packets with uncompromising speed and data security.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Select or Drag Source PDFs:</strong> Drop multiple PDF files into the staging zone or select files simultaneously from your operating system folder.</li>
+          <li><strong>Arrange File Sequence:</strong> Drag and drop document cards to establish the exact sequential page order, or remove unwanted files before compilation.</li>
+          <li><strong>Compile & Export Merged PDF:</strong> Click the merge button to synthesize a unified document stream and immediately download the combined PDF to your local storage.</li>
+        </ol>
+        <h2>The Engine & Document Processing Architecture</h2>
+        <div class="formula-box">
+          <div class="formula-title">pdf-lib Binary Object Graph & copyPages() API</div>
+          <div class="formula-expr"><code>const pages = await mergedDoc.copyPages(srcDoc, srcDoc.getPageIndices())</code></div>
+        </div>
+        <p>The engine instantiates an empty PDFDocument object. As each source file is parsed from an in-memory Uint8Array, copyPages() extracts the page dictionary references without re-rasterizing vector streams, appending them via addPage() before rebuilding the cross-reference (xref) table during serialization.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Mortgage Application Dossier Assembly</h4>
+            <p>Combining 8 separate financial disclosures, tax returns, and bank statements totaling 42 pages into a single, organized 3.4 MB loan package in under 2 seconds.</p>
+          </div>
+          <div class="content-card">
+            <h4>Academic Research Compilation</h4>
+            <p>Collating a research paper, appendix figures, and bibliography charts from distinct PDF exports into an integrated submission document with preserved vector clarity.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Uploading Password-Encrypted PDFs</h4>
+            <p>Password-protected PDFs prevent dictionary extraction; decrypt or unlock protected source files before attempting collation.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Overlooking Differing Page Orientations</h4>
+            <p>Merging landscape presentations with portrait reports without checking page layout can produce jarring orientations; verify orientation before final distribution.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Accidental Duplicate Page Inclusions</h4>
+            <p>Selecting the same report revision multiple times causes redundant chapters; review the visual file list prior to triggering the merge pipeline.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your sensitive documents never leave your physical machine. The binary parsing and assembly of PDF page trees execute 100% inside your browser's private memory space. No document bytes are ever uploaded to remote servers or stored in cloud databases, guaranteeing absolute confidentiality for legal, financial, and medical records.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Does merging PDFs reduce the quality of vector graphics or text?</summary>
+            <div class="faq-answer">
+              <p>No. The pdf-lib engine performs low-level binary copying of internal PDF content streams. Vector graphics, embedded typography, and layout definitions remain 100% uncompressed and pristine.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Is there a limit on how many PDF files I can merge?</summary>
+            <div class="faq-answer">
+              <p>There is no programmatic software limit. The only constraint is your computer's available physical RAM to hold the active document binary buffers simultaneously.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I merge PDF files that have different page dimensions?</summary>
+            <div class="faq-answer">
+              <p>Yes. PDF standards allow individual pages within the same document to have independent MediaBox dimensions, allowing US Letter, A4, and custom slides to coexist seamlessly.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related PDF & Document Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-split.html" class="related-tool-card">
+            <div class="tool-name">PDF Splitter</div>
+            <div class="tool-desc">Extract specific page ranges or burst documents into individual pages.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">PDF to Word Converter</div>
+            <div class="tool-desc">Extract formatted editable document text from PDF archives.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Base64 File Encoder</div>
+            <div class="tool-desc">Encode compiled PDF files into data strings for transmission.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- 3 Guide Cards -->
-      <div class="guide-cards-grid">
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>Zero Server Transmission</span>
-          </h3>
-          <p>Traditional PDF sites upload your tax documents, contracts, and IDs to cloud servers where they may sit in temporary buckets. VantorKit processes files entirely in your browser's local sandbox memory.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة دمج ملفات PDF عبر المتصفح من فانتور كيت حلاً برمجياً متقدماً لتجميع المستندات وإدارتها بدقة فائقة، وهي مصممة خصيصاً للمحامين والمحاسبين والباحثين والشركات. إن تجميع العقود القانونية والتقارير المالية والملفات الأكاديمية المنفصلة في ملف PDF واحد كان يفرض تاريخياً رفع وثائق سرية للغاية إلى خوادم سحابية تابعة لجهات خارجية. تقوم هذه الأداة بفرز كائنات PDF وإعادة بناء جداول الإسناد المتقاطع وهياكل الصفحات بالكامل داخل الذاكرة العشوائية لمتصفحك المحلي.</p>
+        <p>بالاعتماد على مكتبة pdf-lib المتطورة وتقنيات المعالجة الثنائية المباشرة، تُدمج الملفات مع الحفاظ الكامل على الخطوط المضمنة والرسومات المتجهية وحقول النماذج والروابط التشعبية. بفضل ميزة إعادة ترتيب الملفات بالسحب والإفلات والاستجابة اللحظية مع انعدام أي اتصال بالشبكة، يمكنك تجهيز ملفاتك الرسمية بأقصى درجات السرعة والأمان.</p>
+        <p>تتميز هذه المنظومة بقدرتها الفائقة على التعامل مع المستندات المعقدة التي تحتوي على طبقات رسومية متعددة وعناصر تفاعلية ونماذج قابلة للتعبئة. بفضل التحسين المستمر لمعالجة تدفقات الذاكرة، توفر الأداة حلاً مثالياً للمؤسسات والشركات لتجميع الملفات الإدارية وتوثيق العقود اليومية دون أي مخاوف أمنية.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختيار أو سحب ملفات PDF:</strong> قم بإفلات ملفات PDF المتعددة في مساحة العمل المخصصة أو اختر عدة مستندات معاً من متصفح ملفات جهازك.</li>
+          <li><strong>إعادة ترتيب تسلسل المستندات:</strong> اسحب بطاقات الملفات لتحديد الترتيب الدقيق للصفحات كما ترغب، أو احذف أي ملف غير مطلوب قبل التجميع النهائي.</li>
+          <li><strong>دمج وتحميل الملف الموحد:</strong> اضغط على زر الدمج ليقوم المتصفح ببناء المستند الجديد فوراً وتنزيله مباشرة إلى قرصك الصلب دون انتظار.</li>
+        </ol>
+        <h2>المحرك البرمجي وبنية معالجة المستندات</h2>
+        <div class="formula-box">
+          <div class="formula-title">معالجة كائنات PDF الثنائية عبر دالة copyPages()</div>
+          <div class="formula-expr"><code>const pages = await mergedDoc.copyPages(srcDoc, srcDoc.getPageIndices())</code></div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>Lossless Quality Preservation</span>
-          </h3>
-          <p>Our engine copies underlying PDF content streams, embedded vector fonts, high-resolution figures, and raster graphics directly into the new container document without downsampling or degradation.</p>
+        <p>ينشئ المحرك كائناً فارغاً لمستند PDF رئيسي. عند قراءة كل ملف مصدر من مصفوفة بايتات Uint8Array، تقوم دالة copyPages بنسخ قواميس الصفحات الأصلية دون إعادة رسم متجهات الرسوميات، وتدمجها عبر addPage قبل بناء جدول الإسناد المتقاطع (xref).</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تجهيز ملفات القروض والتمويل البنكي</h4>
+            <p>دمج 8 مستندات بنكية وإقرارات ضريبية منفصلة تضم 42 صفحة في ملف PDF موحد بحجم 3.4 ميجابايت خلال أقل من ثانيتين.</p>
+          </div>
+          <div class="content-card">
+            <h4>تجميع الأبحاث والرسائل الجامعية</h4>
+            <p>توحيد أوراق البحث الأكاديمي والملاحق الإحصائية والجداول الرسومية من عدة ملفات في مستند رسمي متكامل مع الحفاظ التام على جودة المخططات.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-            <span>Instant Compilation Speed</span>
-          </h3>
-          <p>Eliminate upload and download latency. Merging occurs instantaneously at the full CPU processing speed of your personal machine, making it ideal for large, multi-hundred-page binders.</p>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ محاولة دمج ملفات محمية بكلمات مرور</h4>
+            <p>الملفات المشفرة بكلمات مرور تمنع الوصول إلى قواميس المحتوى الداخلية؛ قم بفك التشفير أو إلغاء الحماية قبل البدء بالدمج.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تجاهل اختلاف اتجاهات الصفحات</h4>
+            <p>دمج عروض تقديمية أفقية مع تقارير طولية دون مراجعة ينتج عنه مستند غير متناسق؛ تحقق من اتجاه الصفحات قبل اعتماد الترتيب.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إدراج مسودات مكررة لنفس المستند</h4>
+            <p>اختيار نسخ متعددة من نفس التقرير عن طريق الخطأ يؤدي لتكرار الصفحات؛ راجع قائمة البطاقات بعناية قبل التوليد النهائي.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>وثائقك ومستنداتك السرية لا تغادر حاسوبك الشخصي إطلاقاً. تتم عمليات قراءة شفرات البايتات وبناء جداول الصفحات بنسبة 100% داخل مساحة الذاكرة المحلية لمتصفحك دون رفع أي بيانات إلى خوادم بعيدة، مما يضمن سرية تامة للمعاملات القانونية والمالية والطبية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل يؤدي دمج ملفات PDF إلى تقليل دقة الخطوط أو الرسومات المتجهية؟</summary>
+            <div class="faq-answer">
+              <p>كلا، تعتمد الأداة على نسخ جداول المحتوى الثنائي مباشرة على مستوى البايتات، وبالتالي تظل النصوص والخطوط المضمنة والرسومات المتجهية بدقتها الأصلية 100%.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل هناك سقف أقصى لعدد ملفات PDF التي يمكن دمجها؟</summary>
+            <div class="faq-answer">
+              <p>لا توجد قيود برمجية على عدد الملفات؛ يعتمد الحد فقط على سعة الذاكرة العشوائية المتاحة في جهازك للتعامل مع تدفقات البايتات للمستندات المفتوحة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكن دمج ملفات ذات مقاسات صفحات مختلفة (مثل A4 وLetter)؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. تتيح مواصفات قياسات PDF احتواء كل صفحة داخل المستند الواحد على أبعاد مستقلة دون أي تعارض في العرض.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات ملفات PDF والمستندات ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-split.html" class="related-tool-card">
+            <div class="tool-name">أداة تقسيم PDF</div>
+            <div class="tool-desc">استخراج صفحات محددة أو فصل المستندات الضخمة إلى صفحات مستقلة.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">تحويل PDF إلى Word</div>
+            <div class="tool-desc">استخراج وتنسيق النصوص القابلة للتحرير من مستندات PDF.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">مشفر الملفات إلى Base64</div>
+            <div class="tool-desc">تشفير ملفات PDF الناتجة إلى سلاسل نصية لتسهيل نقلها البرمجي.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="info-header" style="margin-bottom: 2rem;">
-        <h2>Frequently Asked Questions</h2>
-        <p>Clear answers to common questions regarding local PDF merging, security, and document handling.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>L'outil de fusion de fichiers PDF côté client de VantorKit est une solution professionnelle d'assemblage documentaire conçue pour les juristes, les experts-comptables, les universitaires et les entreprises. Réunir plusieurs contrats juridiques, déclarations fiscales et dossiers de recherche au sein d'un document consolidé contraignait jusqu'alors à téléverser des données sensibles vers des serveurs tiers. Cet utilitaire opère l'intégralité du traitement binaire des dictionnaires d'objets, l'arborescence des pages et la reconstruction des tables d'indexation directement au cœur de votre navigateur.</p>
+        <p>S'appuyant sur la bibliothèque de pointe pdf-lib et la manipulation directe des flux de données, le moteur concatène vos fichiers en préservant scrupuleusement les polices vectorielles incorporées, les formulaires interactifs et les hyperliens. Grâce à un système intuitif d'ordonnancement par glisser-déposer et à une exécution locale sans aucun transfert réseau, vous assemblez vos dossiers officiels avec une rapidité fulgurante et une confidentialité absolue.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Sélectionnez ou déposez vos PDF:</strong> Glissez vos différents fichiers PDF dans la zone d'assemblage ou choisissez plusieurs documents simultanément depuis votre dossier local.</li>
+          <li><strong>Organisez la séquence des pages:</strong> Déplacez les cartes documentaires pour définir l'ordre chronologique exact de lecture et supprimez les pages superflues avant validation.</li>
+          <li><strong>Générez et téléchargez le PDF unifié:</strong> Cliquez sur le bouton de fusion pour ordonnancer le document final et lancez immédiatement le téléchargement sur votre espace de stockage.</li>
+        </ol>
+        <h2>Moteur de traitement et architecture documentaire</h2>
+        <div class="formula-box">
+          <div class="formula-title">Manipulation d'objets binaires pdf-lib et API copyPages()</div>
+          <div class="formula-expr"><code>const pages = await mergedDoc.copyPages(srcDoc, srcDoc.getPageIndices())</code></div>
+        </div>
+        <p>L'infrastructure alloue un nouvel objet PDFDocument vierge en mémoire vive. Dès qu'un fichier source est chargé dans un tableau d'octets Uint8Array, la méthode copyPages extrait les dictionnaires de pages sans altérer les flux graphiques vectoriels avant d'assembler la table de références croisées (xref).</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Constitution de dossiers de crédit bancaire</h4>
+            <p>Assemblage de 8 justificatifs de revenus, bilans comptables et quittances totalisant 42 pages en un document unique de 3.4 Mo en moins de 2 secondes.</p>
+          </div>
+          <div class="content-card">
+            <h4>Publication de mémoires universitaires</h4>
+            <p>Agrégation du corps principal d'un mémoire, des annexes statistiques et des bibliographies éditées sous des formats PDF distincts en un document homogène.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Tenter de fusionner des PDF verrouillés par mot de passe</h4>
+            <p>Les fichiers protégés empêchent l'analyse des flux d'objets internes; supprimez la protection par mot de passe avant de procéder à l'assemblage.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignorer les disparités d'orientation des pages</h4>
+            <p>Mélanger des diapositives au format paysage avec des rapports au format portrait sans vérification préalable nuit à la fluidité de lecture du dossier.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sélectionner des doublons involontaires</h4>
+            <p>Ajouter par inadvertance plusieurs fois la même révision d'un contrat crée des répétitions; vérifiez la liste des vignettes avant la compilation.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos documents hautement confidentiels ne quittent jamais votre équipement informatique. La lecture des flux binaires et la restructuration des arborescences de pages s'exécutent intégralement dans la mémoire vive de votre navigateur. Aucun octet n'est téléversé sur un serveur distant, assurant une protection inviolable pour vos données juridiques et financières.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>La fusion altère-t-elle la qualité des graphiques vectoriels et des textes ?</summary>
+            <div class="faq-answer">
+              <p>Non. Le moteur effectue une recopie binaire rigoureuse des flux de contenu natifs. Les typographies vectorielles et les schémas conservent l'intégralité de leur netteté d'origine.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Existe-t-il une limite quant au nombre de fichiers fusionnables ?</summary>
+            <div class="faq-answer">
+              <p>Il n'y a aucun bridage logiciel artificiel. La seule limitation repose sur la mémoire vive (RAM) disponible sur votre terminal pour charger simultanément les flux binaires.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Peut-on assembler des documents de formats différents (A4, Letter) ?</summary>
+            <div class="faq-answer">
+              <p>Oui, la norme PDF autorise parfaitement la coexistence de dimensions de pages hétérogènes (MediaBox variables) au sein d'un même fichier assemblé.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils PDF et gestion documentaire connexes</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-split.html" class="related-tool-card">
+            <div class="tool-name">Séparateur de PDF</div>
+            <div class="tool-desc">Extrayez des plages de pages précises ou séparez vos documents.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur PDF vers Word</div>
+            <div class="tool-desc">Récupérez le texte éditable de vos archives documentaires.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Encodeur de fichiers en Base64</div>
+            <div class="tool-desc">Encodez vos PDF sous forme de chaînes de données pour vos transferts.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>Is it safe to merge sensitive medical or legal documents here?</h4>
-          <p>Yes. Disconnect your device from Wi-Fi or turn on Airplane mode after loading this page, and the merger will work with 100% full capability. No external HTTP request is ever made with your document data.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Lo strumento di unione file PDF lato client di VantorKit è una soluzione professionale per l'assemblaggio di documenti digitali, ideata per commercialisti, studi legali, ricercatori e imprese. Unificare contratti riservati, dichiarazioni tributarie e cartelle sanitarie in un unico dossier imponeva storicamente il caricamento di file delicati su server cloud esterni. Questo strumento gestisce l'analisi della struttura degli oggetti PDF, l'albero delle pagine e la ricostruzione della tabella delle referenze incrociate direttamente nel browser.</p>
+        <p>Sfruttando la tecnologia avanzata di pdf-lib e la manipolazione binaria a basso livello, il motore unisce i file salvaguardando caratteri tipografici incorporati, elementi vettoriali, campi modulo e collegamenti ipertestuali. Grazie all'ordinamento intuitivo tramite trascinamento e all'assenza totale di trasmissioni via internet, puoi preparare i tuoi fascicoli aziendali con velocità fulminea e sicurezza assoluta.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Trascina o carica i file PDF:</strong> Rilascia i tuoi documenti PDF nell'area di lavoro o seleziona più file contemporaneamente dall'archivio del tuo computer.</li>
+          <li><strong>Imposta la sequenza dei documenti:</strong> Trascina i riquadri dei file per definire l'ordine cronologico esatto delle pagine ed elimina eventuali documenti non necessari.</li>
+          <li><strong>Unisci e scarica il file completo:</strong> Fai clic sul pulsante di unione per compilare il documento aggregato e scaricarlo immediatamente sul tuo disco locale.</li>
+        </ol>
+        <h2>Motore di elaborazione e architettura documentale</h2>
+        <div class="formula-box">
+          <div class="formula-title">Elaborazione oggetti binari pdf-lib e metodo copyPages()</div>
+          <div class="formula-expr"><code>const pages = await mergedDoc.copyPages(srcDoc, srcDoc.getPageIndices())</code></div>
         </div>
-
-        <div class="faq-item">
-          <h4>How do I control the order of pages in the merged file?</h4>
-          <p>Documents in the list are merged in top-to-bottom sequence. You can reorder files at any time by clicking the Up (▲) and Down (▼) buttons on any item or by dragging the file card directly.</p>
+        <p>Il motore istanzia un documento PDFDocument vuoto. Ciascun file di origine viene elaborato da un buffer Uint8Array in memoria; la funzione copyPages estrae i dizionari delle pagine senza alterare i flussi vettoriali, unendoli con addPage prima di ricompilare la tabella delle referenze (xref).</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Fascicolo per richiesta mutuo bancario</h4>
+            <p>Accorpamento di 8 documenti contabili, buste paga e certificati per un totale di 42 pagine in un unico file da 3.4 MB in meno di 2 secondi.</p>
+          </div>
+          <div class="content-card">
+            <h4>Pubblicazione tesi e allegati scientifici</h4>
+            <p>Unione dell'elaborato accademico principale con tabelle e grafici vettoriali provenienti da file PDF separati preservando l'alta definizione originale.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>What happens to forms, bookmarks, and links in the merged PDF?</h4>
-          <p>Standard visual pages and content streams are preserved. If individual source files contain form fields with conflicting internal names, they are standardized during concatenation to prevent corruption.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Tentare l'unione di file PDF crittografati</h4>
+            <p>I documenti protetti da password bloccano l'accesso alla struttura dei dati; rimuovi la protezione crittografica prima di procedere con l'unione.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Trascurare l'orientamento eterogeneo delle pagine</h4>
+            <p>Unire presentazioni orizzontali a documenti con orientamento verticale senza controllo preliminare genera discontinuità visive nel fascicolo.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Inserire involontariamente file duplicati</h4>
+            <p>Caricare per errore più versioni della stessa bozza produce capitoli ridondanti; verifica l'anteprima delle schede prima della compilazione.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>Are there any file size or usage limits?</h4>
-          <p>There are no arbitrary daily quotas or paywalls. You can merge as many documents as your device's memory comfortably accommodates.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>I tuoi documenti confidenziali non abbandonano mai il tuo dispositivo. La lettura dei byte e l'aggregazione delle pagine avvengono al 100% nella memoria RAM locale del tuo browser. Nessun dato viene caricato su server remoti o archiviato nel cloud, garantendo totale riservatezza per pratiche legali e fiscali.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>L'unione dei PDF altera la nitidezza dei testi o dei grafici vettoriali?</summary>
+            <div class="faq-answer">
+              <p>No. Il motore pdf-lib esegue una copia binaria diretta dei flussi interni. Le definizioni vettoriali e i font incorporati rimangono fedeli al 100% all'originale.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quanti documenti PDF è consentito unire simultaneamente?</summary>
+            <div class="faq-answer">
+              <p>Non esistono limitazioni software prestabilite. Il limite operativo dipende unicamente dalla quantità di memoria RAM disponibile sul tuo computer.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È consentito unire pagine con formati differenti (A4 e Letter)?</summary>
+            <div class="faq-answer">
+              <p>Sì. Le specifiche standard del formato PDF permettono a ogni pagina di avere coordinate dimensionali (MediaBox) autonome all'interno dello stesso documento.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti PDF e gestione documenti correlati</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-split.html" class="related-tool-card">
+            <div class="tool-name">Separatore di PDF</div>
+            <div class="tool-desc">Estrai intervalli di pagine o suddividi documenti voluminosi.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">Convertitore PDF in Word</div>
+            <div class="tool-desc">Estrai testo modificabile e formattato dai tuoi archivi PDF.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Codificatore file in Base64</div>
+            <div class="tool-desc">Converti i file PDF in stringhe di dati per le tue trasmissioni.</div>
+          </a>
         </div>
       </div>
     </article>

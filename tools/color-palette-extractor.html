@@ -36,70 +36,54 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Color Palette Extractor",
-        "url": "https://vantorkit.com/tools/color-palette-extractor.html",
-        "applicationCategory": "DesignApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side color palette extractor using HTML5 Canvas pixel sampling and k-means quantization. Features interactive eyedropper, WCAG contrast scoring, and instant CSS variable, PNG, and JSON exports."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Color Palette Extractor",
+      "url": "https://vantorkit.com/tools/color-palette-extractor.html",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my images uploaded to any remote server or third-party cloud?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. Color extraction executes 100% locally inside your web browser using HTML5 Canvas pixel sampling and k-means quantization algorithms. Your proprietary designs, photos, and artwork never leave your device."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does client-side color extraction work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The tool draws your image onto an in-memory HTML5 Canvas element, extracts raw pixel RGBA values, filters out transparent areas, and applies k-means clustering to group millions of pixels into mathematically dominant chromatic centroids."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How are contrast ratios and WCAG accessibility calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Relative luminance is calculated using the official WCAG 2.1 formula based on linearized sRGB color channels. The tool then calculates contrast ratios against pure white (#FFFFFF) and pure black (#000000) to confirm if text satisfies AA (4.5:1) or AAA (7:1) readability guidelines."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I sample custom individual pixel colors from the image?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! The interactive image preview includes a live magnifying loupe that inspects pixels as you hover. Clicking anywhere on the image locks that specific pixel color so you can copy its HEX code or add it directly to your custom palette."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What export formats are supported?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can copy all palette swatches as ready-to-paste CSS custom properties (--color-1, --color-2), download an ultra-sharp presentation PNG swatch card, or export structured JSON containing HEX, RGB, HSL, luminance, and contrast metrics."
-            }
+      "description": "Free client-side color palette extractor using HTML5 Canvas pixel sampling and k-means quantization. Features interactive eyedropper, WCAG contrast scoring, and instant CSS variable, PNG, and JSON exports."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does median-cut quantization identify dominant colors?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The algorithm constructs a 3D bounding box containing all RGB coordinates in the image, then recursively splits the box along its dimension of greatest color variance until the target number of discrete color clusters is reached."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I export the extracted palette directly into my CSS codebase?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The tool generates copyable snippets including CSS custom properties (:root variables), JSON arrays, and Tailwind CSS configuration objects."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the extractor consider semi-transparent alpha pixels?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Pixels with an alpha channel below 0.5 are automatically filtered out during buffer scanning to prevent background canvas bleeding from polluting your palette."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1792,6 +1776,388 @@
       </div>
 
     </div>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Color Palette Extractor is an intelligent algorithmic color quantization tool built for digital artists, UI/UX designers, and frontend architects. Isolating cohesive, harmonious color palettes from existing brand photography, mood boards, or nature shots is traditionally an arduous manual eyedropper task. This utility automatically scans every pixel within a target graphic, clusters chromatically adjacent RGB coordinates using median-cut quantization, and outputs dominant color schemes alongside accessible contrast metrics.</p>
+        <p>Because the extraction engine runs 100% inside your client-side browser runtime, it processes ultra-high-resolution RAW photos and proprietary UI mockups instantaneously with zero network latency. Every identified swatch is presented with corresponding HEX, RGB, HSL, and WCAG contrast ratings, allowing you to copy design tokens directly into Tailwind CSS, CSS variables, or design systems without external telemetry.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Load Source Graphic:</strong> Drag and drop any photograph, illustration, or UI mockup into the drop zone, or paste an image directly from your operating system clipboard.</li>
+          <li><strong>Adjust Swatch Count & Clustering:</strong> Configure your desired palette size from 4 to 12 distinct swatches, and choose whether to sort colors by visual prominence or tonal luminance.</li>
+          <li><strong>Export Swatches & Design Tokens:</strong> Click any color tile to copy HEX or HSL codes instantly, or export the complete palette as a CSS variables snippet or JSON array for your codebase.</li>
+        </ol>
+        <h2>The Engine & Canvas Graphics Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">ImageData Pixel Buffer & Median-Cut Quantization</div>
+          <div class="formula-expr"><code>ctx.getImageData(0, 0, width, height).data</code></div>
+        </div>
+        <p>The extractor draws the image to a canvas element and extracts the raw Uint8ClampedArray pixel buffer. An asynchronous median-cut or k-means spatial clustering algorithm partitions 3D RGB color space along its longest axis recursively to establish balanced dominant color centroids.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Brand Identity UI Theme Generation</h4>
+            <p>Extracting a 6-color system from a client's flagship marketing photography, generating primary brand accents, dark neutral backgrounds, and soft muted borders ready for CSS design systems.</p>
+          </div>
+          <div class="content-card">
+            <h4>Digital Art & Illustration Matching</h4>
+            <p>Sampling tonal gradients from a fantasy landscape concept painting to create consistent environmental lighting swatches in Figma and Procreate with zero manual guesswork.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Sampling Images Dominated by Monotone Backgrounds</h4>
+            <p>An image with 85% solid white or black space yields repetitive neutral swatches; crop or focus your input on dynamic, colorful areas for diverse palettes.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring WCAG Text Contrast Ratios</h4>
+            <p>Pairing extracted primary swatches with secondary text without checking luminance can create unreadable interfaces; always verify contrast ratings before implementing text.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Over-sampling Noisy Artifacts in JPEGs</h4>
+            <p>Low-bitrate images with compression noise can introduce erratic muddy swatches; use high-resolution clean PNG or WebP files for accurate color harvesting.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All color quantification operations execute strictly within your local browser memory. Your proprietary brand photos, unannounced marketing campaigns, and artwork files are never uploaded to any remote server or stored in third-party databases. Complete design privacy is guaranteed.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How does median-cut quantization identify dominant colors?</summary>
+            <div class="faq-answer">
+              <p>The algorithm constructs a 3D bounding box containing all RGB coordinates in the image, then recursively splits the box along its dimension of greatest color variance until the target number of discrete color clusters is reached.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I export the extracted palette directly into my CSS codebase?</summary>
+            <div class="faq-answer">
+              <p>Yes. The tool generates copyable snippets including CSS custom properties (:root variables), JSON arrays, and Tailwind CSS configuration objects.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does the extractor consider semi-transparent alpha pixels?</summary>
+            <div class="faq-answer">
+              <p>No. Pixels with an alpha channel below 0.5 are automatically filtered out during buffer scanning to prevent background canvas bleeding from polluting your palette.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Image & Graphic Design Tools</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Image Compressor</div>
+            <div class="tool-desc">Optimize your graphics before or after extracting visual palettes.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image to Base64</div>
+            <div class="tool-desc">Convert color-sampled graphics into inline data strings.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">SVG to PNG Converter</div>
+            <div class="tool-desc">Rasterize vector brand icons into crisp bitmap assets.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة استخراج باليت الألوان من فانتور كيت حلاً برمجياً فائق الذكاء لتكميم الألوان وعزل الدرجات المتناسقة، وهي مصممة خصيصاً لمصممي الواجهات والفنانين الرقميين ومهندسي الواجهات الأمامية. إن استخراج أنظمة ألوان متناغمة من الصور الفوتوغرافية أو لوحات الإلهام بالطرق اليدوية عبر أداة القطارة عملية شاقة ومستهلكة للوقت. تقوم هذه الأداة بمسح كل بكسل داخل الصورة، وتجميع إحداثيات الألوان المتجاورة في فضاء RGB عبر خوارزمية التقطيع الوسيط، وتوليد لوحات لونية متكاملة مدعومة بمقاييس التباين البصري.</p>
+        <p>نظراً لأن محرك الاستخراج يعمل بنسبة 100% داخل المتصفح، يمكنك معالجة الصور ذات الدقة الفائقة والتصاميم الحصرية دون أي تأخير في الشبكة أو رفع للملفات. يتم تقديم كل لون بصيغ HEX وRGB وHSL مع اختبارات سهولة القراءة حسب معايير WCAG لنسخها واستخدامها مباشرة في أنظمة التصميم وTailwind CSS.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>رفع الصورة المراد تحليلها:</strong> قم بسحب وإفلات أي صورة فوتوغرافية أو تصميم في مساحة الفحص، أو الصق صورة مباشرة من حافظة جهازك.</li>
+          <li><strong>تحديد عدد العينات ونمط التجميع:</strong> اختر عدد الألوان المطلوب في الباليت من 4 إلى 12 لوناً، وحدد ما إذا كنت تفضل الترتيب حسب نسبة الهيمنة البصرية أو شدة السطوع.</li>
+          <li><strong>نسخ الأكواد وتصدير الرموز:</strong> انقر على أي مربع لوني لنسخ كود HEX أو HSL فوراً، أو قم بتصدير الباليت كاملة كمتغيرات CSS جاهزة للتضمين في مشروعك البرمجي.</li>
+        </ol>
+        <h2>المحرك البرمجي وتقنيات معالجة الرسوميات</h2>
+        <div class="formula-box">
+          <div class="formula-title">مصفوفة بكسلات ImageData وخوارزمية Median-Cut</div>
+          <div class="formula-expr"><code>ctx.getImageData(0, 0, width, height).data</code></div>
+        </div>
+        <p>ترسم الأداة الصورة على عنصر كانفاس وتستخرج مصفوفة البايتات المباشرة Uint8ClampedArray. تُقسّم خوارزمية التقطيع الوسيط فضاء الألوان ثلاثي الأبعاد بشكل تكراري على طول المحور الأوسع تبايناً للوصول إلى مراكز الألوان الأكثر هيمنة.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>بناء ثيمات متناسقة لهويات الشركات</h4>
+            <p>استخراج نظام لوني مكون من 6 ألوان متناغمة من جلسة تصوير تسويقية، لتوليد ألوان الواجهة الرئيسية والخلفيات الداكنة والحدود الناعمة لمتغيرات CSS.</p>
+          </div>
+          <div class="content-card">
+            <h4>مطابقة التدرجات في الرسم الرقمي</h4>
+            <p>سحب عينات الإضاءة المحيطة وتدرجات الظلال من لوحات المناظر الخيالية لتطبيقها بدقة وتناغم داخل تطبيقات Figma وProcreate.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ تحليل صور تهيمن عليها خلفيات أحادية صلبة</h4>
+            <p>استخدام صورة تحتوي على مساحات بيضاء أو سوداء بنسبة 80% يولد عينات مكررة محايدة؛ ركز التحليل على الأجزاء الحيوية الملونة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إهمال معايير تباين النصوص والسهولة البصرية</h4>
+            <p>دمج الألوان المستخرجة مع نصوص دون فحص معامل السطوع يضر بإمكانية القراءة؛ تأكد دائماً من درجات WCAG قبل اعتماد الألوان.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الاعتماد على صور منخفضة الجودة ذات تشويش</h4>
+            <p>الصور ذات الجودة الرديئة المليئة بضبابية الضغط تولد ألواناً مشوهة وغير نقية؛ استخدم ملفات PNG أو WebP عالية الوضوح.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تتم جميع عمليات مسح وتجميع الألوان حصرياً في الذاكرة العشوائية لمتصفحك المحلي. تصاميمك الحصرية وصور منتجاتك السرية لا تُرسل مطلقاً إلى أي خوادم خارجية ولا تُخزن في أي قواعد بيانات، مما يمنحك سرية تامة ومطلقة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف تعمل خوارزمية التقطيع الوسيط في عزل الألوان المهيمنة؟</summary>
+            <div class="faq-answer">
+              <p>تقوم الخوارزمية بإنشاء صندوق إحداثيات ثلاثي الأبعاد يضم قيم RGB لكافة بكسلات الصورة، ثم تشطره تكرارياً عند المحور الأكثر تبايناً حتى تتشكل مجموعات لونية متوازنة تعبر عن روح الصورة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكنني تصدير الألوان المستخرجة مباشرة إلى ملفات CSS؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. تتيح الأداة تصدير الألوان كمتغيرات جذرية (:root) في CSS أو ككائنات JSON أو كرموز مهيأة لإعدادات Tailwind CSS.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تؤثر البكسلات الشفافة على دقة الألوان المستخرجة؟</summary>
+            <div class="faq-answer">
+              <p>كلا، يتم تجاهل أي بكسل تقل قيمة الشفافية فيه عن 50% تلقائياً أثناء المسح لضمان عدم تلويث الباليت بخلفية لوحة الرسم.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات الصور والتصميم الجرافيكي ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">ضاغط الصور</div>
+            <div class="tool-desc">تحسين حجم الصور قبل أو بعد استخراج الألوان منها.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">تحويل الصور إلى Base64</div>
+            <div class="tool-desc">تحويل الرسومات إلى سلاسل نصية لتضمينها في الأكواد.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">تحويل SVG إلى PNG</div>
+            <div class="tool-desc">تحويل الشعارات المتجهية إلى صور نقطية بأبعاد قابلة للتخصيص.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>L'extracteur de palette de couleurs côté client de VantorKit est un outil algorithmique de quantification chromatique dédié aux artistes numériques, aux designers UX/UI et aux intégrateurs front-end. Isoler une palette cohérente et équilibrée à partir d'une photographie de marque, d'un tableau d'ambiance ou d'un visuel naturel relève traditionnellement d'un travail fastidieux à la pipette. Cet utilitaire analyse chaque pixel de votre image, regroupe les coordonnées RGB selon l'algorithme de coupe médiane et génère des harmonies de couleurs prêtes à l'emploi associées à des métriques de contraste WCAG.</p>
+        <p>Grâce à une exécution entièrement confinée dans le navigateur, l'outil analyse les photographies haute résolution et les maquettes confidentielles sans aucun temps de transfert réseau. Chaque nuance est accompagnée de ses valeurs HEX, RGB, HSL et de son ratio d'accessibilité, vous permettant de copier directement des jetons de conception dans vos variables CSS ou vos configurations Tailwind.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Déposez votre visuel de référence:</strong> Glissez n'importe quelle photographie ou maquette graphique dans la zone d'analyse, ou collez directement une image depuis votre presse-papiers.</li>
+          <li><strong>Configurez le nombre de nuances:</strong> Définissez la taille de votre palette entre 4 et 12 nuances distinctes et choisissez le mode de classement par dominance visuelle ou par luminance.</li>
+          <li><strong>Exportez les codes couleurs et jetons:</strong> Cliquez sur une vignette pour copier son code HEX ou HSL, ou exportez l'ensemble sous la forme de variables CSS ou d'un objet JSON pour votre projet.</li>
+        </ol>
+        <h2>Moteur de rendu et traitement graphique Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">Buffer ImageData et quantification par coupe médiane</div>
+          <div class="formula-expr"><code>ctx.getImageData(0, 0, width, height).data</code></div>
+        </div>
+        <p>L'image est projetée dans un élément canvas hors écran pour extraire le tampon brut Uint8ClampedArray. L'algorithme de coupe médiane segmente récursivement l'espace colorimétrique 3D selon son axe de plus grande variance pour déterminer les centroïdes dominants.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Création de thèmes graphiques d'entreprise</h4>
+            <p>Extraction d'un système à 6 teintes à partir de la photo publicitaire phare d'un client, générant les couleurs d'accent, les arrière-plans neutres et les bordures pour un design system.</p>
+          </div>
+          <div class="content-card">
+            <h4>Harmonisation chromatique pour l'illustration</h4>
+            <p>Prélèvement d'ambiances lumineuses sur un concept art pour harmoniser des teintes environnementales dans Figma sans approximations manuelles.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Analyser des visuels à fond monochrome prédominant</h4>
+            <p>Une image composée à 80% de blanc uni produit des nuances neutres répétitives; recadrez votre sélection sur les zones denses en couleurs.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Négliger les règles d'accessibilité WCAG</h4>
+            <p>Associer une couleur extraite à du texte sans vérifier le contraste lumineux nuit à la lisibilité; consultez toujours les scores de conformité intégrés.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Utiliser des fichiers JPEG fortement altérés</h4>
+            <p>Les artefacts de compression génèrent des pixels bruités et faussent la pureté de la palette; travaillez avec des fichiers PNG ou WebP nets.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toutes les étapes d'analyse des pixels et d'agrégation statistique s'exécutent strictement dans la mémoire vive locale de votre navigateur. Vos photographies de marque inédites et vos projets de création ne sont jamais téléversés sur des serveurs distants, assurant une protection totale du secret professionnel.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment la coupe médiane sélectionne-t-elle les teintes dominantes ?</summary>
+            <div class="faq-answer">
+              <p>Elle englobe tous les pixels de l'image dans une boîte tridimensionnelle RGB, puis la divise récursivement sur l'axe présentant la plus grande dispersion jusqu'à obtenir le nombre exact de cellules colorimétriques souhaité.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je exporter directement la palette dans mon code CSS ?</summary>
+            <div class="faq-answer">
+              <p>Oui. L'utilitaire produit des extraits prêts à copier comprenant des propriétés personnalisées CSS (:root), des tableaux JSON et des jetons pour Tailwind CSS.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Les pixels transparents faussent-ils les résultats ?</summary>
+            <div class="faq-answer">
+              <p>Non. Tout pixel dont l'opacité est inférieure à 50% est écarté lors du parcours initial afin d'éviter que le fond vierge ne vienne fausser les centroïdes de couleur.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils d'image et de design graphique connexes</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compresseur d'images</div>
+            <div class="tool-desc">Allégez vos créations avant ou après l'extraction des palettes.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image vers Base64</div>
+            <div class="tool-desc">Transformez vos visuels en chaînes intégrables dans votre code.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">SVG vers PNG</div>
+            <div class="tool-desc">Rastérisez vos éléments vectoriels avec une netteté absolue.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>L'estrattore di palette di colori lato client di VantorKit è un motore di quantizzazione cromatica avanzato, progettato per grafici digitali, designer UI/UX e sviluppatori front-end. Catturare una tavolozza armonica ed equilibrata a partire da foto di catalogo, moodboard o immagini panoramiche richiede solitamente un tedioso campionamento manuale con contagocce. Questo strumento esamina ogni pixel dell'immagine, raggruppa le coordinate RGB nello spazio tridimensionale tramite l'algoritmo median-cut e genera combinazioni cromatiche bilanciate corredate di parametri di contrasto WCAG.</p>
+        <p>Grazie all'esecuzione che avviene al 100% all'interno del runtime del browser, puoi scansionare foto in alta definizione e bozzetti aziendali riservati senza alcuna latenza di rete. Ciascuna tonalità viene fornita con codici HEX, RGB, HSL e verifiche di leggibilità per consentirti di copiare i token di stile direttamente nel tuo foglio di stile CSS o nella configurazione di Tailwind.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Carica il visivo di riferimento:</strong> Rilascia qualsiasi fotografia, mockup o schermata grafica nell'area di lavoro o incolla direttamente un'immagine dagli appunti di sistema.</li>
+          <li><strong>Regola il numero di campioni cromatici:</strong> Imposta la quantità di sfumature desiderate (da 4 a 12 campioni) e definisci il criterio di ordinamento per frequenza visiva o luminosità relativa.</li>
+          <li><strong>Esporta i codici colore e i token:</strong> Fai clic su un qualsiasi riquadro per copiare i codici HEX o HSL, oppure esporta l'intera tavolozza sotto forma di variabili CSS (:root) o oggetto JSON.</li>
+        </ol>
+        <h2>Motore grafico e rendering Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">Buffer ImageData e quantizzazione median-cut</div>
+          <div class="formula-expr"><code>ctx.getImageData(0, 0, width, height).data</code></div>
+        </div>
+        <p>L'immagine viene proiettata su una superficie canvas per estrarre il buffer tipizzato Uint8ClampedArray. L'algoritmo median-cut suddivide ricorsivamente la scatola RGB tridimensionale lungo l'asse con maggiore varianza cromatica per localizzare i baricentri dominanti.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Creazione tema cromatico per portale aziendale</h4>
+            <p>Estrazione di un sistema coordinato a 6 colori da uno scatto pubblicitario, generando le tinte d'accento, i toni scuri di sfondo e i bordi neutri per il design system.</p>
+          </div>
+          <div class="content-card">
+            <h4>Campionamento tonalità per concept art</h4>
+            <p>Prelievo delle sfumature d'illuminazione da un'opera pittorica digitale per riprodurre identiche atmosfere visive su software di grafica come Figma.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Elaborare immagini con sfondi a tinta unita predominanti</h4>
+            <p>Un'immagine con l'80% di spazio bianco o nero genera tonalità piatte e ripetitive; focalizza l'input su porzioni con ricchezza di dettagli cromatici.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Trascurare le linee guida di accessibilità WCAG</h4>
+            <p>Utilizzare le tinte estratte per il testo senza verificare il rapporto di contrasto crea problemi di leggibilità; controlla sempre i punteggi di contrasto suggeriti.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Campionare file JPEG fortemente compressi</h4>
+            <p>Gli artefatti da compressione introducono pixel rumorosi che sporcano le armonie cromatiche; privilegia file sorgente PNG o WebP privi di distorsioni.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le operazioni di analisi e clustering dei colori avvengono esclusivamente all'interno della memoria RAM del tuo dispositivo. I file di progetto riservati e le fotografie non vengono mai trasmessi verso server esterni né memorizzati in database, tutelando al 100% la proprietà intellettuale.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>In che modo l'algoritmo median-cut estrae i colori predominanti?</summary>
+            <div class="faq-answer">
+              <p>Esso racchiude tutti i valori RGB dei pixel in un cubo tridimensionale, per poi dividerlo ripetutamente a metà lungo l'asse di massima dispersione fino a formare il numero desiderato di aggregazioni cromatiche stabili.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È possibile copiare la tavolozza direttamente nel codice sorgente?</summary>
+            <div class="faq-answer">
+              <p>Sì. Il tool genera frammenti pronti all'uso contenenti proprietà personalizzate CSS (:root), array JSON e oggetti di configurazione compatibili con Tailwind CSS.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come vengono gestiti i pixel trasparenti nell'immagine?</summary>
+            <div class="faq-answer">
+              <p>Tutti i pixel con canale alpha inferiore al 50% vengono scartati durante l'analisi per evitare che il colore di fondo della pagina contamini la tavolozza finale.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di grafica e fotoritocco correlati</h2>
+        <div class="related-tools-grid">
+          <a href="image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compressore immagini</div>
+            <div class="tool-desc">Ottimizza il peso delle immagini prima o dopo l'analisi cromatica.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Immagine in Base64</div>
+            <div class="tool-desc">Codifica i file visivi in stringhe di dati direttamente integrabili nel codice.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">Convertitore SVG in PNG</div>
+            <div class="tool-desc">Rast बौद्धिक vettoriale con precisione geometrica e resa ottimale.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Educational Guide & Features Section -->

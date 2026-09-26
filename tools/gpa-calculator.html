@@ -36,62 +36,62 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit GPA & Grade Calculator",
-        "url": "https://vantorkit.com/tools/gpa-calculator.html",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side GPA and Grade Calculator. Compute semester and cumulative GPA across standard 4.0, weighted 5.0, and percentage scales with credit hour weighting and Dean's list honor determinations."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit GPA & Grade Calculator",
+      "url": "https://vantorkit.com/tools/gpa-calculator.html",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How is a semester GPA calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Semester GPA is calculated by multiplying each course's grade points by its credit hours to determine Quality Points, summing all quality points, and dividing by the total number of credit hours attempted (GPA = Total Quality Points / Total Credits)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between weighted and unweighted GPA?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "An unweighted GPA measures academic performance on a standard 4.0 scale regardless of course difficulty. A weighted GPA gives extra points (often +0.5 for Honors and +1.0 for Advanced Placement / IB courses) on a 5.0 scale to reflect rigor."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do prior credits impact cumulative GPA?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Cumulative GPA blends past academic history with current semester results. Prior quality points (Prior GPA × Prior Credits) are added to current semester quality points and divided by all completed credits combined."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are my grades or student data uploaded to any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. VantorKit complies strictly with student privacy best practices (aligned with FERPA principles). 100% of calculations execute locally in your web browser. Nothing is sent across the internet."
-            }
+      "description": "Free client-side GPA and Grade Calculator. Compute semester and cumulative GPA across standard 4.0, weighted 5.0, and percentage scales with credit hour weighting and Dean's list honor determinations."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between weighted and unweighted GPA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An unweighted GPA measures academic achievement on a standard 4.0 scale regardless of course difficulty, whereas a weighted GPA awards extra points (typically +0.5 for Honors and +1.0 for AP/IB) to reflect academic rigor."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "How do credit hours affect overall GPA calculation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Credit hours serve as weighting multipliers: each course's grade points are multiplied by its credit hours. Higher-credit courses have a greater proportional impact on both semester and cumulative GPAs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are Pass/Fail or Incomplete courses included in GPA calculation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, courses taken on a Pass/Fail, Audit, or Incomplete basis do not carry quality grade points and are excluded from the GPA calculation, although passing credits may count toward degree completion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I calculate what grades I need to raise my cumulative GPA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Multiply your current GPA by completed credit hours to find total quality points, then determine how many additional quality points and credits are required in upcoming terms to reach your target GPA threshold."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1520,6 +1520,420 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side GPA Calculator is an academic assessment engine built for university students, high school scholars, and admissions officers. Computing Semester GPA (SGPA) and Cumulative GPA (CGPA) requires weighting course grades against credit hours across varying grading scales. This utility performs instant collegiate calculations entirely within your local browser.</p>
+        <p>Supporting standard 4.0 collegiate scales, weighted honors courses, and custom grade mappings, the calculator provides clear academic trajectory metrics while keeping your transcripts completely private.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Select Grading Scale and Course Rigor:</strong> Choose between standard 4.0 unweighted scales or weighted systems (such as Honors or AP/IB course credits with +0.5 or +1.0 grade point additions).</li>
+          <li><strong>Add Courses and Credit Hour Allocations:</strong> Input course titles alongside assigned credit hours and earned letter grades. Easily add, adjust, or remove course rows to model dynamic semester schedules.</li>
+          <li><strong>Review Semester and Cumulative Projections:</strong> Inspect your computed semester GPA, total attempted credit hours, aggregate quality grade points earned, and forecast cumulative targets by integrating prior academic history.</li>
+        </ol>
+        <h2>The Engine & Formula Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Credit-Weighted Arithmetic Mean Formulation</div>
+          <div class="formula-expr"><code>GPA = Σ(GradePointsᵢ × Creditsᵢ) / Σ(Creditsᵢ)  |  Weighted: GP_weighted = GP_base + Weight_bonus</code></div>
+        </div>
+        <p>GPA computation executes a credit-weighted arithmetic mean rather than a simple average. For each course i, quality points are computed by multiplying the numerical grade equivalent GradePointsᵢ (e.g., A=4.0, B=3.0, C=2.0, D=1.0, F=0.0) by assigned course credit hours Creditsᵢ. The total quality points are then divided by the total credit hours attempted: GPA = Σ(GradePointsᵢ × Creditsᵢ) / Σ(Creditsᵢ). For weighted scales, rigor bonuses are incorporated directly into the course grade point base prior to credit multiplication: GP_weighted = GP_base + 0.5 (for Honors) or + 1.0 (for AP/IB coursework). Courses evaluated under Pass/Fail or Audit designations are excluded from calculations.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>College Semester 15-Credit Course Load Evaluation</h4>
+            <p>A university undergraduate completes four courses: Biology (4 credits, grade A = 4.0 GP → 16.0 quality points), Calculus (4 credits, grade B = 3.0 GP → 12.0 quality points), English Literature (3 credits, grade A- = 3.7 GP → 11.1 quality points), and History Seminar (4 credits, grade B+ = 3.3 GP → 13.2 quality points). Total credits = 15; total quality points = 52.3. The semester GPA is: 52.3 / 15 = 3.49.</p>
+          </div>
+          <div class="content-card">
+            <h4>Cumulative GPA Forecasting with Prior Academic History</h4>
+            <p>A student with a prior cumulative record of 60 credits and a 3.20 GPA (192 quality points) achieves a 3.80 GPA across 15 new semester credits (57 quality points). The new cumulative GPA calculates as: (192 + 57) / (60 + 15) = 249 / 75 = 3.32 cumulative GPA.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Averaging Letter Grades Without Credit Hour Weighting</h4>
+            <p>Calculating the simple average of grades earned in a 4-credit science lecture and a 1-credit physical education elective distorts your true GPA. Courses with higher credit loads exert proportionally larger influence on your academic standing.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Including Pass/Fail Courses in GPA Math</h4>
+            <p>Passing a Pass/Fail or Satisfactory/Unsatisfactory course awards earned academic credits toward graduation, but carries zero quality grade points and must be excluded from GPA denominator calculations.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Misunderstanding Cumulative GPA Inertia</h4>
+            <p>As total accumulated credit hours increase, raising a cumulative GPA requires substantially higher performance. Earning straight A's in senior year moves a 100-credit cumulative GPA much less than in freshman year.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All course names, letter grades, credit hours, and GPA calculations remain strictly on your local device. No academic records, grades, or transcripts are ever uploaded to remote servers or tracked by third-party analytics.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>What is the difference between weighted and unweighted GPA?</summary>
+            <div class="faq-answer">
+              <p>An unweighted GPA measures academic achievement on a standard 4.0 scale regardless of course difficulty, whereas a weighted GPA awards extra points (typically +0.5 for Honors and +1.0 for AP/IB) to reflect academic rigor.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do credit hours affect overall GPA calculation?</summary>
+            <div class="faq-answer">
+              <p>Credit hours serve as weighting multipliers: each course's grade points are multiplied by its credit hours. Higher-credit courses have a greater proportional impact on both semester and cumulative GPAs.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Are Pass/Fail or Incomplete courses included in GPA calculation?</summary>
+            <div class="faq-answer">
+              <p>No, courses taken on a Pass/Fail, Audit, or Incomplete basis do not carry quality grade points and are excluded from the GPA calculation, although passing credits may count toward degree completion.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How can I calculate what grades I need to raise my cumulative GPA?</summary>
+            <div class="faq-answer">
+              <p>Multiply your current GPA by completed credit hours to find total quality points, then determine how many additional quality points and credits are required in upcoming terms to reach your target GPA threshold.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Mathematical & Financial Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Percentage Calculator</div>
+            <div class="tool-desc">Calculate grade percentages, score proportions, and test score deltas.</div>
+          </a>
+          <a href="./date-difference.html" class="related-tool-card">
+            <div class="tool-name">Date Difference & Workdays</div>
+            <div class="tool-desc">Calculate study intervals, semester deadlines, and exam schedules.</div>
+          </a>
+          <a href="./age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Age & Milestone Calculator</div>
+            <div class="tool-desc">Track academic milestone timelines and graduation countdown dates.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر حاسبة المعدل التراكمي والفصلي عبر المتصفح من فانتور كيت أداة تقييم أكاديمي متقدمة مخصصة لطلاب الجامعات والمدارس ومسؤولي القبول والتسجيل. إن احتساب المعدل الفصلي (SGPA) والمعدل التراكمي (CGPA) يتطلب وزناً دقيقاً لدرجات المواد مقابل الساعات المعتمدة لكل مقرر وفق سلالم التقييم المعتمدة. تقوم هذه الأداة بحساب المعدل الفصلي والتراكمي فوراً داخل متصفحك.</p>
+        <p>تدعم الأداة سلم الـ 4.0 القياسي ومقررات الشرف والمقاييس المخصصة، مما يوفر للطلاب رؤية واضحة لأدائهم الأكاديمي مع الحفاظ التام على خصوصية درجاتهم وسجلاتهم الدراسية.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختر المقياس الأكاديمي ونوع المادة:</strong> حدد نوع نظام الدرجات المعتمد: المقياس القياسي 4.0 أو المقياس المرجح 5.0 لمساقات الشرف أو البرامج المتقدمة التي تمنح نقاطاً إضافية.</li>
+          <li><strong>أدخل أسماء المساقات والساعات المعتمدة:</strong> اكتب أسماء المواد مع تحديد الساعات المعتمدة لكل مساق والدرجة الحرفية المحققة، مع إمكانية إضافة أو حذف المواد بسهولة لتنظيم جدولك.</li>
+          <li><strong>استعرض المعدل الفصلي والتوقعات التراكمية:</strong> اطلع فوراً على معدلك الفصلي المحسوب، وإجمالي الساعات المعتمدة، ونقاط الجودة المكتسبة، مع إمكانية دمج نتائجك السابقة لحساب المعدل التراكمي الشامل.</li>
+        </ol>
+        <h2>محرك الحساب والمعادلات الرياضية</h2>
+        <div class="formula-box">
+          <div class="formula-title">صيغة المتوسط الحسابي المرجح بالساعات المعتمدة</div>
+          <div class="formula-expr"><code>المعدل = Σ(نقاط الدرجة × الساعات) / Σ(الساعات)  |  المرجح: النقاط المرجحة = نقاط الدرجة + نقاط الصعوبة</code></div>
+        </div>
+        <p>يعتمد حساب المعدل التراكمي على المتوسط المرجح بالساعات المعتمدة وليس المتوسط البسيط. لكل مساق i، تُحسب نقاط الجودة بضرب القيمة الرقمية المقابلة للدرجة الحرفية (مثلاً A=4.0، B=3.0، C=2.0) في عدد الساعات المعتمدة للمساق. ثم يُقسم مجموع نقاط الجودة على إجمالي الساعات المعتمدة: المعدل = Σ(نقاط الدرجة × الساعات) / Σ(الساعات). وفي المقاييس المرجحة، تُضاف ميزة الصعوبة إلى أصل الدرجة قبل الضرب (+0.5 لمساقات الشرف، +1.0 للمساقات المتقدمة). ولا تدخل مساقات النجاح/الرسوب (Pass/Fail) في حساب المعدل التراكمي.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>حساب معدل فصل دراسي جامعي من 15 ساعة معتمدة</h4>
+            <p>أتم طالب جامعي 4 مواد: علم الأحياء (4 ساعات، تقدير A = 4.0 نقاط → 16.0 نقطة جودة)، التفاضل والتكامل (4 ساعات، تقدير B = 3.0 نقاط → 12.0 نقطة جودة)، الأدب الإنجليزي (3 ساعات، تقدير A- = 3.7 نقاط → 11.1 نقطة جودة)، ومساق التاريخ (4 ساعات، تقدير B+ = 3.3 نقاط → 13.2 نقطة جودة). إجمالي الساعات = 15؛ ومجموع النقاط = 52.3. المعدل الفصلي: 52.3 / 15 = 3.49.</p>
+          </div>
+          <div class="content-card">
+            <h4>توقع المعدل التراكمي بدمج الفصول السابقة</h4>
+            <p>طالب لديه سجل سابق من 60 ساعة معتمدة بمعدل 3.20 (192 نقطة جودة)، وحقق معدل 3.80 في فصل دراسي جديد من 15 ساعة (57 نقطة جودة). يحسب المعدل التراكمي الجديد كالتالي: (192 + 57) / (60 + 15) = 249 / 75 = 3.32 معدل تراكمي عام.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ إهمال ترجيح المواد بالساعات المعتمدة</h4>
+            <p>حساب المتوسط الحسابي العادي للدرجات بين مساق تخصصي من 4 ساعات ومساق اختياري من ساعة واحدة يشوه معدلك الحقيقي؛ فالمواد ذات الساعات الأكبر تؤثر بنسبة أعلى بكثير على معدلك العام.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إدراج مساقات النجاح والرسوب غير المحتسبة في المعدل</h4>
+            <p>اجتياز مادة بنظام (Pass/Fail) يمنحك ساعات معتمدة نحو التخرج، لكنه لا يحمل أي نقاط جودة رقمية ويجب استبعاده تماماً من بسط ومقام معادلة المعدل التراكمي.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ عدم إدراك أثر القصور الذاتي للمعدل التراكمي</h4>
+            <p>كلما زادت الساعات المعتمدة المتراكمة في سجلك الأكاديمي، أصبح رفع المعدل التراكمي يتطلب أداءً فائقاً؛ فالحصول على درجات كاملة في السنة الأخيرة يغير المعدل التراكمي بنسبة أقل بكثير مقارنة بالسنة الأولى.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية والأمان المحلي 100%</h3>
+          <p>تظل جميع أسماء المساقات، والدرجات الحرفية، والتقديرات الأكاديمية محفوظة بشكل آمن على جهازك الشخصي فقط. لا يتم تخزين أو نقل أي سجلات دراسية أو نتائج جامعية إلى خوادم خارجية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>ما الفرق الأساسي بين المعدل التراكمي المرجح وغير المرجح؟</summary>
+            <div class="faq-answer">
+              <p>يقيس المعدل غير المرجح التحصيل الدراسي على مقياس 4.0 بغض النظر عن صعوبة المواد، بينما يمنح المعدل المرجح نقاطاً إضافية لمساقات الشرف والمساقات المتقدمة تقديراً لصعوبتها الأكاديمية.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف تؤثر الساعات المعتمدة على المعدل الأكاديمي العام؟</summary>
+            <div class="faq-answer">
+              <p>تعمل الساعات المعتمدة كمعامل ترجيح؛ حيث تُضرب نقاط كل مساق في عدد ساعاته، وبالتالي فإن المواد ذات الساعات الأكبر يكون تأثيرها الحاسم أكبر على المعدل التراكمي.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل تدخل مساقات النجاح والرسوب (Pass/Fail) في حساب المعدل؟</summary>
+            <div class="faq-answer">
+              <p>لا، المساقات المعتمدة بنظام النجاح أو الرسوب فقط لا تحمل نقاط جودة رقمية وتُستبعد تماماً من حساب المعدل، رغم احتساب ساعاتها ضمن متطلبات التخرج.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يمكنني معرفة الدرجات المطلوبة لرفع معدلي التراكمي إلى حد معين؟</summary>
+            <div class="faq-answer">
+              <p>تضرب معدلك الحالي في عدد الساعات المنجزة لمعرفة نقاطك الحالية، ثم تحدد النقاط والساعات الإضافية اللازمة في الفصول القادمة للوصول إلى المعدل المستهدف.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات مالية وحسابية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة النسبة المئوية</div>
+            <div class="tool-desc">حساب النسب المئوية، وتقديرات الامتحانات، وتفاوت الدرجات.</div>
+          </a>
+          <a href="./date-difference.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الفرق بين التواريخ</div>
+            <div class="tool-desc">حساب فترات الدراسة، ومواعيد التسليم، وجداول الامتحانات.</div>
+          </a>
+          <a href="./age-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة العمر والمراحل الحياتية</div>
+            <div class="tool-desc">متابعة المواعيد الدراسية والمحطات الزمنية ومواعيد التخرج.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le calculateur de moyenne universitaire (GPA) côté client de VantorKit est un outil d'évaluation académique conçu pour les étudiants, lycéens et jurys d'admission. Calculer une moyenne semestrielle ou cumulative exige de pondérer chaque note par le nombre de crédits de la matière selon le barème. Cet utilitaire réalise ces pondérations avec exactitude au sein de votre navigateur.</p>
+        <p>Compatible avec l'échelle standard sur 4.0, les cours d'honneur et les barèmes personnalisés, le calculateur offre une vue claire de votre parcours tout en préservant la confidentialité de vos notes.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Sélectionnez l'échelle de notation:</strong> Optez pour l'échelle standard non pondérée (4.0) ou l'échelle pondérée (5.0) intégrant les bonus de difficulté pour cours d'excellence ou spécialisés.</li>
+          <li><strong>Ajoutez vos matières et crédits associés:</strong> Indiquez l'intitulé de vos cours, les crédits horaires attribués et la note obtenue (lettres ou points). Ajustez ou supprimez facilement des lignes de cours.</li>
+          <li><strong>Consultez la moyenne et les projections:</strong> Visualisez votre moyenne semestrielle, le total des crédits validés, les points de qualité acquis et vos perspectives de moyenne cumulée avec vos antécédents.</li>
+        </ol>
+        <h2>Moteur de calcul et formules mathématiques</h2>
+        <div class="formula-box">
+          <div class="formula-title">Calcul de la moyenne arithmétique pondérée par les crédits</div>
+          <div class="formula-expr"><code>GPA = Σ(Points_Noteᵢ × Créditsᵢ) / Σ(Créditsᵢ)  |  Pondéré : Points_pondérés = Points_base + Bonus</code></div>
+        </div>
+        <p>Le calcul du GPA correspond à une moyenne arithmétique pondérée. Pour chaque matière i, les points de qualité résultent de la multiplication de la valeur numérique de la note (ex. A=4.0, B=3.0, C=2.0) par les crédits horaires de la matière. La somme des points de qualité est ensuite divisée par le total des crédits : GPA = Σ(Points_Noteᵢ × Créditsᵢ) / Σ(Créditsᵢ). Sur l'échelle pondérée, une majoration (+0.5 ou +1.0 point) s'ajoute à la note avant pondération. Les matières validées sans notation (Pass/Fail) sont exclues du calcul de la moyenne.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Moyenne semestrielle universitaire de 15 crédits</h4>
+            <p>Un étudiant suit quatre modules : Biologie (4 crédits, note A = 4.0 → 16.0 points), Analyse mathématique (4 crédits, note B = 3.0 → 12.0 points), Littérature (3 crédits, note A- = 3.7 → 11.1 points) et Histoire (4 crédits, note B+ = 3.3 → 13.2 points). Total des crédits = 15 ; total des points = 52.3. La moyenne semestrielle s'établit à : 52.3 / 15 = 3.49.</p>
+          </div>
+          <div class="content-card">
+            <h4>Projection de moyenne cumulée sur plusieurs semestres</h4>
+            <p>Un étudiant ayant validé 60 crédits antérieurs avec un GPA de 3.20 (192 points) obtient 3.80 de moyenne sur 15 nouveaux crédits semestriels (57 points). Son nouveau GPA cumulé s'établit à : (192 + 57) / (60 + 15) = 249 / 75 = 3.32.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Faire la moyenne simple des notes sans pondération</h4>
+            <p>Calculer la moyenne arithmétique brute entre un cours magistral de 4 crédits et un atelier d'un seul crédit fausse vos résultats. Les enseignements à fort coefficient ont un impact proportionnel déterminant sur votre moyenne.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Intégrer les cours validés sans note chiffrée</h4>
+            <p>Valider une matière en contrôle continu sans attribution de note (Pass/Fail) accorde des crédits vers l'obtention du diplôme mais ne génère aucun point de notation dans le calcul du GPA.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Méconnaître l'inertie de la moyenne cumulée</h4>
+            <p>Plus le volume global de crédits accumulés est élevé, plus il devient difficile de faire évoluer sa moyenne cumulée. Réussir un excellent semestre terminal fait moins bouger la moyenne qu'en première année.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>L'ensemble de vos relevés de notes, cours et calculs de moyenne est conservé exclusivement sur votre équipement local. Aucune donnée académique ou résultat d'examen n'est acheminé vers des serveurs externes.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quelle est la différence entre un GPA pondéré et non pondéré ?</summary>
+            <div class="faq-answer">
+              <p>Le GPA non pondéré évalue les résultats sur une échelle standard 4.0 sans tenir compte du niveau du cours, alors que le GPA pondéré accorde des points supplémentaires pour valoriser les enseignements exigeants.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment les crédits d'heures interviennent-ils dans le calcul ?</summary>
+            <div class="faq-answer">
+              <p>Les crédits servent de coefficients multiplicateurs : les points d'une note sont multipliés par les crédits de la matière. Les cours à fort volume de crédits pèsent davantage sur la moyenne finale.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Les cours validés en 'Pass/Fail' sont-ils pris en compte ?</summary>
+            <div class="faq-answer">
+              <p>Non, les cours validés sans note numérique n'apportent aucun point d'évaluation et sont écartés du calcul de la moyenne, bien qu'ils comptabilisent des crédits pour l'obtention du diplôme.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment calculer les notes nécessaires pour atteindre un GPA cible ?</summary>
+            <div class="faq-answer">
+              <p>Multipliez votre GPA actuel par les crédits déjà validés pour obtenir votre total de points, puis déterminez les points requis lors des prochains semestres pour atteindre le seuil de moyenne visé.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils financiers et mathématiques connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Pourcentage</div>
+            <div class="tool-desc">Calculez les pourcentages de réussite, les notes et les écarts de score.</div>
+          </a>
+          <a href="./date-difference.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Jours et Dates</div>
+            <div class="tool-desc">Planifiez vos périodes de révision, rendus de projets et dates d'examens.</div>
+          </a>
+          <a href="./age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur d'Âge et Échéances</div>
+            <div class="tool-desc">Mesurez les étapes de votre parcours étudiant et le compte à rebours de remise de diplôme.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il calcolatore di media accademica (GPA) lato client di VantorKit è uno strumento di valutazione per studenti universitari, maturandi e uffici di ammissione. Calcolare la media semestrale o complessiva richiede di ponderare i voti dei singoli esami con i relativi crediti formativi (CFU). Questa applicazione effettua medie ponderate istantanee direttamente nel tuo browser.</p>
+        <p>Supportando la scala standard in 4.0, corsi avanzati e mappature personalizzate, il calcolatore assicura piena trasparenza sulla progressione negli studi mantenendo i voti e il libretto universitario del tutto riservati.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Seleziona la scala di valutazione:</strong> Scegli tra la scala non ponderata (4.0) o la scala ponderata (5.0) che riconosce punteggi aggiuntivi per esami avanzati e corsi di eccellenza.</li>
+          <li><strong>Inserisci insegnamenti e crediti formativi:</strong> Digita la denominazione del corso, i crediti associati e il voto conseguito (in lettere o punteggio numerico). Modifica o elimina le righe per rispecchiare il tuo piano di studi.</li>
+          <li><strong>Esamina la media semestrale e cumulativa:</strong> Verifica all'istante il tuo GPA semestrale, il totale dei crediti maturati e simula l'andamento del GPA cumulativo integrando la carriera pregressa.</li>
+        </ol>
+        <h2>Motore di calcolo e formule matematiche</h2>
+        <div class="formula-box">
+          <div class="formula-title">Media aritmetica ponderata sui crediti formativi</div>
+          <div class="formula-expr"><code>GPA = Σ(Punti_Votoᵢ × Creditiᵢ) / Σ(Creditiᵢ)  |  Ponderato : Punti_ponderati = Punti_base + Bonus</code></div>
+        </div>
+        <p>Il calcolo del GPA applica la media aritmetica ponderata sui crediti. Per ogni esame i, i punti di qualità si ricavano moltiplicando il controvalore numerico del voto (es. A=4.0, B=3.0, C=2.0) per i crediti formativi attribuiti al corso. La somma dei punti di qualità viene quindi divisa per il totale complessivo dei crediti: GPA = Σ(Punti_Votoᵢ × Creditiᵢ) / Σ(Creditiᵢ). Nelle scale ponderate, una maggiorazione (+0.5 o +1.0) viene sommata alla base prima della ponderazione. Le idoneità senza voto numerico (Pass/Fail) sono escluse dal conteggio del GPA.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Valutazione di un semestre universitario da 15 crediti</h4>
+            <p>Uno studente supera quattro esami: Biologia (4 crediti, voto A = 4.0 → 16.0 punti), Analisi Matematica (4 crediti, voto B = 3.0 → 12.0 punti), Letteratura (3 crediti, voto A- = 3.7 → 11.1 punti) e Storia (4 crediti, voto B+ = 3.3 → 13.2 punti). Crediti totali = 15; punti complessivi = 52.3. Il GPA semestrale corrisponde a: 52.3 / 15 = 3.49.</p>
+          </div>
+          <div class="content-card">
+            <h4>Proiezione del GPA cumulativo su più sessioni</h4>
+            <p>Uno studente con uno storico di 60 crediti e un GPA cumulativo di 3.20 (192 punti) consegue un GPA di 3.80 su 15 nuovi crediti semestrali (57 punti). Il nuovo GPA cumulativo risulta: (192 + 57) / (60 + 15) = 249 / 75 = 3.32.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Calcolare la media semplice senza ponderazione dei crediti</h4>
+            <p>Trattare un corso da 4 crediti allo stesso modo di una prova da 1 credito distorce la media effettiva. Gli esami con carico formativo più elevato esercitano un impatto determinante sul rendimento complessivo.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Includere idoneità e giudizi senza voto numerico</h4>
+            <p>Superare una prova con semplice idoneità (Pass/Fail) conferisce crediti utili al conseguimento del titolo ma non apporta punti di merito algebrici, dovendo rimanere esclusa dal calcolo del GPA.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignorare l'inerzia del GPA cumulativo nel tempo</h4>
+            <p>Maggiore è il numero complessivo di crediti già verbalizzati, più difficile risulta modificare il GPA cumulativo. Una serie di ottimi voti all'ultimo anno sposta la media cumulativa molto meno rispetto al primo anno.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutti gli esami inseriti, le votazioni e le medie accademiche rimangono confinati nella memoria locale del tuo dispositivo. Nessun dato universitario o libretto studenti viene mai inoltrato a server esterni.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Qual è la differenza fondamentale tra GPA ponderato e non ponderato?</summary>
+            <div class="faq-answer">
+              <p>Il GPA non ponderato valuta il rendimento su una scala standard 4.0 senza considerare la difficoltà della materia, mentre il GPA ponderato attribuisce punti integrativi per premiare corsi più impegnativi.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>In che modo i crediti formativi incidono sulla media generale?</summary>
+            <div class="faq-answer">
+              <p>I crediti fungono da moltiplicatori di ponderazione: i punti di ogni voto vengono moltiplicati per i crediti del corso, conferendo agli insegnamenti con più crediti un peso maggiore sulla media.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Le idoneità (Pass/Fail) concorrono alla determinazione del GPA?</summary>
+            <div class="faq-answer">
+              <p>No, le prove con giudizio di sola idoneità non rilasciano punteggi numerici e vengono escluse dal calcolo del GPA, pur risultando valide ai fini del conseguimento del titolo.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come posso stimare i voti necessari per incrementare la mia media?</summary>
+            <div class="faq-answer">
+              <p>Moltiplica il tuo GPA attuale per i crediti maturati per ottenere i punti attuali, quindi calcola quanti punti aggiuntivi dovrai conseguire nei prossimi semestri per raggiungere il GPA prefissato.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti finanziari e matematici correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Percentuale</div>
+            <div class="tool-desc">Calcola percentuali di profitto, scostamenti e parametri proporzionali.</div>
+          </a>
+          <a href="./date-difference.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore Differenza Date</div>
+            <div class="tool-desc">Pianifica scadenze per appelli d'esame, sessioni di studio e consegne tesi.</div>
+          </a>
+          <a href="./age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Età e Tappe</div>
+            <div class="tool-desc">Monitora le tappe cronologiche del tuo percorso accademico e countdown laurea.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Toast Notification -->

@@ -39,54 +39,62 @@
 
   <!-- Structured Data: WebApplication, FinancialApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Compound Interest Calculator",
-        "url": "https://vantorkit.com/tools/compound-interest.html",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Interactive compound interest calculator and investment growth simulator featuring customizable contributions, visual stacked growth charts, and annual breakdown schedules."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Compound Interest Calculator",
+      "url": "https://vantorkit.com/tools/compound-interest.html",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is compound interest and how does it differ from simple interest?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Simple interest is paid only on the initial principal. Compound interest earns interest on both the initial principal and the accumulated interest from previous periods, creating exponential wealth growth over time."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the Rule of 72?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The Rule of 72 is a quick financial mental formula used to estimate how many years it will take to double an investment at a fixed annual interest rate. Divide 72 by the annual interest rate (e.g. 72 / 8% = 9 years to double)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How often should interest compound for maximum growth?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The more frequently interest is compounded (e.g., daily or monthly compared to annually), the higher the effective annual yield, because interest begins earning returns sooner."
-            }
+      "description": "Interactive compound interest calculator and investment growth simulator featuring customizable contributions, visual stacked growth charts, and annual breakdown schedules."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between simple interest and compound interest?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simple interest is paid only on the initial principal balance, while compound interest is calculated on both the initial principal and the accumulated interest from previous periods."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "How does compounding frequency impact investment returns?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Higher compounding frequencies (such as monthly or daily versus annually) result in interest being credited more frequently, allowing subsequent interest to compound sooner and producing higher overall returns."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Rule of 72 in compound interest calculations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Rule of 72 is a mental shortcut to estimate how many years it takes for an investment to double. Simply divide 72 by the annual interest rate (e.g., at 8% annual return, an investment doubles in approximately 72 / 8 = 9 years)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do monthly contributions affect long-term compound growth?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Regular monthly contributions continuously increase the principal base that earns compound interest, dramatically magnifying total returns over multi-decade horizons compared to a static lump sum."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1594,61 +1602,418 @@
     </section>
 
     <!-- SEO Educational Guide -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading">The Mathematics of Compounding: Formula &amp; Strategic Insights</h2>
-        <p>Understand how time, regular deposits, and compounding frequencies interact to accelerate exponential portfolio growth.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Compound Interest Calculator is a wealth projection engine built for long-term equity investors, retirement planners, and financial analysts. Exponential compound growth transforms modest recurring contributions into substantial portfolios over extended horizons. This utility models future wealth accumulation with exact mathematical fidelity entirely in your browser.</p>
+        <p>By incorporating customizable principal deposits, recurring contributions, variable compounding frequencies, and multi-year projection horizons, the calculator generates complete annual breakdowns with zero server communication and total financial privacy.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Input Starting Principal & Deposits:</strong> Define your starting capital balance alongside regular monthly or annual deposits. The model accommodates lump sums as well as continuous recurring investment schedules.</li>
+          <li><strong>Select Return Rate & Interval:</strong> Enter your projected annual interest rate and select the compounding cadence (annually, semi-annually, quarterly, monthly, or daily), governing the speed of exponential accumulation.</li>
+          <li><strong>Inspect Trajectory & Growth Table:</strong> Analyze the computed future value, total cumulative contributions, aggregate interest accrued, and inspect the chronological year-by-year compounding table.</li>
+        </ol>
+        <h2>The Engine & Formula Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Future Value of Principal and Annuity Compounding Formula</div>
+          <div class="formula-expr"><code>A = P(1 + r/n)ⁿᵗ + PMT × [((1 + r/n)ⁿᵗ - 1) / (r/n)]  |  Rule of 72: t ≈ 72 / (r × 100)</code></div>
+        </div>
+        <p>Future terminal wealth A comprises two distinct components: exponential principal appreciation and future annuity value of regular deposits. P is initial principal, r is nominal annual interest rate in decimal form, n represents compounding cycles per calendar year (12 for monthly, 365 for daily), t is investment duration in years, and PMT is the recurring periodic deposit. The principal portion grows as P(1 + r/n)ⁿᵗ, while ongoing annuity cash flows compound via the geometric series summation PMT × [((1 + r/n)ⁿᵗ - 1) / (r/n)]. For quick doubling estimation, the Rule of 72 offers a reliable heuristic: dividing 72 by the annual percentage rate estimates the years required to double invested capital without additional contributions.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Long-Term Retirement Wealth Accumulation</h4>
+            <p>An investor starts with $10,000 and contributes $300 monthly into an index fund averaging a 7.0% annual return compounded monthly over 25 years. The total out-of-pocket investment equals $100,000 ($10,000 principal + $90,000 deposits). The terminal portfolio balance reaches $297,789.28, with compound interest contributing $197,789.28 (nearly double the total money deposited).</p>
+          </div>
+          <div class="content-card">
+            <h4>Frequency Impact Comparison (Annual vs Daily)</h4>
+            <p>Investing $50,000 at 8.0% over 20 years yields $233,047.86 under annual compounding (n=1). Switching to daily compounding (n=365) yields $247,603.95—generating an additional $14,556.09 in pure interest without adding a single extra dollar of capital.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusing Simple Interest with Compound Growth</h4>
+            <p>Simple interest calculates returns exclusively on the original principal (I = P × r × t). Assuming simple interest for long-term investments severely underestimates capital growth by ignoring interest earned on accumulated reinvested earnings.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Underestimating the Cost of Procrastination</h4>
+            <p>Delaying an investment start date by just five years can cut a 30-year terminal portfolio balance nearly in half. In exponential growth, the final years generate the vast majority of absolute dollar gains.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring Inflation's Real Purchasing Power Drag</h4>
+            <p>A nominal 7% annual growth rate during a period of 3% annual inflation yields a real purchasing power return of approximately 4%. Always factor inflation into long-term retirement target estimates.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All compound interest projections and growth tables are generated entirely inside your browser runtime. No asset values, savings contributions, or financial projections are ever uploaded to remote servers or tracked in external databases.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>What is the difference between simple interest and compound interest?</summary>
+            <div class="faq-answer">
+              <p>Simple interest is paid only on the initial principal balance, while compound interest is calculated on both the initial principal and the accumulated interest from previous periods.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How does compounding frequency impact investment returns?</summary>
+            <div class="faq-answer">
+              <p>Higher compounding frequencies (such as monthly or daily versus annually) result in interest being credited more frequently, allowing subsequent interest to compound sooner and producing higher overall returns.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the Rule of 72 in compound interest calculations?</summary>
+            <div class="faq-answer">
+              <p>The Rule of 72 is a mental shortcut to estimate how many years it takes for an investment to double. Simply divide 72 by the annual interest rate (e.g., at 8% annual return, an investment doubles in approximately 72 / 8 = 9 years).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do monthly contributions affect long-term compound growth?</summary>
+            <div class="faq-answer">
+              <p>Regular monthly contributions continuously increase the principal base that earns compound interest, dramatically magnifying total returns over multi-decade horizons compared to a static lump sum.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Mathematical & Financial Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Loan Payment Calculator</div>
+            <div class="tool-desc">Model loan repayments, interest amortization, and debt payoff timelines.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Percentage Calculator</div>
+            <div class="tool-desc">Compute percentages, proportion metrics, and rate change variations.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Discount & Tax Calculator</div>
+            <div class="tool-desc">Calculate sales taxes, retail discounts, and net invoice figures.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- 3 Feature Explanations -->
-      <div class="guide-cards-grid">
-        <div class="guide-card">
-          <h3>The Compound Interest Formula</h3>
-          <p>Compound interest applies returns to both your initial principal and previous earnings.</p>
-          <div class="formula-display">A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]</div>
-          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">Where <strong>P</strong> is principal, <strong>r</strong> is annual rate, <strong>n</strong> is compounding frequency, <strong>t</strong> is years, and <strong>PMT</strong> is regular monthly contribution.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>الفائدة المركبة هي العملية المالية الرياضية التي يتم فيها إعادة استثمار الفوائد والأرباح الناتجة عن أصل المبلغ الأساسي، لتوليد أرباح إضافية في الفترات التالية. ويُطلق عليها عادة "أرباح على أرباح"، وهي تمثل المحرك الأساسي لبناء الثروات طويلة الأجل، وصناديق التقاعد، وتنمية رؤوس الأموال.</p>
+        <p>في التخطيط المالي الحديث وإدارة الثروات، يهدف تحليل النمو المركب إلى تقييم كيفية تفاعل الإيداعات الشهرية أو السنوية المنتظمة مع دورات التراكم المركب عبر العقود الزمنية. ومن خلال محاكاة الاستثمار الدوري إلى جانب العوائد المتوقعة، يستطيع المستثمر رسم مسار نمو مدخراته بوضوح وتقدير أثر التضخم على القوة الشرائية المستقبلية.</p>
+        <p>إغفال دورات التراكم أو تأخير بدء الاستثمار لعدة سنوات يؤدي إلى تقليص العائد النهائي للمحفظة الاستثمارية بشكل هائل. صُممت هذه الحاسبة لتشغيل نماذج النمو المالي بدقة متناهية داخل متصفحك مباشرة، لتوفر توقعات فورية وتفصيلاً سنوياً للنمو دون نقل أي بيانات.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>حدد رأس المال والإيداع الدوري:</strong> أدخل مبلغ الاستثمار الأولي مع تحديد قيمة الإيداعات الدورية (شهرياً أو سنوياً). تدعم الحاسبة المبالغ المقطوعة الواحدة أو خطط الاستثمار التراكمي المستمر.</li>
+          <li><strong>اضبط العائد ودورية التراكم:</strong> اكتب نسبة العائد السنوي المتوقع وحدد دورية حساب الفائدة (سنوياً، ربع سنوياً، شهرياً، أو يومياً)، حيث تتحكم دورية التراكم بشكل مباشر في تسريع وتيرة النمو.</li>
+          <li><strong>استعرض مسار النمو والجدول التفصيلي:</strong> اطلع على الرصيد النهائي المتوقع، وإجمالي المبالغ المودعة ذاتياً، والأرباح المركبة الصافية المحققة، مع مراجعة جدول التراكم الزمني سنة بسنة.</li>
+        </ol>
+        <h2>محرك الحساب والمعادلات الرياضية</h2>
+        <div class="formula-box">
+          <div class="formula-title">معادلة القيمة المستقبلية والتراكم الدوري المركب</div>
+          <div class="formula-expr"><code>A = P(1 + r/n)ⁿᵗ + PMT × [((1 + r/n)ⁿᵗ - 1) / (r/n)]  |  قاعدة 72: t ≈ 72 / (r × 100)</code></div>
         </div>
-
-        <div class="guide-card">
-          <h3>The Rule of 72 Shortcut</h3>
-          <p>Estimate how many years it will take for your investment to double at a given annual interest rate without complex logarithms.</p>
-          <div class="formula-display">Years to Double ≈ 72 ÷ Annual Return Rate</div>
-          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">For instance, an investment generating 9% annually will double approximately every 8 years (72 ÷ 9 = 8 years).</p>
+        <p>تتكون القيمة الإجمالية المستقبلية A من شقين: نمو رأس المال الأولي، والقيمة التراكمية للدفعات الدورية. P هي رأس المال المبدئي، وr معدل الفائدة السنوي، وn عدد مرات التراكم سنوياً (12 للشهري، 365 لليومي)، وt مدة الاستثمار بالسنوات، وPMT قيمة الدفعة الدورية. ينمو رأس المال الأصلي وفق P(1 + r/n)ⁿᵗ، بينما تتراكم الدفعات الدورية عبر المتوالية الهندسية. ولتقدير زمن مضاعفة رأس المال سريعاً، توفر "قاعدة 72" تقديراً ممتازاً بقسمة 72 على معدل العائد السنوي.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>بناء محفظة تقاعدية طويلة الأجل</h4>
+            <p>بدأ مستثمر بمبلغ 10,000 دولار مع إضافة 300 دولار شهرياً في صندوق استثماري يحقق عائداً سنوياً 7.0% بتراكم شهري لمدة 25 سنة. إجمالي المبالغ المدفوعة ذاتياً هو 100,000 دولار (10,000 أصل + 90,000 إيداعات). يبلغ الرصيد النهائي 297,789.28 دولاراً، حيث شكلت الأرباح المركبة وحدها 197,789.28 دولاراً (ضعف المبالغ المودعة تقريباً).</p>
+          </div>
+          <div class="content-card">
+            <h4>مقارنة دوريات التراكم (سنوي مقابل يومي)</h4>
+            <p>استثمار 50,000 دولار بعائد 8.0% لمدة 20 سنة ينتج 233,047.86 دولاراً عند التراكم السنوي (n=1). بينما يؤدي التراكم اليومي (n=365) إلى تحقيق 247,603.95 دولاراً—أي زيادة إضافية قدرها 14,556.09 دولاراً من الفوائد النقية دون إضافة فلس واحد كأصل إضافي.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <h3>The Exponential Advantage of Time</h3>
-          <p>Because returns compound exponentially, starting 5 to 10 years earlier produces vastly superior wealth than saving larger sums later.</p>
-          <div class="formula-display">Growth = Principal × (Multiplier)^Time</div>
-          <p style="font-size:0.82rem; margin-top:0.6rem; color:var(--text-muted);">Consistent dollar-cost averaging shields you from market timing while harnessing the compounding curve.</p>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الخلط بين الفائدة البسيطة والفائدة المركبة</h4>
+            <p>تحسب الفائدة البسيطة العائد على رأس المال الأصلي فقط (I = P × r × t). الاعتماد على الفائدة البسيطة في الخطط طويلة الأجل يقلل بشكل مضلل من تقديرات النمو الحقيقي للمحفظة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ التقليل من كلفة التسويف وتأخير الاستثمار</h4>
+            <p>تأخير بدء الاستثمار لمدة 5 سنوات فقط يمكن أن يخفض القيمة النهائية للمحفظة بعد 30 سنة إلى النصف تقريباً؛ فالسنوات الأخيرة من خطة الاستثمار هي التي تولد الجزء الأكبر من العوائد.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إغفال أثر التضخم على القوة الشرائية الحقيقية</h4>
+            <p>تحقيق عائد اسمي قدره 7% في ظل تضخم سنوي يبلغ 3% يعني أن العائد الحقيقي الصافي يقارب 4%. ضع دائماً معدل التضخم في الحسبان عند تحديد أهداف التقاعد المالية.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية والأمان المحلي 100%</h3>
+          <p>تُجرى جميع حسابات الفائدة المركبة وتوقعات النمو المالي كلياً داخل متصفحك المحلي. لا يتم نقل أي بيانات استثمارية أو مدخرات مالية إلى خوادم خارجية، وتُحذف كافة الأرقام فور إغلاق الصفحة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>ما الفرق الأساسي بين الفائدة البسيطة والفائدة المركبة؟</summary>
+            <div class="faq-answer">
+              <p>تُحسب الفائدة البسيطة على رأس المال المبدئي فقط، بينما تُحسب الفائدة المركبة على رأس المال المبدئي مضافاً إليه جميع الأرباح والفوائد المتراكمة من الفترات السابقة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف تؤثر دورية التراكم على العائد الاستثماري الإجمالي؟</summary>
+            <div class="faq-answer">
+              <p>كلما زادت دورية حساب الفائدة (مثل التراكم اليومي أو الشهري مقارنة بالسنوي)، تمت إضافة الأرباح إلى أصل الحساب بوقت أبكر، مما يولد فوائد إضافية ويزيد العائد الكلي.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هي قاعدة 72 الحسابية وكيف تُستخدم؟</summary>
+            <div class="faq-answer">
+              <p>قاعدة 72 هي صيغة حسابية ذهنية لتقدير عدد السنوات اللازمة لمضاعفة رأس المال؛ تقسم الرقم 72 على نسبة العائد السنوي (مثلاً بعائد 8%، يتضاعف المال في: 72 / 8 = 9 سنوات تقريباً).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما أثر الإيداعات الشهرية المنتظمة على نمو المحفظة؟</summary>
+            <div class="faq-answer">
+              <p>تساعد الإيداعات الدورية على زيادة القاعدة النقدية التي تُحسب عليها الفائدة المركبة بشكل مستمر، مما يضاعف العوائد التراكمية على المدى الطويل بصورة أكبر بكثير من الإيداع المنفرد.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات مالية وحسابية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة أقساط القروض</div>
+            <div class="tool-desc">حساب أقساط القروض وجداول الإهلاك البنكية وتكلفة الفوائد.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة النسبة المئوية</div>
+            <div class="tool-desc">حساب النسب المئوية، ومعدلات التغير، وهوامش الأرباح بدقة.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الخصم والضرائب</div>
+            <div class="tool-desc">حساب التخفيضات التجارية، وضريبة القيمة المضافة، وصافي الفواتير.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="info-header" style="margin-bottom: 2rem;">
-        <h2>Frequently Asked Questions</h2>
-        <p>Essential insights for mastering investment calculations and wealth accumulation.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le calculateur d'intérêts composés côté client de VantorKit est un moteur de projection patrimoniale conçu pour les investisseurs en bourse, les épargnants et les conseillers financiers. La capitalisation exponentielle des intérêts transforme des versements réguliers en un capital substantiel sur le long terme. Cet outil modélise l'accumulation future de votre patrimoine directement dans votre navigateur.</p>
+        <p>Intégrant versements programmés, fréquences de composition modulables et horizons pluriannuels, l'utilitaire dresse des bilans d'épargne précis tout en préservant la confidentialité absolue de vos projets financiers.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Définissez le capital initial et les versements:</strong> Indiquez votre capital de départ ainsi que le montant de vos versements récurrents (mensuels ou annuels). Le système gère les versements uniques comme les plans programmés.</li>
+          <li><strong>Paramétrez le rendement et la capitalisation:</strong> Renseignez le taux d'intérêt annuel anticipé et sélectionnez la fréquence de calcul des intérêts (annuelle, trimestrielle, mensuelle ou journalière).</li>
+          <li><strong>Analysez la projection et le tableau d'évolution:</strong> Consultez le capital final estimé, le total des versements effectués et les intérêts cumulés, accompagnés du tableau détaillé de capitalisation année par année.</li>
+        </ol>
+        <h2>Moteur de calcul et formules mathématiques</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formule de la valeur future avec versements réguliers</div>
+          <div class="formula-expr"><code>A = P(1 + r/n)ⁿᵗ + PMT × [((1 + r/n)ⁿᵗ - 1) / (r/n)]  |  Règle des 72 : t ≈ 72 / (r × 100)</code></div>
+        </div>
+        <p>La valeur finale A combine la croissance du capital initial et la capitalisation des versements périodiques. P représente le montant initial, r le taux d'intérêt annuel en décimales, n le nombre de capitalisations par an (12 pour mensuel, 365 pour journalier), t la durée en années, et PMT le versement récurrent. Le capital initial croît selon P(1 + r/n)ⁿᵗ, tandis que les versements s'accumulent via la suite géométrique. Pour estimer rapidement le temps nécessaire pour doubler un capital, la règle des 72 s'applique en divisant 72 par le taux de rendement annuel.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Constitution d'un capital retraite sur 25 ans</h4>
+            <p>Un épargnant commence avec 10 000 € et verse 300 € par mois sur un support rapportant 7,0% par an avec capitalisation mensuelle pendant 25 ans. Les versements cumulés atteignent 100 000 € (10 000 € de capital + 90 000 € d'apports). La valeur finale s'élève à 297 789,28 €, les intérêts composés représentant à eux seuls 197 789,28 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Comparatif de fréquence (Annuelle vs Journalière)</h4>
+            <p>Un placement de 50 000 € à 8,0% sur 20 ans produit 233 047,86 € avec une capitalisation annuelle (n=1). Avec une capitalisation journalière (n=365), le total grimpe à 247 603,95 €, générant un gain supplémentaire de 14 556,09 € d'intérêts purs sans apport financier complémentaire.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confondre intérêts simples et intérêts composés</h4>
+            <p>Les intérêts simples ne rémunèrent que le capital d'origine (I = P × r × t). Appliquer ce schéma à un investissement à long terme sous-estime drastiquement le potentiel d'accumulation de l'épargne.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sous-estimer le coût de l'attentisme</h4>
+            <p>Différer son entrée en investissement de seulement cinq ans peut diviser par deux le capital accumulé au terme de trente ans, car les dernières années génèrent les gains monétaires les plus spectaculaires.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Oublier l'érosion monétaire liée à l'inflation</h4>
+            <p>Un rendement nominal de 7% sous une inflation de 3% équivaut à un taux réel de 4%. Prenez toujours en compte l'inflation pour calibrer vos objectifs d'épargne futurs.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toutes les projections d'intérêts composés et tableaux financiers sont calculés localement dans le moteur JavaScript de votre navigateur. Aucune donnée d'épargne ou projection patrimoniale n'est transmise ni hébergée sur des serveurs distants.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Quelle est la différence fondamentale entre intérêts simples et composés ?</summary>
+            <div class="faq-answer">
+              <p>Les intérêts simples sont calculés uniquement sur le capital d'origine, alors que les intérêts composés portent à la fois sur le capital initial et sur tous les intérêts précédemment accumulés.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment la fréquence de capitalisation agit-elle sur les gains ?</summary>
+            <div class="faq-answer">
+              <p>Plus la fréquence de capitalisation est élevée (mensuelle ou journalière plutôt qu'annuelle), plus les intérêts sont réinvestis tôt, ce qui maximise le rendement global grâce à la capitalisation continue.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qu'est-ce que la règle des 72 en calcul financier ?</summary>
+            <div class="faq-answer">
+              <p>C'est une méthode d'estimation mentale permettant de calculer la durée nécessaire pour doubler un capital en divisant 72 par le taux d'intérêt annuel (à 8% par an, le capital double en environ 72 / 8 = 9 ans).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quel est l'impact de versements mensuels réguliers ?</summary>
+            <div class="faq-answer">
+              <p>Les versements programmés augmentent continuellement l'assiette productive d'intérêts, amplifiant de manière spectaculaire le capital final par rapport à un investissement initial statique.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils financiers et mathématiques connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Prêt et Mensualités</div>
+            <div class="tool-desc">Simulez le coût des crédits, les mensualités et le tableau d'amortissement.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Pourcentage</div>
+            <div class="tool-desc">Évaluez les pourcentages directs, les taux d'évolution et les ratios de marge.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Remise et TVA</div>
+            <div class="tool-desc">Calculez la TVA, les remises commerciales et le montant net facturé.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>How does compounding frequency affect my final returns?</h4>
-          <p>The more frequently an investment compounds (e.g. daily vs. annually), the faster your accumulated earnings start generating their own returns. While the difference between monthly and daily compounding is modest, the jump from annual to monthly compounding is significant over multi-decade horizons.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il calcolatore di interesse composto lato client di VantorKit è un motore di proiezione patrimoniale ideato per investitori, risparmiatori e consulenti finanziari. La crescita esponenziale trasforma piccoli versamenti periodici in patrimoni considerevoli nel lungo termine. Questa applicazione calcola l'accumulo futuro del capitale con esattezza matematica all'interno del tuo browser.</p>
+        <p>Gestendo capitale iniziale, contributi periodici, frequenze di capitalizzazione e orizzonti pluriennali, lo strumento fornisce prospetti completi garantendo totale riservatezza per la tua pianificazione economica.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Indica capitale iniziale e versamenti periodici:</strong> Inserisci l'importo iniziale disponibile e l'ammontare degli accantonamenti periodici (mensili o annuali). Lo strumento gestisce versamenti singoli o piani continuativi.</li>
+          <li><strong>Imposta tasso di interesse e capitalizzazione:</strong> Specifica il tasso annuo nominale atteso e scegli l'intervallo di capitalizzazione (annuale, trimestrale, mensile o giornaliero), determinante per la rapidità di accumulo.</li>
+          <li><strong>Esamina la traiettoria e la tabella analitica:</strong> Verifica il montante finale stimato, il totale dei versamenti eseguiti e la quota complessiva di interessi maturati, consultando la tabella dettagliata anno per anno.</li>
+        </ol>
+        <h2>Motore di calcolo e formule matematiche</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formula del montante e capitalizzazione dei versamenti periodici</div>
+          <div class="formula-expr"><code>A = P(1 + r/n)ⁿᵗ + PMT × [((1 + r/n)ⁿᵗ - 1) / (r/n)]  |  Regola del 72: t ≈ 72 / (r × 100)</code></div>
         </div>
-
-        <div class="faq-item">
-          <h4>Does this calculator account for taxes and inflation?</h4>
-          <p>This model calculates nominal gross returns. To simulate real purchasing power, you can adjust your expected annual interest rate downward by the projected inflation rate (e.g. subtracting 2.5% inflation from a 9% return yields a 6.5% real rate).</p>
+        <p>Il montante accumulato A è dato dalla somma del capitale iniziale capitalizzato e del valore futuro dei versamenti periodici. P è il capitale iniziale, r è il tasso annuo in forma decimale, n indica il numero di capitalizzazioni annue (12 per mensile, 365 per giornaliero), t è la durata in anni e PMT il versamento periodico. Il capitale iniziale si espande secondo P(1 + r/n)ⁿᵗ, mentre i versamenti ricorrenti crescono secondo la progressione geometrica. Per stimare gli anni necessari a raddoppiare un investimento, la regola del 72 consiste nel dividere 72 per il tasso annuo.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Piano di accumulo previdenziale su 25 anni</h4>
+            <p>Un risparmiatore avvia un investimento con 10.000 € e versa 300 € al mese con un rendimento del 7,0% annuo e capitalizzazione mensile per 25 anni. Il capitale totale versato ammonta a 100.000 € (10.000 € iniziali + 90.000 € di versamenti). Il montante finale raggiunge 297.789,28 €, con interessi composti pari a ben 197.789,28 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Incidenza della frequenza (Annuale vs Giornaliera)</h4>
+            <p>Investire 50.000 € all'8,0% per 20 anni genera 233.047,86 € con capitalizzazione annuale (n=1). Adottando la capitalizzazione giornaliera (n=365), il montante finale sale a 247.603,95 €, con un surplus di 14.556,09 € di puri interessi senza aggiungere alcun capitale aggiuntivo.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>What is the difference between APR and APY?</h4>
-          <p>APR (Annual Percentage Rate) reflects the nominal stated interest rate without compounding. APY (Annual Percentage Yield) represents the actual annual return achieved once compounding frequency is taken into account.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusione tra interesse semplice e composto</h4>
+            <p>L'interesse semplice calcola il rendimento unicamente sul capitale iniziale (I = P × r × t). Usare tale schema per piani di investimento a lungo termine sottostima notevolmente il rendimento effettivo dell'accumulo.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sottovalutazione dell'effetto procrastinazione</h4>
+            <p>Ritardare l'avvio degli investimenti di soli cinque anni può dimezzare il montante finale ottenibile dopo trent'anni, in quanto gli ultimi anni di capitalizzazione producono i guadagni monetari più elevati.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Disattenzione verso il peso dell'inflazione</h4>
+            <p>Un rendimento nominale del 7% con un'inflazione al 3% produce un tasso reale effettivo pari a circa il 4%. Considera sempre l'inflazione per valutare correttamente il potere d'acquisto futuro.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>How are monthly contributions calculated with different compounding intervals?</h4>
-          <p>Our simulation applies standard financial compounding mechanics. For frequencies matching deposits (monthly), returns compound 12 times a year. For alternative frequencies, an effective equivalent periodic yield is accurately computed.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le proiezioni relative all'interesse composto e i piani di crescita vengono elaborati nella memoria locale del tuo browser. Nessun parametro economico o dato personale viene trasmesso o memorizzato su server remoti.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Qual è la differenza fondamentale tra interesse semplice e composto?</summary>
+            <div class="faq-answer">
+              <p>L'interesse semplice remunera esclusivamente il capitale iniziale investito, mentre l'interesse composto matura sia sul capitale originario sia su tutti gli interessi accumulati nei periodi precedenti.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come incide la frequenza di capitalizzazione sul risultato finale?</summary>
+            <div class="faq-answer">
+              <p>Una maggiore frequenza di capitalizzazione (mensile o giornaliera anziché annuale) consente di reinvestire gli interessi più rapidamente, massimizzando il rendimento complessivo dell'investimento.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Che cos'è la Regola del 72 nel calcolo degli investimenti?</summary>
+            <div class="faq-answer">
+              <p>È una scorciatoia mentale per determinare gli anni necessari a raddoppiare il capitale: si divide 72 per il tasso di rendimento annuo (es. con un tasso dell'8%, il capitale raddoppia in circa 72 / 8 = 9 anni).</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è il beneficio di versamenti periodici costanti?</summary>
+            <div class="faq-answer">
+              <p>I versamenti periodici incrementano in modo continuativo la base monetaria che matura interessi, potenziando in maniera esponenziale il risultato finale rispetto a un investimento iniziale statico.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti finanziari e matematici correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Finanziamento e Rata</div>
+            <div class="tool-desc">Verifica piani di ammortamento, rata mensile e incidenza degli interessi.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Percentuale</div>
+            <div class="tool-desc">Calcola percentuali immediate, scostamenti e quote proporzionali.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore Sconto e IVA</div>
+            <div class="tool-desc">Elabora sconti commerciali applicati, aliquote IVA e importi netti.</div>
+          </a>
         </div>
       </div>
     </article>

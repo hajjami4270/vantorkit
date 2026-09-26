@@ -36,63 +36,67 @@
 
   <!-- Structured Data: WebApplication, FinancialProduct & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Loan & Mortgage Amortization Calculator",
-        "url": "https://vantorkit.com/tools/loan-calculator.html",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "description": "Free client-side loan and mortgage amortization calculator. Interactive visual breakdown, extra monthly payments early payoff analysis, annual and monthly schedules, and CSV export."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Loan & Mortgage Amortization Calculator",
+      "url": "https://vantorkit.com/tools/loan-calculator.html",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FinancialProduct",
-        "name": "Mortgage and Loan Calculator",
-        "description": "Financial planning calculator to estimate fixed-rate loan monthly payments, amortization interest schedules, and debt reduction strategies."
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How is a monthly mortgage or loan payment calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Monthly payments for a fixed-rate loan are calculated using standard amortization mathematics: M = P * [r(1 + r)^n] / [(1 + r)^n - 1], where P is the principal loan amount, r is the monthly interest rate, and n is the total number of monthly payments."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much money can I save by making extra monthly payments?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Any additional money paid directly reduces your remaining loan principal immediately. This stops compound interest from accruing on that amount, shortening your payoff timeline by years and saving thousands of dollars in interest."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is an amortization schedule?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "An amortization schedule is a complete chronological table detailing each loan payment, breaking down exactly how much goes toward interest versus principal, and showing the declining balance after each installment."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is my private financial information uploaded to any server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All financial calculations, schedule projections, and chart renderings run 100% locally in your browser memory. Your loan amounts, interest rates, and personal finances are never recorded or transmitted to any server."
-            }
+      "description": "Free client-side loan and mortgage amortization calculator. Interactive visual breakdown, extra monthly payments early payoff analysis, annual and monthly schedules, and CSV export."
+    },
+    {
+      "@type": "FinancialProduct",
+      "name": "Mortgage and Loan Calculator",
+      "description": "Financial planning calculator to estimate fixed-rate loan monthly payments, amortization interest schedules, and debt reduction strategies."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How is a fixed monthly loan payment calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The payment is calculated using the annuity formula M = P × [r(1+r)ⁿ] / [(1+r)ⁿ - 1], where P is principal, r is the monthly interest rate (APR / 12), and n is total monthly payments."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "What is an amortization schedule and what does it show?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An amortization schedule is a complete chronological table detailing each periodic payment, showing the exact breakdown between interest paid, principal reduced, and the remaining loan balance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do extra principal payments accelerate debt payoff?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Extra principal payments immediately decrease the outstanding loan balance, which permanently lowers subsequent interest charges and accelerates the loan retirement date."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the key difference between nominal APR and the loan note rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The note rate is the pure interest rate applied to your borrowing balance, whereas APR includes mandatory financing fees, origination charges, and points expressed as an annualized percentage."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1509,60 +1513,421 @@
     </div>
 
     <!-- SEO & Educational Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading" data-i18n="guideHeading">How Loan &amp; Mortgage Amortization Works</h2>
-        <p data-i18n="guideSub">Essential insights into interest curves, loan structures, and strategies to become debt-free faster.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Loan & Mortgage Amortization Calculator is a financial modeling suite engineered for prospective homebuyers, commercial borrowers, and financial advisors. Evaluating lending structures requires assessing how periodic interest charges, compounding frequencies, and amortization schedules dictate long-term capital expense. This utility delivers precise schedules entirely inside your local browser.</p>
+        <p>Featuring instantaneous monthly payment estimation, principal-versus-interest allocation curves, and full multi-year amortization tables, the engine provides clear visibility into total financing costs with complete privacy for your financial plans.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Define Loan Principal and Term:</strong> Input the borrowed principal amount alongside the proposed repayment tenure in years or months. The model supports consumer loans and commercial credit facilities.</li>
+          <li><strong>Configure Interest Rate and Frequency:</strong> Specify the nominal annual percentage rate (APR) and preferred repayment cadence (monthly or bi-weekly). The model automatically converts the annual rate into the appropriate periodic rate.</li>
+          <li><strong>Analyze Installments and Total Interest:</strong> Examine the calculated periodic installment, lifetime interest charges, total debt repayment amount, and the complete step-by-step amortization schedule with export capabilities.</li>
+        </ol>
+        <h2>The Engine & Formula Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">The Standard Fixed-Rate Amortization Formula</div>
+          <div class="formula-expr"><code>M = P × [r(1 + r)ⁿ] / [(1 + r)ⁿ - 1]  |  Iₖ = Bₖ₋₁ × r  |  Pₖ = M - Iₖ</code></div>
+        </div>
+        <p>Installment sizing follows the standard annuity repayment formula where M represents periodic installment, P is starting principal, r is periodic interest rate (nominal APR divided by installment periods per year), and n is the total number of payment intervals. In each period k, interest charge Iₖ is determined by multiplying outstanding balance Bₖ₋₁ by periodic rate r. The principal portion repaid Pₖ is the difference M - Iₖ, and ending balance updates to Bₖ = Bₖ₋₁ - Pₖ. IEEE-754 floating-point rounding is applied at each period interval to replicate commercial banking rounding conventions.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Fixed-Rate Residential Mortgage Comparison</h4>
+            <p>A borrower takes a $300,000 mortgage at 6.0% nominal APR. Over a 30-year term (360 payments), monthly payment is $1,798.65, with lifetime interest reaching $347,514.57 (total repayment $647,514.57). Shortening the term to 15 years increases payment to $2,531.57, but collapses total interest to $155,682.74, delivering $191,831.83 in direct interest savings.</p>
+          </div>
+          <div class="content-card">
+            <h4>Automobile Financing Payoff Analysis</h4>
+            <p>Financing a $25,000 vehicle at 7.5% APR over 60 months produces a monthly installment of $500.95 with total interest of $5,057.06. Adding a modest $100 extra principal contribution each month retires the loan 13 months early while cutting interest costs by over $1,150.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusing Nominal APR with Effective Annual Rate</h4>
+            <p>Nominal APR ignores compounding frequency within the year. For monthly compounding, an APR of 6.0% yields an Effective Annual Rate of 6.168%. Always evaluate financing agreements using equivalent compounding standards.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Overlooking Front-Loaded Interest Burden</h4>
+            <p>Because interest is computed against outstanding balance, earliest installments consist almost entirely of interest charges. Refinancing or selling an asset too early in the loan lifecycle means very little equity has been established.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring Prepayment Allocation Rules</h4>
+            <p>Lenders often default extra payments to future scheduled installments rather than immediate principal balance reduction unless explicitly specified. Always verify that supplementary payments directly reduce the principal balance.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All loan calculations and amortization schedules are generated entirely inside your browser's local sandbox memory. No financial figures, credit balances, or loan structures are ever logged, tracked, or transmitted to external servers. Your financial inquiries remain entirely private.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How is a fixed monthly loan payment calculated?</summary>
+            <div class="faq-answer">
+              <p>The payment is calculated using the annuity formula M = P × [r(1+r)ⁿ] / [(1+r)ⁿ - 1], where P is principal, r is the monthly interest rate (APR / 12), and n is total monthly payments.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is an amortization schedule and what does it show?</summary>
+            <div class="faq-answer">
+              <p>An amortization schedule is a complete chronological table detailing each periodic payment, showing the exact breakdown between interest paid, principal reduced, and the remaining loan balance.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do extra principal payments accelerate debt payoff?</summary>
+            <div class="faq-answer">
+              <p>Extra principal payments immediately decrease the outstanding loan balance, which permanently lowers subsequent interest charges and accelerates the loan retirement date.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the key difference between nominal APR and the loan note rate?</summary>
+            <div class="faq-answer">
+              <p>The note rate is the pure interest rate applied to your borrowing balance, whereas APR includes mandatory financing fees, origination charges, and points expressed as an annualized percentage.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Mathematical & Financial Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Compound Interest Calculator</div>
+            <div class="tool-desc">Simulate long-term capital growth, compounding schedules, and wealth accumulation.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Discount & Tax Calculator</div>
+            <div class="tool-desc">Evaluate net invoice prices, commercial trade discounts, and regional sales taxes.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Percentage Calculator</div>
+            <div class="tool-desc">Calculate basic percentages, relative proportions, and percentage rate variances.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="guide-grid">
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span data-i18n="guide1Title">1. The Front-Loaded Interest Curve</span>
-          </div>
-          <p data-i18n="guide1Desc">In the initial years of any fixed-rate mortgage, the vast majority of each payment covers interest rather than principal. As your outstanding balance decreases over time, an increasingly larger portion goes toward building home equity.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تُعد حاسبة القروض أداة مالية متقدمة لنمذجة خطط سداد الديون، حيث تُمكن المقترضين من تقدير قيمة الأقساط الدورية، وإجمالي الفوائد المتراكمة، وجدول استهلاك أصل الدين بدقة متناهية. وسواء كنت تخطط لتمويل عقاري، أو شراء سيارة، أو الحصول على تسهيلات ائتمانية، فإن فهم آليات احتساب الأقساط يشكل ركيزة التخطيط المالي السليم.</p>
+        <p>تعتمد معظم القروض البنكية ذات الفائدة الثابتة على نظام الدفعات المتساوية، حيث يظل القسط الشهري الإجمالي ثابتاً، بينما يتغير توزيعه الداخلي باستمرار؛ ففي المراحل الأولى تذهب الحصة الكبرى من القسط لسداد الفائدة، بينما يتحول الجزء الأكبر تدريجياً لسداد أصل المبلغ في المراحل المتأخرة.</p>
+        <p>الاعتماد على تقديرات غير دقيقة دون استعراض جدول الإهلاك الزمني الكامل قد يخفي التكلفة الحقيقية للاقتراض. توفر هذه الحاسبة شفافية مالية مطلقة من خلال حساب الأقساط وجداول الإهلاك فورياً داخل متصفحك دون الحاجة لمشاركة أي معلومات مصرفية.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>حدد مبلغ القسط والمدة الزمنية:</strong> أدخل قيمة أصل القرض المراد اقتراضه مع تحديد فترة السداد بالسنوات أو الأشهر، حيث تدعم الحاسبة كافة أنواع القروض الشخصية والعقارية والتجارية.</li>
+          <li><strong>اضبط معدل الفائدة ودورية السداد:</strong> حدد نسبة الفائدة السنوية الاسمية ودورية السداد المفضلة (شهرياً أو كل أسبوعين)، وسيقوم المحرك بتحويل النسبة السنوية إلى النسبة الدورية المقابلة.</li>
+          <li><strong>استعرض الأقساط وجدول الإهلاك:</strong> اطلع فوراً على القسط الدوري المستحق، وإجمالي الفائدة المدفوعة طوال مدة القرض، وجدول الإهلاك الزمني المفصل الذي يوضح رصيد القرض المتبقي بعد كل دفعة.</li>
+        </ol>
+        <h2>محرك الحساب والمعادلات الرياضية</h2>
+        <div class="formula-box">
+          <div class="formula-title">معادلة الأقساط المتساوية وجدول إهلاك القروض</div>
+          <div class="formula-expr"><code>M = P × [r(1 + r)ⁿ] / [(1 + r)ⁿ - 1]  |  Iₖ = Bₖ₋₁ × r  |  Pₖ = M - Iₖ</code></div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            <span data-i18n="guide2Title">2. The Power of Extra Principal Payments</span>
+        <p>يتم احتساب القسط الدوري الثابت M باستخدام معادلة الأقساط المتساوية، حيث P تمثل أصل القرض، وr معدل الفائدة الدوري، وn إجمالي عدد الدفعات. في كل دورة سداد k، تُحسب قيمة الفائدة Iₖ بضرب الرصيد المتبقي Bₖ₋₁ في معدل الفائدة الدوري r. ويُحسب الجزء المخصص لأصل الدين Pₖ بطرح الفائدة من القسط M - Iₖ، ليصبح الرصيد الجديد Bₖ = Bₖ₋₁ - Pₖ. تُطبق قواعد التقريب المالي المعتمدة مصرفياً لضمان تصفير رصيد القرض بدقة في نهاية المدة.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>مقارنة فترات سداد التمويل العقاري</h4>
+            <p>قرض عقاري بقيمة 300,000 دولار بفائدة سنوية 6.0%. عند سداده على 30 سنة (360 شهراً)، يكون القسط الشهري 1,798.65 دولاراً، وتبلغ الفوائد التراكمية 347,514.57 دولاراً. بينما عند تقليص المدة إلى 15 سنة، يرتفع القسط إلى 2,531.57 دولاراً، لكن تنخفض الفوائد إلى 155,682.74 دولاراً، مما يوفر أكثر من 191,831 دولاراً.</p>
           </div>
-          <p data-i18n="guide2Desc">Adding even $100 or $200 per month directly to your principal reduces the balance upon which future interest is calculated. This creates a compounding savings effect, trimming years off your loan and saving tens of thousands of dollars.</p>
+          <div class="content-card">
+            <h4>أثر السداد الإضافي على قروض السيارات</h4>
+            <p>تمويل سيارة بمبلغ 25,000 دولار بفائدة 7.5% لمدة 5 سنوات ينتج عنه قسط شهري قدره 500.95 دولاراً وفوائد إجمالية تبلغ 5,057 دولاراً. دفع 100 دولار إضافية شهرياً لسداد الأصل ينهي القرض قبل موعده بـ 13 شهراً ويوفر أكثر من 1,150 دولاراً من الفوائد.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span data-i18n="guide3Title">3. Complete Client-Side Confidentiality</span>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الخلط بين الفائدة الاسمية ومعدل الفائدة الفعلي</h4>
+            <p>الفائدة الاسمية المعلنة تتجاهل أثر التراكم الدوري؛ ففائدة اسمية 6% سنوياً مع دفع شهري تعادل فائدة فعلية سنوية قدرها 6.168%. قارن دائماً بين العروض باستخدام المعدل الفعلي السنوي.</p>
           </div>
-          <p data-i18n="guide3Desc">Your loan balances, household debt calculations, and personal mortgage projections never leave your web browser. All amortization engines run entirely locally with zero cookies, cloud storage, or external database logs.</p>
+          <div class="content-card">
+            <h4>⚠️ تجاهل تركز الفائدة في السنوات الأولى</h4>
+            <p>نظراً لأن الفائدة تُحسب على الرصيد القائم، فإن الأقساط الأولى تذهب بنسبة تفوق 70% لسداد الفائدة فقط. إعادة تمويل القرض أو بيع الأصل مبكراً قد يفقدك مزايا السداد طويل الأجل.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ عدم توجيه الدفعات الإضافية نحو أصل الدين</h4>
+            <p>تقوم بعض البنوك تلقائياً باعتبار الدفعات الإضافية سداداً مسبقاً لأقساط مستقبلية بدلاً من خصمها مباشرة من أصل القرض. تأكد دائماً من طلب خصم الدفعات الزائدة من الأصل مباشرة.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية والأمان المحلي 100%</h3>
+          <p>تُنفذ جميع حسابات القروض وجداول السداد داخل متصفحك بشكل كامل ومحمي. لا يتم تخزين أو نقل أي أرقام أو بيانات مالية إلى خوادم خارجية، وتُمسح كافة المدخلات فور مغادرة الصفحة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف يتم احتساب القسط الشهري الثابت للقرض؟</summary>
+            <div class="faq-answer">
+              <p>يُحسب باستخدام معادلة الأقساط الرياضية M = P × [r(1+r)ⁿ] / [(1+r)ⁿ - 1]، بالاعتماد على أصل القرض، ومعدل الفائدة الشهري، وإجمالي عدد أشهر السداد.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هو جدول إهلاك القرض وماذا يوضح؟</summary>
+            <div class="faq-answer">
+              <p>جدول الإهلاك هو جدول زمني تفصيلي يوضح كل قسط دوري مقسماً إلى حصة الفائدة، وحصة سداد أصل القرض، مع بيان الرصيد المتبقي بعد كل دفعة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف تساعد الدفعات الإضافية في تقليص تكلفة القرض؟</summary>
+            <div class="faq-answer">
+              <p>الدفعات الإضافية تخفض أصل القرض فورياً، مما يقلل مبالغ الفائدة المحتسبة في الفترات التالية ويقصر المدة الإجمالية اللازمة لسداد كامل القرض.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما الفرق بين معدل الفائدة الاسمي والنسبة السنوية الشاملة؟</summary>
+            <div class="faq-answer">
+              <p>معدل الفائدة الاسمي يمثل تكلفة الاقتراض البحتة، بينما تتضمن النسبة السنوية الشاملة الرسوم الإدارية ومصاريف التأمين والتأسيس مقومة كنسبة سنوية.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات مالية وحسابية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الفائدة المركبة</div>
+            <div class="tool-desc">محاكاة نمو المدخرات والاستثمارات عبر تراكم الفوائد والإيداعات الدورية.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الخصم والضرائب</div>
+            <div class="tool-desc">حساب الخصومات التجارية، وضريبة القيمة المضافة، وصافي الفواتير.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة النسبة المئوية</div>
+            <div class="tool-desc">حساب النسب المئوية المباشرة، والتغير النسبي، وحصص الأرقام بدقة.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <h3 style="font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:1.25rem" data-i18n="faqTitle">Frequently Asked Questions</h3>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4 data-i18n="faq1Q">How is my monthly payment calculated?</h4>
-          <p data-i18n="faq1A">We apply the standard fixed-rate amortization formula based on your loan principal, monthly interest rate, and total payments count, providing accurate estimates of principal and interest.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le simulateur d'emprunt et tableau d'amortissement côté client de VantorKit est un outil financier conçu pour les acquéreurs, investisseurs et conseillers bancaires. Analyser un crédit exige d'évaluer l'incidence du taux d'intérêt, de la durée et du rythme d'amortissement sur le coût du capital. Cet utilitaire produit des échéanciers complets au sein de votre navigateur.</p>
+        <p>Offrant une estimation immédiate des mensualités et une ventilation du capital et des intérêts, le moteur garantit une visibilité totale sur vos frais de financement sans transmettre vos données bancaires.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Indiquez le capital et la durée:</strong> Saisissez le montant total emprunté et la durée de remboursement envisagée en années ou en mois, pour un crédit personnel ou immobilier.</li>
+          <li><strong>Paramétrez le taux et la périodicité:</strong> Renseignez le taux d'intérêt nominal annuel et la fréquence des remboursements (mensuelle ou bimensuelle). Le système adapte automatiquement le taux périodique.</li>
+          <li><strong>Consultez l'échéancier d'amortissement:</strong> Visualisez la mensualité exacte, le coût total des intérêts d'emprunt et l'échéancier complet détaillant la part de capital et d'intérêts pour chaque échéance.</li>
+        </ol>
+        <h2>Moteur de calcul et formules mathématiques</h2>
+        <div class="formula-box">
+          <div class="formula-title">La formule classique de l'amortissement à annuités constantes</div>
+          <div class="formula-expr"><code>M = P × [r(1 + r)ⁿ] / [(1 + r)ⁿ - 1]  |  Iₖ = Bₖ₋₁ × r  |  Pₖ = M - Iₖ</code></div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq2Q">What is the difference between 15-year and 30-year mortgages?</h4>
-          <p data-i18n="faq2A">A 15-year loan has higher monthly payments but amortizes twice as fast, resulting in significantly lower lifetime interest costs. A 30-year loan offers lower monthly payments but accrues much more total interest.</p>
+        <p>La mensualité M est déterminée selon la formule des annuités constantes, où P désigne le capital emprunté, r le taux périodique proportionnel, et n le nombre total de mensualités. Pour chaque période k, la charge d'intérêts Iₖ se calcule en multipliant le capital restant dû Bₖ₋₁ par le taux périodique r. La part de capital amortie Pₖ est la différence M - Iₖ, et le solde restant s'établit à Bₖ = Bₖ₋₁ - Pₖ. Les règles d'arrondi monétaire sont appliquées rigoureusement à chaque période pour garantir que le capital restant dû atteigne précisément zéro.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Comparatif de durée pour un crédit immobilier</h4>
+            <p>Pour un prêt immobilier de 300 000 € à 6,0% sur 30 ans (360 mensualités), la mensualité s'élève à 1 798,65 € pour un coût total d'intérêts de 347 514,57 €. En ramenant la durée à 15 ans (180 mensualités), l'échéance passe à 2 531,57 €, mais le total des intérêts chute à 155 682,74 €, générant une économie nette de 191 831,83 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Remboursement anticipé d'un crédit automobile</h4>
+            <p>Un emprunt automobile de 25 000 € à 7,5% sur 60 mois implique une mensualité de 500,95 € et 5 057,06 € d'intérêts. Un versement anticipé de 100 € par mois sur le capital réduit la durée du prêt de 13 mois et fait économiser plus de 1 150 € d'intérêts.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq3Q">How do extra payments shorten my loan?</h4>
-          <p data-i18n="faq3A">100% of any extra monthly payment goes directly toward paying down principal debt. Because interest is charged on the remaining balance, reducing principal faster accelerates the entire payoff schedule.</p>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confondre taux nominal et taux effectif global</h4>
+            <p>Le taux nominal ne tient pas compte des frais annexes ni de la capitalisation. Un taux nominal de 6,0% équivaut à un taux effectif annuel de 6,168%. Fondez toujours vos comparaisons sur le Taux Annuel Effectif Global (TAEG).</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Négliger la concentration des intérêts en début de prêt</h4>
+            <p>Puisque les intérêts sont calculés sur le capital restant dû, les premières mensualités remboursent très peu de capital. Racheter ou solder un emprunt au bout de deux ans génère peu d'économies d'intérêts.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Oublier les conditions de remboursement anticipé</h4>
+            <p>Assurez-vous que vos versements complémentaires soient imputés directement sur le capital restant dû et non sur les mensualités futures, afin d'accélérer l'amortissement du prêt.</p>
+          </div>
         </div>
-        <div class="faq-item">
-          <h4 data-i18n="faq4Q">Can I download the amortization schedule for my records?</h4>
-          <p data-i18n="faq4A">Yes! Click the 'Export CSV' button to save a spreadsheet file, or use 'Print' to generate a clean, printer-friendly PDF copy of your annual or monthly schedule.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos simulations de prêt demeurent strictement confidentielles. Tous les calculs s'exécutent dans la mémoire vive de votre navigateur. Aucune donnée financière n'est transmise sur le réseau.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment est calculée la mensualité constante d'un prêt ?</summary>
+            <div class="faq-answer">
+              <p>Elle est déterminée par la formule mathématique des annuités M = P × [r(1+r)ⁿ] / [(1+r)ⁿ - 1], reliant le capital emprunté, le taux périodique et le nombre de mensualités.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qu'est-ce qu'un tableau d'amortissement ?</summary>
+            <div class="faq-answer">
+              <p>C'est un récapitulatif périodique détaillant pour chaque échéance la part de capital remboursé, le montant des intérêts bancaires payés et le capital restant dû.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quel est l'impact d'un remboursement anticipé partiel ?</summary>
+            <div class="faq-answer">
+              <p>Un versement anticipé réduit directement le capital restant dû, ce qui diminue le montant des intérêts futurs et permet de réduire soit la durée du prêt, soit les mensualités.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quelle est la différence entre le taux nominal et le TAEG ?</summary>
+            <div class="faq-answer">
+              <p>Le taux nominal correspond à la rémunération brute du prêteur, tandis que le TAEG inclut l'ensemble des frais obligatoires (dossier, assurance, garanties) exprimés en pourcentage annuel.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils financiers et mathématiques connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calculateur d'Intérêts Composés</div>
+            <div class="tool-desc">Simulez la croissance de votre épargne avec capitalisation et versements réguliers.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Remise et TVA</div>
+            <div class="tool-desc">Calculez les remises commerciales, la TVA et les montants nets de facturation.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Pourcentage</div>
+            <div class="tool-desc">Calculez les pourcentages simples, les variations et les proportions relatives.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il simulatore di mutui e prestiti lato client di VantorKit è uno strumento di analisi finanziaria sviluppato per acquirenti immobiliari, investitori e consulenti. Valutare un finanziamento richiede la comprensione di come tassi, durata e ammortamento incidano sul costo complessivo. Questo strumento genera piani di ammortamento completi direttamente nel tuo browser.</p>
+        <p>Con calcolo istantaneo della rata mensile e scomposizione tra capitale e interessi, il motore assicura piena trasparenza sui costi di finanziamento senza comunicare i tuoi piani a server esterni.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Specifica il capitale e la durata:</strong> Inserisci l'importo totale richiesto e la durata complessiva del finanziamento in anni o mesi, per qualsiasi tipologia di credito personale o mutuo casa.</li>
+          <li><strong>Configura tasso e periodicità:</strong> Indica il tasso di interesse annuo nominale (TAN) e la frequenza delle scadenze (mensile o quindicinale). Lo strumento calcolerà il tasso applicato a ciascuna rata.</li>
+          <li><strong>Verifica rate e piano di ammortamento:</strong> Visualizza l'importo esatto della rata periodica, il totale degli interessi dovuti e il piano cronologico dettagliato con la suddivisione tra quota capitale e quota interessi.</li>
+        </ol>
+        <h2>Motore di calcolo e formule matematiche</h2>
+        <div class="formula-box">
+          <div class="formula-title">La formula dell'ammortamento a rata costante (alla francese)</div>
+          <div class="formula-expr"><code>M = P × [r(1 + r)ⁿ] / [(1 + r)ⁿ - 1]  |  Iₖ = Bₖ₋₁ × r  |  Pₖ = M - Iₖ</code></div>
+        </div>
+        <p>La determinazione della rata M risponde alla formula dell'ammortamento alla francese, dove P è il capitale erogato, r è il tasso periodico effettivo, ed n è il numero complessivo di versamenti. Ad ogni scadenza k, la quota interessi Iₖ si calcola moltiplicando il debito residuo precedente Bₖ₋₁ per il tasso periodico r. La quota capitale Pₖ si ottiene per differenza M - Iₖ, e il debito residuo si aggiorna in Bₖ = Bₖ₋₁ - Pₖ. L'algoritmo applica criteri di arrotondamento bancari precisi a ciascuna scadenza, assicurando che all'ultima rata il debito residuo si azzeri esattamente.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Confronto sulla durata di un mutuo immobiliare</h4>
+            <p>Un mutuo di 300.000 € al 6,0% su 30 anni (360 rate) comporta una rata mensile di 1.798,65 € e interessi complessivi pari a 347.514,57 €. Riducendo la durata a 15 anni (180 rate), la rata sale a 2.531,57 €, ma il totale degli interessi scende a 155.682,74 €, producendo un risparmio netto di 191.831,83 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Estinzione anticipata di un prestito auto</h4>
+            <p>Finanziare 25.000 € al 7,5% per 60 mesi richiede una rata di 500,95 € con 5.057,06 € di interessi totali. Aggiungendo un versamento supplementare di 100 € al mese sul capitale, il debito si estingue con 13 mesi di anticipo, risparmiando oltre 1.150 € di interessi.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confondere TAN e TAEG</h4>
+            <p>Il TAN indica il solo tasso di interesse nominale puro, mentre il TAEG incorpora le spese accessorie, di perizia e di gestione. Un TAN del 6,0% corrisponde a un tasso annuo effettivo di almeno il 6,168%. Confronta sempre le offerte tramite il TAEG.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sottovalutare la concentrazione iniziale degli interessi</h4>
+            <p>Poiché gli interessi maturano sul capitale ancora da rimborsare, le prime rate sono composte in gran parte da interessi. Rimborsare o rinegoziare un mutuo nei primissimi anni abbatte poco capitale.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Destinazione non corretta dei pagamenti extra</h4>
+            <p>Verifica che eventuali rimborsi parziali anticipati vengano imputati direttamente all'abbattimento della quota capitale e non come anticipo delle rate future, per massimizzare il risparmio.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le elaborazioni di calcolo e i piani di ammortamento vengono generati localmente all'interno del browser. Nessun dato finanziario viene trasmesso o registrato su server esterni. Chiudendo la scheda web si rimuove ogni traccia di memoria.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Come si calcola la rata mensile di un prestito?</summary>
+            <div class="faq-answer">
+              <p>Viene calcolata tramite la formula dell'ammortamento alla francese M = P × [r(1+r)ⁿ] / [(1+r)ⁿ - 1], connettendo capitale, tasso periodico e numero di rate.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Che cos'è il piano di ammortamento?</summary>
+            <div class="faq-answer">
+              <p>È una tabella analitica che descrive per ogni scadenza la quota capitale rimborsata, la quota interessi pagata e il debito residuo ancora da estinguere.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è il vantaggio di effettuare pagamenti anticipati sul capitale?</summary>
+            <div class="faq-answer">
+              <p>I versamenti extra riducono subito il capitale residuo, abbassando la base di calcolo degli interessi futuri e abbreviando la durata del finanziamento.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la differenza fondamentale tra TAN e TAEG?</summary>
+            <div class="faq-answer">
+              <p>Il TAN rappresenta il tasso nominale applicato al prestito, mentre il TAEG esprime il costo totale effettivo del finanziamento comprensivo di tutte le spese obbligatorie.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti finanziari e matematici correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Interesse Composto</div>
+            <div class="tool-desc">Verifica la crescita dei tuoi risparmi con versamenti periodici e capitalizzazione.</div>
+          </a>
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore Sconto e IVA</div>
+            <div class="tool-desc">Calcola gli sconti commerciali applicati, l'IVA e i totali netti delle fatture.</div>
+          </a>
+          <a href="./percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Percentuale</div>
+            <div class="tool-desc">Elabora percentuali immediate, scostamenti e quote proporzionali relative.</div>
+          </a>
         </div>
       </div>
     </article>
-
   </main>
 
   <!-- Footer -->

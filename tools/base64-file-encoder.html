@@ -36,62 +36,54 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Base64 File Encoder & Decoder",
-        "url": "https://vantorkit.com/tools/base64-file-encoder.html",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5 FileReader API.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side Base64 File Encoder and Decoder. Convert PDFs, images, fonts, audio, and documents into Base64 strings and Data URIs, or decode Base64 back into binary files with automatic MIME autodetection."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Base64 File Encoder & Decoder",
+      "url": "https://vantorkit.com/tools/base64-file-encoder.html",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 FileReader API.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my files uploaded to any server during Base64 conversion?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All encoding and decoding runs 100% locally in your browser memory using the standard HTML5 FileReader and Blob APIs. Your documents, photos, audio files, and confidential keys never leave your device."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is Base64 encoded output ~33% larger than the original file?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Base64 represents binary data using only 64 printable ASCII characters (6 bits per character). Because 3 binary bytes (24 bits) require 4 Base64 characters (24 bits) to represent, the encoding inherently introduces a 4:3 (+33.3%) size overhead."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What is the difference between raw Base64 and a Data URI?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "A raw Base64 string contains only encoded ASCII characters. A Data URI prefixes the string with metadata (e.g., data:image/png;base64,...) allowing web browsers to directly embed images in HTML <img alt="Image preview"> tags or CSS background properties without separate HTTP requests."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does the Base64 decoder detect the file format?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "If a Data URI is provided, the MIME header is parsed directly. If raw Base64 is pasted, VantorKit inspects the decoded binary signature bytes (e.g. %PDF for PDFs, PNG headers, JPEG headers, PK for ZIP/DOCX) to automatically determine the file extension."
-            }
+      "description": "Free client-side Base64 File Encoder and Decoder. Convert PDFs, images, fonts, audio, and documents into Base64 strings and Data URIs, or decode Base64 back into binary files with automatic MIME autodetection."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is there any restriction on the type of file I can encode?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Any file format—including PDF, ZIP, MP3, WOFF2, EXE, and DOCX—can be encoded into Base64 and subsequently decoded back to its exact original binary state."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Base64 encoding encrypt my confidential data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Base64 is merely a representation format that transforms binary data into printable ASCII characters. Anyone with the string can decode it instantly without a key."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is the Base64 output larger than my original file?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Base64 encodes every 3 bytes (24 bits) of binary data into 4 ASCII characters (32 bits), leading to a mathematical overhead of approximately 33.3%."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1416,6 +1408,390 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Base64 File Encoder & Decoder is an all-purpose binary data translation utility engineered for systems architects, security researchers, and web developers. Converting arbitrary local files—such as PDF documents, audio clips, ZIP archives, fonts, and application binaries—into ASCII Base64 representations is essential for API payload embedding, secure database storage, and offline data transmission. This utility performs rapid, hardware-accelerated encoding and decoding directly inside your browser.</p>
+        <p>Built on native browser FileReader and TypedArray primitives, the tool converts binary bytes into RFC 4648 compliant Base64 strings without arbitrary file type limitations. You can also paste existing Base64 strings to decode them back into their original binary files, complete with MIME type auto-detection and instantaneous file downloads.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Choose Encode or Decode Mode:</strong> Select 'File to Base64' to convert a local file into a text string, or 'Base64 to File' to reconstruct a binary document from raw text.</li>
+          <li><strong>Input Binary File or Text String:</strong> Drop any file into the staging zone, or paste an existing Base64 string into the input textarea.</li>
+          <li><strong>Copy Code or Download Binary File:</strong> Copy the resulting Base64 string (with optional Data URI prefix) or download the reconstructed binary file immediately.</li>
+        </ol>
+        <h2>The Engine & Document Processing Architecture</h2>
+        <div class="formula-box">
+          <div class="formula-title">FileReader.readAsArrayBuffer() & Uint8Array Binary Stream</div>
+          <div class="formula-expr"><code>btoa(String.fromCharCode(...new Uint8Array(buffer))) / FileReader</code></div>
+        </div>
+        <p>For small-to-medium files, chunks of Uint8Array byte streams are mapped to ASCII characters using standard 6-bit grouping. For decoding, atob() unpacks ASCII character codes into an in-memory Uint8Array before wrapping them into a downloadable Blob.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Inlining Custom Web Fonts in CSS</h4>
+            <p>Encoding a 38 KB WOFF2 font file into a Base64 data URI to embed directly into a critical CSS stylesheet, eliminating render-blocking font downloads.</p>
+          </div>
+          <div class="content-card">
+            <h4>API Payload Attachment Encoding</h4>
+            <p>Converting a signed 1.2 MB PDF agreement into a Base64 payload for direct submission to a REST API endpoint that rejects multipart form uploads.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Encoding Massive Video Files in Browser Memory</h4>
+            <p>Encoding multi-gigabyte video files can overwhelm browser RAM limits; keep browser-based encoding under 100 MB for optimal stability.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Omitting the Correct MIME Type Header When Decoding</h4>
+            <p>Reconstructing files from Base64 without specifying the proper extension or MIME type may cause operating systems to fail to recognize the downloaded file.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusing Base64 Encoding with Cryptographic Encryption</h4>
+            <p>Base64 is a public binary-to-text encoding format, not an encryption cipher; never rely on Base64 alone to protect confidential secrets.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All encoding and decoding operations take place 100% inside your browser's local memory. Your binary archives, font files, and documents are never transmitted across the network, stored on third-party servers, or analyzed by telemetry scripts. Complete enterprise privacy is guaranteed.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Is there any restriction on the type of file I can encode?</summary>
+            <div class="faq-answer">
+              <p>No. Any file format—including PDF, ZIP, MP3, WOFF2, EXE, and DOCX—can be encoded into Base64 and subsequently decoded back to its exact original binary state.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Does Base64 encoding encrypt my confidential data?</summary>
+            <div class="faq-answer">
+              <p>No. Base64 is merely a representation format that transforms binary data into printable ASCII characters. Anyone with the string can decode it instantly without a key.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Why is the Base64 output larger than my original file?</summary>
+            <div class="faq-answer">
+              <p>Base64 encodes every 3 bytes (24 bits) of binary data into 4 ASCII characters (32 bits), leading to a mathematical overhead of approximately 33.3%.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related PDF & Document Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image to Base64</div>
+            <div class="tool-desc">Specialized tool for converting images into CSS data URIs.</div>
+          </a>
+          <a href="csv-json-converter.html" class="related-tool-card">
+            <div class="tool-name">CSV to JSON Converter</div>
+            <div class="tool-desc">Transform tabular spreadsheets into structured data files.</div>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Password Generator</div>
+            <div class="tool-desc">Create high-entropy cryptographic encryption keys.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة تشفير وفك تشفير الملفات بصيغة Base64 عبر المتصفح من فانتور كيت محركاً شاملاً لتحويل البيانات الثنائية، وهي مصممة لمهندسي النظم وباحثي أمن المعلومات ومطوري الويب. إن تحويل مختلف الملفات الرقمية—مثل مستندات PDF والمقاطع الصوتية وملفات ZIP المضغوطة وخطوط الويب وملفات البرامج التنفيذية—إلى نصوص ASCII آمنة يعتبر خطوة أساسية لتضمين الملفات في واجهات APIs والتخزين في قواعد البيانات ونقل البيانات في البيئات المعزولة. تقوم هذه الأداة بكافة عمليات التشفير وفك التشفير مباشرة داخل متصفحك.</p>
+        <p>بالاعتماد على واجهات المتصفح المدمجة FileReader وTypedArray، تُحول بايتات الملفات الثنائية إلى سلاسل نصية متوافقة مع معيار RFC 4648 دون قيود على صيغة الملف. كما تتيح لك الأداة لصق سلاسل Base64 لإعادة بنائها فوراً وتحميلها كملفات ثنائية أصلية مع استكشاف نوع الوسائط MIME تلقائياً.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختيار وضع التشفير أو فك التشفير:</strong> اختر 'تحويل ملف إلى Base64' لتشفير ملفك إلى نص، أو 'تحويل Base64 إلى ملف' لإعادة بناء الملف الثنائي الأصلي من النص.</li>
+          <li><strong>إدخال الملف أو السلسلة النصية:</strong> قم بسحب أي ملف إلى مساحة العمل، أو الصق سلسلة نصية مشفرة بـ Base64 في مربع الإدخال.</li>
+          <li><strong>نسخ الكود أو تنزيل الملف الناتج:</strong> انسخ سلسلة Base64 الناتجة بضغطة زر أو حمّل الملف الثنائي المعاد بناؤه فوراً إلى جهازك.</li>
+        </ol>
+        <h2>المحرك البرمجي وبنية معالجة المستندات</h2>
+        <div class="formula-box">
+          <div class="formula-title">معالجة تدفقات البايتات عبر FileReader وUint8Array</div>
+          <div class="formula-expr"><code>btoa(String.fromCharCode(...new Uint8Array(buffer))) / FileReader</code></div>
+        </div>
+        <p>بالنسبة للملفات، يتم تقسيم مصفوفات بايتات Uint8Array إلى مجموعات ذات 6 بتات ومطابقتها بأحرف ASCII القياسية. في وضع فك التشفير، تفك دالة atob الرموز النصية إلى مصفوفة بايتات في الذاكرة وتغلفها داخل كائن Blob قابل للتنزيل.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تضمين خطوط الويب مباشرة في ملفات CSS</h4>
+            <p>تشفير ملف خط WOFF2 بحجم 38 كيلوبايت إلى سلسلة Data URI لتضمينه في ملف التنسيق الأساسي، مما يمنع وميض تأخير تحميل الخطوط الخارجية.</p>
+          </div>
+          <div class="content-card">
+            <h4>إرفاق الوثائق الرسمية في طلبات API</h4>
+            <p>تحويل عقد PDF موقع بحجم 1.2 ميجابايت إلى سلسلة Base64 لإرساله مباشرة إلى خادم API لا يدعم رفع الملفات المتعددة multipart.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ محاولة تشفير ملفات فيديو عملاقة في المتصفح</h4>
+            <p>تشفير ملفات فيديو ضخمة تفوق عدة جيجابايت قد يستهلك ذاكرة المتصفح بالكامل؛ حافظ على معالجة ملفات أقل من 100 ميجابايت لضمان استقرار الأداء.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ إغفال لاحقة نوع الملف عند فك التشفير</h4>
+            <p>إعادة بناء ملف من سلسلة Base64 دون تحديد الامتداد الصحيح أو نوع الوسائط يجعل نظام التشغيل عاجزاً عن فتح الملف بشكل سليم.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الخلط بين ترميز Base64 والتشفير الأمني السري</h4>
+            <p>نظام Base64 هو مجرد طريقة لتمثيل البيانات الثنائية في هيئة نصوص وليس خوارزمية تشفير أمني؛ لا تعتمد عليه بمفرده لحماية أسرار حساسة.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تتم جميع عمليات التشفير وفك التشفير بالكامل داخل الذاكرة المحلية لمتصفحك بنسبة 100%. ملفاتك الثنائية ومستنداتك لا تُرسل مطلقاً عبر الإنترنت ولا تُخزن على خوادم تابعة لجهات خارجية، مما يضمن أماناً وسرية مطلقة لبياناتك الخاصة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل هناك أي قيود على نوع الملفات التي يمكن تشفيرها؟</summary>
+            <div class="faq-answer">
+              <p>كلا، يمكنك تشفير أي صيغة للملفات بما في ذلك PDF وZIP وMP3 وWOFF2 وDOCX وتحويلها إلى Base64 وإعادة فك تشفيرها لحالتها الأصلية بدقة تامة.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يحمي تشفير Base64 بياناتي من أعين المتطفلين؟</summary>
+            <div class="faq-answer">
+              <p>كلا، فنظام Base64 ليس خوارزمية تشفير سرية، بل هو معيار لتمثيل البيانات الثنائية بأحرف نصية، ويمكن لأي شخص فك شفرته فوراً دون الحاجة لمفتاح سري.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>لماذا تصبح سلسلة Base64 أكبر حجماً من الملف الأصلي؟</summary>
+            <div class="faq-answer">
+              <p>يقوم نظام Base64 بتمثيل كل 3 بايتات ثنائية (24 بت) عبر 4 أحرف نصية (32 بت)، مما يؤدي لزيادة رياضية حتمية تبلغ 33.3% في الحجم الإجمالي.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات ملفات PDF والمستندات ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">تحويل الصور إلى Base64</div>
+            <div class="tool-desc">أداة متخصصة لتحويل الصور إلى رموز Data URI لتصميم الويب.</div>
+          </a>
+          <a href="csv-json-converter.html" class="related-tool-card">
+            <div class="tool-name">محول CSV إلى JSON</div>
+            <div class="tool-desc">تحويل الجداول والبيانات إلى ملفات وهياكل مهيكلة.</div>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">مولد كلمات المرور</div>
+            <div class="tool-desc">توليد مفاتيح تشفير قوية وعشوائية لحماية حساباتك.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>L'encodeur et décodeur de fichiers en Base64 côté client de VantorKit est un utilitaire universel de transcription binaire conçu pour les architectes systèmes, les chercheurs en sécurité et les développeurs web. Traduire des fichiers informatiques quelconques—tels que des documents PDF, des bandes sonores, des archives ZIP ou des polices de caractères—en chaînes ASCII Base64 est essentiel pour l'intégration directe dans des API, l'archivage en base de données et l'échange de données en milieu sécurisé. Cet outil réalise ces opérations avec une rapidité exemplaire au sein de votre navigateur.</p>
+        <p>S'appuyant sur les primitives natives FileReader et TypedArray de votre navigateur, l'outil convertit les octets binaires en chaînes de caractères conformes au standard RFC 4648 sans aucune restriction de format. Vous pouvez également coller des chaînes Base64 existantes pour reconstruire instantanément vos fichiers binaires d'origine avec reconnaissance automatique du type MIME.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Sélectionnez le mode d'opération:</strong> Basculez entre 'Fichier vers Base64' pour encoder un document en chaîne textuelle ou 'Base64 vers Fichier' pour restaurer un binaire.</li>
+          <li><strong>Importez le fichier ou collez le texte:</strong> Déposez n'importe quel fichier dans la zone d'encodage ou collez votre chaîne Base64 dans la zone de décodage.</li>
+          <li><strong>Copiez le code ou téléchargez le fichier:</strong> Copiez la chaîne générée (avec préfixe Data URI optionnel) ou téléchargez le fichier binaire reconstitué d'un simple clic.</li>
+        </ol>
+        <h2>Moteur de traitement et architecture documentaire</h2>
+        <div class="formula-box">
+          <div class="formula-title">Traitement des flux d'octets FileReader et Uint8Array</div>
+          <div class="formula-expr"><code>btoa(String.fromCharCode(...new Uint8Array(buffer))) / FileReader</code></div>
+        </div>
+        <p>Les octets du flux binaire sont segmentés en blocs de 6 bits et associés aux caractères de la table ASCII officielle. Lors du décodage, atob restaure les codes de caractères en mémoire dans un tableau typé Uint8Array encapsulé dans un Blob téléchargeable.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Intégration directe de polices web dans une feuille CSS</h4>
+            <p>Encodage d'une police WOFF2 de 38 Ko sous forme de Data URI dans une feuille de style critique pour éliminer les blocages d'affichage de typographies.</p>
+          </div>
+          <div class="content-card">
+            <h4>Transmission de pièces jointes vers une API REST</h4>
+            <p>Conversion d'un contrat PDF signé de 1.2 Mo en chaîne Base64 pour transmission directe vers une API n'acceptant pas les formulaires multipart.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Traiter des fichiers vidéo gigantesques dans le navigateur</h4>
+            <p>Encoder des vidéos de plusieurs gigaoctets peut saturer la mémoire vive du navigateur; limitez l'usage à des fichiers de moins de 100 Mo pour une stabilité optimale.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Omettre l'extension appropriée lors du décodage</h4>
+            <p>Reconstruire un fichier depuis du Base64 sans spécifier le bon type MIME empêche le système d'exploitation d'ouvrir le document avec l'application adaptée.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondre encodage Base64 et chiffrement cryptographique</h4>
+            <p>Le Base64 est une simple représentation textuelle de données binaires et non un système de chiffrement; ne l'utilisez jamais seul pour protéger des secrets.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toutes les étapes d'encodage et de décodage s'exécutent strictement au cœur de la mémoire vive de votre navigateur. Vos fichiers binaires, polices et documents confidentiels ne transitent jamais sur le réseau et ne sont pas archivés sur des serveurs distants, assurant une confidentialité totale.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Y a-t-il une limite sur les formats de fichiers pris en charge ?</summary>
+            <div class="faq-answer">
+              <p>Non. Tout type de fichier binaire (PDF, ZIP, MP3, WOFF2, EXE, DOCX) peut être transformé en Base64 puis restauré fidèlement à son état initial.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>L'encodage Base64 protège-t-il mes données comme un chiffrement ?</summary>
+            <div class="faq-answer">
+              <p>Non. Le Base64 ne fait que représenter des données binaires sous forme imprimable ASCII. N'importe qui peut décoder la chaîne instantanément sans mot de passe.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Pourquoi la chaîne Base64 est-elle plus volumineuse que le fichier source ?</summary>
+            <div class="faq-answer">
+              <p>L'encodage associe 4 caractères ASCII (32 bits) à chaque groupe de 3 octets binaires (24 bits), ce qui entraîne une hausse mathématique de poids constante d'environ 33.3%.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils PDF et gestion documentaire connexes</h2>
+        <div class="related-tools-grid">
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image vers Base64</div>
+            <div class="tool-desc">Outil dédié à la conversion d'images en URI pour le web.</div>
+          </a>
+          <a href="csv-json-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur CSV vers JSON</div>
+            <div class="tool-desc">Transformez vos données tabulaires en fichiers structurés.</div>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Générateur de mots de passe</div>
+            <div class="tool-desc">Générez des clés d'accès aléatoires et hautement sécurisées.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il codificatore e decodificatore di file in Base64 lato client di VantorKit è un'utility universale per la manipolazione di dati binari, concepita per ingegneri di sistema, esperti di sicurezza informatica e sviluppatori web. Tradurre file locali di qualsiasi tipo—come documenti PDF, tracce audio, archivi ZIP, font tipografici ed eseguibili—in stringhe ASCII Base64 è indispensabile per l'incorporamento in payload API, l'archiviazione su database e lo scambio sicuro di file. Questo strumento realizza codifiche e decodifiche con immediatezza all'interno del browser.</p>
+        <p>Sfruttando le primitive native FileReader e TypedArray del browser, lo strumento trasforma i byte binari in stringhe conformi allo standard RFC 4648 senza limitazioni sul tipo di file. È inoltre possibile incollare stringhe Base64 esistenti per decodificarle e riscaricare il file binario originale, con rilevamento automatico dell'intestazione MIME.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Imposta la modalità di operazione:</strong> Scegli 'Da File a Base64' per convertire un documento in una stringa di testo, oppure 'Da Base64 a File' per ricostruire il file binario originale.</li>
+          <li><strong>Carica il file o incolla la stringa:</strong> Trascina qualsiasi file nell'area di lavoro oppure incolla la tua stringa Base64 nel campo di testo dedicato.</li>
+          <li><strong>Copia la stringa o scarica il file binario:</strong> Copia la stringa Base64 generata (con prefisso Data URI opzionale) oppure scarica istantaneamente il file binario ricostruito.</li>
+        </ol>
+        <h2>Motore di elaborazione e architettura documentale</h2>
+        <div class="formula-box">
+          <div class="formula-title">Gestione flussi di byte con FileReader e Uint8Array</div>
+          <div class="formula-expr"><code>btoa(String.fromCharCode(...new Uint8Array(buffer))) / FileReader</code></div>
+        </div>
+        <p>I byte del buffer binario vengono raggruppati a blocchi di 6 bit e associati ai caratteri della tabella ASCII. In fase di decodifica, atob converte i caratteri in un array Uint8Array in memoria, incapsulato in un oggetto Blob pronto per il download.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Incorporamento font web in fogli di stile CSS</h4>
+            <p>Codifica di un font WOFF2 da 38 KB come Data URI da includere nel foglio di stile principale, azzerando i ritardi nel rendering tipografico della pagina.</p>
+          </div>
+          <div class="content-card">
+            <h4>Trasmissione allegati in chiamate API REST</h4>
+            <p>Conversione di un contratto PDF firmato da 1.2 MB in una stringa Base64 per l'invio diretto a un'API che non gestisce formati multipart.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Codificare file video di dimensioni eccessive</h4>
+            <p>Elaborare file video pesanti diversi gigabyte può saturare la memoria RAM del browser; mantieni l'elaborazione al di sotto dei 100 MB per garantire stabilità.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Omettere l'estensione appropriata in fase di decodifica</h4>
+            <p>Ricostruire file senza definire l'estensione o il MIME type corretto impedisce al sistema operativo di aprire il file con l'applicazione associata.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondere la codifica Base64 con la crittografia di sicurezza</h4>
+            <p>Base64 è unicamente un formato di rappresentazione testuale di dati binari e non una cifratura; non utilizzarlo da solo per proteggere informazioni segrete.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le procedure di codifica e decodifica si svolgono per intero nella memoria locale del tuo browser. I tuoi file binari e i documenti riservati non vengono mai inviati su server esterni né memorizzati nel cloud, tutelando al 100% la riservatezza aziendale.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Esiste qualche limitazione sulle tipologie di file codificabili?</summary>
+            <div class="faq-answer">
+              <p>No. Qualsiasi formato binario (PDF, ZIP, MP3, WOFF2, EXE, DOCX) può essere convertito in Base64 e successivamente ricostruito nel suo stato esatto originale.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>La codifica Base64 protegge i file come una crittografia?</summary>
+            <div class="faq-answer">
+              <p>No. Base64 è unicamente un metodo per rappresentare dati binari mediante caratteri stampabili. Chiunque può decodificare la stringa all'istante senza bisogno di chiavi.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Per quale motivo la stringa Base64 è più pesante del file iniziale?</summary>
+            <div class="faq-answer">
+              <p>La codifica associa 4 caratteri ASCII (32 bit) a ogni gruppo di 3 byte binari (24 bit), determinando un aumento matematico costante delle dimensioni di circa il 33.3%.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti PDF e gestione documenti correlati</h2>
+        <div class="related-tools-grid">
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Immagine in Base64</div>
+            <div class="tool-desc">Strumento mirato per trasformare immagini in stringhe Data URI.</div>
+          </a>
+          <a href="csv-json-converter.html" class="related-tool-card">
+            <div class="tool-name">Convertitore CSV in JSON</div>
+            <div class="tool-desc">Trasforma fogli tabulari in strutture dati pronte per il codice.</div>
+          </a>
+          <a href="password-generator.html" class="related-tool-card">
+            <div class="tool-name">Generatore di password</div>
+            <div class="tool-desc">Genera chiavi crittografiche robuste ad alta entropia.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Toast Notification -->

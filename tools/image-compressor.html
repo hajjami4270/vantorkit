@@ -39,70 +39,54 @@
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Image Compressor & WebP Optimizer",
-        "url": "https://vantorkit.com/tools/image-compressor.html",
-        "applicationCategory": "MultimediaApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side image compressor and WebP conversion tool. Compress JPG, PNG, WEBP, and AVIF files locally with quality controls, dimension downscaling, real-time split-screen comparison, and bulk ZIP export."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Image Compressor & WebP Optimizer",
+      "url": "https://vantorkit.com/tools/image-compressor.html",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my images uploaded to any external server during compression?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All image decoding, resampling, compression, and WebP encoding happen 100% locally inside your browser using the HTML5 Canvas 2D engine and Blob APIs. Your files never leave your computer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why is WebP format recommended for web performance?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "WebP is a modern image format developed by Google that provides superior lossless and lossy compression for images on the web. WebP lossy images are typically 25% to 34% smaller than comparable JPEG images while retaining identical perceptual quality."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I compress multiple images at once?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! You can drop dozens of images simultaneously. VantorKit processes them all in your browser, shows individual file metrics, and allows you to download all optimized images together as a ZIP archive."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does the split preview slider work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The interactive split comparison tool overlays the original and compressed images with pixel-perfect alignment. Simply drag the divider bar left and right to inspect fine details, sharpness, and artifact levels in real-time."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does converting transparent PNG to JPEG cause black backgrounds?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. When converting transparent images to JPEG, VantorKit automatically blends transparent alpha regions against a clean white backdrop, ensuring your graphics look clean and professional."
-            }
+      "description": "Free client-side image compressor and WebP conversion tool. Compress JPG, PNG, WEBP, and AVIF files locally with quality controls, dimension downscaling, real-time split-screen comparison, and bulk ZIP export."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does compressing images reduce their physical pixel dimensions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Only if you explicitly enter max width or height constraints. By default, the compressor preserves exact pixel dimensions and optimizes file size solely by tuning encoding quantization matrices."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is WebP generally lighter than JPEG at the same visual quality?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "WebP utilizes advanced intra-frame predictive coding borrowed from the VP8 video standard, achieving roughly 25% to 34% greater compression efficiency compared to legacy JPEG codecs at identical SSIM ratings."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there any limit to the image file size I can process?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because processing runs client-side using your system memory, limits depend on your computer RAM and browser canvas size quotas (typically up to 16,384×16,384 pixels on modern desktop browsers)."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -2010,6 +1994,388 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Image Compressor is a high-performance optimization utility engineered to shrink raster graphics file sizes without perceptible loss in visual fidelity. Modern web applications, digital portfolios, and email campaigns frequently choke under the weight of uncompressed multi-megabyte digital photographs. By dynamically recalibrating spatial discrete cosine transforms (DCT) and chrominance subsampling ratios entirely within your local browser runtime, this utility strips bloat while keeping edges sharp and colors vibrant.</p>
+        <p>Unlike traditional cloud-hosted compression pipelines that upload your sensitive product shots or proprietary designs to distant storage clusters, this tool leverages native browser hardware acceleration. You can optimize raw PNG, JPEG, and WebP assets for lightning-fast Core Web Vitals, reduced Content Delivery Network bandwidth billing, and friction-free user uploads without surrendering data sovereignty.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Select or Drag Source Image:</strong> Drop any JPEG, PNG, or WebP file into the designated target zone, or click to load directly from your operating system file picker.</li>
+          <li><strong>Adjust Compression & Dimension Controls:</strong> Fine-tune the output quality slider from 0.05 to 1.0, specify custom maximum dimensions if downscaling is desired, or toggle WebP conversion for maximum byte savings.</li>
+          <li><strong>Review Side-by-Side & Export:</strong> Inspect live byte delta percentages, compare original versus compressed image clarity in real time, and download the optimized asset immediately.</li>
+        </ol>
+        <h2>The Engine & Canvas Graphics Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Browser Canvas 2D Subsampling & toBlob() API</div>
+          <div class="formula-expr"><code>canvas.toBlob(callback, 'image/webp', qualityLevel)</code></div>
+        </div>
+        <p>The compression engine instantiates an in-memory HTMLCanvasElement. Once the source bitmap is drawn via ctx.drawImage(), the native browser encoder executes discrete cosine quantization or lossy WebP predictive filtering based on the supplied floating-point quality argument (0.01 to 1.0). This operates asynchronously off the main thread.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>E-Commerce Product Catalog Optimization</h4>
+            <p>A raw 4.8 MB digital camera product photo (4032×3024 JPEG) compressed down to 240 KB at 82% quality with a 1600px width limit, slashing mobile page load times by 95% while retaining crisp fabric textures.</p>
+          </div>
+          <div class="content-card">
+            <h4>Blog Featured Header Asset</h4>
+            <p>A 2.1 MB uncompressed PNG illustration converted to modern WebP format at 85% quality, yielding a 180 KB deliverable that scores 100/100 on Google PageSpeed Insights LCP audits.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Recompressing Already Compressed JPEGs</h4>
+            <p>Applying aggressive lossy compression repeatedly to an existing low-bitrate JPEG introduces muddy block artifacts; always start from highest resolution master assets.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ignoring Output Format Differences</h4>
+            <p>Compressing flat logos as lossy JPEGs can introduce blurry halos around sharp typography; use WebP or preserve PNG with indexed color for graphic icons.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Over-compressing Mobile Thumbnails</h4>
+            <p>Setting quality below 0.50 produces severe color banding on modern OLED screens; benchmark quality between 0.75 and 0.85 for the optimal sweet spot.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your graphics never leave your physical workstation. The image bitmap is processed purely inside your local browser memory space through native Canvas APIs. Zero network packets, zero server uploads, and zero tracking cookies ensure complete privacy for proprietary marketing assets, confidential blueprints, and personal family photographs.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Does compressing images reduce their physical pixel dimensions?</summary>
+            <div class="faq-answer">
+              <p>Only if you explicitly enter max width or height constraints. By default, the compressor preserves exact pixel dimensions and optimizes file size solely by tuning encoding quantization matrices.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Why is WebP generally lighter than JPEG at the same visual quality?</summary>
+            <div class="faq-answer">
+              <p>WebP utilizes advanced intra-frame predictive coding borrowed from the VP8 video standard, achieving roughly 25% to 34% greater compression efficiency compared to legacy JPEG codecs at identical SSIM ratings.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Is there any limit to the image file size I can process?</summary>
+            <div class="faq-answer">
+              <p>Because processing runs client-side using your system memory, limits depend on your computer RAM and browser canvas size quotas (typically up to 16,384×16,384 pixels on modern desktop browsers).</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Image & Graphic Design Tools</h2>
+        <div class="related-tools-grid">
+          <a href="image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Image Resizer</div>
+            <div class="tool-desc">Scale dimensions to exact pixel or aspect ratio targets.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image to Base64</div>
+            <div class="tool-desc">Encode compressed images into inline data URIs for CSS and HTML.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">SVG to PNG Converter</div>
+            <div class="tool-desc">Rasterize vector illustrations at arbitrary resolutions.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة ضغط الصور عبر المتصفح من فانتور كيت حلاً هندسياً متقدماً مصمماً لتقليص أحجام ملفات الصور النقطية بدقة متناهية دون فقدان ملحوظ في جودتها البصرية. تواجه المواقع الإلكترونية الحديثة وحملات التسويق الرقمي وتطبيقات الويب بطئاً شديداً في التحميل بسبب الصور الضخمة ذات الأحجام غير المحسنة. تقوم أداتنا بإعادة معايرة خوارزميات الترميز والتقسيم اللوني مباشرة داخل بيئة المتصفح المحلية، مما يحذف البيانات الزائدة مع المحافظة على وضوح الحواف وتباين الألوان.</p>
+        <p>بخلاف خدمات الضغط السحابية التقليدية التي تشترط رفع صورك الخاصة أو تصاميمك الحصرية إلى خوادم بعيدة، تستفيد هذه الأداة من قدرات معالجة الرسوميات المدمجة في جهازك. يتيح لك ذلك تحسين صور PNG وJPEG وWebP للحصول على سرعة فائقة في مؤشرات أداء الويب الأساسية وخفض تكاليف نقل البيانات دون التنازل عن سرية الملفات.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختيار أو سحب الصورة:</strong> قم بإفلات ملف الصورة بصيغة JPEG أو PNG أو WebP في مساحة الرفع المحددة، أو اضغط للاختيار من جهازك.</li>
+          <li><strong>تعديل شريط الجودة والأبعاد:</strong> اضبط مؤشر نسبة الجودة من 0.05 إلى 1.0 وحدد أقصى عرض مرغوب فيه أو فعّل التحويل إلى صيغة WebP لتقليل الحجم بأقصى قدر ممكن.</li>
+          <li><strong>المعاينة الحية والتحميل:</strong> قارن نسبة التوفير في البايتات ووضوح الصورة بين الأصل والنسخة المضغوطة بشكل فوري، ثم حمّل الملف بضغطة زر.</li>
+        </ol>
+        <h2>المحرك البرمجي وتقنيات معالجة الرسوميات</h2>
+        <div class="formula-box">
+          <div class="formula-title">واجهة Canvas 2D وخوارزمية toBlob المحلية</div>
+          <div class="formula-expr"><code>canvas.toBlob(callback, 'image/webp', qualityLevel)</code></div>
+        </div>
+        <p>يعتمد محرك المعالجة على إنشاء عنصر Canvas برمجياً في الذاكرة. فور رسم بكسلات الصورة عبر ctx.drawImage()، يُشغّل المتصفح خوارزمية التكميم الرياضي المنفصلة لصيغة التصدير المطلوبة مع تطبيق معامل الجودة العشري دون إجهاد واجهة المستخدم.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تحسين صور متاجر التجارة الإلكترونية</h4>
+            <p>ضغط صورة منتج فائقة الدقة بحجم 4.8 ميجابايت إلى 240 كيلوبايت فقط بجودة 82% وأبعاد ملائمة، مما خفض وقت تحميل صفحة الشراء بنسبة 95% على الهواتف المحمولة.</p>
+          </div>
+          <div class="content-card">
+            <h4>تسريع صور مقالات المدونات التقنية</h4>
+            <p>تحويل صورة توضيحية بصيغة PNG من حجم 2.1 ميجابايت إلى صيغة WebP بحجم 180 كيلوبايت مع إحراز درجة 100 كاملة في مقاييس LCP لأداء صفحات جوجل.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ إعادة ضغط ملفات JPEG منخفضة الجودة</h4>
+            <p>تطبيق ضغط مفرط على ملفات تم ضغطها مسبقاً يسبب تشوهات بصرية قبيحة حول التفاصيل الدقيقة؛ ابدأ دائماً بالصورة الأصلية ذات الدقة العالية.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ تجاهل اختيار الصيغة المناسبة للمحتوى</h4>
+            <p>حفظ الشعارات ذات النصوص الحادة بصيغة JPEG يؤدي لضبابية حول الحروف؛ استخدم WebP أو حافظ على PNG لتحقيق أقصى درجات النقاء.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ المبالغة في خفض الجودة دون 50%</h4>
+            <p>تخفيض المؤشر إلى ما دون 0.50 يؤدي لتكسر تدرجات الألوان وظهور خطوط باهتة على شاشات الهواتف المتطورة؛ اعتمد النطاق 0.75 إلى 0.85 لتوازن مثالي.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>ملفاتك وصورك لا تغادر جهازك أو حاسوبك الشخصي على الإطلاق. تتم عمليات التحليل والضغط بالكامل في الذاكرة العشوائية لمتصفحك عبر واجهات برمجة الكانفاس المحلية دون إرسال أي حزم بيانات عبر الشبكة إلى أي خادم، مما يوفر أماناً وخصوصية تامة لصورك العائلية ومستنداتك السرية.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل يؤدي ضغط الصورة إلى تغيير أبعادها الفيزيائية بالبكسل؟</summary>
+            <div class="faq-answer">
+              <p>كلا، لا يتم تغيير الأبعاد إلا إذا قمت يدوياً بتحديد أقصى عرض أو ارتفاع مرغوب فيه. افتراضياً، يتم تقليل الحجم عن طريق إزالة البيانات غير الضرورية وتحسين ترميز الألوان فقط.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>لماذا تعتبر صيغة WebP أصغر حجماً من JPEG مع نفس الجودة؟</summary>
+            <div class="faq-answer">
+              <p>تعتمد WebP على خوارزميات التنبؤ البيني المأخوذة من معيار الفيديو الحديث VP8، مما يوفر كفاءة ضغط تزيد بنسبة 25% إلى 34% مقارنة بصيغ JPEG التقليدية بنفس مستوى الإدراك البصري.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل هناك حد أقصى لحجم ملف الصورة الذي يمكن معالجته؟</summary>
+            <div class="faq-answer">
+              <p>تعتمد الحدود على سعة ذاكرة الوصول العشوائي لجهازك وحدود الكانفاس في المتصفح، والتي تدعم عادةً صورا حتى دقة 16384×16384 بكسل بكل سلاسة.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات الصور والتصميم الجرافيكي ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="image-resizer.html" class="related-tool-card">
+            <div class="tool-name">مغير أبعاد الصور</div>
+            <div class="tool-desc">تعديل أبعاد الصور بالبكسل أو بنسب العرض إلى الارتفاع بدقة متناهية.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">تحويل الصور إلى Base64</div>
+            <div class="tool-desc">تشفير الصور المضغوطة لتضمينها مباشرة داخل أكواد CSS وHTML.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">تحويل SVG إلى PNG</div>
+            <div class="tool-desc">تحويل الرسوميات المتجهية إلى صور نقطية بأي دقة تختارها.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le compresseur d'images côté client de VantorKit est un utilitaire d'optimisation de haute précision conçu pour réduire drastiquement le poids de vos fichiers graphiques matriciels sans altération visuelle perceptible. Les plateformes web modernes, les portfolios en ligne et les campagnes d'emailing souffrent fréquemment de lenteurs majeures causées par des photos non optimisées pesant plusieurs mégaoctets. En recalculant dynamiquement les matrices de quantification spatiale et le sous-échantillonnage de la chrominance au sein même de votre navigateur, notre moteur élimine le superflu tout en préservant le piqué des détails et la vivacité des couleurs.</p>
+        <p>Contrairement aux services d'optimisation cloud classiques qui transfèrent vos clichés commerciaux confidentiels vers des serveurs tiers, cet outil exploite l'accélération matérielle locale de votre appareil. Vous pouvez ainsi traiter vos fichiers PNG, JPEG et WebP pour booster vos scores Core Web Vitals, alléger vos coûts de bande passante CDN et accélérer la navigation de vos utilisateurs sans aucun compromis sur la confidentialité.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Déposez ou sélectionnez votre fichier:</strong> Glissez votre image JPEG, PNG ou WebP dans la zone de dépôt interactive ou sélectionnez-la directement depuis votre explorateur de fichiers.</li>
+          <li><strong>Ajustez le niveau de compression et le format:</strong> Modifiez le curseur de qualité entre 0.05 et 1.0, appliquez un redimensionnement si nécessaire et activez la conversion WebP pour maximiser le gain d'espace.</li>
+          <li><strong>Vérifiez l'aperçu et téléchargez:</strong> Visualisez en temps réel le pourcentage d'économie d'octets ainsi que la netteté comparative, puis exportez votre fichier optimisé d'un simple clic.</li>
+        </ol>
+        <h2>Moteur de rendu et traitement graphique Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">API Canvas 2D et encodage local toBlob()</div>
+          <div class="formula-expr"><code>canvas.toBlob(callback, 'image/webp', qualityLevel)</code></div>
+        </div>
+        <p>L'architecture alloue un élément HTMLCanvasElement en mémoire vive locale. Après le rendu des pixels sources via ctx.drawImage(), le moteur d'encodage natif du navigateur exécute la transformée en cosinus discrète ou l'algorithme prédictif WebP selon le facteur de qualité spécifié.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Boutique en ligne et fiches produits</h4>
+            <p>Une photo de catalogue de 4.8 Mo en haute définition (4032×3024 JPEG) ramenée à seulement 240 Ko avec une qualité de 82%, réduisant le temps de chargement mobile de 95% sans perdre la finesse des textures textiles.</p>
+          </div>
+          <div class="content-card">
+            <h4>Bannière d'en-tête de blog</h4>
+            <p>Une illustration PNG de 2.1 Mo convertie en WebP à 85% de qualité produisant un fichier final de 180 Ko, garantissant un score de 100/100 sur l'audit LCP de Google PageSpeed.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Recompresser des fichiers JPEG déjà dégradés</h4>
+            <p>Appliquer une compression agressive sur une image JPEG déjà altérée engendre des artefacts de blocs disgracieux; travaillez systématiquement sur le fichier source maître.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Négliger le choix du format d'exportation</h4>
+            <p>Exporter des logos vectoriels en JPEG génère du flou autour des polices; privilégiez le format WebP ou conservez le PNG avec palette indexée.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sous-doser la qualité en dessous de 50%</h4>
+            <p>Une valeur inférieure à 0.50 détruit les dégradés subtils sur les écrans OLED récents; privilégiez une plage comprise entre 0.75 et 0.85 pour un équilibre parfait.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Aucune donnée visuelle ne transite sur le réseau. L'intégralité du traitement géométrique et de la compression s'exécute dans la mémoire vive locale de votre navigateur grâce aux API Canvas natives. L'absence totale de téléversement vers des serveurs externes garantit une sécurité absolue pour vos créations graphiques confidentielles et vos photos privées.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>La compression modifie-t-elle la résolution en pixels de l'image ?</summary>
+            <div class="faq-answer">
+              <p>Non, les dimensions physiques restent strictement identiques à moins que vous n'indiquiez expressément une largeur ou une hauteur maximale dans les paramètres de redimensionnement.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Pourquoi le format WebP est-il plus performant que le JPEG classique ?</summary>
+            <div class="faq-answer">
+              <p>Le format WebP fait appel à un codage prédictif intra-trame dérivé du codec vidéo VP8, offrant une compression supérieure de 25% à 34% à équivalence de fidélité visuelle structurelle.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Existe-t-il une taille maximale de fichier traitable ?</summary>
+            <div class="faq-answer">
+              <p>La seule limite dépend de la mémoire vive disponible sur votre ordinateur et des plafonds de surface Canvas de votre navigateur (souvent jusqu'à 16384×16384 pixels).</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils d'image et de design graphique connexes</h2>
+        <div class="related-tools-grid">
+          <a href="image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Redimensionneur d'images</div>
+            <div class="tool-desc">Modifiez précisément les dimensions en pixels ou conservez vos ratios.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur Image vers Base64</div>
+            <div class="tool-desc">Encodez vos images optimisées en chaînes de données directement exploitables en CSS.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur SVG vers PNG</div>
+            <div class="tool-desc">Rastérisez vos fichiers vectoriels à n'importe quelle échelle de résolution.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il compressore di immagini lato client di VantorKit è uno strumento professionale di ottimizzazione sviluppato per ridurre drasticamente il peso dei file grafici raster senza alcuna perdita visibile di qualità. I moderni portali web, i portfolio digitali e le newsletter commerciali subiscono spesso gravi rallentamenti a causa di scatti fotografici pesanti diversi megabyte. Ricalibrando gli algoritmi di quantizzazione spaziale e il sottocampionamento della crominanza direttamente nel runtime del browser locale, il nostro motore elimina le ridondanze preservando contorni nitidi e colori fedeli.</p>
+        <p>A differenza delle tradizionali piattaforme cloud che caricano le tue fotografie riservate su server remoti, questo strumento fa leva sull'accelerazione hardware del tuo dispositivo. Puoi comprimere file PNG, JPEG e WebP per massimizzare i parametri Core Web Vitals, diminuire i costi di trasferimento dati su CDN e offrire un'esperienza fluida agli utenti senza cedere il controllo sui tuoi dati.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Trascina o seleziona l'immagine sorgente:</strong> Rilascia il tuo file JPEG, PNG o WebP nell'apposita area di caricamento oppure selezionalo dal selettore di file di sistema.</li>
+          <li><strong>Configura qualità e dimensioni massime:</strong> Regola il selettore di qualità da 0.05 a 1.0, imposta un ridimensionamento opzionale e abilita la conversione in WebP per ottenere il massimo risparmio di spazio.</li>
+          <li><strong>Confronta il risultato e scarica:</strong> Esamina in tempo reale la percentuale di risparmio in byte e la nitidezza del confronto visivo, quindi scarica subito l'immagine ottimizzata.</li>
+        </ol>
+        <h2>Motore grafico e rendering Canvas</h2>
+        <div class="formula-box">
+          <div class="formula-title">API Canvas 2D e codifica nativa toBlob()</div>
+          <div class="formula-expr"><code>canvas.toBlob(callback, 'image/webp', qualityLevel)</code></div>
+        </div>
+        <p>L'algoritmo istanzia un elemento HTMLCanvasElement in memoria. Una volta renderizzati i pixel con ctx.drawImage(), il codificatore del browser esegue la quantizzazione cosinusoidale discreta o la predizione WebP secondo il livello di qualità a virgola mobile fornito.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Ottimizzazione catalogo e-commerce</h4>
+            <p>Una fotografia di prodotto ad alta definizione da 4.8 MB (4032×3024 JPEG) ridotta a 240 KB con qualità 82% e larghezza massima 1600px, velocizzando il caricamento mobile del 95% con tessuti nitidi.</p>
+          </div>
+          <div class="content-card">
+            <h4>Grafica per intestazione blog</h4>
+            <p>Un'illustrazione PNG da 2.1 MB convertita in WebP all'85% di qualità che genera un file da 180 KB, ottenendo un punteggio di 100/100 nell'audit LCP di Google PageSpeed Insights.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Ricompressione di file JPEG già degradati</h4>
+            <p>Applicare una compressione aggressiva su file JPEG a basso bitrate moltiplica gli artefatti ad aloni; opera sempre a partire dai file master originali.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Scelta impropria del formato di output</h4>
+            <p>Comprimere grafiche con testo in formato JPEG crea sbavature cromatiche; scegli WebP o mantieni il formato PNG con palette indicizzata.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Impostazione della qualità al di sotto del 50%</h4>
+            <p>Un valore inferiore a 0.50 causa evidenti scalettature cromatiche sugli schermi moderni; mantieni la qualità tra 0.75 e 0.85 per un risultato bilanciato.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Nessun dato o immagine lascia il tuo dispositivo locale. L'intera elaborazione geometrica e di compressione avviene all'interno della memoria RAM del tuo browser tramite API Canvas native. L'assenza totale di connessioni di rete e upload verso server garantisce riservatezza assoluta per materiali di lavoro confidenziali e fotografie personali.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>La compressione altera le dimensioni in pixel dell'immagine?</summary>
+            <div class="faq-answer">
+              <p>No, a meno che tu non scriva valori espliciti nei campi di larghezza o altezza massima. Per impostazione predefinita viene ridotto unicamente il peso in byte del file.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Per quale motivo il formato WebP è più leggero del JPEG classico?</summary>
+            <div class="faq-answer">
+              <p>Il formato WebP impiega algoritmi predittivi derivati dallo standard video VP8, garantendo dal 25% al 34% di efficienza in più a parità di qualità percepita dall'occhio umano.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la dimensione massima di immagine elaborabile?</summary>
+            <div class="faq-answer">
+              <p>Non esistono limiti prestabiliti sul server: il limite dipende unicamente dalla memoria RAM del tuo computer e dai limiti di superficie Canvas del browser in uso.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di grafica e fotoritocco correlati</h2>
+        <div class="related-tools-grid">
+          <a href="image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Ridimensionatore immagini</div>
+            <div class="tool-desc">Modifica le dimensioni in pixel o rispetta le proporzioni originali con precisione.</div>
+          </a>
+          <a href="image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Convertitore Immagine in Base64</div>
+            <div class="tool-desc">Genera stringhe di dati codificate per l'incorporamento diretto in CSS e HTML.</div>
+          </a>
+          <a href="svg-to-png.html" class="related-tool-card">
+            <div class="tool-name">Convertitore SVG in PNG</div>
+            <div class="tool-desc">Trasforma file vettoriali in immagini raster a qualsiasi risoluzione.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Toast Notification -->

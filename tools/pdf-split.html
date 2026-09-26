@@ -28,54 +28,54 @@
 
   <!-- Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit PDF Split & Extract",
-        "url": "https://vantorkit.com/tools/pdf-split.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Client-side PDF page extractor and splitter that extracts custom page ranges or separates individual pages locally inside the browser using WebAssembly with zero data transmission."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit PDF Split & Extract",
+      "url": "https://vantorkit.com/tools/pdf-split.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Are my confidential PDF documents uploaded to any remote server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All PDF splitting and page extraction runs locally inside your browser memory using pdf-lib. Your confidential tax filings, legal contracts, and medical records never leave your computer."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How does custom page range extraction work?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can either type custom page ranges like '1-3, 5, 8-10' or visually click pages in the interactive grid. Both input methods stay automatically synchronized."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I split a PDF into separate single-page documents?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Choose the 'Split All Pages' mode, and VantorKit will package every page into individual PDF files bundled cleanly into a ZIP archive for one-click downloading."
-            }
+      "description": "Client-side PDF page extractor and splitter that extracts custom page ranges or separates individual pages locally inside the browser using WebAssembly with zero data transmission."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does splitting a PDF damage the quality of high-resolution images inside?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The splitting engine transfers the raw underlying binary image and vector streams directly into the new PDF structure without any recompression or downsampling."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I extract non-consecutive pages into a single new PDF?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. By specifying comma-separated page ranges (for example: 1-3, 7, 11-14), the tool compiles those exact selected pages into one unified new document."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are multiple extracted pages downloaded?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "When extracting individual pages in bulk (burst mode), the tool bundles all resulting PDF files into a single, clean ZIP archive for convenient one-click downloading."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1778,64 +1778,388 @@
     </div>
 
     <!-- SEO Informational & Security Guide Section -->
-    <article class="info-section" aria-labelledby="guide-heading">
-      <div class="info-header">
-        <h2 id="guide-heading">Confidential, Browser-Only PDF Splitting</h2>
-        <p>Discover how client-side WebAssembly computation protects your financial statements, legal agreements, and personal IDs from cloud storage leaks.</p>
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side PDF Splitter is an agile document deconstruction and extraction utility engineered for legal clerks, real estate professionals, and university students. Large multi-page PDF files—such as extensive commercial contracts, municipal building permits, and scanned book chapters—frequently need to be isolated into targeted sections. Rather than risking confidential contracts on remote cloud conversion platforms, this utility parses and segments PDF documents entirely inside your browser.</p>
+        <p>Using hardware-accelerated binary stream handling via pdf-lib, the tool lets you specify precise page ranges, burst every page into individual single-page documents, or extract custom intervals with zero loss of vector clarity. Form fields, font definitions, and high-resolution figures remain perfectly intact while generating lightweight, focused PDF deliverables instantly.</p>
+        <p>Furthermore, the splitter maintains an intelligent internal page cache, ensuring that extracting high-density architectural schematics or image-heavy presentations does not exhaust system resources. Whether you are generating targeted appendices for legal disclosures or trimming excess blank pages, the utility delivers instantaneous outputs with zero loss of vector crispness or font hinting.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Upload Source Document:</strong> Drag and drop your multi-page PDF into the processing pane, or select it from your local storage drive.</li>
+          <li><strong>Specify Extraction Rules:</strong> Choose between bursting all pages into separate files, entering custom page ranges (e.g., 1-5, 8, 12-15), or extracting even/odd pages.</li>
+          <li><strong>Process & Download Archives:</strong> Click the split button to immediately generate your separated PDF files or a packaged ZIP archive for bulk exports.</li>
+        </ol>
+        <h2>The Engine & Document Processing Architecture</h2>
+        <div class="formula-box">
+          <div class="formula-title">pdf-lib Selective Object Tree Extraction</div>
+          <div class="formula-expr"><code>const newDoc = await PDFDocument.create(); newDoc.copyPages(src, indices)</code></div>
+        </div>
+        <p>The splitting engine reads the source document's cross-reference table into an ArrayBuffer. For each specified page index, copyPages() transfers the page object subtree into a new document instance, pruning unreferenced resources before invoking save() to generate optimized output streams.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Commercial Lease Clause Extraction</h4>
+            <p>Extracting pages 14 through 18 containing specific indemnification clauses from an 80-page commercial lease to email directly to external legal counsel.</p>
+          </div>
+          <div class="content-card">
+            <h4>Textbook Chapter Separation</h4>
+            <p>Splitting a 350-page scanned university coursebook into discrete weekly chapter modules under 5 MB each for seamless distribution across student portals.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Entering Invalid Page Numbers</h4>
+            <p>Requesting page numbers that exceed the total page count (e.g., requesting page 50 of a 30-page PDF) triggers errors; check the total page indicator.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Splitting Password-Protected Files</h4>
+            <p>Encrypted PDFs block unauthorized page-tree restructuring; unlock the document with its owner password before attempting to split.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Overwriting Files with Identical Names</h4>
+            <p>Downloading multiple burst files into the same folder without organized suffixes can cause accidental overwriting; verify output naming conventions.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Your confidential documentation never leaves your computer. The page extraction and binary serialization processes run exclusively within your web browser's local memory. Zero uploads to external servers, zero cloud logging, and zero tracking cookies ensure total document security.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Does splitting a PDF damage the quality of high-resolution images inside?</summary>
+            <div class="faq-answer">
+              <p>No. The splitting engine transfers the raw underlying binary image and vector streams directly into the new PDF structure without any recompression or downsampling.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I extract non-consecutive pages into a single new PDF?</summary>
+            <div class="faq-answer">
+              <p>Yes. By specifying comma-separated page ranges (for example: 1-3, 7, 11-14), the tool compiles those exact selected pages into one unified new document.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How are multiple extracted pages downloaded?</summary>
+            <div class="faq-answer">
+              <p>When extracting individual pages in bulk (burst mode), the tool bundles all resulting PDF files into a single, clean ZIP archive for convenient one-click downloading.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related PDF & Document Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-merge.html" class="related-tool-card">
+            <div class="tool-name">PDF Merger</div>
+            <div class="tool-desc">Combine multiple individual PDF files into a single master document.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">PDF to Word Converter</div>
+            <div class="tool-desc">Convert extracted PDF pages into editable Word documents.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Base64 File Encoder</div>
+            <div class="tool-desc">Encode extracted PDF segments into Base64 data strings.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- 3 Guide Cards -->
-      <div class="guide-cards-grid">
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>Zero Server Transmission</span>
-          </h3>
-          <p>Traditional PDF utilities upload files to remote servers where they may persist in cloud caches. VantorKit processes byte arrays directly in local WebAssembly memory on your device.</p>
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة تقسيم ملفات PDF عبر المتصفح من فانتور كيت وسيلة سريعة وآمنة لتفكيك المستندات الكبيرة واستخراج صفحات محددة بدقة متناهية، وهي موجهة للمحامين والوسطاء العقاريين والطلاب والباحثين. إن ملفات PDF الضخمة—مثل العقود التجارية الطويلة أو الرخص الإنشائية أو فصول الكتب الدراسية—تتطلب في كثير من الأحيان عزل صفحات معينة لمشاركتها بشكل مستقل. بدلاً من المخاطرة برفع وثائقك الرسمية إلى خوادم خارجية غير موثوقة، تتيح لك هذه الأداة تجزئة ملفات PDF مباشرة داخل متصفحك المحلي.</p>
+        <p>من خلال الاستفادة من المعالجة الثنائية المتقدمة عبر مكتبة pdf-lib، يمكنك تحديد نطاقات صفحات دقيقة، أو تجزئة كل صفحة إلى ملف مستقل، أو استخراج صفحات فردية وزوجية دون أدنى مساس بجودة الخطوط أو الرسومات. تبقى حقول النماذج والتخطيطات المعقدة محفوظة بنقاء تام مع توليد مستندات خفيفة الحجم في ثوانٍ معدودة.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>رفع المستند المصدر:</strong> قم بسحب ملف PDF متعدد الصفحات وإفلاته في مساحة العمل، أو اضغط لاختياره من ذاكرة جهازك.</li>
+          <li><strong>تحديد معايير ونطاق التقسيم:</strong> اختر بين تقسيم كافة الصفحات لملفات مستقلة، أو إدخال نطاقات مخصصة (مثل 1-5، 8، 12-15)، أو استخراج صفحات محددة.</li>
+          <li><strong>معالجة وتحميل الملفات الناتجة:</strong> اضغط على زر التقسيم لتوليد المستندات الجديدة فوراً وتنزيلها كملفات منفردة أو داخل أرشيف مضغوط ZIP بضغطة واحدة.</li>
+        </ol>
+        <h2>المحرك البرمجي وبنية معالجة المستندات</h2>
+        <div class="formula-box">
+          <div class="formula-title">استخراج أشجار الكائنات المحددة عبر pdf-lib</div>
+          <div class="formula-expr"><code>const newDoc = await PDFDocument.create(); newDoc.copyPages(src, indices)</code></div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>Lossless Page Cloning</span>
-          </h3>
-          <p>Our extraction engine extracts structural PDF object trees, vector glyphs, color spaces, and bitmap streams verbatim without recompressing, blurring, or downgrading clarity.</p>
+        <p>يقرأ محرك التقسيم جدول الإسناد المتقاطع للمستند الأصلي داخل مخزن ArrayBuffer. لكل فهرس صفحة مطلوب استخراجه، تقوم دالة copyPages بنقل الشجرة الفرعية لكائنات الصفحة إلى مستند مستقل وتجاهل الموارد غير المرتبطة قبل الحفظ.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>استخراج بنود العقود التجارية للمراجعة القانونية</h4>
+            <p>فصل الصفحات من 14 إلى 18 الخاصة ببنود التعويض والتأمين من عقد إيجار تجاري يضم 80 صفحة لإرسالها لمحامي الشركة مباشرة.</p>
+          </div>
+          <div class="content-card">
+            <h4>تجزئة الكتب الأكاديمية والمقررات الجامعية</h4>
+            <p>تقسيم كتاب جامعي يضم 350 صفحة إلى وحدات وفصول أسبوعية مستقلة لا يتجاوز حجم كل منها 5 ميجابايت لتسهيل تداولها بين الطلاب.</p>
+          </div>
         </div>
-
-        <div class="guide-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-            <span>Instantaneous Speed</span>
-          </h3>
-          <p>Eliminate upload and download wait times. Extraction occurs at the raw CPU speed of your computer, easily extracting dozens of pages in a fraction of a second.</p>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ إدخال أرقام صفحات تتجاوز إجمالي المستند</h4>
+            <p>طلب استخراج الصفحة رقم 50 من مستند يحتوي على 30 صفحة فقط يسبب توقف العملية؛ تأكد دائماً من عدد الصفحات الفعلي.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ محاولة تقسيم ملفات مشفرة بكلمة مرور</h4>
+            <p>ملفات PDF المحمية بكلمات مرور تمنع الوصول إلى هياكل الصفحات؛ قم بفك التشفير أو إدخال كلمة المرور قبل بدء التقسيم.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ استبدال الملفات الناتجة بالخطأ عند التنزيل</h4>
+            <p>تنزيل عدة صفحات مفرقة في نفس المجلد دون تسميات واضحة قد يسبب الكتابة فوق ملفات سابقة؛ انتبه لأسماء الملفات المخرجة.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>مستنداتك وملفاتك الحساسة لا تغادر جهازك الشخصي أبداً. تتم جميع عمليات استخراج الصفحات وتوليد الملفات الجديدة بنسبة 100% داخل الذاكرة المحلية لمتصفحك دون رفع أي بيانات أو تسجيل أي ملفات على خوادم خارجية، مما يضمن أماناً وسرية مطلقة.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>هل يؤثر تقسيم ملف PDF على جودة الصور عالية الدقة بداخله؟</summary>
+            <div class="faq-answer">
+              <p>كلا، يقوم محرك التقسيم بنقل تدفقات البايتات الأصلية للصور والرسومات المتجهية مباشرة إلى ملف PDF الجديد دون إعادة ضغط أو تقليل للأبعاد.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكنني استخراج صفحات غير متتالية في ملف PDF واحد جديد؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. يمكنك إدخال نطاقات متباعدة مفصولة بفواصل (مثل: 1-3, 7, 11-14) ليقوم البرنامج بجمع هذه الصفحات المختارة تحديداً في ملف واحد.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يتم تنزيل الصفحات المستخرجة عند اختيار التجزئة الكاملة؟</summary>
+            <div class="faq-answer">
+              <p>عند تجزئة المستند إلى صفحات منفردة متعددة، تجمع الأداة كافة الملفات الناتجة تلقائياً داخل ملف أرشيف مضغوط ZIP لسهولة تحميلها بنقرة واحدة.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات ملفات PDF والمستندات ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-merge.html" class="related-tool-card">
+            <div class="tool-name">أداة دمج PDF</div>
+            <div class="tool-desc">توحيد ملفات PDF متعددة في مستند رئيسي واحد مرتب.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">تحويل PDF إلى Word</div>
+            <div class="tool-desc">تحويل الصفحات المستخرجة إلى مستندات وورد قابلة للتعديل.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">مشفر الملفات إلى Base64</div>
+            <div class="tool-desc">تشفير المستندات المستخرجة إلى صيغ Base64 لتضمينها البرمجي.</div>
+          </a>
         </div>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="info-header" style="margin-bottom: 2rem;">
-        <h2>Frequently Asked Questions</h2>
-        <p>Clear answers to common questions regarding local PDF extraction, confidentiality, and page selection.</p>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>L'outil de découpage de fichiers PDF côté client de VantorKit est une solution précise d'extraction et de segmentation documentaire conçue pour les professions juridiques, les gestionnaires immobiliers et les étudiants. Les volumineux fichiers PDF—tels que les baux commerciaux, les plans d'urbanisme ou les manuels de formation—nécessitent couramment d'isoler des chapitres ou des sections ciblées. Plutôt que de confier des documents d'entreprise à des convertisseurs en ligne douteux, cet utilitaire décompose vos fichiers PDF directement dans la mémoire de votre navigateur.</p>
+        <p>Grâce au traitement binaire accéléré de la bibliothèque pdf-lib, vous pouvez cibler des intervalles précis de pages, éclater l'intégralité d'un document en pages unitaires ou extraire des sélections spécifiques sans aucune altération de la netteté vectorielle. Les polices incorporées, les calques et les illustrations haute définition restent parfaitement intègres dans des fichiers légers et immédiatement exploitables.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Importez le document original:</strong> Déposez votre document PDF multipage dans l'interface de travail ou parcourez les dossiers de votre appareil d'un simple clic.</li>
+          <li><strong>Définissez la règle d'extraction:</strong> Optez pour l'éclatement complet en pages distinctes, saisissez des plages personnalisées (ex. 1-5, 8, 12-15) ou isolez les pages paires/impaires.</li>
+          <li><strong>Téléchargez les documents générés:</strong> Lancez l'extraction pour télécharger immédiatement vos nouveaux fichiers PDF unitaires ou une archive ZIP rassemblant l'ensemble des pages.</li>
+        </ol>
+        <h2>Moteur de traitement et architecture documentaire</h2>
+        <div class="formula-box">
+          <div class="formula-title">Extraction sélective de sous-arborescences pdf-lib</div>
+          <div class="formula-expr"><code>const newDoc = await PDFDocument.create(); newDoc.copyPages(src, indices)</code></div>
+        </div>
+        <p>Le moteur charge la table d'indexation du document source dans un ArrayBuffer. Pour chaque indice de page retenu, copyPages() transfère la branche d'objets associée dans une nouvelle instance PDF vierge avant d'exécuter save() pour restituer le fichier allégé.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Extraction de clauses dans un bail commercial</h4>
+            <p>Isolement des pages 14 à 18 détaillant les clauses de responsabilité au sein d'un contrat de 80 pages pour transmission directe au conseil juridique.</p>
+          </div>
+          <div class="content-card">
+            <h4>Segmentation de manuels pédagogiques</h4>
+            <p>Découpage d'un manuel de 350 pages en modules hebdomadaires de moins de 5 Mo pour faciliter le partage sur les espaces numériques d'apprentissage.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Indiquer des numéros de pages inexistants</h4>
+            <p>Demander la page 50 sur un document qui n'en compte que 30 génère une erreur d'indexation; vérifiez le nombre total de pages indiqué.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Traiter des fichiers protégés par mot de passe</h4>
+            <p>Les fichiers PDF verrouillés interdisent l'accès aux arborescences de pages; déverrouillez le document avant de lancer le découpage.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Écraser des fichiers par manque d'organisation</h4>
+            <p>Télécharger un grand nombre de pages dans un même répertoire sans nommage distinct peut provoquer des écrasements; surveillez vos dossiers de réception.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Vos documents sensibles ne transitent jamais sur internet. Toutes les étapes d'extraction de pages et de réencodage binaire s'effectuent strictement dans la mémoire vive de votre navigateur. L'absence absolue de communication réseau garantit une sécurité intégrale pour vos pièces comptables et contrats.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Le découpage dégrade-t-il la résolution des photographies intégrées ?</summary>
+            <div class="faq-answer">
+              <p>Non. Le moteur copie directement les flux binaires bruts des images et des tracés vectoriels dans le nouveau fichier PDF sans rééchantillonnage ni compression destructrice.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je regrouper des pages non consécutives dans un seul PDF ?</summary>
+            <div class="faq-answer">
+              <p>Oui. En séparant vos plages par des virgules (par exemple : 1-3, 7, 11-14), l'outil rassemble précisément les pages sélectionnées dans un unique fichier d'arrivée.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment s'effectue le téléchargement lors d'un découpage en masse ?</summary>
+            <div class="faq-answer">
+              <p>Lorsque vous séparez un document en pages individuelles multiples, l'application compile l'ensemble des fichiers générés au sein d'une archive ZIP prête à télécharger.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils PDF et gestion documentaire connexes</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-merge.html" class="related-tool-card">
+            <div class="tool-name">Fusion de PDF</div>
+            <div class="tool-desc">Rassemblez plusieurs fichiers PDF en un document unique et structuré.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur PDF vers Word</div>
+            <div class="tool-desc">Transformez vos pages PDF en documents Word parfaitement éditables.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Encodeur de fichiers en Base64</div>
+            <div class="tool-desc">Convertissez vos fichiers PDF en chaînes de données exploitables.</div>
+          </a>
+        </div>
       </div>
 
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>Is it safe to split sensitive tax or medical PDFs here?</h4>
-          <p>Yes. Disconnect your computer from Wi-Fi or enable Airplane mode after loading the page, and the tool will continue working with 100% full capability. No network requests are ever dispatched.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Lo strumento di divisione file PDF lato client di VantorKit è un'applicazione avanzata per l'estrazione e la scomposizione documentale, pensata per consulenti legali, periti, studenti e uffici amministrativi. I documenti PDF di grandi dimensioni—come fascicoli contrattuali, perizie tecniche o capitoli di testi universitari—richiedono frequentemente l'isolamento di sezioni mirate. Anziché caricare dati societari su piattaforme online remote, questa applicazione segmenta e organizza i file PDF interamente nel tuo browser.</p>
+        <p>Sfruttando l'elaborazione binaria ad alte prestazioni di pdf-lib, puoi estrarre intervalli di pagine specifici, separare ogni singola pagina in file autonomi o selezionare pagine alterne senza perdita di definizione. I caratteri tipografici, i livelli grafici e le illustrazioni ad alta risoluzione rimangono impeccabili all'interno di documenti leggeri pronti per la condivisione.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Carica il file originale:</strong> Rilascia il documento PDF multipagina nell'area di lavoro o selezionalo dalle cartelle del tuo dispositivo.</li>
+          <li><strong>Imposta le opzioni di divisione:</strong> Scegli se separare tutte le pagine singolarmente, inserire intervalli personalizzati (es. 1-5, 8, 12-15) oppure estrarre solo pagine pari o dispari.</li>
+          <li><strong>Estrai e scarica i documenti:</strong> Avvia l'estrazione per scaricare immediatamente i singoli file PDF generati o un archivio ZIP completo contenente tutte le pagine.</li>
+        </ol>
+        <h2>Motore di elaborazione e architettura documentale</h2>
+        <div class="formula-box">
+          <div class="formula-title">Estrazione selettiva dell'albero degli oggetti con pdf-lib</div>
+          <div class="formula-expr"><code>const newDoc = await PDFDocument.create(); newDoc.copyPages(src, indices)</code></div>
         </div>
-
-        <div class="faq-item">
-          <h4>How do I format custom page ranges?</h4>
-          <p>Use commas and hyphens (e.g. <code>1-3, 5, 8-12</code>). You can also simply click any page card in the interactive grid to toggle it on or off.</p>
+        <p>Il motore analizza la tabella delle referenze del documento sorgente in un buffer ArrayBuffer. Per ciascun indice specificato, copyPages() trasferisce i nodi dell'albero degli oggetti in una nuova istanza PDF prima di invocare save() per produrre il file compatto.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Estrazione clausole da contratto d'appalto</h4>
+            <p>Isolamento delle pagine da 14 a 18 relative ai termini di pagamento da un contratto di 80 pagine per l'invio immediato al commercialista.</p>
+          </div>
+          <div class="content-card">
+            <h4>Scomposizione manuale universitario</h4>
+            <p>Suddivisione di una dispensa da 350 pagine in capitoli settimanali inferiori a 5 MB per facilitare la consultazione su tablet e smartphone.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>What happens when I choose "Split into Single Pages"?</h4>
-          <p>The tool separates each page into an individual 1-page PDF document (e.g. <code>page-1.pdf</code>, <code>page-2.pdf</code>) and packs them into a single `.zip` file for quick downloading.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Inserire numeri di pagina inesistenti</h4>
+            <p>Richiedere la pagina 50 di un documento composto da sole 30 pagine causa un errore di lettura; verifica sempre il numero totale di pagine disponibili.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Elaborare file PDF protetti da cifratura</h4>
+            <p>I documenti protetti da password bloccano l'accesso alla struttura interna; rimuovi la protezione crittografica prima della scomposizione.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Sovrascrivere file scaricati per errore</h4>
+            <p>Scaricare molteplici pagine estratte nella stessa cartella senza verificare i nomi può causare sovrascritture accidentali; controlla la cartella di download.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>Are there any file size or page count limits?</h4>
-          <p>No paywalls or arbitrary daily limits exist. You can split documents as large as your device's browser memory comfortably accommodates.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>I tuoi documenti privati non vengono mai trasferiti all'esterno. Tutte le procedure di estrazione delle pagine e serializzazione dei dati si svolgono esclusivamente all'interno della memoria RAM del tuo browser. Zero upload, zero log su server e massima tutela della riservatezza per contratti e perizie.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>La separazione delle pagine riduce la nitidezza delle immagini?</summary>
+            <div class="faq-answer">
+              <p>No. Il motore copia integralmente i flussi binari originali di immagini e tracciati vettoriali nel nuovo documento PDF senza applicare ricompressione o ridimensionamento.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È consentito estrarre pagine non consecutive in un unico nuovo PDF?</summary>
+            <div class="faq-answer">
+              <p>Sì. Indicando gli intervalli separati da virgole (ad esempio: 1-3, 7, 11-14), lo strumento unisce con precisione chirurgica le pagine indicate in un solo file risultante.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come vengono scaricate le pagine in caso di suddivisione multipla?</summary>
+            <div class="faq-answer">
+              <p>Se scegli di dividere l'intero documento in singole pagine, l'applicazione raggruppa tutti i file PDF risultanti all'interno di un comodo archivio ZIP.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti PDF e gestione documenti correlati</h2>
+        <div class="related-tools-grid">
+          <a href="pdf-merge.html" class="related-tool-card">
+            <div class="tool-name">Unione di PDF</div>
+            <div class="tool-desc">Aggrega molteplici documenti PDF in un unico file coordinato.</div>
+          </a>
+          <a href="pdf-to-word.html" class="related-tool-card">
+            <div class="tool-name">Convertitore PDF in Word</div>
+            <div class="tool-desc">Trasforma pagine PDF in documenti Word liberamente modificabili.</div>
+          </a>
+          <a href="base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Codificatore file in Base64</div>
+            <div class="tool-desc">Codifica i documenti PDF in stringhe Base64 per impieghi software.</div>
+          </a>
         </div>
       </div>
     </article>

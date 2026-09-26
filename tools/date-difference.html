@@ -36,62 +36,54 @@
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Date Difference & Workdays Calculator",
-        "url": "https://vantorkit.com/tools/date-difference.html",
-        "applicationCategory": "UtilityApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Free client-side Date Difference and Workdays Calculator. Calculate calendar days, business working days, weekends, and equivalent hours, or add/subtract business days with custom weekend filters."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Date Difference & Workdays Calculator",
+      "url": "https://vantorkit.com/tools/date-difference.html",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How does the calculator determine business working days?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "The calculator iterates across the date interval and checks each day's day-of-week against your selected weekend definition (e.g. Saturday & Sunday for Western standards, or Friday & Saturday for Gulf standards), deducting any specified public holidays."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Should the end date be included in date difference calculations?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "By default in software and calendar arithmetic, end dates are excluded (difference = End - Start). However, for work contracts, hotel stays, or project milestones, enabling 'Include End Date' counts both boundary days (+1 day)."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does this tool work for Middle East / Gulf weekend schedules?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. You can switch the weekend filter to 'Friday & Saturday' to accurately calculate business working days across the Middle East and Gulf region, or select 'Sunday only'."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Are my dates or calculation history logged on a server?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. All calculations run strictly in your web browser memory using JavaScript Date algorithms with zero network telemetry or tracking."
-            }
+      "description": "Free client-side Date Difference and Workdays Calculator. Calculate calendar days, business working days, weekends, and equivalent hours, or add/subtract business days with custom weekend filters."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the calculator handle leap years and February 29?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The engine uses the Gregorian calendar astronomical rules where years divisible by 4 are leap years (unless divisible by 100 and not by 400), guaranteeing exact day-count precision."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I customize the weekend days to match my country?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. You can switch between standard Saturday/Sunday weekends, Middle Eastern Friday/Saturday weekends, single-day Sunday weekends, or custom business days."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between total days and working days?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Total days represents every 24-hour calendar day elapsed. Working days (or business days) excludes weekends and any custom public holidays you configure."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1424,6 +1416,388 @@
         </div>
       </div>
     </section>
+  
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Date Difference & Workdays Calculator is a high-precision chronological interval engine built for project managers, payroll specialists, legal researchers, and operations planners. Calculating exact durations between two calendar milestones is deceptively complex due to leap years, daylight saving time shifts, variable month lengths (28, 29, 30, 31 days), and diverse international business weekend conventions. This utility executes comprehensive date arithmetic entirely inside your local browser environment.</p>
+        <p>Whether you need to compute elapsed calendar days, calculate true working business days excluding Saturday/Sunday or Middle Eastern Friday/Saturday weekends, account for custom statutory public holidays, or add and subtract precise day offsets from a target date, this tool provides instant answers with zero server round-trips. Your business schedules and confidential contract milestones remain 100% private.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Select Mode & Calendar Dates:</strong> Choose 'Difference Between Dates' or 'Add/Subtract Days', then pick your start date and end date from the calendar or use quick shortcuts.</li>
+          <li><strong>Configure Weekend & Holiday Filters:</strong> Select your regional weekend convention (Sat/Sun, Fri/Sat, or custom) and specify any additional public holidays to exclude from working day counts.</li>
+          <li><strong>Inspect Breakdown & Copy Metrics:</strong> Review the instant multi-unit summary (total days, business workdays, weeks, months, years, hours) and copy results directly into project schedules.</li>
+        </ol>
+        <h2>The Engine & Algorithmic Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">UTC Epoch Normalization & Business Day Iteration</div>
+          <div class="formula-expr"><code>Date.UTC(y, m, d) -> diffDays = (t2 - t1) / 86400000</code></div>
+        </div>
+        <p>Dates are normalized to UTC midnight timestamps to eliminate daylight saving time offsets. Working day computations evaluate day-of-week indexes (0 to 6) in integer steps, filtering out regional weekend definitions and custom holiday arrays.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Construction Project Contract Duration</h4>
+            <p>Calculating exact business workdays between March 1, 2026, and November 30, 2026, excluding weekends and 6 statutory holidays to establish accurate completion deadlines.</p>
+          </div>
+          <div class="content-card">
+            <h4>Court Filing Statutory Notice Period</h4>
+            <p>Adding 45 strict business days to a legal service date under Friday/Saturday weekend rules to determine exact jurisdictional response dates without human calendar counting errors.</p>
+          </div>
+        </div>
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Forgetting Daylight Saving Time Skews in Naive Math</h4>
+            <p>Dividing millisecond timestamps without UTC normalization can yield fractional days (e.g. 29.96 days) on DST transition nights; our tool standardizes to UTC midnight.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Assuming Global Saturday/Sunday Weekend Uniformity</h4>
+            <p>Many Middle Eastern and Gulf nations observe Friday/Saturday weekends; always select the appropriate regional filter for cross-border contracts.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusing Inclusive vs. Exclusive Boundary Counting</h4>
+            <p>Standard contracts frequently differ on whether the start date counts as Day 1; use our inclusive toggle to ensure statutory legal compliance.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All chronological arithmetic and date iterations execute purely in your local browser JavaScript engine. Your personal vacation dates, sensitive legal timelines, and corporate project schedules are never transmitted to any external server or saved in third-party tracking databases.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How does the calculator handle leap years and February 29?</summary>
+            <div class="faq-answer">
+              <p>The engine uses the Gregorian calendar astronomical rules where years divisible by 4 are leap years (unless divisible by 100 and not by 400), guaranteeing exact day-count precision.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I customize the weekend days to match my country?</summary>
+            <div class="faq-answer">
+              <p>Yes. You can switch between standard Saturday/Sunday weekends, Middle Eastern Friday/Saturday weekends, single-day Sunday weekends, or custom business days.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the difference between total days and working days?</summary>
+            <div class="faq-answer">
+              <p>Total days represents every 24-hour calendar day elapsed. Working days (or business days) excludes weekends and any custom public holidays you configure.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Everyday & Productive Utilities</h2>
+        <div class="related-tools-grid">
+          <a href="age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Age Calculator</div>
+            <div class="tool-desc">Calculate exact chronological age and upcoming birthday countdowns.</div>
+          </a>
+          <a href="timezone-planner.html" class="related-tool-card">
+            <div class="tool-name">Time Zone Planner</div>
+            <div class="tool-desc">Coordinate multi-city meeting times across global business hours.</div>
+          </a>
+          <a href="percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Percentage Calculator</div>
+            <div class="tool-desc">Compute project completion percentages and progress metrics.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر أداة حساب فرق التواريخ وأيام العمل عبر المتصفح من فانتور كيت محركاً زمنياً فائق الدقة لإجراء الحسابات التقويمية المعقدة، وهي مخصصة لمديري المشاريع ومسؤولي الرواتب والباحثين القانونيين ومخططي العمليات. إن احتساب الفواصل الزمنية الدقيقة بين تاريخين يمثل تحدياً رياضياً بسبب تباين أطوال الأشهر (28، 29، 30، 31 يوماً)، والسنوات الكبيسة، وتغيرات التوقيت الصيفي، واختلاف عطلات نهاية الأسبوع الرسمية بين دول العالم. تتيح لك هذه الأداة تنفيذ كافة الحسابات الزمنية محلياً داخل متصفحك.</p>
+        <p>سواء كنت ترغب في معرفة عدد الأيام التقويمية الإجمالية، أو احتساب أيام العمل الفعلية مع استثناء عطلات الجمعة والسبت المعتمدة في العالم العربي أو عطلات السبت والأحد الدولية، أو إضافة وطرح عدد محدد من الأيام من تاريخ معين، توفر الأداة نتائج فورية ومفصلة دون أي حاجة للاتصال بالإنترنت، مما يضمن أمان وخصوصية جداول أعمالك.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>تحديد الوضع واختيار التواريخ:</strong> اختر بين 'الفرق بين تاريخين' أو 'إضافة وطرح أيام'، ثم حدد تاريخ البداية والنهاية من التقويم أو عبر الاختصارات السريعة.</li>
+          <li><strong>تخصيص العطلات الأسبوعية والرسمية:</strong> اختر نظام عطلة نهاية الأسبوع الملائم لبلدك (الجمعة والسبت، السبت والأحد، إلخ) وأدخل عدد أيام العطلات الرسمية المراد استبعادها.</li>
+          <li><strong>معاينة التفاصيل ونسخ النتائج:</strong> اطلع على التقرير الزمني الشامل (الأيام الإجمالية، أيام العمل، الأسابيع، الأشهر، الساعات) وانسخ البيانات مباشرة إلى خططك الإدارية.</li>
+        </ol>
+        <h2>المحرك البرمجي والمنطق الخوارزمي</h2>
+        <div class="formula-box">
+          <div class="formula-title">معايرة توقيت UTC الموحد وخوارزمية فحص أيام العمل</div>
+          <div class="formula-expr"><code>Date.UTC(y, m, d) -> diffDays = (t2 - t1) / 86400000</code></div>
+        </div>
+        <p>تتم معايرة التواريخ على منتصف الليل بتوقيت UTC لتلافي فروق التوقيت الصيفي. يقوم المحرك بفحص فهارس أيام الأسبوع (من 0 إلى 6) خطوة بخطوة، واستبعاد عطلات نهاية الأسبوع المحددة وقوائم الإجازات الرسمية.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تحديد مدة تنفيذ عقود المقاولات والإنشاءات</h4>
+            <p>حساب أيام العمل الفعلية بين 1 مارس 2026 و30 نوفمبر 2026 مع استبعاد عطلات نهاية الأسبوع و6 أيام إجازات رسمية لتحديد المواعيد النهائية بدقة.</p>
+          </div>
+          <div class="content-card">
+            <h4>احتساب المهل القضائية والقانونية</h4>
+            <p>إضافة 45 يوم عمل لنظام قضائي يعتمد عطلة الجمعة والسبت لتحديد الموعد النهائي لتقديم الطعون القانونية دون أي خطأ في العد البشري.</p>
+          </div>
+        </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ إغفال تأثيرات التوقيت الصيفي في الحسابات البدائية</h4>
+            <p>طرح التوقيت المحلي مباشرة قد يولد أرقاماً كسرية مثل 29.96 يوماً عند انتقال التوقيت الصيفي؛ تعالج أداتنا التواريخ عبر توقيت UTC الصافي.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ افتراض أن عطلة نهاية الأسبوع موحدة عالمياً</h4>
+            <p>العديد من الدول العربية والخليجية تعتمد عطلة الجمعة والسبت بخلاف الدول الغربية؛ احرص دائماً على تحديد النمط الجغرافي المناسب.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الخلط بين شمول تاريخ النهاية واستبعاده</h4>
+            <p>تختلف العقود التجارية في اعتبار تاريخ البداية أو النهاية محسوباً ضمن المدة؛ استخدم خيار الشمول والتضمين لمطابقة الشروط.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية ومعالجة البيانات محلياً 100%</h3>
+          <p>تتم جميع الحسابات الزمنية والتقويمية محلياً بالكامل داخل متصفحك بنسبة 100%. لا تُرسل تواريخ إجازاتك أو مواعيد قضاياك القانونية أو مخططات مشاريعك السرية إلى أي خادم خارجي، مما يوفر خصوصية وسرية مطلقة لبياناتك.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف تتعامل الأداة مع السنوات الكبيسة ويوم 29 فبراير؟</summary>
+            <div class="faq-answer">
+              <p>يعتمد المحرك على القواعد الفلكية الدقيقة للتقويم الميلادي الغريغوري، حيث تعتبر كل سنة تقبل القسمة على 4 سنة كبيسة، مما يضمن دقة متناهية في حساب الأيام.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>هل يمكنني تغيير عطلة نهاية الأسبوع لتناسب الدول العربية؟</summary>
+            <div class="faq-answer">
+              <p>نعم بالتأكيد. يمكنك التبديل بسهولة بين عطلة الجمعة والسبت (المعتمدة في الشرق الأوسط) أو السبت والأحد (الدولية) أو يوم الأحد فقط.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما الفرق الأساسي بين إجمالي الأيام وأيام العمل الفعلية؟</summary>
+            <div class="faq-answer">
+              <p>إجمالي الأيام يمثل كافة الأيام التقويمية المنقضية، بينما أيام العمل تستثني أيام العطلات الأسبوعية والإجازات الرسمية التي تقوم بتحديدها.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات يومية وإنتاجية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="age-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة العمر والمحطات</div>
+            <div class="tool-desc">حساب العمر الزمني بدقة متناهية والعد التنازلي لأعياد الميلاد.</div>
+          </a>
+          <a href="timezone-planner.html" class="related-tool-card">
+            <div class="tool-name">مخطط المناطق الزمنية</div>
+            <div class="tool-desc">تنسيق مواعيد الاجتماعات الدولية بين مختلف العواصم والمدن.</div>
+          </a>
+          <a href="percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة النسبة المئوية</div>
+            <div class="tool-desc">حساب نسب إنجاز المشاريع ومؤشرات التقدم الزمني.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le calculateur d'écart de dates et jours ouvrés côté client de VantorKit est un moteur chronologique de haute précision conçu pour les chefs de projets, les gestionnaires de paie, les juristes et les planificateurs. Mesurer précisément la durée séparant deux échéances calendaires s'avère complexe en raison des années bissextiles, des décalages d'heure d'été/hiver, de la variabilité des mois (28, 29, 30 ou 31 jours) et des différentes conventions de week-end dans le monde. Cet outil réalise tous vos calculs d'intervalles directement dans votre navigateur.</p>
+        <p>Que vous ayez besoin de quantifier le nombre brut de jours calendaires, de déterminer les jours ouvrés réels en excluant les week-ends et les jours fériés légaux, ou d'ajouter et soustraire un nombre précis de jours à une date de référence, cet utilitaire délivre des réponses immédiates sans aucune requête serveur. Vos plannings stratégiques et jalons contractuels restent 100% confidentiels.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Choisissez le mode et les dates:</strong> Basculez entre 'Différence entre deux dates' ou 'Ajouter/Soustraire des jours', puis choisissez vos dates sur le calendrier interactif.</li>
+          <li><strong>Paramétrez le week-end et les congés:</strong> Définissez votre convention régionale de repos (samedi/dimanche ou vendredi/samedi) et indiquez le nombre de jours fériés à déduire.</li>
+          <li><strong>Analysez le bilan détaillé et copiez:</strong> Consultez la synthèse instantanée (jours totaux, jours ouvrés, semaines, mois, heures) et copiez directement les résultats dans vos rapports.</li>
+        </ol>
+        <h2>Moteur algorithmique et fonctionnement interne</h2>
+        <div class="formula-box">
+          <div class="formula-title">Normalisation UTC et algorithme d'itération ouvrée</div>
+          <div class="formula-expr"><code>Date.UTC(y, m, d) -> diffDays = (t2 - t1) / 86400000</code></div>
+        </div>
+        <p>Les dates sont calées sur minuit en temps universel (UTC) afin d'annihiler les anomalies liées aux changements d'heure. Le moteur évalue les indices des jours de la semaine (0 à 6) pour exclure les week-ends configurés et les jours fériés.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Planification des délais d'un chantier BTP</h4>
+            <p>Calcul des jours ouvrés réels entre le 1er mars 2026 et le 30 novembre 2026 en retranchant les week-ends et 6 jours fériés pour fixer les dates de livraison des travaux.</p>
+          </div>
+          <div class="content-card">
+            <h4>Décompte des délais légaux de recours</h4>
+            <p>Ajout de 45 jours ouvrés stricts à une date de notification pour déterminer la date limite de réponse juridique sans risque d'erreur calendaire manuelle.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Négliger les passages à l'heure d'été/hiver</h4>
+            <p>Diviser une différence brute de millisecondes sans normalisation UTC produit des jours décimaux (ex. 29.96 jours); notre moteur garantit des nombres entiers parfaits.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Présumer que le week-end est identique partout</h4>
+            <p>De nombreux pays du Moyen-Orient appliquent un week-end le vendredi et samedi; ajustez systématiquement les filtres régionaux pour vos contrats internationaux.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondre inclusion et exclusion du jour final</h4>
+            <p>Les textes juridiques précisent souvent si le jour de notification est inclus ou non; utilisez l'option d'inclusion pour une parfaite conformité.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>L'ensemble des calculs arithmétiques et des itérations calendaires s'exécute intégralement dans le moteur JavaScript local de votre navigateur. Vos dates de vacances privées et vos échéances contractuelles ne sont jamais envoyées vers des serveurs distants, assurant une confidentialité totale.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment l'outil gère-t-il les années bissextiles et le 29 février ?</summary>
+            <div class="faq-answer">
+              <p>Le moteur intègre scrupuleusement les règles du calendrier grégorien (les années divisibles par 4 sauf siècles non divisibles par 400), assurant un décompte parfait des jours calendaires.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Puis-je adapter les jours de week-end selon mon pays ?</summary>
+            <div class="faq-answer">
+              <p>Oui. Vous pouvez basculer entre le repos standard samedi/dimanche, le repos vendredi/samedi propre à certains pays ou un repos personnalisé sur un seul jour.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quelle est la nuance entre jours calendaires et jours ouvrés ?</summary>
+            <div class="faq-answer">
+              <p>Les jours calendaires représentent l'intégralité des tranches de 24 heures écoulées. Les jours ouvrés soustraient les jours de fin de semaine et les jours fériés configurés.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Utilitaires du quotidien et productivité connexes</h2>
+        <div class="related-tools-grid">
+          <a href="age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur d'âge</div>
+            <div class="tool-desc">Mesurez l'âge exact au jour près et suivez les anniversaires.</div>
+          </a>
+          <a href="timezone-planner.html" class="related-tool-card">
+            <div class="tool-name">Planificateur de fuseaux horaires</div>
+            <div class="tool-desc">Coordonnez vos réunions internationales sur les plages ouvrables.</div>
+          </a>
+          <a href="percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de pourcentage</div>
+            <div class="tool-desc">Évaluez l'avancement temporel et les pourcentages de vos projets.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il calcolatore di differenza tra date e giorni lavorativi lato client di VantorKit è un motore cronologico avanzato sviluppato per project manager, uffici paghe, commercialisti e studi legali. Calcolare con accuratezza l'intervallo temporale tra due momenti del calendario nasconde insidie dovute agli anni bisestili, ai passaggi all'ora legale/solare, alla durata variabile dei mesi (28, 29, 30, 31 giorni) e ai diversi regimi di riposo settimanale nel mondo. Questo strumento esegue ogni calcolo direttamente nel browser.</p>
+        <p>Sia che tu debba determinare il totale dei giorni solari, isolare i giorni feriali effettivi escludendo i sabati/domeniche o i venerdì/sabati del Medio Oriente, considerare festività pubbliche o sommare/sottrarre giorni lavorativi da una data stabilita, questo applicativo ti fornisce dati immediati senza scambi di dati con server remoti. I tuoi impegni e le scadenze legali rimangono protetti al 100%.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Imposta la modalità e le date:</strong> Scegli tra 'Differenza tra due date' o 'Aggiungi/Sottrai giorni', quindi seleziona le date iniziale e finale dal calendario interattivo.</li>
+          <li><strong>Definisci weekend e giorni festivi:</strong> Seleziona la convenzione di fine settimana appropriata (sabato/domenica o venerdì/sabato) e indica i giorni festivi infrasettimanali da escludere.</li>
+          <li><strong>Esamina il resoconto completo e copia:</strong> Visualizza il riepilogo dettagliato (giorni solari, giorni lavorativi, settimane, mesi, ore) e copia i valori nei tuoi documenti di lavoro.</li>
+        </ol>
+        <h2>Motore algoritmico e funzionamento interno</h2>
+        <div class="formula-box">
+          <div class="formula-title">Normalizzazione temporale UTC e iterazione giorni lavorativi</div>
+          <div class="formula-expr"><code>Date.UTC(y, m, d) -> diffDays = (t2 - t1) / 86400000</code></div>
+        </div>
+        <p>Tutte le date vengono ancorate alla mezzanotte UTC per neutralizzare le discrepanze dell'ora legale. Il ciclo computazionale analizza i giorni della settimana (da 0 a 6) filtrando i giorni di riposo configurati e i giorni festivi inseriti.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Stima dei tempi contrattuali di appalto</h4>
+            <p>Calcolo dei giorni lavorativi effettivi tra il 1° marzo 2026 e il 30 novembre 2026 escludendo i fine settimana e 6 festività per stabilire il cronoprogramma delle opere.</p>
+          </div>
+          <div class="content-card">
+            <h4>Conteggio termini per adempimenti fiscali</h4>
+            <p>Aggiunta di 45 giorni lavorativi a una data di notifica tributaria per calcolare con sicurezza il termine perentorio di versamento evitando sanzioni.</p>
+          </div>
+        </div>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Ignorare le variazioni dell'ora legale</h4>
+            <p>Dividere i millisecondi senza normalizzare in UTC può produrre giorni frazionari (es. 29.96 giorni) durante i cambi d'ora; il nostro motore garantisce numeri interi esatti.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ritenere che il fine settimana sia ovunque sabato e domenica</h4>
+            <p>Diversi paesi adottano il riposo di venerdì e sabato; seleziona sempre l'impostazione geografica idonea per transazioni internazionali.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusione tra inclusione ed esclusione del termine finale</h4>
+            <p>I contratti specificano se il giorno di partenza o di arrivo vada conteggiato; impiega il comando di inclusione per rispettare le clausole.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutte le elaborazioni numeriche e le verifiche del calendario avvengono esclusivamente nel motore JavaScript locale del tuo browser. Le date dei tuoi impegni e i cronoprogrammi confidenziali non vengono mai trasferiti a server esterni né tracciati, assicurando la totale riservatezza.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>In che modo vengono conteggiati gli anni bisestili e il 29 febbraio?</summary>
+            <div class="faq-answer">
+              <p>L'algoritmo applica con rigore le regole del calendario gregoriano (anni divisibili per 4, eccetto i secoli non divisibili per 400), assicurando la precisione assoluta dei giorni solari.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>È consentito impostare un fine settimana differente per altri paesi?</summary>
+            <div class="faq-answer">
+              <p>Sì. Puoi alternare facilmente tra il weekend convenzionale sabato/domenica, il regime venerdì/sabato diffuso in Medio Oriente o il riposo su singolo giorno.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la differenza sostanziale tra giorni totali e giorni lavorativi?</summary>
+            <div class="faq-answer">
+              <p>I giorni totali comprendono tutti i giorni di calendario trascorsi. I giorni lavorativi detraggono i giorni di riposo settimanale e le festività indicate dall'utente.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti di uso quotidiano e produttività correlati</h2>
+        <div class="related-tools-grid">
+          <a href="age-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore d'età</div>
+            <div class="tool-desc">Calcola l'età esatta e visualizza il conto alla rovescia per i compleanni.</div>
+          </a>
+          <a href="timezone-planner.html" class="related-tool-card">
+            <div class="tool-name">Pianificatore fusi orari</div>
+            <div class="tool-desc">Organizza call internazionali sovrapponendo gli orari lavorativi.</div>
+          </a>
+          <a href="percentage-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di percentuale</div>
+            <div class="tool-desc">Valuta le percentuali di avanzamento e i tassi di completamento.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Toast Notification Box -->

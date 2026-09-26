@@ -36,54 +36,62 @@
 
   <!-- Structured Data: SoftwareApplication & FAQPage -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebApplication",
-        "name": "VantorKit Percentage Calculator",
-        "url": "https://vantorkit.com/tools/percentage-calculator.html",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "A fast, client-side percentage calculator supporting basic percentages, proportion calculation, and percentage increase/decrease."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "VantorKit Percentage Calculator",
+      "url": "https://vantorkit.com/tools/percentage-calculator.html",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How do you calculate P% of a number X?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "To find P% of X, convert the percentage into a decimal by dividing by 100, then multiply by X: Formula = (P / 100) * X. For example, 15% of 200 is (15 / 100) * 200 = 30."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How do you calculate what percent X is of Y?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Divide X by Y and multiply the result by 100: Formula = (X / Y) * 100. For example, if you scored 45 out of 60, (45 / 60) * 100 = 75%."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How is percentage increase or decrease calculated?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Subtract the initial value (X) from the final value (Y), divide the difference by the absolute value of the initial value (|X|), and multiply by 100: Formula = ((Y - X) / |X|) * 100. If the result is positive, it is an increase; if negative, it is a decrease."
-            }
+      "description": "A fast, client-side percentage calculator supporting basic percentages, proportion calculation, and percentage increase/decrease."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you calculate P% of a number X?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Multiply the percentage P by the number X, then divide by 100. For example, 15% of $80 is (15 × 80) / 100 = $12."
           }
-        ]
-      }
-    ]
-  }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between percentage and percentage points?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Percentage points represent the simple arithmetic difference between two rates (8% - 5% = 3 percentage points). Percentage change measures relative shift: ((8 - 5) / 5) × 100 = +60%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I find the original price before a discount was applied?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Divide the discounted price by (1 - (Discount% / 100)). For example, if an item with a 20% discount costs $80, the original price was 80 / (1 - 0.20) = 80 / 0.80 = $100."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is percentage change from zero considered undefined?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Because the percentage change formula divides the delta by the starting baseline. Dividing any non-zero number by zero is mathematically impossible, making relative change undefined."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <style>
@@ -1479,148 +1487,417 @@
     </div>
 
     <!-- SEO Informational & Formula Guide Section -->
-    <article class="info-section" aria-labelledby="seo-heading">
-      <div class="info-header">
-        <h2 id="seo-heading">Understanding Percentage Formulas &amp; Practical Guide</h2>
-        <p>A percentage is a dimensionless mathematical ratio expressed as a fraction of 100. Master the three foundational formulas below for financial calculations, retail discounts, markups, and statistical comparisons.</p>
-      </div>
 
-      <!-- 3 Formula Explanations -->
-      <div class="formula-cards-grid">
-        <div class="formula-card">
-          <h3>1. Basic Percentage Formula</h3>
-          <p>Find the portion or absolute amount that corresponds to a specified rate out of a baseline value.</p>
-          <div class="formula-display">Result = (P / 100) × X</div>
-          <div class="formula-example">
-            <strong>Example:</strong> Calculating an 8.5% sales tax on a $120 item:<br>
-            (8.5 ÷ 100) × 120 = <strong>$10.20</strong> tax.
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <style>
+        .tool-content-layer { font-size: 0.95rem; line-height: 1.7; }
+        .tool-content-layer .lang-content-block { display: none; }
+        html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+        html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] { display: block; }
+        html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] { display: block; }
+        html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] { display: block; }
+        html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] { display: block; }
+        .tool-content-layer h2 { font-size: 1.45rem; font-weight: 700; color: #f8fafc; margin-top: 2rem; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        .tool-content-layer h3 { font-size: 1.15rem; font-weight: 600; color: #e2e8f0; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .tool-content-layer p { margin-bottom: 1rem; color: #94a3b8; }
+        .tool-content-layer ol { margin-bottom: 1.25rem; padding-inline-start: 1.5rem; list-style-type: decimal; }
+        .tool-content-layer li { margin-bottom: 0.65rem; color: #cbd5e1; }
+        .tool-content-layer code { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(51, 65, 85, 0.6); color: #38bdf8; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+        .content-card { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; }
+        .content-card h4 { font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+        .content-card p { font-size: 0.875rem; color: #94a3b8; margin-bottom: 0; }
+        .formula-box { background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4)); border-left: 4px solid #3b82f6; border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        html[dir="rtl"] .formula-box { border-left: none; border-right: 4px solid #3b82f6; }
+        .formula-box .formula-title { font-weight: 700; color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .formula-box .formula-expr { font-size: 1.05rem; color: #f8fafc; direction: ltr; text-align: left; }
+        html[dir="rtl"] .formula-box .formula-expr { text-align: right; }
+        .faq-accordion { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .faq-item { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.5rem; overflow: hidden; }
+        .faq-item summary { padding: 0.85rem 1.25rem; font-weight: 600; color: #e2e8f0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: '+'; font-size: 1.25rem; color: #64748b; font-weight: 400; }
+        .faq-item[open] summary::after { content: '−'; color: #38bdf8; }
+        .faq-item .faq-answer { padding: 0 1.25rem 1rem 1.25rem; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid rgba(30, 41, 59, 0.6); margin-top: 0.5rem; padding-top: 0.75rem; }
+        .privacy-banner { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 0.75rem; padding: 1.25rem; margin: 1.5rem 0; }
+        .privacy-banner h3 { color: #34d399; margin-top: 0; }
+        .related-tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+        .related-tool-card { display: block; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(51, 65, 85, 0.5); border-radius: 0.75rem; padding: 1rem 1.25rem; text-decoration: none; transition: all 0.2s ease; }
+        .related-tool-card:hover { border-color: #3b82f6; background: rgba(30, 41, 59, 0.6); transform: translateY(-2px); }
+        .related-tool-card .tool-name { font-weight: 600; color: #f1f5f9; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .related-tool-card .tool-desc { font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 0; }
+      </style>
+
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it & Practical Utility</h2>
+        <p>The VantorKit Client-Side Percentage Calculator is a high-precision arithmetic engine designed for business analysts, finance specialists, educators, and retail shoppers. Calculating proportions, percentage markups, discounts, and relative variations is essential across financial reporting, academic grading, and consumer commerce. This utility delivers mathematically sound solutions for multi-scenario percentage inquiries directly in your browser with zero latency.</p>
+        <p>Running 100% locally using standard IEEE 754 floating-point safeguards, the calculator provides instant answers for fractional shares, price increases, and percentage shifts without transmitting sensitive accounting figures over the network.</p>
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Choose the Calculation Mode:</strong> Select the operational card matching your problem: calculating P% of value X, finding what percentage X is of total Y, or calculating percentage change between value A and value B.</li>
+          <li><strong>Input Exact Values:</strong> Type numeric values into the designated input fields. The system automatically processes decimals and signed numbers while rejecting invalid entries.</li>
+          <li><strong>Review Instant Computed Metrics:</strong> Inspect the derived results rendered instantly without page reloads. Output metrics include computed values, absolute variances, and clear mathematical breakdowns.</li>
+        </ol>
+        <h2>The Engine & Formula Breakdown</h2>
+        <div class="formula-box">
+          <div class="formula-title">Exact Mathematical Formulas and Precision Handling</div>
+          <div class="formula-expr"><code>P% of X = (P × X) / 100  |  X of Y% = (X / Y) × 100  |  Δ% = ((V₂ - V₁) / |V₁|) × 100</code></div>
+        </div>
+        <p>Computations utilize IEEE-754 double-precision floating-point arithmetic with defensive rounding logic to eliminate binary conversion artifacts like 0.1 + 0.2 producing 0.30000000000000004. Basic percentage evaluation employs the linear formula V = (P × X) / 100. Proportional ratio calculation evaluates Ratio% = (X / Y) × 100, enforcing a defensive guard ensuring Y ≠ 0. For growth measurements, the delta formula Δ% = ((V₂ - V₁) / |V₁|) × 100 is executed. Using the absolute value of the baseline in the denominator preserves the correct directional sign when evaluating trajectories from negative baselines.</p>
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Retail Markup and Markdown Evaluation</h4>
+            <p>A wholesaler purchases inventory at $120.00 and lists it at $180.00. The markup percentage is ((180 - 120) / 120) × 100 = 50.00%. During an end-of-quarter sale offering 25% off the list price, the discount equals (25 × 180) / 100 = $45.00, resulting in a customer sale price of $135.00.</p>
+          </div>
+          <div class="content-card">
+            <h4>System Performance Latency Delta</h4>
+            <p>Following an optimization upgrade, query response latency falls from 250ms to 175ms. The percentage improvement is ((175 - 250) / 250) × 100 = -30.00%, confirming a 30% reduction in query wait time.</p>
           </div>
         </div>
-
-        <div class="formula-card">
-          <h3>2. Percentage Share / Ratio</h3>
-          <p>Determine what proportion a smaller or larger part represents relative to a reference whole.</p>
-          <div class="formula-display">Percentage = (X / Y) × 100</div>
-          <div class="formula-example">
-            <strong>Example:</strong> Scoring 42 correct answers out of 50 on an exam:<br>
-            (42 ÷ 50) × 100 = <strong>84%</strong> score.
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusing Percentage Points with Percent Change</h4>
+            <p>When a tax rate moves from 4% to 5%, it rises by 1 percentage point, but the relative increase is +25% ((5 - 4)/4 × 100). Conflating these concepts leads to serious reporting discrepancies.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Calculating Percentage Change from Zero</h4>
+            <p>Computing percentage growth from a starting value of zero is mathematically undefined due to division by zero. Only absolute differences should be reported in such cases.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Assuming Symmetry in Loss and Gain</h4>
+            <p>A 20% loss is not reversed by a 20% gain. A $100 capital dropping 20% becomes $80. A subsequent 20% gain produces $16, totaling $96 ($4 net loss). Reversing a 20% drop requires a 25% gain.</p>
           </div>
         </div>
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All percentage calculations run entirely inside your local browser sandbox. No numbers, balances, or financial metrics are ever transmitted across networks or stored on remote tracking servers. Closing the tab removes all session data immediately.</p>
+        </div>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>How do you calculate P% of a number X?</summary>
+            <div class="faq-answer">
+              <p>Multiply the percentage P by the number X, then divide by 100. For example, 15% of $80 is (15 × 80) / 100 = $12.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>What is the difference between percentage and percentage points?</summary>
+            <div class="faq-answer">
+              <p>Percentage points represent the simple arithmetic difference between two rates (8% - 5% = 3 percentage points). Percentage change measures relative shift: ((8 - 5) / 5) × 100 = +60%.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>How do I find the original price before a discount was applied?</summary>
+            <div class="faq-answer">
+              <p>Divide the discounted price by (1 - (Discount% / 100)). For example, if an item with a 20% discount costs $80, the original price was 80 / (1 - 0.20) = 80 / 0.80 = $100.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Why is percentage change from zero considered undefined?</summary>
+            <div class="faq-answer">
+              <p>Because the percentage change formula divides the delta by the starting baseline. Dividing any non-zero number by zero is mathematically impossible, making relative change undefined.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Related Mathematical & Financial Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Discount & Tax Calculator</div>
+            <div class="tool-desc">Calculate commercial discounts, sales taxes, VAT rates, and net invoice totals.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Loan Payment Calculator</div>
+            <div class="tool-desc">Compute amortized loan payments, cumulative interest, and principal schedules.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Compound Interest Calculator</div>
+            <div class="tool-desc">Simulate annual compound growth, recurring deposits, and wealth projections.</div>
+          </a>
+        </div>
+      </div>
 
-        <div class="formula-card">
-          <h3>3. Percentage Change (Growth/Decline)</h3>
-          <p>Compute relative shift between an original value (X) and a new value (Y) normalized by original magnitude.</p>
-          <div class="formula-display">Δ% = ((Y - X) / |X|) × 100</div>
-          <div class="formula-example">
-            <strong>Example:</strong> Price drops from $80 to $60 on Black Friday:<br>
-            ((60 - 80) ÷ 80) × 100 = <strong>-25%</strong> discount.
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعتبر حاسبة النسب المئوية عبر المتصفح من فانتور كيت أداة حسابية فائقة الدقة مخصصة للمحللين الماليين والطلاب وأصحاب المتاجر والمستهلكين. إن حساب النسب والتغيرات المئوية والزيادات والخصومات يمثل عصب التحليلات المالية والتجارية اليومية. تقدم لك هذه الأداة حلولاً فورية لكافة أنماط النسب المئوية مباشرة داخل متصفحك دون أي تأخير.</p>
+        <p>من خلال التنفيذ المحلي التام المعتمد على حماية الدقة العشرية، تمنحك الأداة نتائج موثوقة لحساب الأجزاء من الكل ونسب التغير دون مشاركة أرقامك المالية الحساسة عبر الشبكة.</p>
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختر بطاقة الحساب المناسبة:</strong> حدد نمط الحساب المطلوب: حساب النسبة المئوية من رقم معين، أو معرفة نسبة رقم من إجمالي كلي، أو حساب نسبة الزيادة والنقصان بين قيمتين.</li>
+          <li><strong>أدخل القيم بدقة:</strong> اكتب الأرقام في الحقول المخصصة، حيث يتعامل النظام بسلاسة مع الكسور العشرية والأرقام الموجبة والسالبة مع فلترة تمنع الأخطاء.</li>
+          <li><strong>استعرض النتائج والتحليل الفوري:</strong> شاهد النتائج المحسوبة فورياً دون الحاجة لتحديث الصفحة، مع بيان الفروق المطلقة والخطوات الحسابية الجاهزة للاستخدام في تقاريرك.</li>
+        </ol>
+        <h2>محرك الحساب والمعادلات الرياضية</h2>
+        <div class="formula-box">
+          <div class="formula-title">المعادلات الرياضية الدقيقة وضبط الفاصلة العائمة</div>
+          <div class="formula-expr"><code>النسبة من القيمة = (P × X) / 100  |  نسبة X من Y = (X / Y) × 100  |  نسبة التغير = ((V₂ - V₁) / |V₁|) × 100</code></div>
+        </div>
+        <p>تعتمد العمليات الحسابية على معيار الدقة المزدوجة IEEE-754 مع تقنيات تقريب محكمة للتخلص من أخطاء التحويل الثنائي مثل الناتج غير الدقيق لعملية 0.1 + 0.2 في لغات البرمجة. تُطبق معادلة النسبة البسيطة بالشكل الخطي V = (P × X) / 100. وفي حساب التناسب، تُطبق المعادلة Ratio% = (X / Y) × 100 مع شرط وقائي صارم يمنع أن تكون قيمة Y مساوية للصفر. أما لقياس معدل النمو، فتُطبق معادلة الفروق Δ% = ((V₂ - V₁) / |V₁|) × 100، حيث يضمن استخدام القيمة المطلقة في المقام احتساب الاتجاه الصحيح للزيادة والنقصان.</p>
+        <h2>أمثلة وسيناريوهات تطبيقية واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>تحليل هوامش المبيعات والخصم التجاري</h4>
+            <p>اشترى تاجر بضاعة بقيمة 120.00 دولاراً وعرضها بسعر 180.00 دولاراً. نسبة هامش الربح هي ((180 - 120) / 120) × 100 = 50.00%. وعند تقديم خصم بنسبة 25% على سعر البيع، تبلغ قيمة التخفيض (25 × 180) / 100 = 45.00 دولاراً، ليصبح سعر البيع النهائي 135.00 دولاراً.</p>
+          </div>
+          <div class="content-card">
+            <h4>قياس تحسن زمن استجابة الأنظمة البرمجية</h4>
+            <p>بعد ترقية الذاكرة المؤقتة، انخفض زمن استجابة قاعدة البيانات من 250 ميلي ثانية إلى 175 ميلي ثانية. نسبة التحسن هي ((175 - 250) / 250) × 100 = -30.00%، مما يؤكد انخفاض زمن الانتظار بمقدار 30%.</p>
           </div>
         </div>
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الخلط بين النقاط المئوية ونسبة التغير المئوية</h4>
+            <p>عند ارتفاع الفائدة من 4% إلى 5%، فإن الزيادة المطلقة هي نقطة مئوية واحدة (+1%)، بينما نسبة التغير الفعلية هي +25%. هذا الخلط ينتج عنه تقارير مالية مضللة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ محاولة حساب التغير انطلاقاً من الصفر</h4>
+            <p>حساب نسبة التغير من نقطة انطلاق قيمتها صفر غير معرّف رياضياً بسبب استحالة القسمة على صفر، ولا بد من الاكتفاء بذكر الفرق المطلق.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ وهم التماثل في الخسارة والربح</h4>
+            <p>خسارة 20% لا تعوضها زيادة لاحقة بنسبة 20%؛ فإذا انخفض مبلغ 100 دولار بنسبة 20% يصبح 80 دولاراً، وزيادة 20% على 80 دولاراً تعطي 16 دولاراً ليصبح الإجمالي 96 دولاراً (خسارة 4 دولارات). تعويض انخفاض 20% يتطلب زيادة بنسبة 25%.</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية والأمان المحلي 100%</h3>
+          <p>تتم جميع العمليات الحسابية بنسبة 100% داخل متصفحك عبر الذاكرة المحلية للجهاز. لا يتم نقل أي أرقام أو أرصدة مالية إلى أي خوادم أو تسجيلها في أنظمة تتبع. ويتم مسح بيانات الجلسة فور إغلاق علامة التبويب.</p>
+        </div>
+        <h2>الأسئلة الشائعة حول الأداة</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>كيف يتم حساب نسبة P% من القيمة الإجمالية X؟</summary>
+            <div class="faq-answer">
+              <p>تضرب النسبة P في الرقم X ثم تقسم الناتج على 100. على سبيل المثال، لحساب 15% من 80 دولاراً: (15 × 80) / 100 = 12 دولاراً.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>ما هو الفرق بين النسبة المئوية والنقاط المئوية؟</summary>
+            <div class="faq-answer">
+              <p>النقاط المئوية تمثل الفرق الحسابي المباشر بين نسبتين (مثلاً 8% ناقص 5% يساوي 3 نقاط مئوية)، أما نسبة التغير فتقيس التحول النسبي بينهما: ((8 - 5) / 5) × 100 = زيادة بنسبة 60%.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>كيف يمكن معرفة السعر الأصلي لمنتج بعد تطبيق الخصم؟</summary>
+            <div class="faq-answer">
+              <p>تقسم السعر النهائي بعد الخصم على (1 - (نسبة الخصم / 100)). مثلاً إذا كان السعر بعد خصم 20% هو 80 دولاراً، فالسعر الأصلي: 80 / (1 - 0.20) = 80 / 0.80 = 100 دولار.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>لماذا لا يمكن حساب نسبة التغير المئوية لقيمة بدأت من الصفر؟</summary>
+            <div class="faq-answer">
+              <p>لأن صيغة حساب التغير المئوي تعتمد على قسمة الفرق على القيمة الابتدائية، والقسمة على صفر مستحيلة رياضياً وتجعل النتيجة غير معرّفة.</p>
+            </div>
+          </details>
+        </div>
+        <h2>أدوات مالية وحسابية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الخصم والضرائب</div>
+            <div class="tool-desc">حساب ضريبة القيمة المضافة والتخفيضات التجارية وقيم الفواتير الصافية.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">حاسبة أقساط القروض</div>
+            <div class="tool-desc">حساب جداول إهلاك القروض البنكية ومبالغ الفائدة الشهرية والأصلية.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">حاسبة الفائدة المركبة</div>
+            <div class="tool-desc">محاكاة تراكم العوائد الاستثمارية السنوية والإيداعات الدورية المنظمة.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- Quick Reference Table -->
-      <div class="table-container">
-        <h3>Common Percentage, Fraction, and Decimal Equivalents</h3>
-        <p>Use this reference table to mentally convert standard percentages to decimal multipliers and simplified fractions.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Percentage (%)</th>
-              <th>Decimal Multiplier</th>
-              <th>Simplified Fraction</th>
-              <th>Common Real-World Usage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>5%</strong></td>
-              <td>0.05</td>
-              <td>1/20</td>
-              <td>Standard state sales taxes, small brokerage fees</td>
-            </tr>
-            <tr>
-              <td><strong>10%</strong></td>
-              <td>0.10</td>
-              <td>1/10</td>
-              <td>Quick mental discounts, tithing, preliminary tips</td>
-            </tr>
-            <tr>
-              <td><strong>15%</strong></td>
-              <td>0.15</td>
-              <td>3/20</td>
-              <td>Casual dining tips, capital gains tax brackets</td>
-            </tr>
-            <tr>
-              <td><strong>20%</strong></td>
-              <td>0.20</td>
-              <td>1/5</td>
-              <td>Standard restaurant gratuity, typical down payment</td>
-            </tr>
-            <tr>
-              <td><strong>25%</strong></td>
-              <td>0.25</td>
-              <td>1/4</td>
-              <td>One quarter off, seasonal clearance sales</td>
-            </tr>
-            <tr>
-              <td><strong>33.33%</strong></td>
-              <td>0.3333</td>
-              <td>1/3</td>
-              <td>Buy two get one free (effective discount)</td>
-            </tr>
-            <tr>
-              <td><strong>50%</strong></td>
-              <td>0.50</td>
-              <td>1/2</td>
-              <td>Half off, 1-to-1 matching contributions</td>
-            </tr>
-            <tr>
-              <td><strong>75%</strong></td>
-              <td>0.75</td>
-              <td>3/4</td>
-              <td>Deep liquidation markdowns, 3/4 milestone</td>
-            </tr>
-            <tr>
-              <td><strong>100%</strong></td>
-              <td>1.00</td>
-              <td>1/1</td>
-              <td>Doubling of baseline value, complete total</td>
-            </tr>
-            <tr>
-              <td><strong>200%</strong></td>
-              <td>2.00</td>
-              <td>2/1</td>
-              <td>Tripling of baseline value (+200% increase)</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation et utilité pratique</h2>
+        <p>Le calculateur de pourcentages côté client de VantorKit est un moteur arithmétique de précision conçu pour les analystes financiers, gestionnaires, enseignants et consommateurs. Le calcul des proportions, des remises et des variations relatives est indispensable dans les bilans comptables. Cet utilitaire apporte des solutions instantanées à toutes vos équations de pourcentages au sein de votre navigateur.</p>
+        <p>Grâce à une exécution locale prévenant les erreurs d'arrondi décimal, il garantit des résultats rigoureux pour vos hausses de prix et vos ratios sans transférer vos données chiffrées sur le réseau.</p>
+        <h2>Guide pratique pas à pas</h2>
+        <ol>
+          <li><strong>Sélectionnez votre cas d'usage:</strong> Identifiez le module adapté : calculer P% d'un montant X, déterminer la part de X sur un total Y, ou mesurer la variation en pourcentage entre A et B.</li>
+          <li><strong>Renseignez vos grandeurs numériques:</strong> Saisissez vos valeurs dans les champs dédiés. Le moteur prend en compte les valeurs décimales et négatives en appliquant un filtrage pour interdire toute division par zéro.</li>
+          <li><strong>Consultez les résultats calculés:</strong> Visualisez les résultats calculés sans rechargement de page, comprenant le détail arithmétique et les écarts prêts à l'emploi.</li>
+        </ol>
+        <h2>Moteur de calcul et formules mathématiques</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formules mathématiques et rigueur en virgule flottante</div>
+          <div class="formula-expr"><code>P% de X = (P × X) / 100  |  Part de X dans Y = (X / Y) × 100  |  Variation% = ((V₂ - V₁) / |V₁|) × 100</code></div>
+        </div>
+        <p>Chaque calcul met en œuvre la norme arithmétique IEEE-754 en double précision pour éliminer les résidus binaires classiques. L'évaluation proportionnelle utilise la relation linéaire V = (P × X) / 100. Le ratio s'obtient par Ratio% = (X / Y) × 100, avec vérification que Y ≠ 0. La mesure du taux d'évolution s'appuie sur Δ% = ((V₂ - V₁) / |V₁|) × 100, la valeur absolue au dénominateur assurant la cohérence directionnelle même avec des valeurs négatives.</p>
+        <h2>Cas d'usage et scénarios concrets</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Gestion de marge et décote promotionnelle</h4>
+            <p>Une entreprise achète un article à 120,00 € et fixe son prix de vente à 180,00 €. Le taux de marge brute s'établit à ((180 - 120) / 120) × 100 = 50,00%. Si une remise de 25% est accordée, la déduction est de (25 × 180) / 100 = 45,00 €, portant le prix client à 135,00 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Évaluation de gain de performance système</h4>
+            <p>À la suite de la mise en place d'un cache, la latence des requêtes descend de 250 ms à 175 ms. Le taux d'amélioration correspond à ((175 - 250) / 250) × 100 = -30,00%, matérialisant une réduction effective de 30% du temps d'attente.</p>
+          </div>
+        </div>
+        <h2>Erreurs courantes à éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusion entre points de pourcentage et taux d'évolution</h4>
+            <p>Si un taux passe de 4% à 5%, il croît de 1 point de pourcentage, alors que son augmentation relative est de +25%. Confondre ces deux approches entraîne des erreurs manifestes.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Calcul d'une variation relative à partir de zéro</h4>
+            <p>Évaluer une croissance en pourcentage depuis une valeur initiale nulle est indéterminé mathématiquement. Dans ces situations, seul l'écart absolu doit être mentionné.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Croyance erronée en la réciprocité des gains et pertes</h4>
+            <p>Une perte de 20% n'est pas compensée par un gain consécutif de 20%. Un capital de 100 € subissant une baisse de 20% tombe à 80 €. Une hausse ultérieure de 20% sur 80 € ne génère que 16 €, atteignant 96 € (soit 4 € de perte nette).</p>
+          </div>
+        </div>
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de confidentialité 100% côté client</h3>
+          <p>Toutes les opérations s'exécutent exclusivement dans votre navigateur local. Vos chiffres confidentiels et données financières ne sont jamais transmis sur des serveurs distants.</p>
+        </div>
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Comment calcule-t-on P% d'un nombre X ?</summary>
+            <div class="faq-answer">
+              <p>Multipliez le pourcentage P par le nombre X, puis divisez le total par 100. Par exemple, 15% de 80 € s'établit à (15 × 80) / 100 = 12 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Quelle différence distingue un pourcentage de points de pourcentage ?</summary>
+            <div class="faq-answer">
+              <p>Les points de pourcentage correspondent à la soustraction directe de deux pourcentages (8% - 5% = 3 points). La variation en pourcentage traduit l'évolution relative : ((8 - 5) / 5) × 100 = hausse de 60%.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Comment calculer le montant d'origine avant remise ?</summary>
+            <div class="faq-answer">
+              <p>Divisez le prix final remisé par (1 - (Pourcentage de remise / 100)). Par exemple, pour un produit soldé à 80 € après 20% de remise : 80 / (1 - 0,20) = 80 / 0,80 = 100 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Pourquoi une variation relative depuis zéro est-elle indéterminée ?</summary>
+            <div class="faq-answer">
+              <p>Parce que le dénominateur de la formule de variation correspond à la valeur de référence. La division par zéro étant impossible, le résultat relatif ne peut être établi.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Outils financiers et mathématiques connexes</h2>
+        <div class="related-tools-grid">
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Remise et TVA</div>
+            <div class="tool-desc">Calculez la TVA, les remises commerciales et le montant net des factures.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calculateur de Prêt et Mensualités</div>
+            <div class="tool-desc">Simulez le tableau d'amortissement, le coût des intérêts et les échéances d'emprunt.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calculateur d'Intérêts Composés</div>
+            <div class="tool-desc">Projetez la capitalisation de votre épargne avec versements programmés réguliers.</div>
+          </a>
+        </div>
       </div>
 
-      <!-- FAQ Section -->
-      <div class="info-header" style="margin-bottom: 2rem;">
-        <h2>Frequently Asked Questions</h2>
-        <p>Answers to common questions regarding percentage mathematics, edge cases, and calculations.</p>
-      </div>
-
-      <div class="faq-grid">
-        <div class="faq-item">
-          <h4>What is the difference between percentage and percentage points?</h4>
-          <p>A percentage is a relative proportional change, whereas percentage points measure the arithmetic difference between two percentages. For instance, if an interest rate increases from 4% to 5%, it grew by 1 percentage point, which corresponds to a 25% relative increase.</p>
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è e utilità pratica</h2>
+        <p>Il calcolatore di percentuali lato client di VantorKit è un motore aritmetico di precisione sviluppato per analisti finanziari, contabili, docenti e consumatori. Calcolare quote percentuali, ricarichi, sconti e variazioni relative è fondamentale nell'analisi aziendale e nella gestione commerciale quotidiana. Questa applicazione fornisce soluzioni matematiche immediate a ogni tipo di calcolo percentuale all'interno del browser.</p>
+        <p>Eseguito interamente in locale con protezione dagli errori di arrotondamento, lo strumento assicura risposte esatte per variazioni di prezzo e quote senza trasmettere cifre contabili private su server remoti.</p>
+        <h2>Guida dettagliata passo dopo passo</h2>
+        <ol>
+          <li><strong>Seleziona la scheda operativa:</strong> Individua il riquadro desiderato: calcolo del P% di una cifra X, quota di X rispetto a Y, o calcolo della variazione percentuale tra A e B.</li>
+          <li><strong>Inserisci i parametri numerici:</strong> Digita i tuoi valori nei campi indicati. Il calcolatore elabora cifre decimali e valori con segno, escludendo divisioni per zero indefinite.</li>
+          <li><strong>Consulta le metriche in tempo reale:</strong> Visualizza all'istante il risultato senza dover aggiornare la pagina web, con l'indicazione della formula risolutiva e degli scostamenti utili.</li>
+        </ol>
+        <h2>Motore di calcolo e formule matematiche</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formulazioni matematiche e accuratezza in virgola mobile</div>
+          <div class="formula-expr"><code>P% di X = (P × X) / 100  |  Quota di X su Y = (X / Y) × 100  |  Δ% = ((V₂ - V₁) / |V₁|) × 100</code></div>
         </div>
-
-        <div class="faq-item">
-          <h4>Can a percentage increase exceed 100%?</h4>
-          <p>Yes. Any growth where the final amount is more than double the initial amount yields a percentage increase greater than 100%. For example, an asset rising from $50 to $150 represents a 200% increase.</p>
+        <p>Tutti i conteggi sfruttano lo standard a virgola mobile IEEE-754 in doppia precisione per prevenire errori numerici binari. La frazione proporzionale elementare risponde a V = (P × X) / 100. La quota percentuale segue Rapporto% = (X / Y) × 100, verificando che Y ≠ 0. La quantificazione dei tassi di variazione segue Δ% = ((V₂ - V₁) / |V₁|) × 100, dove il valore assoluto per la grandezza iniziale preserva il corretto andamento della variazione anche con valori di partenza negativi.</p>
+        <h2>Scenari pratici del mondo reale</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Margine commerciale e sconto sulle vendite</h4>
+            <p>Un commerciante acquista una fornitura a 120,00 € e fissa il prezzo a 180,00 €. Il margine di ricarico applicato corrisponde a ((180 - 120) / 120) × 100 = 50,00%. Se per fine serie applica uno sconto del 25%, il risparmio ammonta a (25 × 180) / 100 = 45,00 €, stabilendo il prezzo finale a 135,00 €.</p>
+          </div>
+          <div class="content-card">
+            <h4>Riduzione della latenza di interrogazione dati</h4>
+            <p>In seguito all'ottimizzazione degli indici, il tempo di risposta scende da 250 ms a 175 ms. La percentuale di miglioramento ottenuta è ((175 - 250) / 250) × 100 = -30,00%, attestando una diminuzione del 30% del tempo di elaborazione.</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>How do I calculate percentage change when the initial value is zero?</h4>
-          <p>Mathematically, percentage change from zero is undefined because it requires dividing by zero. While an increase from 0 to 50 represents an absolute gain of 50, it cannot be expressed as a finite percentage change.</p>
+        <h2>Errori comuni da evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Confusione tra punti percentuali e variazione percentuale</h4>
+            <p>Se un tasso sale dal 4% al 5%, l'incremento assoluto è di 1 punto percentuale, ma la variazione relativa effettiva ammonta al +25%. Scambiare questi concetti produce conclusioni errate.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Computo di variazioni percentuali partendo da zero</h4>
+            <p>Calcolare un incremento percentuale da una base pari a zero non ha significato matematico per l'impossibilità di dividere per zero. In simili scenari si deve indicare il solo valore assoluto.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Presunzione di simmetria tra perdite e profitti</h4>
+            <p>Una perdita del 20% non viene annullata da un rialzo del 20%. Un capitale di 100 € che scende del 20% diventa 80 €. Un successivo recupero del 20% su 80 € produce 16 €, portando il totale a 96 € (con 4 € di disavanzo netto).</p>
+          </div>
         </div>
-
-        <div class="faq-item">
-          <h4>How do I reverse a percentage discount?</h4>
-          <p>To find the original price before a discount of D%, divide the discounted sale price by (1 - (D / 100)). For example, if a jacket on a 20% sale costs $80, the original price was 80 ÷ (1 - 0.20) = 80 ÷ 0.80 = $100.</p>
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di privacy 100% lato client</h3>
+          <p>Tutti i calcoli si svolgono unicamente nella memoria isolata del tuo browser. Nessun dato quantitativo o parametro economico viene inviato a server terzi o inserito in sistemi di tracciamento. La chiusura della pagina web cancella ogni informazione istantaneamente.</p>
+        </div>
+        <h2>Domande frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item">
+            <summary>Come si calcola il P% di un numero X?</summary>
+            <div class="faq-answer">
+              <p>Moltiplica la percentuale P per il numero X e dividi per 100. Ad esempio, il 15% di 80 € equivale a (15 × 80) / 100 = 12 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Qual è la differenza tra percentuale e punti percentuali?</summary>
+            <div class="faq-answer">
+              <p>I punti percentuali indicano la differenza diretta tra due tassi (8% - 5% = 3 punti). La variazione percentuale quantifica lo scostamento relativo: ((8 - 5) / 5) × 100 = incremento del 60%.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Come si ricava il prezzo iniziale prima dell'applicazione dello sconto?</summary>
+            <div class="faq-answer">
+              <p>Dividi il prezzo scontato per (1 - (Percentuale Sconto / 100)). Se un articolo con sconto del 20% costa 80 €, il prezzo iniziale era 80 / (1 - 0,20) = 80 / 0,80 = 100 €.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Perché la variazione percentuale da una base zero è considerata non definita?</summary>
+            <div class="faq-answer">
+              <p>Perché la formula richiede di dividere per il valore iniziale. La divisione per zero è un'operazione aritmetica priva di significato, rendendo impossibile esprimere una variazione percentuale relativa.</p>
+            </div>
+          </details>
+        </div>
+        <h2>Strumenti finanziari e matematici correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./discount-tax-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore Sconto e IVA</div>
+            <div class="tool-desc">Calcola l'IVA, gli sconti commerciali applicati e l'importo netto delle fatture.</div>
+          </a>
+          <a href="./loan-calculator.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Finanziamento e Rata</div>
+            <div class="tool-desc">Verifica piani di ammortamento, quota capitale, interessi e scadenze mensili.</div>
+          </a>
+          <a href="./compound-interest.html" class="related-tool-card">
+            <div class="tool-name">Calcolatore di Interesse Composto</div>
+            <div class="tool-desc">Stima la crescita dell'investimento con versamenti periodici e capitalizzazione.</div>
+          </a>
         </div>
       </div>
     </article>
