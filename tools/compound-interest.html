@@ -2290,6 +2290,7 @@
       let activeLang = 'en';
 
       function setLanguage(lang) {
+      window.setLanguage = setLanguage;
         if (!I18N[lang]) lang = 'en';
         activeLang = lang;
         localStorage.setItem('vantorkit_lang', lang);
@@ -2692,123 +2693,159 @@
     })();
   </script>
 
-  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
-  <script>
-    (function() {
-      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
-      const BACK_LABELS = {
-        en: '← Back to Tools',
-        ar: 'الرجوع إلى الأدوات ←',
-        fr: '← Retour aux outils',
-        it: '← Torna agli strumenti'
-      };
+    <!-- VantorKit Authoritative Language Switcher & RTL Sync Runtime -->
+  <script id="vantorkit-lang-controller">
+  (function() {
+    'use strict';
 
-      function updateActiveLanguageUI(lang) {
-        if (!LANG_NAMES[lang]) lang = 'en';
-        const isRtl = lang === 'ar';
-        document.documentElement.setAttribute('lang', lang);
-        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+    const LANG_NAMES = {
+      en: 'English',
+      ar: 'العربية',
+      fr: 'Français',
+      it: 'Italiano'
+    };
 
-        const label = document.getElementById('currentLangLabel');
-        if (label) label.textContent = LANG_NAMES[lang];
+    const BACK_LABELS = {
+      en: '← Back to Tools',
+      ar: 'الرجوع إلى الأدوات ←',
+      fr: '← Retour aux outils',
+      it: '← Torna agli strumenti'
+    };
 
-        document.querySelectorAll('.lang-option').forEach(opt => {
-          const optLang = opt.getAttribute('data-lang');
-          opt.classList.toggle('active', optLang === lang);
-        });
+    function updateActiveLanguageUI(lang) {
+      if (!LANG_NAMES[lang]) lang = 'en';
+      const isRtl = (lang === 'ar');
 
-        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
-        if (backSpan && BACK_LABELS[lang]) {
-          backSpan.textContent = BACK_LABELS[lang];
+      // 1. Root lang & dir attributes
+      document.documentElement.setAttribute('lang', lang);
+      document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+      const htmlRoot = document.getElementById('htmlRoot');
+      if (htmlRoot && htmlRoot !== document.documentElement) {
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+      }
+
+      // 2. Active button label text
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      if (currentLangLabel) {
+        currentLangLabel.textContent = LANG_NAMES[lang];
+      }
+
+      // 3. Dropdown option active indicator
+      document.querySelectorAll('.lang-option').forEach(opt => {
+        const optLang = opt.getAttribute('data-lang');
+        opt.classList.toggle('active', optLang === lang);
+      });
+
+      // 4. Back to Tools link localization
+      const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+      if (backSpan && BACK_LABELS[lang]) {
+        backSpan.textContent = BACK_LABELS[lang];
+      }
+
+      // 5. SEO Content Layer language block visibility sync
+      document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
+        block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
+      });
+    }
+
+    function initLangSwitcher() {
+      const dropdown = document.getElementById('langDropdown');
+      const oldBtn = document.getElementById('langToggleBtn');
+      const oldMenu = document.getElementById('langMenu');
+      if (!dropdown || !oldBtn || !oldMenu) return;
+
+      // Clone button & menu to neutralize any competing or double-toggling event listeners
+      const toggleBtn = oldBtn.cloneNode(true);
+      oldBtn.parentNode.replaceChild(toggleBtn, oldBtn);
+
+      const menu = oldMenu.cloneNode(true);
+      oldMenu.parentNode.replaceChild(menu, oldMenu);
+
+      function openMenu() {
+        menu.classList.add('open', 'show');
+        dropdown.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeMenu() {
+        menu.classList.remove('open', 'show');
+        dropdown.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      function toggleMenu(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
+        if (isOpen) {
+          closeMenu();
+        } else {
+          openMenu();
         }
       }
 
-      function setupDropdownInteractivity() {
-        const dropdown = document.getElementById('langDropdown');
-        const toggleBtn = document.getElementById('langToggleBtn');
-        const menu = document.getElementById('langMenu');
-        if (!dropdown || !toggleBtn || !menu) return;
+      // Authoritative toggle click listener
+      toggleBtn.addEventListener('click', toggleMenu);
 
-        function closeDropdown() {
-          menu.classList.remove('open', 'show');
-          dropdown.classList.remove('active');
-          toggleBtn.setAttribute('aria-expanded', 'false');
-        }
-
-        function toggleDropdown(e) {
+      // Authoritative language options click listener
+      menu.querySelectorAll('.lang-option').forEach(opt => {
+        opt.addEventListener('click', function(e) {
           if (e) {
             e.preventDefault();
             e.stopPropagation();
           }
-          const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
-          if (isOpen) {
-            closeDropdown();
-          } else {
-            menu.classList.add('open', 'show');
-            dropdown.classList.add('active');
-            toggleBtn.setAttribute('aria-expanded', 'true');
+          const selectedLang = opt.getAttribute('data-lang');
+          if (selectedLang && LANG_NAMES[selectedLang]) {
+            try {
+              localStorage.setItem('vantorkit_lang', selectedLang);
+            } catch (err) {}
+
+            updateActiveLanguageUI(selectedLang);
+
+            // Call tool translation engine if defined
+            if (typeof window.setLanguage === 'function') {
+              try { window.setLanguage(selectedLang); } catch (err) { console.warn(err); }
+            } else if (typeof window.applyLanguage === 'function') {
+              try { window.applyLanguage(selectedLang); } catch (err) { console.warn(err); }
+            }
+
+            closeMenu();
           }
+        });
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          closeMenu();
         }
+      });
 
-        // Cleanly bind toggle button
-        toggleBtn.onclick = toggleDropdown;
+      // Close dropdown on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
 
-        // Cleanly bind all language options
-        menu.querySelectorAll('.lang-option').forEach(opt => {
-          opt.onclick = function(e) {
-            if (e) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-            const selectedLang = opt.getAttribute('data-lang');
-            if (selectedLang) {
-              try {
-                localStorage.setItem('vantorkit_lang', selectedLang);
-              } catch (err) {}
-              updateActiveLanguageUI(selectedLang);
+      // Initial apply from localStorage
+      let currentLang = 'en';
+      try {
+        currentLang = localStorage.getItem('vantorkit_lang') || 'en';
+      } catch (err) {}
+      if (!LANG_NAMES[currentLang]) currentLang = 'en';
+      updateActiveLanguageUI(currentLang);
+    }
 
-              // Trigger tool translation logic if defined
-              if (typeof setLanguage === 'function') {
-                try { setLanguage(selectedLang); } catch (err) { console.warn(err); }
-              } else if (typeof applyLanguage === 'function') {
-                try { applyLanguage(selectedLang); } catch (err) { console.warn(err); }
-              }
-            }
-            closeDropdown();
-          };
-        });
-
-        // Global click-outside listener
-        document.addEventListener('click', function(e) {
-          if (dropdown && !dropdown.contains(e.target)) {
-            closeDropdown();
-          }
-        });
-
-        // Global Escape key listener
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            closeDropdown();
-            toggleBtn.focus();
-          }
-        });
-
-        // Initial apply
-        let savedLang = 'en';
-        try {
-          savedLang = localStorage.getItem('vantorkit_lang') || 'en';
-        } catch (err) {}
-        if (!LANG_NAMES[savedLang]) savedLang = 'en';
-        updateActiveLanguageUI(savedLang);
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
-      } else {
-        setupDropdownInteractivity();
-      }
-    })();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLangSwitcher);
+    } else {
+      initLangSwitcher();
+    }
+  })();
   </script>
-
 </body>
 </html>
