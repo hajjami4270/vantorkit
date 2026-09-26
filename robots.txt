@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vantorkit.com/sitemap.xml

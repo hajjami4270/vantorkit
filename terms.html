@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Terms of Service — VantorKit</title>
+  <meta name="description" content="VantorKit Terms of Service: Read our terms governing fair use, client-side utility disclaimers, intellectual property, and limitations of liability.">
+  <link rel="canonical" href="https://vantorkit.com/terms.html">
+
+  <!-- Google Fonts: Plus Jakarta Sans for Latin, Cairo for Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --nav-height: 70px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.05) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Standard Top Navigation */
+    .top-nav {
+      height: var(--nav-height);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.07);
+      transform: translateX(-2px);
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px);
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-brand svg {
+      width: 34px;
+      height: 34px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    .nav-brand span {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .nav-brand span span {
+      color: var(--accent);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .globe-icon {
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon,
+    .lang-dropdown.active .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 1000;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+    }
+
+    .lang-option.active .check-icon {
+      display: inline-block;
+      color: #60a5fa;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Main Container & Page Header */
+    main {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #a855f7 0%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 0 auto 0.75rem;
+      line-height: 1.6;
+    }
+
+    .effective-date {
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    /* Content Cards */
+    .terms-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .content-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .content-card h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1.1em;
+      background: var(--accent-secondary);
+      border-radius: 2px;
+    }
+
+    .content-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .content-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .content-card ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .content-card li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    html[dir="rtl"] .content-card li {
+      padding-left: 0;
+      padding-right: 1.5rem;
+    }
+
+    .content-card li::before {
+      content: "•";
+      color: var(--accent-secondary);
+      font-size: 1.3rem;
+      position: absolute;
+      left: 0.4rem;
+      top: -0.15rem;
+    }
+
+    html[dir="rtl"] .content-card li::before {
+      left: auto;
+      right: 0.4rem;
+    }
+
+    .content-card strong {
+      color: #f1f5f9;
+    }
+
+    .content-card a {
+      color: #a855f7;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .content-card a:hover {
+      color: #c084fc;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.85);
+      padding: 3rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover,
+    .footer-link.active {
+      color: #c084fc;
+    }
+
+    .footer-copy {
+      color: #64748b;
+      font-size: 0.84rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; }
+      .content-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Standardized Header Navigation -->
+  <div class="top-nav">
+    <a href="./" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="./" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL_t" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR_t" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC_t" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL_t)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR_t)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC_t)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- 4-Language Dropdown Selector -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <main>
+    <header class="page-header">
+      <div class="badge-pill" data-i18n="termsBadge">Legal Agreement</div>
+      <h1 data-i18n="termsTitle">Terms of <span>Service</span></h1>
+      <p class="page-subtitle" data-i18n="termsSubtitle">Please review the rules, acceptable use standards, and liability disclaimers that govern your use of the VantorKit utility platform.</p>
+      <div class="effective-date" data-i18n="termsUpdated">Last Updated: September 26, 2026 • Effective Date: September 26, 2026</div>
+    </header>
+
+    <div class="terms-container">
+
+      <!-- Section 1: Acceptance -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec1Title">1. Acceptance of Terms</h2>
+        <p data-i18n="termsSec1P1">By accessing, browsing, or utilizing the VantorKit website located at <strong>https://vantorkit.com</strong> or any of its tools, utilities, and services, you acknowledge that you have read, understood, and agreed to be bound by these Terms of Service and our accompanying Privacy Policy. If you do not agree with any provision of these terms, you must discontinue use of the platform immediately.</p>
+      </section>
+
+      <!-- Section 2: Platform Description -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec2Title">2. Description of Service &amp; Client-Side Operation</h2>
+        <p data-i18n="termsSec2P1">VantorKit provides a suite of 25+ browser-based utilities for data transformation, mathematical calculations, file manipulations (PDFs, images, CSV, JSON), text editing, and everyday productivity. All computational processing occurs exclusively on the user's local machine via modern browser APIs (HTML5, Canvas, WebAssembly, Web Crypto). VantorKit does not host, retain, or store user-generated content or files on remote servers.</p>
+      </section>
+
+      <!-- Section 3: Permitted Fair Use -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec3Title">3. Permitted Fair Use &amp; Prohibited Conduct</h2>
+        <p data-i18n="termsSec3P1">You are granted a non-exclusive, non-transferable, revocable license to access and use VantorKit for personal, professional, and commercial tasks, subject to the following restrictions:</p>
+        <ul>
+          <li>You may not use the services to process illegal materials, malicious software, unauthorized confidential documents, or content that infringes upon the intellectual property of third parties.</li>
+          <li>You may not launch automated denial-of-service (DDoS) attacks, flood requests, or attempt to compromise server infrastructure.</li>
+          <li>You may not scrape, frame, mirror, or repackage VantorKit branding, design assets, or original code to mislead consumers or distribute fraudulent clone services.</li>
+        </ul>
+      </section>
+
+      <!-- Section 4: Disclaimers -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec4Title">4. Disclaimers of Warranties ("As-Is" Utilities)</h2>
+        <p data-i18n="termsSec4P1">The tools, scripts, calculators, and informational materials on VantorKit are provided strictly on an <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> basis, without warranty of any kind, whether express, implied, statutory, or otherwise. Specifically:</p>
+        <ul>
+          <li><strong>Calculation Accuracy:</strong> While we employ industry-standard algorithms and high-precision mathematics, VantorKit makes no warranty regarding absolute accuracy, completeness, or suitability of results for critical financial, legal, medical, or architectural purposes. Always independently audit vital figures with certified professionals.</li>
+          <li><strong>File Conversion Fidelity:</strong> Conversions involving PDF documents, vector graphics, image compression, and text diffs are executed on best-effort browser engines. We do not warrant that all document layouts, embedded font subsets, or complex vector paths will render without variance.</li>
+        </ul>
+      </section>
+
+      <!-- Section 5: Intellectual Property -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec5Title">5. Intellectual Property Rights</h2>
+        <p data-i18n="termsSec5P1"><strong>Platform Property:</strong> The VantorKit name, brand logo, domain name, graphic identity, UI components, stylesheets, and original source code are the exclusive property of VantorKit and its founders, protected by copyright and intellectual property laws.</p>
+        <p data-i18n="termsSec5P2"><strong>User Content Ownership:</strong> You retain 100% full, unrestricted ownership and copyright over all files, images, documents, texts, and datasets you process through VantorKit utilities. We claim zero ownership, rights, or licenses over your proprietary materials.</p>
+      </section>
+
+      <!-- Section 6: Advertising & Links -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec6Title">6. Third-Party Advertisements &amp; External Links</h2>
+        <p data-i18n="termsSec6P1">VantorKit displays third-party advertisements through Google AdSense to sustain free, open access. We do not endorse, guarantee, or assume liability for any products, services, claims, or external content advertised on the platform or linked externally. Your interactions with advertisers are strictly between you and the respective third-party vendor.</p>
+      </section>
+
+      <!-- Section 7: Limitation of Liability -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec7Title">7. Limitation of Liability</h2>
+        <p data-i18n="termsSec7P1">To the fullest extent permitted by applicable law, in no event shall VantorKit, its developers, operators, or affiliates be liable for any direct, indirect, incidental, special, consequential, or exemplary damages—including but not limited to loss of profits, data corruption, business interruption, or system failure—arising from or relating to your use of or inability to use the platform.</p>
+      </section>
+
+      <!-- Section 8: Modifications & Contact -->
+      <section class="content-card">
+        <h2 data-i18n="termsSec8Title">8. Modifications to Terms &amp; Contact</h2>
+        <p data-i18n="termsSec8P1">We reserve the right to revise or update these Terms of Service at any time. When modifications occur, the "Last Updated" date at the top of this page will be revised. Continued use of VantorKit after changes indicates your acceptance of the updated terms.</p>
+        <p>If you have any questions or require legal inquiries regarding these terms, please contact us:</p>
+        <p><strong>Email:</strong> <a href="mailto:legal@vantorkit.com">legal@vantorkit.com</a> or <a href="mailto:contact@vantorkit.com">contact@vantorkit.com</a><br>
+        <strong>Support Center:</strong> <a href="https://vantorkit.com/contact.html">https://vantorkit.com/contact.html</a></p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Standardized Multi-Page Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal & Support">
+        <a href="/privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+        <a href="/terms.html" class="footer-link active" data-i18n="footerTerms">Terms of Service</a>
+        <a href="/about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
+        <a href="/contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+      </nav>
+      <p class="footer-copy" id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Standardized Language Selector & RTL Sync Logic -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      const I18N_PAGE = {
+        en: {
+          termsBadge: "Legal Agreement",
+          termsTitle: 'Terms of <span style="background:linear-gradient(135deg,#a855f7 0%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Service</span>',
+          termsSubtitle: "Please review the rules, acceptable use standards, and liability disclaimers that govern your use of the VantorKit utility platform.",
+          termsUpdated: "Last Updated: September 26, 2026 • Effective Date: September 26, 2026",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Terms of Service",
+          footerAbout: "About Us",
+          footerContact: "Contact",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
+        },
+        ar: {
+          termsBadge: "اتفاقية قانونية",
+          termsTitle: 'شروط <span style="background:linear-gradient(135deg,#a855f7 0%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">الخدمة</span>',
+          termsSubtitle: "يرجى قراءة القواعد ومعايير الاستخدام المقبول وإخلاء المسؤولية القانونية التي تحكم استخدامك لمنصة فانتوركيت.",
+          termsUpdated: "آخر تحديث: 26 سبتمبر 2026 • تاريخ السريان: 26 سبتمبر 2026",
+          footerPriv: "سياسة الخصوصية",
+          footerTerms: "شروط الخدمة",
+          footerAbout: "من نحن",
+          footerContact: "اتصل بنا",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك."
+        },
+        fr: {
+          termsBadge: "Accord Juridique",
+          termsTitle: 'Conditions d\'<span style="background:linear-gradient(135deg,#a855f7 0%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Utilisation</span>',
+          termsSubtitle: "Veuillez consulter les règles, conditions d'utilisation équitable et clauses de non-responsabilité régissant VantorKit.",
+          termsUpdated: "Dernière mise à jour : 26 septembre 2026",
+          footerPriv: "Politique de confidentialité",
+          footerTerms: "Conditions d'utilisation",
+          footerAbout: "À propos",
+          footerContact: "Contact",
+          footerText: "© 2026 VantorKit. Utilitaires Web rapides, gratuits et privés. Tout le traitement est effectué localement dans votre navigateur."
+        },
+        it: {
+          termsBadge: "Accordo Legale",
+          termsTitle: 'Termini di <span style="background:linear-gradient(135deg,#a855f7 0%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Servizio</span>',
+          termsSubtitle: "Consulta le regole di utilizzo corretto, le esclusioni di responsabilità e le condizioni d'uso di VantorKit.",
+          termsUpdated: "Ultimo aggiornamento: 26 settembre 2026",
+          footerPriv: "Informativa sulla privacy",
+          footerTerms: "Termini di servizio",
+          footerAbout: "Chi siamo",
+          footerContact: "Contatti",
+          footerText: "© 2026 VantorKit. Utilità web veloci, gratuite e private. Tutta l'elaborazione viene eseguita localmente nel browser."
+        }
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+
+        const t = I18N_PAGE[lang] || I18N_PAGE.en;
+        Object.keys(t).forEach(key => {
+          const els = document.querySelectorAll(`[data-i18n="${key}"]`);
+          els.forEach(el => {
+            el.innerHTML = t[key];
+          });
+        });
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          const isOpen = menu.classList.contains('open');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.onclick = toggleDropdown;
+
+        menu.querySelectorAll('.lang-option').forEach(opt => {
+          opt.onclick = function(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const selectedLang = opt.getAttribute('data-lang');
+            if (selectedLang) {
+              try { localStorage.setItem('vantorkit_lang', selectedLang); } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+            }
+            closeDropdown();
+          };
+        });
+
+        document.addEventListener('click', function(e) {
+          if (dropdown && !dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            closeDropdown();
+            toggleBtn.focus();
+          }
+        });
+
+        let savedLang = 'en';
+        try { savedLang = localStorage.getItem('vantorkit_lang') || 'en'; } catch (err) {}
+        if (!LANG_NAMES[savedLang]) savedLang = 'en';
+        updateActiveLanguageUI(savedLang);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+      } else {
+        setupDropdownInteractivity();
+      }
+    })();
+  </script>
+</body>
+</html>

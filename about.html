@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>About Us — VantorKit</title>
+  <meta name="description" content="Discover VantorKit: Our mission, zero-server privacy architecture, modern web engineering philosophy, and commitment to free client-side utility tools.">
+  <link rel="canonical" href="https://vantorkit.com/about.html">
+
+  <!-- Google Fonts: Plus Jakarta Sans for Latin, Cairo for Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --nav-height: 70px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.05) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Standard Top Navigation */
+    .top-nav {
+      height: var(--nav-height);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.07);
+      transform: translateX(-2px);
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px);
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .nav-brand svg {
+      width: 34px;
+      height: 34px;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+    }
+
+    .nav-brand span {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .nav-brand span span {
+      color: var(--accent);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .globe-icon {
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon,
+    .lang-dropdown.active .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 1000;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+    }
+
+    .lang-option.active .check-icon {
+      display: inline-block;
+      color: #60a5fa;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Main Container & Page Header */
+    main {
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* About Container */
+    .about-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .content-card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .content-card h2::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 1.1em;
+      background: #10b981;
+      border-radius: 2px;
+    }
+
+    .content-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .content-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .content-card ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .content-card li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    html[dir="rtl"] .content-card li {
+      padding-left: 0;
+      padding-right: 1.5rem;
+    }
+
+    .content-card li::before {
+      content: "•";
+      color: #10b981;
+      font-size: 1.3rem;
+      position: absolute;
+      left: 0.4rem;
+      top: -0.15rem;
+    }
+
+    html[dir="rtl"] .content-card li::before {
+      left: auto;
+      right: 0.4rem;
+    }
+
+    .content-card strong {
+      color: #f1f5f9;
+    }
+
+    /* Pillars Grid */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .pillar-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .pillar-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pillar-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .pillar-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.85);
+      padding: 3rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover,
+    .footer-link.active {
+      color: #34d399;
+    }
+
+    .footer-copy {
+      color: #64748b;
+      font-size: 0.84rem;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      h1 { font-size: 2rem; }
+      .content-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Standardized Header Navigation -->
+  <div class="top-nav">
+    <a href="./" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="./" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL_a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR_a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC_a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL_a)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR_a)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC_a)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- 4-Language Dropdown Selector -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <main>
+    <header class="page-header">
+      <div class="badge-pill" data-i18n="aboutBadge">About VantorKit</div>
+      <h1 data-i18n="aboutTitle">Empowering Productivity Through <span>Private Web Utilities</span></h1>
+      <p class="page-subtitle" data-i18n="aboutSubtitle">We build fast, client-side digital tools that respect your time, bandwidth, and personal data privacy.</p>
+    </header>
+
+    <div class="about-container">
+
+      <!-- Platform Stat Highlights -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">25</div>
+          <div class="stat-label" data-i18n="stat1">Production Tools</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label" data-i18n="stat2">Client-Side Processed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0 KB</div>
+          <div class="stat-label" data-i18n="stat3">Server File Uploads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-label" data-i18n="stat4">Global Languages</div>
+        </div>
+      </div>
+
+      <!-- Section 1: Our Mission -->
+      <section class="content-card">
+        <h2 data-i18n="aboutSec1Title">Our Mission: High-Speed Tools Without Privacy Compromises</h2>
+        <p data-i18n="aboutSec1P1">The internet is filled with utility websites that force users to upload proprietary files—tax calculations, confidential PDFs, company graphics, or private passwords—to remote cloud servers. This traditional model introduces security vulnerabilities, upload latency, queue bottlenecks, and unsolicited tracking.</p>
+        <p data-i18n="aboutSec1P2"><strong>VantorKit was created to challenge this paradigm.</strong> By leveraging the incredible processing capabilities of modern web browsers, every tool in our platform runs 100% on your own hardware. Your browser becomes the computation engine. No files are uploaded to our servers, no queue limits exist, and calculations happen at the speed of light.</p>
+      </section>
+
+      <!-- Section 2: Core Engineering Pillars -->
+      <section class="content-card">
+        <h2 data-i18n="aboutSec2Title">Core Engineering Pillars</h2>
+        <div class="pillars-grid">
+          <div class="pillar-item">
+            <div class="pillar-icon">🔒</div>
+            <div class="pillar-title" data-i18n="pillar1Title">Zero-Server Uploads</div>
+            <div class="pillar-desc" data-i18n="pillar1Desc">All file conversions, image compressions, and PDF operations occur inside the browser memory. When you close the tab, all data vanishes.</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon">⚡</div>
+            <div class="pillar-title" data-i18n="pillar2Title">Zero-Latency Execution</div>
+            <div class="pillar-desc" data-i18n="pillar2Desc">Eliminating server hops and remote queue waits yields instant, real-time results for calculation and formatting tasks.</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon">🌍</div>
+            <div class="pillar-title" data-i18n="pillar3Title">Inclusive Multilingual UI</div>
+            <div class="pillar-desc" data-i18n="pillar3Desc">Native support for English, Arabic (with complete right-to-left layout), French, and Italian, remembering your preferences via local storage.</div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon">💎</div>
+            <div class="pillar-title" data-i18n="pillar4Title">Open &amp; Accessible</div>
+            <div class="pillar-desc" data-i18n="pillar4Desc">No subscriptions, no mandatory account registrations, no paywalls, and no artificial daily usage quotas.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: The 25-Tool Catalog -->
+      <section class="content-card">
+        <h2 data-i18n="aboutSec3Title">The Complete 25-Tool Catalog</h2>
+        <p data-i18n="aboutSec3P1">Our curated suite covers the essential utility workflows encountered by software developers, graphic designers, financial analysts, students, and digital creators:</p>
+        <ul>
+          <li><strong>Math &amp; Finance:</strong> Percentage Calculator, Compound Interest Calculator, Loan &amp; Amortization Schedules, Discount &amp; Sales Tax Calculator, GPA &amp; Grade Calculator.</li>
+          <li><strong>PDF &amp; File Engineering:</strong> PDF Merge, PDF Split &amp; Extract, PDF to Word Converter, CSV to JSON / JSON to CSV, Base64 File Encoder.</li>
+          <li><strong>Images &amp; Vector Graphics:</strong> Color Palette Extractor, SVG to PNG Converter, Image Resizer &amp; Crop, Image to Base64, Image Compressor &amp; WebP Optimizer, Multi-Size Favicon Builder.</li>
+          <li><strong>Text &amp; Development Utilities:</strong> Word &amp; Character Counter, Markdown Previewer &amp; HTML Exporter, Case Converter &amp; URL Slugifier, Text Diff &amp; Compare.</li>
+          <li><strong>Everyday Helpers:</strong> Date Difference &amp; Workdays, QR Code Generator, Age &amp; Milestone Calculator, Cryptographic Password Generator &amp; Entropy, Time Zone Meeting Planner.</li>
+        </ul>
+      </section>
+
+      <!-- Section 4: How We Sustain VantorKit -->
+      <section class="content-card">
+        <h2 data-i18n="aboutSec4Title">How We Sustain the Platform</h2>
+        <p data-i18n="aboutSec4P1">Operating high-availability infrastructure and continuous engineering requires ongoing investment. Rather than charging subscription fees or locking tools behind premium tiers, VantorKit is sustained through transparent, non-intrusive banner advertising powered by Google AdSense.</p>
+        <p data-i18n="aboutSec4P2">This advertising model ensures that every utility remains freely available to anyone across the globe, whether a student calculating their semester GPA or an engineer comparing code diffs on the fly.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Standardized Multi-Page Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal & Support">
+        <a href="/privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+        <a href="/terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
+        <a href="/about.html" class="footer-link active" data-i18n="footerAbout">About Us</a>
+        <a href="/contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+      </nav>
+      <p class="footer-copy" id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Standardized Language Selector & RTL Sync Logic -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      const I18N_PAGE = {
+        en: {
+          aboutBadge: "About VantorKit",
+          aboutTitle: 'Empowering Productivity Through <span style="background:linear-gradient(135deg,#34d399 0%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Private Web Utilities</span>',
+          aboutSubtitle: "We build fast, client-side digital tools that respect your time, bandwidth, and personal data privacy.",
+          aboutSec1Title: "Our Mission: High-Speed Tools Without Privacy Compromises",
+          stat1: "Production Tools",
+          stat2: "Client-Side Processed",
+          stat3: "Server File Uploads",
+          stat4: "Global Languages",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Terms of Service",
+          footerAbout: "About Us",
+          footerContact: "Contact",
+          footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
+        },
+        ar: {
+          aboutBadge: "عن فانتوركيت",
+          aboutTitle: 'تمكين الإنتاجية من خلال <span style="background:linear-gradient(135deg,#34d399 0%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">أدوات ويب خاصة وآمنة</span>',
+          aboutSubtitle: "نحن نبني أدوات رقمية سريعة تعمل داخل المتصفح تحترم وقتك وسرعة اتصالك وخصوصية بياناتك الشخصية.",
+          aboutSec1Title: "مهمتنا: أدوات فائقة السرعة بدون التضحية بالخصوصية",
+          stat1: "أداة إنتاجية جاهزة",
+          stat2: "معالجة محلية بالكامل",
+          stat3: "رفع ملفات إلى الخادم",
+          stat4: "لغات عالمية",
+          footerPriv: "سياسة الخصوصية",
+          footerTerms: "شروط الخدمة",
+          footerAbout: "من نحن",
+          footerContact: "اتصل بنا",
+          footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك."
+        },
+        fr: {
+          aboutBadge: "À propos de VantorKit",
+          aboutTitle: 'La productivité grâce aux <span style="background:linear-gradient(135deg,#34d399 0%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Utilitaires Web Privés</span>',
+          aboutSubtitle: "Des outils numériques rapides côté client qui respectent votre temps, votre bande passante et votre vie privée.",
+          aboutSec1Title: "Notre Mission : Rapidité et Respect de la Confidentialité",
+          stat1: "Outils de Production",
+          stat2: "Traitement Côté Client",
+          stat3: "Téléchargements Serveur",
+          stat4: "Langues Supportées",
+          footerPriv: "Politique de confidentialité",
+          footerTerms: "Conditions d'utilisation",
+          footerAbout: "À propos",
+          footerContact: "Contact",
+          footerText: "© 2026 VantorKit. Utilitaires Web rapides, gratuits et privés. Tout le traitement est effectué localement dans votre navigateur."
+        },
+        it: {
+          aboutBadge: "Informazioni su VantorKit",
+          aboutTitle: 'Potenziare la produttività con <span style="background:linear-gradient(135deg,#34d399 0%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Utilità Web Private</span>',
+          aboutSubtitle: "Sviluppiamo strumenti veloci lato client che rispettano il tuo tempo, la larghezza di banda e la privacy dei dati.",
+          aboutSec1Title: "La Nostra Missione: Massima Velocità Senza Compromessi",
+          stat1: "Strumenti Pronti",
+          stat2: "Elaborazione Locale",
+          stat3: "File Inviati al Server",
+          stat4: "Lingue Supportate",
+          footerPriv: "Informativa sulla privacy",
+          footerTerms: "Termini di servizio",
+          footerAbout: "Chi siamo",
+          footerContact: "Contatti",
+          footerText: "© 2026 VantorKit. Utilità web veloci, gratuite e private. Tutta l'elaborazione viene eseguita localmente nel browser."
+        }
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+
+        const t = I18N_PAGE[lang] || I18N_PAGE.en;
+        Object.keys(t).forEach(key => {
+          const els = document.querySelectorAll(`[data-i18n="${key}"]`);
+          els.forEach(el => {
+            el.innerHTML = t[key];
+          });
+        });
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          const isOpen = menu.classList.contains('open');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.onclick = toggleDropdown;
+
+        menu.querySelectorAll('.lang-option').forEach(opt => {
+          opt.onclick = function(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const selectedLang = opt.getAttribute('data-lang');
+            if (selectedLang) {
+              try { localStorage.setItem('vantorkit_lang', selectedLang); } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+            }
+            closeDropdown();
+          };
+        });
+
+        document.addEventListener('click', function(e) {
+          if (dropdown && !dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            closeDropdown();
+            toggleBtn.focus();
+          }
+        });
+
+        let savedLang = 'en';
+        try { savedLang = localStorage.getItem('vantorkit_lang') || 'en'; } catch (err) {}
+        if (!LANG_NAMES[savedLang]) savedLang = 'en';
+        updateActiveLanguageUI(savedLang);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+      } else {
+        setupDropdownInteractivity();
+      }
+    })();
+  </script>
+</body>
+</html>

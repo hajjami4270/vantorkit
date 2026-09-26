@@ -865,20 +865,50 @@
     }
 
     /* Footer */
-    footer {
+    footer, .site-footer {
       border-top: 1px solid var(--card-border);
       text-align: center;
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 1.5rem;
       color: var(--text-muted);
       font-size: 0.88rem;
       background: rgba(7, 9, 14, 0.85);
       margin-top: auto;
     }
 
-    footer p {
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #60a5fa;
+    }
+
+    .footer-copy, footer p {
       max-width: 600px;
       margin: 0 auto;
       line-height: 1.6;
+      color: #64748b;
+      font-size: 0.84rem;
     }
 
     /* Responsive Adjustments */
@@ -947,7 +977,7 @@
         <!-- Live Tool Count Pill -->
         <div class="badge-tools-count">
           <span class="pulse-dot"></span>
-          <span id="navToolCount" data-i18n="toolsCount">24 Tools Available</span>
+          <span id="navToolCount" data-i18n="toolsCount">25 Tools Available</span>
         </div>
 
         <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
@@ -1592,8 +1622,16 @@
     </div>
   </main>
 
-  <footer>
-    <p id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally.</p>
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal & Support">
+        <a href="/privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+        <a href="/terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
+        <a href="/about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
+        <a href="/contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+      </nav>
+      <p class="footer-copy" id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
   </footer>
 
   <!-- Complete Multi-Language (i18n) Engine & Interactive Filtering -->
@@ -1613,6 +1651,10 @@
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
           footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Terms of Service",
+          footerAbout: "About Us",
+          footerContact: "Contact",
           cat_all: "All Tools",
           cat_math: "Math & Finance",
           cat_files: "PDF & Files",
@@ -1739,6 +1781,10 @@
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
           footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك.",
+          footerPriv: "سياسة الخصوصية",
+          footerTerms: "شروط الخدمة",
+          footerAbout: "من نحن",
+          footerContact: "اتصل بنا",
           cat_all: "جميع الأدوات",
           cat_math: "الرياضيات والمالية",
           cat_files: "PDF والملفات",
@@ -1865,6 +1911,10 @@
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
           footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur.",
+          footerPriv: "Politique de confidentialité",
+          footerTerms: "Conditions d'utilisation",
+          footerAbout: "À propos",
+          footerContact: "Contact",
           cat_all: "Tous les Outils",
           cat_math: "Maths & Finance",
           cat_files: "PDF & Fichiers",
@@ -1991,6 +2041,10 @@
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
           footerText: "© 2026 VantorKit. Utilità web veloci, private e gratuite. Tutte le elaborazioni vengono eseguite localmente nel tuo browser.",
+          footerPriv: "Informativa sulla privacy",
+          footerTerms: "Termini di servizio",
+          footerAbout: "Chi siamo",
+          footerContact: "Contatti",
           cat_all: "Tutti gli Strumenti",
           cat_math: "Matematica & Finanza",
           cat_files: "PDF & File",
