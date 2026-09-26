@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Time Zone Meeting Planner — 24-Hour Overlap Matrix | VantorKit</title>
+  <meta name="description" content="Plan international team meetings and client calls across multiple time zones. Compare 24-hour visual overlap bars with working hour highlights. 100% private in-browser tool.">
+  <meta name="keywords" content="timezone meeting planner, world clock meeting planner, time zone converter, time zone overlap, business hours overlap, remote team time converter, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/timezone-planner.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Time Zone Meeting Planner | VantorKit">
+  <meta property="og:description" content="Compare overlapping business hours across major global timezones with an interactive 24-hour visual matrix.">
+  <meta property="og:url" content="https://vantorkit.com/tools/timezone-planner.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Time Zone Meeting Planner | VantorKit">
+  <meta name="twitter:description" content="Find the perfect meeting time across global time zones locally in your browser.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Time Zone Meeting Planner",
+        "url": "https://vantorkit.com/tools/timezone-planner.html",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5 Intl API.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side Time Zone Meeting Planner. Compare 24-hour working hours overlap across international cities and generate instant meeting invitations."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does this tool use an external time zone API?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The planner runs 100% locally in your browser using the native JavaScript ECMAScript Internationalization (Intl) API, guaranteeing instant performance and zero telemetry."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the tool handle Daylight Saving Time (DST)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Because the tool uses official IANA time zone identifiers (such as Europe/London or America/New_York) and your selected calendar date, all DST transitions and seasonal clock shifts are automatically calculated."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the standard working hours color codes?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Green represents standard business hours (09:00 - 17:00), Amber represents extended hours (07:00 - 09:00 and 17:00 - 20:00), and dark slate represents off-hours and sleep periods."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I copy the meeting times into an email or calendar invite?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! The 'Copy Meeting Times' button creates a formatted multi-line summary listing each city's exact local time, ready to paste directly into Google Calendar, Outlook, Slack, or email."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Tool Header */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--badge-text);
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .tool-header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tool-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Controls Bar Card */
+    .controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .controls-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .control-item {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      flex-wrap: wrap;
+    }
+    .control-label {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .date-input-mini {
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: .5rem .85rem;
+      border-radius: 10px;
+      font-size: .9rem;
+      outline: none;
+      font-family: inherit;
+    }
+    .date-input-mini::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+      cursor: pointer;
+    }
+
+    /* Search & Add City Box */
+    .city-add-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 440px;
+    }
+    .city-search-input {
+      width: 100%;
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .55rem 1rem .55rem 2.4rem;
+      color: #fff;
+      font-size: .9rem;
+      outline: none;
+      font-family: inherit;
+      transition: all .2s ease;
+    }
+    .city-search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .search-icon-inside {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    html[dir="rtl"] .city-search-input {
+      padding: .55rem 2.4rem .55rem 1rem;
+    }
+    html[dir="rtl"] .search-icon-inside {
+      left: auto;
+      right: 12px;
+    }
+    .city-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: rgba(14, 18, 28, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+      z-index: 500;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      display: none;
+      backdrop-filter: blur(20px);
+    }
+    .city-dropdown-menu.show {
+      display: block;
+    }
+    .city-option-item {
+      padding: .6rem 1rem;
+      font-size: .88rem;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all .15s ease;
+    }
+    .city-option-item:hover {
+      background: rgba(59, 130, 246, 0.18);
+      color: #60a5fa;
+    }
+    .city-option-tz {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem;
+      color: var(--text-muted);
+    }
+
+    /* Reference Time Slider Row */
+    .slider-time-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--card-border);
+      flex-wrap: wrap;
+    }
+    .time-slider {
+      flex: 1;
+      min-width: 200px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .slider-time-badge {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #60a5fa;
+      padding: .35rem .85rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    /* Working Hours Legend */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      font-size: .82rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding: 0 .5rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+    .legend-dot.work { background: #10b981; }
+    .legend-dot.extended { background: #f59e0b; }
+    .legend-dot.sleep { background: rgba(255, 255, 255, 0.12); }
+
+    /* Timeline Matrix Container */
+    .matrix-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+    .matrix-table {
+      min-width: 820px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* City Row */
+    .city-row {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 1.25rem;
+      align-items: center;
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: .85rem 1.1rem;
+      transition: all .2s ease;
+    }
+    .city-row.is-base {
+      border-color: rgba(59, 130, 246, 0.45);
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.15);
+    }
+    .city-meta-col {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+    .city-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .city-name {
+      font-size: .98rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .city-tz-label {
+      font-size: .75rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .city-row-actions {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+    }
+    .btn-set-base {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s ease;
+    }
+    .btn-set-base:hover, .btn-set-base.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      color: #60a5fa;
+    }
+    .btn-remove-city {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s ease;
+    }
+    .btn-remove-city:hover {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+      color: #f87171;
+    }
+
+    /* 24-Hour Timeline Bar */
+    .timeline-bar {
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      gap: 3px;
+      height: 42px;
+      position: relative;
+    }
+    .hour-block {
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: all .15s ease;
+      position: relative;
+      user-select: none;
+    }
+    .hour-block:hover {
+      transform: scaleY(1.1);
+      z-index: 2;
+    }
+    .hour-block.work {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+    .hour-block.extended {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+    .hour-block.sleep {
+      background: rgba(255, 255, 255, 0.03);
+      color: #64748b;
+    }
+    .hour-block.selected-hour {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+      box-shadow: 0 0 12px var(--accent-glow);
+      font-weight: 800;
+    }
+    .day-shift-badge {
+      font-size: .6rem;
+      position: absolute;
+      top: 1px;
+      right: 2px;
+      padding: 0 2px;
+      border-radius: 3px;
+      background: rgba(168, 85, 247, 0.3);
+      color: #c084fc;
+      line-height: 1;
+    }
+
+    /* Meeting Summary & Export Section */
+    .summary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      margin-bottom: 2rem;
+    }
+    .summary-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .summary-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .overlap-quality-badge {
+      padding: .3rem .85rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .overlap-quality-badge.good {
+      background: var(--success-bg);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+    .overlap-quality-badge.partial {
+      background: var(--warning-bg);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+    .overlap-quality-badge.poor {
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+
+    /* Meeting Cities Grid */
+    .meeting-cities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .meeting-city-card {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .meeting-city-name {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .meeting-city-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #93c5fd;
+    }
+    .meeting-city-sub {
+      font-size: .75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .btn-action-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-action-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-action-primary.copied {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-action-secondary {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .65rem 1.1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    /* Educational Guide & FAQ */
+    .edu-section {
+      margin-top: 3.5rem;
+    }
+    .edu-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .edu-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .edu-header p {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    html[dir="rtl"] .toast-box {
+      right: auto;
+      left: 24px;
+    }
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+    footer p { margin-bottom: .4rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+    }
+
+    .nav-brand span span {
+      color: #3b82f6 !important;
+    }
+
+    .lang-dropdown {
+      position: relative !important;
+      display: inline-block !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.8rem !important;
+      border-radius: 10px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .lang-btn .globe-icon {
+      color: var(--accent, #3b82f6) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn .chevron-icon {
+      transition: transform 0.2s ease !important;
+      opacity: 0.7 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-dropdown.active .lang-btn .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-nav">
+    <a href="../index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        <span data-i18n="badgePill">100% Client-Side • Native Intl Engine • Zero External APIs</span>
+      </div>
+      <h1 data-i18n="toolTitle">Time Zone Meeting Planner</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Coordinate cross-border team meetings, remote standups, and international client calls across multiple time zones with an interactive 24-hour visual overlap matrix.</p>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-card">
+      <div class="controls-top-row">
+        <!-- Date Selector -->
+        <div class="control-item">
+          <label class="control-label" for="meetingDate" data-i18n="meetingDateLabel">Meeting Date:</label>
+          <input type="date" class="date-input-mini" id="meetingDate">
+          <button type="button" class="btn-action-secondary" id="btnTodayDate" style="padding:.45rem .8rem;font-size:.8rem;" data-i18n="btnToday">Today</button>
+        </div>
+
+        <!-- Add City Dropdown -->
+        <div class="city-add-wrap">
+          <svg class="search-icon-inside" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" class="city-search-input" id="citySearchInput" placeholder="Add city (e.g. Casablanca, Tokyo, Dubai)..." autocomplete="off">
+          <div class="city-dropdown-menu" id="cityDropdownMenu"></div>
+        </div>
+      </div>
+
+      <!-- Time Slider Row -->
+      <div class="slider-time-row">
+        <span class="control-label" data-i18n="referenceHourLabel">Reference Meeting Hour:</span>
+        <input type="range" class="time-slider" id="hourSlider" min="0" max="23" value="14" step="1">
+        <span class="slider-time-badge" id="sliderTimeBadge">14:00</span>
+        <button type="button" class="btn-action-secondary" id="btnCurrentHour" style="padding:.4rem .85rem;font-size:.8rem;" data-i18n="btnCurrentHour">Current Hour</button>
+      </div>
+    </div>
+
+    <!-- Working Hours Legend -->
+    <div class="legend-bar">
+      <span class="legend-item"><span class="legend-dot work"></span> <span data-i18n="legendWork">Standard Work (09:00 - 17:00)</span></span>
+      <span class="legend-item"><span class="legend-dot extended"></span> <span data-i18n="legendExtended">Extended (07:00 - 09:00 &amp; 17:00 - 20:00)</span></span>
+      <span class="legend-item"><span class="legend-dot sleep"></span> <span data-i18n="legendSleep">Off-Hours / Sleep</span></span>
+      <span style="margin-left:auto;font-size:.8rem;color:var(--accent);" data-i18n="legendHint">💡 Click any hour block to set meeting time</span>
+    </div>
+
+    <!-- 24-Hour Timeline Matrix -->
+    <div class="matrix-card">
+      <div class="matrix-table" id="matrixTable">
+        <!-- Rendered City Rows -->
+      </div>
+    </div>
+
+    <!-- Meeting Summary & Export Box -->
+    <div class="summary-card">
+      <div class="summary-header-row">
+        <div class="summary-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span data-i18n="meetingSummaryTitle">Selected Meeting Time Slot</span>
+        </div>
+        <div class="overlap-quality-badge good" id="overlapBadge">
+          <span>●</span>
+          <span id="overlapBadgeText">Optimal Meeting Window</span>
+        </div>
+      </div>
+
+      <!-- Cities Time Grid -->
+      <div class="meeting-cities-grid" id="meetingCitiesGrid">
+        <!-- Rendered City Mini Cards -->
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-bar">
+        <button type="button" class="btn-action-primary" id="btnCopyTimes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span id="copyTimesBtnText" data-i18n="btnCopyInvite">Copy Meeting Times</span>
+        </button>
+        <button type="button" class="btn-action-secondary" id="btnResetAll">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>
+          <span data-i18n="btnReset">Reset to Defaults</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Educational Guide & FAQ Section -->
+    <section class="edu-section">
+      <div class="edu-header">
+        <h2 data-i18n="eduTitle">Remote Collaboration &amp; Time Zone Strategy</h2>
+        <p data-i18n="eduSub">Master asynchronous scheduling, Daylight Saving shifts, and distributed team dynamics.</p>
+      </div>
+
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          </div>
+          <h3 data-i18n="guide1Title">Finding the Golden Overlap</h3>
+          <p data-i18n="guide1Desc">The 'Golden Hour' occurs when participants across multiple continents fall within core business hours (09:00 - 17:00). When full overlap is impossible, rotate weekly meeting slots to distribute inconvenience fairly.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <h3 data-i18n="guide2Title">The Daylight Saving (DST) Trap</h3>
+          <p data-i18n="guide2Desc">Different countries transition into Daylight Saving Time on different weeks (e.g., the US in early March, Europe in late March, while the Southern Hemisphere moves inversely). Our planner calculates the exact date to prevent missed meetings.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <h3 data-i18n="guide3Title">Asynchronous by Default</h3>
+          <p data-i18n="guide3Desc">For teams spanning more than 8 time zones, reserve synchronous meetings for collaborative brainstorming, 1-on-1 feedback, and social bonding, delegating status updates to asynchronous channels like Slack or Loom.</p>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">How does the planner detect my local time zone?</h4>
+          <p data-i18n="faq1A">The tool uses your web browser's native <code>Intl.DateTimeFormat().resolvedOptions().timeZone</code> to accurately identify your local IANA time zone without querying any external IP location service.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What does the '+1d' or '-1d' badge mean?</h4>
+          <p data-i18n="faq2A">When a time slot in another city crosses midnight relative to your base reference date, the badge indicates that the meeting occurs on the following day (+1d) or the previous day (-1d) for that participant.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I change the reference base city?</h4>
+          <p data-i18n="faq3A">Click the star icon (★) on any city row to set it as the primary base. The 00:00 to 23:00 timeline axis will immediately re-anchor around that city's local day.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Are my meeting dates or selected cities tracked?</h4>
+          <p data-i18n="faq4A">Never. All calculations run strictly in client-side memory with zero analytics, zero cookies, and zero server logging.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Standard Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Free, fast, and 100% private client-side utility tools.</p>
+    <p>Zero cloud logs &bull; Client-side security &bull; No cookies &bull; <a href="../index.html">All Tools</a></p>
+  </footer>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          e.stopPropagation();
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.addEventListener('click', toggleDropdown);
+
+        menu.querySelectorAll('.lang-option').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedLang = btn.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+              if (typeof window.setLanguage === 'function') {
+                window.setLanguage(selectedLang);
+              }
+              closeDropdown();
+            }
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeDropdown();
+        });
+      }
+
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      updateActiveLanguageUI(initialLang);
+      document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+    })();
+  </script>
+
+  <!-- Time Zone Planner Engine & i18n Logic -->
+  <script>
+  (function() {
+    // 4-Language Translation Dictionaries
+    const I18N = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "100% Client-Side • Native Intl Engine • Zero External APIs",
+        toolTitle: "Time Zone Meeting Planner",
+        toolSubtitle: "Coordinate cross-border team meetings, remote standups, and international client calls across multiple time zones with an interactive 24-hour visual overlap matrix.",
+        meetingDateLabel: "Meeting Date:",
+        btnToday: "Today",
+        referenceHourLabel: "Reference Meeting Hour:",
+        btnCurrentHour: "Current Hour",
+        legendWork: "Standard Work (09:00 - 17:00)",
+        legendExtended: "Extended (07:00 - 09:00 & 17:00 - 20:00)",
+        legendSleep: "Off-Hours / Sleep",
+        legendHint: "💡 Click any hour block to set meeting time",
+        meetingSummaryTitle: "Selected Meeting Time Slot",
+        overlapOptimal: "Optimal Meeting Window (All within business hours)",
+        overlapPartial: "Workable Meeting Window (Some extended hours)",
+        overlapChallenging: "Challenging Window (Includes sleep/off-hours)",
+        btnCopyInvite: "Copy Meeting Times",
+        btnReset: "Reset to Defaults",
+        copiedToast: "Copied to clipboard!",
+        tagWork: "Work Hours",
+        tagExtended: "Extended",
+        tagSleep: "Sleep / Off",
+        eduTitle: "Remote Collaboration & Time Zone Strategy",
+        eduSub: "Master asynchronous scheduling, Daylight Saving shifts, and distributed team dynamics.",
+        guide1Title: "Finding the Golden Overlap",
+        guide1Desc: "The 'Golden Hour' occurs when participants across multiple continents fall within core business hours (09:00 - 17:00). When full overlap is impossible, rotate weekly meeting slots to distribute inconvenience fairly.",
+        guide2Title: "The Daylight Saving (DST) Trap",
+        guide2Desc: "Different countries transition into Daylight Saving Time on different weeks (e.g., the US in early March, Europe in late March, while the Southern Hemisphere moves inversely). Our planner calculates the exact date to prevent missed meetings.",
+        guide3Title: "Asynchronous by Default",
+        guide3Desc: "For teams spanning more than 8 time zones, reserve synchronous meetings for collaborative brainstorming, 1-on-1 feedback, and social bonding, delegating status updates to asynchronous channels like Slack or Loom.",
+        faq1Q: "How does the planner detect my local time zone?",
+        faq1A: "The tool uses your web browser's native Intl.DateTimeFormat().resolvedOptions().timeZone to accurately identify your local IANA time zone without querying any external IP location service.",
+        faq2Q: "What does the '+1d' or '-1d' badge mean?",
+        faq2A: "When a time slot in another city crosses midnight relative to your base reference date, the badge indicates that the meeting occurs on the following day (+1d) or the previous day (-1d) for that participant.",
+        faq3Q: "How do I change the reference base city?",
+        faq3A: "Click the star icon (★) on any city row to set it as the primary base. The 00:00 to 23:00 timeline axis will immediately re-anchor around that city's local day.",
+        faq4Q: "Are my meeting dates or selected cities tracked?",
+        faq4A: "Never. All calculations run strictly in client-side memory with zero analytics, zero cookies, and zero server logging."
+      },
+      ar: {
+        backLink: "الرجوع إلى الأدوات ←",
+        badgePill: "100% داخل المتصفح • محرك Intl أصلي • بدون واجهات خارجية",
+        toolTitle: "مخطط اجتماعات المناطق الزمنية",
+        toolSubtitle: "نسّق اجتماعات الفرق العالمية ومكالمات العملاء الدولية عبر المناطق الزمنية المختلفة باستخدام مصفوفة تداخل بصرية تفاعلية على مدار 24 ساعة.",
+        meetingDateLabel: "تاريخ الاجتماع:",
+        btnToday: "اليوم",
+        referenceHourLabel: "ساعة الاجتماع المرجعية:",
+        btnCurrentHour: "الساعة الحالية",
+        legendWork: "ساعات العمل الرسمية (09:00 - 17:00)",
+        legendExtended: "ساعات ممتدة (07:00 - 09:00 و 17:00 - 20:00)",
+        legendSleep: "أوقات الراحة / النوم",
+        legendHint: "💡 اضغط على أي خانة لتحديد موعد الاجتماع",
+        meetingSummaryTitle: "تفاصيل الموعد الزمني المختار",
+        overlapOptimal: "نافذة اجتماعات مثالية (الجميع في أوقات العمل)",
+        overlapPartial: "نافذة مقبولة (بعض الأطراف في ساعات ممتدة)",
+        overlapChallenging: "توقيت صعب (يشمل أوقات نوم لبعض الأطراف)",
+        btnCopyInvite: "نسخ مواعيد الاجتماع",
+        btnReset: "إعادة الضبط الافتراضي",
+        copiedToast: "تم النسخ إلى الحافظة بنجاح!",
+        tagWork: "أوقات عمل",
+        tagExtended: "ساعات ممتدة",
+        tagSleep: "خارج العمل / نوم",
+        eduTitle: "إدارة فرق العمل عن بُعد واستراتيجيات المناطق الزمنية",
+        eduSub: "تعرف على آليات التنسيق اللامتزامن، والتوقيت الصيفي، وتقليل إرهاق فروق التوقيت.",
+        guide1Title: "البحث عن التداخل الذهبي",
+        guide1Desc: "تتحقق 'الساعة الذهبية' عندما يقع المشاركون عبر القارات المختلفة ضمن ساعات العمل الأساسية. إذا استحال التوافق الكامل، قم بتدوير مواعيد الاجتماعات أسبوعياً.",
+        guide2Title: "فخ التوقيت الصيفي (DST)",
+        guide2Desc: "تنتقل الدول إلى التوقيت الصيفي في أسابيع متباينة (مثل أمريكا في أوائل مارس، وأوروبا في أواخره). يعتمد محركنا على تقويم التاريخ المختار لحساب التحولات بدقة.",
+        guide3Title: "التواصل غير المتزامن كأصل",
+        guide3Desc: "للفرق التي تتجاوز فروق التوقيت بينها 8 ساعات، يُفضل حصر الاجتماعات الحية للعصف الذهني والتواصل الإنساني، مع تفويض التحديثات الروتينية للرسائل غير المتزامنة.",
+        faq1Q: "كيف يكتشف المخطط منطقتي الزمنية المحلية؟",
+        faq1A: "يعتمد التطبيق على خاصية متصفحك الأصلية Intl.DateTimeFormat().resolvedOptions().timeZone لتحديد المنطقة بدقة دون طلب أي خوادم خارجية.",
+        faq2Q: "ماذا تعني علامة '+1d' أو '-1d'؟",
+        faq2A: "عندما تتجاوز الساعة في مدينة أخرى منتصف الليل بالنسبة للمدينة المرجعية، تشير العلامة إلى أن الاجتماع يقع في اليوم التالي (+1d) أو السابق (-1d).",
+        faq3Q: "كيف أغير المدينة المرجعية الأساسية؟",
+        faq3A: "اضغط على أيقونة النجمة (★) بجانب أي مدينة لجعلها المرجع الأساسي، وسيعاد ترتيب شريط الـ 24 ساعة وفقاً ليومها المحلي فوراً.",
+        faq4Q: "هل يتم تسجيل مواعيدي أو المدن المختارة؟",
+        faq4A: "أبداً. تتم كافة العمليات داخل ذاكرة متصفحك بنسبة 100% دون كوكيز أو تتبع."
+      },
+      fr: {
+        backLink: "← Retour aux outils",
+        badgePill: "100% Côté Client • Moteur Intl Natif • Zéro API Externe",
+        toolTitle: "Planificateur de Réunions Fuseaux Horaires",
+        toolSubtitle: "Coordonnez vos réunions d'équipe internationales et appels clients à travers les fuseaux horaires grâce à une matrice visuelle de chevauchement sur 24 heures.",
+        meetingDateLabel: "Date de la réunion :",
+        btnToday: "Aujourd'hui",
+        referenceHourLabel: "Heure de référence :",
+        btnCurrentHour: "Heure actuelle",
+        legendWork: "Heures de bureau (09h00 - 17h00)",
+        legendExtended: "Heures étendues (07h00 - 09h00 & 17h00 - 20h00)",
+        legendSleep: "Repos / Sommeil",
+        legendHint: "💡 Cliquez sur une heure pour fixer la réunion",
+        meetingSummaryTitle: "Créneau de Réunion Sélectionné",
+        overlapOptimal: "Créneau optimal (Tous pendant les heures ouvrées)",
+        overlapPartial: "Créneau acceptable (Horaires étendus pour certains)",
+        overlapChallenging: "Créneau difficile (Heures de nuit ou sommeil)",
+        btnCopyInvite: "Copier les horaires de réunion",
+        btnReset: "Réinitialiser",
+        copiedToast: "Copié dans le presse-papiers !",
+        tagWork: "Heures de travail",
+        tagExtended: "Horaires étendus",
+        tagSleep: "Nuit / Repos",
+        eduTitle: "Collaboration à Distance & Stratégie des Fuseaux Horaires",
+        eduSub: "Maîtrisez la planification asynchrone, les décalages d'heure d'été et la dynamique des équipes distribuées.",
+        guide1Title: "Trouver le Chevauchement Idéal",
+        guide1Desc: "Le 'créneau en or' intervient lorsque les collaborateurs sur plusieurs continents se trouvent simultanément dans leurs heures de travail normales. En cas de décalage extrême, alternez les horaires chaque semaine.",
+        guide2Title: "Le Piège du Changement d'Heure (DST)",
+        guide2Desc: "Les pays passent à l'heure d'été à des dates différentes. Notre planificateur s'appuie sur la date civile exacte pour recalculer automatiquement les écarts réels.",
+        guide3Title: "Privilégier l'Asynchrone",
+        guide3Desc: "Pour les équipes séparées par plus de 8 heures de décalage, réservez les visioconférences aux ateliers créatifs et utilisez les canaux asynchrones pour le suivi quotidien.",
+        faq1Q: "Comment l'outil détecte-t-il mon fuseau horaire ?",
+        faq1A: "L'application interroge l'API standard Intl.DateTimeFormat de votre navigateur pour identifier votre zone IANA sans faire appel à un serveur distant.",
+        faq2Q: "Que signifie le badge '+1d' ou '-1d' ?",
+        faq2A: "Si l'heure dans une ville franchit minuit par rapport à votre fuseau de référence, le badge indique que la réunion a lieu le lendemain (+1d) ou la veille (-1d).",
+        faq3Q: "Comment définir une nouvelle ville de référence ?",
+        faq3A: "Cliquez sur l'étoile (★) sur n'importe quelle ligne de ville pour en faire la référence de l'axe 24 heures.",
+        faq4Q: "Mes réunions et villes sont-elles enregistrées ?",
+        faq4A: "Jamais. Tout fonctionne localement dans la mémoire de votre navigateur, sans cookies ni transmission de données."
+      },
+      it: {
+        backLink: "← Torna agli strumenti",
+        badgePill: "100% Lato Client • Motore Intl Nativo • Zero API Esterne",
+        toolTitle: "Pianificatore Riunioni Fusi Orari",
+        toolSubtitle: "Coordina riunioni di team internazionali e call con clienti attraverso fusi orari diversi con una matrice visiva di sovrapposizione su 24 ore.",
+        meetingDateLabel: "Data riunione:",
+        btnToday: "Oggi",
+        referenceHourLabel: "Ora di riferimento:",
+        btnCurrentHour: "Ora attuale",
+        legendWork: "Orario lavorativo (09:00 - 17:00)",
+        legendExtended: "Orario esteso (07:00 - 09:00 & 17:00 - 20:00)",
+        legendSleep: "Ore notturne / Riposo",
+        legendHint: "💡 Clicca su un'ora per impostare la riunione",
+        meetingSummaryTitle: "Fascia Oraria Selezionata",
+        overlapOptimal: "Fascia ottimale (Tutti in orario lavorativo)",
+        overlapPartial: "Fascia praticabile (Orari estesi per alcuni)",
+        overlapChallenging: "Fascia difficile (Include ore di riposo/notturne)",
+        btnCopyInvite: "Copia orari riunione",
+        btnReset: "Reimposta predefiniti",
+        copiedToast: "Copiato negli appunti!",
+        tagWork: "Orario di lavoro",
+        tagExtended: "Orario esteso",
+        tagSleep: "Notte / Riposo",
+        eduTitle: "Collaborazione Remota & Gestione dei Fusi Orari",
+        eduSub: "Padroneggia la pianificazione asincrona, i cambi di ora legale e la gestione di team distribuiti.",
+        guide1Title: "Trovare la Sovrapposizione Perfetta",
+        guide1Desc: "La 'fascia d'oro' si verifica quando i partecipanti in diversi continenti rientrano nell'orario lavorativo standard. Se la sovrapposizione è limitata, ruota gli orari settimanalmente.",
+        guide2Title: "La Trappola dell'Ora Legale (DST)",
+        guide2Desc: "I diversi paesi passano all'ora legale in date differenti. Il nostro strumento calcola la data esatta per evitare errori di coordinamento stagionali.",
+        guide3Title: "Approccio Asincrono",
+        guide3Desc: "Per team con più di 8 ore di differenza, riserva le riunioni sincrone ai momenti strategici ed esegui i report su canali asincroni come Slack o Notion.",
+        faq1Q: "Come viene rilevato il mio fuso orario locale?",
+        faq1A: "L'applicazione utilizza l'API nativa Intl.DateTimeFormat del tuo browser per identificare la zona IANA senza consultare server esterni.",
+        faq2Q: "Cosa indicano i badge '+1d' o '-1d'?",
+        faq2A: "Se l'orario di un'altra città supera la mezzanotte rispetto alla città di riferimento, il badge indica che la call cadrà il giorno successivo (+1d) o precedente (-1d).",
+        faq3Q: "Come cambio la città di riferimento?",
+        faq3A: "Clicca sull'icona della stella (★) su una città per impostarla come riferimento principale dell'asse delle 24 ore.",
+        faq4Q: "I miei dati o le città selezionate vengono tracciati?",
+        faq4A: "Mai. L'elaborazione avviene al 100% nella memoria del tuo browser senza cookie né archiviazione remota."
+      }
+    };
+
+    // Major Global Cities Catalog
+    const GLOBAL_CITIES = [
+      { name: "Casablanca", country: "Morocco", tz: "Africa/Casablanca", flag: "🇲🇦" },
+      { name: "London", country: "United Kingdom", tz: "Europe/London", flag: "🇬🇧" },
+      { name: "Paris", country: "France", tz: "Europe/Paris", flag: "🇫🇷" },
+      { name: "New York", country: "USA", tz: "America/New_York", flag: "🇺🇸" },
+      { name: "San Francisco", country: "USA", tz: "America/Los_Angeles", flag: "🇺🇸" },
+      { name: "Dubai", country: "UAE", tz: "Asia/Dubai", flag: "🇦🇪" },
+      { name: "Tokyo", country: "Japan", tz: "Asia/Tokyo", flag: "🇯🇵" },
+      { name: "Sydney", country: "Australia", tz: "Australia/Sydney", flag: "🇦🇺" },
+      { name: "Singapore", country: "Singapore", tz: "Asia/Singapore", flag: "🇸🇬" },
+      { name: "Berlin", country: "Germany", tz: "Europe/Berlin", flag: "🇩🇪" },
+      { name: "Madrid", country: "Spain", tz: "Europe/Madrid", flag: "🇪🇸" },
+      { name: "Rome", country: "Italy", tz: "Europe/Rome", flag: "🇮🇹" },
+      { name: "Amsterdam", country: "Netherlands", tz: "Europe/Amsterdam", flag: "🇳🇱" },
+      { name: "Toronto", country: "Canada", tz: "America/Toronto", flag: "🇨🇦" },
+      { name: "Chicago", country: "USA", tz: "America/Chicago", flag: "🇺🇸" },
+      { name: "Los Angeles", country: "USA", tz: "America/Los_Angeles", flag: "🇺🇸" },
+      { name: "São Paulo", country: "Brazil", tz: "America/Sao_Paulo", flag: "🇧🇷" },
+      { name: "Buenos Aires", country: "Argentina", tz: "America/Argentina/Buenos_Aires", flag: "🇦🇷" },
+      { name: "Mexico City", country: "Mexico", tz: "America/Mexico_City", flag: "🇲🇽" },
+      { name: "Cairo", country: "Egypt", tz: "Africa/Cairo", flag: "🇪🇬" },
+      { name: "Riyadh", country: "Saudi Arabia", tz: "Asia/Riyadh", flag: "🇸🇦" },
+      { name: "Istanbul", country: "Turkey", tz: "Europe/Istanbul", flag: "🇹🇷" },
+      { name: "Mumbai / New Delhi", country: "India", tz: "Asia/Kolkata", flag: "🇮🇳" },
+      { name: "Bangkok", country: "Thailand", tz: "Asia/Bangkok", flag: "🇹🇭" },
+      { name: "Hong Kong", country: "Hong Kong", tz: "Asia/Hong_Kong", flag: "🇭🇰" },
+      { name: "Seoul", country: "South Korea", tz: "Asia/Seoul", flag: "🇰🇷" },
+      { name: "Melbourne", country: "Australia", tz: "Australia/Melbourne", flag: "🇦🇺" },
+      { name: "Auckland", country: "New Zealand", tz: "Pacific/Auckland", flag: "🇳🇿" },
+      { name: "Honolulu", country: "USA", tz: "Pacific/Honolulu", flag: "🇺🇸" },
+      { name: "Johannesburg", country: "South Africa", tz: "Africa/Johannesburg", flag: "🇿🇦" },
+      { name: "Lagos", country: "Nigeria", tz: "Africa/Lagos", flag: "🇳🇬" },
+      { name: "Nairobi", country: "Kenya", tz: "Africa/Nairobi", flag: "🇰🇪" }
+    ];
+
+    // State Variables
+    let activeLang = 'en';
+    let selectedDate = new Date().toISOString().split('T')[0];
+    let selectedHour = 14; // Base hour 0 - 23
+    let baseCityIndex = 0; // Index of the primary base city in activeCities
+
+    // Detect Local Time Zone
+    const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    const localCityName = localTz.split('/').pop().replace(/_/g, ' ') + " (Local)";
+
+    // Initial Active Cities
+    let activeCities = [
+      { name: localCityName, country: "Your Location", tz: localTz, flag: "📍" },
+      { name: "London", country: "United Kingdom", tz: "Europe/London", flag: "🇬🇧" },
+      { name: "New York", country: "USA", tz: "America/New_York", flag: "🇺🇸" },
+      { name: "Paris", country: "France", tz: "Europe/Paris", flag: "🇫🇷" }
+    ];
+
+    // DOM Elements
+    const meetingDateInput = document.getElementById('meetingDate');
+    const btnTodayDate = document.getElementById('btnTodayDate');
+    const hourSlider = document.getElementById('hourSlider');
+    const sliderTimeBadge = document.getElementById('sliderTimeBadge');
+    const btnCurrentHour = document.getElementById('btnCurrentHour');
+    const citySearchInput = document.getElementById('citySearchInput');
+    const cityDropdownMenu = document.getElementById('cityDropdownMenu');
+    const matrixTable = document.getElementById('matrixTable');
+    const meetingCitiesGrid = document.getElementById('meetingCitiesGrid');
+    const overlapBadge = document.getElementById('overlapBadge');
+    const overlapBadgeText = document.getElementById('overlapBadgeText');
+    const btnCopyTimes = document.getElementById('btnCopyTimes');
+    const copyTimesBtnText = document.getElementById('copyTimesBtnText');
+    const btnResetAll = document.getElementById('btnResetAll');
+    const toastBox = document.getElementById('toastBox');
+    const toastMessage = document.getElementById('toastMessage');
+
+    // Toast Utility
+    let toastTimer = null;
+    function showToast(msg) {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastMessage.textContent = msg;
+      toastBox.classList.add('show');
+      toastTimer = setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2500);
+    }
+
+    // Date/Time Calculation Utilities
+    function getUtcForTzHour(dateStr, hour, tz) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      let guess = new Date(Date.UTC(y, m - 1, d, hour, 0, 0));
+      
+      const f = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', hour12: false
+      });
+      
+      for (let i = 0; i < 3; i++) {
+        const parts = {};
+        f.formatToParts(guess).forEach(p => parts[p.type] = p.value);
+        const tzHour = parseInt(parts.hour === '24' ? '0' : parts.hour, 10);
+        const tzDay = parseInt(parts.day, 10);
+        const diffHours = (tzDay - d) * 24 + (tzHour - hour);
+        if (diffHours === 0) break;
+        guess = new Date(guess.getTime() - diffHours * 3600000);
+      }
+      return guess;
+    }
+
+    function getTimePartsInTz(utcDate, tz) {
+      const f = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', second: 'numeric',
+        hour12: false
+      });
+      const parts = {};
+      f.formatToParts(utcDate).forEach(p => parts[p.type] = p.value);
+      return {
+        year: parseInt(parts.year, 10),
+        month: parseInt(parts.month, 10),
+        day: parseInt(parts.day, 10),
+        hour: parseInt(parts.hour === '24' ? '0' : parts.hour, 10),
+        minute: parseInt(parts.minute, 10)
+      };
+    }
+
+    function getTzOffsetString(date, tz) {
+      try {
+        const str = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz,
+          timeZoneName: 'shortOffset'
+        }).format(date);
+        const match = str.match(/GMT([+-]\d+(:?\d+)?)/);
+        return match ? 'UTC' + match[1] : 'UTC';
+      } catch (e) {
+        return 'UTC';
+      }
+    }
+
+    function getHourStatus(hour) {
+      if (hour >= 9 && hour < 17) return 'work';
+      if ((hour >= 7 && hour < 9) || (hour >= 17 && hour < 20)) return 'extended';
+      return 'sleep';
+    }
+
+    // Render 24-Hour Timeline Matrix
+    function renderMatrix() {
+      matrixTable.innerHTML = '';
+
+      if (baseCityIndex >= activeCities.length) {
+        baseCityIndex = 0;
+      }
+      const baseCity = activeCities[baseCityIndex] || activeCities[0];
+
+      // Compute UTC moments for each hour 0 - 23 in baseCity
+      const hourlyUtcMoments = [];
+      for (let h = 0; h < 24; h++) {
+        hourlyUtcMoments.push(getUtcForTzHour(selectedDate, h, baseCity.tz));
+      }
+
+      // Base date day number
+      const baseDayNum = parseInt(selectedDate.split('-')[2], 10);
+
+      activeCities.forEach((city, cityIdx) => {
+        const isBase = cityIdx === baseCityIndex;
+        const row = document.createElement('div');
+        row.className = `city-row ${isBase ? 'is-base' : ''}`;
+
+        // City Meta Column
+        const offsetStr = getTzOffsetString(hourlyUtcMoments[selectedHour], city.tz);
+        const metaCol = document.createElement('div');
+        metaCol.className = 'city-meta-col';
+        metaCol.innerHTML = `
+          <div class="city-title-group">
+            <span class="city-name"><span>${city.flag}</span> <span>${city.name}</span></span>
+            <span class="city-tz-label">${offsetStr} &bull; ${city.country}</span>
+          </div>
+          <div class="city-row-actions">
+            <button type="button" class="btn-set-base ${isBase ? 'active' : ''}" title="Set as primary reference base" data-idx="${cityIdx}">★</button>
+            ${activeCities.length > 1 ? `<button type="button" class="btn-remove-city" title="Remove city" data-idx="${cityIdx}">✕</button>` : ''}
+          </div>
+        `;
+
+        // 24-Hour Timeline Bar
+        const bar = document.createElement('div');
+        bar.className = 'timeline-bar';
+
+        for (let h = 0; h < 24; h++) {
+          const utcMoment = hourlyUtcMoments[h];
+          const timeParts = getTimePartsInTz(utcMoment, city.tz);
+          const localHour = timeParts.hour;
+          const status = getHourStatus(localHour);
+          const isSelected = h === selectedHour;
+
+          // Day shift relative to base date
+          const diffDays = timeParts.day - baseDayNum;
+          let shiftBadge = '';
+          if (diffDays === 1 || diffDays < -20) {
+            shiftBadge = '<span class="day-shift-badge">+1d</span>';
+          } else if (diffDays === -1 || diffDays > 20) {
+            shiftBadge = '<span class="day-shift-badge">-1d</span>';
+          }
+
+          const block = document.createElement('div');
+          block.className = `hour-block ${status} ${isSelected ? 'selected-hour' : ''}`;
+          block.innerHTML = `<span>${String(localHour).padStart(2, '0')}</span>${shiftBadge}`;
+          block.title = `${city.name}: ${String(localHour).padStart(2, '0')}:00`;
+
+          block.addEventListener('click', () => {
+            selectedHour = h;
+            hourSlider.value = h;
+            sliderTimeBadge.textContent = `${String(h).padStart(2, '0')}:00`;
+            renderMatrix();
+            renderSummary();
+          });
+
+          bar.appendChild(block);
+        }
+
+        row.appendChild(metaCol);
+        row.appendChild(bar);
+        matrixTable.appendChild(row);
+      });
+
+      // Attach base toggle & remove listeners
+      matrixTable.querySelectorAll('.btn-set-base').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          baseCityIndex = parseInt(btn.getAttribute('data-idx'), 10);
+          renderMatrix();
+          renderSummary();
+        });
+      });
+
+      matrixTable.querySelectorAll('.btn-remove-city').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(btn.getAttribute('data-idx'), 10);
+          if (activeCities.length > 1) {
+            activeCities.splice(idx, 1);
+            if (baseCityIndex >= activeCities.length) {
+              baseCityIndex = 0;
+            }
+            renderMatrix();
+            renderSummary();
+          }
+        });
+      });
+    }
+
+    // Render Selected Meeting Summary
+    function renderSummary() {
+      meetingCitiesGrid.innerHTML = '';
+
+      if (baseCityIndex >= activeCities.length) {
+        baseCityIndex = 0;
+      }
+      const baseCity = activeCities[baseCityIndex] || activeCities[0];
+      const selectedUtc = getUtcForTzHour(selectedDate, selectedHour, baseCity.tz);
+
+      let workCount = 0;
+      let extendedCount = 0;
+      let sleepCount = 0;
+
+      const dict = I18N[activeLang] || I18N.en;
+
+      activeCities.forEach(city => {
+        const timeParts = getTimePartsInTz(selectedUtc, city.tz);
+        const status = getHourStatus(timeParts.hour);
+        const offset = getTzOffsetString(selectedUtc, city.tz);
+
+        if (status === 'work') workCount++;
+        else if (status === 'extended') extendedCount++;
+        else sleepCount++;
+
+        let statusText = dict.tagWork;
+        let statusClass = 'color:#34d399;';
+        if (status === 'extended') {
+          statusText = dict.tagExtended;
+          statusClass = 'color:#fbbf24;';
+        } else if (status === 'sleep') {
+          statusText = dict.tagSleep;
+          statusClass = 'color:#94a3b8;';
+        }
+
+        const card = document.createElement('div');
+        card.className = 'meeting-city-card';
+        card.innerHTML = `
+          <div class="meeting-city-name">${city.flag} ${city.name}</div>
+          <div class="meeting-city-time">${String(timeParts.hour).padStart(2, '0')}:00</div>
+          <div class="meeting-city-sub">
+            <span>${offset}</span>
+            <span style="${statusClass}font-weight:600;">${statusText}</span>
+          </div>
+        `;
+        meetingCitiesGrid.appendChild(card);
+      });
+
+      // Calculate Overlap Quality
+      if (sleepCount === 0 && extendedCount === 0) {
+        overlapBadge.className = 'overlap-quality-badge good';
+        overlapBadgeText.textContent = dict.overlapOptimal;
+      } else if (sleepCount === 0) {
+        overlapBadge.className = 'overlap-quality-badge partial';
+        overlapBadgeText.textContent = dict.overlapPartial;
+      } else {
+        overlapBadge.className = 'overlap-quality-badge poor';
+        overlapBadgeText.textContent = dict.overlapChallenging;
+      }
+    }
+
+    // Autocomplete Search Dropdown
+    function setupCitySearch() {
+      citySearchInput.addEventListener('input', () => {
+        const q = citySearchInput.value.trim().toLowerCase();
+        if (!q) {
+          cityDropdownMenu.classList.remove('show');
+          return;
+        }
+
+        const matches = GLOBAL_CITIES.filter(c => 
+          c.name.toLowerCase().includes(q) || 
+          c.country.toLowerCase().includes(q) ||
+          c.tz.toLowerCase().includes(q)
+        );
+
+        cityDropdownMenu.innerHTML = '';
+        if (matches.length === 0) {
+          cityDropdownMenu.innerHTML = `<div class="city-option-item" style="color:var(--text-muted);">No matching cities</div>`;
+        } else {
+          matches.slice(0, 10).forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'city-option-item';
+            item.innerHTML = `
+              <span>${c.flag} <strong>${c.name}</strong> (${c.country})</span>
+              <span class="city-option-tz">${c.tz}</span>
+            `;
+            item.addEventListener('click', () => {
+              // Add city if not already present
+              const exists = activeCities.some(ac => ac.name === c.name || ac.tz === c.tz);
+              if (!exists) {
+                activeCities.push({ ...c });
+                renderMatrix();
+                renderSummary();
+                showToast(`Added ${c.name}`);
+              } else {
+                showToast(`${c.name} is already in the list`);
+              }
+              citySearchInput.value = '';
+              cityDropdownMenu.classList.remove('show');
+            });
+            cityDropdownMenu.appendChild(item);
+          });
+        }
+        cityDropdownMenu.classList.add('show');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!citySearchInput.contains(e.target) && !cityDropdownMenu.contains(e.target)) {
+          cityDropdownMenu.classList.remove('show');
+        }
+      });
+    }
+
+    // Set Defaults
+    function setDefaults() {
+      const now = new Date();
+      selectedDate = now.toISOString().split('T')[0];
+      selectedHour = now.getHours();
+      meetingDateInput.value = selectedDate;
+      hourSlider.value = selectedHour;
+      sliderTimeBadge.textContent = `${String(selectedHour).padStart(2, '0')}:00`;
+      baseCityIndex = 0;
+
+      activeCities = [
+        { name: localCityName, country: "Your Location", tz: localTz, flag: "📍" },
+        { name: "London", country: "United Kingdom", tz: "Europe/London", flag: "🇬🇧" },
+        { name: "New York", country: "USA", tz: "America/New_York", flag: "🇺🇸" },
+        { name: "Paris", country: "France", tz: "Europe/Paris", flag: "🇫🇷" }
+      ];
+
+      renderMatrix();
+      renderSummary();
+    }
+
+    // Event Listeners
+    meetingDateInput.addEventListener('change', () => {
+      selectedDate = meetingDateInput.value;
+      renderMatrix();
+      renderSummary();
+    });
+
+    btnTodayDate.addEventListener('click', () => {
+      selectedDate = new Date().toISOString().split('T')[0];
+      meetingDateInput.value = selectedDate;
+      renderMatrix();
+      renderSummary();
+    });
+
+    hourSlider.addEventListener('input', (e) => {
+      selectedHour = parseInt(e.target.value, 10);
+      sliderTimeBadge.textContent = `${String(selectedHour).padStart(2, '0')}:00`;
+      renderMatrix();
+      renderSummary();
+    });
+
+    btnCurrentHour.addEventListener('click', () => {
+      selectedHour = new Date().getHours();
+      hourSlider.value = selectedHour;
+      sliderTimeBadge.textContent = `${String(selectedHour).padStart(2, '0')}:00`;
+      renderMatrix();
+      renderSummary();
+    });
+
+    btnResetAll.addEventListener('click', () => {
+      setDefaults();
+      showToast("Reset to defaults");
+    });
+
+    // Copy Meeting Invitation Text
+    btnCopyTimes.addEventListener('click', () => {
+      if (baseCityIndex >= activeCities.length) baseCityIndex = 0;
+      const baseCity = activeCities[baseCityIndex] || activeCities[0];
+      const selectedUtc = getUtcForTzHour(selectedDate, selectedHour, baseCity.tz);
+
+      let text = `Global Meeting Invitation\n`;
+      text += `Date: ${selectedDate}\n\n`;
+
+      activeCities.forEach(city => {
+        const timeParts = getTimePartsInTz(selectedUtc, city.tz);
+        const offset = getTzOffsetString(selectedUtc, city.tz);
+        text += `• ${city.name} (${offset}): ${String(timeParts.hour).padStart(2, '0')}:00\n`;
+      });
+
+      text += `\nScheduled with VantorKit (https://vantorkit.com/tools/timezone-planner.html)`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btnCopyTimes.classList.add('copied');
+        copyTimesBtnText.textContent = "✓ Copied!";
+        showToast(I18N[activeLang]?.copiedToast || "Copied to clipboard!");
+        setTimeout(() => {
+          btnCopyTimes.classList.remove('copied');
+          copyTimesBtnText.textContent = I18N[activeLang]?.btnCopyInvite || "Copy Meeting Times";
+        }, 2000);
+      });
+    });
+
+    // i18n Translation Switcher
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      activeLang = lang;
+      const dict = I18N[lang];
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      renderMatrix();
+      renderSummary();
+    }
+
+    // Expose setLanguage globally
+    window.setLanguage = setLanguage;
+
+    // Initialization
+    setupCitySearch();
+    setDefaults();
+    const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(initialLang);
+
+  })();
+  </script>
+</body>
+</html>
