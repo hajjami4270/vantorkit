@@ -1,0 +1,2299 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Date Difference &amp; Workdays Calculator — Business Days &amp; Calendar Time | VantorKit</title>
+  <meta name="description" content="Calculate total days, business workdays, and weekends between two dates. Add or subtract calendar and working days with custom weekend filters. 100% private in-browser tool.">
+  <meta name="keywords" content="date difference calculator, business days calculator, workdays calculator, days between dates, add days to date, subtract days from date, weekend filter, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/date-difference.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Date Difference &amp; Workdays Calculator | VantorKit">
+  <meta property="og:description" content="Calculate calendar days, working business days, weekends, and equivalent hours between dates with custom weekend filters.">
+  <meta property="og:url" content="https://vantorkit.com/tools/date-difference.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Date Difference &amp; Workdays Calculator | VantorKit">
+  <meta name="twitter:description" content="Calculate business working days and date differences locally with zero server telemetry.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Date Difference & Workdays Calculator",
+        "url": "https://vantorkit.com/tools/date-difference.html",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side Date Difference and Workdays Calculator. Calculate calendar days, business working days, weekends, and equivalent hours, or add/subtract business days with custom weekend filters."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How does the calculator determine business working days?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The calculator iterates across the date interval and checks each day's day-of-week against your selected weekend definition (e.g. Saturday & Sunday for Western standards, or Friday & Saturday for Gulf standards), deducting any specified public holidays."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Should the end date be included in date difference calculations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "By default in software and calendar arithmetic, end dates are excluded (difference = End - Start). However, for work contracts, hotel stays, or project milestones, enabling 'Include End Date' counts both boundary days (+1 day)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this tool work for Middle East / Gulf weekend schedules?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. You can switch the weekend filter to 'Friday & Saturday' to accurately calculate business working days across the Middle East and Gulf region, or select 'Sunday only'."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are my dates or calculation history logged on a server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All calculations run strictly in your web browser memory using JavaScript Date algorithms with zero network telemetry or tracking."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1140px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* Tool Header */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--badge-text);
+      padding: .4rem .9rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(8px);
+    }
+    .tool-header h1 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tool-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Primary Calculator Mode Tabs */
+    .calc-tabs-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .calc-tabs-nav {
+      background: rgba(14, 18, 28, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: .35rem;
+      display: inline-flex;
+      gap: .35rem;
+      backdrop-filter: blur(12px);
+    }
+    .calc-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: .65rem 1.4rem;
+      border-radius: 10px;
+      font-size: .92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .calc-tab-btn:hover {
+      color: #fff;
+    }
+    .calc-tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Calculator View Container */
+    .calc-view {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .calc-view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Layout Grids */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .input-card, .results-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+    }
+    .card-title svg {
+      color: var(--accent);
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: .5rem;
+    }
+    .date-input-wrap {
+      position: relative;
+    }
+    .date-input, .select-input, .num-input {
+      width: 100%;
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      color: #fff;
+      font-size: .95rem;
+      outline: none;
+      transition: all .2s ease;
+      font-family: inherit;
+    }
+    .date-input:focus, .select-input:focus, .num-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    .date-input::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+      cursor: pointer;
+    }
+
+    /* Quick Presets Pills */
+    .preset-pills-row {
+      display: flex;
+      gap: .4rem;
+      margin-top: .45rem;
+      flex-wrap: wrap;
+    }
+    .btn-preset {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s ease;
+    }
+    .btn-preset:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Swap Dates Button */
+    .swap-dates-row {
+      display: flex;
+      justify-content: center;
+      margin: -.5rem 0 .75rem;
+    }
+    .btn-swap-dates {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+    }
+    .btn-swap-dates:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: var(--accent);
+      color: #60a5fa;
+      transform: rotate(180deg);
+    }
+
+    /* Checkbox & Options */
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .88rem;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+    }
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    /* Segmented Controls */
+    .segmented-control {
+      display: flex;
+      background: rgba(8, 11, 18, 0.85);
+      padding: .25rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      gap: .25rem;
+    }
+    .segmented-btn {
+      flex: 1;
+      text-align: center;
+      padding: .6rem .8rem;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .segmented-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Results Dashboard Elements */
+    .hero-stat-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.7) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-stat-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-stat-label {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .35rem;
+    }
+    .hero-stat-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: .4rem;
+    }
+    .hero-stat-sub {
+      font-size: .88rem;
+      color: #93c5fd;
+    }
+
+    /* 3-Column Metrics Row */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 600px) {
+      .metrics-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .metric-pill-card {
+      background: rgba(11, 15, 25, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem .85rem;
+      text-align: center;
+    }
+    .metric-pill-title {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-bottom: .25rem;
+    }
+    .metric-pill-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .metric-pill-val.working {
+      color: #34d399;
+    }
+    .metric-pill-val.weekend {
+      color: #f87171;
+    }
+    .metric-pill-sub {
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin-top: .15rem;
+    }
+
+    /* Detailed Breakdown Card */
+    .detailed-breakdown-box {
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .breakdown-title {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .breakdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .breakdown-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .breakdown-item-label {
+      color: var(--text-muted);
+    }
+    .breakdown-item-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #93c5fd;
+    }
+
+    /* Actions Bar */
+    .results-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .btn-action-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-action-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-action-primary.copied {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-action-secondary {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: .65rem 1.1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    /* Tab 2 Add/Subtract Specific Styling */
+    .target-date-display {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.7) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+    .target-weekday-badge {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid var(--accent);
+      color: #60a5fa;
+      padding: .25rem .75rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      margin-bottom: .6rem;
+    }
+    .target-date-heading {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+      line-height: 1.2;
+    }
+    .target-date-sub {
+      color: var(--text-muted);
+      font-size: .92rem;
+    }
+
+    /* Educational Guide & FAQ */
+    .edu-section {
+      margin-top: 3.5rem;
+    }
+    .edu-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .edu-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .edu-header p {
+      color: var(--text-muted);
+      font-size: .95rem;
+    }
+    .guide-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    html[dir="rtl"] .toast-box {
+      right: auto;
+      left: 24px;
+    }
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+    footer p { margin-bottom: .4rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+    }
+
+    .nav-brand span span {
+      color: #3b82f6 !important;
+    }
+
+    .lang-dropdown {
+      position: relative !important;
+      display: inline-block !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.8rem !important;
+      border-radius: 10px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .lang-btn .globe-icon {
+      color: var(--accent, #3b82f6) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn .chevron-icon {
+      transition: transform 0.2s ease !important;
+      opacity: 0.7 !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-dropdown.active .lang-btn .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-nav">
+    <a href="../index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        <span data-i18n="badgePill">100% Client-Side • Instant Date Math • Custom Weekend Filters</span>
+      </div>
+      <h1 data-i18n="toolTitle">Date Difference &amp; Workdays</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Calculate calendar days, business working days, weekends, and equivalent hours between dates, or add/subtract business days with custom weekend filters.</p>
+    </header>
+
+    <!-- Calculation Mode Switcher Tabs -->
+    <div class="calc-tabs-bar">
+      <div class="calc-tabs-nav">
+        <button type="button" class="calc-tab-btn active" data-view="diff" id="btnTabDiff">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span data-i18n="tabDiffTitle">Difference Between Dates</span>
+        </button>
+        <button type="button" class="calc-tab-btn" data-view="addsub" id="btnTabAddSub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span data-i18n="tabAddSubTitle">Add or Subtract Days</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 1: Difference Between Dates -->
+    <div class="calc-view active" id="viewDiff">
+      <div class="calc-grid">
+        <!-- Input Parameters Card -->
+        <div class="input-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span data-i18n="intervalSettings">Interval Settings</span>
+          </h2>
+
+          <!-- Start Date -->
+          <div class="form-group">
+            <label class="form-label" for="startDate" data-i18n="startDateLabel">Start Date</label>
+            <div class="date-input-wrap">
+              <input type="date" class="date-input" id="startDate">
+            </div>
+            <div class="preset-pills-row">
+              <button type="button" class="btn-preset" data-action="start-today" data-i18n="presetToday">Today</button>
+              <button type="button" class="btn-preset" data-action="start-yesterday" data-i18n="presetYesterday">Yesterday</button>
+              <button type="button" class="btn-preset" data-action="start-first-year" data-i18n="presetStartYear">Jan 1</button>
+            </div>
+          </div>
+
+          <!-- Swap Dates Button -->
+          <div class="swap-dates-row">
+            <button type="button" class="btn-swap-dates" id="btnSwapDates" title="Swap Dates" aria-label="Swap Start and End Dates">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 16 3 12 7 8"></polyline><line x1="21" y1="12" x2="3" y2="12"></line><polyline points="17 8 21 12 17 16"></polyline></svg>
+            </button>
+          </div>
+
+          <!-- End Date -->
+          <div class="form-group">
+            <label class="form-label" for="endDate" data-i18n="endDateLabel">End Date</label>
+            <div class="date-input-wrap">
+              <input type="date" class="date-input" id="endDate">
+            </div>
+            <div class="preset-pills-row">
+              <button type="button" class="btn-preset" data-action="end-today" data-i18n="presetToday">Today</button>
+              <button type="button" class="btn-preset" data-action="end-plus7">+7d</button>
+              <button type="button" class="btn-preset" data-action="end-plus30">+30d</button>
+              <button type="button" class="btn-preset" data-action="end-plus90">+90d</button>
+              <button type="button" class="btn-preset" data-action="end-last-year" data-i18n="presetEndYear">Dec 31</button>
+            </div>
+          </div>
+
+          <!-- Include End Date Checkbox -->
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="checkIncludeEnd">
+              <span data-i18n="includeEndLabel">Include End Date in count (+1 day)</span>
+            </label>
+          </div>
+
+          <!-- Weekend Filter Definition -->
+          <div class="form-group">
+            <label class="form-label" for="selectWeekend" data-i18n="weekendFilterLabel">Weekend Days (Non-Working)</label>
+            <select class="select-input" id="selectWeekend">
+              <option value="sat-sun" selected data-i18n="optSatSun">Saturday &amp; Sunday (Western / International)</option>
+              <option value="fri-sat" data-i18n="optFriSat">Friday &amp; Saturday (Middle East / Gulf)</option>
+              <option value="sun" data-i18n="optSunOnly">Sunday only</option>
+              <option value="none" data-i18n="optNoWeekends">None (Continuous 7-Day Week)</option>
+            </select>
+          </div>
+
+          <!-- Public Holidays to Exclude -->
+          <div class="form-group">
+            <label class="form-label" for="inputHolidays" data-i18n="holidaysLabel">Public Holidays to Exclude (Count)</label>
+            <input type="number" class="num-input" id="inputHolidays" min="0" max="365" value="0">
+          </div>
+        </div>
+
+        <!-- Results Dashboard Card -->
+        <div class="results-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span data-i18n="calculationResults">Calculation Results</span>
+          </h2>
+
+          <!-- Hero Highlight Card: Total Days -->
+          <div class="hero-stat-card">
+            <div class="hero-stat-label" data-i18n="totalCalendarDays">Total Calendar Days</div>
+            <div class="hero-stat-value" id="resTotalDays">0 Days</div>
+            <div class="hero-stat-sub" id="resSpanSummary">Select dates to calculate</div>
+          </div>
+
+          <!-- 3-Metrics Summary Grid -->
+          <div class="metrics-row">
+            <div class="metric-pill-card">
+              <div class="metric-pill-title" data-i18n="workingDaysTitle">Working Days</div>
+              <div class="metric-pill-val working" id="resWorkDays">0</div>
+              <div class="metric-pill-sub" id="resWorkPct">0% of total</div>
+            </div>
+            <div class="metric-pill-card">
+              <div class="metric-pill-title" data-i18n="weekendDaysTitle">Weekend Days</div>
+              <div class="metric-pill-val weekend" id="resWeekendDays">0</div>
+              <div class="metric-pill-sub" id="resWeekendPct">0% of total</div>
+            </div>
+            <div class="metric-pill-card">
+              <div class="metric-pill-title" data-i18n="holidaysTitle">Public Holidays</div>
+              <div class="metric-pill-val" id="resHolidays">0</div>
+              <div class="metric-pill-sub" data-i18n="deductedSub">deducted</div>
+            </div>
+          </div>
+
+          <!-- Detailed Breakdown Box -->
+          <div class="detailed-breakdown-box">
+            <div class="breakdown-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="equivalentTime">Equivalent Time &amp; Calendar Breakdown</span>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblYMD">Years, Months, Days</span>
+                <span class="breakdown-item-value" id="resYMD">0 Years, 0 Months, 0 Days</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblWeeks">Weeks &amp; Days</span>
+                <span class="breakdown-item-value" id="resWeeks">0 Weeks, 0 Days</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblHours">Total Hours</span>
+                <span class="breakdown-item-value" id="resHours">0 Hours</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblWorkingHours">Standard Working Hours (8h/day)</span>
+                <span class="breakdown-item-value" id="resWorkHours">0 Hours</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblMinutes">Total Minutes &amp; Seconds</span>
+                <span class="breakdown-item-value" id="resMinutes">0 min (0 sec)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="results-actions-bar">
+            <button type="button" class="btn-action-primary" id="btnCopyDiff">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="copyDiffText" data-i18n="btnCopySummary">Copy Calculation Summary</span>
+            </button>
+            <button type="button" class="btn-action-secondary" id="btnResetDiff">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>
+              <span data-i18n="btnReset">Reset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Add or Subtract Days -->
+    <div class="calc-view" id="viewAddSub">
+      <div class="calc-grid">
+        <!-- Input Parameters Card -->
+        <div class="input-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span data-i18n="shiftSettings">Date Shift Parameters</span>
+          </h2>
+
+          <!-- Base Date -->
+          <div class="form-group">
+            <label class="form-label" for="baseDate" data-i18n="baseDateLabel">Base Starting Date</label>
+            <div class="date-input-wrap">
+              <input type="date" class="date-input" id="baseDate">
+            </div>
+            <div class="preset-pills-row">
+              <button type="button" class="btn-preset" data-action="base-today" data-i18n="presetToday">Today</button>
+              <button type="button" class="btn-preset" data-action="base-tomorrow" data-i18n="presetTomorrow">Tomorrow</button>
+            </div>
+          </div>
+
+          <!-- Operation: Add or Subtract -->
+          <div class="form-group">
+            <label class="form-label" data-i18n="operationLabel">Operation</label>
+            <div class="segmented-control">
+              <button type="button" class="segmented-btn active" data-op="add" id="btnOpAdd" data-i18n="opAdd">Add (+)</button>
+              <button type="button" class="segmented-btn" data-op="sub" id="btnOpSub" data-i18n="opSubtract">Subtract (-)</button>
+            </div>
+          </div>
+
+          <!-- Number of Days Input -->
+          <div class="form-group">
+            <label class="form-label" for="inputShiftDays" data-i18n="shiftDaysLabel">Number of Days</label>
+            <input type="number" class="num-input" id="inputShiftDays" min="1" max="10000" value="30">
+            <div class="preset-pills-row">
+              <button type="button" class="btn-preset" data-shift="7">7d</button>
+              <button type="button" class="btn-preset" data-shift="14">14d</button>
+              <button type="button" class="btn-preset" data-shift="30">30d</button>
+              <button type="button" class="btn-preset" data-shift="60">60d</button>
+              <button type="button" class="btn-preset" data-shift="90">90d</button>
+              <button type="button" class="btn-preset" data-shift="180">180d</button>
+            </div>
+          </div>
+
+          <!-- Day Type: Calendar vs Business -->
+          <div class="form-group">
+            <label class="form-label" data-i18n="dayTypeLabel">Count Days As</label>
+            <div class="segmented-control">
+              <button type="button" class="segmented-btn active" data-type="calendar" id="btnTypeCal" data-i18n="typeCalendar">Calendar Days</button>
+              <button type="button" class="segmented-btn" data-type="business" id="btnTypeBiz" data-i18n="typeBusiness">Business Days Only</button>
+            </div>
+          </div>
+
+          <!-- Weekend filter for Business Days -->
+          <div class="form-group" id="groupShiftWeekend" style="display:none;">
+            <label class="form-label" for="selectShiftWeekend" data-i18n="weekendFilterLabel">Weekend Days (Non-Working)</label>
+            <select class="select-input" id="selectShiftWeekend">
+              <option value="sat-sun" selected data-i18n="optSatSun">Saturday &amp; Sunday (Western / International)</option>
+              <option value="fri-sat" data-i18n="optFriSat">Friday &amp; Saturday (Middle East / Gulf)</option>
+              <option value="sun" data-i18n="optSunOnly">Sunday only</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Target Date Display Card -->
+        <div class="results-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span data-i18n="targetDateResult">Computed Target Date</span>
+          </h2>
+
+          <div class="target-date-display">
+            <div class="target-weekday-badge" id="resTargetWeekday">Thursday</div>
+            <div class="target-date-heading" id="resTargetDateFormatted">November 12, 2026</div>
+            <div class="target-date-sub" id="resTargetExplanation">30 calendar days from start date</div>
+          </div>
+
+          <!-- Context Breakdown -->
+          <div class="detailed-breakdown-box">
+            <div class="breakdown-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="shiftSummaryTitle">Date Shift Summary</span>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="baseDateLabel">Base Starting Date</span>
+                <span class="breakdown-item-value" id="resTargetBaseDisplay">-</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblIsoDate">ISO Date (YYYY-MM-DD)</span>
+                <span class="breakdown-item-value" id="resTargetIso">-</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblTotalCalendarSpan">Calendar Days Spanned</span>
+                <span class="breakdown-item-value" id="resTargetSpanDays">-</span>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-item-label" data-i18n="lblWeekendDaysEncountered">Weekend Days En-Route</span>
+                <span class="breakdown-item-value" id="resTargetWeekendEncountered">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="results-actions-bar">
+            <button type="button" class="btn-action-primary" id="btnCopyTarget">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="copyTargetText" data-i18n="btnCopyTargetDate">Copy Target Date</span>
+            </button>
+            <button type="button" class="btn-action-secondary" id="btnResetAddSub">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path></svg>
+              <span data-i18n="btnReset">Reset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Educational Guide & FAQ Section -->
+    <section class="edu-section">
+      <div class="edu-header">
+        <h2 data-i18n="eduTitle">Working Days &amp; Calendar Time Calculations</h2>
+        <p data-i18n="eduSub">Master contract delivery timelines, SLA deadlines, and international working calendar rules.</p>
+      </div>
+
+      <div class="guide-cards-grid">
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </div>
+          <h3 data-i18n="guide1Title">Contracts &amp; SLA Milestones</h3>
+          <p data-i18n="guide1Desc">Commercial contracts, legal notices, and software SLAs specify deadlines in "Business Days" rather than calendar days. A 10-business-day turnaround usually spans 14 to 16 calendar days once weekends and holidays are accounted for.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <h3 data-i18n="guide2Title">International Weekend Variations</h3>
+          <p data-i18n="guide2Desc">While Europe and the Americas recognize Saturday and Sunday as weekends, several Middle Eastern and Gulf nations observed Thursday/Friday or Friday/Saturday schedules. Selecting the right filter ensures contractual accuracy.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <h3 data-i18n="guide3Title">DST &amp; Timezone Boundaries</h3>
+          <p data-i18n="guide3Desc">Naive calendar math that divides millisecond timestamps by 86,400,000 can produce subtle off-by-one errors during Daylight Saving Time (DST) changes. Our engine calculates UTC day boundaries to eliminate timezone drift.</p>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Why does "Include End Date" change the result by 1 day?</h4>
+          <p data-i18n="faq1A">By default, standard calendar subtraction (e.g. May 5 minus May 1) yields 4 days of elapsed time. For project milestones where work occurs on both May 1 and May 5, checking "Include End Date" accounts for both days, resulting in 5 days.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">Can I exclude custom national or bank holidays?</h4>
+          <p data-i18n="faq2A">Yes! You can enter the exact number of public holidays in your region in the "Public Holidays to Exclude" field, and the calculator will automatically deduct them from the total business working days.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How are Leap Years handled?</h4>
+          <p data-i18n="faq3A">Our calculation uses native JavaScript UTC calendar logic, which accurately factors in February 29th during leap years (such as 2024 and 2028), ensuring total day and month precision.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Are calculations private and secure?</h4>
+          <p data-i18n="faq4A">Yes, 100%. No dates, project schedules, or calculations are ever transmitted across the internet. Everything runs purely within your local browser runtime.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Standard Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Free, fast, and 100% private client-side utility tools.</p>
+    <p>Zero cloud logs &bull; Client-side security &bull; No cookies &bull; <a href="../index.html">All Tools</a></p>
+  </footer>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          e.stopPropagation();
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        toggleBtn.addEventListener('click', toggleDropdown);
+
+        menu.querySelectorAll('.lang-option').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedLang = btn.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+              if (typeof window.setLanguage === 'function') {
+                window.setLanguage(selectedLang);
+              }
+              closeDropdown();
+            }
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeDropdown();
+        });
+      }
+
+      const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+      updateActiveLanguageUI(initialLang);
+      document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+    })();
+  </script>
+
+  <!-- Date Difference & Workdays Calculator Engine & i18n -->
+  <script>
+  (function() {
+    // 4-Language Translation Dictionaries
+    const I18N = {
+      en: {
+        backLink: "← Back to Tools",
+        badgePill: "100% Client-Side • Instant Date Math • Custom Weekend Filters",
+        toolTitle: "Date Difference & Workdays",
+        toolSubtitle: "Calculate calendar days, business working days, weekends, and equivalent hours between dates, or add/subtract business days with custom weekend filters.",
+        tabDiffTitle: "Difference Between Dates",
+        tabAddSubTitle: "Add or Subtract Days",
+        intervalSettings: "Interval Settings",
+        startDateLabel: "Start Date",
+        endDateLabel: "End Date",
+        presetToday: "Today",
+        presetYesterday: "Yesterday",
+        presetTomorrow: "Tomorrow",
+        presetStartYear: "Jan 1",
+        presetEndYear: "Dec 31",
+        includeEndLabel: "Include End Date in count (+1 day)",
+        weekendFilterLabel: "Weekend Days (Non-Working)",
+        optSatSun: "Saturday & Sunday (Western / International)",
+        optFriSat: "Friday & Saturday (Middle East / Gulf)",
+        optSunOnly: "Sunday only",
+        optNoWeekends: "None (Continuous 7-Day Week)",
+        holidaysLabel: "Public Holidays to Exclude (Count)",
+        calculationResults: "Calculation Results",
+        totalCalendarDays: "Total Calendar Days",
+        workingDaysTitle: "Working Days",
+        weekendDaysTitle: "Weekend Days",
+        holidaysTitle: "Public Holidays",
+        deductedSub: "deducted",
+        equivalentTime: "Equivalent Time & Calendar Breakdown",
+        lblYMD: "Years, Months, Days",
+        lblWeeks: "Weeks & Days",
+        lblHours: "Total Hours",
+        lblWorkingHours: "Standard Working Hours (8h/day)",
+        lblMinutes: "Total Minutes & Seconds",
+        btnCopySummary: "Copy Calculation Summary",
+        btnReset: "Reset",
+        shiftSettings: "Date Shift Parameters",
+        baseDateLabel: "Base Starting Date",
+        operationLabel: "Operation",
+        opAdd: "Add (+)",
+        opSubtract: "Subtract (-)",
+        shiftDaysLabel: "Number of Days",
+        dayTypeLabel: "Count Days As",
+        typeCalendar: "Calendar Days",
+        typeBusiness: "Business Days Only",
+        targetDateResult: "Computed Target Date",
+        shiftSummaryTitle: "Date Shift Summary",
+        lblIsoDate: "ISO Date (YYYY-MM-DD)",
+        lblTotalCalendarSpan: "Calendar Days Spanned",
+        lblWeekendDaysEncountered: "Weekend Days En-Route",
+        btnCopyTargetDate: "Copy Target Date",
+        copiedToast: "Copied to clipboard!",
+        eduTitle: "Working Days & Calendar Time Calculations",
+        eduSub: "Master contract delivery timelines, SLA deadlines, and international working calendar rules.",
+        guide1Title: "Contracts & SLA Milestones",
+        guide1Desc: "Commercial contracts, legal notices, and software SLAs specify deadlines in 'Business Days' rather than calendar days. A 10-business-day turnaround usually spans 14 to 16 calendar days once weekends and holidays are accounted for.",
+        guide2Title: "International Weekend Variations",
+        guide2Desc: "While Europe and the Americas recognize Saturday and Sunday as weekends, several Middle Eastern and Gulf nations observed Thursday/Friday or Friday/Saturday schedules. Selecting the right filter ensures contractual accuracy.",
+        guide3Title: "DST & Timezone Boundaries",
+        guide3Desc: "Naive calendar math that divides millisecond timestamps by 86,400,000 can produce subtle off-by-one errors during Daylight Saving Time (DST) changes. Our engine calculates UTC day boundaries to eliminate timezone drift.",
+        faq1Q: "Why does 'Include End Date' change the result by 1 day?",
+        faq1A: "By default, standard calendar subtraction (e.g. May 5 minus May 1) yields 4 days of elapsed time. For project milestones where work occurs on both May 1 and May 5, checking 'Include End Date' accounts for both days, resulting in 5 days.",
+        faq2Q: "Can I exclude custom national or bank holidays?",
+        faq2A: "Yes! You can enter the exact number of public holidays in your region in the 'Public Holidays to Exclude' field, and the calculator will automatically deduct them from the total business working days.",
+        faq3Q: "How are Leap Years handled?",
+        faq3A: "Our calculation uses native JavaScript UTC calendar logic, which accurately factors in February 29th during leap years (such as 2024 and 2028), ensuring total day and month precision.",
+        faq4Q: "Are calculations private and secure?",
+        faq4A: "Yes, 100%. No dates, project schedules, or calculations are ever transmitted across the internet. Everything runs purely within your local browser runtime."
+      },
+      ar: {
+        backLink: "الرجوع إلى الأدوات ←",
+        badgePill: "100% داخل المتصفح • حسابات فورية • فلاتر عطلات مخصصة",
+        toolTitle: "حساب فرق التواريخ وأيام العمل",
+        toolSubtitle: "احسب عدد الأيام التقويمية وأيام العمل الرسمية وعطلات نهاية الأسبوع، أو أضف واطرح أيام العمل مع دعم فلاتر عطلات الشرق الأوسط والغرب.",
+        tabDiffTitle: "الفرق بين تاريخين",
+        tabAddSubTitle: "إضافة أو طرح أيام من تاريخ",
+        intervalSettings: "إعدادات الفترة الزمنية",
+        startDateLabel: "تاريخ البداية",
+        endDateLabel: "تاريخ النهاية",
+        presetToday: "اليوم",
+        presetYesterday: "أمس",
+        presetTomorrow: "غداً",
+        presetStartYear: "1 يناير",
+        presetEndYear: "31 ديسمبر",
+        includeEndLabel: "تضمين تاريخ النهاية في الحساب (+1 يوم)",
+        weekendFilterLabel: "عطلة نهاية الأسبوع (أيام التوقف)",
+        optSatSun: "السبت والأحد (النظام الدولي / الغربي)",
+        optFriSat: "الجمعة والسبت (الشرق الأوسط والخليج)",
+        optSunOnly: "الأحد فقط",
+        optNoWeekends: "بدون عطلات (أسبوع كامل 7 أيام)",
+        holidaysLabel: "عدد الإجازات الرسمية للخصم",
+        calculationResults: "نتائج الحساب",
+        totalCalendarDays: "إجمالي الأيام التقويمية",
+        workingDaysTitle: "أيام العمل",
+        weekendDaysTitle: "أيام العطلة",
+        holidaysTitle: "العطلات الرسمية",
+        deductedSub: "تم خصمها",
+        equivalentTime: "تفصيل المدة المكافئة والتقويم",
+        lblYMD: "سنوات، أشهر، أيام",
+        lblWeeks: "أسابيع وأيام",
+        lblHours: "إجمالي الساعات",
+        lblWorkingHours: "ساعات العمل الرسمية (8 س/يوم)",
+        lblMinutes: "إجمالي الدقائق والثواني",
+        btnCopySummary: "نسخ ملخص الحساب",
+        btnReset: "إعادة ضبط",
+        shiftSettings: "إعدادات إزاحة التاريخ",
+        baseDateLabel: "تاريخ البداية الأساسي",
+        operationLabel: "العملية",
+        opAdd: "إضافة (+)",
+        opSubtract: "طرح (-)",
+        shiftDaysLabel: "عدد الأيام",
+        dayTypeLabel: "نوع احتساب الأيام",
+        typeCalendar: "أيام تقويمية",
+        typeBusiness: "أيام عمل فقط",
+        targetDateResult: "التاريخ الناتج المحسوب",
+        shiftSummaryTitle: "ملخص إزاحة التاريخ",
+        lblIsoDate: "تاريخ ISO (YYYY-MM-DD)",
+        lblTotalCalendarSpan: "الأيام التقويمية المقطوعة",
+        lblWeekendDaysEncountered: "عطلات نهاية الأسبوع المصادفة",
+        btnCopyTargetDate: "نسخ التاريخ الناتج",
+        copiedToast: "تم النسخ إلى الحافظة بنجاح!",
+        eduTitle: "حسابات أيام العمل والفترات الزمنية",
+        eduSub: "تعرف على آليات احتساب تسليم العقود، مواعيد اتفاقيات مستوى الخدمة (SLA)، وأنظمة العطلات الدولية.",
+        guide1Title: "مواعيد العقود واتفاقيات SLA",
+        guide1Desc: "تحدد العقود التجارية والمشاريع المواعيد بـ 'أيام العمل' وليس الأيام التقويمية. غالباً ما تمتد فترة الـ 10 أيام عمل إلى 14 إلى 16 يوماً تقويمياً عند احتساب العطلات.",
+        guide2Title: "اختلاف العطلات الأسبوعية دولياً",
+        guide2Desc: "بينما تعتمد أوروبا وأمريكا السبت والأحد كعطلة، تتبع دول الخليج والشرق الأوسط نظام الجمعة والسبت. اختيار الفلتر الملائم يضمن دقة قانونية لعقودك.",
+        guide3Title: "المناطق الزمنية والتوقيت الصيفي",
+        guide3Desc: "الحساب البسيط بقسمة الملي ثانية على 86,400,000 يسبب أخطاء أثناء التوقيت الصيفي (DST). يعتمد محركنا على حدود أيام UTC لإلغاء أي انحراف زمني.",
+        faq1Q: "لماذا يغير خيار 'تضمين تاريخ النهاية' النتيجة بيوم واحد؟",
+        faq1A: "افتراضياً، طرح 1 مايو من 5 مايو يعطي 4 أيام منقضية. إذا كان العمل يُنجز في كلا اليومين (1 و 5 مايو)، فإن تحديد الخيار يضيف يوم النهاية لتصبح 5 أيام.",
+        faq2Q: "هل يمكنني استبعاد العطلات الوطنية أو الأعياد؟",
+        faq2A: "نعم! أدخل عدد أيام العطلات في حقل 'عدد الإجازات الرسمية للخصم' وسيقوم الحاسب تلقائياً بطرحها من صافي أيام العمل.",
+        faq3Q: "كيف يتم التعامل مع السنوات الكبيسة؟",
+        faq3A: "يستخدم نظامنا منطق تقويم UTC الأصلي في جافاسكريبت، والذي يحتسب بدقة يوم 29 فبراير في السنوات الكبيسة لضمان دقة كاملة.",
+        faq4Q: "هل الحسابات آمنة وخاصة؟",
+        faq4A: "نعم 100%. لا يتم إرسال أي تواريخ أو بيانات عبر الإنترنت. تجري كافة العمليات محلياً داخل متصفحك."
+      },
+      fr: {
+        backLink: "← Retour aux outils",
+        badgePill: "100% Côté Client • Calculs Instantanés • Filtres de Week-end Personnalisés",
+        toolTitle: "Différence de Dates & Jours Ouvrés",
+        toolSubtitle: "Calculez le nombre de jours calendaires, jours ouvrés, week-ends et heures équivalentes entre deux dates, ou ajoutez/soustrayez des jours ouvrés.",
+        tabDiffTitle: "Différence entre deux dates",
+        tabAddSubTitle: "Ajouter ou soustraire des jours",
+        intervalSettings: "Paramètres de l'intervalle",
+        startDateLabel: "Date de début",
+        endDateLabel: "Date de fin",
+        presetToday: "Aujourd'hui",
+        presetYesterday: "Hier",
+        presetTomorrow: "Demain",
+        presetStartYear: "1er Janv",
+        presetEndYear: "31 Déc",
+        includeEndLabel: "Inclure la date de fin (+1 jour)",
+        weekendFilterLabel: "Jours de week-end (non travaillés)",
+        optSatSun: "Samedi & Dimanche (Standard occidental / international)",
+        optFriSat: "Vendredi & Samedi (Moyen-Orient / Golfe)",
+        optSunOnly: "Dimanche uniquement",
+        optNoWeekends: "Aucun (Semaine continue de 7 jours)",
+        holidaysLabel: "Jours fériés à déduire (Nombre)",
+        calculationResults: "Résultats du calcul",
+        totalCalendarDays: "Total des jours calendaires",
+        workingDaysTitle: "Jours ouvrés",
+        weekendDaysTitle: "Jours de week-end",
+        holidaysTitle: "Jours fériés",
+        deductedSub: "déduits",
+        equivalentTime: "Équivalence horaire & Décomposition",
+        lblYMD: "Années, Mois, Jours",
+        lblWeeks: "Semaines & Jours",
+        lblHours: "Heures totales",
+        lblWorkingHours: "Heures de travail standards (8h/j)",
+        lblMinutes: "Minutes & Secondes totales",
+        btnCopySummary: "Copier le résumé du calcul",
+        btnReset: "Réinitialiser",
+        shiftSettings: "Paramètres du décalage de date",
+        baseDateLabel: "Date de départ",
+        operationLabel: "Opération",
+        opAdd: "Ajouter (+)",
+        opSubtract: "Soustraire (-)",
+        shiftDaysLabel: "Nombre de jours",
+        dayTypeLabel: "Comptabiliser en",
+        typeCalendar: "Jours calendaires",
+        typeBusiness: "Jours ouvrés uniquement",
+        targetDateResult: "Date d'échéance calculée",
+        shiftSummaryTitle: "Résumé du décalage",
+        lblIsoDate: "Date ISO (AAAA-MM-JJ)",
+        lblTotalCalendarSpan: "Jours calendaires écoulés",
+        lblWeekendDaysEncountered: "Week-ends rencontrés",
+        btnCopyTargetDate: "Copier la date cible",
+        copiedToast: "Copié dans le presse-papiers !",
+        eduTitle: "Calcul des Jours Ouvrés & Gestion du Temps",
+        eduSub: "Maîtrisez les délais contractuels, les livrables SLA et les règles de calendrier internationales.",
+        guide1Title: "Contrats & Jalons SLA",
+        guide1Desc: "Les contrats d'affaires et accords de niveau de service (SLA) définissent souvent les délais en 'Jours Ouvrés'. Un délai de 10 jours ouvrés s'étale généralement sur 14 à 16 jours calendaires avec les week-ends.",
+        guide2Title: "Variations Internationales de Week-ends",
+        guide2Desc: "Alors que l'Europe et l'Amérique observent le samedi et dimanche, plusieurs pays du Moyen-Orient fonctionnent selon un cycle vendredi-samedi. Choisir le bon filtre garantit la conformité contractuelle.",
+        guide3Title: "Fuseaux Horaires & Heure d'Été",
+        guide3Desc: "Les calculs simplistes divisant les millisecondes par 86 400 000 génèrent des erreurs lors du passage à l'heure d'été. Notre outil opère en dates UTC pures pour éliminer toute dérive.",
+        faq1Q: "Pourquoi 'Inclure la date de fin' ajoute-t-il 1 jour ?",
+        faq1A: "Par défaut, la soustraction calendaire (du 1er au 5 mai) compte 4 jours écoulés. Si vous travaillez sur le projet le 1er et le 5 mai, cocher cette option comptabilise les deux bornes, soit 5 jours.",
+        faq2Q: "Puis-je déduire des jours fériés spécifiques ?",
+        faq2A: "Oui ! Indiquez simplement le nombre de jours fériés de votre région dans le champ 'Jours fériés à déduire' pour les soustraire automatiquement des jours ouvrés.",
+        faq3Q: "Comment sont gérées les années bissextiles ?",
+        faq3A: "L'outil utilise les fonctions de date natives en UTC, prenant en compte le 29 février lors des années bissextiles (comme 2024 et 2028).",
+        faq4Q: "Mes données restent-elles confidentielles ?",
+        faq4A: "Oui, à 100%. Aucun calendrier ni résultat n'est transmis sur internet. Tout s'exécute dans votre navigateur."
+      },
+      it: {
+        backLink: "← Torna agli strumenti",
+        badgePill: "100% Lato Client • Calcoli Immediati • Filtri Weekend Personalizzati",
+        toolTitle: "Differenza Date & Giorni Lavorativi",
+        toolSubtitle: "Calcola giorni di calendario, giorni lavorativi aziendali, weekend e ore equivalenti tra date, oppure aggiungi/sottrai giorni lavorativi.",
+        tabDiffTitle: "Differenza tra due date",
+        tabAddSubTitle: "Aggiungi o sottrai giorni",
+        intervalSettings: "Parametri dell'intervallo",
+        startDateLabel: "Data di inizio",
+        endDateLabel: "Data di fine",
+        presetToday: "Oggi",
+        presetYesterday: "Ieri",
+        presetTomorrow: "Domani",
+        presetStartYear: "1 Gen",
+        presetEndYear: "31 Dic",
+        includeEndLabel: "Includi data di fine nel conteggio (+1 giorno)",
+        weekendFilterLabel: "Giorni di weekend (non lavorativi)",
+        optSatSun: "Sabato & Domenica (Standard occidentale / internazionale)",
+        optFriSat: "Venerdì & Sabato (Medio Oriente / Golfo)",
+        optSunOnly: "Solo Domenica",
+        optNoWeekends: "Nessuno (Settimana continua di 7 giorni)",
+        holidaysLabel: "Festività pubbliche da dedurre (Conteggio)",
+        calculationResults: "Risultati del calcolo",
+        totalCalendarDays: "Totale giorni di calendario",
+        workingDaysTitle: "Giorni lavorativi",
+        weekendDaysTitle: "Giorni di weekend",
+        holidaysTitle: "Festività pubbliche",
+        deductedSub: "dedotti",
+        equivalentTime: "Equivalenza temporale & Scomposizione",
+        lblYMD: "Anni, Mesi, Giorni",
+        lblWeeks: "Settimane & Giorni",
+        lblHours: "Ore totali",
+        lblWorkingHours: "Ore lavorative standard (8h/g)",
+        lblMinutes: "Minuti & Secondi totali",
+        btnCopySummary: "Copia riepilogo calcolo",
+        btnReset: "Reimposta",
+        shiftSettings: "Parametri di spostamento data",
+        baseDateLabel: "Data iniziale di base",
+        operationLabel: "Operazione",
+        opAdd: "Aggiungi (+)",
+        opSubtract: "Sottrai (-)",
+        shiftDaysLabel: "Numero di giorni",
+        dayTypeLabel: "Calcola come",
+        typeCalendar: "Giorni di calendario",
+        typeBusiness: "Solo giorni lavorativi",
+        targetDateResult: "Data calcolata di destinazione",
+        shiftSummaryTitle: "Riepilogo spostamento data",
+        lblIsoDate: "Data ISO (AAAA-MM-GG)",
+        lblTotalCalendarSpan: "Giorni di calendario trascorsi",
+        lblWeekendDaysEncountered: "Giorni di weekend incontrati",
+        btnCopyTargetDate: "Copia data calcolata",
+        copiedToast: "Copiato negli appunti!",
+        eduTitle: "Calcolo dei Giorni Lavorativi & Gestione Scadenze",
+        eduSub: "Gestisci le tempistiche contrattuali, le consegne SLA e le regole di calendario internazionali.",
+        guide1Title: "Contratti & Scadenze SLA",
+        guide1Desc: "I contratti commerciali e gli accordi di servizio (SLA) indicano le scadenze in 'Giorni Lavorativi'. Un termine di 10 giorni lavorativi si traduce solitamente in 14-16 giorni di calendario.",
+        guide2Title: "Variazioni Internazionali del Weekend",
+        guide2Desc: "Mentre l'Europa e le Americhe osservano il sabato e la domenica, diversi paesi del Medio Oriente operano con il ciclo venerdì-sabato. Scegliere il filtro corretto garantisce la precisione contrattuale.",
+        guide3Title: "Fusi Orari & Ora Legale",
+        guide3Desc: "Calcolare i giorni dividendo i millisecondi per 86.400.000 può generare errori durante il cambio dell'ora legale. Il nostro motore calcola date UTC per eliminare ogni deriva temporale.",
+        faq1Q: "Perché 'Includi data di fine' aggiunge 1 giorno?",
+        faq1A: "Per impostazione predefinita, la sottrazione (es. dal 1° al 5 maggio) calcola 4 giorni trascorsi. Per progetti in cui si lavora sia il 1° che il 5 maggio, selezionare questa opzione conteggia entrambi gli estremi (5 giorni).",
+        faq2Q: "Posso escludere festività nazionali specifiche?",
+        faq2A: "Sì! Inserisci il numero esatto di festività nel campo 'Festività pubbliche da dedurre' e verranno sottratte dal conteggio dei giorni lavorativi.",
+        faq3Q: "Come vengono gestiti gli anni bisestili?",
+        faq3A: "Il calcolo utilizza la logica UTC standard di JavaScript, che include correttamente il 29 febbraio negli anni bisestili (come il 2024 e il 2028).",
+        faq4Q: "I calcoli sono privati e sicuri?",
+        faq4A: "Sì, al 100%. Nessuna data o calcolo viene inviato via internet. Tutto viene elaborato localmente nel tuo browser."
+      }
+    };
+
+    // State Variables
+    let activeLang = 'en';
+    let currentCalcView = 'diff'; // 'diff' or 'addsub'
+    let shiftOp = 'add'; // 'add' or 'sub'
+    let shiftDayType = 'calendar'; // 'calendar' or 'business'
+
+    // DOM Elements - Tab 1
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const btnSwapDates = document.getElementById('btnSwapDates');
+    const checkIncludeEnd = document.getElementById('checkIncludeEnd');
+    const selectWeekend = document.getElementById('selectWeekend');
+    const inputHolidays = document.getElementById('inputHolidays');
+
+    const resTotalDays = document.getElementById('resTotalDays');
+    const resSpanSummary = document.getElementById('resSpanSummary');
+    const resWorkDays = document.getElementById('resWorkDays');
+    const resWorkPct = document.getElementById('resWorkPct');
+    const resWeekendDays = document.getElementById('resWeekendDays');
+    const resWeekendPct = document.getElementById('resWeekendPct');
+    const resHolidays = document.getElementById('resHolidays');
+    const resYMD = document.getElementById('resYMD');
+    const resWeeks = document.getElementById('resWeeks');
+    const resHours = document.getElementById('resHours');
+    const resWorkHours = document.getElementById('resWorkHours');
+    const resMinutes = document.getElementById('resMinutes');
+    const btnCopyDiff = document.getElementById('btnCopyDiff');
+    const copyDiffText = document.getElementById('copyDiffText');
+    const btnResetDiff = document.getElementById('btnResetDiff');
+
+    // DOM Elements - Tab 2
+    const baseDateInput = document.getElementById('baseDate');
+    const btnOpAdd = document.getElementById('btnOpAdd');
+    const btnOpSub = document.getElementById('btnOpSub');
+    const inputShiftDays = document.getElementById('inputShiftDays');
+    const btnTypeCal = document.getElementById('btnTypeCal');
+    const btnTypeBiz = document.getElementById('btnTypeBiz');
+    const groupShiftWeekend = document.getElementById('groupShiftWeekend');
+    const selectShiftWeekend = document.getElementById('selectShiftWeekend');
+
+    const resTargetWeekday = document.getElementById('resTargetWeekday');
+    const resTargetDateFormatted = document.getElementById('resTargetDateFormatted');
+    const resTargetExplanation = document.getElementById('resTargetExplanation');
+    const resTargetBaseDisplay = document.getElementById('resTargetBaseDisplay');
+    const resTargetIso = document.getElementById('resTargetIso');
+    const resTargetSpanDays = document.getElementById('resTargetSpanDays');
+    const resTargetWeekendEncountered = document.getElementById('resTargetWeekendEncountered');
+    const btnCopyTarget = document.getElementById('btnCopyTarget');
+    const copyTargetText = document.getElementById('copyTargetText');
+    const btnResetAddSub = document.getElementById('btnResetAddSub');
+
+    // Toast Box
+    const toastBox = document.getElementById('toastBox');
+    const toastMessage = document.getElementById('toastMessage');
+
+    let toastTimer = null;
+    function showToast(msg) {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastMessage.textContent = msg;
+      toastBox.classList.add('show');
+      toastTimer = setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2500);
+    }
+
+    // Date Utilities
+    function parseDateUTC(dateStr) {
+      if (!dateStr) return null;
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return null;
+      return new Date(Date.UTC(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10)));
+    }
+
+    function formatDateISO(d) {
+      if (!d) return '';
+      const year = d.getUTCFullYear();
+      const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(d.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLocaleCode(lang) {
+      if (lang === 'ar') return 'ar-SA';
+      if (lang === 'fr') return 'fr-FR';
+      if (lang === 'it') return 'it-IT';
+      return 'en-US';
+    }
+
+    function formatFullDateLocalized(d, lang) {
+      if (!d) return '';
+      const loc = getLocaleCode(lang);
+      return new Intl.DateTimeFormat(loc, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC'
+      }).format(d);
+    }
+
+    function formatWeekdayLocalized(d, lang) {
+      if (!d) return '';
+      const loc = getLocaleCode(lang);
+      return new Intl.DateTimeFormat(loc, {
+        weekday: 'long',
+        timeZone: 'UTC'
+      }).format(d);
+    }
+
+    // Difference Calculation Engine
+    function calculateDifference() {
+      const d1 = parseDateUTC(startDateInput.value);
+      const d2 = parseDateUTC(endDateInput.value);
+      if (!d1 || !d2) return;
+
+      const includeEnd = checkIncludeEnd.checked;
+      const weekendType = selectWeekend.value;
+      const holidayCount = Math.max(0, parseInt(inputHolidays.value, 10) || 0);
+
+      let start = d1;
+      let end = d2;
+      let isInverted = false;
+      if (start > end) {
+        start = d2;
+        end = d1;
+        isInverted = true;
+      }
+
+      const oneDay = 86400000;
+      let totalCalendarDays = Math.round((end - start) / oneDay);
+      if (includeEnd) totalCalendarDays += 1;
+
+      let workdays = 0;
+      let weekends = 0;
+
+      const cur = new Date(start.getTime());
+      const endLimit = includeEnd ? new Date(end.getTime() + oneDay) : new Date(end.getTime());
+
+      while (cur < endLimit) {
+        const day = cur.getUTCDay();
+        let isWeekend = false;
+        if (weekendType === 'sat-sun') {
+          isWeekend = (day === 0 || day === 6);
+        } else if (weekendType === 'fri-sat') {
+          isWeekend = (day === 5 || day === 6);
+        } else if (weekendType === 'sun') {
+          isWeekend = (day === 0);
+        }
+
+        if (isWeekend) {
+          weekends++;
+        } else {
+          workdays++;
+        }
+        cur.setUTCDate(cur.getUTCDate() + 1);
+      }
+
+      const actualWorkdays = Math.max(0, workdays - holidayCount);
+      const workPct = totalCalendarDays > 0 ? ((actualWorkdays / totalCalendarDays) * 100).toFixed(1) : 0;
+      const weekendPct = totalCalendarDays > 0 ? ((weekends / totalCalendarDays) * 100).toFixed(1) : 0;
+
+      // Calculate Years, Months, Days breakdown
+      let sDate = new Date(start);
+      let eDate = new Date(end);
+      if (includeEnd) {
+        eDate.setUTCDate(eDate.getUTCDate() + 1);
+      }
+      let years = eDate.getUTCFullYear() - sDate.getUTCFullYear();
+      let months = eDate.getUTCMonth() - sDate.getUTCMonth();
+      let days = eDate.getUTCDate() - sDate.getUTCDate();
+
+      if (days < 0) {
+        months -= 1;
+        const prevMonthLastDay = new Date(Date.UTC(eDate.getUTCFullYear(), eDate.getUTCMonth(), 0)).getUTCDate();
+        days += prevMonthLastDay;
+      }
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      const totalWeeks = Math.floor(totalCalendarDays / 7);
+      const remDays = totalCalendarDays % 7;
+      const totalHours = totalCalendarDays * 24;
+      const standardWorkHours = actualWorkdays * 8;
+      const totalMinutes = totalHours * 60;
+      const totalSeconds = totalMinutes * 60;
+
+      // Update UI Elements
+      resTotalDays.textContent = `${totalCalendarDays} ${activeLang === 'ar' ? 'يوم' : (totalCalendarDays === 1 ? 'Day' : 'Days')}`;
+      
+      const formattedStart = formatFullDateLocalized(d1, activeLang);
+      const formattedEnd = formatFullDateLocalized(d2, activeLang);
+      if (isInverted) {
+        resSpanSummary.textContent = `${formattedEnd} → ${formattedStart}`;
+      } else {
+        resSpanSummary.textContent = `${formattedStart} → ${formattedEnd}`;
+      }
+
+      resWorkDays.textContent = actualWorkdays.toLocaleString();
+      resWorkPct.textContent = `${workPct}% of total`;
+      resWeekendDays.textContent = weekends.toLocaleString();
+      resWeekendPct.textContent = `${weekendPct}% of total`;
+      resHolidays.textContent = holidayCount.toLocaleString();
+
+      if (activeLang === 'ar') {
+        resYMD.textContent = `${years} سنوات، ${months} أشهر، ${days} أيام`;
+        resWeeks.textContent = `${totalWeeks} أسابيع، ${remDays} أيام`;
+        resHours.textContent = `${totalHours.toLocaleString()} ساعة`;
+        resWorkHours.textContent = `${standardWorkHours.toLocaleString()} ساعة`;
+        resMinutes.textContent = `${totalMinutes.toLocaleString()} دقيقة (${totalSeconds.toLocaleString()} ثانية)`;
+      } else if (activeLang === 'fr') {
+        resYMD.textContent = `${years} an(s), ${months} mois, ${days} jour(s)`;
+        resWeeks.textContent = `${totalWeeks} semaine(s), ${remDays} jour(s)`;
+        resHours.textContent = `${totalHours.toLocaleString()} heures`;
+        resWorkHours.textContent = `${standardWorkHours.toLocaleString()} heures`;
+        resMinutes.textContent = `${totalMinutes.toLocaleString()} min (${totalSeconds.toLocaleString()} s)`;
+      } else if (activeLang === 'it') {
+        resYMD.textContent = `${years} anno/i, ${months} mese/i, ${days} giorno/i`;
+        resWeeks.textContent = `${totalWeeks} settimana/e, ${remDays} giorno/i`;
+        resHours.textContent = `${totalHours.toLocaleString()} ore`;
+        resWorkHours.textContent = `${standardWorkHours.toLocaleString()} ore`;
+        resMinutes.textContent = `${totalMinutes.toLocaleString()} min (${totalSeconds.toLocaleString()} sec)`;
+      } else {
+        resYMD.textContent = `${years} Year${years === 1 ? '' : 's'}, ${months} Month${months === 1 ? '' : 's'}, ${days} Day${days === 1 ? '' : 's'}`;
+        resWeeks.textContent = `${totalWeeks} Week${totalWeeks === 1 ? '' : 's'}, ${remDays} Day${remDays === 1 ? '' : 's'}`;
+        resHours.textContent = `${totalHours.toLocaleString()} Hours`;
+        resWorkHours.textContent = `${standardWorkHours.toLocaleString()} Hours`;
+        resMinutes.textContent = `${totalMinutes.toLocaleString()} min (${totalSeconds.toLocaleString()} sec)`;
+      }
+    }
+
+    // Add or Subtract Days Engine
+    function calculateShift() {
+      const baseDate = parseDateUTC(baseDateInput.value);
+      if (!baseDate) return;
+
+      const numDays = Math.max(1, parseInt(inputShiftDays.value, 10) || 1);
+      const step = shiftOp === 'add' ? 1 : -1;
+      const weekendType = selectShiftWeekend.value;
+
+      const target = new Date(baseDate.getTime());
+      let calendarDaysElapsed = 0;
+      let weekendsEncountered = 0;
+
+      if (shiftDayType === 'calendar') {
+        target.setUTCDate(target.getUTCDate() + (step * numDays));
+        calendarDaysElapsed = numDays;
+
+        // Count weekends passed
+        const cur = new Date(baseDate.getTime());
+        const countStep = step;
+        for (let i = 0; i < numDays; i++) {
+          cur.setUTCDate(cur.getUTCDate() + countStep);
+          const day = cur.getUTCDay();
+          let isWeekend = false;
+          if (weekendType === 'sat-sun') isWeekend = (day === 0 || day === 6);
+          else if (weekendType === 'fri-sat') isWeekend = (day === 5 || day === 6);
+          else if (weekendType === 'sun') isWeekend = (day === 0);
+          if (isWeekend) weekendsEncountered++;
+        }
+      } else {
+        // Business days
+        let added = 0;
+        let safety = 0;
+        while (added < numDays && safety < 100000) {
+          target.setUTCDate(target.getUTCDate() + step);
+          calendarDaysElapsed++;
+          safety++;
+          const day = target.getUTCDay();
+          let isWeekend = false;
+          if (weekendType === 'sat-sun') isWeekend = (day === 0 || day === 6);
+          else if (weekendType === 'fri-sat') isWeekend = (day === 5 || day === 6);
+          else if (weekendType === 'sun') isWeekend = (day === 0);
+
+          if (!isWeekend) {
+            added++;
+          } else {
+            weekendsEncountered++;
+          }
+        }
+      }
+
+      // Display results
+      resTargetWeekday.textContent = formatWeekdayLocalized(target, activeLang);
+      resTargetDateFormatted.textContent = formatFullDateLocalized(target, activeLang);
+      resTargetIso.textContent = formatDateISO(target);
+      resTargetBaseDisplay.textContent = formatFullDateLocalized(baseDate, activeLang);
+      resTargetSpanDays.textContent = `${calendarDaysElapsed} ${activeLang === 'ar' ? 'يوم' : 'Days'}`;
+      resTargetWeekendEncountered.textContent = `${weekendsEncountered} ${activeLang === 'ar' ? 'يوم عطلة' : 'Days'}`;
+
+      if (activeLang === 'ar') {
+        resTargetExplanation.textContent = `${numDays} ${shiftDayType === 'business' ? 'أيام عمل' : 'أيام تقويمية'} ${shiftOp === 'add' ? 'بعد' : 'قبل'} تاريخ البداية`;
+      } else if (activeLang === 'fr') {
+        resTargetExplanation.textContent = `${numDays} ${shiftDayType === 'business' ? 'jours ouvrés' : 'jours calendaires'} ${shiftOp === 'add' ? 'après' : 'avant'} la date de départ`;
+      } else if (activeLang === 'it') {
+        resTargetExplanation.textContent = `${numDays} ${shiftDayType === 'business' ? 'giorni lavorativi' : 'giorni di calendario'} ${shiftOp === 'add' ? 'dopo' : 'prima'} la data iniziale`;
+      } else {
+        resTargetExplanation.textContent = `${numDays} ${shiftDayType === 'business' ? 'business days' : 'calendar days'} ${shiftOp === 'add' ? 'after' : 'before'} base date`;
+      }
+    }
+
+    // Set Default Initial Dates
+    function setDefaults() {
+      const today = new Date();
+      const todayISO = formatDateISO(today);
+
+      const plus30 = new Date(today.getTime() + 30 * 86400000);
+      const plus30ISO = formatDateISO(plus30);
+
+      startDateInput.value = todayISO;
+      endDateInput.value = plus30ISO;
+      baseDateInput.value = todayISO;
+      inputShiftDays.value = "30";
+      inputHolidays.value = "0";
+      checkIncludeEnd.checked = false;
+
+      calculateDifference();
+      calculateShift();
+    }
+
+    // Tab Navigation Logic
+    const btnTabDiff = document.getElementById('btnTabDiff');
+    const btnTabAddSub = document.getElementById('btnTabAddSub');
+    const viewDiff = document.getElementById('viewDiff');
+    const viewAddSub = document.getElementById('viewAddSub');
+
+    btnTabDiff.addEventListener('click', () => {
+      currentCalcView = 'diff';
+      btnTabDiff.classList.add('active');
+      btnTabAddSub.classList.remove('active');
+      viewDiff.classList.add('active');
+      viewAddSub.classList.remove('active');
+      calculateDifference();
+    });
+
+    btnTabAddSub.addEventListener('click', () => {
+      currentCalcView = 'addsub';
+      btnTabAddSub.classList.add('active');
+      btnTabDiff.classList.remove('active');
+      viewAddSub.classList.add('active');
+      viewDiff.classList.remove('active');
+      calculateShift();
+    });
+
+    // Tab 1 Events
+    [startDateInput, endDateInput, selectWeekend, inputHolidays].forEach(el => {
+      el.addEventListener('change', calculateDifference);
+      el.addEventListener('input', calculateDifference);
+    });
+    checkIncludeEnd.addEventListener('change', calculateDifference);
+
+    btnSwapDates.addEventListener('click', () => {
+      const temp = startDateInput.value;
+      startDateInput.value = endDateInput.value;
+      endDateInput.value = temp;
+      calculateDifference();
+    });
+
+    document.querySelectorAll('#viewDiff .btn-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        const now = new Date();
+        const curYear = now.getUTCFullYear();
+
+        if (action === 'start-today') {
+          startDateInput.value = formatDateISO(now);
+        } else if (action === 'start-yesterday') {
+          const y = new Date(now.getTime() - 86400000);
+          startDateInput.value = formatDateISO(y);
+        } else if (action === 'start-first-year') {
+          startDateInput.value = `${curYear}-01-01`;
+        } else if (action === 'end-today') {
+          endDateInput.value = formatDateISO(now);
+        } else if (action === 'end-plus7') {
+          const s = parseDateUTC(startDateInput.value) || now;
+          endDateInput.value = formatDateISO(new Date(s.getTime() + 7 * 86400000));
+        } else if (action === 'end-plus30') {
+          const s = parseDateUTC(startDateInput.value) || now;
+          endDateInput.value = formatDateISO(new Date(s.getTime() + 30 * 86400000));
+        } else if (action === 'end-plus90') {
+          const s = parseDateUTC(startDateInput.value) || now;
+          endDateInput.value = formatDateISO(new Date(s.getTime() + 90 * 86400000));
+        } else if (action === 'end-last-year') {
+          endDateInput.value = `${curYear}-12-31`;
+        }
+        calculateDifference();
+      });
+    });
+
+    btnResetDiff.addEventListener('click', () => {
+      const today = new Date();
+      startDateInput.value = formatDateISO(today);
+      endDateInput.value = formatDateISO(new Date(today.getTime() + 30 * 86400000));
+      checkIncludeEnd.checked = false;
+      inputHolidays.value = "0";
+      selectWeekend.value = "sat-sun";
+      calculateDifference();
+    });
+
+    btnCopyDiff.addEventListener('click', () => {
+      const summary = `VantorKit Date Difference Calculation:
+Interval: ${startDateInput.value} to ${endDateInput.value}
+${resTotalDays.textContent} (${resSpanSummary.textContent})
+Working Days: ${resWorkDays.textContent} (${resWorkPct.textContent})
+Weekend Days: ${resWeekendDays.textContent} (${resWeekendPct.textContent})
+Holidays Deducted: ${resHolidays.textContent}
+Equivalent: ${resYMD.textContent} | ${resWeeks.textContent} | ${resHours.textContent}
+Calculated with VantorKit (https://vantorkit.com/tools/date-difference.html)`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        btnCopyDiff.classList.add('copied');
+        copyDiffText.textContent = "✓ Copied!";
+        showToast(I18N[activeLang]?.copiedToast || "Copied to clipboard!");
+        setTimeout(() => {
+          btnCopyDiff.classList.remove('copied');
+          copyDiffText.textContent = I18N[activeLang]?.btnCopySummary || "Copy Calculation Summary";
+        }, 2000);
+      });
+    });
+
+    // Tab 2 Events
+    baseDateInput.addEventListener('change', calculateShift);
+    inputShiftDays.addEventListener('input', calculateShift);
+    selectShiftWeekend.addEventListener('change', calculateShift);
+
+    btnOpAdd.addEventListener('click', () => {
+      shiftOp = 'add';
+      btnOpAdd.classList.add('active');
+      btnOpSub.classList.remove('active');
+      calculateShift();
+    });
+
+    btnOpSub.addEventListener('click', () => {
+      shiftOp = 'sub';
+      btnOpSub.classList.add('active');
+      btnOpAdd.classList.remove('active');
+      calculateShift();
+    });
+
+    btnTypeCal.addEventListener('click', () => {
+      shiftDayType = 'calendar';
+      btnTypeCal.classList.add('active');
+      btnTypeBiz.classList.remove('active');
+      groupShiftWeekend.style.display = 'none';
+      calculateShift();
+    });
+
+    btnTypeBiz.addEventListener('click', () => {
+      shiftDayType = 'business';
+      btnTypeBiz.classList.add('active');
+      btnTypeCal.classList.remove('active');
+      groupShiftWeekend.style.display = 'block';
+      calculateShift();
+    });
+
+    document.querySelectorAll('#viewAddSub .btn-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        const shiftVal = btn.getAttribute('data-shift');
+        const now = new Date();
+
+        if (action === 'base-today') {
+          baseDateInput.value = formatDateISO(now);
+        } else if (action === 'base-tomorrow') {
+          const t = new Date(now.getTime() + 86400000);
+          baseDateInput.value = formatDateISO(t);
+        } else if (shiftVal) {
+          inputShiftDays.value = shiftVal;
+        }
+        calculateShift();
+      });
+    });
+
+    btnResetAddSub.addEventListener('click', () => {
+      const today = new Date();
+      baseDateInput.value = formatDateISO(today);
+      inputShiftDays.value = "30";
+      shiftOp = 'add';
+      btnOpAdd.classList.add('active');
+      btnOpSub.classList.remove('active');
+      shiftDayType = 'calendar';
+      btnTypeCal.classList.add('active');
+      btnTypeBiz.classList.remove('active');
+      groupShiftWeekend.style.display = 'none';
+      selectShiftWeekend.value = "sat-sun";
+      calculateShift();
+    });
+
+    btnCopyTarget.addEventListener('click', () => {
+      const text = `${resTargetDateFormatted.textContent} (${resTargetIso.textContent})
+${resTargetExplanation.textContent}
+Calculated with VantorKit (https://vantorkit.com/tools/date-difference.html)`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btnCopyTarget.classList.add('copied');
+        copyTargetText.textContent = "✓ Copied!";
+        showToast(I18N[activeLang]?.copiedToast || "Copied to clipboard!");
+        setTimeout(() => {
+          btnCopyTarget.classList.remove('copied');
+          copyTargetText.textContent = I18N[activeLang]?.btnCopyTargetDate || "Copy Target Date";
+        }, 2000);
+      });
+    });
+
+    // i18n Translation Switcher
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      activeLang = lang;
+      const dict = I18N[lang];
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      calculateDifference();
+      calculateShift();
+    }
+
+    // Expose setLanguage globally for standardized dropdown sync
+    window.setLanguage = setLanguage;
+
+    // Initialize
+    setDefaults();
+    const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(initialLang);
+
+  })();
+  </script>
+</body>
+</html>
