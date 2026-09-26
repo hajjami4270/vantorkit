@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Image to Base64 Converter — Data URI, HTML &amp; CSS Generator | VantorKit</title>
+  <meta name="description" content="Convert images (PNG, JPG, WebP, SVG, GIF, ICO) into Base64 Data URIs, HTML img tags, and CSS background code directly in your browser. 100% client-side with zero server uploads.">
+  <meta name="keywords" content="image to base64, convert image to base64, data uri generator, png to base64, jpg to base64, svg to base64, base64 image encoder, inline image css, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/image-to-base64.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Image to Base64 Converter — Data URI &amp; HTML Generator | VantorKit">
+  <meta property="og:description" content="Convert PNG, JPG, WebP, SVG, GIF, or ICO into Base64 Data URIs, HTML img tags, and CSS backgrounds directly in your browser. 100% private.">
+  <meta property="og:url" content="https://vantorkit.com/tools/image-to-base64.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Image to Base64 Converter | VantorKit">
+  <meta name="twitter:description" content="Encode images to Base64 Data URIs locally in your browser with zero server telemetry.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "VantorKit Image to Base64 Converter",
+        "url": "https://vantorkit.com/tools/image-to-base64.html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript. Requires HTML5 FileReader API.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Free client-side Image to Base64 converter. Convert PNG, JPG, WebP, SVG, GIF, and ICO into Data URIs, HTML img tags, and CSS background snippets locally."
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are my images uploaded to any server during Base64 conversion?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All conversion runs 100% locally in your browser memory using the HTML5 FileReader API. Your images never leave your computer."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why is Base64 ~33% larger than the original image?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Base64 encodes every 3 bytes (24 bits) of binary data into 4 ASCII characters (6 bits each), resulting in an inherent 4:3 (+33.3%) size overhead."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When should I embed an image as Base64 instead of linking a file?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Base64 inlining is best for small icons, logos, avatars, and critical graphics under 10KB to eliminate separate HTTP round-trips and prevent layout shift."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which image formats are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The tool supports PNG, JPEG/JPG, WebP, SVG, GIF, and ICO image formats with automatic MIME type detection."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.25);
+      --badge-bg: rgba(30, 41, 59, 0.7);
+      --badge-text: #60a5fa;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem 4rem;
+    }
+
+    /* Header Section */
+    .tool-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: .35rem .85rem;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--badge-text);
+      margin-bottom: .85rem;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      margin-bottom: .6rem;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.tool-subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Dropzone Upload Section */
+    .dropzone-container {
+      margin-bottom: 2rem;
+    }
+    .dropzone {
+      border: 2px dashed rgba(59, 130, 246, 0.35);
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.45);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      backdrop-filter: blur(12px);
+    }
+    .dropzone:hover, .dropzone.drag-active {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+      transform: translateY(-2px);
+    }
+    .dropzone-icon-wrap {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--accent);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+    }
+    .dropzone h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .dropzone p {
+      color: var(--text-muted);
+      font-size: .92rem;
+      margin-bottom: 1.35rem;
+    }
+    .dropzone-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      flex-wrap: wrap;
+    }
+    .btn-browse {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .7rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-browse:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-sample {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+      padding: .7rem 1.3rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      transition: all .2s ease;
+    }
+    .btn-sample:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .paste-hint {
+      margin-top: 1.15rem;
+      font-size: .8rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .kbd-shortcut {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: #e2e8f0;
+    }
+    #imageFileInput { display: none; }
+
+    /* Results Workspace (hidden until image loaded) */
+    .results-workspace {
+      display: none;
+      flex-direction: column;
+      gap: 1.75rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+    .results-workspace.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Meta & Preview Card */
+    .image-meta-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 1.5rem;
+      align-items: center;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    @media (max-width: 640px) {
+      .image-meta-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+    .thumbnail-box {
+      width: 130px;
+      height: 130px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background-image: 
+        linear-gradient(45deg, rgba(255,255,255,.05) 25%, transparent 25%), 
+        linear-gradient(-45deg, rgba(255,255,255,.05) 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,.05) 75%), 
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,.05) 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      background-color: #0c101d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    .thumbnail-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .meta-details {
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+    }
+    .meta-file-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      word-break: break-all;
+    }
+    .stats-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+    }
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: .35rem .85rem;
+      font-size: .82rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .stat-pill strong {
+      color: #fff;
+      font-weight: 700;
+    }
+    .overhead-pill {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: .8rem;
+      padding: .35rem .75rem;
+      border-radius: 999px;
+    }
+
+    /* Output Tabs & Snippet Box */
+    .snippet-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .snippet-tabs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(11, 15, 25, 0.6);
+      padding: 0 .75rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .tabs-nav {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding: .5rem 0;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: .55rem 1rem;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      white-space: nowrap;
+      transition: all .15s ease;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: rgba(59, 130, 246, 0.2);
+      box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.4);
+    }
+    .snippet-char-count {
+      font-size: .8rem;
+      color: var(--text-muted);
+      padding: .5rem .5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .snippet-body {
+      position: relative;
+    }
+    .code-output {
+      width: 100%;
+      height: 220px;
+      background: rgba(8, 11, 18, 0.95);
+      border: none;
+      padding: 1.25rem;
+      color: #93c5fd;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .snippet-actions-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--card-border);
+      background: rgba(11, 15, 25, 0.7);
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .action-group-left, .action-group-right {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .btn-action-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      padding: .65rem 1.4rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+      transition: all .2s ease;
+    }
+    .btn-action-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-action-primary.copied {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .btn-action-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: .65rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-action-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-clear-tool {
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #f87171;
+      padding: .65rem 1.1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: all .2s ease;
+    }
+    .btn-clear-tool:hover {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+    }
+
+    /* Educational Guide & FAQ */
+    .info-section {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .info-header h2 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto;
+      font-size: .95rem;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+    .guide-card-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .guide-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .45rem;
+    }
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 500px) {
+      .faq-grid { grid-template-columns: 1fr; }
+    }
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .5rem;
+    }
+    .faq-item p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Toast Notification */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: .75rem 1.25rem;
+      border-radius: 10px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    html[dir="rtl"] .toast-box {
+      right: auto;
+      left: 24px;
+    }
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: .88rem;
+      background: rgba(7, 9, 14, 0.85);
+    }
+    footer p { margin-bottom: .4rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ========================================================
+       Standardized Global Navigation & Language Dropdown Styles
+       ======================================================== */
+    .top-nav {
+      height: 70px !important;
+      border-bottom: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 0 1.5rem !important;
+      background: rgba(7, 9, 14, 0.85) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+    }
+
+    .back-link {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      color: var(--text-muted, #94a3b8) !important;
+      text-decoration: none !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      transition: all 0.2s ease !important;
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+    }
+
+    .back-link:hover {
+      color: #fff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
+      transform: translateX(-2px) !important;
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px) !important;
+    }
+
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.65rem !important;
+      text-decoration: none !important;
+      color: #fff !important;
+      font-weight: 800 !important;
+      font-size: 1.15rem !important;
+      letter-spacing: -0.02em !important;
+      flex-shrink: 0 !important;
+    }
+
+    .nav-brand svg {
+      width: 32px !important;
+      height: 32px !important;
+      filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4)) !important;
+      transition: transform 0.2s ease !important;
+    }
+
+    .nav-brand:hover svg {
+      transform: scale(1.05) !important;
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    /* Standard Glassmorphic Language Switcher */
+    .lang-dropdown {
+      position: relative !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      background: rgba(22, 27, 42, 0.8) !important;
+      border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08)) !important;
+      color: var(--text-main, #f8fafc) !important;
+      padding: 0.45rem 0.85rem !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      transition: all 0.2s ease !important;
+      font-family: inherit !important;
+      white-space: nowrap !important;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"],
+    .lang-dropdown.active .lang-btn {
+      border-color: var(--accent, #3b82f6) !important;
+      background: rgba(26, 32, 48, 0.95) !important;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.25) !important;
+    }
+
+    .globe-icon {
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease !important;
+      color: var(--text-muted, #94a3b8) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon,
+    .lang-dropdown.active .chevron-icon {
+      transform: rotate(180deg) !important;
+    }
+
+    .lang-menu {
+      position: absolute !important;
+      top: calc(100% + 8px) !important;
+      right: 0 !important;
+      width: 170px !important;
+      background: rgba(14, 18, 28, 0.96) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-radius: 12px !important;
+      padding: 0.4rem !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+      display: none !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+      z-index: 1000 !important;
+    }
+
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-dropdown.active .lang-menu {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out !important;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      padding: 0.55rem 0.75rem !important;
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted, #94a3b8) !important;
+      border-radius: 8px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      text-align: left !important;
+      font-family: inherit !important;
+      box-sizing: border-box !important;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #fff !important;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2) !important;
+      color: #60a5fa !important;
+      font-weight: 700 !important;
+    }
+
+    .lang-option .check-icon,
+    .lang-option .lang-check {
+      display: none !important;
+      color: #60a5fa !important;
+      flex-shrink: 0 !important;
+    }
+
+    .lang-option.active .check-icon,
+    .lang-option.active .lang-check {
+      display: block !important;
+    }
+
+    .lang-item-content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+    }
+
+    @media (max-width: 600px) {
+      .top-nav {
+        padding: 0 1rem !important;
+      }
+      .nav-brand span {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .back-link span {
+        display: none !important;
+      }
+      .top-nav {
+        padding: 0 0.75rem !important;
+      }
+    }
+
+    /* RTL specific overrides */
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] .top-nav {
+      direction: rtl !important;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right !important;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-nav">
+    <a href="../index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Tool Header -->
+    <header class="tool-header">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="badgePill">100% Client-Side • Zero Cloud Uploads • Instant Encoding</span>
+      </div>
+      <h1 data-i18n="toolTitle">Image to Base64 Converter</h1>
+      <p class="tool-subtitle" data-i18n="toolSubtitle">Convert PNG, JPG, WebP, SVG, GIF, or ICO into embeddable Base64 Data URIs, HTML &lt;img&gt; tags, and CSS background snippets locally in your browser.</p>
+    </header>
+
+    <!-- Upload / Dropzone -->
+    <div class="dropzone-container">
+      <div class="dropzone" id="dropZone">
+        <div class="dropzone-icon-wrap">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>
+        </div>
+        <h3 data-i18n="dropzoneTitle">Drag &amp; Drop Image Here</h3>
+        <p data-i18n="dropzoneSub">Supports PNG, JPG, WebP, SVG, GIF, ICO (Max recommended: 15MB)</p>
+        <div class="dropzone-actions">
+          <button type="button" class="btn-browse" id="btnBrowse" data-i18n="btnBrowse">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Choose Image File
+          </button>
+          <button type="button" class="btn-sample" id="btnSample" data-i18n="btnSample">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Load Sample Graphic
+          </button>
+        </div>
+        <div class="paste-hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span data-i18n="pasteHint">Or paste directly from clipboard</span>
+          <span class="kbd-shortcut">Ctrl+V / ⌘V</span>
+        </div>
+        <input type="file" id="imageFileInput" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/x-icon,image/*">
+      </div>
+    </div>
+
+    <!-- Results Workspace -->
+    <div class="results-workspace" id="resultsWorkspace">
+      <!-- File Metadata & Preview Card -->
+      <div class="image-meta-card">
+        <div class="thumbnail-box" id="thumbnailBox">
+          <img id="imgPreview" src="" alt="Image Preview">
+        </div>
+        <div class="meta-details">
+          <div class="meta-file-title" id="metaFileName">image.png</div>
+          <div class="stats-pills-row">
+            <span class="stat-pill"><span data-i18n="metaDimensions">Dimensions:</span> <strong id="metaDimensions">0 × 0 px</strong></span>
+            <span class="stat-pill"><span data-i18n="metaMime">MIME:</span> <strong id="metaMime">image/png</strong></span>
+            <span class="stat-pill"><span data-i18n="metaOriginalSize">File Size:</span> <strong id="metaOriginalSize">0 KB</strong></span>
+            <span class="stat-pill"><span data-i18n="metaBase64Size">Base64 Size:</span> <strong id="metaBase64Size">0 KB</strong></span>
+            <span class="overhead-pill" data-i18n="metaOverhead">+33.3% Overhead</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Output Snippet Box with Tabs -->
+      <div class="snippet-container">
+        <div class="snippet-tabs-header">
+          <div class="tabs-nav">
+            <button type="button" class="tab-btn active" data-tab="datauri" id="tabDataUri" data-i18n="tabDataUri">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              Data URI
+            </button>
+            <button type="button" class="tab-btn" data-tab="html" id="tabHtml" data-i18n="tabHtml">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              HTML &lt;img&gt;
+            </button>
+            <button type="button" class="tab-btn" data-tab="css" id="tabCss" data-i18n="tabCss">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              CSS Background
+            </button>
+            <button type="button" class="tab-btn" data-tab="raw" id="tabRaw" data-i18n="tabRaw">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              Raw Base64
+            </button>
+          </div>
+          <div class="snippet-char-count" id="snippetCharCount">0 characters</div>
+        </div>
+
+        <div class="snippet-body">
+          <textarea class="code-output" id="snippetOutput" readonly spellcheck="false" placeholder="Base64 output will appear here..."></textarea>
+        </div>
+
+        <div class="snippet-actions-bar">
+          <div class="action-group-left">
+            <button type="button" class="btn-action-primary" id="btnCopySnippet" data-i18n="btnCopySnippet">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="copyBtnLabel" data-i18n="btnCopyLabel">Copy Snippet</span>
+            </button>
+            <button type="button" class="btn-action-secondary" id="btnDownloadTxt" data-i18n="btnDownloadTxt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download as .txt
+            </button>
+          </div>
+          <div class="action-group-right">
+            <button type="button" class="btn-clear-tool" id="btnClearImage" data-i18n="btnClearImage">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              Clear Image
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Educational SEO Guide & FAQ Section -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="infoTitle">Everything About Base64 Image Inlining</h2>
+        <p data-i18n="infoSubtitle">Learn when and how to embed images directly into HTML and CSS stylesheets without external HTTP requests.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+          </div>
+          <h3 data-i18n="guide1Title">Eliminate HTTP Requests</h3>
+          <p data-i18n="guide1Desc">Embedding small graphics (icons, logos, bullets, avatars) directly into your HTML document or CSS bundle prevents separate DNS lookups and TCP handshakes, improving Largest Contentful Paint (LCP) on mobile networks.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          </div>
+          <h3 data-i18n="guide2Title">The +33% Overhead Math</h3>
+          <p data-i18n="guide2Desc">Base64 converts 3 binary bytes (24 bits) into 4 printable ASCII characters (6 bits each). This produces a predictable 4:3 (~33.3%) file size increase. Keep Base64 inlining restricted to assets smaller than 10KB.</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          </div>
+          <h3 data-i18n="guide3Title">Browser Caching Trade-off</h3>
+          <p data-i18n="guide3Desc">When an image is inlined inside HTML, it re-downloads whenever the HTML reloads. If placed inside a versioned, cached CSS stylesheet, the image stays cached in browser storage across multiple visits.</p>
+        </div>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Are my images uploaded to any remote server?</h4>
+          <p data-i18n="faq1A">Never. Conversion is performed 100% locally in your web browser memory via the HTML5 FileReader API. Your images, personal graphics, and proprietary designs never leave your machine.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What formats can I encode with this tool?</h4>
+          <p data-i18n="faq2A">The tool handles PNG, JPEG/JPG, WebP, SVG, GIF, and ICO image formats. It accurately senses the MIME type and provides compliant Data URIs for both HTML and CSS.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I paste an image directly from clipboard?</h4>
+          <p data-i18n="faq3A">Simply press Ctrl+V (or Cmd+V on macOS) anywhere on the page after copying an image or taking a screenshot. The tool immediately detects the image payload and produces your Base64 snippets.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can I decode Base64 back into an image or file?</h4>
+          <p data-i18n="faq4A">Yes! You can use VantorKit's Base64 File Encoder &amp; Decoder tool to paste any Base64 string and download the original binary image or document file instantly.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-box" id="toastBox">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Standard Footer -->
+  <footer>
+    <p>&copy; 2026 VantorKit. Free, fast, and 100% private client-side utility tools.</p>
+    <p>Zero cloud logs &bull; Client-side security &bull; No cookies &bull; <a href="../index.html">All Tools</a></p>
+  </footer>
+
+  <!-- Standardized Language Dropdown & RTL Sync Runtime -->
+  <script>
+    (function() {
+      const LANG_NAMES = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
+      const BACK_LABELS = {
+        en: '← Back to Tools',
+        ar: 'الرجوع إلى الأدوات ←',
+        fr: '← Retour aux outils',
+        it: '← Torna agli strumenti'
+      };
+
+      function updateActiveLanguageUI(lang) {
+        if (!LANG_NAMES[lang]) lang = 'en';
+        const isRtl = lang === 'ar';
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+
+        const label = document.getElementById('currentLangLabel');
+        if (label) label.textContent = LANG_NAMES[lang];
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+          const optLang = opt.getAttribute('data-lang');
+          opt.classList.toggle('active', optLang === lang);
+        });
+
+        const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+        if (backSpan && BACK_LABELS[lang]) {
+          backSpan.textContent = BACK_LABELS[lang];
+        }
+      }
+
+      function setupDropdownInteractivity() {
+        const dropdown = document.getElementById('langDropdown');
+        const toggleBtn = document.getElementById('langToggleBtn');
+        const menu = document.getElementById('langMenu');
+        if (!dropdown || !toggleBtn || !menu) return;
+
+        function closeDropdown() {
+          menu.classList.remove('open', 'show');
+          dropdown.classList.remove('active');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleDropdown(e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            menu.classList.add('open', 'show');
+            dropdown.classList.add('active');
+            toggleBtn.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        // Cleanly bind toggle button
+        toggleBtn.onclick = toggleDropdown;
+
+        // Cleanly bind all language options
+        menu.querySelectorAll('.lang-option').forEach(opt => {
+          opt.onclick = function(e) {
+            if (e) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            const selectedLang = opt.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              updateActiveLanguageUI(selectedLang);
+
+              // Trigger tool translation logic if defined
+              if (typeof setLanguage === 'function') {
+                try { setLanguage(selectedLang); } catch (err) { console.warn(err); }
+              } else if (typeof applyLanguage === 'function') {
+                try { applyLanguage(selectedLang); } catch (err) { console.warn(err); }
+              }
+            }
+            closeDropdown();
+          };
+        });
+
+        // Global click-outside listener
+        document.addEventListener('click', function(e) {
+          if (dropdown && !dropdown.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        // Global Escape key listener
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            closeDropdown();
+            toggleBtn.focus();
+          }
+        });
+
+        // Initial apply
+        let savedLang = 'en';
+        try {
+          savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+        } catch (err) {}
+        if (!LANG_NAMES[savedLang]) savedLang = 'en';
+        updateActiveLanguageUI(savedLang);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupDropdownInteractivity);
+      } else {
+        setupDropdownInteractivity();
+      }
+    })();
+  </script>
+
+  <!-- Image to Base64 Tool Logic with Comprehensive i18n -->
+  <script>
+  (function() {
+    const I18N = {
+      en: {
+        langLabel: "English",
+        backLink: "← Back to Tools",
+        badgePill: "100% Client-Side • Zero Cloud Uploads • Instant Encoding",
+        toolTitle: "Image to Base64 Converter",
+        toolSubtitle: "Convert PNG, JPG, WebP, SVG, GIF, or ICO into embeddable Base64 Data URIs, HTML <img> tags, and CSS background snippets locally in your browser.",
+        dropzoneTitle: "Drag & Drop Image Here",
+        dropzoneSub: "Supports PNG, JPG, WebP, SVG, GIF, ICO (Max recommended: 15MB)",
+        btnBrowse: "Choose Image File",
+        btnSample: "Load Sample Graphic",
+        pasteHint: "Or paste directly from clipboard",
+        metaDimensions: "Dimensions:",
+        metaMime: "MIME:",
+        metaOriginalSize: "File Size:",
+        metaBase64Size: "Base64 Size:",
+        metaOverhead: "+33.3% Overhead",
+        tabDataUri: "Data URI",
+        tabHtml: "HTML <img>",
+        tabCss: "CSS Background",
+        tabRaw: "Raw Base64",
+        btnCopySnippet: "Copy Snippet",
+        btnCopyLabel: "Copy Snippet",
+        btnCopiedLabel: "Copied!",
+        btnDownloadTxt: "Download as .txt",
+        btnClearImage: "Clear Image",
+        infoTitle: "Everything About Base64 Image Inlining",
+        infoSubtitle: "Learn when and how to embed images directly into HTML and CSS stylesheets without external HTTP requests.",
+        guide1Title: "Eliminate HTTP Requests",
+        guide1Desc: "Embedding small graphics (icons, logos, bullets, avatars) directly into your HTML document or CSS bundle prevents separate DNS lookups and TCP handshakes, improving Largest Contentful Paint (LCP) on mobile networks.",
+        guide2Title: "The +33% Overhead Math",
+        guide2Desc: "Base64 converts 3 binary bytes (24 bits) into 4 printable ASCII characters (6 bits each). This produces a predictable 4:3 (~33.3%) file size increase. Keep Base64 inlining restricted to assets smaller than 10KB.",
+        guide3Title: "Browser Caching Trade-off",
+        guide3Desc: "When an image is inlined inside HTML, it re-downloads whenever the HTML reloads. If placed inside a versioned, cached CSS stylesheet, the image stays cached in browser storage across multiple visits.",
+        faq1Q: "Are my images uploaded to any remote server?",
+        faq1A: "Never. Conversion is performed 100% locally in your web browser memory via the HTML5 FileReader API. Your images, personal graphics, and proprietary designs never leave your machine.",
+        faq2Q: "What formats can I encode with this tool?",
+        faq2A: "The tool handles PNG, JPEG/JPG, WebP, SVG, GIF, and ICO image formats. It accurately senses the MIME type and provides compliant Data URIs for both HTML and CSS.",
+        faq3Q: "How do I paste an image directly from clipboard?",
+        faq3A: "Simply press Ctrl+V (or Cmd+V on macOS) anywhere on the page after copying an image or taking a screenshot. The tool immediately detects the image payload and produces your Base64 snippets.",
+        faq4Q: "Can I decode Base64 back into an image or file?",
+        faq4A: "Yes! You can use VantorKit's Base64 File Encoder & Decoder tool to paste any Base64 string and download the original binary image or document file instantly.",
+        toastCopied: "Snippet copied to clipboard!",
+        toastLoaded: "Image converted to Base64 successfully!",
+        toastCleared: "Workspace cleared."
+      },
+      ar: {
+        langLabel: "العربية",
+        backLink: "الرجوع إلى الأدوات ←",
+        badgePill: "100% محلي في المتصفح • بدون رفع للسحابة • ترميز فوري",
+        toolTitle: "محول الصور إلى Base64",
+        toolSubtitle: "حوّل صور PNG أو JPG أو WebP أو SVG أو GIF أو ICO إلى عناوين Data URI وروابط HTML <img> وأكواد خلفيات CSS مباشرة داخل متصفحك.",
+        dropzoneTitle: "اسحب الصورة وأفلتها هنا",
+        dropzoneSub: "يدعم PNG و JPG و WebP و SVG و GIF و ICO (الحجم الموصى به: حتى 15 ميجابايت)",
+        btnBrowse: "اختيار ملف الصورة",
+        btnSample: "تحميل رسم توضيحي للتجربة",
+        pasteHint: "أو الصق مباشرة من الحافظة",
+        metaDimensions: "الأبعاد:",
+        metaMime: "نوع MIME:",
+        metaOriginalSize: "حجم الملف:",
+        metaBase64Size: "حجم Base64:",
+        metaOverhead: "+33.3% زيادة في الحجم",
+        tabDataUri: "عنوان Data URI",
+        tabHtml: "وسم HTML <img>",
+        tabCss: "خلفية CSS",
+        tabRaw: "سلسلة Base64 النقية",
+        btnCopySnippet: "نسخ الكود",
+        btnCopyLabel: "نسخ الكود",
+        btnCopiedLabel: "تم النسخ!",
+        btnDownloadTxt: "تنزيل كملف .txt",
+        btnClearImage: "مسح الصورة",
+        infoTitle: "كل ما تحتاج معرفته عن تضمين الصور بصيغة Base64",
+        infoSubtitle: "تعرف على كيفية وتوقيت تضمين الصور مباشرة في ملفات HTML و CSS دون الحاجة لطلبات HTTP منفصلة.",
+        guide1Title: "تخطي طلبات HTTP الإضافية",
+        guide1Desc: "يؤدي تضمين الرسومات الصغيرة (الأيقونات والشعارات والصور الرمزية) مباشرة في مستند HTML أو حزمة CSS إلى تجنب استعلامات DNS المنفصلة ومصادقات TCP، مما يسرع ظهور المحتوى الرئيسي على الهواتف.",
+        guide2Title: "معادلة زيادة الحجم بنسبة 33%",
+        guide2Desc: "يحول ترميز Base64 كل 3 بايتات ثنائية إلى 4 أحرف ASCII قابلة للقراءة، مما يضيف زيادة بنسبة الثلث تقريباً (+33.3%). يُنصح بحصر التضمين على الملفات التي يقل حجمها عن 10 كيلوبايت.",
+        guide3Title: "مفاضلة التخزين المؤقت",
+        guide3Desc: "عندما تُضمن الصورة داخل HTML يتم تنزيلها مع كل تحديث للمستند. أما عند وضعها داخل ملف CSS مخزن مؤقتاً ومحمي بإصدار، فتبقى محفوظة في ذاكرة المتصفح عبر الزيارات المتكررة.",
+        faq1Q: "هل تُرفع صوري إلى أي خوادم خارجية؟",
+        faq1A: "مستحيل تماماً. تتم كل المعالجة داخل ذاكرة متصفحك مباشرة عبر واجهة HTML5 FileReader. صورك وتصميماتك لا تغادر جهازك أبداً.",
+        faq2Q: "ما هي الصيغ المدعومة في هذا المحول؟",
+        faq2A: "يدعم المحول صيغ PNG و JPG و WebP و SVG و GIF و ICO، مع تحديد نوع MIME الدقيق وتوفير أكواد صالحة لكل من HTML و CSS.",
+        faq3Q: "كيف يمكنني لصق صورة من الحافظة مباشرة؟",
+        faq3A: "ما عليك سوى الضغط على Ctrl+V (أو Cmd+V على نظام Mac) في أي مكان بالصفحة بعد نسخ لقطة شاشة أو صورة، وسيقوم المحول بقراءتها وتحويلها فوراً.",
+        faq4Q: "هل يمكنني فك ترميز Base64 وإعادته لملف صورة؟",
+        faq4A: "نعم! يمكنك استخدام أداة مشفر ومفكك Base64 في VantorKit للصق أي سلسلة وتنزيل ملف الصورة الأصلي على الفور.",
+        toastCopied: "تم نسخ الكود إلى الحافظة بنجاح!",
+        toastLoaded: "تم تحويل الصورة إلى Base64 بنجاح!",
+        toastCleared: "تم تفريغ مساحة العمل."
+      },
+      fr: {
+        langLabel: "Français",
+        backLink: "← Retour aux outils",
+        badgePill: "100% Côté Client • Zéro Téléversement Cloud • Encodage Instantané",
+        toolTitle: "Convertisseur Image vers Base64",
+        toolSubtitle: "Convertissez PNG, JPG, WebP, SVG, GIF ou ICO en Data URI Base64, balises HTML <img> et arrière-plans CSS directement dans votre navigateur.",
+        dropzoneTitle: "Glissez & Déposez votre image ici",
+        dropzoneSub: "Prend en charge PNG, JPG, WebP, SVG, GIF, ICO (Max recommandé: 15 Mo)",
+        btnBrowse: "Choisir une Image",
+        btnSample: "Charger une Image de Démonstration",
+        pasteHint: "Ou collez directement depuis le presse-papiers",
+        metaDimensions: "Dimensions:",
+        metaMime: "Type MIME:",
+        metaOriginalSize: "Taille d'origine:",
+        metaBase64Size: "Taille Base64:",
+        metaOverhead: "+33.3% Surcharge",
+        tabDataUri: "Data URI",
+        tabHtml: "Balise HTML <img>",
+        tabCss: "Arrière-plan CSS",
+        tabRaw: "Base64 Brut",
+        btnCopySnippet: "Copier l'extrait",
+        btnCopyLabel: "Copier l'extrait",
+        btnCopiedLabel: "Copié !",
+        btnDownloadTxt: "Télécharger en .txt",
+        btnClearImage: "Effacer l'image",
+        infoTitle: "Tout Savoir sur l'Intégration d'Images en Base64",
+        infoSubtitle: "Apprenez quand et comment intégrer des images directement dans vos pages HTML et feuilles de style CSS sans requêtes HTTP supplémentaires.",
+        guide1Title: "Élimination des requêtes HTTP",
+        guide1Desc: "Intégrer de petits éléments graphiques (icônes, logos, puces, avatars) directement dans vos documents HTML ou vos bundles CSS élimine les allers-retours réseau et accélère l'affichage initial.",
+        guide2Title: "La surcharge de taille de 33%",
+        guide2Desc: "Base64 encode 3 octets binaires en 4 caractères ASCII, entraînant une surcharge géométrique inhérente de 4:3 (~33.3%). Réservez l'inlining aux fichiers inférieurs à 10 Ko.",
+        guide3Title: "Gestion du cache navigateur",
+        guide3Desc: "Une image intégrée dans le HTML est rechargée à chaque chargement de page. Si elle est placée dans une feuille de style CSS mise en cache, elle reste en mémoire locale.",
+        faq1Q: "Mes images sont-elles téléversées sur un serveur distant ?",
+        faq1A: "Non, absolument pas. La conversion s'exécute à 100% dans la mémoire locale de votre navigateur via l'API HTML5 FileReader. Vos images ne quittent jamais votre machine.",
+        faq2Q: "Quels formats d'images sont pris en charge ?",
+        faq2A: "L'outil gère PNG, JPEG/JPG, WebP, SVG, GIF et ICO avec détection automatique du type MIME pour un code HTML et CSS conforme.",
+        faq3Q: "Comment coller une image depuis le presse-papiers ?",
+        faq3A: "Appuyez simplement sur Ctrl+V (ou Cmd+V sur Mac) n'importe où sur la page après avoir copié une image ou pris une capture d'écran.",
+        faq4Q: "Puis-je reconvertir du Base64 en image téléchargeable ?",
+        faq4A: "Oui ! Utilisez notre outil 'Encodeur et Décodeur de Fichiers Base64' pour coller du Base64 et réexporter le fichier binaire d'origine.",
+        toastCopied: "Extrait copié dans le presse-papiers !",
+        toastLoaded: "Image encodée en Base64 avec succès !",
+        toastCleared: "Espace de travail réinitialisé."
+      },
+      it: {
+        langLabel: "Italiano",
+        backLink: "← Torna agli strumenti",
+        badgePill: "100% Lato Client • Zero Caricamenti Cloud • Codifica Istantanea",
+        toolTitle: "Convertitore da Immagine a Base64",
+        toolSubtitle: "Converti PNG, JPG, WebP, SVG, GIF o ICO in Data URI Base64, tag HTML <img> e sfondi CSS direttamente nel tuo browser.",
+        dropzoneTitle: "Trascina e rilascia l'immagine qui",
+        dropzoneSub: "Supporta PNG, JPG, WebP, SVG, GIF, ICO (Consigliato max: 15 MB)",
+        btnBrowse: "Scegli File Immagine",
+        btnSample: "Carica Grafica di Esempio",
+        pasteHint: "Oppure incolla dagli appunti",
+        metaDimensions: "Dimensioni:",
+        metaMime: "Tipo MIME:",
+        metaOriginalSize: "Dimensione File:",
+        metaBase64Size: "Dimensione Base64:",
+        metaOverhead: "+33.3% Sovraccarico",
+        tabDataUri: "Data URI",
+        tabHtml: "Tag HTML <img>",
+        tabCss: "Sfondo CSS",
+        tabRaw: "Base64 Grezzo",
+        btnCopySnippet: "Copia Snippet",
+        btnCopyLabel: "Copia Snippet",
+        btnCopiedLabel: "Copiato!",
+        btnDownloadTxt: "Scarica come .txt",
+        btnClearImage: "Cancella Immagine",
+        infoTitle: "Tutto sull'Incorporamento di Immagini in Base64",
+        infoSubtitle: "Scopri quando e come incorporare immagini direttamente nei tuoi documenti HTML e fogli di stile CSS senza richieste HTTP separate.",
+        guide1Title: "Elimina le richieste HTTP",
+        guide1Desc: "L'incorporamento di piccole risorse grafiche (icone, loghi, avatar) direttamente nel codice HTML o CSS evita risoluzioni DNS separate e accelera il rendering su reti mobili.",
+        guide2Title: "La matematica dell'aumento del 33%",
+        guide2Desc: "Base64 codifica 3 byte binari in 4 caratteri ASCII, con un incremento strutturale del 33.3%. È consigliabile limitare l'inlining a file inferiori a 10 KB.",
+        guide3Title: "Compromesso della cache del browser",
+        guide3Desc: "Un'immagine inlined in HTML viene riscaricata a ogni ricaricamento. Se inserita in un foglio CSS con cache attiva, rimane memorizzata nel browser per le visite successive.",
+        faq1Q: "Le mie immagini vengono caricate su server remoti?",
+        faq1A: "Assolutamente no. Tutta l'elaborazione avviene al 100% nella memoria del tuo browser tramite l'API HTML5 FileReader. Le tue immagini restano private.",
+        faq2Q: "Quali formati grafici sono supportati?",
+        faq2A: "Il convertitore supporta PNG, JPG/JPEG, WebP, SVG, GIF e ICO con rilevamento automatico del MIME type.",
+        faq3Q: "Come posso incollare un'immagine dagli appunti?",
+        faq3A: "Premi semplicemente Ctrl+V (o Cmd+V su Mac) in qualunque punto della pagina dopo aver copiato uno screenshot o un'immagine.",
+        faq4Q: "Posso decodificare una stringa Base64 in file immagine?",
+        faq4A: "Certamente! Utilizza lo strumento 'Codificatore e Decodificatore File Base64' di VantorKit per incollare il codice e scaricare il file immagine originale.",
+        toastCopied: "Snippet copiato negli appunti!",
+        toastLoaded: "Immagine convertita in Base64 con successo!",
+        toastCleared: "Area di lavoro svuotata."
+      }
+    };
+
+    // DOM Elements
+    const dropZone = document.getElementById('dropZone');
+    const imageFileInput = document.getElementById('imageFileInput');
+    const btnBrowse = document.getElementById('btnBrowse');
+    const btnSample = document.getElementById('btnSample');
+    const resultsWorkspace = document.getElementById('resultsWorkspace');
+    const imgPreview = document.getElementById('imgPreview');
+    const metaFileName = document.getElementById('metaFileName');
+    const metaDimensions = document.getElementById('metaDimensions');
+    const metaMime = document.getElementById('metaMime');
+    const metaOriginalSize = document.getElementById('metaOriginalSize');
+    const metaBase64Size = document.getElementById('metaBase64Size');
+    const snippetOutput = document.getElementById('snippetOutput');
+    const snippetCharCount = document.getElementById('snippetCharCount');
+    const btnCopySnippet = document.getElementById('btnCopySnippet');
+    const copyBtnLabel = document.getElementById('copyBtnLabel');
+    const btnDownloadTxt = document.getElementById('btnDownloadTxt');
+    const btnClearImage = document.getElementById('btnClearImage');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const toastBox = document.getElementById('toastBox');
+    const toastMessage = document.getElementById('toastMessage');
+
+    let currentFile = null;
+    let currentDataUri = '';
+    let currentRawBase64 = '';
+    let currentMimeType = 'image/png';
+    let currentWidth = 0;
+    let currentHeight = 0;
+    let currentTab = 'datauri';
+    let activeLang = 'en';
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      if (!toastBox) return;
+      toastMessage.textContent = msg;
+      toastBox.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastBox.classList.remove('show');
+      }, 2600);
+    }
+
+    function generateSnippet(tab) {
+      if (!currentDataUri) return '';
+      switch (tab) {
+        case 'datauri':
+          return currentDataUri;
+        case 'html': {
+          const dims = (currentWidth && currentHeight) ? ` width="${currentWidth}" height="${currentHeight}"` : '';
+          return `<img src="${currentDataUri}" alt="${currentFile ? currentFile.name : 'Embedded Image'}"${dims} />`;
+        }
+        case 'css':
+          return `background-image: url('${currentDataUri}');\nbackground-size: contain;\nbackground-repeat: no-repeat;`;
+        case 'raw':
+          return currentRawBase64;
+        default:
+          return currentDataUri;
+      }
+    }
+
+    function updateOutputView() {
+      const code = generateSnippet(currentTab);
+      snippetOutput.value = code;
+      const len = code.length;
+      snippetCharCount.textContent = len.toLocaleString() + ' characters';
+    }
+
+    function processImageFile(file) {
+      if (!file) return;
+      currentFile = file;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentDataUri = e.target.result;
+        const commaIdx = currentDataUri.indexOf(',');
+        currentRawBase64 = commaIdx !== -1 ? currentDataUri.slice(commaIdx + 1) : currentDataUri;
+        currentMimeType = file.type || 'image/png';
+
+        // Load into Image element to determine dimensions
+        const img = new Image();
+        img.onload = function() {
+          currentWidth = img.naturalWidth || img.width;
+          currentHeight = img.naturalHeight || img.height;
+
+          // Update UI
+          imgPreview.src = currentDataUri;
+          metaFileName.textContent = file.name || 'image.png';
+          metaDimensions.textContent = `${currentWidth} × ${currentHeight} px`;
+          metaMime.textContent = currentMimeType;
+          metaOriginalSize.textContent = formatBytes(file.size);
+          const base64Bytes = Math.round(currentRawBase64.length * 0.75);
+          metaBase64Size.textContent = formatBytes(currentRawBase64.length);
+
+          updateOutputView();
+          resultsWorkspace.classList.add('active');
+          dropZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          showToast(I18N[activeLang]?.toastLoaded || 'Image converted successfully!');
+        };
+        img.src = currentDataUri;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Load SVG/Canvas sample graphic
+    function loadSampleGraphic() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+
+      // Gradient background
+      const grad = ctx.createLinearGradient(0, 0, 400, 400);
+      grad.addColorStop(0, '#1e293b');
+      grad.addColorStop(0.5, '#0f172a');
+      grad.addColorStop(1, '#020617');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 400, 400);
+
+      // Glowing circle
+      const radial = ctx.createRadialGradient(200, 200, 10, 200, 200, 150);
+      radial.addColorStop(0, 'rgba(59, 130, 246, 0.8)');
+      radial.addColorStop(0.5, 'rgba(168, 85, 247, 0.4)');
+      radial.addColorStop(1, 'transparent');
+      ctx.fillStyle = radial;
+      ctx.beginPath();
+      ctx.arc(200, 200, 150, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Geometric badge
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('VantorKit', 200, 185);
+
+      ctx.fillStyle = '#60a5fa';
+      ctx.font = '600 18px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('100% Client-Side Graphic', 200, 230);
+
+      canvas.toBlob(function(blob) {
+        const file = new File([blob], 'vantorkit-sample.png', { type: 'image/png' });
+        processImageFile(file);
+      }, 'image/png');
+    }
+
+    // Clear Workspace
+    function clearWorkspace() {
+      currentFile = null;
+      currentDataUri = '';
+      currentRawBase64 = '';
+      currentWidth = 0;
+      currentHeight = 0;
+      imgPreview.src = '';
+      snippetOutput.value = '';
+      snippetCharCount.textContent = '0 characters';
+      resultsWorkspace.classList.remove('active');
+      imageFileInput.value = '';
+      showToast(I18N[activeLang]?.toastCleared || 'Workspace cleared.');
+    }
+
+    // Tab buttons
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-tab');
+        updateOutputView();
+      });
+    });
+
+    // Copy action
+    btnCopySnippet.addEventListener('click', () => {
+      if (!snippetOutput.value) return;
+      navigator.clipboard.writeText(snippetOutput.value).then(() => {
+        btnCopySnippet.classList.add('copied');
+        copyBtnLabel.textContent = I18N[activeLang]?.btnCopiedLabel || 'Copied!';
+        showToast(I18N[activeLang]?.toastCopied || 'Snippet copied to clipboard!');
+        setTimeout(() => {
+          btnCopySnippet.classList.remove('copied');
+          copyBtnLabel.textContent = I18N[activeLang]?.btnCopyLabel || 'Copy Snippet';
+        }, 2200);
+      }).catch(() => {
+        snippetOutput.select();
+        document.execCommand('copy');
+        showToast(I18N[activeLang]?.toastCopied || 'Snippet copied to clipboard!');
+      });
+    });
+
+    // Download .txt
+    btnDownloadTxt.addEventListener('click', () => {
+      if (!snippetOutput.value) return;
+      const blob = new Blob([snippetOutput.value], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const baseName = currentFile ? currentFile.name.replace(/\.[^/.]+$/, "") : "image";
+      a.href = url;
+      a.download = `${baseName}-base64-${currentTab}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    });
+
+    // Clear Button
+    btnClearImage.addEventListener('click', clearWorkspace);
+
+    // File Input & Drag and Drop Events
+    btnBrowse.addEventListener('click', (e) => {
+      e.stopPropagation();
+      imageFileInput.click();
+    });
+    btnSample.addEventListener('click', (e) => {
+      e.stopPropagation();
+      loadSampleGraphic();
+    });
+    dropZone.addEventListener('click', () => {
+      imageFileInput.click();
+    });
+
+    imageFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        processImageFile(e.target.files[0]);
+      }
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('drag-active');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('drag-active');
+      });
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files[0]) {
+        processImageFile(dt.files[0]);
+      }
+    });
+
+    // Clipboard Paste Listener (Ctrl+V / Cmd+V)
+    window.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf('image') !== -1) {
+          const blob = items[i].getAsFile();
+          if (blob) {
+            const pastedFile = new File([blob], 'pasted-graphic.png', { type: blob.type || 'image/png' });
+            processImageFile(pastedFile);
+            break;
+          }
+        }
+      }
+    });
+
+    // i18n Translation Switcher
+    function setLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      activeLang = lang;
+      const dict = I18N[lang];
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Update snippet tabs labels
+      updateOutputView();
+    }
+
+    // Expose setLanguage globally for standardized dropdown sync
+    window.setLanguage = setLanguage;
+
+    // Initialization with stored language
+    const initialLang = localStorage.getItem('vantorkit_lang') || 'en';
+    setLanguage(initialLang);
+
+  })();
+  </script>
+</body>
+</html>
