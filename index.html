@@ -709,6 +709,49 @@
     .category-btn[data-cat="everyday"] svg { color: var(--cat-everyday); }
     .category-btn[data-cat="everyday"]:hover { color: var(--cat-everyday-hover); }
 
+    /* Enhancement 2: Category Filter Color Dots (w-2 h-2 rounded-full) */
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      display: inline-block;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+    }
+
+    .cat-dot-math {
+      background-color: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+    }
+    .cat-dot-files {
+      background-color: #f59e0b;
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+    }
+    .cat-dot-images {
+      background-color: #ec4899;
+      box-shadow: 0 0 6px rgba(236, 72, 153, 0.6);
+    }
+    .cat-dot-text {
+      background-color: #8b5cf6;
+      box-shadow: 0 0 6px rgba(139, 92, 246, 0.6);
+    }
+    .cat-dot-everyday {
+      background-color: #3b82f6;
+      box-shadow: 0 0 6px rgba(59, 130, 246, 0.6);
+    }
+
+    .category-btn:hover .cat-dot {
+      transform: scale(1.25);
+    }
+    .category-btn.active .cat-dot {
+      transform: scale(1.3);
+    }
+    .category-btn.active .cat-dot-math { box-shadow: 0 0 10px rgba(16, 185, 129, 0.85); }
+    .category-btn.active .cat-dot-files { box-shadow: 0 0 10px rgba(245, 158, 11, 0.85); }
+    .category-btn.active .cat-dot-images { box-shadow: 0 0 10px rgba(236, 72, 153, 0.85); }
+    .category-btn.active .cat-dot-text { box-shadow: 0 0 10px rgba(139, 92, 246, 0.85); }
+    .category-btn.active .cat-dot-everyday { box-shadow: 0 0 10px rgba(59, 130, 246, 0.85); }
+
     /* Category Pill Indicator per active category */
     .categories-bar:has(.category-btn[data-cat="math"].active) .category-pill-indicator {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.2) 100%);
@@ -987,6 +1030,48 @@
     }
     .tool-card[data-category="everyday"]:hover .card-arrow { color: var(--cat-everyday); }
 
+    /* Enhancement 1: 26th Card — Request a Tool (Dashed Border SaaS Styling) */
+    .tool-card.card-request-tool {
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      background: rgba(15, 20, 32, 0.4);
+      cursor: pointer;
+    }
+
+    .tool-card.card-request-tool:hover {
+      border-color: rgba(96, 165, 250, 0.5);
+      background: rgba(26, 34, 52, 0.6);
+      box-shadow: 0 16px 36px -8px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(96, 165, 250, 0.2);
+    }
+
+    .tool-card.card-request-tool .tool-icon-wrap {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px dashed rgba(96, 165, 250, 0.35);
+      color: #60a5fa;
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .tool-card.card-request-tool:hover .tool-icon-wrap {
+      background: rgba(59, 130, 246, 0.22);
+      border-color: rgba(96, 165, 250, 0.6);
+      color: #93c5fd;
+      box-shadow: 0 0 18px rgba(59, 130, 246, 0.4);
+      transform: scale(1.06);
+    }
+
+    .tool-card.card-request-tool .tool-badge.request-badge {
+      background: rgba(59, 130, 246, 0.12);
+      color: #93c5fd;
+      border: 1px dashed rgba(96, 165, 250, 0.35);
+    }
+
+    .tool-card.card-request-tool:hover .card-arrow {
+      color: #60a5fa;
+    }
+
+    .tool-card[data-category="request"] .tool-category {
+      color: #60a5fa;
+    }
+
     .tool-title {
       font-size: 1.15rem;
       font-weight: 700;
@@ -1011,20 +1096,23 @@
       border-top: 1px solid rgba(255, 255, 255, 0.04);
     }
 
+    /* Enhancement 3: Card Arrow Micro-Interactions */
     .card-arrow {
       color: var(--text-muted);
-      transition: all 0.2s ease;
+      opacity: 0.4;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
       display: flex;
       align-items: center;
     }
 
     .tool-card:hover .card-arrow {
       color: var(--accent);
-      transform: translateX(4px);
+      opacity: 1;
+      transform: translateX(3px);
     }
 
     html[dir="rtl"] .tool-card:hover .card-arrow {
-      transform: translateX(-4px) rotate(180deg);
+      transform: translateX(-3px) rotate(180deg);
     }
 
     html[dir="rtl"] .card-arrow svg {
@@ -1129,7 +1217,7 @@
     }
 
     .footer-link {
-      color: var(--text-muted);
+      color: #94a3b8;
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 500;
@@ -1143,11 +1231,12 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
+    /* Enhancement 4: Footer Contrast Enhancement */
     .footer-copy, footer p {
       max-width: 600px;
       margin: 0 auto;
       line-height: 1.6;
-      color: #64748b;
+      color: #94a3b8;
       font-size: 0.84rem;
     }
 
@@ -1295,7 +1384,7 @@
 
   <main>
     <!-- Categories Filter Pills (Sliding Indicator) -->
-    <div class="categories-wrapper">
+    <div class="categories-wrapper" id="category-filters">
       <div class="categories-bar" id="categoriesBar" role="tablist">
         <!-- Floating Sliding Pill Indicator -->
         <div class="category-pill-indicator" id="categoryPillIndicator" aria-hidden="true"></div>
@@ -1304,23 +1393,23 @@
         <span data-i18n="cat_all">All Tools</span>
       </button>
       <button type="button" class="category-btn" data-cat="math">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+        <span class="cat-dot cat-dot-math" aria-hidden="true"></span>
         <span data-i18n="cat_math">Math &amp; Finance</span>
       </button>
       <button type="button" class="category-btn" data-cat="files">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <span class="cat-dot cat-dot-files" aria-hidden="true"></span>
         <span data-i18n="cat_files">PDF &amp; Files</span>
       </button>
       <button type="button" class="category-btn" data-cat="images">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span class="cat-dot cat-dot-images" aria-hidden="true"></span>
         <span data-i18n="cat_images">Images</span>
       </button>
       <button type="button" class="category-btn" data-cat="text">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+        <span class="cat-dot cat-dot-text" aria-hidden="true"></span>
         <span data-i18n="cat_text">Text Tools</span>
       </button>
       <button type="button" class="category-btn" data-cat="everyday">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span class="cat-dot cat-dot-everyday" aria-hidden="true"></span>
         <span data-i18n="cat_everyday">Everyday</span>
       </button>
       </div>
@@ -1857,6 +1946,31 @@
         </div>
       </a>
 
+      <!-- 26th Utility Card: Request a Tool (Grid Harmony & Balanced Bottom Row) -->
+      <a href="mailto:support@vantorkit.com?subject=Tool%20Request" class="tool-card card-request-tool" data-tool-id="request-a-tool" data-category="request">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap request-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </div>
+            <span class="tool-badge request-badge" data-i18n="badge_request">Suggest</span>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_request">Community</div>
+            <div class="tool-title" data-tool-field="title">Request a Tool</div>
+            <div class="tool-desc" data-tool-field="desc">Need a specific browser utility? Tell us what client-side tool to build next.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
       <!-- Empty Search Results Placeholder -->
       <div class="no-results" id="noResultsBox">
         <div class="no-results-icon">🔍</div>
@@ -1910,6 +2024,8 @@
           badge_popular: "Popular",
           badge_high_value: "High Value",
           badge_live: "Live Now",
+          badge_request: "Suggest",
+          cat_request: "Community",
           tools: {
             "percentage-calculator": {
               title: "Percentage Calculator",
@@ -2014,6 +2130,10 @@
             "text-diff": {
               title: "Text Diff & Compare",
               desc: "Compare two text snippets side-by-side or inline with visual additions and deletions highlights."
+            },
+            "request-a-tool": {
+              title: "Request a Tool",
+              desc: "Need a specific browser utility? Tell us what client-side tool to build next."
             }
           }
         },
@@ -2040,6 +2160,8 @@
           badge_popular: "شائع",
           badge_high_value: "قيمة عالية",
           badge_live: "متاح الآن",
+          badge_request: "اقتراح",
+          cat_request: "المجتمع",
           tools: {
             "percentage-calculator": {
               title: "حاسبة النسبة المئوية",
@@ -2144,6 +2266,10 @@
             "text-diff": {
               title: "مقارنة النصوص وتحديد الفروقات",
               desc: "قارن بين نصين جنباً إلى جنب أو بشكل مدمج مع تمييز دقيق للإضافات والحذف."
+            },
+            "request-a-tool": {
+              title: "اقتراح أداة جديدة",
+              desc: "هل تحتاج إلى أداة تصفح معينة؟ أخبرنا بما ترغب في بنائه مستقبلاً."
             }
           }
         },
@@ -2170,6 +2296,8 @@
           badge_popular: "Populaire",
           badge_high_value: "Haute Valeur",
           badge_live: "Disponible",
+          badge_request: "Suggérer",
+          cat_request: "Communauté",
           tools: {
             "percentage-calculator": {
               title: "Calculateur de Pourcentage",
@@ -2274,6 +2402,10 @@
             "text-diff": {
               title: "Comparateur de Texte (Diff)",
               desc: "Comparez deux textes côte à côte ou en ligne avec surbrillance des ajouts et suppressions."
+            },
+            "request-a-tool": {
+              title: "Proposer un outil",
+              desc: "Besoin d'un outil spécifique ? Dites-nous quel outil développer ensuite."
             }
           }
         },
@@ -2300,6 +2432,8 @@
           badge_popular: "Popolare",
           badge_high_value: "Alto Valore",
           badge_live: "Disponibile",
+          badge_request: "Suggerisci",
+          cat_request: "Community",
           tools: {
             "percentage-calculator": {
               title: "Calcolatore di Percentuale",
@@ -2404,6 +2538,10 @@
             "text-diff": {
               title: "Confronto Testo & Diff",
               desc: "Confronta due testi affiancati o in linea con evidenziazione visiva di aggiunte e rimozioni."
+            },
+            "request-a-tool": {
+              title: "Richiedi uno strumento",
+              desc: "Hai bisogno di un'utilità specifica? Suggeriscici il prossimo strumento."
             }
           }
         }
