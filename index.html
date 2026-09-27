@@ -1254,6 +1254,569 @@
       main {
         padding: 0.5rem 1rem 2.5rem;
       }
+    /* ==========================================================================
+       VantorKit Collapsible Navigation Drawer (SaaS Dark Aesthetic & RTL/LTR)
+       ========================================================================== */
+    .nav-brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .drawer-trigger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+
+    .drawer-trigger-btn:hover {
+      border-color: var(--accent);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
+      transform: scale(1.05);
+      color: #fff;
+    }
+
+    .drawer-trigger-btn:active {
+      transform: scale(0.95);
+    }
+
+    .drawer-trigger-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .drawer-trigger-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .drawer-trigger-btn:hover svg {
+      transform: scale(1.08);
+    }
+
+    /* Drawer Container & Backdrop */
+    .drawer-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      visibility: hidden;
+      pointer-events: none;
+      transition: visibility 0.3s ease;
+    }
+
+    .drawer-container.open {
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .drawer-container.open .drawer-backdrop {
+      opacity: 1;
+    }
+
+    /* Drawer Panel (Dark SaaS Styling) */
+    .drawer-panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 360px;
+      max-width: calc(100vw - 44px);
+      background: #0b0f19;
+      border-right: 1px solid #1f2937;
+      border-left: none;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+      overflow: hidden;
+      z-index: 1001;
+    }
+
+    /* RTL Support for Drawer Panel */
+    html[dir="rtl"] .drawer-panel {
+      left: auto;
+      right: 0;
+      border-right: none;
+      border-left: 1px solid #1f2937;
+      transform: translateX(100%);
+    }
+
+    .drawer-container.open .drawer-panel {
+      transform: translateX(0);
+    }
+
+    html[dir="rtl"] .drawer-container.open .drawer-panel {
+      transform: translateX(0);
+    }
+
+    /* Prevent body scrolling when drawer is open */
+    body.drawer-open {
+      overflow: hidden !important;
+    }
+
+    /* Drawer Header */
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.25rem;
+      background: rgba(15, 20, 32, 0.85);
+      border-bottom: 1px solid #1f2937;
+      flex-shrink: 0;
+    }
+
+    .drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .drawer-brand-logo {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.4));
+    }
+
+    .drawer-brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .drawer-brand-title span {
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .drawer-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .drawer-close-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg) scale(1.05);
+    }
+
+    /* In-Drawer Quick Search */
+    .drawer-search-wrap {
+      padding: 0.85rem 1.25rem 0.65rem;
+      background: #0b0f19;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+
+    .drawer-search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .drawer-search-icon {
+      position: absolute;
+      left: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    html[dir="rtl"] .drawer-search-icon {
+      left: auto;
+      right: 0.75rem;
+    }
+
+    .drawer-search-input {
+      width: 100%;
+      padding: 0.55rem 2rem 0.55rem 2.25rem;
+      background: rgba(18, 24, 38, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9px;
+      color: #fff;
+      font-size: 0.84rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    html[dir="rtl"] .drawer-search-input {
+      padding: 0.55rem 2.25rem 0.55rem 2rem;
+    }
+
+    .drawer-search-input:focus {
+      border-color: var(--accent);
+      background: rgba(22, 30, 48, 0.9);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .drawer-search-input::placeholder {
+      color: #64748b;
+    }
+
+    .drawer-search-clear {
+      position: absolute;
+      right: 0.6rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    html[dir="rtl"] .drawer-search-clear {
+      right: auto;
+      left: 0.6rem;
+    }
+
+    .drawer-search-clear:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    /* Scrollable Drawer Body */
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1rem 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+
+    .drawer-body::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .drawer-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .drawer-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    .drawer-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    /* Drawer Sections */
+    .drawer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .drawer-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .drawer-section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .drawer-section-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+    }
+
+    .drawer-section-action {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #64748b;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+      text-transform: none;
+    }
+
+    .drawer-section-action:hover {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Empty States */
+    .drawer-empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1rem;
+      background: rgba(15, 20, 32, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: #64748b;
+      font-size: 0.78rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .drawer-empty-icon {
+      color: #f59e0b;
+      font-size: 0.9rem;
+    }
+
+    /* Tool Row Items */
+    .drawer-tool-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .drawer-tool-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
+      background: transparent;
+      transition: background 0.15s ease;
+    }
+
+    .drawer-tool-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .drawer-tool-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 500;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .drawer-tool-link:hover {
+      color: #fff;
+    }
+
+    .drawer-tool-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Category Accent Dots in Drawer */
+    .drawer-cat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .drawer-cat-dot.math { background-color: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5); }
+    .drawer-cat-dot.files { background-color: #f59e0b; box-shadow: 0 0 6px rgba(245, 158, 11, 0.5); }
+    .drawer-cat-dot.images { background-color: #ec4899; box-shadow: 0 0 6px rgba(236, 72, 153, 0.5); }
+    .drawer-cat-dot.text { background-color: #8b5cf6; box-shadow: 0 0 6px rgba(139, 92, 246, 0.5); }
+    .drawer-cat-dot.everyday { background-color: #3b82f6; box-shadow: 0 0 6px rgba(59, 130, 246, 0.5); }
+    .drawer-cat-dot.request { background-color: #60a5fa; box-shadow: 0 0 6px rgba(96, 165, 250, 0.5); }
+
+    /* Star Toggle Button */
+    .drawer-star-btn {
+      background: none;
+      border: none;
+      padding: 4px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
+    }
+
+    .drawer-star-btn:hover {
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.12);
+      transform: scale(1.15);
+    }
+
+    .drawer-star-btn.active {
+      color: #fbbf24;
+      filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.6));
+    }
+
+    .drawer-star-btn.active:hover {
+      transform: scale(1.2) rotate(12deg);
+    }
+
+    /* Accordion for All Tools */
+    .drawer-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .drawer-accordion-group {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      background: rgba(15, 20, 32, 0.35);
+      overflow: hidden;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .drawer-accordion-group:hover {
+      border-color: rgba(255, 255, 255, 0.09);
+      background: rgba(20, 26, 42, 0.45);
+    }
+
+    .drawer-accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.8rem;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    html[dir="rtl"] .drawer-accordion-header {
+      text-align: right;
+    }
+
+    .drawer-accordion-header:hover {
+      color: #fff;
+    }
+
+    .drawer-accordion-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .drawer-accordion-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .drawer-accordion-count {
+      font-size: 0.72rem;
+      color: #64748b;
+      font-weight: 700;
+      padding: 1px 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 999px;
+    }
+
+    .drawer-accordion-chevron {
+      color: #64748b;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .drawer-accordion-group.open .drawer-accordion-chevron {
+      transform: rotate(180deg);
+    }
+
+    .drawer-accordion-content {
+      display: none;
+      padding: 0.25rem 0.5rem 0.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .drawer-accordion-group.open .drawer-accordion-content {
+      display: block;
+    }
+
+    /* Drawer Footer */
+    .drawer-footer {
+      padding: 0.85rem 1.25rem;
+      border-top: 1px solid #1f2937;
+      background: rgba(11, 15, 25, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #64748b;
+      flex-shrink: 0;
+    }
+
+    .drawer-footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #94a3b8;
+    }
+
+    .drawer-footer-badge svg {
+      color: var(--accent);
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -1268,45 +1831,174 @@
 </head>
 <body>
 
+  <!-- Collapsible Navigation Drawer (Privacy-First Client-Side Storage) -->
+  <div class="drawer-container" id="vantorDrawerContainer" aria-hidden="true">
+    <!-- Backdrop Overlay with Blur and Light Dismiss -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Drawer Panel with Slide-in from Leading Edge -->
+    <aside class="drawer-panel" id="vantorDrawer" role="dialog" aria-modal="true" aria-label="Navigation Drawer">
+      <!-- Drawer Header -->
+      <div class="drawer-header">
+        <a href="./" class="drawer-brand" aria-label="VantorKit Home">
+          <svg class="brand-logo-svg drawer-brand-logo" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+            <g>
+              <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+              <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+              <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+              <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+            </g>
+          </svg>
+          <span class="drawer-brand-title">Vantor<span>Kit</span></span>
+        </a>
+
+        <button type="button" class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close Navigation Drawer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- In-Drawer Quick Search -->
+      <div class="drawer-search-wrap">
+        <div class="drawer-search-box">
+          <span class="drawer-search-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="text" class="drawer-search-input" id="drawerSearchInput" placeholder="Filter 26 tools..." autocomplete="off" spellcheck="false" aria-label="Filter tools">
+          <button type="button" class="drawer-search-clear" id="drawerSearchClear" aria-label="Clear filter">✕</button>
+        </div>
+      </div>
+
+      <!-- Scrollable Drawer Body -->
+      <div class="drawer-body" id="drawerBody">
+        
+        <!-- Pinned / Favorites Section (⭐) -->
+        <section class="drawer-section" id="drawerFavoritesSection">
+          <div class="drawer-section-header">
+            <div class="drawer-section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span id="drawerFavoritesTitle">Pinned Tools</span>
+              <span class="drawer-section-badge" id="drawerFavoritesBadge">0</span>
+            </div>
+          </div>
+          <div class="drawer-tool-list" id="drawerFavoritesList">
+            <!-- Dynamic or Empty State -->
+          </div>
+        </section>
+
+        <!-- Recent Tools Section (🕒) -->
+        <section class="drawer-section" id="drawerRecentsSection">
+          <div class="drawer-section-header">
+            <div class="drawer-section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span id="drawerRecentsTitle">Recent Tools</span>
+            </div>
+            <button type="button" class="drawer-section-action" id="drawerClearRecentsBtn" style="display: none;">Clear</button>
+          </div>
+          <div class="drawer-tool-list" id="drawerRecentsList">
+            <!-- Dynamic or Empty State -->
+          </div>
+        </section>
+
+        <!-- All Tools Categorized List (Accordion) -->
+        <section class="drawer-section" id="drawerAllToolsSection">
+          <div class="drawer-section-header">
+            <div class="drawer-section-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span id="drawerAllToolsTitle">All Tools</span>
+              <span class="drawer-section-badge">26</span>
+            </div>
+          </div>
+          
+          <div class="drawer-accordion" id="drawerAccordion">
+            <!-- Rendered by VantorKitDrawer -->
+          </div>
+
+          <!-- In-drawer No Results State -->
+          <div class="drawer-empty-state" id="drawerNoResults" style="display: none;">
+            <span>🔍</span>
+            <span id="drawerNoResultsText">No matching tools found</span>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="drawer-footer">
+        <div class="drawer-footer-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span id="drawerPrivacyBadge">100% Client-Side • Zero Logs</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
   <!-- Modern SaaS Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="./" class="brand-link" aria-label="VantorKit Home">
-        <!-- Sleek Custom Geometric 'V' SVG Logo -->
-        <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#38bdf8" />
-              <stop offset="100%" stop-color="#3b82f6" />
-            </linearGradient>
-            <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#818cf8" />
-              <stop offset="100%" stop-color="#c084fc" />
-            </linearGradient>
-            <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#60a5fa" />
-              <stop offset="100%" stop-color="#a855f7" />
-            </linearGradient>
-            <filter id="vGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.35"/>
-            </filter>
-          </defs>
-          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
-          <g filter="url(#vGlow)">
-            <!-- Left Wing -->
-            <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
-            <!-- Right Wing -->
-            <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
-            <!-- Central Geometric Diamond Node -->
-            <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
-            <!-- Apex Vertex -->
-            <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
-          </g>
-        </svg>
+      <div class="nav-brand-group">
+        <button type="button" class="drawer-trigger-btn" id="drawerTriggerBtn" aria-label="Toggle Navigation Drawer" aria-expanded="false" aria-controls="vantorDrawer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="./" class="brand-link" aria-label="VantorKit Home">
+          <!-- Sleek Custom Geometric 'V' SVG Logo -->
+          <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#3b82f6" />
+              </linearGradient>
+              <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#818cf8" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+              <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#60a5fa" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+              <filter id="vGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.35"/>
+              </filter>
+            </defs>
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+            <g filter="url(#vGlow)">
+              <!-- Left Wing -->
+              <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+              <!-- Right Wing -->
+              <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+              <!-- Central Geometric Diamond Node -->
+              <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+              <!-- Apex Vertex -->
+              <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+            </g>
+          </svg>
 
-        <span class="brand-name">Vantor<span>Kit</span></span>
-        <span class="brand-tag">v1.0</span>
-      </a>
+          <span class="brand-name">Vantor<span>Kit</span></span>
+          <span class="brand-tag">v1.0</span>
+        </a>
+      </div>
 
       <div class="nav-actions">
         <!-- Live Tool Count Pill -->
@@ -2026,6 +2718,18 @@
           badge_live: "Live Now",
           badge_request: "Suggest",
           cat_request: "Community",
+          drawerNavTitle: "Navigation",
+          drawerSearchPlaceholder: "Filter 26 tools...",
+          drawerPinnedTitle: "Pinned Tools",
+          drawerEmptyPinned: "No pinned tools yet — click ★ to pin",
+          drawerRecentsTitle: "Recent Tools",
+          drawerEmptyRecents: "No recent tools yet",
+          drawerClearRecents: "Clear",
+          drawerAllToolsTitle: "All Tools",
+          drawerNoMatchingTools: "No matching tools found",
+          drawerCloseAria: "Close Navigation Drawer",
+          drawerTriggerAria: "Toggle Navigation Drawer",
+          drawerClientSideBadge: "100% Client-Side • Zero Logs",
           tools: {
             "percentage-calculator": {
               title: "Percentage Calculator",
@@ -2162,6 +2866,18 @@
           badge_live: "متاح الآن",
           badge_request: "اقتراح",
           cat_request: "المجتمع",
+          drawerNavTitle: "التنقل السريع",
+          drawerSearchPlaceholder: "تصفية 26 أداة...",
+          drawerPinnedTitle: "الأدوات المثبتة",
+          drawerEmptyPinned: "لا توجد أدوات مثبتة — انقر على ★ للتثبيت",
+          drawerRecentsTitle: "الأدوات الأخيرة",
+          drawerEmptyRecents: "لا توجد أدوات حديثة حتى الآن",
+          drawerClearRecents: "مسح",
+          drawerAllToolsTitle: "جميع الأدوات",
+          drawerNoMatchingTools: "لم يتم العثور على أدوات مطابقة",
+          drawerCloseAria: "إغلاق القائمة الجانبية",
+          drawerTriggerAria: "فتح القائمة الجانبية",
+          drawerClientSideBadge: "معالجة محلية 100% • بدون سجلات",
           tools: {
             "percentage-calculator": {
               title: "حاسبة النسبة المئوية",
@@ -2298,6 +3014,18 @@
           badge_live: "Disponible",
           badge_request: "Suggérer",
           cat_request: "Communauté",
+          drawerNavTitle: "Navigation",
+          drawerSearchPlaceholder: "Filtrer 26 outils...",
+          drawerPinnedTitle: "Outils épinglés",
+          drawerEmptyPinned: "Aucun outil épinglé — cliquez sur ★ pour épingler",
+          drawerRecentsTitle: "Outils récents",
+          drawerEmptyRecents: "Aucun outil récent pour le moment",
+          drawerClearRecents: "Effacer",
+          drawerAllToolsTitle: "Tous les outils",
+          drawerNoMatchingTools: "Aucun outil correspondant trouvé",
+          drawerCloseAria: "Fermer le menu latéral",
+          drawerTriggerAria: "Ouvrir le menu latéral",
+          drawerClientSideBadge: "100% Côté Client • Zéro Log",
           tools: {
             "percentage-calculator": {
               title: "Calculateur de Pourcentage",
@@ -2434,6 +3162,18 @@
           badge_live: "Disponibile",
           badge_request: "Suggerisci",
           cat_request: "Community",
+          drawerNavTitle: "Navigazione",
+          drawerSearchPlaceholder: "Filtra 26 strumenti...",
+          drawerPinnedTitle: "Strumenti aggiunti",
+          drawerEmptyPinned: "Nessuno strumento aggiunto — clicca ★ per aggiungere",
+          drawerRecentsTitle: "Strumenti recenti",
+          drawerEmptyRecents: "Nessuno strumento recente",
+          drawerClearRecents: "Cancella",
+          drawerAllToolsTitle: "Tutti gli strumenti",
+          drawerNoMatchingTools: "Nessuno strumento corrispondente trovato",
+          drawerCloseAria: "Chiudi il menu laterale",
+          drawerTriggerAria: "Apri il menu laterale",
+          drawerClientSideBadge: "100% Lato Client • Zero Registri",
           tools: {
             "percentage-calculator": {
               title: "Calcolatore di Percentuale",
@@ -2546,6 +3286,7 @@
           }
         }
       };
+      window.TRANSLATIONS = TRANSLATIONS;
 
       // --- State & DOM References ---
       const htmlRoot = document.getElementById('htmlRoot');
@@ -2636,6 +3377,11 @@
         setTimeout(() => {
           updateCategoryIndicator(null, false);
         }, 0);
+
+        // Update Drawer language if initialized
+        if (window.VantorKitDrawer && typeof window.VantorKitDrawer.updateLanguage === 'function') {
+          window.VantorKitDrawer.updateLanguage(lang);
+        }
       }
 
       // Toggle Language Menu
@@ -2816,6 +3562,615 @@
       requestAnimationFrame(() => {
         updateCategoryIndicator(null, false);
       });
+    })();
+  </script>
+
+  <!-- VantorKitDrawer Module (Privacy-First Client-Side Storage) -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Master catalog of all 26 VantorKit Tools
+      const TOOLS_DATA = [
+        // Math & Finance (5)
+        { id: 'percentage-calculator', cat: 'math', href: 'tools/percentage-calculator.html' },
+        { id: 'compound-interest', cat: 'math', href: 'tools/compound-interest.html' },
+        { id: 'loan-amortization', cat: 'math', href: 'tools/loan-calculator.html' },
+        { id: 'discount-sales-tax', cat: 'math', href: 'tools/discount-tax-calculator.html' },
+        { id: 'gpa-calculator', cat: 'math', href: 'tools/gpa-calculator.html' },
+        // PDF & Files (5)
+        { id: 'csv-json', cat: 'files', href: 'tools/csv-json-converter.html' },
+        { id: 'pdf-merge', cat: 'files', href: 'tools/pdf-merge.html' },
+        { id: 'pdf-split', cat: 'files', href: 'tools/pdf-split.html' },
+        { id: 'pdf-to-word', cat: 'files', href: 'tools/pdf-to-word.html' },
+        { id: 'base64-file-encoder', cat: 'files', href: 'tools/base64-file-encoder.html' },
+        // Images (6)
+        { id: 'color-palette-extractor', cat: 'images', href: 'tools/color-palette-extractor.html' },
+        { id: 'svg-png-converter', cat: 'images', href: 'tools/svg-to-png.html' },
+        { id: 'image-resizer-crop', cat: 'images', href: 'tools/image-resizer.html' },
+        { id: 'image-to-base64', cat: 'images', href: 'tools/image-to-base64.html' },
+        { id: 'image-compressor', cat: 'images', href: 'tools/image-compressor.html' },
+        { id: 'favicon-builder', cat: 'images', href: 'tools/favicon-builder.html' },
+        // Everyday (5)
+        { id: 'date-difference', cat: 'everyday', href: 'tools/date-difference.html' },
+        { id: 'qr-code-generator', cat: 'everyday', href: 'tools/qr-generator.html' },
+        { id: 'age-milestone-calculator', cat: 'everyday', href: 'tools/age-calculator.html' },
+        { id: 'password-generator', cat: 'everyday', href: 'tools/password-generator.html' },
+        { id: 'timezone-meeting-planner', cat: 'everyday', href: 'tools/timezone-planner.html' },
+        // Text Tools (4)
+        { id: 'word-counter', cat: 'text', href: 'tools/word-counter.html' },
+        { id: 'markdown-previewer', cat: 'text', href: 'tools/markdown-editor.html' },
+        { id: 'url-slug-generator', cat: 'text', href: 'tools/case-converter.html' },
+        { id: 'text-diff', cat: 'text', href: 'tools/text-diff.html' },
+        // Community / Request (1)
+        { id: 'request-a-tool', cat: 'request', href: 'mailto:support@vantorkit.com?subject=Tool%20Request' }
+      ];
+
+      const CATEGORIES_ORDER = ['math', 'files', 'images', 'everyday', 'text', 'request'];
+
+      // Storage Keys
+      const STORAGE_FAVORITES_KEY = 'vantorkit_favorites';
+      const STORAGE_RECENTS_KEY = 'vantorkit_recents';
+      const MAX_RECENTS = 5;
+
+      // In-memory fallback if localStorage fails (e.g. strict private mode quota)
+      let memFavorites = [];
+      let memRecents = [];
+
+      function safeGetItem(key) {
+        try {
+          const val = localStorage.getItem(key);
+          return val ? JSON.parse(val) : null;
+        } catch (e) {
+          console.warn('VantorKitDrawer: localStorage read error for ' + key, e);
+          return key === STORAGE_FAVORITES_KEY ? memFavorites : memRecents;
+        }
+      }
+
+      function safeSetItem(key, val) {
+        try {
+          localStorage.setItem(key, JSON.stringify(val));
+        } catch (e) {
+          console.warn('VantorKitDrawer: localStorage write error for ' + key, e);
+          if (key === STORAGE_FAVORITES_KEY) memFavorites = val;
+          if (key === STORAGE_RECENTS_KEY) memRecents = val;
+        }
+      }
+
+      function safeRemoveItem(key) {
+        try {
+          localStorage.removeItem(key);
+        } catch (e) {
+          console.warn('VantorKitDrawer: localStorage remove error for ' + key, e);
+          if (key === STORAGE_FAVORITES_KEY) memFavorites = [];
+          if (key === STORAGE_RECENTS_KEY) memRecents = [];
+        }
+      }
+
+      // Helper: get current language and translation strings
+      function getCurrentLang() {
+        return document.documentElement.getAttribute('lang') || 'en';
+      }
+
+      function getI18nString(key, fallback = '') {
+        const lang = getCurrentLang();
+        const dict = (window.TRANSLATIONS && window.TRANSLATIONS[lang]) || (window.TRANSLATIONS && window.TRANSLATIONS.en);
+        return (dict && dict[key]) || fallback;
+      }
+
+      function getToolTitle(toolId) {
+        const lang = getCurrentLang();
+        const dict = (window.TRANSLATIONS && window.TRANSLATIONS[lang]) || (window.TRANSLATIONS && window.TRANSLATIONS.en);
+        if (dict && dict.tools && dict.tools[toolId]) {
+          return dict.tools[toolId].title;
+        }
+        if (window.TRANSLATIONS && window.TRANSLATIONS.en && window.TRANSLATIONS.en.tools && window.TRANSLATIONS.en.tools[toolId]) {
+          return window.TRANSLATIONS.en.tools[toolId].title;
+        }
+        return toolId;
+      }
+
+      function getCategoryLabel(cat) {
+        const lang = getCurrentLang();
+        const dict = (window.TRANSLATIONS && window.TRANSLATIONS[lang]) || (window.TRANSLATIONS && window.TRANSLATIONS.en);
+        return (dict && dict['cat_' + cat]) || cat;
+      }
+
+      // DOM References
+      let container, backdrop, panel, triggerBtn, closeBtn, searchInput, searchClear;
+      let favoritesList, favoritesBadge, recentsList, clearRecentsBtn, accordionContainer, noResultsBox;
+      let lastFocusedElement = null;
+
+      // SVG Star Templates
+      function starSvg(filled = false) {
+        if (filled) {
+          return `<svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+        }
+        return `<svg class="star-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+      }
+
+      function renderToolRow(tool, isPinned = false) {
+        const title = getToolTitle(tool.id);
+        const ariaLabel = isPinned ? ('Unpin ' + title) : ('Pin ' + title);
+        return `
+          <div class="drawer-tool-item" data-tool-id="${tool.id}" data-category="${tool.cat}">
+            <a href="${tool.href}" class="drawer-tool-link" data-tool-id="${tool.id}">
+              <span class="drawer-cat-dot ${tool.cat}" aria-hidden="true"></span>
+              <span class="drawer-tool-name">${title}</span>
+            </a>
+            <button type="button" class="drawer-star-btn ${isPinned ? 'active' : ''}" data-tool-id="${tool.id}" aria-label="${ariaLabel}" title="${isPinned ? 'Unpin' : 'Pin'}">
+              ${starSvg(isPinned)}
+            </button>
+          </div>
+        `;
+      }
+
+      const VantorKitDrawer = {
+        // --- Open Drawer ---
+        open() {
+          if (!container) return;
+          lastFocusedElement = document.activeElement;
+          container.classList.add('open');
+          container.setAttribute('aria-hidden', 'false');
+          if (panel) panel.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('drawer-open');
+          if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'true');
+
+          // Make background content inert for accessibility
+          const main = document.querySelector('main');
+          const header = document.querySelector('header');
+          const footer = document.querySelector('.site-footer');
+          if (main) main.inert = true;
+          if (header) header.inert = true;
+          if (footer) footer.inert = true;
+
+          // Focus in-drawer search input without layout jump
+          if (searchInput) {
+            setTimeout(() => {
+              searchInput.focus({ preventScroll: true });
+            }, 60);
+          }
+        },
+
+        // --- Close Drawer ---
+        close() {
+          if (!container || !container.classList.contains('open')) return;
+          container.classList.remove('open');
+          container.setAttribute('aria-hidden', 'true');
+          if (panel) panel.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('drawer-open');
+          if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'false');
+
+          // Remove inert from background content
+          const main = document.querySelector('main');
+          const header = document.querySelector('header');
+          const footer = document.querySelector('.site-footer');
+          if (main) main.inert = false;
+          if (header) header.inert = false;
+          if (footer) footer.inert = false;
+
+          // Restore focus to trigger button
+          if (triggerBtn && typeof triggerBtn.focus === 'function') {
+            triggerBtn.focus({ preventScroll: true });
+          } else if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+            lastFocusedElement.focus({ preventScroll: true });
+          }
+        },
+
+        isOpen() {
+          return container && container.classList.contains('open');
+        },
+
+        // --- Pinned / Favorites Management ---
+        getFavorites() {
+          const favs = safeGetItem(STORAGE_FAVORITES_KEY);
+          return Array.isArray(favs) ? favs : [];
+        },
+
+        toggleFavorite(toolId) {
+          if (!toolId) return;
+          let favs = this.getFavorites();
+          const index = favs.indexOf(toolId);
+          if (index > -1) {
+            favs.splice(index, 1);
+          } else {
+            favs.unshift(toolId);
+          }
+          safeSetItem(STORAGE_FAVORITES_KEY, favs);
+
+          // Update Favorites UI
+          this.renderFavorites();
+
+          // Sync star button states across drawer
+          this.syncStarStates();
+        },
+
+        renderFavorites() {
+          if (!favoritesList) return;
+          const favs = this.getFavorites();
+          if (favoritesBadge) favoritesBadge.textContent = favs.length;
+
+          if (favs.length === 0) {
+            const emptyText = getI18nString('drawerEmptyPinned', 'No pinned tools yet — click ★ to pin');
+            favoritesList.innerHTML = `
+              <div class="drawer-empty-state">
+                <span class="drawer-empty-icon">★</span>
+                <span id="drawerEmptyPinnedText">${emptyText}</span>
+              </div>
+            `;
+            return;
+          }
+
+          let html = '';
+          favs.forEach(id => {
+            const tool = TOOLS_DATA.find(t => t.id === id);
+            if (tool) {
+              html += renderToolRow(tool, true);
+            }
+          });
+          favoritesList.innerHTML = html;
+        },
+
+        // --- Recent Tools Management ---
+        getRecents() {
+          const recents = safeGetItem(STORAGE_RECENTS_KEY);
+          return Array.isArray(recents) ? recents : [];
+        },
+
+        addRecent(toolId) {
+          if (!toolId) return;
+          const toolExists = TOOLS_DATA.some(t => t.id === toolId);
+          if (!toolExists) return;
+
+          let recents = this.getRecents();
+          recents = recents.filter(id => id !== toolId);
+          recents.unshift(toolId);
+          if (recents.length > MAX_RECENTS) {
+            recents = recents.slice(0, MAX_RECENTS);
+          }
+          safeSetItem(STORAGE_RECENTS_KEY, recents);
+          this.renderRecents();
+        },
+
+        clearRecents() {
+          safeRemoveItem(STORAGE_RECENTS_KEY);
+          this.renderRecents();
+        },
+
+        renderRecents() {
+          if (!recentsList) return;
+          const recents = this.getRecents();
+
+          if (recents.length === 0) {
+            if (clearRecentsBtn) clearRecentsBtn.style.display = 'none';
+            const emptyText = getI18nString('drawerEmptyRecents', 'No recent tools yet');
+            recentsList.innerHTML = `
+              <div class="drawer-empty-state">
+                <span id="drawerEmptyRecentsText">${emptyText}</span>
+              </div>
+            `;
+            return;
+          }
+
+          if (clearRecentsBtn) clearRecentsBtn.style.display = 'inline-block';
+          const favs = this.getFavorites();
+          let html = '';
+          recents.forEach(id => {
+            const tool = TOOLS_DATA.find(t => t.id === id);
+            if (tool) {
+              const isPinned = favs.includes(id);
+              html += renderToolRow(tool, isPinned);
+            }
+          });
+          recentsList.innerHTML = html;
+        },
+
+        // --- Sync star button active classes and icons across the DOM ---
+        syncStarStates() {
+          const favs = this.getFavorites();
+          document.querySelectorAll('.drawer-star-btn').forEach(btn => {
+            const toolId = btn.dataset.toolId;
+            const isPinned = favs.includes(toolId);
+            const tool = TOOLS_DATA.find(t => t.id === toolId);
+            const title = tool ? getToolTitle(tool.id) : toolId;
+            if (isPinned) {
+              btn.classList.add('active');
+              btn.setAttribute('aria-label', 'Unpin ' + title);
+              btn.setAttribute('title', 'Unpin');
+              btn.innerHTML = starSvg(true);
+            } else {
+              btn.classList.remove('active');
+              btn.setAttribute('aria-label', 'Pin ' + title);
+              btn.setAttribute('title', 'Pin');
+              btn.innerHTML = starSvg(false);
+            }
+          });
+        },
+
+        // --- All Tools Categorized Accordion ---
+        renderCategories() {
+          if (!accordionContainer) return;
+          const favs = this.getFavorites();
+          let html = '';
+
+          CATEGORIES_ORDER.forEach(cat => {
+            const catTools = TOOLS_DATA.filter(t => t.cat === cat);
+            if (catTools.length === 0) return;
+            const catLabel = getCategoryLabel(cat);
+
+            let toolsHtml = '';
+            catTools.forEach(tool => {
+              const isPinned = favs.includes(tool.id);
+              toolsHtml += renderToolRow(tool, isPinned);
+            });
+
+            html += `
+              <div class="drawer-accordion-group open" data-category="${cat}">
+                <button type="button" class="drawer-accordion-header" aria-expanded="true">
+                  <div class="drawer-accordion-header-left">
+                    <span class="drawer-cat-dot ${cat}" aria-hidden="true"></span>
+                    <span class="drawer-accordion-cat-name">${catLabel}</span>
+                  </div>
+                  <div class="drawer-accordion-header-right">
+                    <span class="drawer-accordion-count">${catTools.length}</span>
+                    <svg class="drawer-accordion-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </button>
+                <div class="drawer-accordion-content">
+                  <div class="drawer-tool-list">
+                    ${toolsHtml}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          accordionContainer.innerHTML = html;
+        },
+
+        // --- In-Drawer Quick Search (Real-Time Filter) ---
+        filterTools(query) {
+          const q = (query || '').toLowerCase().trim();
+          if (searchClear) {
+            searchClear.style.display = q.length > 0 ? 'inline-flex' : 'none';
+          }
+
+          if (!accordionContainer) return;
+          const groups = accordionContainer.querySelectorAll('.drawer-accordion-group');
+          let totalMatches = 0;
+
+          groups.forEach(group => {
+            const items = group.querySelectorAll('.drawer-tool-item');
+            let groupMatches = 0;
+
+            items.forEach(item => {
+              const toolId = item.dataset.toolId;
+              let localizedTitle = '';
+              let localizedDesc = '';
+              let enTitle = '';
+              let enDesc = '';
+
+              const lang = getCurrentLang();
+              if (window.TRANSLATIONS && window.TRANSLATIONS[lang] && window.TRANSLATIONS[lang].tools && window.TRANSLATIONS[lang].tools[toolId]) {
+                localizedTitle = (window.TRANSLATIONS[lang].tools[toolId].title || '').toLowerCase();
+                localizedDesc = (window.TRANSLATIONS[lang].tools[toolId].desc || '').toLowerCase();
+              }
+              if (window.TRANSLATIONS && window.TRANSLATIONS.en && window.TRANSLATIONS.en.tools && window.TRANSLATIONS.en.tools[toolId]) {
+                enTitle = (window.TRANSLATIONS.en.tools[toolId].title || '').toLowerCase();
+                enDesc = (window.TRANSLATIONS.en.tools[toolId].desc || '').toLowerCase();
+              }
+
+              const matches = (q === '') ||
+                localizedTitle.includes(q) ||
+                localizedDesc.includes(q) ||
+                enTitle.includes(q) ||
+                enDesc.includes(q) ||
+                toolId.toLowerCase().includes(q);
+
+              if (matches) {
+                item.style.display = 'flex';
+                groupMatches++;
+                totalMatches++;
+              } else {
+                item.style.display = 'none';
+              }
+            });
+
+            if (groupMatches > 0) {
+              group.style.display = 'block';
+              group.classList.add('open');
+              const header = group.querySelector('.drawer-accordion-header');
+              if (header) header.setAttribute('aria-expanded', 'true');
+            } else {
+              group.style.display = 'none';
+            }
+          });
+
+          if (noResultsBox) {
+            noResultsBox.style.display = (totalMatches === 0 && q.length > 0) ? 'flex' : 'none';
+          }
+        },
+
+        // --- Multi-Language Switcher Hook ---
+        updateLanguage(lang) {
+          const dict = (window.TRANSLATIONS && window.TRANSLATIONS[lang]) || (window.TRANSLATIONS && window.TRANSLATIONS.en);
+          if (!dict) return;
+
+          const favTitleEl = document.getElementById('drawerFavoritesTitle');
+          if (favTitleEl && dict.drawerPinnedTitle) favTitleEl.textContent = dict.drawerPinnedTitle;
+
+          const recentsTitleEl = document.getElementById('drawerRecentsTitle');
+          if (recentsTitleEl && dict.drawerRecentsTitle) recentsTitleEl.textContent = dict.drawerRecentsTitle;
+
+          const allToolsTitleEl = document.getElementById('drawerAllToolsTitle');
+          if (allToolsTitleEl && dict.drawerAllToolsTitle) allToolsTitleEl.textContent = dict.drawerAllToolsTitle;
+
+          if (clearRecentsBtn && dict.drawerClearRecents) clearRecentsBtn.textContent = dict.drawerClearRecents;
+          if (searchInput && dict.drawerSearchPlaceholder) searchInput.placeholder = dict.drawerSearchPlaceholder;
+          if (closeBtn && dict.drawerCloseAria) closeBtn.setAttribute('aria-label', dict.drawerCloseAria);
+          if (triggerBtn && dict.drawerTriggerAria) triggerBtn.setAttribute('aria-label', dict.drawerTriggerAria);
+
+          const badgeEl = document.getElementById('drawerPrivacyBadge');
+          if (badgeEl && dict.drawerClientSideBadge) badgeEl.textContent = dict.drawerClientSideBadge;
+
+          const noResultsTextEl = document.getElementById('drawerNoResultsText');
+          if (noResultsTextEl && dict.drawerNoMatchingTools) noResultsTextEl.textContent = dict.drawerNoMatchingTools;
+
+          // Re-render categories, favorites, and recents with updated translations
+          this.renderCategories();
+          this.renderFavorites();
+          this.renderRecents();
+
+          // Re-apply filter if active
+          if (searchInput && searchInput.value) {
+            this.filterTools(searchInput.value);
+          }
+        },
+
+        // --- Initialization ---
+        init() {
+          container = document.getElementById('vantorDrawerContainer');
+          backdrop = document.getElementById('drawerBackdrop');
+          panel = document.getElementById('vantorDrawer');
+          triggerBtn = document.getElementById('drawerTriggerBtn');
+          closeBtn = document.getElementById('drawerCloseBtn');
+          searchInput = document.getElementById('drawerSearchInput');
+          searchClear = document.getElementById('drawerSearchClear');
+
+          favoritesList = document.getElementById('drawerFavoritesList');
+          favoritesBadge = document.getElementById('drawerFavoritesBadge');
+          recentsList = document.getElementById('drawerRecentsList');
+          clearRecentsBtn = document.getElementById('drawerClearRecentsBtn');
+          accordionContainer = document.getElementById('drawerAccordion');
+          noResultsBox = document.getElementById('drawerNoResults');
+
+          // Trigger button click
+          if (triggerBtn) {
+            triggerBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (this.isOpen()) {
+                this.close();
+              } else {
+                this.open();
+              }
+            });
+          }
+
+          // Close button click
+          if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.close();
+            });
+          }
+
+          // Backdrop click closes drawer
+          if (backdrop) {
+            backdrop.addEventListener('click', () => {
+              this.close();
+            });
+          }
+
+          // Escape key closes drawer
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen()) {
+              this.close();
+            }
+          });
+
+          // In-drawer search events
+          if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+              this.filterTools(e.target.value);
+            });
+          }
+
+          if (searchClear) {
+            searchClear.addEventListener('click', () => {
+              if (searchInput) {
+                searchInput.value = '';
+                this.filterTools('');
+                searchInput.focus();
+              }
+            });
+          }
+
+          // Clear recents button click
+          if (clearRecentsBtn) {
+            clearRecentsBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.clearRecents();
+            });
+          }
+
+          // Event Delegation inside Drawer Body for Star Buttons, Tool Links, and Accordion Headers
+          const drawerBody = document.getElementById('drawerBody');
+          if (drawerBody) {
+            drawerBody.addEventListener('click', (e) => {
+              // 1. Click on Star Button -> toggle favorite
+              const starBtn = e.target.closest('.drawer-star-btn');
+              if (starBtn && starBtn.dataset.toolId) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleFavorite(starBtn.dataset.toolId);
+                return;
+              }
+
+              // 2. Click on Tool Link -> record to recents and close drawer
+              const toolLink = e.target.closest('.drawer-tool-link');
+              if (toolLink && toolLink.dataset.toolId) {
+                this.addRecent(toolLink.dataset.toolId);
+                this.close();
+                return;
+              }
+
+              // 3. Click on Accordion Header -> toggle group
+              const accHeader = e.target.closest('.drawer-accordion-header');
+              if (accHeader) {
+                e.preventDefault();
+                const group = accHeader.closest('.drawer-accordion-group');
+                if (group) {
+                  const isOpen = group.classList.contains('open');
+                  if (isOpen) {
+                    group.classList.remove('open');
+                    accHeader.setAttribute('aria-expanded', 'false');
+                  } else {
+                    group.classList.add('open');
+                    accHeader.setAttribute('aria-expanded', 'true');
+                  }
+                }
+              }
+            });
+          }
+
+          // Event Delegation on main Tools Grid: click on any card records to recents
+          const toolsGrid = document.getElementById('toolsGrid');
+          if (toolsGrid) {
+            toolsGrid.addEventListener('click', (e) => {
+              const card = e.target.closest('.tool-card');
+              if (card && card.dataset.toolId) {
+                this.addRecent(card.dataset.toolId);
+              }
+            });
+          }
+
+          // Initial Render
+          const currentLang = getCurrentLang();
+          this.updateLanguage(currentLang);
+        }
+      };
+
+      // Expose globally
+      window.VantorKitDrawer = VantorKitDrawer;
+
+      // Auto-initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => VantorKitDrawer.init());
+      } else {
+        VantorKitDrawer.init();
+      }
     })();
   </script>
 </body>
