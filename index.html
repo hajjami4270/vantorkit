@@ -1312,7 +1312,7 @@
         <!-- Live Tool Count Pill -->
         <div class="badge-tools-count">
           <span class="pulse-dot"></span>
-          <span id="navToolCount" data-i18n="toolsCount">25 Tools Available</span>
+          <span id="navToolCount" data-i18n="toolsCount">26 Tools Available</span>
         </div>
 
         <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
@@ -1376,7 +1376,7 @@
     
     <div class="search-wrapper">
       <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="text" id="toolSearch" class="search-box" placeholder="Search 25 tools (e.g. percentage, pdf, diff)..." autocomplete="off" spellcheck="false">
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 26 tools (e.g. percentage, pdf, audio, diff)..." autocomplete="off" spellcheck="false">
       <kbd class="search-kbd" id="searchKbd" title="Press ⌘K or Ctrl+K to search">⌘K</kbd>
       <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
@@ -1621,6 +1621,28 @@
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
             <div class="tool-title" data-tool-field="title">Base64 File Encoder</div>
             <div class="tool-desc" data-tool-field="desc">Encode documents and binary assets into data URIs and raw Base64 strings.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Files 6: Audio Trimmer & Cutter -->
+      <a href="tools/audio-trimmer.html" class="tool-card" data-tool-id="audio-trimmer" data-category="files">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+            </div>
+            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">Audio Trimmer &amp; Cutter</div>
+            <div class="tool-desc" data-tool-field="desc">Cut, trim, and extract high-precision audio clips with interactive waveform and WAV export.</div>
           </div>
         </div>
         <div class="card-footer">
@@ -2003,10 +2025,10 @@
       const TRANSLATIONS = {
         en: {
           langLabel: "English",
-          toolsCount: "25 Tools Available",
+          toolsCount: "26 Tools Available",
           brandBadge: "Client-Side • Privacy-First • No Logs",
           heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
-          searchPlaceholder: "Search 25 tools (e.g. percentage, pdf, diff)...",
+          searchPlaceholder: "Search 26 tools (e.g. percentage, pdf, audio, diff)...",
           noResultsTitle: "No tools found",
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
@@ -2066,6 +2088,10 @@
             "base64-file-encoder": {
               title: "Base64 File Encoder",
               desc: "Encode documents and binary assets into data URIs and raw Base64 strings."
+            },
+            "audio-trimmer": {
+              title: "Audio Trimmer & Cutter",
+              desc: "Cut, trim, and extract high-precision audio clips with interactive waveform and WAV export."
             },
             "color-palette-extractor": {
               title: "Color Palette Extractor",
@@ -2139,10 +2165,10 @@
         },
         ar: {
           langLabel: "العربية",
-          toolsCount: "25 أداة متاحة",
+          toolsCount: "26 أداة متاحة",
           brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
           heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
-          searchPlaceholder: "ابحث في 25 أداة (مثل النسبة المئوية، PDF، المقارنة)...",
+          searchPlaceholder: "ابحث في 26 أداة (مثل النسبة المئوية، PDF، الصوت، المقارنة)...",
           noResultsTitle: "لم يتم العثور على نتائج",
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
@@ -2202,6 +2228,10 @@
             "base64-file-encoder": {
               title: "تشفير الملفات بـ Base64",
               desc: "حوّل المستندات والملفات الثنائية إلى صيغ data URI وسلاسل نصية Base64."
+            },
+            "audio-trimmer": {
+              title: "قص وتقطيع الصوت",
+              desc: "قص وتعديل المقاطع الصوتية بدقة عالية مع مخطط موجي تفاعلي وتصدير بصيغة WAV."
             },
             "color-palette-extractor": {
               title: "استخراج لوحة الألوان",
@@ -2275,10 +2305,10 @@
         },
         fr: {
           langLabel: "Français",
-          toolsCount: "25 Outils Disponibles",
+          toolsCount: "26 Outils Disponibles",
           brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
           heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
-          searchPlaceholder: "Rechercher parmi 25 outils (ex: pourcentage, pdf, diff)...",
+          searchPlaceholder: "Rechercher parmi 26 outils (ex: pourcentage, pdf, audio, diff)...",
           noResultsTitle: "Aucun outil trouvé",
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
@@ -2338,6 +2368,10 @@
             "base64-file-encoder": {
               title: "Encodeur de Fichiers Base64",
               desc: "Encodez documents et fichiers binaires en URI de données et chaînes Base64."
+            },
+            "audio-trimmer": {
+              title: "Découpeur audio & Trimmer",
+              desc: "Découpez et extrayez des extraits audio haute précision avec onde sonore interactive et export WAV."
             },
             "color-palette-extractor": {
               title: "Extracteur de Palette de Couleurs",
@@ -2411,10 +2445,10 @@
         },
         it: {
           langLabel: "Italiano",
-          toolsCount: "25 Strumenti Disponibili",
+          toolsCount: "26 Strumenti Disponibili",
           brandBadge: "Lato Client • Massima Privacy • Nessun Log",
           heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
-          searchPlaceholder: "Cerca tra 25 strumenti (es: percentuale, pdf, diff)...",
+          searchPlaceholder: "Cerca tra 26 strumenti (es: percentuale, pdf, audio, diff)...",
           noResultsTitle: "Nessun risultato",
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
@@ -2474,6 +2508,10 @@
             "base64-file-encoder": {
               title: "Codificatore File Base64",
               desc: "Codifica documenti e risorse binarie in URI dati e stringhe Base64 grezze."
+            },
+            "audio-trimmer": {
+              title: "Taglia Audio & Trimmer",
+              desc: "Taglia e ritaglia spezzoni audio ad alta precisione con forma d'onda interattiva ed esportazione WAV."
             },
             "color-palette-extractor": {
               title: "Estrattore di Palette Colori",
