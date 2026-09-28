@@ -12,7 +12,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Tools (26 Verified Catalog Utilities) -->
+  <!-- Tools (27 Verified Catalog Utilities) -->
   <url>
     <loc>https://vantorkit.com/tools/percentage-calculator.html</loc>
     <lastmod>2026-09-26T18:00:00+00:00</lastmod>
@@ -76,6 +76,18 @@
   <url>
     <loc>https://vantorkit.com/tools/audio-trimmer.html</loc>
     <lastmod>2026-09-28T14:30:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/tools/video-trimmer.html</loc>
+    <lastmod>2026-09-28T18:30:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/video-trimmer.html</loc>
+    <lastmod>2026-09-28T18:30:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
