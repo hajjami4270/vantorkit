@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit</title>
-  <meta name="description" content="Resize and crop images locally in your browser. Custom pixel dimensions, aspect ratio presets, and format conversion with zero cloud uploads.">
+  <title>Image Resizer & Crop – Custom Dimensions & Aspect Ratio</title>
+  <meta name="description" content="Scale photos, crop target compositions, and adjust aspect ratios for social feeds. Re-encoding processes locally with zero cloud photo retention.">>
   <meta name="keywords" content="image resizer, crop image online, photo resizer, aspect ratio cropper, convert image to webp, compress jpg, client side image editor, free image tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-resizer.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/image-resizer.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/image-resizer.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/image-resizer.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/image-resizer.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/image-resizer.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit">
-  <meta property="og:description" content="100% private in-browser image resizing and cropping. Adjust pixel dimensions, lock aspect ratios, and optimize file weight instantly.">
+  <meta property="og:title" content="Image Resizer & Crop – Custom Dimensions & Aspect Ratio">>
+  <meta property="og:description" content="Scale photos, crop target compositions, and adjust aspect ratios for social feeds. Re-encoding processes locally with zero cloud photo retention.">>
   <meta property="og:url" content="https://vantorkit.com/tools/image-resizer.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Image Resizer &amp; Crop — Free High-Resolution Photo Editor | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Image Resizer & Crop",
       "url": "https://vantorkit.com/tools/image-resizer.html",
       "applicationCategory": "PhotoEditorApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side image resizing, cropping, and compression tool. Supports custom pixel dimensions, percentage scaling presets, visual aspect ratio overlays (1:1, 16:9, 9:16, 4:5), and multi-format export (JPG, PNG, WEBP) with zero server uploads."
+      "description": "Client-side photo scaling and cropping utility adjusting pixel dimensions, aspect ratios, and export formats directly in local browser memory."
     },
     {
       "@type": "FAQPage",
@@ -3435,6 +3440,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Image Resizer & Crop – Custom Dimensions & Aspect Ratio",
+        "desc": "Scale photos, crop target compositions, and adjust aspect ratios for social feeds. Re-encoding processes locally with zero cloud photo retention."
+    },
+    "ar": {
+        "title": "تغيير حجم وقص الصور – أبعاد مخصصة ونسب عرض متناسقة",
+        "desc": "عدل أبعاد الصور وقص أجزاءها بدقة مع نسب عرض مخصصة لمنصات النشر. تتم إعادة التحجيم في الذاكرة المحلية لجهازك مع سرية تامة للصور."
+    },
+    "fr": {
+        "title": "Redimensionner & Recadrer – Dimensions et Proportions",
+        "desc": "Ajustez la taille et recadrez vos images selon vos besoins graphiques. Le traitement s'effectue localement sans conservation de vos photos."
+    },
+    "it": {
+        "title": "Ridimensiona e Ritaglia Immagini – Proporzioni e Pixel",
+        "desc": "Modifica risoluzione e ritaglia composizioni visive per i social network. Il ricampionamento avviene nel browser senza memorizzare immagini."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3467,6 +3491,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

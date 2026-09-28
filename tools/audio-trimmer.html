@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Audio Trimmer &amp; Cutter — Free Client-Side Audio Splitter | VantorKit</title>
-  <meta name="description" content="Trim, cut, and split MP3, WAV, AAC, and OGG audio files locally in your browser. Interactive waveform visualization, millisecond precision, and lossless 16-bit WAV export with zero server uploads.">
+  <title>Audio Trimmer &amp; Cutter – Precision Sound Waveform Editor</title>
+  <meta name="description" content="Slice audio tracks with interactive waveform scrubbing and millisecond markers. Lossless WAV and MP3 exports process directly inside browser RAM.">>>>
   <meta name="keywords" content="audio trimmer, cut audio online, trim audio online, mp3 cutter, audio cutter, wav cutter, client side audio trimmer, split audio browser, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/audio-trimmer.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/audio-trimmer.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/audio-trimmer.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/audio-trimmer.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/audio-trimmer.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/audio-trimmer.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Audio Trimmer &amp; Cutter — Free Client-Side Audio Splitter | VantorKit">
-  <meta property="og:description" content="Cut, trim, and split audio tracks 100% locally in your browser. Millisecond precision, interactive waveform handles, audio preview, and verified 16-bit WAV export. Zero server uploads.">
+  <meta property="og:title" content="Audio Trimmer &amp; Cutter – Precision Sound Waveform Editor">>>>
+  <meta property="og:description" content="Slice audio tracks with interactive waveform scrubbing and millisecond markers. Lossless WAV and MP3 exports process directly inside browser RAM.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/audio-trimmer.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Audio Trimmer &amp; Cutter | VantorKit">
@@ -47,14 +52,14 @@
       "name": "VantorKit Audio Trimmer & Cutter",
       "url": "https://vantorkit.com/tools/audio-trimmer.html",
       "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires Web Audio API and HTML5 Canvas.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Audio Trimmer & Cutter. Split, trim, and edit MP3, WAV, AAC, M4A, and OGG audio tracks locally with interactive canvas waveform scrubbing, millisecond time inputs, audio preview, and verified 16-bit PCM WAV export."
+      "description": "Pure client-side Web Audio API workstation for trimming MP3, WAV, and AAC audio with high-DPI waveform visualization, millisecond markers, and lossless WAV export."
     },
     {
       "@type": "FAQPage",
@@ -3461,6 +3466,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Audio Trimmer &amp; Cutter – Precision Sound Waveform Editor",
+        "desc": "Slice audio tracks with interactive waveform scrubbing and millisecond markers. Lossless WAV and MP3 exports process directly inside browser RAM."
+    },
+    "ar": {
+        "title": "قص وتقطيع الصوت – محرر المخطط الموجي بدقة المللي ثانية",
+        "desc": "قص المقاطع الصوتية بصيغ MP3 وWAV مع مخطط موجي تفاعلي وتدقيق دقيق بالأجزاء من الثانية. يتم التصدير محلياً في ذاكرة جهازك دون رفع أي صوتيات."
+    },
+    "fr": {
+        "title": "Découpeur Audio & Trimmer – Éditeur d'Onde Sonore Précis",
+        "desc": "Découpez vos pistes MP3 et WAV avec une forme d'onde interactive au millième de seconde. Export WAV sans perte réalisé dans la mémoire vive locale."
+    },
+    "it": {
+        "title": "Taglia Audio & Trimmer – Editor Forma d'Onda di Precisione",
+        "desc": "Ritaglia brani musicali e registrazioni con forma d'onda interattiva e controlli millimetrici. Esportazione WAV e MP3 elaborata nella RAM locale."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3493,6 +3517,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

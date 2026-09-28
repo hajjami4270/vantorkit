@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>GPA &amp; Grade Calculator — Semester &amp; Cumulative GPA | VantorKit</title>
-  <meta name="description" content="Calculate semester and cumulative GPA with standard 4.0, weighted 5.0, and percentage scales. Export CSV grade reports privately in-browser.">
+  <title>GPA & Grade Calculator – Academic Average Tracker</title>
+  <meta name="description" content="Tally semester and cumulative credit points on 4.0 or weighted 5.0 systems. Grades stay strictly in local memory with exportable transcript records.">>
   <meta name="keywords" content="gpa calculator, grade calculator, college gpa, cumulative gpa calculator, weighted gpa, 4.0 scale gpa, high school gpa, credit hours calculator, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/gpa-calculator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/gpa-calculator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/gpa-calculator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/gpa-calculator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/gpa-calculator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/gpa-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="GPA &amp; Grade Calculator — Semester &amp; Cumulative GPA | VantorKit">
-  <meta property="og:description" content="Free client-side GPA calculator. Calculate semester and cumulative GPA on 4.0 and 5.0 scales with credit hours and honors badges.">
+  <meta property="og:title" content="GPA & Grade Calculator – Academic Average Tracker">>
+  <meta property="og:description" content="Tally semester and cumulative credit points on 4.0 or weighted 5.0 systems. Grades stay strictly in local memory with exportable transcript records.">>
   <meta property="og:url" content="https://vantorkit.com/tools/gpa-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="GPA &amp; Grade Calculator | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit GPA & Grade Calculator",
       "url": "https://vantorkit.com/tools/gpa-calculator.html",
       "applicationCategory": "EducationalApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side GPA and Grade Calculator. Compute semester and cumulative GPA across standard 4.0, weighted 5.0, and percentage scales with credit hour weighting and Dean's list honor determinations."
+      "description": "Client-side academic grading tool calculating semester and cumulative GPAs across multiple grading scales with local CSV transcript export."
     },
     {
       "@type": "FAQPage",
@@ -2708,6 +2713,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "GPA & Grade Calculator – Academic Average Tracker",
+        "desc": "Tally semester and cumulative credit points on 4.0 or weighted 5.0 systems. Grades stay strictly in local memory with exportable transcript records."
+    },
+    "ar": {
+        "title": "حاسبة المعدل التراكمي والفصلي – حساب الدرجات بدقة",
+        "desc": "احسب معدلك الفصلي والتراكمي بالساعات المعتمدة على مقياس 4.0 أو 5.0 الموزون. تظل سجلاتك الدراسية محفوظة محلياً في جهازك مع إمكانية التصدير."
+    },
+    "fr": {
+        "title": "Calculateur de Moyenne & GPA – Suivi des Notes",
+        "desc": "Calculez votre moyenne semestrielle et cumulative sur barème 4.0 ou pondéré. Vos notes restent confidentielles dans votre navigateur personnel."
+    },
+    "it": {
+        "title": "Calcolatore Media Esami & GPA – Calcolo Voti Universitari",
+        "desc": "Determina la media pesata dei tuoi crediti universitari e il punteggio GPA. I tuoi dati accademici restano riservati nella memoria del browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2740,6 +2764,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Time Zone Meeting Planner — 24-Hour Overlap Matrix | VantorKit</title>
-  <meta name="description" content="Plan international team meetings and client calls across world time zones. Compare 24-hour overlap bars with working hours. 100% private tool.">
+  <title>Time Zone Planner – Working Hours Overlap Matrix</title>
+  <meta name="description" content="Coordinate international meetings across world cities using a 24-hour visual overlap matrix. Schedule calculations evaluate offline on your computer.">>
   <meta name="keywords" content="timezone meeting planner, world clock meeting planner, time zone converter, time zone overlap, business hours overlap, remote team time converter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/timezone-planner.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/timezone-planner.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/timezone-planner.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/timezone-planner.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/timezone-planner.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/timezone-planner.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Time Zone Meeting Planner | VantorKit">
-  <meta property="og:description" content="Compare overlapping business hours across major global timezones with an interactive 24-hour visual matrix.">
+  <meta property="og:title" content="Time Zone Planner – Working Hours Overlap Matrix">>
+  <meta property="og:description" content="Coordinate international meetings across world cities using a 24-hour visual overlap matrix. Schedule calculations evaluate offline on your computer.">>
   <meta property="og:url" content="https://vantorkit.com/tools/timezone-planner.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Time Zone Meeting Planner | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Time Zone Meeting Planner",
       "url": "https://vantorkit.com/tools/timezone-planner.html",
       "applicationCategory": "BusinessApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Intl API.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Time Zone Meeting Planner. Compare 24-hour working hours overlap across international cities and generate instant meeting invitations."
+      "description": "Interactive meeting schedule planner comparing working hours across international time zones with a 24-hour visual matrix rendered offline."
     },
     {
       "@type": "FAQPage",
@@ -2329,6 +2334,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Time Zone Planner – Working Hours Overlap Matrix",
+        "desc": "Coordinate international meetings across world cities using a 24-hour visual overlap matrix. Schedule calculations evaluate offline on your computer."
+    },
+    "ar": {
+        "title": "مخطط المناطق الزمنية – تداخل ساعات العمل للمقابلات",
+        "desc": "نسق الاجتماعات الدولية بين مختلف المدن العالمية عبر مخطط تداخل زمني 24 ساعة. تتم مقارنة التوقيتات محلياً في جهازك لتنظيم مواعيدك بأمان."
+    },
+    "fr": {
+        "title": "Planificateur de Fuseaux – Matrice de Travail 24h",
+        "desc": "Organisez vos réunions internationales avec une matrice visuelle de chevauchement sur 24h. Les calculs d'horaires s'effectuent hors ligne."
+    },
+    "it": {
+        "title": "Pianificatore Fusi Orari – Orari di Lavoro Condivisi",
+        "desc": "Coordina riunioni tra team remoti con una matrice visuale di sovrapposizione a 24 ore. L'elaborazione degli orari avviene sul tuo dispositivo."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2361,6 +2385,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

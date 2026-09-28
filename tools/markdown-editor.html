@@ -15,15 +15,19 @@
     })();
   </script>
 
-  <title>Markdown Live Editor &amp; HTML Converter — Real-Time Split Preview | VantorKit</title>
-  <meta name="description" content="Write and preview Markdown with real-time split screen. Features syntax highlighting, browser auto-save, and instant HTML export. 100% private.">
+  <title>Markdown Live Editor – Split Screen HTML Preview</title>
+  <meta name="description" content="Draft and format Markdown documents with real-time split-screen HTML preview and syntax highlighting. Documents compile in browser memory with zero tracking.">>>
   <meta name="keywords" content="markdown editor, markdown previewer, markdown to html converter, online markdown editor, live preview markdown, github flavored markdown, markdown table generator, text tools, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/markdown-editor.html">
-
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/markdown-editor.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/markdown-editor.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/markdown-editor.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/markdown-editor.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/markdown-editor.html">
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Markdown Live Editor &amp; HTML Converter — Real-Time Split Preview | VantorKit">
-  <meta property="og:description" content="Write Markdown with side-by-side formatted preview and instant HTML export. Includes quick syntax toolbar, local auto-save, and reading time stats.">
+  <meta property="og:title" content="Markdown Live Editor – Split Screen HTML Preview">>>
+  <meta property="og:description" content="Draft and format Markdown documents with real-time split-screen HTML preview and syntax highlighting. Documents compile in browser memory with zero tracking.">>>
   <meta property="og:url" content="https://vantorkit.com/tools/markdown-editor.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Markdown Live Editor &amp; HTML Converter — VantorKit">
@@ -44,17 +48,17 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "VantorKit Markdown Live Editor & HTML Converter",
+      "name": "Markdown Live Editor",
       "url": "https://vantorkit.com/tools/markdown-editor.html",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Markdown live editor and HTML converter. Split-screen preview, syntax formatting toolbar, local auto-save, synchronized scrolling, and instant HTML export with zero server logging."
+      "description": "Live split-screen Markdown editor with real-time HTML preview and syntax highlighting rendered client-side with zero remote storage or server logging."
     },
     {
       "@type": "FAQPage",
@@ -2828,6 +2832,25 @@ ${bodyContent}
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Markdown Live Editor – Split Screen HTML Preview",
+        "desc": "Draft and format Markdown documents with real-time split-screen HTML preview and syntax highlighting. Documents compile in browser memory with zero tracking."
+    },
+    "ar": {
+        "title": "محرر ماركداون مباشر – معاينة فورية لكود HTML",
+        "desc": "حرر مستندات ماركداون مع معاينة فورية مقسمة الشاشة لكود HTML وتظليل برمجي سلس. تُبنى صفحاتك ومستنداتك داخل ذاكرة المتصفح دون تعقب أو تخزين خارجي."
+    },
+    "fr": {
+        "title": "Éditeur Markdown en Direct – Aperçu HTML Écran Scindé",
+        "desc": "Rédigez et visualisez vos documents Markdown en temps réel avec aperçu HTML scindé et coloration. Le rendu syntaxique reste confiné dans la mémoire du client."
+    },
+    "it": {
+        "title": "Editor Markdown Live – Anteprima HTML a Schermo Diviso",
+        "desc": "Scrivi testi in formato Markdown con anteprima HTML simultanea a doppio riquadro. L'elaborazione del markup avviene nella sandbox del tuo browser personale."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2860,6 +2883,20 @@ ${bodyContent}
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

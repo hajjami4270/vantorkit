@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>CSV to JSON &amp; JSON to CSV Converter — Free Online Tool | VantorKit</title>
-  <meta name="description" content="Convert CSV to JSON and JSON to CSV in your browser. Fast RFC 4180 parsing with delimiter auto-detection, nested flattening, and zero uploads.">
+  <title>CSV to JSON Converter – Tabular & Object Data Parser</title>
+  <meta name="description" content="Convert CSV spreadsheets to structured JSON and reverse arrays back to tabular files. RFC 4180 parsing runs in-memory with zero cloud exposure.">>>>
   <meta name="keywords" content="csv to json, json to csv, csv converter, json converter, flatten json to csv, online csv converter, data converter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/csv-json-converter.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CSV to JSON &amp; JSON to CSV Converter — Free Online Tool | VantorKit">
-  <meta property="og:description" content="Convert CSV to JSON and JSON to CSV instantly in your browser. 100% private, client-side data conversion with zero logs.">
+  <meta property="og:title" content="CSV to JSON Converter – Tabular & Object Data Parser">>>>
+  <meta property="og:description" content="Convert CSV spreadsheets to structured JSON and reverse arrays back to tabular files. RFC 4180 parsing runs in-memory with zero cloud exposure.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/csv-json-converter.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CSV to JSON &amp; JSON to CSV Converter | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit CSV to JSON & JSON to CSV Converter",
       "url": "https://vantorkit.com/tools/csv-json-converter.html",
       "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "High-performance client-side bidirectional CSV and JSON converter with automatic delimiter detection, nested JSON flattening, and RFC 4180 compliance."
+      "description": "Private client-side data serialization tool converting CSV spreadsheets to JSON arrays and reconstructing JSON to delimited files without server processing."
     },
     {
       "@type": "FAQPage",
@@ -2720,6 +2725,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "CSV to JSON Converter – Tabular & Object Data Parser",
+        "desc": "Convert CSV spreadsheets to structured JSON and reverse arrays back to tabular files. RFC 4180 parsing runs in-memory with zero cloud exposure."
+    },
+    "ar": {
+        "title": "محول CSV إلى JSON – تحويل الجداول والبيانات بدقة",
+        "desc": "حول جداول CSV إلى كائنات JSON والعكس بسرعة ومطابقة لمعيار RFC 4180. تتم معالجة البيانات محلياً في ذاكرة جهازك دون رفعها إلى أي سحابة."
+    },
+    "fr": {
+        "title": "Convertisseur CSV en JSON – Analyseur de Données Tabulaires",
+        "desc": "Transformez vos fichiers CSV en JSON et inversement sans intermédiaire. Analyse conforme RFC 4180 exécutée localement sans partage de données."
+    },
+    "it": {
+        "title": "Convertitore CSV in JSON – Strutturazione Dati Tabellari",
+        "desc": "Converti fogli CSV in array JSON e viceversa in tempo reale. Elaborazione RFC 4180 eseguita sul tuo computer senza trasferimenti di file."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2752,6 +2776,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

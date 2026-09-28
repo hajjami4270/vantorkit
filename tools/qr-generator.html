@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Generator — Free Custom &amp; Vector SVG Export | VantorKit</title>
-  <meta name="description" content="Create custom QR codes for URLs, Wi-Fi networks, vCards, emails, and text. Download high-resolution PNG and SVG vectors with zero data uploads.">
+  <title>QR Code Generator – Custom Vector SVG & PNG Codes</title>
+  <meta name="description" content="Create scannable QR matrices for URLs, WiFi credentials, vCards, and emails. Visual rendering compiles into vector SVG entirely on your personal device.">>
   <meta name="keywords" content="qr code generator, wifi qr code, vcard qr code, vector qr code, svg qr code, client side qr, private qr generator, free qr maker, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/qr-generator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/qr-generator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/qr-generator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/qr-generator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/qr-generator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/qr-generator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="QR Code Generator — Free Custom &amp; Vector SVG Export | VantorKit">
-  <meta property="og:description" content="Create customizable QR codes for links, Wi-Fi connections, contacts, and emails with zero server logging. Download high-res PNG or vector SVG.">
+  <meta property="og:title" content="QR Code Generator – Custom Vector SVG & PNG Codes">>
+  <meta property="og:description" content="Create scannable QR matrices for URLs, WiFi credentials, vCards, and emails. Visual rendering compiles into vector SVG entirely on your personal device.">>
   <meta property="og:url" content="https://vantorkit.com/tools/qr-generator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="QR Code Generator — Free Custom &amp; Vector SVG Export | VantorKit">
@@ -35,14 +40,14 @@
       "name": "VantorKit QR Code Generator",
       "url": "https://vantorkit.com/tools/qr-generator.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side QR Code Generator supporting URLs, Wi-Fi credentials, vCard contacts, emails, and plain text with custom colors, SVG vector export, and instant PNG downloads."
+      "description": "Client-side QR code generator producing scannable matrix barcodes for links, WiFi networks, and vCards with vector SVG and PNG export in-browser."
     },
     {
       "@type": "FAQPage",
@@ -3051,6 +3056,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "QR Code Generator – Custom Vector SVG & PNG Codes",
+        "desc": "Create scannable QR matrices for URLs, WiFi credentials, vCards, and emails. Visual rendering compiles into vector SVG entirely on your personal device."
+    },
+    "ar": {
+        "title": "توليد رموز QR – إنشاء باركود متجه SVG وصور PNG",
+        "desc": "أنشئ رموز QR سريعة للروابط وبيانات Wi-Fi وجهات الاتصال وبطاقات vCard. يتم رسم الرموز وتصديرها محلياً في جهازك دون مشاركة معلوماتك."
+    },
+    "fr": {
+        "title": "Générateur de QR Code – Export Vectoriel SVG & PNG",
+        "desc": "Créez des codes QR pour vos liens, accès Wi-Fi, contacts et emails. La génération graphique s'effectue entièrement sur votre appareil."
+    },
+    "it": {
+        "title": "Generatore Codici QR – Esportazione Vettoriale SVG e PNG",
+        "desc": "Genera codici QR per collegamenti web, reti Wi-Fi, contatti e messaggi. Il rendering visivo si elabora localmente sul tuo dispositivo."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3083,6 +3107,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

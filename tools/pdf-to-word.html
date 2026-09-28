@@ -15,13 +15,18 @@
     })();
   </script>
 
-  <title>PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit</title>
-  <meta name="description" content="Convert PDF files to editable Word documents directly in your browser. 100% private client-side processing with zero server uploads or cloud data.">
+  <title>PDF to Word Converter – Export Editable DOCX Files</title>
+  <meta name="description" content="Extract text, headings, and formatting from PDF files into clean Word documents. File conversion completes inside your browser with zero document uploads.">>>>
   <meta name="keywords" content="pdf to word, pdf to docx, convert pdf to word online, free pdf converter, client side pdf word, private pdf tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/pdf-to-word.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/pdf-to-word.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit">
-  <meta property="og:description" content="Convert PDF documents to editable Word .docx files instantly in your browser. 100% private with zero uploads.">
+  <meta property="og:title" content="PDF to Word Converter – Export Editable DOCX Files">>>>
+  <meta property="og:description" content="Extract text, headings, and formatting from PDF files into clean Word documents. File conversion completes inside your browser with zero document uploads.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/pdf-to-word.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PDF to Word Converter — Free Client-Side .docx Exporter | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit PDF to Word Converter",
       "url": "https://vantorkit.com/tools/pdf-to-word.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Client-side PDF to Word converter using pdf.js and docx.js. No file uploads to any server."
+      "description": "In-browser PDF to DOCX reconstruction utility extracting textual hierarchies and layout structures locally with zero cloud transmissions."
     },
     {
       "@type": "FAQPage",
@@ -1711,6 +1716,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "PDF to Word Converter – Export Editable DOCX Files",
+        "desc": "Extract text, headings, and formatting from PDF files into clean Word documents. File conversion completes inside your browser with zero document uploads."
+    },
+    "ar": {
+        "title": "تحويل PDF إلى Word – تصدير مستندات DOCX قابلة للتعديل",
+        "desc": "استخرج النصوص والعناوين والتنسيقات من ملفات PDF إلى مستندات Word جاهزة للتحرير. تتم المعالجة بالكامل داخل المتصفح دون إرسال المستند للخارج."
+    },
+    "fr": {
+        "title": "Convertisseur PDF en Word – Exporter en DOCX Modifiable",
+        "desc": "Convertissez vos PDF en documents Word éditables en préservant le texte et la structure. Traitement 100% navigateur sans téléversement de fichier."
+    },
+    "it": {
+        "title": "Convertitore PDF in Word – Esporta File DOCX Modificabili",
+        "desc": "Trasforma documenti PDF in file Word modificabili preservando paragrafi e testo. La conversione avviene nel tuo browser senza caricamenti esterni."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -1743,6 +1767,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

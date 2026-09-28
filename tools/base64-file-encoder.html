@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Base64 File Encoder &amp; Decoder — Data URI &amp; Binary Converter | VantorKit</title>
-  <meta name="description" content="Encode any file to Base64 and Data URIs, or decode Base64 strings to original binary files locally in your browser with zero server uploads.">
+  <title>Base64 File Encoder – Data URI & Binary Decoder</title>
+  <meta name="description" content="Encode any binary file into Base64 strings or decode data URIs back to downloadable assets. Runs entirely offline in browser memory without servers.">>>>
   <meta name="keywords" content="base64 file encoder, base64 decoder, file to base64, data uri generator, convert pdf to base64, image to base64, decode base64 file, binary to base64, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/base64-file-encoder.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/base64-file-encoder.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/base64-file-encoder.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/base64-file-encoder.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/base64-file-encoder.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/base64-file-encoder.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Base64 File Encoder &amp; Decoder — Data URI &amp; Binary Converter | VantorKit">
-  <meta property="og:description" content="Convert any file to Base64, Data URI, HTML embed, or CSS snippet, and decode Base64 back into downloadable files. 100% client-side.">
+  <meta property="og:title" content="Base64 File Encoder – Data URI & Binary Decoder">>>>
+  <meta property="og:description" content="Encode any binary file into Base64 strings or decode data URIs back to downloadable assets. Runs entirely offline in browser memory without servers.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/base64-file-encoder.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Base64 File Encoder &amp; Decoder | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Base64 File Encoder & Decoder",
       "url": "https://vantorkit.com/tools/base64-file-encoder.html",
       "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 FileReader API.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Base64 File Encoder and Decoder. Convert PDFs, images, fonts, audio, and documents into Base64 strings and Data URIs, or decode Base64 back into binary files with automatic MIME autodetection."
+      "description": "Client-side binary-to-text conversion tool transforming arbitrary files into Base64 strings, Data URIs, and downloadable reconstructed binaries."
     },
     {
       "@type": "FAQPage",
@@ -2577,6 +2582,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Base64 File Encoder – Data URI & Binary Decoder",
+        "desc": "Encode any binary file into Base64 strings or decode data URIs back to downloadable assets. Runs entirely offline in browser memory without servers."
+    },
+    "ar": {
+        "title": "تشفير وفك تشفير ملفات Base64 – روابط Data URI",
+        "desc": "حول أي ملف رقمي إلى نصوص Base64 أو استرجع الملفات الأصلية من الرموز المشفرة. يعمل بالكامل في الذاكرة المحلية لجهازك دون الحاجة لاتصال خارجي."
+    },
+    "fr": {
+        "title": "Encodeur de Fichiers Base64 – Décodeur Binaire & Data URI",
+        "desc": "Encodez vos fichiers binaires en chaînes Base64 ou restaurez les fichiers d'origine. Fonctionne hors ligne dans la mémoire de votre navigateur."
+    },
+    "it": {
+        "title": "Codificatore File Base64 – Decodifica Binaria e Data URI",
+        "desc": "Codifica qualsiasi file in stringhe Base64 o ricava l'asset originale dai dati codificati. L'elaborazione si svolge nella RAM senza server."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2609,6 +2633,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

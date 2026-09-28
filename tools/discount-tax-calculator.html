@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Discount &amp; Sales Tax Calculator — Final Price &amp; Savings | VantorKit</title>
-  <meta name="description" content="Calculate discounts, stacked promo codes, and sales tax or VAT in real time. Includes price breakdowns and reverse calculations. 100% private.">
+  <title>Discount & Tax Calculator – Net Price & Savings</title>
+  <meta name="description" content="Deduct promo discounts and stack regional sales tax or VAT to find your register total. Computations run client-side for rapid, private shopping math.">>
   <meta name="keywords" content="discount calculator, sales tax calculator, final price calculator, vat calculator, stacked discount, reverse discount calculator, percentage off, shopping savings, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/discount-tax-calculator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/discount-tax-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Discount &amp; Sales Tax Calculator — Final Price &amp; Savings | VantorKit">
-  <meta property="og:description" content="Instant client-side discount, stacked promo code, and sales tax calculation. See total savings, net discount %, and visual cost breakdown.">
+  <meta property="og:title" content="Discount & Tax Calculator – Net Price & Savings">>
+  <meta property="og:description" content="Deduct promo discounts and stack regional sales tax or VAT to find your register total. Computations run client-side for rapid, private shopping math.">>
   <meta property="og:url" content="https://vantorkit.com/tools/discount-tax-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Discount &amp; Sales Tax Calculator | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Discount & Sales Tax Calculator",
       "url": "https://vantorkit.com/tools/discount-tax-calculator.html",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side discount and sales tax calculator. Compute percentage or fixed cash discounts, stacked promo codes, sales tax and VAT, visual price breakdown, and reverse original sticker price."
+      "description": "Client-side retail math tool calculating percentage discounts, stacked coupons, and sales tax or VAT instantly in-browser without network latency."
     },
     {
       "@type": "FAQPage",
@@ -3045,6 +3050,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Discount & Tax Calculator – Net Price & Savings",
+        "desc": "Deduct promo discounts and stack regional sales tax or VAT to find your register total. Computations run client-side for rapid, private shopping math."
+    },
+    "ar": {
+        "title": "حاسبة الخصم والضريبة – حساب السعر النهائي والتوفير",
+        "desc": "احسب أسعار الشراء بعد التخفيضات وإضافة ضريبة القيمة المضافة أو المبيعات. تتم جميع العمليات الحسابية محلياً لتسوق ذكي وسريع دون جمع بياناتك."
+    },
+    "fr": {
+        "title": "Calculateur Remise & Taxe – Prix Net et Économies",
+        "desc": "Appliquez remises commerciales et taxes locales (TVA) pour connaître le total à payer. Les calculs s'exécutent localement pour un shopping discret."
+    },
+    "it": {
+        "title": "Calcolatore Sconto e IVA – Prezzo Finale e Risparmio",
+        "desc": "Applica coupon e imposte sul valore aggiunto per verificare l'importo effettivo alla cassa. Il calcolo si svolge sul tuo device senza invio dati."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3077,6 +3101,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

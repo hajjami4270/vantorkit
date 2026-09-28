@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Compound Interest Calculator — Investment Growth Simulator | VantorKit</title>
-  <meta name="description" content="Calculate compound interest and investment growth. Simulate monthly contributions, compare compounding schedules, and view interactive charts.">
+  <title>Compound Interest Calculator – Forecast Savings Growth</title>
+  <meta name="description" content="Model multi-year wealth accumulation with custom deposit frequencies and rates. Projections render in real time without sending financials anywhere.">>
   <meta name="keywords" content="compound interest calculator, investment calculator, future value calculator, interest growth, rule of 72, financial planning, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/compound-interest.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/compound-interest.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/compound-interest.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/compound-interest.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/compound-interest.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/compound-interest.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Compound Interest Calculator — Investment Growth Simulator | VantorKit">
-  <meta property="og:description" content="Simulate investment growth, deposits, and compound frequencies with interactive visual charts and year-by-year schedules. 100% free and client-side.">
+  <meta property="og:title" content="Compound Interest Calculator – Forecast Savings Growth">>
+  <meta property="og:description" content="Model multi-year wealth accumulation with custom deposit frequencies and rates. Projections render in real time without sending financials anywhere.">>
   <meta property="og:url" content="https://vantorkit.com/tools/compound-interest.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Compound Interest Calculator | VantorKit">
@@ -47,14 +52,14 @@
       "name": "VantorKit Compound Interest Calculator",
       "url": "https://vantorkit.com/tools/compound-interest.html",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Interactive compound interest calculator and investment growth simulator featuring customizable contributions, visual stacked growth charts, and annual breakdown schedules."
+      "description": "Interactive investment growth simulator computing compound interest and recurring deposits locally with real-time browser chart generation and zero server calls."
     },
     {
       "@type": "FAQPage",
@@ -2721,6 +2726,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Compound Interest Calculator – Forecast Savings Growth",
+        "desc": "Model multi-year wealth accumulation with custom deposit frequencies and rates. Projections render in real time without sending financials anywhere."
+    },
+    "ar": {
+        "title": "حاسبة الفائدة المركبة – محاكاة نمو الاستثمارات",
+        "desc": "قم بتقدير نمو أموالك عبر الفائدة المركبة مع مساهمات دورية متنوعة. تجري جميع العمليات الحسابية محلياً في جهازك بأمان تام وبدون أي خوادم."
+    },
+    "fr": {
+        "title": "Calculateur d'Intérêts Composés – Projections Épargne",
+        "desc": "Simulez la croissance de vos placements avec versements programmés. Vos projections financières se calculent en direct sans partage de données."
+    },
+    "it": {
+        "title": "Calcolatore Interesse Composto – Crescita Investimenti",
+        "desc": "Modella la crescita dei tuoi risparmi nel tempo con versamenti periodici. I calcoli finanziari avvengono sul tuo dispositivo con la massima privacy."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2753,6 +2777,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Merge — Free Client-Side PDF Combiner | VantorKit</title>
-  <meta name="description" content="Combine and merge multiple PDF documents into a single organized file entirely in your browser. 100% private, client-side processing with zero server uploads.">
+  <title>PDF Merge – Combine & Reorder Documents Online</title>
+  <meta name="description" content="Merge multiple PDF files into an organized document with drag-and-drop page ordering. Files are assembled in local memory without leaving your machine.">>>>
   <meta name="keywords" content="pdf merge, merge pdf online, combine pdf, join pdf, free pdf merger, client side pdf merge, private pdf tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/pdf-merge.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/pdf-merge.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/pdf-merge.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/pdf-merge.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/pdf-merge.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/pdf-merge.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PDF Merge — Free Client-Side PDF Combiner | VantorKit">
-  <meta property="og:description" content="Combine multiple PDF files into one in seconds. 100% client-side privacy with zero document uploads.">
+  <meta property="og:title" content="PDF Merge – Combine & Reorder Documents Online">>>>
+  <meta property="og:description" content="Merge multiple PDF files into an organized document with drag-and-drop page ordering. Files are assembled in local memory without leaving your machine.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/pdf-merge.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PDF Merge — Free Client-Side PDF Combiner | VantorKit">
@@ -35,14 +40,14 @@
       "name": "VantorKit PDF Merge",
       "url": "https://vantorkit.com/tools/pdf-merge.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Secure in-browser client-side PDF combiner that merges multiple PDF documents locally using WebAssembly and Web APIs without transmitting files over the network."
+      "description": "Client-side PDF document assembly utility merging multiple PDF files into a single ordered document using local WebAssembly/PDF-Lib with zero server uploads."
     },
     {
       "@type": "FAQPage",
@@ -2667,6 +2672,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "PDF Merge – Combine & Reorder Documents Online",
+        "desc": "Merge multiple PDF files into an organized document with drag-and-drop page ordering. Files are assembled in local memory without leaving your machine."
+    },
+    "ar": {
+        "title": "دمج ملفات PDF – تجميع وترتيب المستندات محلياً",
+        "desc": "ادمج عدة مستندات PDF في ملف منظم واحد مع إعادة ترتيب الصفحات بالسحب. يتم تجميع الملفات محلياً داخل جهازك دون إرسالها إلى أي خادم خارجي."
+    },
+    "fr": {
+        "title": "Fusionner PDF – Combiner des Documents en Ligne",
+        "desc": "Assemblez plusieurs fichiers PDF en un document ordonné avec réorganisation par glisser-déposer. Vos fichiers ne quittent jamais votre équipement."
+    },
+    "it": {
+        "title": "Unisci PDF – Combina e Riordina Documenti Online",
+        "desc": "Unisci più documenti PDF in un unico file con ordinamento visivo delle pagine. L'assemblaggio avviene in memoria locale con totale riservatezza."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2699,6 +2723,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

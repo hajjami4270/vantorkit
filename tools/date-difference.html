@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Date Difference &amp; Workdays Calculator — Business Days &amp; Calendar Time | VantorKit</title>
-  <meta name="description" content="Calculate total days, business workdays, and weekends between two dates. Add or subtract calendar days with custom weekend filters. 100% private.">
+  <title>Date Difference Calculator – Workdays & Duration</title>
+  <meta name="description" content="Calculate elapsed days, weekends, and business workdays between two calendar dates. Date math executes in local browser scripts without saving dates.">>
   <meta name="keywords" content="date difference calculator, business days calculator, workdays calculator, days between dates, add days to date, subtract days from date, weekend filter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/date-difference.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/date-difference.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/date-difference.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/date-difference.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/date-difference.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/date-difference.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Date Difference &amp; Workdays Calculator | VantorKit">
-  <meta property="og:description" content="Calculate calendar days, working business days, weekends, and equivalent hours between dates with custom weekend filters.">
+  <meta property="og:title" content="Date Difference Calculator – Workdays & Duration">>
+  <meta property="og:description" content="Calculate elapsed days, weekends, and business workdays between two calendar dates. Date math executes in local browser scripts without saving dates.">>
   <meta property="og:url" content="https://vantorkit.com/tools/date-difference.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Date Difference &amp; Workdays Calculator | VantorKit">
@@ -43,15 +48,15 @@
       "@type": "WebApplication",
       "name": "VantorKit Date Difference & Workdays Calculator",
       "url": "https://vantorkit.com/tools/date-difference.html",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "All",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Date Difference and Workdays Calculator. Calculate calendar days, business working days, weekends, and equivalent hours, or add/subtract business days with custom weekend filters."
+      "description": "Client-side calendar utility computing elapsed days, business workdays, and custom weekend intervals directly in browser memory without tracking dates."
     },
     {
       "@type": "FAQPage",
@@ -2664,6 +2669,25 @@ Calculated with VantorKit (https://vantorkit.com/tools/date-difference.html)`;
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Date Difference Calculator – Workdays & Duration",
+        "desc": "Calculate elapsed days, weekends, and business workdays between two calendar dates. Date math executes in local browser scripts without saving dates."
+    },
+    "ar": {
+        "title": "حاسبة فرق الأيام والتاريخ – أيام العمل والتقويم",
+        "desc": "احسب عدد الأيام المنقضية وأيام العمل والعطلات الأسبوعية بين تاريخين بدقة. تجري الحسابات التقويمية محلياً في متصفحك دون حفظ أي تواريخ."
+    },
+    "fr": {
+        "title": "Calculateur d'Écart de Dates – Jours Ouvrés & Durée",
+        "desc": "Calculez le nombre de jours ouvrés, week-ends et durées entre deux dates. Traitement calendaire exécuté sur votre machine sans stockage."
+    },
+    "it": {
+        "title": "Calcolatore Differenza Date – Giorni Lavorativi e Mesi",
+        "desc": "Calcola giorni solari, fine settimana e giorni lavorativi tra due date. Le operazioni di calendario avvengono offline nel tuo browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2696,6 +2720,20 @@ Calculated with VantorKit (https://vantorkit.com/tools/date-difference.html)`;
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

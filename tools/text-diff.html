@@ -15,15 +15,19 @@
     })();
   </script>
 
-  <title>Text Diff &amp; Compare — Free Online Visual Difference Checker | VantorKit</title>
-  <meta name="description" content="Compare two texts side-by-side or inline with visual difference highlights. Granular line, word, and character diffs with 100% local privacy.">
+  <title>Text Diff Tool – Compare Differences Side by Side</title>
+  <meta name="description" content="Inspect line, word, and character differences between two text drafts side by side. Diff parsing algorithms execute locally on client hardware without uploads.">>>
   <meta name="keywords" content="text diff, compare text, diff checker, text compare online, difference checker, code diff, word diff, side by side diff, unified diff, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/text-diff.html">
-
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/text-diff.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/text-diff.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/text-diff.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/text-diff.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/text-diff.html">
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Text Diff &amp; Compare — Free Online Visual Difference Checker | VantorKit">
-  <meta property="og:description" content="Compare text and code side-by-side or inline with visual green additions and red deletions highlights. Line, word, and character granularity. 100% private.">
+  <meta property="og:title" content="Text Diff Tool – Compare Differences Side by Side">>>
+  <meta property="og:description" content="Inspect line, word, and character differences between two text drafts side by side. Diff parsing algorithms execute locally on client hardware without uploads.">>>
   <meta property="og:url" content="https://vantorkit.com/tools/text-diff.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Text Diff &amp; Compare — VantorKit">
@@ -44,17 +48,17 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "VantorKit Text Diff & Compare",
+      "name": "Text Diff Tool",
       "url": "https://vantorkit.com/tools/text-diff.html",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side text diff tool. Compare text, code, or documentation side-by-side or inline with line, word, and character granularity, similarity score, and zero cloud uploads."
+      "description": "Compare texts side-by-side or inline to detect additions, deletions, and character changes using client-side diff algorithms without external transmissions."
     },
     {
       "@type": "FAQPage",
@@ -2818,6 +2822,25 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Text Diff Tool – Compare Differences Side by Side",
+        "desc": "Inspect line, word, and character differences between two text drafts side by side. Diff parsing algorithms execute locally on client hardware without uploads."
+    },
+    "ar": {
+        "title": "أداة مقارنة النصوص – كشف الفروق جنباً إلى جنب",
+        "desc": "قارن بين نسختين من النصوص جنباً إلى جنب لاكتشاف الفروقات على مستوى الأسطر والكلمات بدقة. تعمل خوارزمية الفحص محلياً على جهازك دون إرسال نصوصك للخارج."
+    },
+    "fr": {
+        "title": "Comparateur de Textes – Vérificateur de Différences",
+        "desc": "Comparez deux rédactions côte à côte ou en ligne pour détecter ajouts et suppressions. L'analyse différentielle s'exécute directement sur votre ordinateur."
+    },
+    "it": {
+        "title": "Confronto Testi – Analisi Differenze Affiancate",
+        "desc": "Individua modifiche, aggiunte e cancellazioni tra due testi affiancati riga per riga. L'algoritmo di differenziazione gira in locale senza caricare file."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2850,6 +2873,20 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

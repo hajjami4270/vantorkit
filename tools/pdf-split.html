@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Split &amp; Extract — Free Client-Side PDF Splitter | VantorKit</title>
-  <meta name="description" content="Split and extract specific pages or page ranges from PDF files locally in your browser. 100% private client-side processing with zero cloud uploads.">
+  <title>PDF Split & Extract – Separate Custom Page Ranges</title>
+  <meta name="description" content="Extract individual pages or isolate custom intervals from large PDF documents. Page decoupling finishes in your browser with complete privacy.">>>>
   <meta name="keywords" content="pdf split, split pdf, extract pdf pages, separate pdf, split pdf online, free pdf splitter, client side pdf split, private pdf tool, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/pdf-split.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/pdf-split.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/pdf-split.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/pdf-split.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/pdf-split.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/pdf-split.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PDF Split &amp; Extract — Free Client-Side PDF Splitter | VantorKit">
-  <meta property="og:description" content="Extract pages or split PDF documents locally in your browser with zero document uploads. Fast, confidential, and free.">
+  <meta property="og:title" content="PDF Split & Extract – Separate Custom Page Ranges">>>>
+  <meta property="og:description" content="Extract individual pages or isolate custom intervals from large PDF documents. Page decoupling finishes in your browser with complete privacy.">>>>
   <meta property="og:url" content="https://vantorkit.com/tools/pdf-split.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PDF Split &amp; Extract — Free Client-Side PDF Splitter | VantorKit">
@@ -36,14 +41,14 @@
       "name": "VantorKit PDF Split & Extract",
       "url": "https://vantorkit.com/tools/pdf-split.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Client-side PDF page extractor and splitter that extracts custom page ranges or separates individual pages locally inside the browser using WebAssembly with zero data transmission."
+      "description": "Browser-based PDF extractor and splitter separating custom page ranges and individual sheets from PDF documents directly in client-side memory."
     },
     {
       "@type": "FAQPage",
@@ -3083,6 +3088,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "PDF Split & Extract – Separate Custom Page Ranges",
+        "desc": "Extract individual pages or isolate custom intervals from large PDF documents. Page decoupling finishes in your browser with complete privacy."
+    },
+    "ar": {
+        "title": "تقسيم ملفات PDF – استخراج صفحات ومقاطع محددة",
+        "desc": "افصل صفحات محددة أو استخرج نطاقات مخصصة من ملفات PDF الكبيرة فورياً. تتم عملية تقسيم المستند في متصفحك دون رفع أي صفحة إلى السحابة."
+    },
+    "fr": {
+        "title": "Diviser PDF – Extraire des Pages et Intervalles",
+        "desc": "Isolez des pages ou découpez des intervalles personnalisés depuis vos PDF. Le découpage s'effectue dans votre navigateur en toute confidentialité."
+    },
+    "it": {
+        "title": "Dividi PDF – Estrai Pagine e Intervalli Personalizzati",
+        "desc": "Separa pagine singole o estrai capitoli specifici da documenti PDF voluminosi. Il processo si completa localmente preservando la privacy."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3115,6 +3139,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

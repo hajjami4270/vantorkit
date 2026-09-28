@@ -15,15 +15,19 @@
     })();
   </script>
 
-  <title>Word &amp; Character Counter — Real-Time Text Analysis &amp; Keyword Density | VantorKit</title>
-  <meta name="description" content="Count words, characters, sentences, and paragraphs in real time. Analyze keyword density, reading time, and speaking duration with 100% privacy.">
+  <title>Word Counter – Character Count & Reading Time Stats</title>
+  <meta name="description" content="Count words, characters, sentences, and estimated reading time as you type. Text frequency calculations run instantaneously in local memory with total secrecy.">>>
   <meta name="keywords" content="word counter, character counter, letter counter, reading time calculator, speaking time, keyword density analyzer, case converter, title case, sentence case, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/word-counter.html">
-
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/word-counter.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/word-counter.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/word-counter.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/word-counter.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/word-counter.html">
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Word &amp; Character Counter — Real-Time Text Analysis | VantorKit">
-  <meta property="og:description" content="Count words, characters, sentences, paragraphs, and reading times in real-time. Includes case converter and keyword density analyzer. 100% private.">
+  <meta property="og:title" content="Word Counter – Character Count & Reading Time Stats">>>
+  <meta property="og:description" content="Count words, characters, sentences, and estimated reading time as you type. Text frequency calculations run instantaneously in local memory with total secrecy.">>>
   <meta property="og:url" content="https://vantorkit.com/tools/word-counter.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Word &amp; Character Counter — Real-Time Text Analysis | VantorKit">
@@ -41,17 +45,17 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "VantorKit Word & Character Counter",
+      "name": "Word Counter",
       "url": "https://vantorkit.com/tools/word-counter.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side word counter and character counter with real-time reading time, speaking duration, keyword density analysis, case transformation, and social media character limit tracking."
+      "description": "Real-time text metrics tool calculating word count, character totals, reading time, and keyword densities entirely in browser memory with zero tracking."
     },
     {
       "@type": "FAQPage",
@@ -2402,6 +2406,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Word Counter – Character Count & Reading Time Stats",
+        "desc": "Count words, characters, sentences, and estimated reading time as you type. Text frequency calculations run instantaneously in local memory with total secrecy."
+    },
+    "ar": {
+        "title": "عداد الكلمات والحروف – زمن القراءة وإحصاء النص",
+        "desc": "احسب عدد الكلمات والحروف والفقرات ومعدل وقت القراءة والإلقاء أثناء الكتابة مباشرة. تحسب المؤشرات النصية فورياً في متصفحك دون نقل المحتوى لأي خوادم."
+    },
+    "fr": {
+        "title": "Compteur de Mots – Caractères & Temps de Lecture",
+        "desc": "Mesurez le nombre de mots, caractères, phrases et temps de lecture pendant votre saisie. Les statistiques textuelles se calculent localement dans votre session."
+    },
+    "it": {
+        "title": "Conteggio Parole – Caratteri e Tempo di Lettura",
+        "desc": "Calcola all'istante numero di vocaboli, caratteri, frasi e tempi stimati di lettura. L'analisi frequenziale del testo opera in RAM sul tuo dispositivo."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2434,6 +2457,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

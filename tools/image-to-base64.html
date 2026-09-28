@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Image to Base64 Converter — Data URI, HTML &amp; CSS Generator | VantorKit</title>
-  <meta name="description" content="Convert PNG, JPG, WebP, and SVG images into Base64 Data URIs, HTML tags, and CSS code directly in your browser. Fast and 100% client-side.">
+  <title>Image to Base64 Converter – Data URI & CSS Code Maker</title>
+  <meta name="description" content="Convert PNG, JPG, and SVG graphics into copyable Data URIs and background-image CSS. String generation operates locally in browser sandbox memory.">>
   <meta name="keywords" content="image to base64, convert image to base64, data uri generator, png to base64, jpg to base64, svg to base64, base64 image encoder, inline image css, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-to-base64.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/image-to-base64.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/image-to-base64.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/image-to-base64.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/image-to-base64.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/image-to-base64.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Image to Base64 Converter — Data URI &amp; HTML Generator | VantorKit">
-  <meta property="og:description" content="Convert PNG, JPG, WebP, SVG, GIF, or ICO into Base64 Data URIs, HTML img tags, and CSS backgrounds directly in your browser. 100% private.">
+  <meta property="og:title" content="Image to Base64 Converter – Data URI & CSS Code Maker">>
+  <meta property="og:description" content="Convert PNG, JPG, and SVG graphics into copyable Data URIs and background-image CSS. String generation operates locally in browser sandbox memory.">>
   <meta property="og:url" content="https://vantorkit.com/tools/image-to-base64.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Image to Base64 Converter | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Image to Base64 Converter",
       "url": "https://vantorkit.com/tools/image-to-base64.html",
       "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 FileReader API.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Image to Base64 converter. Convert PNG, JPG, WebP, SVG, GIF, and ICO into Data URIs, HTML img tags, and CSS background snippets locally."
+      "description": "Client-side image serialization tool converting PNG, JPEG, WebP, and SVG files into Data URIs, CSS background rules, and HTML img tags."
     },
     {
       "@type": "FAQPage",
@@ -2091,6 +2096,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Image to Base64 Converter – Data URI & CSS Code Maker",
+        "desc": "Convert PNG, JPG, and SVG graphics into copyable Data URIs and background-image CSS. String generation operates locally in browser sandbox memory."
+    },
+    "ar": {
+        "title": "تحويل الصور إلى Base64 – كود Data URI وأكواد CSS",
+        "desc": "حول صور PNG وJPG وSVG إلى روابط Data URI وشفرات CSS جاهزة للنسخ المباشر. يتم توليد الأكواد محلياً في متصفحك دون رفع أي صورة إلى الإنترنت."
+    },
+    "fr": {
+        "title": "Convertisseur Image en Base64 – Data URI & CSS Intégrable",
+        "desc": "Transformez vos visuels en chaînes Data URI et règles CSS prêtes à coller. Génération de code réalisée dans le bac à sable de votre navigateur."
+    },
+    "it": {
+        "title": "Convertitore Immagini in Base64 – Codice Data URI e CSS",
+        "desc": "Converti grafiche PNG e JPG in Data URI e background CSS pronti all'uso. La codifica si esegue nel tuo browser salvaguardando i tuoi dati."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2123,6 +2147,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

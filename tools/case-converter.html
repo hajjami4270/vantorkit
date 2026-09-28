@@ -15,15 +15,19 @@
     })();
   </script>
 
-  <title>Case Converter &amp; URL Slugifier — Free Online Text Case &amp; Slug Tool | VantorKit</title>
-  <meta name="description" content="Convert text to UPPERCASE, lowercase, Title Case, camelCase, snake_case, and generate clean SEO URL slugs. Fast, private, and client-side.">
+  <title>Case Converter – Text Letter Case & URL Slugifier</title>
+  <meta name="description" content="Transform text between uppercase, lowercase, camelCase, and clean URL slugs. String alterations process instantaneously in local memory without transmission.">>>
   <meta name="keywords" content="case converter, url slugifier, slug generator, camelcase converter, snake case, pascalcase, kebab case, title case, uppercase, lowercase, text tools, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/case-converter.html">
-
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/case-converter.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/case-converter.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/case-converter.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/case-converter.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/case-converter.html">
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Case Converter &amp; URL Slugifier — Free Online Text Case Tool | VantorKit">
-  <meta property="og:description" content="Instant text transformation tool for developers and writers. Convert between camelCase, snake_case, Title Case, kebab-case, and generate clean SEO URL slugs.">
+  <meta property="og:title" content="Case Converter – Text Letter Case & URL Slugifier">>>
+  <meta property="og:description" content="Transform text between uppercase, lowercase, camelCase, and clean URL slugs. String alterations process instantaneously in local memory without transmission.">>>
   <meta property="og:url" content="https://vantorkit.com/tools/case-converter.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Case Converter &amp; URL Slugifier — VantorKit">
@@ -41,17 +45,17 @@
   "@graph": [
     {
       "@type": "WebApplication",
-      "name": "VantorKit Case Converter & URL Slugifier",
+      "name": "Case Converter",
       "url": "https://vantorkit.com/tools/case-converter.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side case converter and URL slugifier. Convert text to camelCase, snake_case, PascalCase, kebab-case, Title Case, and generate clean SEO-optimized URL slugs with zero cloud logging."
+      "description": "Convert text case formatting (uppercase, lowercase, camelCase, snake_case) and generate SEO slugs in local browser memory without network transmissions."
     },
     {
       "@type": "FAQPage",
@@ -2523,6 +2527,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Case Converter – Text Letter Case & URL Slugifier",
+        "desc": "Transform text between uppercase, lowercase, camelCase, and clean URL slugs. String alterations process instantaneously in local memory without transmission."
+    },
+    "ar": {
+        "title": "محول حالة الأحرف – تغيير حالة النص وصياغة الروابط",
+        "desc": "حول نصوصك بين الحروف الكبيرة والصغيرة وصيغ camelCase وslugs للروابط بسرعة. تتم معالجة السلاسل النصية لحظياً على جهازك دون إرسالها خارج المتصفح."
+    },
+    "fr": {
+        "title": "Convertisseur de Casse – Majuscules & Slugs URL",
+        "desc": "Passez vos textes en majuscules, minuscules, camelCase et slugs d'URL optimisés. Les modifications de chaînes s'exécutent en local sans aucun stockage distant."
+    },
+    "it": {
+        "title": "Convertitore Maiuscole e Minuscole – Slug URL e Testo",
+        "desc": "Trasforma testo in maiuscolo, minuscolo, camelCase e genera slug URL per il web. La formattazione delle stringhe viene calcolata interamente nel browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2555,6 +2578,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Age &amp; Milestone Calculator — Exact Age, Next Birthday &amp; Life Stats | VantorKit</title>
-  <meta name="description" content="Calculate your exact age in years, months, days, and seconds. View upcoming birthday countdowns and milestones. 100% private in-browser tool.">
+  <title>Age Calculator – Precise Birth Milestones & Stats</title>
+  <meta name="description" content="Calculate your chronological age down to days, hours, and minutes with upcoming milestone countdowns. Birthdate figures evaluate privately in browser RAM.">>
   <meta name="keywords" content="age calculator, exact age calculator, milestone calculator, next birthday countdown, total days lived, heartbeats calculator, zodiac calculator, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/age-calculator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/age-calculator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/age-calculator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/age-calculator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/age-calculator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/age-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Age &amp; Milestone Calculator | VantorKit">
-  <meta property="og:description" content="Calculate your exact age in years, months, days, and seconds with live ticking counters, next birthday countdowns, and fun life statistics.">
+  <meta property="og:title" content="Age Calculator – Precise Birth Milestones & Stats">>
+  <meta property="og:description" content="Calculate your chronological age down to days, hours, and minutes with upcoming milestone countdowns. Birthdate figures evaluate privately in browser RAM.">>
   <meta property="og:url" content="https://vantorkit.com/tools/age-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Age &amp; Milestone Calculator | VantorKit">
@@ -43,15 +48,15 @@
       "@type": "WebApplication",
       "name": "VantorKit Age & Milestone Calculator",
       "url": "https://vantorkit.com/tools/age-calculator.html",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "All",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Age and Milestone Calculator. Compute exact chronological age in years, months, days, hours, and seconds with live ticking counters, birthday countdowns, and life statistics."
+      "description": "Client-side chronological age calculator analyzing birth milestones, exact time elapsed, and next birthday countdowns privately in browser memory."
     },
     {
       "@type": "FAQPage",
@@ -2468,6 +2473,25 @@ Calculated with VantorKit (https://vantorkit.com/tools/age-calculator.html)`;
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Age Calculator – Precise Birth Milestones & Stats",
+        "desc": "Calculate your chronological age down to days, hours, and minutes with upcoming milestone countdowns. Birthdate figures evaluate privately in browser RAM."
+    },
+    "ar": {
+        "title": "حاسبة العمر الدقيقة – إحصائيات الميلاد والمحطات",
+        "desc": "احسب عمرك الزمني بالسنوات والأشهر والأيام والدقائق مع عداد للأعياد القادمة. يتم احتساب تاريخ ميلادك محلياً في متصفحك بسرية تامة دون تسجيله."
+    },
+    "fr": {
+        "title": "Calculateur d'Âge Précis – Anniversaires et Jalons",
+        "desc": "Calculez votre âge exact en années, mois et jours avec compte à rebours de vos jalons. Vos dates restent confidentielles dans votre navigateur."
+    },
+    "it": {
+        "title": "Calcolatore Età Esatta – Giorni Vissuti e Compleanni",
+        "desc": "Determina la tua età cronologica esatta in giorni, ore e minuti con i prossimi traguardi. Il calcolo si svolge nella RAM del tuo browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2500,6 +2524,20 @@ Calculated with VantorKit (https://vantorkit.com/tools/age-calculator.html)`;
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

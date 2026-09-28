@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit</title>
-  <meta name="description" content="Calculate percentages instantly: find P% of X, what % X is of Y, and percentage increase or decrease. Fast, private, and mobile-friendly.">
+  <title>Percentage Calculator – Fast Percent & Change Math</title>
+  <meta name="description" content="Compute percentage increases, proportion differences, and custom discounts with instant feedback. All math evaluates locally on your device.">>
   <meta name="keywords" content="percentage calculator, percent change calculator, percentage increase, percentage decrease, what percent of, discount calculator, math tools, free online utilities, VantorKit">
   <link rel="canonical" href="https://vantorkit.com/tools/percentage-calculator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/percentage-calculator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/percentage-calculator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/percentage-calculator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/percentage-calculator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/percentage-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Percentage Calculator — Free Online Real-Time Percent Tool | VantorKit">
-  <meta property="og:description" content="Instant real-time percentage calculations: P% of X, X is what % of Y, and percentage increase or decrease. 100% free, private, client-side.">
+  <meta property="og:title" content="Percentage Calculator – Fast Percent & Change Math">>
+  <meta property="og:description" content="Compute percentage increases, proportion differences, and custom discounts with instant feedback. All math evaluates locally on your device.">>
   <meta property="og:url" content="https://vantorkit.com/tools/percentage-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Percentage Calculator — Free Online Real-Time Percent Tool">
@@ -44,14 +49,14 @@
       "name": "VantorKit Percentage Calculator",
       "url": "https://vantorkit.com/tools/percentage-calculator.html",
       "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "A fast, client-side percentage calculator supporting basic percentages, proportion calculation, and percentage increase/decrease."
+      "description": "High-precision percentage calculator supporting proportion analysis, base amounts, and rate adjustments with 100% in-browser computation and zero server uploads."
     },
     {
       "@type": "FAQPage",
@@ -2476,6 +2481,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Percentage Calculator – Fast Percent & Change Math",
+        "desc": "Compute percentage increases, proportion differences, and custom discounts with instant feedback. All math evaluates locally on your device."
+    },
+    "ar": {
+        "title": "حاسبة النسبة المئوية – حساب النسب والزيادة بدقة",
+        "desc": "احسب النسبة المئوية ومعدلات الزيادة والنقصان وتغير القيم في الوقت الفعلي مع معالجة محلية كاملة داخل متصفحك دون إرسال أي بيانات."
+    },
+    "fr": {
+        "title": "Calculateur de Pourcentage – Calculs et Variations",
+        "desc": "Calculez les pourcentages, augmentations et remises en temps réel. Traitement direct et confidentiel dans votre navigateur sans téléversement."
+    },
+    "it": {
+        "title": "Calcolatore di Percentuale – Variazioni e Quote",
+        "desc": "Calcola percentuali, aumenti e sconti all'istante sul tuo dispositivo. Tutte le operazioni matematiche avvengono localmente nel browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2508,6 +2532,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

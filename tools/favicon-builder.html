@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Multi-Size Favicon Builder — Generate ICO, PNG &amp; Webmanifest | VantorKit</title>
-  <meta name="description" content="Generate multi-size favicons (16x16 to 512x512) and Apple Touch Icons directly in your browser. Download ICO and PNG packages with zero uploads.">
+  <title>Favicon Builder – Generate Multi-Size ICO & Web Icons</title>
+  <meta name="description" content="Package desktop and mobile app icons from 16px to 512px with site manifest headers. Bundles compile into a clean ZIP archive directly on your device.">>
   <meta name="keywords" content="favicon generator, favicon builder, multi-size favicon, ico generator, apple touch icon, pwa icons, android chrome icon, site.webmanifest, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/favicon-builder.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/favicon-builder.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/favicon-builder.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/favicon-builder.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/favicon-builder.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/favicon-builder.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Multi-Size Favicon Builder — Generate ICO, PNG &amp; Webmanifest | VantorKit">
-  <meta property="og:description" content="Generate crisp, multi-resolution favicons, Apple Touch icons, Android PWA manifests, and cross-platform ICO packages in your browser. 100% private.">
+  <meta property="og:title" content="Favicon Builder – Generate Multi-Size ICO & Web Icons">>
+  <meta property="og:description" content="Package desktop and mobile app icons from 16px to 512px with site manifest headers. Bundles compile into a clean ZIP archive directly on your device.">>
   <meta property="og:url" content="https://vantorkit.com/tools/favicon-builder.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Multi-Size Favicon Builder | VantorKit">
@@ -47,14 +52,14 @@
       "name": "VantorKit Multi-Size Favicon Builder",
       "url": "https://vantorkit.com/tools/favicon-builder.html",
       "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas API.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Multi-Size Favicon Builder. Generate 16x16, 32x32, 48x48, Apple Touch Icon (180x180), Android Chrome (192x192, 512x512), standard favicon.ico, and site.webmanifest with one click."
+      "description": "Client-side icon generation utility building multi-resolution ICO, Apple Touch Icons, and web manifests packaged into local ZIP archives."
     },
     {
       "@type": "FAQPage",
@@ -2939,6 +2944,25 @@ Generated with VantorKit Multi-Size Favicon Builder (https://vantorkit.com/tools
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Favicon Builder – Generate Multi-Size ICO & Web Icons",
+        "desc": "Package desktop and mobile app icons from 16px to 512px with site manifest headers. Bundles compile into a clean ZIP archive directly on your device."
+    },
+    "ar": {
+        "title": "صانع الأيقونات Favicon – توليد حزم ICO وأيقونات الويب",
+        "desc": "أنشئ حزم الأيقونات متعددة المقاسات من 16 إلى 512 بكسل مع ملفات webmanifest. يتم تجميع الحزمة في أرشيف ZIP محلياً داخل جهازك دون خوادم."
+    },
+    "fr": {
+        "title": "Générateur de Favicon – Créer des Icônes Multi-Tailles",
+        "desc": "Générez des packs d'icônes de 16 à 512 px avec manifestes pour applications web. Vos archives ZIP se compilent directement sur votre appareil."
+    },
+    "it": {
+        "title": "Creatore Favicon – Generatore Pacchetti ICO e Web App",
+        "desc": "Crea icone multipiattaforma da 16px a 512px comprensive di file manifest. L'archivio ZIP finale si compila interamente sul tuo computer."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2971,6 +2995,20 @@ Generated with VantorKit Multi-Size Favicon Builder (https://vantorkit.com/tools
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

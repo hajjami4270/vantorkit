@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Color Palette Extractor — Free In-Browser Image Color Palette Generator | VantorKit</title>
-  <meta name="description" content="Extract dominant color palettes from images locally in your browser. Inspect WCAG contrast and export to CSS or JSON with zero server uploads.">
+  <title>Color Palette Extractor – Sample Image Hues & Contrast</title>
+  <meta name="description" content="Extract dominant hex codes, accents, and WCAG contrast ratios from any image. Palette analysis occurs on an offline HTML5 canvas without uploads.">>
   <meta name="keywords" content="color palette extractor, extract colors from image, image color picker, palette generator, dominant colors, canvas k-means, wcag contrast checker, eyedropper tool, hex code extractor, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/color-palette-extractor.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/color-palette-extractor.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/color-palette-extractor.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/color-palette-extractor.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/color-palette-extractor.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/color-palette-extractor.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Color Palette Extractor — Free In-Browser Image Color Palette Generator | VantorKit">
-  <meta property="og:description" content="Extract dominant color palettes from any photo or artwork locally in your browser. 100% private, with WCAG contrast inspection and instant CSS/PNG/JSON exports.">
+  <meta property="og:title" content="Color Palette Extractor – Sample Image Hues & Contrast">>
+  <meta property="og:description" content="Extract dominant hex codes, accents, and WCAG contrast ratios from any image. Palette analysis occurs on an offline HTML5 canvas without uploads.">>
   <meta property="og:url" content="https://vantorkit.com/tools/color-palette-extractor.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Color Palette Extractor — Free In-Browser Image Color Palette Generator | VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Color Palette Extractor",
       "url": "https://vantorkit.com/tools/color-palette-extractor.html",
       "applicationCategory": "DesignApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side color palette extractor using HTML5 Canvas pixel sampling and k-means quantization. Features interactive eyedropper, WCAG contrast scoring, and instant CSS variable, PNG, and JSON exports."
+      "description": "Client-side image color extraction tool sampling dominant swatches, harmonic shades, and WCAG contrast scores directly on an offline HTML5 canvas."
     },
     {
       "@type": "FAQPage",
@@ -3578,6 +3583,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Color Palette Extractor – Sample Image Hues & Contrast",
+        "desc": "Extract dominant hex codes, accents, and WCAG contrast ratios from any image. Palette analysis occurs on an offline HTML5 canvas without uploads."
+    },
+    "ar": {
+        "title": "استخراج لوحة الألوان – استخلاص درجات وتباين الصور",
+        "desc": "استخرج أكواد ألوان Hex المتناسقة ودرجات التباين المعتمدة من أي صورة. تتم قراءة البكسلات محلياً عبر Canvas دون نقل الصورة لأي خادم."
+    },
+    "fr": {
+        "title": "Extracteur de Palette – Analyse des Couleurs & Contrastes",
+        "desc": "Extrayez les codes hexadécimaux et ratios de contraste WCAG depuis vos images. Traitement direct sur Canvas HTML5 sans envoi vers un serveur."
+    },
+    "it": {
+        "title": "Estrattore Palette Colori – Campiona Tonalità e Contrasti",
+        "desc": "Estrai codici esadecimali dominanti e conformità WCAG da qualsiasi immagine. L'analisi dei colori si svolge localmente senza caricare file."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3610,6 +3634,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

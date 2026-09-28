@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Image Compressor &amp; WebP Optimizer — Free Client-Side Photo Compression | VantorKit</title>
-  <meta name="description" content="Compress JPG, PNG, and WebP images locally in your browser. Reduce file size up to 90% while maintaining visual quality with zero server uploads.">
+  <title>Image Compressor – Optimize JPG, PNG & WebP Quality</title>
+  <meta name="description" content="Shrink bulky photo assets up to 90% while comparing live side-by-side quality. Compression quantization runs on client hardware with zero remote latency.">>
   <meta name="keywords" content="image compressor, webp optimizer, compress image online, client side image compressor, bulk image compression, reduce jpg size, png compressor, avif optimizer, split image comparison, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/image-compressor.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/image-compressor.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/image-compressor.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/image-compressor.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/image-compressor.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/image-compressor.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Image Compressor &amp; WebP Optimizer — Free Client-Side Photo Compression | VantorKit">
-  <meta property="og:description" content="Compress and convert images 100% locally in your browser. Reduce bandwidth without losing quality. Bulk ZIP export & interactive split-view comparison.">
+  <meta property="og:title" content="Image Compressor – Optimize JPG, PNG & WebP Quality">>
+  <meta property="og:description" content="Shrink bulky photo assets up to 90% while comparing live side-by-side quality. Compression quantization runs on client hardware with zero remote latency.">>
   <meta property="og:url" content="https://vantorkit.com/tools/image-compressor.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Image Compressor &amp; WebP Optimizer | VantorKit">
@@ -47,14 +52,14 @@
       "name": "VantorKit Image Compressor & WebP Optimizer",
       "url": "https://vantorkit.com/tools/image-compressor.html",
       "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side image compressor and WebP conversion tool. Compress JPG, PNG, WEBP, and AVIF files locally with quality controls, dimension downscaling, real-time split-screen comparison, and bulk ZIP export."
+      "description": "Client-side image compression tool reducing JPEG, PNG, and WebP file sizes via browser Canvas quantization with interactive split-screen preview."
     },
     {
       "@type": "FAQPage",
@@ -3476,6 +3481,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Image Compressor – Optimize JPG, PNG & WebP Quality",
+        "desc": "Shrink bulky photo assets up to 90% while comparing live side-by-side quality. Compression quantization runs on client hardware with zero remote latency."
+    },
+    "ar": {
+        "title": "ضغط الصور وتحسين WebP – تقليل حجم الصور مع الحفاظ على الدقة",
+        "desc": "قلص حجم صورك حتى 90% مع معاينة مباشرة للمقارنة قبل الحفظ وبعده. تجري المعالجة بالكامل على معالج جهازك دون انتظار رفع الملفات للسيرفر."
+    },
+    "fr": {
+        "title": "Compresseur d'Images – Optimisation JPG, PNG et WebP",
+        "desc": "Réduisez le poids de vos visuels jusqu'à 90% avec aperçu comparatif direct. La compression s'exécute sur votre machine sans latence réseau."
+    },
+    "it": {
+        "title": "Compressore Immagini – Ottimizza Formati JPG, PNG e WebP",
+        "desc": "Riduci le dimensioni dei file fino al 90% con confronto visivo affiancato. L'ottimizzazione avviene sull'hardware locale in totale autonomia."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -3508,6 +3532,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

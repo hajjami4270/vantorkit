@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Loan &amp; Mortgage Amortization Calculator — Visual Schedule &amp; Early Payoff | VantorKit</title>
-  <meta name="description" content="Calculate monthly loan payments, total interest, and early payoff savings. Includes visual amortization breakdowns and CSV schedule export.">
+  <title>Loan & Mortgage Calculator – Track Payoff Schedules</title>
+  <meta name="description" content="Estimate monthly principal and interest fees with early payoff strategies. Detailed amortization schedules calculate securely inside your browser.">>
   <meta name="keywords" content="loan calculator, mortgage calculator, amortization schedule, mortgage amortization, extra payments calculator, early loan payoff, monthly payment calculator, finance tools, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/loan-calculator.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/loan-calculator.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/loan-calculator.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/loan-calculator.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/loan-calculator.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/loan-calculator.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Loan &amp; Mortgage Amortization Calculator — Visual Schedule | VantorKit">
-  <meta property="og:description" content="Calculate monthly installments, interest breakdown, and early payoff savings with visual charts and downloadable CSV schedules. 100% client-side privacy.">
+  <meta property="og:title" content="Loan & Mortgage Calculator – Track Payoff Schedules">>
+  <meta property="og:description" content="Estimate monthly principal and interest fees with early payoff strategies. Detailed amortization schedules calculate securely inside your browser.">>
   <meta property="og:url" content="https://vantorkit.com/tools/loan-calculator.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Loan &amp; Mortgage Amortization Calculator — VantorKit">
@@ -44,14 +49,14 @@
       "name": "VantorKit Loan & Mortgage Amortization Calculator",
       "url": "https://vantorkit.com/tools/loan-calculator.html",
       "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side loan and mortgage amortization calculator. Interactive visual breakdown, extra monthly payments early payoff analysis, annual and monthly schedules, and CSV export."
+      "description": "Private client-side loan and mortgage amortization calculator computing principal schedules, extra payments, and payoff terms directly in your browser."
     },
     {
       "@type": "FinancialProduct",
@@ -2657,6 +2662,25 @@
       it: '← Torna agli strumenti'
     };
 
+    const SEO_META = {
+    "en": {
+        "title": "Loan & Mortgage Calculator – Track Payoff Schedules",
+        "desc": "Estimate monthly principal and interest fees with early payoff strategies. Detailed amortization schedules calculate securely inside your browser."
+    },
+    "ar": {
+        "title": "حاسبة القروض والتمويل العقاري – جدول سداد الأقساط",
+        "desc": "احسب أقساط القروض العقارية والشخصية وحجم الفوائد وخيارات السداد المبكر. يتم احتساب جدول الاستهلاك بالكامل داخل متصفحك مع حفظ سرية أرقامك."
+    },
+    "fr": {
+        "title": "Calculateur de Prêt & Crédit – Tableaux d'Amortissement",
+        "desc": "Estimez vos mensualités d'emprunt et vos gains en remboursement anticipé. L'échéancier se génère instantanément sans transfert de données."
+    },
+    "it": {
+        "title": "Calcolatore Mutui e Prestiti – Piano di Ammortamento",
+        "desc": "Calcola rate mensili, quota capitale e risparmi sui rimborsi anticipati. I piani di ammortamento si generano offline nella memoria del browser."
+    }
+};
+
     function updateActiveLanguageUI(lang) {
       if (!LANG_NAMES[lang]) lang = 'en';
       const isRtl = (lang === 'ar');
@@ -2689,6 +2713,20 @@
       }
 
       // 5. SEO Content Layer language block visibility sync
+      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+        if (SEO_META[lang].title) {
+          document.title = SEO_META[lang].title;
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+        }
+        if (SEO_META[lang].desc) {
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+        }
+      }
+
       document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
         block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
       });

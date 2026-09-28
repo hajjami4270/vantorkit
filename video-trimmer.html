@@ -15,15 +15,20 @@
     })();
   </script>
 
-  <title>Video Trimmer &amp; Cutter — Free Client-Side Video Splitter | VantorKit</title>
-  <meta name="description" content="Trim, cut, and slice MP4, WebM, MOV, and MKV videos locally in your browser. Dual-handle timeline slider, millisecond precision, instant preview loop, and fast stream copy export with zero server uploads.">
+  <title>Video Trimmer &amp; Cutter – Dual-Handle Timeline Editor</title>
+  <meta name="description" content="Trim MP4, WebM, and MOV clips with precision timeline scrubbing and stream copying. Cuts export rapidly in-browser without sending video to any server.">>>>
   <meta name="keywords" content="video trimmer, cut video online, trim video online, mp4 cutter, video cutter, webm trimmer, client side video cutter, split video browser, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/video-trimmer.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/video-trimmer.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/video-trimmer.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/video-trimmer.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/video-trimmer.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/video-trimmer.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Video Trimmer &amp; Cutter — Free Client-Side Video Splitter | VantorKit">
-  <meta property="og:description" content="Cut, trim, and slice videos 100% locally in your browser. Millisecond precision, dual-handle timeline scrubber, interactive preview loop, and fast stream copy export. Zero server uploads.">
+  <meta property="og:title" content="Video Trimmer &amp; Cutter – Dual-Handle Timeline Editor">>>>
+  <meta property="og:description" content="Trim MP4, WebM, and MOV clips with precision timeline scrubbing and stream copying. Cuts export rapidly in-browser without sending video to any server.">>>>
   <meta property="og:url" content="https://vantorkit.com/video-trimmer.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Video Trimmer &amp; Cutter | VantorKit">
@@ -47,14 +52,14 @@
       "name": "VantorKit Video Trimmer & Cutter",
       "url": "https://vantorkit.com/video-trimmer.html",
       "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "All",
+      "operatingSystem": "Any",
       "browserRequirements": "Requires JavaScript. Requires HTML5 Video and MediaSource API.",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
       },
-      "description": "Free client-side Video Trimmer & Cutter. Split, trim, and edit MP4, WebM, MOV, and MKV video clips locally with dual-handle timeline scrubbing, millisecond time inputs, interactive preview loop, and fast stream copy export."
+      "description": "Zero-backend video trimmer leveraging in-browser stream copy and native MediaRecorder fallback to trim MP4 and WebM videos without remote server re-encoding."
     },
     {
       "@type": "FAQPage",
@@ -3404,7 +3409,40 @@
         it: 'Italiano'
       };
 
+      const SEO_META = {
+    "en": {
+        "title": "Video Trimmer &amp; Cutter – Dual-Handle Timeline Editor",
+        "desc": "Trim MP4, WebM, and MOV clips with precision timeline scrubbing and stream copying. Cuts export rapidly in-browser without sending video to any server."
+    },
+    "ar": {
+        "title": "قص وتعديل الفيديو – شريط زمني بمؤشرات سحب مزدوجة",
+        "desc": "قص مقاطع MP4 وWebM وMOV عبر شريط زمني تفاعلي مع نسخ مباشر فائق السرعة للتدفقات. يتم التصدير محلياً في جهازك دون رفع أي فيديو لخوادم سحابية."
+    },
+    "fr": {
+        "title": "Découpeur Vidéo & Trimmer – Chronologie à Double Curseur",
+        "desc": "Élaguez vos vidéos MP4, WebM et MOV avec précision temporelle et copie directe de flux. Export rapide dans le navigateur sans téléversement."
+    },
+    "it": {
+        "title": "Taglia Video & Trimmer – Timeline con Doppi Cursori",
+        "desc": "Ritaglia video MP4, WebM e MOV con timeline interattiva e copia diretta dei flussi. Esportazione immediata nel browser senza invio di file a server."
+    }
+};
+
       function updateActiveLanguageUI(lang) {
+        if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+          if (SEO_META[lang].title) {
+            document.title = SEO_META[lang].title;
+            const ogTitle = document.querySelector('meta[property="og:title"]');
+            if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
+          }
+          if (SEO_META[lang].desc) {
+            const metaDesc = document.querySelector('meta[name="description"]');
+            if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+            const ogDesc = document.querySelector('meta[property="og:description"]');
+            if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
+          }
+        }
+
         if (!LANG_NAMES[lang]) lang = 'en';
         document.documentElement.setAttribute('lang', lang);
         document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
