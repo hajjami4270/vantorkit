@@ -34,6 +34,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Lightweight Pure Client-Side MP3 Encoder -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
 {
@@ -800,6 +803,26 @@
       cursor: not-allowed;
       pointer-events: none;
     }
+    .audio-trimmer-btn-playpause {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+      min-width: 165px;
+      justify-content: center;
+    }
+    .audio-trimmer-btn-playpause:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+    .audio-trimmer-btn-playpause.playing {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+      color: #fff;
+    }
+    .audio-trimmer-btn-playpause.playing:hover {
+      box-shadow: 0 6px 22px rgba(245, 158, 11, 0.55);
+    }
     .audio-trimmer-btn-play {
       background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
       color: #fff;
@@ -835,6 +858,48 @@
     .audio-trimmer-btn-reset:hover {
       background: rgba(255, 255, 255, 0.08);
       color: #fff;
+    }
+    .audio-trimmer-export-group {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .audio-trimmer-format-picker {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: .45rem .85rem;
+      transition: all .2s ease;
+    }
+    .audio-trimmer-format-picker:focus-within {
+      border-color: var(--indigo);
+      box-shadow: 0 0 14px var(--indigo-glow);
+    }
+    .audio-trimmer-format-label {
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .audio-trimmer-format-select {
+      background: transparent;
+      color: #f8fafc;
+      border: none;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      font-family: inherit;
+    }
+    .audio-trimmer-format-select option {
+      background: #0f172a;
+      color: #f8fafc;
+      font-weight: 600;
+      padding: .4rem;
     }
     .audio-trimmer-btn-export {
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -1179,9 +1244,12 @@
       h1 { font-size: 2rem; }
       .audio-trimmer-dropzone { padding: 2rem 1.25rem; }
       .audio-trimmer-meta-card { flex-direction: column; align-items: flex-start; }
-      .audio-trimmer-transport-bar { flex-direction: column; align-items: stretch; }
-      .audio-trimmer-btn { justify-content: center; width: 100%; }
-      .audio-trimmer-playback-group { width: 100%; }
+      .audio-trimmer-transport-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
+      .audio-trimmer-playback-group { width: 100%; display: flex; flex-direction: row; gap: .5rem; flex-wrap: wrap; }
+      .audio-trimmer-btn-playpause { flex: 1; min-width: 0; }
+      .audio-trimmer-export-group { width: 100%; flex-direction: column; align-items: stretch; }
+      .audio-trimmer-format-picker { width: 100%; justify-content: space-between; }
+      .audio-trimmer-btn-export { width: 100%; justify-content: center; }
       .audio-trimmer-waveform-box { padding: 1rem; }
       .audio-trimmer-canvas-wrap { height: 130px; }
     }
@@ -1409,28 +1477,35 @@
         <!-- Transport & Actions Row -->
         <div class="audio-trimmer-transport-bar">
           <div class="audio-trimmer-playback-group">
-            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-play" id="btnPreview" data-i18n="btnPreview">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              <span>Preview Selected</span>
+            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-playpause" id="btnPlayPause" aria-label="Play Selected">
+              <span id="btnPlayPauseIcon" aria-hidden="true" style="display:inline-flex;align-items:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </span>
+              <span id="btnPlayPauseText" data-i18n="btnPlay">Play Selected</span>
             </button>
-            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-pause" id="btnPause" disabled data-i18n="btnPause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-              <span>Pause</span>
+            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-stop" id="btnStop" disabled aria-label="Stop Playback" title="Stop">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
+              <span data-i18n="btnStop">Stop</span>
             </button>
-            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-stop" id="btnStop" disabled data-i18n="btnStop">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
-              <span>Stop</span>
-            </button>
-            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-reset" id="btnResetSelection" data-i18n="btnReset">
+            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-reset" id="btnResetSelection" aria-label="Reset Selection" title="Reset Range">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
-              <span>Reset</span>
+              <span data-i18n="btnReset">Reset</span>
             </button>
           </div>
 
-          <button type="button" class="audio-trimmer-btn audio-trimmer-btn-export" id="btnExportWav" data-i18n="btnExportWav">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Export WAV</span>
-          </button>
+          <div class="audio-trimmer-export-group">
+            <div class="audio-trimmer-format-picker">
+              <label for="exportFormatSelect" class="audio-trimmer-format-label" data-i18n="lblExportFormat">Format:</label>
+              <select id="exportFormatSelect" class="audio-trimmer-format-select" aria-label="Audio Export Format">
+                <option value="wav" data-i18n="optWav">WAV (Lossless Studio WAV)</option>
+                <option value="mp3" data-i18n="optMp3">MP3 (Standard MP3)</option>
+              </select>
+            </div>
+            <button type="button" class="audio-trimmer-btn audio-trimmer-btn-export" id="btnExportAudio">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span id="btnExportText" data-i18n="btnExportWav">Export WAV</span>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1449,9 +1524,9 @@
           </div>
         </div>
         <div class="audio-trimmer-success-actions">
-          <button type="button" class="audio-trimmer-btn-download" id="btnDownloadExportedWav" data-i18n="btnDownload">
+          <button type="button" class="audio-trimmer-btn-download" id="btnDownloadExported" data-i18n="btnDownload">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Download WAV
+            <span id="btnDownloadExportedText">Download WAV</span>
           </button>
           <button type="button" class="audio-trimmer-btn audio-trimmer-btn-stop" id="btnDismissSuccess" data-i18n="btnTrimAnother">
             Trim Another Clip
@@ -1875,7 +1950,9 @@
         statusLoading: "Reading audio file into memory...",
         statusDecoding: "Decoding audio stream with Web Audio API...",
         statusInRAM: "Computing waveform peaks in local memory",
-        statusExporting: "Slicing PCM data and encoding 16-bit WAV...",
+        statusExporting: "Slicing PCM data and encoding audio...",
+        statusExportingWav: "Slicing PCM data and encoding 16-bit WAV...",
+        statusExportingMp3: "Encoding trimmed audio to MP3 locally...",
         waveformTitle: "Interactive Waveform",
         lblTotalDuration: "Total Duration",
         lblSelectedDuration: "Selected Duration",
@@ -1885,13 +1962,20 @@
         quickAll: "Select All",
         quickFirst30: "First 30s",
         quickLast30: "Last 30s",
-        btnPreview: "Preview Selected",
+        btnPlay: "Play Selected",
+        btnPreview: "Play Selected",
         btnPause: "Pause",
         btnStop: "Stop",
         btnReset: "Reset",
+        lblExportFormat: "Format:",
+        optWav: "WAV (Lossless Studio WAV)",
+        optMp3: "MP3 (Standard MP3)",
         btnExportWav: "Export WAV",
+        btnExportMp3: "Export MP3",
         exportSuccessTitle: "Audio Clip Ready for Download",
-        btnDownload: "Download WAV",
+        btnDownload: "Download Audio",
+        btnDownloadWav: "Download WAV",
+        btnDownloadMp3: "Download MP3",
         btnTrimAnother: "Trim Another Clip",
         errDecodeFailed: "This audio format could not be decoded by your browser. Try WAV or MP3.",
         errOversized: "File exceeds 50 MB limit. Please select a smaller audio file.",
@@ -1899,7 +1983,9 @@
         errInvalidTime: "Start time must be before end time.",
         errExportFailed: "Unable to export audio. Please check selection and try again.",
         toastCopied: "Copied to clipboard!",
-        toastDownloaded: "WAV file downloaded successfully!",
+        toastDownloaded: "Audio file downloaded successfully!",
+        toastDownloadedWav: "WAV file downloaded successfully!",
+        toastDownloadedMp3: "MP3 file downloaded successfully!",
         footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
@@ -1915,7 +2001,9 @@
         statusLoading: "جارٍ قراءة الملف الصوتي في الذاكرة...",
         statusDecoding: "جارٍ فك تشفير الصوت عبر Web Audio API...",
         statusInRAM: "جارٍ حساب قمم المخطط الموجي محلياً",
-        statusExporting: "جارٍ اقتطاع العينات وتوليد ملف WAV 16-bit...",
+        statusExporting: "جارٍ اقتطاع وتشفير الملف الصوتي...",
+        statusExportingWav: "جارٍ اقتطاع العينات وتوليد ملف WAV 16-bit...",
+        statusExportingMp3: "جارٍ تشفير المقطع الصوتي إلى MP3 محلياً...",
         waveformTitle: "المخطط الموجي التفاعلي",
         lblTotalDuration: "المدة الإجمالية",
         lblSelectedDuration: "المدة المحددة",
@@ -1925,13 +2013,20 @@
         quickAll: "تحديد الكل",
         quickFirst30: "أول 30 ثانية",
         quickLast30: "آخر 30 ثانية",
-        btnPreview: "معاينة المقطع",
+        btnPlay: "تشغيل المقطع",
+        btnPreview: "تشغيل المقطع",
         btnPause: "إيقاف مؤقت",
         btnStop: "إيقاف",
         btnReset: "إعادة ضبط",
+        lblExportFormat: "الصيغة:",
+        optWav: "WAV (جودة أصلية فائقة)",
+        optMp3: "MP3 (صوت مضغوط متوافق)",
         btnExportWav: "تصدير WAV",
+        btnExportMp3: "تصدير MP3",
         exportSuccessTitle: "المقطع الصوتي جاهز للتنزيل",
-        btnDownload: "تنزيل WAV",
+        btnDownload: "تنزيل الملف الصوتي",
+        btnDownloadWav: "تنزيل WAV",
+        btnDownloadMp3: "تنزيل MP3",
         btnTrimAnother: "اقتطاع مقطع آخر",
         errDecodeFailed: "تعذر فك تشفير هذا التنسيق في متصفحك. يرجى تجربة ملف WAV أو MP3.",
         errOversized: "حجم الملف يتجاوز الحد الأقصى 50 ميجابايت. يرجى اختيار ملف أصغر.",
@@ -1939,7 +2034,9 @@
         errInvalidTime: "يجب أن يكون وقت البداية قبل وقت النهاية.",
         errExportFailed: "تعذر تصدير الصوت. يرجى التحقق من التحديد والمحاولة مجدداً.",
         toastCopied: "تم النسخ إلى الحافظة!",
-        toastDownloaded: "تم تنزيل ملف WAV بنجاح!",
+        toastDownloaded: "تم تنزيل الملف الصوتي بنجاح!",
+        toastDownloadedWav: "تم تنزيل ملف WAV بنجاح!",
+        toastDownloadedMp3: "تم تنزيل ملف MP3 بنجاح!",
         footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك."
       },
       fr: {
@@ -1955,7 +2052,9 @@
         statusLoading: "Lecture du fichier sonore en mémoire...",
         statusDecoding: "Décodage du signal avec Web Audio API...",
         statusInRAM: "Calcul des crêtes de l'onde dans la mémoire locale",
-        statusExporting: "Extraction PCM et encodage WAV 16 bits...",
+        statusExporting: "Extraction et encodage audio en cours...",
+        statusExportingWav: "Extraction PCM et encodage WAV 16 bits...",
+        statusExportingMp3: "Encodage du fichier en MP3 en mémoire...",
         waveformTitle: "Onde sonore interactive",
         lblTotalDuration: "Durée totale",
         lblSelectedDuration: "Durée sélectionnée",
@@ -1965,13 +2064,20 @@
         quickAll: "Tout sélectionner",
         quickFirst30: "Premières 30s",
         quickLast30: "Dernières 30s",
+        btnPlay: "Écouter l'extrait",
         btnPreview: "Écouter l'extrait",
         btnPause: "Pause",
         btnStop: "Arrêter",
         btnReset: "Réinitialiser",
+        lblExportFormat: "Format :",
+        optWav: "WAV (Qualité studio sans perte)",
+        optMp3: "MP3 (Standard compressé)",
         btnExportWav: "Exporter WAV",
+        btnExportMp3: "Exporter MP3",
         exportSuccessTitle: "Extrait audio prêt au téléchargement",
-        btnDownload: "Télécharger WAV",
+        btnDownload: "Télécharger l'audio",
+        btnDownloadWav: "Télécharger WAV",
+        btnDownloadMp3: "Télécharger MP3",
         btnTrimAnother: "Découper un autre extrait",
         errDecodeFailed: "Ce format audio n'a pas pu être décodé par votre navigateur. Essayez un fichier WAV ou MP3.",
         errOversized: "Le fichier dépasse la limite de 50 Mo. Veuillez sélectionner un fichier plus compact.",
@@ -1979,7 +2085,9 @@
         errInvalidTime: "Le temps de début doit être inférieur au temps de fin.",
         errExportFailed: "Impossible d'exporter l'audio. Veuillez vérifier votre sélection.",
         toastCopied: "Copié dans le presse-papiers!",
-        toastDownloaded: "Fichier WAV téléchargé avec succès!",
+        toastDownloaded: "Fichier audio téléchargé avec succès!",
+        toastDownloadedWav: "Fichier WAV téléchargé avec succès !",
+        toastDownloadedMp3: "Fichier MP3 téléchargé avec succès !",
         footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tous les traitements s'effectuent dans votre navigateur."
       },
       it: {
@@ -1995,7 +2103,9 @@
         statusLoading: "Caricamento traccia audio in memoria...",
         statusDecoding: "Decodifica del flusso audio con Web Audio API...",
         statusInRAM: "Calcolo dei picchi dell'onda acustica",
-        statusExporting: "Estrazione PCM e codifica WAV a 16 bit...",
+        statusExporting: "Estrazione e codifica audio in corso...",
+        statusExportingWav: "Estrazione PCM e codifica WAV a 16 bit...",
+        statusExportingMp3: "Codifica del file ritagliato in MP3...",
         waveformTitle: "Forma d'onda interattiva",
         lblTotalDuration: "Durata totale",
         lblSelectedDuration: "Durata selezionata",
@@ -2005,13 +2115,20 @@
         quickAll: "Seleziona tutto",
         quickFirst30: "Primi 30s",
         quickLast30: "Ultimi 30s",
+        btnPlay: "Ascolta Selezione",
         btnPreview: "Ascolta Selezione",
         btnPause: "Pausa",
         btnStop: "Interrompi",
         btnReset: "Ripristina",
+        lblExportFormat: "Formato:",
+        optWav: "WAV (Qualità studio lossless)",
+        optMp3: "MP3 (Standard compresso)",
         btnExportWav: "Esporta WAV",
+        btnExportMp3: "Esporta MP3",
         exportSuccessTitle: "Spezzone audio pronto per il download",
-        btnDownload: "Scarica WAV",
+        btnDownload: "Scarica Audio",
+        btnDownloadWav: "Scarica WAV",
+        btnDownloadMp3: "Scarica MP3",
         btnTrimAnother: "Taglia un altro spezzone",
         errDecodeFailed: "Impossibile decodificare questo formato con il tuo browser. Prova con WAV o MP3.",
         errOversized: "Il file supera il limite massimo di 50 MB. Seleziona un file di dimensioni inferiori.",
@@ -2019,7 +2136,9 @@
         errInvalidTime: "Il punto iniziale deve precedere il punto finale.",
         errExportFailed: "Impossibile esportare l'audio. Controlla la selezione e riprova.",
         toastCopied: "Copiato negli appunti!",
-        toastDownloaded: "File WAV scaricato con successo!",
+        toastDownloaded: "File audio scaricato con successo!",
+        toastDownloadedWav: "File WAV scaricato con successo!",
+        toastDownloadedMp3: "File MP3 scaricato con successo!",
         footerText: "© 2026 VantorKit. Strumenti web veloci, privati e gratuiti. Tutte le elaborazioni avvengono nel tuo browser."
       }
     };
@@ -2050,6 +2169,9 @@
     let playbackStartOffset = 0;
     let isPlaying = false;
     let animFrameId = null;
+    let selectedExportFormat = 'wav';
+    let exportedBlob = null;
+    let exportedBlobType = 'wav';
     let exportedWavBlob = null;
     let lastGeneratedUrl = null;
 
@@ -2088,16 +2210,23 @@
     const btnPresetLast15 = document.getElementById('btnPresetLast15');
     const btnPresetLast30 = document.getElementById('btnPresetLast30');
 
-    const btnPreview = document.getElementById('btnPreview');
-    const btnPause = document.getElementById('btnPause');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const btnPlayPauseIcon = document.getElementById('btnPlayPauseIcon');
+    const btnPlayPauseText = document.getElementById('btnPlayPauseText');
+    const btnPreview = btnPlayPause; // Compatibility alias
     const btnStop = document.getElementById('btnStop');
     const btnResetSelection = document.getElementById('btnResetSelection');
-    const btnExportWav = document.getElementById('btnExportWav');
+    const exportFormatSelect = document.getElementById('exportFormatSelect');
+    const btnExportAudio = document.getElementById('btnExportAudio');
+    const btnExportText = document.getElementById('btnExportText');
+    const btnExportWav = btnExportAudio; // Compatibility alias
 
     const exportSuccessCard = document.getElementById('exportSuccessCard');
     const dispExportSpecs = document.getElementById('dispExportSpecs');
     const dispExportSize = document.getElementById('dispExportSize');
-    const btnDownloadExportedWav = document.getElementById('btnDownloadExportedWav');
+    const btnDownloadExported = document.getElementById('btnDownloadExported') || document.getElementById('btnDownloadExportedWav');
+    const btnDownloadExportedText = document.getElementById('btnDownloadExportedText');
+    const btnDownloadExportedWav = btnDownloadExported; // Compatibility alias
     const btnDismissSuccess = document.getElementById('btnDismissSuccess');
 
     const toastBox = document.getElementById('toastBox');
@@ -2146,8 +2275,60 @@
         }
       });
 
-      // Update dynamic duration chips labels if audio loaded
+      // Synchronize dynamic button labels and indicators
+      updatePlayPauseButtonUI(isPlaying);
+      updateExportButtonText();
+      if (exportedBlob) {
+        updateDownloadButtonText();
+      }
       updateTimeDisplays();
+    }
+
+    function updatePlayPauseButtonUI(playing) {
+      const lang = getActiveLang();
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      if (!btnPlayPause) return;
+      if (playing) {
+        btnPlayPause.classList.add('playing');
+        if (btnPlayPauseIcon) {
+          btnPlayPauseIcon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+        }
+        if (btnPlayPauseText) {
+          btnPlayPauseText.textContent = dict.btnPause || 'Pause';
+        }
+        btnPlayPause.setAttribute('aria-label', dict.btnPause || 'Pause');
+      } else {
+        btnPlayPause.classList.remove('playing');
+        if (btnPlayPauseIcon) {
+          btnPlayPauseIcon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+        }
+        if (btnPlayPauseText) {
+          btnPlayPauseText.textContent = dict.btnPlay || 'Play Selected';
+        }
+        btnPlayPause.setAttribute('aria-label', dict.btnPlay || 'Play Selected');
+      }
+    }
+
+    function updateExportButtonText() {
+      const lang = getActiveLang();
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      if (!btnExportText) return;
+      if (selectedExportFormat === 'mp3') {
+        btnExportText.textContent = dict.btnExportMp3 || 'Export MP3';
+      } else {
+        btnExportText.textContent = dict.btnExportWav || 'Export WAV';
+      }
+    }
+
+    function updateDownloadButtonText() {
+      const lang = getActiveLang();
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      if (!btnDownloadExportedText) return;
+      if (exportedBlobType === 'mp3') {
+        btnDownloadExportedText.textContent = dict.btnDownloadMp3 || 'Download MP3';
+      } else {
+        btnDownloadExportedText.textContent = dict.btnDownloadWav || 'Download WAV';
+      }
     }
 
     function showToast(msg) {
@@ -2269,17 +2450,18 @@
       } else if (state === AudioState.READY) {
         audioLoadingCard.classList.remove('active');
         audioWorkspace.classList.add('active');
-        btnPreview.disabled = false;
-        btnPause.disabled = true;
-        btnStop.disabled = true;
-        btnExportWav.disabled = false;
+        btnPlayPause.disabled = false;
+        btnStop.disabled = (currentPlayhead === selectionStart);
+        btnExportAudio.disabled = false;
+        updatePlayPauseButtonUI(false);
       } else if (state === AudioState.PREVIEWING) {
-        btnPreview.disabled = true;
-        btnPause.disabled = false;
+        btnPlayPause.disabled = false;
         btnStop.disabled = false;
+        btnExportAudio.disabled = false;
+        updatePlayPauseButtonUI(true);
       } else if (state === AudioState.EXPORTING) {
-        btnPreview.disabled = true;
-        btnExportWav.disabled = true;
+        btnPlayPause.disabled = true;
+        btnExportAudio.disabled = true;
       } else if (state === AudioState.ERROR) {
         audioLoadingCard.classList.remove('active');
       }
@@ -2561,17 +2743,30 @@
         const playRatio = Math.max(0, Math.min(1, currentPlayhead / totalDuration));
         const playX = playRatio * w;
 
+        ctx.save();
+        ctx.shadowColor = 'rgba(56, 189, 248, 0.85)';
+        ctx.shadowBlur = 8;
         ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.moveTo(playX, 0);
         ctx.lineTo(playX, h);
         ctx.stroke();
 
+        // Top downward indicator pin
         ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(playX - 6, 0);
+        ctx.lineTo(playX + 6, 0);
+        ctx.lineTo(playX, 9);
+        ctx.closePath();
+        ctx.fill();
+
+        // Bottom circular indicator
         ctx.beginPath();
         ctx.arc(playX, h - 8, 4.5, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
 
       ctx.restore();
@@ -2778,7 +2973,7 @@
     });
 
     /* ==========================================================================
-       Audio Preview Engine (One-Shot AudioBufferSourceNode)
+       Audio Playback Engine (AudioBufferSourceNode with Active Playhead)
        ========================================================================== */
 
     function stopPlayback(resetToStart = true) {
@@ -2798,24 +2993,50 @@
       if (resetToStart) {
         currentPlayhead = selectionStart;
       }
-      setAudioState(AudioState.READY);
+      updatePlayPauseButtonUI(false);
+      btnStop.disabled = (currentPlayhead === selectionStart);
       updateTimeDisplays();
       renderWaveform();
     }
 
-    function startPreview(offset) {
+    async function startPlayback(offset) {
       if (!currentAudioBuffer) return;
       const ctx = getAudioContext();
 
-      // Stop previous instance cleanly
-      stopPlayback(false);
+      // Ensure AudioContext is actively running to defeat autoplay policy
+      if (ctx.state === 'suspended') {
+        try {
+          await ctx.resume();
+        } catch (e) {
+          console.warn('AudioContext resume error:', e);
+        }
+      }
+
+      // Stop previous instance cleanly without resetting position
+      if (activeSourceNode) {
+        try {
+          activeSourceNode.onended = null;
+          activeSourceNode.stop();
+          activeSourceNode.disconnect();
+        } catch (e) {}
+        activeSourceNode = null;
+      }
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
 
       let startPos = (typeof offset === 'number') ? offset : selectionStart;
       if (startPos >= selectionEnd || startPos < selectionStart) {
         startPos = selectionStart;
       }
 
-      const durationToPlay = selectionEnd - startPos;
+      let durationToPlay = selectionEnd - startPos;
+      if (durationToPlay <= 0.02) {
+        currentPlayhead = selectionStart;
+        startPos = selectionStart;
+        durationToPlay = selectionEnd - startPos;
+      }
       if (durationToPlay <= 0.02) return;
 
       const source = ctx.createBufferSource();
@@ -2834,7 +3055,8 @@
       };
 
       source.start(0, startPos, durationToPlay);
-      setAudioState(AudioState.PREVIEWING);
+      updatePlayPauseButtonUI(true);
+      btnStop.disabled = false;
 
       function tick() {
         if (!isPlaying) return;
@@ -2852,7 +3074,7 @@
       animFrameId = requestAnimationFrame(tick);
     }
 
-    function pausePreview() {
+    function pausePlayback() {
       if (!isPlaying) return;
       const ctx = getAudioContext();
       const elapsed = ctx.currentTime - playbackStartTime;
@@ -2860,13 +3082,16 @@
       stopPlayback(false);
     }
 
-    btnPreview.addEventListener('click', () => {
-      startPreview(currentPlayhead);
-    });
+    async function togglePlayPause() {
+      if (!currentAudioBuffer) return;
+      if (isPlaying) {
+        pausePlayback();
+      } else {
+        await startPlayback(currentPlayhead);
+      }
+    }
 
-    btnPause.addEventListener('click', () => {
-      pausePreview();
-    });
+    btnPlayPause.addEventListener('click', togglePlayPause);
 
     btnStop.addEventListener('click', () => {
       stopPlayback(true);
@@ -3001,9 +3226,78 @@
       return base;
     }
 
+    /* ==========================================================================
+       Client-Side MP3 Encoding (LAME.js Integration)
+       ========================================================================== */
+
+    function encodeMp3(audioBuffer, startTime, endTime, kbps = 192) {
+      if (typeof lamejs === 'undefined' || !lamejs.Mp3Encoder) {
+        throw new Error("LAME MP3 encoder library is not available.");
+      }
+
+      const sampleRate = audioBuffer.sampleRate;
+      const numChannels = audioBuffer.numberOfChannels;
+      const startSample = Math.max(0, Math.floor(startTime * sampleRate));
+      const endSample = Math.min(audioBuffer.length, Math.ceil(endTime * sampleRate));
+      const numSamples = Math.max(0, endSample - startSample);
+
+      if (numSamples === 0) {
+        throw new Error("Zero-length audio selection.");
+      }
+
+      const mp3encoder = new lamejs.Mp3Encoder(numChannels, sampleRate, kbps);
+      const mp3Data = [];
+      const sampleBlockSize = 1152;
+
+      if (numChannels === 1) {
+        const floatSamples = audioBuffer.getChannelData(0);
+        const int16Samples = new Int16Array(numSamples);
+        for (let i = 0; i < numSamples; i++) {
+          const s = Math.max(-1, Math.min(1, floatSamples[startSample + i]));
+          int16Samples[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+        }
+
+        for (let i = 0; i < numSamples; i += sampleBlockSize) {
+          const chunk = int16Samples.subarray(i, i + sampleBlockSize);
+          const mp3buf = mp3encoder.encodeBuffer(chunk);
+          if (mp3buf.length > 0) {
+            mp3Data.push(mp3buf);
+          }
+        }
+      } else {
+        const floatLeft = audioBuffer.getChannelData(0);
+        const floatRight = audioBuffer.getChannelData(1);
+        const int16Left = new Int16Array(numSamples);
+        const int16Right = new Int16Array(numSamples);
+
+        for (let i = 0; i < numSamples; i++) {
+          const sL = Math.max(-1, Math.min(1, floatLeft[startSample + i]));
+          const sR = Math.max(-1, Math.min(1, floatRight[startSample + i]));
+          int16Left[i] = sL < 0 ? sL * 0x8000 : sL * 0x7FFF;
+          int16Right[i] = sR < 0 ? sR * 0x8000 : sR * 0x7FFF;
+        }
+
+        for (let i = 0; i < numSamples; i += sampleBlockSize) {
+          const chunkL = int16Left.subarray(i, i + sampleBlockSize);
+          const chunkR = int16Right.subarray(i, i + sampleBlockSize);
+          const mp3buf = mp3encoder.encodeBuffer(chunkL, chunkR);
+          if (mp3buf.length > 0) {
+            mp3Data.push(mp3buf);
+          }
+        }
+      }
+
+      const mp3buf = mp3encoder.flush();
+      if (mp3buf.length > 0) {
+        mp3Data.push(mp3buf);
+      }
+
+      return new Blob(mp3Data, { type: 'audio/mp3' });
+    }
+
     async function handleExport() {
       if (!currentAudioBuffer) return;
-      stopPlayback(true);
+      stopPlayback(false);
       clearError();
 
       const duration = selectionEnd - selectionStart;
@@ -3013,30 +3307,51 @@
       }
 
       setAudioState(AudioState.EXPORTING);
+      const lang = getActiveLang();
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
       try {
-        const blob = encode16BitWav(currentAudioBuffer, selectionStart, selectionEnd);
-        const stats = await validateWavBlob(blob, currentAudioBuffer.numberOfChannels, currentAudioBuffer.sampleRate, duration);
-
-        exportedWavBlob = blob;
-        dispExportSpecs.textContent = `16-bit PCM WAV • ${stats.sampleRate.toLocaleString()} Hz • ${stats.channels === 1 ? 'Mono' : 'Stereo'} (${formatTime(stats.duration)})`;
-        dispExportSize.textContent = formatBytes(stats.size);
-
-        exportSuccessCard.classList.add('active');
-        setAudioState(AudioState.READY);
-
-        // Immediate download prompt
-        triggerDownload(blob, currentOriginalFilename);
-        showToast(TRANSLATIONS[getActiveLang()].toastDownloaded);
+        if (selectedExportFormat === 'mp3') {
+          audioLoadingText.textContent = dict.statusExportingMp3 || "Encoding trimmed audio to MP3 locally...";
+          await new Promise(r => setTimeout(r, 25));
+          const blob = encodeMp3(currentAudioBuffer, selectionStart, selectionEnd, 192);
+          exportedBlob = blob;
+          exportedBlobType = 'mp3';
+          exportedWavBlob = blob; // compatibility alias
+          dispExportSpecs.textContent = `MP3 (192 kbps) • ${currentAudioBuffer.sampleRate.toLocaleString()} Hz • ${currentAudioBuffer.numberOfChannels === 1 ? 'Mono' : 'Stereo'} (${formatTime(duration)})`;
+          dispExportSize.textContent = formatBytes(blob.size);
+          updateDownloadButtonText();
+          exportSuccessCard.classList.add('active');
+          setAudioState(AudioState.READY);
+          triggerDownload(blob, currentOriginalFilename, 'mp3');
+          showToast(dict.toastDownloadedMp3 || "MP3 file downloaded successfully!");
+        } else {
+          audioLoadingText.textContent = dict.statusExportingWav || "Slicing PCM data and encoding 16-bit WAV...";
+          await new Promise(r => setTimeout(r, 25));
+          const blob = encode16BitWav(currentAudioBuffer, selectionStart, selectionEnd);
+          const stats = await validateWavBlob(blob, currentAudioBuffer.numberOfChannels, currentAudioBuffer.sampleRate, duration);
+          exportedBlob = blob;
+          exportedBlobType = 'wav';
+          exportedWavBlob = blob; // compatibility alias
+          dispExportSpecs.textContent = `16-bit PCM WAV • ${stats.sampleRate.toLocaleString()} Hz • ${stats.channels === 1 ? 'Mono' : 'Stereo'} (${formatTime(stats.duration)})`;
+          dispExportSize.textContent = formatBytes(stats.size);
+          updateDownloadButtonText();
+          exportSuccessCard.classList.add('active');
+          setAudioState(AudioState.READY);
+          triggerDownload(blob, currentOriginalFilename, 'wav');
+          showToast(dict.toastDownloadedWav || "WAV file downloaded successfully!");
+        }
       } catch (err) {
+        console.error(err);
         setAudioState(AudioState.READY);
-        showError(TRANSLATIONS[getActiveLang()].errExportFailed);
+        showError(dict.errExportFailed);
       }
     }
 
-    function triggerDownload(blob, originalName) {
+    function triggerDownload(blob, originalName, format = 'wav') {
       const safeBase = sanitizeOriginalFilename(originalName);
-      const filename = `trimmed-${safeBase}.wav`;
+      const ext = format === 'mp3' ? 'mp3' : 'wav';
+      const filename = `trimmed-${safeBase}.${ext}`;
 
       if (lastGeneratedUrl) {
         URL.revokeObjectURL(lastGeneratedUrl);
@@ -3053,12 +3368,19 @@
       document.body.removeChild(a);
     }
 
-    btnExportWav.addEventListener('click', handleExport);
+    exportFormatSelect.addEventListener('change', () => {
+      selectedExportFormat = exportFormatSelect.value;
+      updateExportButtonText();
+    });
 
-    btnDownloadExportedWav.addEventListener('click', () => {
-      if (exportedWavBlob) {
-        triggerDownload(exportedWavBlob, currentOriginalFilename);
-        showToast(TRANSLATIONS[getActiveLang()].toastDownloaded);
+    btnExportAudio.addEventListener('click', handleExport);
+
+    btnDownloadExported.addEventListener('click', () => {
+      if (exportedBlob) {
+        const lang = getActiveLang();
+        const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+        triggerDownload(exportedBlob, currentOriginalFilename, exportedBlobType);
+        showToast(exportedBlobType === 'mp3' ? (dict.toastDownloadedMp3 || dict.toastDownloaded) : (dict.toastDownloadedWav || dict.toastDownloaded));
       }
     });
 

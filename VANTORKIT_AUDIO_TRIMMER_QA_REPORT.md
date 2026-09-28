@@ -1,7 +1,7 @@
 # VantorKit Tool #26 QA & Verification Report: Audio Trimmer & Cutter
 
 **Date:** September 28, 2026  
-**Document Version:** 1.0.0  
+**Document Version:** 1.1.0  
 **Status:** Complete & Verified  
 **Tool Name:** Audio Trimmer & Cutter  
 **URL Slug:** `audio-trimmer` (`tools/audio-trimmer.html`)  
@@ -10,16 +10,18 @@
 
 ## 1. Implementation Summary
 
-Tool #26, **Audio Trimmer & Cutter**, has been fully implemented and integrated into the VantorKit platform as a 100% client-side, zero-backend, privacy-first audio workstation utility. 
+Tool #26, **Audio Trimmer & Cutter**, has been fully implemented, enhanced, and integrated into the VantorKit platform as a 100% client-side, zero-backend, privacy-first audio workstation utility. 
 
 The application enables users to:
 - Drag-and-drop or browse audio recordings in common formats (MP3, WAV, AAC, M4A, OGG, FLAC) with a safe 50 MB client-side memory threshold.
 - Explore an instant synthetic 5-second acoustic demo chime via a dedicated test button without requiring local files.
 - Inspect and scrub interactive waveforms rendered on a responsive, high-DPI (Retina-aware) HTML5 Canvas.
 - Establish millisecond-precision audio start and end boundaries (`mm:ss.SS`) using synchronized visual draggable handles or direct authoritative numerical inputs with increment/decrement nudge controls.
-- Preview exclusively the selected audio segment utilizing one-shot `AudioBufferSourceNode` playback with play, pause, stop, and real-time playhead tracking.
-- Export clean, uncompressed 16-bit PCM WAV audio files encoded entirely in-memory with preservation of source sample rates and channel counts.
-- Perform structural header validation and local round-trip decode verification before offering the sanitized file for immediate download.
+- Control playback via a prominent, unmistakable **Play/Pause toggle** (`▶ تشغيل المقطع` / `⏸ إيقاف مؤقت`) with automated `AudioContext.resume()` (preventing browser autoplay silence) and dedicated Stop/Reset controls.
+- Track playback progression in real-time with an animated, glowing vertical **playhead indicator** sweeping across the waveform canvas.
+- Select desired export format between **Lossless 16-Bit Studio WAV** (custom PCM RIFF encoder) and **Standard Compressed MP3** (192 kbps pure client-side LAME.js encoder) with dynamic button labels.
+- Download sanitized files named appropriately with chosen extension (`trimmed-[name].wav` or `trimmed-[name].mp3`).
+- Perform structural validation and local round-trip decode verification before offering the sanitized file for immediate download.
 - Access an 8-section human-grade Content Layer authored across all four platform languages (`en`, `ar`, `fr`, `it`) with calibrated word counts strictly between 400 and 600 words per language.
 
 ---
@@ -191,13 +193,18 @@ Every exported WAV blob undergoes local in-memory round-trip decoding verificati
 | TC-30 | 4-Language Catalog Translations in `index.html` | `audio-trimmer` present under `en`, `ar`, `fr`, `it` | **PASS** |
 | TC-31 | Sitemap Inclusion in `sitemap.xml` | Canonical URL present with priority 0.8 | **PASS** |
 | TC-32 | Regression Check: All 25 Prior Tools | All 25 tools exist, intact, valid HTML, zero breakage | **PASS** |
+| TC-33 | Play/Pause State Toggle & Autoplay Silence Guard | `#btnPlayPause` handles play/pause toggle with `audioCtx.resume()` | **PASS** |
+| TC-34 | Interactive Canvas Playhead Sweep | Real-time vertical playhead animation and reset mechanics | **PASS** |
+| TC-35 | Export Format Selector UI & Dynamic Labels | Select options for MP3/WAV update export button labels dynamically | **PASS** |
+| TC-36 | Pure Client-Side MP3 Encoding | LAME.js Float32 to Int16 quantization and block encoding (192 kbps) | **PASS** |
+| TC-37 | Dual Format Filename Sanitization & Extensions | Output mapped to `trimmed-[name].mp3` and `trimmed-[name].wav` | **PASS** |
 
 ---
 
 ## 15. Passed Tests
 
-- **Total Automated Test Assertions:** 92
-- **Passed Assertions:** 92
+- **Total Automated Test Assertions:** 97
+- **Passed Assertions:** 97
 - **Pass Rate:** 100%
 
 ---

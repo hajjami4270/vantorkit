@@ -23,10 +23,10 @@
 10. **Base64 File Encoder & Decoder** (`tools/base64-file-encoder.html`): Binary-to-text data URI conversion with MIME autodetection.
 11. **Audio Trimmer & Cutter** (`tools/audio-trimmer.html`) — **Tool #26**:
     - **100% Client-Side Processing:** Zero backend dependencies, zero server uploads, and no remote telemetry.
-    - **Native Web Audio API & AudioContext:** Direct in-memory decoding with `AudioContext.decodeAudioData()`, multi-channel Float32Array PCM buffers, and one-shot `AudioBufferSourceNode` audio preview.
-    - **HTML5 Canvas Waveform:** Responsive, high-DPI (devicePixelRatio-aware) interactive waveform with draggable selection handles and millisecond-accurate scrubbing.
-    - **16-Bit PCM WAV Serialization:** Custom in-memory RIFF/WAVE encoder generating broadcast-compliant uncompressed WAV files with sample-rate preservation and channel interleaving.
-    - **Supported Browser-Dependent Formats:** MP3, WAV, AAC, M4A, OGG, and FLAC (determined by host browser codec capabilities).
+    - **Native Web Audio API & Autoplay-Safe Transport:** Direct in-memory decoding with `AudioContext.decodeAudioData()`, automated `AudioContext.resume()` upon user interaction, one-shot `AudioBufferSourceNode` playback, and dedicated Play/Pause toggle with stop/reset controls.
+    - **HTML5 Canvas Waveform & Real-Time Playhead:** Responsive, high-DPI (devicePixelRatio-aware) interactive waveform with draggable selection handles, millisecond-accurate scrubbing, and a synchronized vertical playhead sweeping across the waveform during playback.
+    - **Dual Client-Side Export (MP3 & WAV):** In-browser export format selector supporting both Lossless 16-Bit PCM WAV (custom RIFF encoder) and Standard Compressed MP3 (192 kbps pure client-side LAME.js encoder) with format-aware file naming (`trimmed-[name].wav` / `trimmed-[name].mp3`).
+    - **Supported Ingestion Formats:** MP3, WAV, AAC, M4A, OGG, and FLAC (determined by host browser codec capabilities).
     - **Privacy-First Guarantee:** All audio decoding, manipulation, and serialization occur in local system memory; audio data never leaves the user's browser.
 
 ### Image & Graphics Utilities (6 Tools)
