@@ -19,11 +19,11 @@
   <meta name="description" content="High-performance client-side CSV/JSON/TSV big-data transformer and stream parser. Process 100MB+ datasets in background Web Workers with zero server uploads and zero latency.">
   <meta name="keywords" content="big data transformer, offline csv to json, large json to csv, web worker csv parser, stream json parser, private data converter, client side tsv converter, ndjson to csv, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/big-data-transformer.html">
-  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/big-data-transformer.html">
-  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/big-data-transformer.html">
-  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/big-data-transformer.html">
-  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/big-data-transformer.html">
-  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/big-data-transformer.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/big-data-transformer.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/big-data-transformer.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/big-data-transformer.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/big-data-transformer.html">
 
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
@@ -1702,6 +1702,8 @@
         privacyPill: "معالجة محلية 100% عبر Web Worker • بياناتك لا تغادر ذاكرة RAM أبداً",
         workerIdle: "المعالج: جاهز",
         workerWorking: "المعالج: جاري المعالجة...",
+        workerError: "المعالج: خطأ في المعالجة",
+        processingErrorToast: "فشلت معالجة الملف، يرجى التحقق من ترميز الملف.",
         lblConvert: "التحويل إلى:",
         lblDelimiter: "فاصل المدخلات:",
         btnExport: "تحميل الملف المحول",
@@ -1835,17 +1837,37 @@
 
     // --- Embedded Web Worker Script for High-Performance Big Data Processing ---
     const workerCode = `
+      self.onerror = function(e) {
+        self.postMessage({ type: 'error', message: 'Worker error: ' + (e && e.message ? e.message : 'Unknown') });
+      };
+      self.onunhandledrejection = function(e) {
+        self.postMessage({ type: 'error', message: 'Unhandled worker rejection: ' + (e && e.reason ? e.reason : 'Unknown') });
+      };
+
       self.onmessage = function(e) {
+        let watchdog = null;
         try {
           const { action, text, targetFormat, customDelimiter, filename } = e.data;
           const startTime = Date.now();
+
+          // 10-second fail-safe watchdog timer
+          watchdog = setTimeout(() => {
+            self.postMessage({ type: 'error', message: 'Processing timeout: Failed to parse file encoding or structure within 10 seconds.' });
+          }, 10000);
 
           if (action === 'parseAndConvert') {
             let parsedData = null;
             let originalType = 'unknown';
 
-            const trimmed = (text || '').trim();
+            let rawText = text || '';
+            // Strip Byte Order Mark (BOM) if present
+            if (rawText.charCodeAt(0) === 0xFEFF) {
+              rawText = rawText.slice(1);
+            }
+
+            const trimmed = rawText.trim();
             if (!trimmed) {
+              if (watchdog) clearTimeout(watchdog);
               self.postMessage({ type: 'error', message: 'The uploaded file is empty.' });
               return;
             }
@@ -1860,7 +1882,7 @@
               } catch (err) {
                 // Try NDJSON
                 try {
-                  const lines = trimmed.split(/\r?\n/);
+                  const lines = trimmed.split(String.fromCharCode(10));
                   const ndjsonRows = [];
                   for (let i = 0; i < lines.length; i++) {
                     const l = lines[i].trim();
@@ -1870,16 +1892,17 @@
                   originalType = 'ndjson';
                 } catch (ndjsonErr) {
                   originalType = 'delimited';
-                  parsedData = parseDelimitedText(text, customDelimiter);
+                  parsedData = parseDelimitedText(rawText, customDelimiter, filename);
                 }
               }
             } else {
               // Parse CSV / TSV / Delimited text / Single-Column text
               originalType = 'delimited';
-              parsedData = parseDelimitedText(text, customDelimiter);
+              parsedData = parseDelimitedText(rawText, customDelimiter, filename);
             }
 
             if (!parsedData || parsedData.length === 0) {
+              if (watchdog) clearTimeout(watchdog);
               self.postMessage({ type: 'error', message: 'No valid records found in dataset.' });
               return;
             }
@@ -1939,17 +1962,18 @@
               exportMime = 'text/csv';
               exportExt = 'csv';
             } else if (targetFormat === 'tsv') {
-              convertedText = serializeToDelimited(parsedData, '\t');
+              convertedText = serializeToDelimited(parsedData, String.fromCharCode(9));
               exportMime = 'text/tab-separated-values';
               exportExt = 'tsv';
             } else if (targetFormat === 'ndjson') {
-              convertedText = parsedData.map(r => JSON.stringify(r)).join('\n');
+              convertedText = parsedData.map(r => JSON.stringify(r)).join(String.fromCharCode(10));
               exportMime = 'application/x-ndjson';
               exportExt = 'ndjson';
             }
 
             const elapsed = Date.now() - startTime;
 
+            if (watchdog) clearTimeout(watchdog);
             self.postMessage({
               type: 'complete',
               totalRows,
@@ -1964,6 +1988,7 @@
             });
           }
         } catch (fatalWorkerErr) {
+          if (watchdog) clearTimeout(watchdog);
           self.postMessage({
             type: 'error',
             message: (fatalWorkerErr && fatalWorkerErr.message) ? fatalWorkerErr.message : 'Dataset processing error.'
@@ -1971,30 +1996,39 @@
         }
       };
 
-      function parseDelimitedText(text, forcedDelimiter) {
+      function parseDelimitedText(text, forcedDelimiter, filename) {
         if (!text || typeof text !== 'string') return [];
-        const trimmedText = text.trim();
+        let cleanText = text;
+        if (cleanText.charCodeAt(0) === 0xFEFF) {
+          cleanText = cleanText.slice(1);
+        }
+        const trimmedText = cleanText.trim();
         if (!trimmedText) return [];
 
         let delimiter = forcedDelimiter;
         const sample = trimmedText.slice(0, 8192);
-        const commas = (sample.match(/,/g) || []).length;
-        const tabs = (sample.match(/\t/g) || []).length;
-        const semicolons = (sample.match(/;/g) || []).length;
-        const pipes = (sample.match(/\|/g) || []).length;
+        let commas = 0, tabs = 0, semicolons = 0, pipes = 0;
+        for (let i = 0; i < sample.length; i++) {
+          const ch = sample[i];
+          if (ch === ',') commas++;
+          else if (ch === String.fromCharCode(9)) tabs++;
+          else if (ch === ';') semicolons++;
+          else if (ch === '|') pipes++;
+        }
         const hasStandardDelimiter = (commas > 0 || tabs > 0 || semicolons > 0 || pipes > 0);
 
         if (!delimiter || delimiter === 'auto') {
-          if (tabs > commas && tabs > semicolons) delimiter = '\t';
+          if (tabs > commas && tabs > semicolons) delimiter = String.fromCharCode(9);
           else if (semicolons > commas && semicolons > pipes) delimiter = ';';
           else if (pipes > commas) delimiter = '|';
           else if (commas > 0) delimiter = ',';
           else delimiter = null; // No standard delimiter detected!
         }
 
-        // --- FALLBACK 1: Single-Column Dataset (Domains.txt, single-line lists, newline-delimited text) ---
-        if (!delimiter || delimiter === 'single_column' || (!hasStandardDelimiter && (!forcedDelimiter || forcedDelimiter === 'auto'))) {
-          const rawLines = trimmedText.split(/\r?\n/);
+        // --- FALLBACK 1: Single-Column Dataset (Keywords, Domains, plain .txt list, newline-delimited text) ---
+        const isTxtFile = filename && filename.trim().toLowerCase().endsWith('.txt');
+        if (!delimiter || delimiter === 'single_column' || (!hasStandardDelimiter && (!forcedDelimiter || forcedDelimiter === 'auto')) || (isTxtFile && !hasStandardDelimiter)) {
+          const rawLines = trimmedText.split(String.fromCharCode(10));
           const nonEmptylines = [];
           for (let i = 0; i < rawLines.length; i++) {
             const line = rawLines[i].trim();
@@ -2005,17 +2039,24 @@
 
           if (nonEmptylines.length === 0) return [];
 
-          const firstLine = nonEmptylines[0].toLowerCase();
-          const isExplicitHeader = ['item', 'value', 'domain', 'domains', 'url', 'host', 'key', 'line', 'record', 'element'].includes(firstLine);
+          const firstLineLower = nonEmptylines[0].toLowerCase();
+          const isExplicitHeader = ['keyword', 'keywords', 'item', 'items', 'value', 'values', 'domain', 'domains', 'url', 'urls', 'host', 'hosts', 'email', 'emails', 'key', 'keys', 'record', 'records'].includes(firstLineLower);
 
           let headerName = 'Item';
           let startIndex = 0;
+
+          const isKeywordList = (filename && (filename.toLowerCase().includes('keyword') || filename.includes('كلم') || filename.includes('مفتاح'))) || firstLineLower.includes('keyword') || firstLineLower.includes('كلم');
+
+          if (isKeywordList) {
+            headerName = 'Keyword';
+          } else {
+            headerName = 'Item';
+          }
 
           if (isExplicitHeader && nonEmptylines.length > 1) {
             headerName = nonEmptylines[0];
             startIndex = 1;
           } else {
-            headerName = 'Item';
             startIndex = 0;
           }
 
@@ -2052,8 +2093,8 @@
           } else if (char === delimiter && !insideQuote) {
             curRow.push(curVal.trim());
             curVal = '';
-          } else if ((char === '\r' || char === '\n') && !insideQuote) {
-            if (char === '\r' && nextChar === '\n') i++;
+          } else if ((char.charCodeAt(0) === 13 || char.charCodeAt(0) === 10) && !insideQuote) {
+            if (char.charCodeAt(0) === 13 && nextChar && nextChar.charCodeAt(0) === 10) i++;
             curRow.push(curVal.trim());
             if (curRow.length > 0 && curRow.some(c => c !== '')) {
               rows.push(curRow);
@@ -2111,13 +2152,13 @@
           lines.push(line);
         }
 
-        return lines.join('\n');
+        return lines.join(String.fromCharCode(10));
       }
 
       function escapeField(field, delimiter) {
         if (field === null || field === undefined) return '';
         const str = String(field);
-        if (str.includes(delimiter) || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        if (str.includes(delimiter) || str.includes('"') || str.includes(String.fromCharCode(10)) || str.includes(String.fromCharCode(13))) {
           return '"' + str.replace(/"/g, '""') + '"';
         }
         return str;
@@ -2180,6 +2221,8 @@
       let currentFilter = '';
       let currentPage = 1;
       const rowsPerPage = 50;
+      let workerWatchdogTimer = null;
+      const MAX_DIRECT_SIZE = 20 * 1024 * 1024; // 20 MB direct read threshold
 
       // Initialize Web Worker via volatile Blob URI
       function initWorker() {
@@ -2205,6 +2248,10 @@
       }
 
       function handleWorkerError(errorMsg) {
+        if (workerWatchdogTimer) {
+          clearTimeout(workerWatchdogTimer);
+          workerWatchdogTimer = null;
+        }
         progressBar.style.width = '0%';
         const translatedError = (I18N[currentLang] && I18N[currentLang].workerError) || 'Worker: Error';
         workerStatusBadge.textContent = translatedError;
@@ -2213,7 +2260,47 @@
         showToast(translatedToast);
       }
 
-      // Stream file with clean EOF chunking
+      // Resilient buffer decoder with multi-encoding fallback (UTF-16 BOM -> UTF-8 fatal -> Windows-1256 -> ISO-8859-1 -> Strip BOM)
+      function decodeBufferResilient(buffer) {
+        if (!buffer || buffer.byteLength === 0) return '';
+        const u8 = new Uint8Array(buffer);
+
+        // 1. Detect UTF-16LE / UTF-16BE BOMs
+        if (u8.length >= 2) {
+          if (u8[0] === 0xFF && u8[1] === 0xFE) {
+            return new TextDecoder('utf-16le').decode(new Uint8Array(buffer, 2));
+          }
+          if (u8[0] === 0xFE && u8[1] === 0xFF) {
+            return new TextDecoder('utf-16be').decode(new Uint8Array(buffer, 2));
+          }
+        }
+
+        // 2. Resilient decode chain: UTF-8 (strict fatal) -> Windows-1256 (Arabic) -> ISO-8859-1
+        let decodedText = '';
+        try {
+          // Attempt standard UTF-8 (fatal: true catches invalid byte sequences like Windows-1256 Arabic)
+          const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+          decodedText = utf8Decoder.decode(buffer);
+        } catch (e) {
+          try {
+            // Fallback to Windows-1256 (standard for Arabic text files created on Windows)
+            const win1256Decoder = new TextDecoder('windows-1256');
+            decodedText = win1256Decoder.decode(buffer);
+          } catch (e2) {
+            // Universal fallback
+            decodedText = new TextDecoder('iso-8859-1').decode(buffer);
+          }
+        }
+
+        // 3. Strip Byte Order Mark (BOM) if present
+        if (decodedText.charCodeAt(0) === 0xFEFF) {
+          decodedText = decodedText.slice(1);
+        }
+
+        return decodedText;
+      }
+
+      // Stream file with clean EOF chunking and multibyte stream decoder (>20MB)
       function readFileStream(file, onProgress, onComplete, onError) {
         if (!file) return;
         const fileSize = file.size;
@@ -2223,14 +2310,18 @@
           return;
         }
 
-        const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB progressive stream chunk
+        const CHUNK_SIZE = 4 * 1024 * 1024; // 4MB progressive chunks
         let offset = 0;
         let accumulatedText = '';
+        let streamDecoder = null;
         const reader = new FileReader();
 
         function readNextChunk() {
-          // Strict stream EOF termination condition: offset >= file.size
+          // Strict stream EOF termination condition: offset >= fileSize
           if (offset >= fileSize) {
+            if (accumulatedText.charCodeAt(0) === 0xFEFF) {
+              accumulatedText = accumulatedText.slice(1);
+            }
             onComplete(accumulatedText);
             return;
           }
@@ -2239,19 +2330,52 @@
           const chunk = file.slice(offset, nextOffset);
 
           reader.onload = function(e) {
-            accumulatedText += e.target.result;
-            offset = nextOffset;
+            try {
+              const buffer = e.target.result;
+              const u8 = new Uint8Array(buffer);
+              const isLast = (nextOffset >= fileSize);
 
-            if (onProgress) {
-              const pct = Math.min(95, Math.round((offset / fileSize) * 100));
-              onProgress(pct);
-            }
+              if (!streamDecoder) {
+                if (u8.length >= 2 && u8[0] === 0xFF && u8[1] === 0xFE) {
+                  streamDecoder = new TextDecoder('utf-16le');
+                } else if (u8.length >= 2 && u8[0] === 0xFE && u8[1] === 0xFF) {
+                  streamDecoder = new TextDecoder('utf-16be');
+                } else {
+                  try {
+                    new TextDecoder('utf-8', { fatal: true }).decode(u8.subarray(0, Math.min(u8.length, 65536)));
+                    streamDecoder = new TextDecoder('utf-8');
+                  } catch (utfErr) {
+                    try {
+                      new TextDecoder('windows-1256').decode(u8.subarray(0, Math.min(u8.length, 65536)));
+                      streamDecoder = new TextDecoder('windows-1256');
+                    } catch (wErr) {
+                      streamDecoder = new TextDecoder('iso-8859-1');
+                    }
+                  }
+                }
+              }
 
-            // Verify strict stream EOF condition
-            if (offset >= fileSize) {
-              onComplete(accumulatedText);
-            } else {
-              setTimeout(readNextChunk, 0);
+              // Always pass { stream: !isLast } so multibyte Arabic characters split across chunk boundaries do not get corrupted
+              const chunkStr = streamDecoder.decode(buffer, { stream: !isLast });
+              accumulatedText += chunkStr;
+              offset = nextOffset;
+
+              if (onProgress) {
+                const pct = Math.min(95, Math.round((offset / fileSize) * 100));
+                onProgress(pct);
+              }
+
+              // Verify strict stream EOF condition
+              if (offset >= fileSize) {
+                if (accumulatedText.charCodeAt(0) === 0xFEFF) {
+                  accumulatedText = accumulatedText.slice(1);
+                }
+                onComplete(accumulatedText);
+              } else {
+                setTimeout(readNextChunk, 0);
+              }
+            } catch (chunkErr) {
+              if (onError) onError(chunkErr);
             }
           };
 
@@ -2259,7 +2383,7 @@
             if (onError) onError(err);
           };
 
-          reader.readAsText(chunk);
+          reader.readAsArrayBuffer(chunk);
         }
 
         readNextChunk();
@@ -2280,7 +2404,7 @@
       }
 
       // Process raw text with worker
-      function processData(text, filename) {
+      function processData(text, filename, originalFileSize) {
         activeRawText = text;
         activeFileName = filename || 'dataset.csv';
 
@@ -2289,11 +2413,23 @@
         inspectorCard.style.display = 'flex';
 
         fileNameBadge.textContent = activeFileName;
-        fileSizeBadge.textContent = formatBytes(new Blob([text]).size);
+        const byteCount = (originalFileSize !== undefined && originalFileSize !== null) ? originalFileSize : new Blob([text]).size;
+        fileSizeBadge.textContent = formatBytes(byteCount);
         workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerWorking) || 'Worker: Processing...';
+        workerStatusBadge.classList.remove('error');
         progressBar.style.width = '70%';
 
         if (!workerInstance) initWorker();
+
+        // 10-second fail-safe watchdog timer
+        if (workerWatchdogTimer) clearTimeout(workerWatchdogTimer);
+        workerWatchdogTimer = setTimeout(() => {
+          handleWorkerError('Processing timed out: Failed to parse file encoding or structure within 10 seconds.');
+          if (workerInstance) {
+            workerInstance.terminate();
+            workerInstance = null;
+          }
+        }, 10000);
 
         workerInstance.postMessage({
           action: 'parseAndConvert',
@@ -2305,10 +2441,14 @@
       }
 
       function renderComplete(data) {
+        if (workerWatchdogTimer) {
+          clearTimeout(workerWatchdogTimer);
+          workerWatchdogTimer = null;
+        }
         progressBar.style.width = '100%';
         workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerIdle) || 'Worker: Ready';
         rowCountBadge.textContent = data.totalRows.toLocaleString() + ' Rows';
-        colCountBadge.textContent = data.columns.length + ' Columns';
+        colCountBadge.textContent = data.columns.length + (data.columns.length === 1 ? ' Column' : ' Columns');
         timeElapsedBadge.textContent = data.elapsed + 'ms';
 
         // Render Schema
@@ -2402,27 +2542,65 @@
       dropzone.addEventListener('click', () => fileInput.click());
 
       function loadFile(file) {
+        if (!file) return;
+
+        if (workerWatchdogTimer) {
+          clearTimeout(workerWatchdogTimer);
+          workerWatchdogTimer = null;
+        }
+
         statusCard.style.display = 'flex';
         controlsPanel.style.display = 'flex';
         inspectorCard.style.display = 'flex';
         fileNameBadge.textContent = file.name;
         fileSizeBadge.textContent = formatBytes(file.size);
+        rowCountBadge.textContent = '0 Rows';
+        colCountBadge.textContent = '0 Columns';
         workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerWorking) || 'Worker: Processing...';
         workerStatusBadge.classList.remove('error');
         progressBar.style.width = '10%';
 
-        readFileStream(
-          file,
-          (pct) => {
-            progressBar.style.width = Math.max(10, Math.min(60, pct)) + '%';
-          },
-          (fullText) => {
-            processData(fullText, file.name);
-          },
-          (err) => {
-            handleWorkerError((err && err.message) || 'Error reading file stream');
-          }
-        );
+        if (file.size === 0) {
+          handleWorkerError('The uploaded file is empty.');
+          return;
+        }
+
+        // For files under 20MB: Read entire file directly as ArrayBuffer with resilient fallback
+        if (file.size <= MAX_DIRECT_SIZE) {
+          const reader = new FileReader();
+          progressBar.style.width = '35%';
+
+          reader.onload = function(e) {
+            progressBar.style.width = '65%';
+            try {
+              const buffer = e.target.result;
+              const fullText = decodeBufferResilient(buffer);
+              processData(fullText, file.name, file.size);
+            } catch (err) {
+              handleWorkerError((err && err.message) || 'Failed to parse file encoding');
+            }
+          };
+
+          reader.onerror = function(err) {
+            handleWorkerError('Error reading file: ' + (err && err.message ? err.message : 'Unknown'));
+          };
+
+          reader.readAsArrayBuffer(file);
+        } else {
+          // Streaming chunk safety for huge files (>20MB)
+          readFileStream(
+            file,
+            (pct) => {
+              progressBar.style.width = Math.max(10, Math.min(60, pct)) + '%';
+            },
+            (fullText) => {
+              processData(fullText, file.name, file.size);
+            },
+            (err) => {
+              handleWorkerError((err && err.message) || 'Error reading file stream');
+            }
+          );
+        }
       }
 
       fileInput.addEventListener('change', (e) => {
