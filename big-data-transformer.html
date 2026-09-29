@@ -1026,6 +1026,32 @@
       color: #64748b;
     }
 
+    .footer-x-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+
+    .footer-x-link .footer-x-icon,
+    .footer-x-link svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .footer-x-link:hover .footer-x-icon,
+    .footer-x-link:hover svg {
+      transform: scale(1.12);
+      color: #fb923c;
+    }
+
+    .footer-x-link:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 2px;
+    }
+
     @media (max-width: 768px) {
       .workspace {
         padding: 0 1rem;
@@ -1601,7 +1627,11 @@
       <a href="./terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
       <a href="./about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
       <a href="./contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
-      <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link" aria-label="Follow VantorKit on X">X (Twitter)</a>
+      <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+        <svg class="footer-x-icon w-4 h-4 fill-current inline-block" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
     </div>
     <div class="footer-copy" data-i18n="footerCopy">
       © 2026 VantorKit. Client-side tools designed with absolute data privacy.
@@ -1623,6 +1653,8 @@
         privacyPill: "100% In-Browser Worker • Your Data Never Leaves RAM",
         workerIdle: "Worker: Ready",
         workerWorking: "Worker: Processing...",
+        workerError: "Worker: Error",
+        processingErrorToast: "Failed to process dataset. Please check file format.",
         lblConvert: "Convert To:",
         lblDelimiter: "Input Delimiter:",
         btnExport: "Download Export",
@@ -1804,15 +1836,20 @@
     // --- Embedded Web Worker Script for High-Performance Big Data Processing ---
     const workerCode = `
       self.onmessage = function(e) {
-        const { action, text, targetFormat, customDelimiter, filename } = e.data;
-        const startTime = Date.now();
+        try {
+          const { action, text, targetFormat, customDelimiter, filename } = e.data;
+          const startTime = Date.now();
 
-        if (action === 'parseAndConvert') {
-          try {
+          if (action === 'parseAndConvert') {
             let parsedData = null;
             let originalType = 'unknown';
 
-            const trimmed = text.trim();
+            const trimmed = (text || '').trim();
+            if (!trimmed) {
+              self.postMessage({ type: 'error', message: 'The uploaded file is empty.' });
+              return;
+            }
+
             if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
               try {
                 parsedData = JSON.parse(trimmed);
@@ -1822,18 +1859,23 @@
                 }
               } catch (err) {
                 // Try NDJSON
-                const lines = trimmed.split(/\r?\n/);
-                const ndjsonRows = [];
-                for (let i = 0; i < lines.length; i++) {
-                  const l = lines[i].trim();
-                  if (l) ndjsonRows.push(JSON.parse(l));
+                try {
+                  const lines = trimmed.split(/\r?\n/);
+                  const ndjsonRows = [];
+                  for (let i = 0; i < lines.length; i++) {
+                    const l = lines[i].trim();
+                    if (l) ndjsonRows.push(JSON.parse(l));
+                  }
+                  parsedData = ndjsonRows;
+                  originalType = 'ndjson';
+                } catch (ndjsonErr) {
+                  originalType = 'delimited';
+                  parsedData = parseDelimitedText(text, customDelimiter);
                 }
-                parsedData = ndjsonRows;
-                originalType = 'ndjson';
               }
             } else {
-              // Parse CSV / TSV / Delimited text
-              originalType = 'csv';
+              // Parse CSV / TSV / Delimited text / Single-Column text
+              originalType = 'delimited';
               parsedData = parseDelimitedText(text, customDelimiter);
             }
 
@@ -1920,38 +1962,85 @@
               originalType,
               elapsed
             });
-
-          } catch (err) {
-            self.postMessage({ type: 'error', message: err.message || 'Error parsing dataset.' });
           }
+        } catch (fatalWorkerErr) {
+          self.postMessage({
+            type: 'error',
+            message: (fatalWorkerErr && fatalWorkerErr.message) ? fatalWorkerErr.message : 'Dataset processing error.'
+          });
         }
       };
 
       function parseDelimitedText(text, forcedDelimiter) {
-        let delimiter = forcedDelimiter;
-        if (!delimiter || delimiter === 'auto') {
-          // Sniff delimiter from first 5 lines
-          const sample = text.slice(0, 4096);
-          const commas = (sample.match(/,/g) || []).length;
-          const tabs = (sample.match(/\t/g) || []).length;
-          const semicolons = (sample.match(/;/g) || []).length;
-          const pipes = (sample.match(/\|/g) || []).length;
+        if (!text || typeof text !== 'string') return [];
+        const trimmedText = text.trim();
+        if (!trimmedText) return [];
 
+        let delimiter = forcedDelimiter;
+        const sample = trimmedText.slice(0, 8192);
+        const commas = (sample.match(/,/g) || []).length;
+        const tabs = (sample.match(/\t/g) || []).length;
+        const semicolons = (sample.match(/;/g) || []).length;
+        const pipes = (sample.match(/\|/g) || []).length;
+        const hasStandardDelimiter = (commas > 0 || tabs > 0 || semicolons > 0 || pipes > 0);
+
+        if (!delimiter || delimiter === 'auto') {
           if (tabs > commas && tabs > semicolons) delimiter = '\t';
           else if (semicolons > commas && semicolons > pipes) delimiter = ';';
           else if (pipes > commas) delimiter = '|';
-          else delimiter = ',';
+          else if (commas > 0) delimiter = ',';
+          else delimiter = null; // No standard delimiter detected!
         }
 
+        // --- FALLBACK 1: Single-Column Dataset (Domains.txt, single-line lists, newline-delimited text) ---
+        if (!delimiter || delimiter === 'single_column' || (!hasStandardDelimiter && (!forcedDelimiter || forcedDelimiter === 'auto'))) {
+          const rawLines = trimmedText.split(/\r?\n/);
+          const nonEmptylines = [];
+          for (let i = 0; i < rawLines.length; i++) {
+            const line = rawLines[i].trim();
+            if (line.length > 0) {
+              nonEmptylines.push(line);
+            }
+          }
+
+          if (nonEmptylines.length === 0) return [];
+
+          const firstLine = nonEmptylines[0].toLowerCase();
+          const isExplicitHeader = ['item', 'value', 'domain', 'domains', 'url', 'host', 'key', 'line', 'record', 'element'].includes(firstLine);
+
+          let headerName = 'Item';
+          let startIndex = 0;
+
+          if (isExplicitHeader && nonEmptylines.length > 1) {
+            headerName = nonEmptylines[0];
+            startIndex = 1;
+          } else {
+            headerName = 'Item';
+            startIndex = 0;
+          }
+
+          const singleColData = [];
+          for (let i = startIndex; i < nonEmptylines.length; i++) {
+            singleColData.push({ [headerName]: nonEmptylines[i] });
+          }
+
+          if (singleColData.length === 0 && nonEmptylines.length > 0) {
+            singleColData.push({ [headerName]: nonEmptylines[0] });
+          }
+
+          return singleColData;
+        }
+
+        // --- Standard Delimited Parsing (CSV, TSV, Semicolon, Pipe) ---
         const rows = [];
         let curRow = [];
         let curVal = '';
         let insideQuote = false;
 
-        const len = text.length;
+        const len = trimmedText.length;
         for (let i = 0; i < len; i++) {
-          const char = text[i];
-          const nextChar = text[i + 1];
+          const char = trimmedText[i];
+          const nextChar = trimmedText[i + 1];
 
           if (char === '"') {
             if (insideQuote && nextChar === '"') {
@@ -1982,6 +2071,15 @@
         }
 
         if (rows.length === 0) return [];
+
+        if (rows.length === 1) {
+          const headers = rows[0].map((h, idx) => 'column_' + (idx + 1));
+          const obj = {};
+          for (let c = 0; c < headers.length; c++) {
+            obj[headers[c]] = rows[0][c] !== undefined ? rows[0][c] : '';
+          }
+          return [obj];
+        }
 
         const headers = rows[0].map((h, idx) => h || ('column_' + (idx + 1)));
         const data = [];
@@ -2096,11 +2194,75 @@
             currentResult = data;
             renderComplete(data);
           } else if (data.type === 'error') {
-            showToast('Error: ' + data.message);
-            workerStatusBadge.textContent = 'Worker: Error';
-            progressBar.style.width = '0%';
+            handleWorkerError(data.message);
           }
         };
+
+        workerInstance.onerror = function(err) {
+          console.error('Worker runtime error:', err);
+          handleWorkerError((err && err.message) ? err.message : 'Worker encountered an unhandled error.');
+        };
+      }
+
+      function handleWorkerError(errorMsg) {
+        progressBar.style.width = '0%';
+        const translatedError = (I18N[currentLang] && I18N[currentLang].workerError) || 'Worker: Error';
+        workerStatusBadge.textContent = translatedError;
+        workerStatusBadge.classList.add('error');
+        const translatedToast = (I18N[currentLang] && I18N[currentLang].processingErrorToast) || ('Error: ' + errorMsg);
+        showToast(translatedToast);
+      }
+
+      // Stream file with clean EOF chunking
+      function readFileStream(file, onProgress, onComplete, onError) {
+        if (!file) return;
+        const fileSize = file.size;
+
+        if (fileSize === 0) {
+          onComplete('');
+          return;
+        }
+
+        const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB progressive stream chunk
+        let offset = 0;
+        let accumulatedText = '';
+        const reader = new FileReader();
+
+        function readNextChunk() {
+          // Strict stream EOF termination condition: offset >= file.size
+          if (offset >= fileSize) {
+            onComplete(accumulatedText);
+            return;
+          }
+
+          const nextOffset = Math.min(offset + CHUNK_SIZE, fileSize);
+          const chunk = file.slice(offset, nextOffset);
+
+          reader.onload = function(e) {
+            accumulatedText += e.target.result;
+            offset = nextOffset;
+
+            if (onProgress) {
+              const pct = Math.min(95, Math.round((offset / fileSize) * 100));
+              onProgress(pct);
+            }
+
+            // Verify strict stream EOF condition
+            if (offset >= fileSize) {
+              onComplete(accumulatedText);
+            } else {
+              setTimeout(readNextChunk, 0);
+            }
+          };
+
+          reader.onerror = function(err) {
+            if (onError) onError(err);
+          };
+
+          reader.readAsText(chunk);
+        }
+
+        readNextChunk();
       }
 
       function showToast(msg) {
@@ -2239,12 +2401,34 @@
 
       dropzone.addEventListener('click', () => fileInput.click());
 
+      function loadFile(file) {
+        statusCard.style.display = 'flex';
+        controlsPanel.style.display = 'flex';
+        inspectorCard.style.display = 'flex';
+        fileNameBadge.textContent = file.name;
+        fileSizeBadge.textContent = formatBytes(file.size);
+        workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerWorking) || 'Worker: Processing...';
+        workerStatusBadge.classList.remove('error');
+        progressBar.style.width = '10%';
+
+        readFileStream(
+          file,
+          (pct) => {
+            progressBar.style.width = Math.max(10, Math.min(60, pct)) + '%';
+          },
+          (fullText) => {
+            processData(fullText, file.name);
+          },
+          (err) => {
+            handleWorkerError((err && err.message) || 'Error reading file stream');
+          }
+        );
+      }
+
       fileInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-          const reader = new FileReader();
-          reader.onload = (ev) => processData(ev.target.result, file.name);
-          reader.readAsText(file);
+          loadFile(file);
         }
       });
 
@@ -2260,9 +2444,7 @@
         dropzone.classList.remove('dragover');
         const file = e.dataTransfer.files[0];
         if (file) {
-          const reader = new FileReader();
-          reader.onload = (ev) => processData(ev.target.result, file.name);
-          reader.readAsText(file);
+          loadFile(file);
         }
       });
 
