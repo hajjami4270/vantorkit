@@ -63,34 +63,34 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Why is decoding JWTs locally safer than using online decoders?",
+          "name": "Is my JWT or secret key stored anywhere?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Many online tools send your pasted tokens and cryptographic secret keys to backend servers or log them in cloud proxies. VantorKit decodes and verifies tokens entirely in your browser's local RAM using Web Crypto API, meaning zero sensitive claims or API credentials are ever transmitted."
+            "text": "No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the browser's garbage collector. Zero network requests are made."
           }
         },
         {
           "@type": "Question",
-          "name": "Which cryptographic signature algorithms are supported for verification?",
+          "name": "What does the 'exp' timestamp claim mean?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The tool supports native HMAC SHA-256 (HS256), HMAC SHA-384 (HS384), and HMAC SHA-512 (HS512) verification and signing directly through the W3C Web Crypto API. Both plaintext and Base64-encoded secrets are supported."
+            "text": "The exp (Expiration Time) claim identifies the Unix epoch timestamp after which the JWT is invalid. VantorKit translates this timestamp into your local timezone and displays a live countdown showing whether the token is currently active or expired."
           }
         },
         {
           "@type": "Question",
-          "name": "How does the timestamp humanizer work?",
+          "name": "How do I verify Base64 encoded secret keys?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The decoder extracts standard Unix epoch timestamp claims (iat, exp, nbf, auth_time), converts them into human-readable UTC and local date formats, and computes real-time active or expired status relative to your device's current clock."
+            "text": "Check the 'Secret is base64 encoded' toggle beneath the secret input field. The verifier will automatically decode the Base64 representation into raw binary bytes before passing it to Web Crypto for HMAC evaluation."
           }
         },
         {
           "@type": "Question",
-          "name": "Can I also generate and sign new JWT tokens with this tool?",
+          "name": "Can this tool verify RSA (RS256) or ECDSA (ES256) tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Switch to the Token Signer tab, customize your header and payload JSON claims, enter your HMAC secret, and generate a freshly signed, valid JWT token in real time."
+            "text": "The decoder parses all standard JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Instant client-side cryptographic verification is currently implemented for symmetric HMAC algorithms (HS256, HS384, HS512)."
           }
         }
       ]
@@ -148,84 +148,79 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* Top Navigation Header */
+    /* Top Navigation */
     .top-nav {
-      height: 70px;
-      border-bottom: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.8);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
-      width: 100%;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #38bdf8, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .back-link {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 0.5rem;
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
+      transition: color 0.2s ease;
       padding: 0.45rem 0.85rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
       border: 1px solid var(--card-border);
-      transition: all 0.2s ease;
-      white-space: nowrap;
+      background: rgba(15, 18, 28, 0.5);
     }
 
     .back-link:hover {
-      color: #fff;
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(56, 189, 248, 0.08);
-      transform: translateX(-2px);
-    }
-
-    html[dir="rtl"] .back-link:hover {
-      transform: translateX(2px);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-brand svg {
-      width: 32px;
-      height: 32px;
-      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
-      transition: transform 0.2s ease;
-    }
-
-    .nav-brand:hover svg {
-      transform: scale(1.05);
-    }
-
-    .nav-brand span span {
-      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
+      border-color: var(--accent);
+      background: var(--card-hover);
     }
 
     /* Language Switcher Dropdown */
@@ -246,19 +241,16 @@
       font-size: 0.85rem;
       font-weight: 600;
       transition: all 0.2s ease;
-      font-family: inherit;
-      white-space: nowrap;
     }
 
-    .lang-btn:hover,
-    .lang-btn[aria-expanded="true"] {
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
       border-color: var(--accent);
-      background: rgba(26, 32, 48, 0.95);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .globe-icon {
-      color: #38bdf8;
+      color: var(--badge-text);
     }
 
     .chevron-icon {
@@ -275,10 +267,9 @@
       top: calc(100% + 8px);
       right: 0;
       width: 170px;
-      background: rgba(14, 18, 28, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border-radius: 12px;
       padding: 0.4rem;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
@@ -313,7 +304,6 @@
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: left;
-      font-family: inherit;
     }
 
     .lang-option:hover {
@@ -324,7 +314,6 @@
     .lang-option.active {
       background: rgba(56, 189, 248, 0.2);
       color: #38bdf8;
-      font-weight: 700;
     }
 
     .lang-option .check-icon {
@@ -342,6 +331,19 @@
       gap: 0.5rem;
     }
 
+    /* RTL Specific Overrides */
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
     html[dir="rtl"] .lang-menu {
       right: auto;
       left: 0;
@@ -351,62 +353,136 @@
       text-align: right;
     }
 
-    html[dir="rtl"] .back-link svg {
-      transform: rotate(180deg);
+    html[dir="rtl"] .info-section,
+    html[dir="rtl"] .guide-card,
+    html[dir="rtl"] .faq-item,
+    html[dir="rtl"] .content-card,
+    html[dir="rtl"] .privacy-banner,
+    html[dir="rtl"] .faq-answer {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .guide-card-title {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    html[dir="rtl"] .pane-header {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .pane-title {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .editor-label {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .ts-card-header {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .ts-card-title {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .ts-card-dates {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .token-structure-bar {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .meta-row {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .checkbox-label {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .secret-input {
+      padding-left: 2.75rem;
+      padding-right: 0.95rem;
+    }
+
+    html[dir="rtl"] .btn-toggle-eye {
+      right: auto;
+      left: 8px;
+    }
+
+    html[dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .formula-box {
+      border-left: none;
+      border-right: 4px solid #38bdf8;
+    }
+
+    /* Keep code and token elements strictly LTR */
+    html[dir="rtl"] .code-editor,
+    html[dir="rtl"] .token-input,
+    html[dir="rtl"] .jwt-textarea,
+    html[dir="rtl"] .token-color-preview,
+    html[dir="rtl"] .jwt-part-tag,
+    html[dir="rtl"] .ts-val-code,
+    html[dir="rtl"] .formula-expr,
+    html[dir="rtl"] .json-code-box,
+    html[dir="rtl"] code,
+    html[dir="rtl"] pre {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     }
 
     /* Main Container */
     main {
       flex: 1;
-      max-width: 1200px;
+      max-width: 1280px;
       width: 100%;
       margin: 0 auto;
-      padding: 2rem 1.5rem 3.5rem;
+      padding: 2.5rem 1.5rem;
     }
 
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 2.25rem;
-      position: relative;
+      margin-bottom: 2rem;
     }
 
-    .brand-badge {
+    .trust-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       padding: 0.35rem 1rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--badge-text);
-      background: var(--badge-bg);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 9999px;
       margin-bottom: 1rem;
-      letter-spacing: 0.35px;
-      backdrop-filter: blur(12px);
-    }
-
-    .brand-badge svg {
-      color: #38bdf8;
     }
 
     h1 {
-      font-size: 2.45rem;
+      font-size: 2.35rem;
       font-weight: 800;
-      letter-spacing: -0.04em;
-      margin-bottom: 0.65rem;
-      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
     }
 
     h1 span {
-      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      background: linear-gradient(135deg, #38bdf8, #c084fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
     }
 
-    p.subtitle {
+    .subtitle {
       color: var(--text-muted);
       font-size: 1.05rem;
       max-width: 680px;
@@ -414,80 +490,86 @@
       line-height: 1.6;
     }
 
-    /* Toolbar Controls & Mode Tabs */
-    .workspace-toolbar {
+    /* Mode Switcher Tabs */
+    .tab-nav {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
     }
 
-    .mode-pills {
+    .tab-btn {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px;
-      background: rgba(15, 23, 42, 0.6);
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      background: rgba(15, 18, 28, 0.6);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-    }
-
-    .mode-btn {
-      background: transparent;
-      border: none;
       color: var(--text-muted);
-      padding: 0.45rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .mode-btn:hover {
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: var(--card-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .tab-btn.active {
       color: #fff;
-    }
-
-    .mode-btn.active {
       background: rgba(56, 189, 248, 0.15);
-      color: #38bdf8;
-      font-weight: 700;
+      border-color: var(--accent);
+      box-shadow: 0 0 16px var(--accent-glow);
     }
 
-    .quick-actions {
+    /* Toolbar: Sample Loaders & Quick Actions */
+    .jwt-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .toolbar-left, .toolbar-right {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .btn-tool-sm {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: #cbd5e1;
-      padding: 0.45rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .btn-tool-sm:hover {
-      background: rgba(56, 189, 248, 0.12);
-      border-color: rgba(56, 189, 248, 0.35);
-      color: #fff;
+      border-color: var(--accent);
+      background: var(--card-hover);
+      color: #38bdf8;
     }
 
-    /* Dual Pane Workspace */
+    /* Workspace 2-Column Grid */
     .jwt-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
+      margin-bottom: 2rem;
     }
 
     @media (max-width: 900px) {
@@ -496,15 +578,13 @@
       }
     }
 
-    /* Left Pane: Encoded Token */
+    /* Pane Card Containers */
     .pane-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 1.5rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -512,38 +592,32 @@
 
     .pane-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--card-border);
-      padding-bottom: 0.85rem;
+      align-items: center;
     }
 
     .pane-title {
       font-size: 0.95rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #cbd5e1;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
+    /* Textarea & Code Editors */
     .jwt-input-wrap {
       position: relative;
-      flex: 1;
-      min-height: 220px;
     }
 
     .jwt-textarea {
       width: 100%;
-      height: 100%;
-      min-height: 220px;
-      background: rgba(10, 14, 24, 0.85);
+      height: 240px;
+      background: rgba(7, 9, 14, 0.85);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 1rem;
-      color: #e2e8f0;
+      color: #f8fafc;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.88rem;
       line-height: 1.6;
@@ -554,30 +628,45 @@
     }
 
     .jwt-textarea:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      box-shadow: 0 0 14px var(--accent-glow);
     }
 
-    /* Token Visual Highlights Display */
+    /* Color Segment Preview Box */
     .token-color-preview {
-      background: rgba(10, 14, 24, 0.9);
+      background: rgba(7, 9, 14, 0.75);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1rem;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.84rem;
-      line-height: 1.6;
+      font-size: 0.82rem;
+      line-height: 1.5;
       word-break: break-all;
-      max-height: 160px;
-      overflow-y: auto;
+      min-height: 68px;
     }
 
-    .token-part-header { color: var(--jwt-header); font-weight: 600; }
-    .token-dot { color: #64748b; font-weight: 700; }
-    .token-part-payload { color: var(--jwt-payload); font-weight: 600; }
-    .token-part-sig { color: var(--jwt-sig); font-weight: 600; }
+    .token-part-header {
+      color: var(--jwt-header);
+      font-weight: 600;
+    }
 
-    /* Right Pane: Decoded Claims */
+    .token-part-payload {
+      color: var(--jwt-payload);
+      font-weight: 600;
+    }
+
+    .token-part-sig {
+      color: var(--jwt-sig);
+      font-weight: 600;
+    }
+
+    .token-dot {
+      color: #64748b;
+      font-weight: 800;
+      padding: 0 1px;
+    }
+
+    /* Right Column: Claims & Verify Sections */
     .decoded-section {
       display: flex;
       flex-direction: column;
@@ -585,7 +674,7 @@
     }
 
     .claim-box {
-      background: rgba(10, 14, 24, 0.7);
+      background: rgba(7, 9, 14, 0.85);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       overflow: hidden;
@@ -593,175 +682,156 @@
 
     .claim-box-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       padding: 0.65rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid var(--card-border);
       font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--card-border);
     }
 
-    .claim-box-header.header-tag { color: var(--jwt-header); }
-    .claim-box-header.payload-tag { color: var(--jwt-payload); }
-    .claim-box-header.sig-tag { color: var(--jwt-sig); }
+    .claim-box-header.header-tag {
+      background: rgba(244, 63, 94, 0.08);
+      color: var(--jwt-header);
+    }
+
+    .claim-box-header.payload-tag {
+      background: rgba(192, 132, 252, 0.08);
+      color: var(--jwt-payload);
+    }
 
     .json-code-box {
       padding: 1rem;
-      margin: 0;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
+      font-size: 0.86rem;
       line-height: 1.6;
-      color: #e2e8f0;
-      overflow-x: auto;
-      max-height: 260px;
+      max-height: 250px;
       overflow-y: auto;
+      margin: 0;
+      color: #cbd5e1;
     }
 
-    /* JSON Syntax Highlighting Colors */
-    .json-key { color: #f43f5e; font-weight: 600; }
-    .json-string { color: #38bdf8; }
+    .json-key { color: #38bdf8; font-weight: 600; }
+    .json-string { color: #34d399; }
     .json-number { color: #f59e0b; }
-    .json-boolean { color: #10b981; font-weight: 700; }
-    .json-null { color: #94a3b8; font-style: italic; }
+    .json-boolean { color: #c084fc; }
+    .json-null { color: #94a3b8; }
 
-    /* Timestamps Interpretation Card */
+    /* Timestamp Humanizer Card */
     .timestamp-card {
-      background: rgba(10, 14, 24, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 12px;
       padding: 1rem 1.25rem;
     }
 
     .timestamp-title {
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      color: #cbd5e1;
-      margin-bottom: 0.75rem;
+      color: var(--badge-text);
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
     }
 
     .timestamp-list {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      font-size: 0.82rem;
-    }
-
-    .timestamp-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
       gap: 0.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    .timestamp-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .ts-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 6px;
+      flex-wrap: wrap;
+      gap: 0.4rem;
     }
 
-    .ts-label {
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
+    .ts-name {
+      font-weight: 700;
+      color: #94a3b8;
     }
 
     .ts-badge {
-      padding: 0.2rem 0.6rem;
+      font-size: 0.75rem;
+      padding: 2px 8px;
       border-radius: 999px;
-      font-size: 0.76rem;
       font-weight: 700;
     }
 
     .ts-badge.valid {
       background: var(--success-bg);
+      color: var(--success);
       border: 1px solid var(--success-border);
-      color: #6ee7b7;
     }
 
     .ts-badge.expired {
       background: var(--danger-bg);
+      color: var(--danger);
       border: 1px solid var(--danger-border);
-      color: #fca5a5;
-    }
-
-    .ts-badge.neutral {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
     }
 
     /* Signature Verification Box */
     .sig-verify-box {
-      background: rgba(10, 14, 24, 0.7);
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
+      backdrop-filter: blur(12px);
     }
 
     .secret-input-row {
-      display: flex;
-      gap: 0.5rem;
       position: relative;
     }
 
     .secret-input {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.9);
+      width: 100%;
+      background: rgba(7, 9, 14, 0.85);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 0.65rem 2.5rem 0.65rem 0.85rem;
+      padding: 0.65rem 2.75rem 0.65rem 0.95rem;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       outline: none;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease;
     }
 
     .secret-input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
     }
 
     .btn-toggle-eye {
       position: absolute;
-      right: 0.65rem;
+      right: 8px;
       top: 50%;
       transform: translateY(-50%);
       background: transparent;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
+      padding: 4px;
       display: flex;
       align-items: center;
-      padding: 4px;
+      transition: color 0.15s ease;
     }
 
     .btn-toggle-eye:hover {
       color: #fff;
     }
 
-    html[dir="rtl"] .secret-input {
-      padding-left: 2.5rem;
-      padding-right: 0.85rem;
-    }
-
-    html[dir="rtl"] .btn-toggle-eye {
-      right: auto;
-      left: 0.65rem;
-    }
-
-    .secret-options {
-      display: flex;
+    .checkbox-label {
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       font-size: 0.82rem;
@@ -770,211 +840,151 @@
       user-select: none;
     }
 
-    .secret-options input[type="checkbox"] {
+    .checkbox-label input {
+      accent-color: var(--accent);
       cursor: pointer;
-      accent-color: #38bdf8;
     }
 
-    /* Verification Status Banner */
-    .status-banner {
-      border-radius: 10px;
-      padding: 0.85rem 1.15rem;
-      font-size: 0.88rem;
-      font-weight: 700;
+    /* Verification Status Pill */
+    .sig-status-badge {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      transition: all 0.25s ease;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
     }
 
-    .status-banner.valid {
+    .sig-status-badge.neutral {
+      background: rgba(30, 41, 59, 0.4);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+    }
+
+    .sig-status-badge.valid {
       background: var(--success-bg);
+      color: var(--success);
       border: 1px solid var(--success-border);
-      color: #6ee7b7;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
     }
 
-    .status-banner.invalid {
+    .sig-status-badge.invalid {
       background: var(--danger-bg);
+      color: var(--danger);
       border: 1px solid var(--danger-border);
-      color: #fca5a5;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
     }
 
-    .status-banner.neutral {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      color: #7dd3fc;
-    }
-
-    /* Signer Mode Editor */
-    .signer-panel {
+    /* Mode 2: Token Signer Section */
+    .signer-section {
       display: none;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
+      border-radius: 16px;
       padding: 1.75rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      gap: 1.5rem;
+      backdrop-filter: blur(12px);
       flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
     }
 
-    .signer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 860px) {
-      .signer-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .editor-box-wrap {
+    .signer-section.active {
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
     }
 
     .editor-label {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
       display: flex;
       justify-content: space-between;
     }
 
-    .code-editor {
-      width: 100%;
-      height: 180px;
-      background: rgba(10, 14, 24, 0.85);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0.85rem;
-      color: #38bdf8;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.84rem;
-      line-height: 1.5;
-      outline: none;
-      resize: vertical;
-    }
-
-    .code-editor:focus {
-      border-color: #38bdf8;
-    }
-
     .btn-generate-jwt {
-      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-      color: #041226;
-      border: none;
-      padding: 0.85rem 1.85rem;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.6rem;
-      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
     .btn-generate-jwt:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 26px rgba(56, 189, 248, 0.5);
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+      transform: translateY(-1px);
     }
 
-    /* Toast Notification */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: rgba(15, 23, 42, 0.96);
-      color: #fff;
-      border: 1px solid #38bdf8;
-      padding: 0.75rem 1.25rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1000;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    html[dir="rtl"] .toast {
-      right: auto;
-      left: 24px;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    /* Educational Guide Section */
+    /* Educational Section */
     .info-section {
-      margin-top: 3.5rem;
       border-top: 1px solid var(--card-border);
       padding-top: 2.5rem;
+      margin-top: 2.5rem;
     }
 
     .info-header {
       text-align: center;
-      margin-bottom: 2rem;
+      max-width: 750px;
+      margin: 0 auto 2rem;
     }
 
     .info-header h2 {
-      font-size: 1.65rem;
+      font-size: 2rem;
       font-weight: 800;
-      color: #fff;
-      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
     }
 
     .info-header p {
       color: var(--text-muted);
-      max-width: 660px;
-      margin: 0 auto;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
     }
 
     .guide-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
     }
 
-    @media (min-width: 768px) {
-      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 768px) {
+      .guide-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .guide-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 1.4rem;
+      padding: 1.5rem;
       backdrop-filter: blur(12px);
     }
 
     .guide-card-title {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #fff;
     }
 
     .guide-card-title svg {
-      color: #38bdf8;
+      color: var(--accent);
     }
 
     .guide-card p {
@@ -986,13 +996,15 @@
     /* FAQ Section */
     .faq-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 3.5rem;
     }
 
-    @media (min-width: 768px) {
-      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 768px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .faq-item {
@@ -1016,14 +1028,234 @@
       line-height: 1.6;
     }
 
-    /* Standardized Footer */
+    /* Content Layer Standard Styles */
+    .tool-content-layer {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .tool-content-layer .lang-content-block {
+      display: none;
+    }
+
+    html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+    html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] {
+      display: block;
+    }
+
+    html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] {
+      display: block;
+    }
+
+    html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] {
+      display: block;
+    }
+
+    html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] {
+      display: block;
+    }
+
+    .tool-content-layer h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .tool-content-layer h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-content-layer p {
+      margin-bottom: 1rem;
+      color: #94a3b8;
+    }
+
+    .tool-content-layer ol {
+      margin-bottom: 1.25rem;
+      padding-inline-start: 1.5rem;
+      list-style-type: decimal;
+    }
+
+    .tool-content-layer li {
+      margin-bottom: 0.65rem;
+      color: #cbd5e1;
+    }
+
+    .tool-content-layer code {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      color: #38bdf8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .content-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .content-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.75rem;
+      padding: 1.15rem 1.25rem;
+    }
+
+    .content-card h4 {
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.4rem;
+    }
+
+    .content-card p {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      margin-bottom: 0;
+    }
+
+    .formula-box {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4));
+      border-left: 4px solid #38bdf8;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .formula-box .formula-title {
+      font-weight: 700;
+      color: #7dd3fc;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .formula-box .formula-expr {
+      font-size: 0.95rem;
+      color: #f8fafc;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .faq-accordion {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-item-details {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .faq-item-details summary {
+      padding: 0.85rem 1.25rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-item-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item-details summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .faq-item-details[open] summary::after {
+      content: '−';
+      color: #38bdf8;
+    }
+
+    .faq-item-details .faq-answer {
+      padding: 0 1.25rem 1rem 1.25rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(30, 41, 59, 0.6);
+      margin-top: 0.5rem;
+      padding-top: 0.75rem;
+    }
+
+    .privacy-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .privacy-banner h3 {
+      color: #34d399;
+      margin-top: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .related-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .related-tool-card {
+      display: block;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .related-tool-card:hover {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .related-tool-card .tool-name {
+      font-weight: 600;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .related-tool-card .tool-desc {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+
+    /* Standardized Site Footer */
     .site-footer {
       border-top: 1px solid var(--card-border);
-      text-align: center;
       padding: 2.5rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      background: rgba(7, 9, 14, 0.85);
+      background: rgba(7, 9, 14, 0.9);
       margin-top: auto;
     }
 
@@ -1038,108 +1270,116 @@
 
     .footer-links {
       display: flex;
+      align-items: center;
+      gap: 1.5rem;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1.5rem;
     }
 
     .footer-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
+      font-size: 0.85rem;
       transition: color 0.2s ease;
     }
 
     .footer-link:hover {
-      color: #38bdf8;
-    }
-
-    .footer-copy {
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-      color: #64748b;
-      font-size: 0.84rem;
-    }
-
-    .footer-x-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      vertical-align: middle;
+      color: var(--text-main);
     }
 
     .footer-x-link svg {
-      width: 1rem;
-      height: 1rem;
+      width: 16px;
+      height: 16px;
       fill: currentColor;
-      transition: transform 0.2s ease;
     }
 
-    .footer-x-link:hover svg {
-      transform: scale(1.12);
+    .footer-copy {
+      color: #64748b;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
     }
   </style>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-S8MDMH082N');
-  </script>
 </head>
 <body>
 
-  <!-- Top Navigation Header -->
+  <!-- Top Navigation -->
   <nav class="top-nav">
-    <a href="../index.html" class="back-link" id="backToHome">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      <span data-i18n="backLink">← Back to Tools</span>
+    <a href="../index.html" class="brand-link">
+      <div class="brand-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      </div>
+      <span class="brand-name">Vantor<span>Kit</span></span>
     </a>
 
-    <div class="nav-right">
-      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
-            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
-            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
-          </defs>
-          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
-          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
-          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
-          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
-          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
-        </svg>
-        <span>Vantor<span>Kit</span></span>
+    <div class="nav-actions">
+      <a href="../index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span data-i18n="backLink">← Back to Tools</span>
       </a>
 
-      <!-- Language Switcher Dropdown (EN, AR, FR, IT) -->
+      <!-- Language Switcher Dropdown -->
       <div class="lang-dropdown" id="langDropdown">
         <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
-          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span id="currentLangLabel">English</span>
           <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
 
         <div class="lang-menu" id="langMenu" role="menu">
           <button type="button" class="lang-option active" data-lang="en" role="menuitem">
-            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <span class="lang-item-content">
+              <span>🇺🇸</span>
+              <span>English</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="ar" role="menuitem">
-            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <span class="lang-item-content">
+              <span>🇸🇦</span>
+              <span>العربية</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="fr" role="menuitem">
-            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <span class="lang-item-content">
+              <span>🇫🇷</span>
+              <span>Français</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="it" role="menuitem">
-            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <span class="lang-item-content">
+              <span>🇮🇹</span>
+              <span>Italiano</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
         </div>
@@ -1147,35 +1387,44 @@
     </div>
   </nav>
 
+  <!-- Main Container -->
   <main>
-    <!-- Header Section -->
     <header>
-      <div class="brand-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         <span data-i18n="heroBadge">Zero Server Transmission • In-Browser RAM Only • Safe for Production Keys</span>
       </div>
-      <h1 data-i18n="heroTitle">JWT Decoder & <span>HMAC Verifier</span></h1>
+      <h1 data-i18n="heroTitle">JWT Decoder &amp; <span>HMAC Verifier</span></h1>
       <p class="subtitle" data-i18n="heroSubtitle">Decode, inspect claims, format timestamps, and verify HMAC HS256 signatures securely in your browser RAM without leaking credentials to third parties.</p>
     </header>
 
-    <!-- Toolbar: Tabs & Sample Loaders -->
-    <div class="workspace-toolbar">
-      <div class="mode-pills">
-        <button type="button" class="mode-btn active" id="tabDecode" data-i18n="tabDecode">Decode & Verify</button>
-        <button type="button" class="mode-btn" id="tabSign" data-i18n="tabSign">Token Signer / Generator</button>
-      </div>
+    <!-- Mode Selector Tabs -->
+    <div class="tab-nav">
+      <button type="button" class="tab-btn active" id="tabDecodeBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span data-i18n="tabDecode">Decode &amp; Verify</span>
+      </button>
+      <button type="button" class="tab-btn" id="tabSignBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        <span data-i18n="tabSign">Token Signer / Generator</span>
+      </button>
+    </div>
 
-      <div class="quick-actions">
+    <!-- Quick Load Toolbar -->
+    <div class="jwt-toolbar">
+      <div class="toolbar-left">
         <button type="button" class="btn-tool-sm" id="btnLoadValidSample">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
           <span data-i18n="btnSampleValid">Sample Active JWT</span>
         </button>
         <button type="button" class="btn-tool-sm" id="btnLoadExpiredSample">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
           <span data-i18n="btnSampleExpired">Sample Expired JWT</span>
         </button>
+      </div>
+      <div class="toolbar-right">
         <button type="button" class="btn-tool-sm" id="btnClearToken">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
           <span data-i18n="btnClear">Clear</span>
         </button>
       </div>
@@ -1199,7 +1448,7 @@
 
         <!-- Token Part Segmentation Preview -->
         <div>
-          <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;" data-i18n="tokenStructureTitle">Token Segmentation & Structure:</div>
+          <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;" data-i18n="tokenStructureTitle">Token Segmentation &amp; Structure:</div>
           <div class="token-color-preview" id="tokenColorPreview">
             <span style="color:#64748b;font-style:italic">Paste a valid 3-part token above to inspect color segmentation...</span>
           </div>
@@ -1211,7 +1460,7 @@
         <!-- Header JSON -->
         <div class="claim-box">
           <div class="claim-box-header header-tag">
-            <span>HEADER: ALGORITHM &amp; TOKEN TYPE</span>
+            <span data-i18n="headerTagTitle">HEADER: ALGORITHM &amp; TOKEN TYPE</span>
             <span id="headerAlgBadge" style="font-size:0.75rem;padding:2px 8px;border-radius:6px;background:rgba(244,63,94,0.15);color:#f43f5e">HS256</span>
           </div>
           <pre class="json-code-box" id="jsonHeaderView">{
@@ -1223,7 +1472,7 @@
         <!-- Payload JSON -->
         <div class="claim-box">
           <div class="claim-box-header payload-tag">
-            <span>PAYLOAD: DATA &amp; CLAIMS</span>
+            <span data-i18n="payloadTagTitle">PAYLOAD: DATA &amp; CLAIMS</span>
             <span id="payloadClaimsCount" style="font-size:0.75rem;padding:2px 8px;border-radius:6px;background:rgba(192,132,252,0.15);color:#c084fc">0 Claims</span>
           </div>
           <pre class="json-code-box" id="jsonPayloadView">{
@@ -1237,7 +1486,7 @@
         <div class="timestamp-card" id="timestampCard" style="display:none">
           <div class="timestamp-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
-            <span data-i18n="tsTitle">Timestamp Analysis & Expiration Status</span>
+            <span data-i18n="tsTitle">Timestamp Analysis &amp; Expiration Status</span>
           </div>
           <div class="timestamp-list" id="timestampList">
             <!-- Dynamically populated -->
@@ -1258,45 +1507,44 @@
             </button>
           </div>
 
-          <label class="secret-options">
-            <input type="checkbox" id="chkSecretBase64">
+          <label class="checkbox-label">
+            <input type="checkbox" id="chkBase64Secret">
             <span data-i18n="chkBase64">Secret is base64 encoded</span>
           </label>
 
-          <!-- Signature Status Banner -->
-          <div class="status-banner neutral" id="signatureStatusBanner">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span id="signatureStatusText" data-i18n="sigStatusNeutral">Enter your HMAC secret key above to verify signature locally.</span>
+          <div class="sig-status-badge neutral" id="sigStatusBadge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span id="sigStatusText" data-i18n="sigStatusNeutral">Enter your HMAC secret key above to verify signature locally.</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Mode 2: Token Generator & Signer Panel -->
-    <div class="signer-panel" id="signerView">
-      <div style="border-bottom:1px solid var(--card-border);padding-bottom:1rem">
-        <h3 style="font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:0.25rem" data-i18n="signerTitle">Generate & Cryptographically Sign a JWT</h3>
-        <p style="font-size:0.88rem;color:var(--text-muted)" data-i18n="signerDesc">Customize claims and sign with HMAC (HS256) directly in client RAM using native Web Crypto API.</p>
+    <!-- Mode 2: Interactive Token Signer -->
+    <div class="signer-section" id="generatorView">
+      <div>
+        <h3 style="font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:0.35rem;" data-i18n="signerTitle">Generate &amp; Cryptographically Sign a JWT</h3>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin:0;" data-i18n="signerDesc">Customize claims and sign with HMAC (HS256) directly in client RAM using native Web Crypto API.</p>
       </div>
 
-      <div class="signer-grid">
-        <div class="editor-box-wrap">
+      <div class="jwt-grid" style="margin-bottom:0">
+        <div>
           <div class="editor-label">
             <span>HEADER (JSON)</span>
-            <span style="color:var(--jwt-header)">HS256</span>
+            <span style="color:#f43f5e">HS256</span>
           </div>
-          <textarea id="signerHeaderInput" class="code-editor" spellcheck="false">{
+          <textarea id="signerHeaderInput" class="jwt-textarea" style="height:150px" spellcheck="false">{
   "alg": "HS256",
   "typ": "JWT"
 }</textarea>
         </div>
 
-        <div class="editor-box-wrap">
+        <div>
           <div class="editor-label">
-            <span>PAYLOAD (JSON)</span>
-            <span style="color:var(--jwt-payload)">Claims</span>
+            <span>PAYLOAD (JSON CLAIMS)</span>
+            <span style="color:#c084fc">Claims</span>
           </div>
-          <textarea id="signerPayloadInput" class="code-editor" spellcheck="false">{
+          <textarea id="signerPayloadInput" class="jwt-textarea" style="height:150px" spellcheck="false">{
   "sub": "usr_9482103",
   "name": "Sarah Connor",
   "role": "admin",
@@ -1315,7 +1563,7 @@
         </div>
         <button type="button" class="btn-generate-jwt" id="btnSignToken">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span data-i18n="btnSignGenerate">Cryptographically Sign & Generate JWT</span>
+          <span data-i18n="btnSignGenerate">Cryptographically Sign &amp; Generate JWT</span>
         </button>
       </div>
 
@@ -1337,7 +1585,7 @@
     <!-- Educational & Technical Guide Section -->
     <section class="info-section">
       <div class="info-header">
-        <h2 data-i18n="guideHeading">Understanding JSON Web Tokens & Zero-Leak Security</h2>
+        <h2 data-i18n="guideHeading">Understanding JSON Web Tokens &amp; Zero-Leak Security</h2>
         <p data-i18n="guideSubheading">Learn the mechanics of JWT authentication tokens, signature verification, and why offline decoders are essential for API security.</p>
       </div>
 
@@ -1345,23 +1593,23 @@
         <div class="guide-card">
           <div class="guide-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            <span data-i18n="g1Title">The 3-Part JWT Architecture</span>
+            <span data-i18n="g1Title">The 3-Part Architecture</span>
           </div>
-          <p data-i18n="g1Desc">A JWT consists of Header (algorithm & type), Payload (user claims, roles, timestamps), and Signature separated by dots. The header and payload are simply Base64URL-encoded JSON, not encrypted.</p>
+          <p data-i18n="g1Desc">A JWT consists of Header (algorithm &amp; token type), Payload (user claims, roles, timestamps), and Signature separated by dots. The header and payload are Base64URL-encoded JSON, not encrypted.</p>
         </div>
         <div class="guide-card">
           <div class="guide-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span data-i18n="g2Title">Native Web Crypto Verification</span>
           </div>
-          <p data-i18n="g2Desc">Verification executes using the browser's hardware-accelerated <code>crypto.subtle</code> API. Your HMAC secret key is ingested directly into non-exportable cryptographic memory without external API calls.</p>
+          <p data-i18n="g2Desc">Signature verification executes entirely via the browser's hardware-accelerated W3C Web Crypto API (crypto.subtle). Your HMAC secret key is ingested directly into isolated cryptographic memory without external API calls.</p>
         </div>
         <div class="guide-card">
           <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             <span data-i18n="g3Title">Why Online Decoders are Risky</span>
           </div>
-          <p data-i18n="g3Desc">Pasting production JWTs or API signing secrets into third-party websites risks exposing session identifiers, email addresses, and HMAC keys to server logs, proxy caches, or malicious extensions.</p>
+          <p data-i18n="g3Desc">Pasting production JWTs or API signing secrets into third-party websites risks leaking session identifiers, email addresses, and HMAC keys into server access logs, reverse proxies, and CDN caches.</p>
         </div>
       </div>
 
@@ -1369,22 +1617,417 @@
       <div class="faq-grid">
         <div class="faq-item">
           <h4 data-i18n="faq1Q">Is my JWT or secret key stored anywhere?</h4>
-          <p data-i18n="faq1A">No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the garbage collector.</p>
+          <p data-i18n="faq1A">No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the browser's garbage collector. Zero network requests are made.</p>
         </div>
         <div class="faq-item">
-          <h4 data-i18n="faq2Q">What does the "exp" timestamp claim mean?</h4>
-          <p data-i18n="faq2A">The <code>exp</code> (Expiration Time) claim identifies the exact expiration time on or after which the JWT must not be accepted for processing. VantorKit humanizes this timestamp into local time and relative countdowns.</p>
+          <h4 data-i18n="faq2Q">What does the 'exp' timestamp claim mean?</h4>
+          <p data-i18n="faq2A">The exp (Expiration Time) claim identifies the Unix epoch timestamp after which the JWT is invalid. VantorKit translates this timestamp into your local timezone and displays a live countdown showing whether the token is currently active or expired.</p>
         </div>
         <div class="faq-item">
-          <h4 data-i18n="faq3Q">How do I verify Base64 encoded secrets?</h4>
-          <p data-i18n="faq3A">Check the "Secret is base64 encoded" box under the secret key input. The tool will decode the Base64 bytes prior to importing the HMAC key into Web Crypto.</p>
+          <h4 data-i18n="faq3Q">How do I verify Base64 encoded secret keys?</h4>
+          <p data-i18n="faq3A">Check the 'Secret is base64 encoded' toggle beneath the secret input field. The verifier will automatically decode the Base64 representation into raw binary bytes before passing it to Web Crypto for HMAC evaluation.</p>
         </div>
         <div class="faq-item">
           <h4 data-i18n="faq4Q">Can this tool verify RSA (RS256) or ECDSA (ES256) tokens?</h4>
-          <p data-i18n="faq4A">The decoder parses all JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Built-in instant cryptographic verification is optimized for HMAC symmetric algorithms (HS256, HS384, HS512).</p>
+          <p data-i18n="faq4A">The decoder parses all standard JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Instant client-side cryptographic verification is currently implemented for symmetric HMAC algorithms (HS256, HS384, HS512).</p>
         </div>
       </div>
     </section>
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it &amp; Practical Utility</h2>
+        <p>The VantorKit In-Browser JWT Decoder &amp; Verifier is a zero-leak cryptographic utility engineered for software architects, backend engineers, DevOps specialists, and security analysts. JSON Web Tokens (RFC 7519) are the standard mechanism for representing authentication claims securely between clients and distributed cloud microservices. However, standard online token inspectors frequently transmit pasted authorization headers and sensitive HMAC secret keys to remote logging servers, introducing grave security compliance and credential leakage risks.</p>
+        <p>This utility executes 100% locally within your device's browser memory sandbox using hardware-accelerated W3C Web Crypto APIs. You can freely decode production Bearer tokens, inspect claims, translate epoch timestamps, and verify or sign cryptographic HMAC signatures with mathematical certainty and zero data transmission.</p>
+
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Input Encoded Token:</strong> Paste your Bearer token or three-segment <code>eyJ...</code> string into the encoded input editor. The system immediately parses the Header, Payload, and Signature components with live color-coded segmentation.</li>
+          <li><strong>Inspect Claims &amp; Timestamps:</strong> Review formatted JSON data structures for issuer identity, user roles, permission scopes, and real-time expiration countdowns translated to your local timezone.</li>
+          <li><strong>Verify or Generate Signatures:</strong> Supply your HMAC secret key (in plaintext or Base64 format) to validate token integrity, or switch to the Signer workspace to generate freshly signed test tokens.</li>
+        </ol>
+
+        <h2>The Engine &amp; Cryptographic Architecture</h2>
+        <div class="formula-box">
+          <div class="formula-title">Cryptographic Signature Verification Formula</div>
+          <div class="formula-expr"><code>HMAC_SHA256(Base64URL(Header) + "." + Base64URL(Payload), Secret) === Base64URL(Signature)</code></div>
+        </div>
+        <p>JWT verification evaluates whether the cryptographic signature matches the message authentication code generated across the canonical header and payload segments. When you input an HMAC secret, the Web Crypto API ingests the raw binary key into protected browser RAM using <code>crypto.subtle.importKey</code> with non-extractable flags. It then computes the message digest and compares the resulting buffer against the decoded signature segment in constant time, defending against timing attacks.</p>
+
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Debugging Expired Production Auth Headers</h4>
+            <p>An API gateway intermittently returns HTTP 401 Unauthorized for mobile clients. By pasting the authorization header into VantorKit, engineers immediately see the humanized <code>exp</code> timestamp expired 45 seconds prior, pinpointing a client-side clock synchronization defect.</p>
+          </div>
+          <div class="content-card">
+            <h4>Verifying Webhook HMAC Signatures Safely</h4>
+            <p>A backend developer integrating Stripe or GitHub webhooks must verify incoming HMAC tokens using a shared production signing secret. VantorKit validates the signature in memory without exposing the production secret key to external cloud monitors.</p>
+          </div>
+        </div>
+
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Storing Confidential Passwords in JWT Claims</h4>
+            <p>JWT payloads are Base64URL-encoded, not encrypted. Anyone who intercepts the token can decode and view claims without knowing the secret key. Never place passwords or credit cards in payload claims.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusing Base64 Strings with Raw Binary Keys</h4>
+            <p>If an API secret was generated as a 32-byte binary buffer and Base64-encoded, verifying it as plaintext ASCII fails. Always toggle the Base64 checkbox when handling base64-encoded secrets.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Trusting Tokens Without Algorithm Whitelisting</h4>
+            <p>Vulnerable backends accepting <code>"alg": "none"</code> allow attackers to forge arbitrary administrator claims. Always enforce strict signature algorithm verification on production gateways.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>All token parsing, payload formatting, timestamp analysis, and HMAC verification execute exclusively in local browser RAM. No tokens, secrets, or claims are ever sent across networks or recorded in cloud logs.</p>
+        </div>
+
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>Is my JWT or secret key stored anywhere?</summary>
+            <div class="faq-answer">
+              <p>No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the browser's garbage collector. Zero network requests are made.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>What does the 'exp' timestamp claim mean?</summary>
+            <div class="faq-answer">
+              <p>The exp (Expiration Time) claim identifies the Unix epoch timestamp after which the JWT is invalid. VantorKit translates this timestamp into your local timezone and displays a live countdown showing whether the token is currently active or expired.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>How do I verify Base64 encoded secret keys?</summary>
+            <div class="faq-answer">
+              <p>Check the 'Secret is base64 encoded' toggle beneath the secret input field. The verifier will automatically decode the Base64 representation into raw binary bytes before passing it to Web Crypto for HMAC evaluation.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Can this tool verify RSA (RS256) or ECDSA (ES256) tokens?</summary>
+            <div class="faq-answer">
+              <p>The decoder parses all standard JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Instant client-side cryptographic verification is currently implemented for symmetric HMAC algorithms (HS256, HS384, HS512).</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Related Developer &amp; Security Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Base64 File Encoder</div>
+            <div class="tool-desc">Encode documents, binary payloads, and signing assets into raw Base64 data URIs.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Text Diff &amp; Compare</div>
+            <div class="tool-desc">Inspect code changes and JSON payload differences side-by-side with visual highlights.</div>
+          </a>
+          <a href="./password-generator.html" class="related-tool-card">
+            <div class="tool-name">Password Generator &amp; Entropy</div>
+            <div class="tool-desc">Generate cryptographically random HMAC secret keys and evaluate entropy strength.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعد أداة فك تشفير والتحقق من رموز JWT في المتصفح من فانتور كيت أداة أمنية فائقة الدقة مصممة لمهندسي البرمجيات ومطوري الواجهات الخلفية وخبراء الأمن السيبراني. تعتبر رموز JSON Web Tokens المعيار العالمي المعتمد لتبادل مطالبات المصادقة والصلاحيات بأمان بين الواجهات الأمامية والخدمات السحابية المصغرة. ومع ذلك، تقوم معظم أدوات فحص الرموز الشائعة عبر الإنترنت بإرسال ترويسات التوكن الحساسة ومفاتيح HMAC السرية إلى خوادم خارجية، مما يعرض بيانات الجلسات والاعتمادات لخطر التسريب الأمني.</p>
+        <p>تعمل هذه الأداة محلياً بنسبة 100% داخل الذاكرة العشوائية لمتصفحك بالاعتماد على واجهات برمجة تطبيقات Web Crypto المدعومة عتادياً. يمكنك فك تشفير الرموز بأمان وفحص المطالبات وتحويل الطوابع الزمنية والتحقق من توقيع HMAC أو توليد توكنات موقعة جديدة دون خروج أي بايت عبر الشبكة.</p>
+
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>إدخال الرمز المشفر:</strong> الصق توكن Bearer أو سلسلة JWT المكونة من ثلاثة أجزاء مفصولة بنقاط داخل محرر الرموز. يقوم النظام فوراً بفرز أجزاء الترويسة والحمولة والتوقيع وتلوينها بصرياً.</li>
+          <li><strong>فحص المطالبات وحالة الصلاحية:</strong> اطلع على بيانات JSON المنسقة للتحقق من هوية المستخدم والصلاحيات الممنوحة ومطالبات الوقت مع عد تنازلي يوضح مدة سريان التوكن بتوقيتك المحلي.</li>
+          <li><strong>التحقق من التوقيع أو توليد توكن جديد:</strong> أدخل مفتاح HMAC السري (كنص عادي أو مشفر بصيغة Base64) للتأكد من سلامة التوقيع، أو انتقل إلى وضع التوليد لإنشاء رمز موقع مشفر فوراً.</li>
+        </ol>
+
+        <h2>بنية المحرك وآلية التحقق المشفرة</h2>
+        <div class="formula-box">
+          <div class="formula-title">معادلة التحقق من صحة توقيع HMAC الرقمي</div>
+          <div class="formula-expr"><code>HMAC_SHA256(Base64URL(Header) + "." + Base64URL(Payload), Secret) === Base64URL(Signature)</code></div>
+        </div>
+        <p>تعتمد آلية التحقق على التأكد من أن التوقيع الرقمي المرفق يطابق تماماً ناتج تشفير الترويسة والحمولة باستخدام المفتاح السري المشترك. عند إدخال المفتاح السري، تقوم واجهة Web Crypto باستيراد المفتاح داخل ذاكرة مشفرة محمية عبر الدالة <code>crypto.subtle.importKey</code> مع منع تصديره، ثم تحسب ناتج HMAC وتقارنه بالتوقيع المرفق في وقت ثابت، مما يوفر حماية كاملة ضد هجمات التوقيت.</p>
+
+        <h2>أمثلة وسيناريوهات واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>استكشاف أخطاء انتهاء صلاحية التوكن في بيئات الإنتاج</h4>
+            <p>عندما ترفض بوابة API طلبات العميل وتعيد رمز الخطأ HTTP 401 Unauthorized، يكشف لصق التوكن فوراً أن مطالبة <code>exp</code> قد انتهت قبل دقيقة، مما يحدد وجود خلل في مزامنة ساعة جهاز العميل.</p>
+          </div>
+          <div class="content-card">
+            <h4>التحقق الآمن من تواقيع Webhook المشتركة</h4>
+            <p>يحتاج مطور الواجهة الخلفية إلى فحص صحة إشعارات Webhook باستخدام مفتاح إنتاج سري مشترك. تتيح أداة فانتور كيت مطابقة التوقيع محلياً دون المخاطرة برفع المفتاح إلى أي خادم خارجي.</p>
+          </div>
+        </div>
+
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ تخزين كلمات المرور الحساسة داخل مطالبات JWT</h4>
+            <p>تذكر دائماً أن حمولة JWT مشفرة بترميز Base64URL وليست معماة تشفيراً. يمكن لأي شخص يمتلك الرمز قراءة محتواه بسهولة دون الحاجة للمفتاح السري. لا تضع بيانات سرية في الحمولة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الخلط بين النصوص العادية ومفاتيح Base64 الثنائية</h4>
+            <p>إذا تم إنشاء المفتاح السري كبايتات ثنائية وتم ترميزها بصيغة Base64، فإن التحقق منه كنص عادي سيفشل حتماً. احرص على تفعيل خيار Base64 عند استخدام مفاتيح مجهزة بهذه الصيغة.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ قبول التوكنات دون التحقق الصارم من الخوارزمية</h4>
+            <p>قد تحتوي بعض الرموز المزورة على ترويسة <code>"alg": "none"</code> لمحاولة تجاوز الحماية في الأنظمة غير المحدثة. تأكد دائماً من تقييد الخوارزمية المقبولة في خوادمك وعدم قبول الرموز غير الموقعة.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية التامة على جهازك</h3>
+          <p>تتم جميع عمليات فك الترميز، وتحليل المطالبات، والتحقق من تواقيع HMAC حصرياً في ذاكرة RAM المؤقتة لمتصفحك. لا يتم تخزين أو نقل أي توكنات أو مفاتيح سرية عبر الشبكة نهائياً.</p>
+        </div>
+
+        <h2>الأسئلة الشائعة (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>هل يتم تخزين رمز JWT أو المفتاح السري في أي مكان؟</summary>
+            <div class="faq-answer">
+              <p>كلا على الإطلاق. تتم جميع عمليات فك التشفير والتحقق من التوقيع حصرياً داخل ذاكرة RAM المؤقتة لمتصفحك. بمجرد إغلاق علامة التبويب، يتم مسح كافة البيانات تلقائياً دون إرسال أي بايت عبر الشبكة.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>ماذا تعني مطالبة الطابع الزمني 'exp'؟</summary>
+            <div class="faq-answer">
+              <p>تحدد مطالبة exp (وقت انتهاء الصلاحية) التوقيت الدقيق الذي يصبح بعده الرمز غير صالح للاستخدام. تقوم أداة فانتور كيت بتحويل هذا الطابع إلى توقيتك المحلي مع عرض حالة الصلاحية اللحظية والعد التنازلي.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>كيف يمكنني التحقق من المفاتيح السرية المشفرة بصيغة Base64؟</summary>
+            <div class="faq-answer">
+              <p>قم بتفعيل خيار 'المفتاح السري مشفر بصيغة Base64' أسفل حقل إدخال المفتاح. ستقوم الأداة بفك تشفير بايتات Base64 تلقائياً قبل تمريرها إلى خوارزمية Web Crypto للتحقق من HMAC.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>هل تدعم الأداة التحقق من رموز RSA (RS256) أو ECDSA (ES256)؟</summary>
+            <div class="faq-answer">
+              <p>يقوم مفكك الرموز بقراءة وتحليل ترويسات ومطالبات كافة خوارزميات JWT القياسية (مثل RS256 و ES256 و EdDSA و HS256). بينما يركز التحقق المشفر الفوري في المتصفح حالياً على خوارزميات HMAC المتناظرة (HS256 و HS384 و HS512).</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>أدوات برمجية وأمنية ذات صلة</h2>
+        <div class="related-tools-grid">
+          <a href="./base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">تشفير الملفات بـ Base64</div>
+            <div class="tool-desc">تشفير المستندات والبيانات الثنائية إلى صيغ data URI وسلاسل نصية.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">مقارنة النصوص وتحديد الفروقات</div>
+            <div class="tool-desc">مقارنة الأكواد وبيانات JSON جنباً إلى جنب مع تمييز دقيق للإضافات.</div>
+          </a>
+          <a href="./password-generator.html" class="related-tool-card">
+            <div class="tool-name">مولد كلمات المرور والإنتروبيا</div>
+            <div class="tool-desc">توليد مفاتيح تشفير عشوائية فائقة الأمان مع تقييم مستوى القوة.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation &amp; Utilité Pratique</h2>
+        <p>Le décodeur et vérificateur JWT local de VantorKit est un outil cryptographique conçu pour les architectes logiciels, développeurs backend, spécialistes DevOps et auditeurs de sécurité. Les jetons JSON Web Tokens (RFC 7519) constituent le standard de l'industrie pour transmettre des revendications d'authentification entre clients et architectures microservices. Cependant, les décodeurs web conventionnels envoient fréquemment vos jetons et clés secrètes HMAC vers des serveurs distants, créant des risques majeurs de fuite d'identifiants.</p>
+        <p>Cet utilitaire s'exécute à 100% dans la mémoire vive de votre navigateur via l'API Web Crypto du W3C. Vous pouvez décoder vos jetons Bearer, analyser les revendications, convertir les horodatages et vérifier ou signer des signatures HMAC sans qu'aucun octet ne quitte votre machine.</p>
+
+        <h2>Guide Étape par Étape</h2>
+        <ol>
+          <li><strong>Saisie du Jeton Encodé :</strong> Collez votre jeton Bearer ou votre chaîne JWT en trois parties dans l'éditeur. Le système segmente et colore immédiatement l'en-tête, la charge utile et la signature.</li>
+          <li><strong>Inspection des Revendications :</strong> Examinez les données JSON formatées identifiant l'utilisateur, les rôles, les portées d'autorisation et le compte à rebours d'expiration traduit dans votre fuseau horaire.</li>
+          <li><strong>Vérification de la Signature HMAC :</strong> Saisissez votre clé secrète HMAC (texte brut ou encodé en Base64) pour valider l'intégrité du jeton, ou passez à l'onglet Signataire pour créer de nouveaux jetons signés.</li>
+        </ol>
+
+        <h2>Le Moteur &amp; L'Architecture Cryptographique</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formule de Vérification Cryptographique HMAC</div>
+          <div class="formula-expr"><code>HMAC_SHA256(Base64URL(Header) + "." + Base64URL(Payload), Secret) === Base64URL(Signature)</code></div>
+        </div>
+        <p>La vérification confirme que la signature correspond au code d'authentification calculé sur l'en-tête et le payload canoniques. Lors de la saisie d'un secret, l'API Web Crypto importe la clé binaire brute dans une mémoire protégée via <code>crypto.subtle.importKey</code> avec des attributs non exportables. Elle calcule ensuite l'empreinte et effectue une comparaison en temps constant, protégeant vos applications contre les attaques temporelles.</p>
+
+        <h2>Cas d'Usage Réels</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Diagnostic d'En-têtes d'Authentification Expirés</h4>
+            <p>Une passerelle API rejette les requêtes avec une erreur HTTP 401 Unauthorized. En collant le jeton dans VantorKit, l'équipe constate que le timestamp <code>exp</code> a expiré il y a 30 secondes, mettant en évidence un décalage d'horloge sur le poste client.</p>
+          </div>
+          <div class="content-card">
+            <h4>Validation Sécurisée de Signatures de Webhooks</h4>
+            <p>Un développeur intégrant des webhooks sécurisés doit tester la validité d'une signature avec une clé secrète de production. VantorKit valide la conformité HMAC en mémoire sans exposer la clé secrète à des tiers.</p>
+          </div>
+        </div>
+
+        <h2>Erreurs Fréquentes à Éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Inclure des Mots de Passe Confidentiels dans le Payload</h4>
+            <p>Les données d'un JWT sont encodées en Base64URL et non chiffrées. Quiconque intercepte le jeton peut lire son contenu en clair. Ne stockez jamais de données hautement confidentielles dans les claims.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondre Chaînes ASCII et Clés Binaires Base64</h4>
+            <p>Si une clé secrète a été générée sous forme d'octets binaires encodés en Base64, la vérifier comme du texte brut échouera. Activez toujours l'option Base64 pour les clés correspondantes.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Tolérer l'Algorithme "none" sur vos Passerelles</h4>
+            <p>Certains systèmes mal configurés acceptent des jetons avec <code>"alg": "none"</code>, permettant à des attaquants de falsifier des droits admin. Imposez toujours une vérification stricte de l'algorithme.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de Confidentialité 100% Côté Client</h3>
+          <p>Toutes les opérations d'analyse, de décodage et de vérification HMAC s'exécutent exclusivement dans la mémoire vive locale de votre navigateur. Aucun jeton ni aucune clé ne sont transmis sur le réseau.</p>
+        </div>
+
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>Mon jeton JWT ou ma clé secrète sont-ils stockés quelque part ?</summary>
+            <div class="faq-answer">
+              <p>Non. Tout le décodage et la vérification se déroulent strictement dans la mémoire vive (RAM) de votre navigateur. À la fermeture de l'onglet, toutes les données sont immédiatement purgées.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Que signifie la revendication d'horodatage 'exp' ?</summary>
+            <div class="faq-answer">
+              <p>La revendication exp (Expiration Time) indique l'heure Unix après laquelle le jeton ne doit plus être accepté. VantorKit convertit cet horodatage dans votre fuseau horaire local et affiche un compte à rebours précis.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Comment vérifier les clés secrètes encodées en Base64 ?</summary>
+            <div class="faq-answer">
+              <p>Cochez la case 'La clé secrète est encodée en base64' sous le champ du secret. L'outil convertira la représentation Base64 en octets bruts avant l'importation de la clé HMAC dans Web Crypto.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Cet outil peut-il vérifier les jetons RSA (RS256) ou ECDSA (ES256) ?</summary>
+            <div class="faq-answer">
+              <p>Le décodeur analyse toutes les structures d'algorithmes JWT (RS256, ES256, EdDSA, HS256, etc.) pour en afficher les claims. La vérification cryptographique instantanée est optimisée pour les algorithmes symétriques HMAC (HS256, HS384, HS512).</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Outils Développeur &amp; Sécurité Associés</h2>
+        <div class="related-tools-grid">
+          <a href="./base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Encodeur de Fichiers Base64</div>
+            <div class="tool-desc">Encodez des documents et fichiers binaires en URI de données et chaînes Base64.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Comparateur de Texte (Diff)</div>
+            <div class="tool-desc">Comparez deux extraits de code ou payloads JSON avec surbrillance visuelle.</div>
+          </a>
+          <a href="./password-generator.html" class="related-tool-card">
+            <div class="tool-name">Générateur de Mots de Passe &amp; Entropie</div>
+            <div class="tool-desc">Générez des clés secrètes HMAC cryptographiquement sûres avec score d'entropie.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è &amp; Utilità Pratica</h2>
+        <p>Il decoder e verificatore JWT locale di VantorKit è uno strumento crittografico professionale ideato per software architect, sviluppatori backend, esperti di sicurezza e amministratori di sistema. I JSON Web Token (RFC 7519) rappresentano lo standard moderno per lo scambio sicuro di informazioni di autenticazione tra client web e microservizi cloud. Tuttavia, molti strumenti online inviano i token incollati e le chiavi segrete a server remoti, con gravi rischi di violazione della sicurezza e perdita di credenziali riservate.</p>
+        <p>Questo strumento opera al 100% all'interno della memoria RAM del browser tramite l'API Web Crypto conforme al W3C. Puoi decodificare token Bearer di produzione, ispezionare i claim, formattare i timestamp ed eseguire la verifica o la generazione di firme HMAC senza che alcun byte lasci il tuo dispositivo.</p>
+
+        <h2>Guida Passo Passo</h2>
+        <ol>
+          <li><strong>Inserimento del Token Codificato:</strong> Incolla il tuo token Bearer o la stringa JWT in tre segmenti nel riquadro di input. Lo strumento segmenta e colora immediatamente intestazione, payload e firma.</li>
+          <li><strong>Analisi di Claim e Timestamp:</strong> Esamina la struttura JSON formattata comprendente identificativo utente, ruoli, permessi e lo stato di scadenza convertito nel tuo fuso orario locale.</li>
+          <li><strong>Verifica della Firma HMAC:</strong> Inserisci la tua chiave segreta HMAC (in testo normale o Base64) per convalidare l'integrità del token, oppure passa alla scheda Generatore per creare nuovi token validi.</li>
+        </ol>
+
+        <h2>Architettura Crittografica &amp; Motore di Verifica</h2>
+        <div class="formula-box">
+          <div class="formula-title">Formula di Verifica Crittografica della Firma</div>
+          <div class="formula-expr"><code>HMAC_SHA256(Base64URL(Header) + "." + Base64URL(Payload), Secret) === Base64URL(Signature)</code></div>
+        </div>
+        <p>La verifica controlla che la firma crittografica allegata corrisponda al codice di autenticazione generato sui segmenti canonici di intestazione e carico utile. Quando inserisci un segreto, l'API Web Crypto acquisisce i byte grezzi nella memoria protetta tramite <code>crypto.subtle.importKey</code> con flag non esportabili, calcolando l'hash e confrontando la firma a tempo costante per prevenire attacchi di temporizzazione.</p>
+
+        <h2>Scenari Applicativi Reali</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Risoluzione dei Problemi di Scadenza dei Token di Produzione</h4>
+            <p>Un gateway API risponde con errore HTTP 401 Unauthorized. Incollando il token su VantorKit, gli ingegneri individuano subito che il claim <code>exp</code> è scaduto pochi secondi prima, diagnosticando un mancato allineamento dell'orologio client.</p>
+          </div>
+          <div class="content-card">
+            <h4>Verifica Sicura delle Firme HMAC per Webhook</h4>
+            <p>Uno sviluppatore backend che implementa webhook deve testare la corretta convalida delle firme usando una chiave segreta di produzione. VantorKit esegue il test in RAM senza esporre la chiave segreta a monitor esterni.</p>
+          </div>
+        </div>
+
+        <h2>Errori Comuni da Evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Salvare Password Riservate nei Claim del Payload</h4>
+            <p>Il payload di un JWT è codificato in Base64URL e non cifrato. Chiunque intercetti il token può leggerne il contenuto senza conoscere la chiave segreta. Non inserire mai dati riservati nei claim.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondere Stringhe ASCII con Chiavi Binare Base64</h4>
+            <p>Se un segreto API è stato generato come buffer binario codificato in Base64, convalidarlo come testo normale fallirà. Attiva sempre l'opzione Base64 quando gestisci chiavi codificate.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Accettare Token Senza Verifica Rigorosa dell'Algoritmo</h4>
+            <p>Sistemi vulnerabili che accettano token con <code>"alg": "none"</code> consentono a malintenzionati di forgiare autorizzazioni arbitrarie. Applica sempre una verifica rigida dell'algoritmo sui server.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di Privacy 100% Lato Client</h3>
+          <p>Tutte le operazioni di analisi, formattazione e verifica HMAC avvengono esclusivamente nella memoria RAM locale del tuo browser. Nessun token o segreto viene mai trasmesso o registrato.</p>
+        </div>
+
+        <h2>Domande Frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>Il mio token JWT o la chiave segreta vengono memorizzati altrove?</summary>
+            <div class="faq-answer">
+              <p>Assolutamente no. Tutte le operazioni di decodifica e verifica avvengono rigorosamente nella memoria RAM del browser locale. Alla chiusura della scheda, tutti i dati vengono rimossi all'istante.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Cosa significa il claim di timestamp 'exp'?</summary>
+            <div class="faq-answer">
+              <p>Il claim exp (Expiration Time) specifica il timestamp Unix dopo il quale il token non deve più essere accettato. VantorKit converte questo valore nel tuo fuso orario locale mostrando il tempo residuo o la scadenza.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Come posso verificare chiavi segrete codificate in Base64?</summary>
+            <div class="faq-answer">
+              <p>Seleziona la casella 'Il segreto è codificato in base64' sotto il campo di input. Il verificatore decodificherà i byte Base64 prima di importare la chiave HMAC nell'API Web Crypto.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Questo strumento può verificare token RSA (RS256) o ECDSA (ES256)?</summary>
+            <div class="faq-answer">
+              <p>Il decoder è in grado di analizzare e mostrare i claim di tutti gli algoritmi JWT standard (RS256, ES256, EdDSA, HS256, ecc.). La verifica crittografica locale istantanea è implementata per gli algoritmi simmetrici HMAC (HS256, HS384, HS512).</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Strumenti di Sviluppo &amp; Sicurezza Correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./base64-file-encoder.html" class="related-tool-card">
+            <div class="tool-name">Codificatore File Base64</div>
+            <div class="tool-desc">Codifica documenti e risorse binarie in URI dati e stringhe Base64 grezze.</div>
+          </a>
+          <a href="./text-diff.html" class="related-tool-card">
+            <div class="tool-name">Confronto Testo &amp; Diff</div>
+            <div class="tool-desc">Confronta due frammenti di codice o payload JSON con evidenziazione visiva.</div>
+          </a>
+          <a href="./password-generator.html" class="related-tool-card">
+            <div class="tool-name">Generatore di Password &amp; Entropia</div>
+            <div class="tool-desc">Genera chiavi segrete HMAC sicure e valuta il punteggio di entropia e robustezza.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Standardized Site Footer -->
@@ -1431,6 +2074,8 @@
           btnClear: "Clear",
           encodedTitle: "Encoded JWT String",
           tokenStructureTitle: "Token Segmentation & Structure:",
+          headerTagTitle: "HEADER: ALGORITHM & TOKEN TYPE",
+          payloadTagTitle: "PAYLOAD: DATA & CLAIMS",
           tsTitle: "Timestamp Analysis & Expiration Status",
           sigVerifyTitle: "VERIFY SIGNATURE (HMAC-SHA256)",
           chkBase64: "Secret is base64 encoded",
@@ -1443,6 +2088,22 @@
           btnSignGenerate: "Cryptographically Sign & Generate JWT",
           generatedTitle: "Generated Signed Token (HS256)",
           btnCopy: "Copy Token",
+          guideHeading: "Understanding JSON Web Tokens & Zero-Leak Security",
+          guideSubheading: "Learn the mechanics of JWT authentication tokens, signature verification, and why offline decoders are essential for API security.",
+          g1Title: "The 3-Part Architecture",
+          g1Desc: "A JWT consists of Header (algorithm & token type), Payload (user claims, roles, timestamps), and Signature separated by dots. The header and payload are Base64URL-encoded JSON, not encrypted.",
+          g2Title: "Native Web Crypto Verification",
+          g2Desc: "Signature verification executes entirely via the browser's hardware-accelerated W3C Web Crypto API (crypto.subtle). Your HMAC secret key is ingested directly into isolated cryptographic memory without external API calls.",
+          g3Title: "Why Online Decoders are Risky",
+          g3Desc: "Pasting production JWTs or API signing secrets into third-party websites risks leaking session identifiers, email addresses, and HMAC keys into server access logs, reverse proxies, and CDN caches.",
+          faq1Q: "Is my JWT or secret key stored anywhere?",
+          faq1A: "No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the browser's garbage collector. Zero network requests are made.",
+          faq2Q: "What does the 'exp' timestamp claim mean?",
+          faq2A: "The exp (Expiration Time) claim identifies the Unix epoch timestamp after which the JWT is invalid. VantorKit translates this timestamp into your local timezone and displays a live countdown showing whether the token is currently active or expired.",
+          faq3Q: "How do I verify Base64 encoded secret keys?",
+          faq3A: "Check the 'Secret is base64 encoded' toggle beneath the secret input field. The verifier will automatically decode the Base64 representation into raw binary bytes before passing it to Web Crypto for HMAC evaluation.",
+          faq4Q: "Can this tool verify RSA (RS256) or ECDSA (ES256) tokens?",
+          faq4A: "The decoder parses all standard JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Instant client-side cryptographic verification is currently implemented for symmetric HMAC algorithms (HS256, HS384, HS512).",
           footerPriv: "Privacy Policy",
           footerTerms: "Terms of Service",
           footerAbout: "About Us",
@@ -1462,6 +2123,8 @@
           btnClear: "مسح",
           encodedTitle: "سلسلة JWT المشفرة",
           tokenStructureTitle: "بنية وتلوين أجزاء التوكن:",
+          headerTagTitle: "الترويسة: نوع الرمز والخوارزمية",
+          payloadTagTitle: "الحمولة: البيانات والمطالبات",
           tsTitle: "تحليل الطوابع الزمنية وصلاحية التوكن",
           sigVerifyTitle: "التحقق من التوقيع الرقمي (HMAC-SHA256)",
           chkBase64: "المفتاح السري مشفر بصيغة Base64",
@@ -1474,6 +2137,22 @@
           btnSignGenerate: "توقيع وتوليد توكن JWT",
           generatedTitle: "التوكن الموقع الناتج (HS256)",
           btnCopy: "نسخ التوكن",
+          guideHeading: "فهم بنية رموز JWT وضمان الأمان بدون تسريب",
+          guideSubheading: "تعرف على آلية عمل رموز مصادقة JWT، وكيفية التحقق من التوقيع الرقمي، ولماذا تعد أدوات فك التشفير غير المتصلة ضرورة لأمان واجهات البرمجة.",
+          g1Title: "بنية رمز JWT ثلاثية الأجزاء",
+          g1Desc: "يتكون رمز JWT من الترويسة (نوع الرمز والخوارزمية)، والحمولة (بيانات المستخدم، الصلاحيات، والطوابع الزمنية)، والتوقيع المشفر، مفصولة بنقاط. الترويسة والحمولة مشفرتان بصيغة Base64URL وليستا مشفرتين تعميةً.",
+          g2Title: "التحقق عبر Web Crypto الأصلي",
+          g2Desc: "تتم عملية التحقق من صحة التوقيع عبر واجهة برمجة تطبيقات Web Crypto المدمجة في المتصفح (crypto.subtle). يتم فحص مفتاح HMAC السري مباشرة في الذاكرة المشفرة المعزولة دون إرسال أي طلبات خارجية.",
+          g3Title: "مخاطر أدوات فك التشفير السحابية",
+          g3Desc: "إن لصق رموز JWT الخاصة ببيئات الإنتاج أو مفاتيح التوقيع السرية في مواقع خارجية يعرض معرفات الجلسات وعناوين البريد ومفاتيح HMAC لخطر التسريب في سجلات الخوادم وشبكات التوصيل السحابية.",
+          faq1Q: "هل يتم تخزين رمز JWT أو المفتاح السري في أي مكان؟",
+          faq1A: "كلا على الإطلاق. تتم جميع عمليات فك التشفير والتحقق من التوقيع حصرياً داخل ذاكرة RAM المؤقتة لمتصفحك. بمجرد إغلاق علامة التبويب، يتم مسح كافة البيانات تلقائياً دون إرسال أي بايت عبر الشبكة.",
+          faq2Q: "ماذا تعني مطالبة الطابع الزمني 'exp'؟",
+          faq2A: "تحدد مطالبة exp (وقت انتهاء الصلاحية) التوقيت الدقيق الذي يصبح بعده الرمز غير صالح للاستخدام. تقوم أداة فانتور كيت بتحويل هذا الطابع إلى توقيتك المحلي مع عرض حالة الصلاحية اللحظية والعد التنازلي.",
+          faq3Q: "كيف يمكنني التحقق من المفاتيح السرية المشفرة بصيغة Base64؟",
+          faq3A: "قم بتفعيل خيار 'المفتاح السري مشفر بصيغة Base64' أسفل حقل إدخال المفتاح. ستقوم الأداة بفك تشفير بايتات Base64 تلقائياً قبل تمريرها إلى خوارزمية Web Crypto للتحقق من HMAC.",
+          faq4Q: "هل تدعم الأداة التحقق من رموز RSA (RS256) أو ECDSA (ES256)؟",
+          faq4A: "يقوم مفكك الرموز بقراءة وتحليل ترويسات ومطالبات كافة خوارزميات JWT القياسية (مثل RS256 و ES256 و EdDSA و HS256). بينما يركز التحقق المشفر الفوري في المتصفح حالياً على خوارزميات HMAC المتناظرة (HS256 و HS384 و HS512).",
           footerPriv: "سياسة الخصوصية",
           footerTerms: "شروط الخدمة",
           footerAbout: "من نحن",
@@ -1493,6 +2172,8 @@
           btnClear: "Effacer",
           encodedTitle: "Chaîne JWT Encodée",
           tokenStructureTitle: "Segmentation & Structure du Jeton :",
+          headerTagTitle: "EN-TÊTE : ALGORITHME & TYPE DE JETON",
+          payloadTagTitle: "CHARGE UTILE : DONNÉES & CLAIMS",
           tsTitle: "Analyse des Horodatages & Validité",
           sigVerifyTitle: "VÉRIFIER LA SIGNATURE (HMAC-SHA256)",
           chkBase64: "La clé secrète est encodée en base64",
@@ -1505,6 +2186,22 @@
           btnSignGenerate: "Signer & Générer le JWT",
           generatedTitle: "Jeton Signé Généré (HS256)",
           btnCopy: "Copier le jeton",
+          guideHeading: "Comprendre les Jetons JWT & Sécurité Zéro Fuite",
+          guideSubheading: "Découvrez le fonctionnement des jetons d'authentification JWT, la vérification des signatures et pourquoi les décodeurs locaux sont essentiels.",
+          g1Title: "L'Architecture en 3 Parties",
+          g1Desc: "Un jeton JWT comprend l'En-tête (algorithme et type), la Charge utile (revendications, rôles, horodatages) et la Signature séparés par des points. L'en-tête et la charge utile sont simplement encodés en Base64URL, et non chiffrés.",
+          g2Title: "Vérification Native Web Crypto",
+          g2Desc: "La vérification de signature s'exécute via l'API Web Crypto du navigateur (crypto.subtle). Votre clé secrète HMAC est traitée directement dans une mémoire cryptographique isolée sans aucun appel API externe.",
+          g3Title: "Pourquoi les Décodeurs en Ligne sont Risqués",
+          g3Desc: "Coller des jetons de production ou des secrets API sur des sites tiers expose vos identifiants de session, emails et clés HMAC aux journaux d'accès serveur, proxys et caches CDN tiers.",
+          faq1Q: "Mon jeton JWT ou ma clé secrète sont-ils stockés quelque part ?",
+          faq1A: "Non. Tout le décodage et la vérification se déroulent strictement dans la mémoire vive (RAM) de votre navigateur. À la fermeture de l'onglet, toutes les données sont immédiatement purgées.",
+          faq2Q: "Que signifie la revendication d'horodatage 'exp' ?",
+          faq2A: "La revendication exp (Expiration Time) indique l'heure Unix après laquelle le jeton ne doit plus être accepté. VantorKit convertit cet horodatage dans votre fuseau horaire local et affiche un compte à rebours précis.",
+          faq3Q: "Comment vérifier les clés secrètes encodées en Base64 ?",
+          faq3A: "Cochez la case 'La clé secrète est encodée en base64' sous le champ du secret. L'outil convertira la représentation Base64 en octets bruts avant l'importation de la clé HMAC dans Web Crypto.",
+          faq4Q: "Cet outil peut-il vérifier les jetons RSA (RS256) ou ECDSA (ES256) ?",
+          faq4A: "Le décodeur analyse toutes les structures d'algorithmes JWT (RS256, ES256, EdDSA, HS256, etc.) pour en afficher les claims. La vérification cryptographique instantanée est optimisée pour les algorithmes symétriques HMAC (HS256, HS384, HS512).",
           footerPriv: "Politique de confidentialité",
           footerTerms: "Conditions d'utilisation",
           footerAbout: "À propos",
@@ -1524,6 +2221,8 @@
           btnClear: "Cancella",
           encodedTitle: "Stringa JWT Codificata",
           tokenStructureTitle: "Struttura e Segmentazione Token:",
+          headerTagTitle: "INTESTAZIONE: ALGORITMO & TIPO TOKEN",
+          payloadTagTitle: "PAYLOAD: DATI & CLAIM",
           tsTitle: "Analisi Timestamp & Scadenza",
           sigVerifyTitle: "VERIFICA FIRMA (HMAC-SHA256)",
           chkBase64: "Il segreto è codificato in base64",
@@ -1536,6 +2235,22 @@
           btnSignGenerate: "Firma e Genera JWT",
           generatedTitle: "Token Firmato Generato (HS256)",
           btnCopy: "Copia Token",
+          guideHeading: "Informazioni sui Token JWT & Massima Sicurezza",
+          guideSubheading: "Scopri come funzionano i token di autenticazione JWT, la verifica della firma e perché i decoder locali sono essenziali per la sicurezza delle API.",
+          g1Title: "L'Architettura in 3 Parti",
+          g1Desc: "Un token JWT è composto da Intestazione (algoritmo e tipo), Carico utile (claim utente, ruoli, timestamp) e Firma separati da punti. Intestazione e payload sono semplicemente codificati in Base64URL, non crittografati.",
+          g2Title: "Verifica Nativa Web Crypto",
+          g2Desc: "La verifica della firma viene eseguita tramite l'API Web Crypto del browser (crypto.subtle). La tua chiave segreta HMAC viene gestita direttamente nella memoria crittografica protetta senza alcuna chiamata di rete esterna.",
+          g3Title: "Perché i Decoder Online Sono Rischiosi",
+          g3Desc: "Incollare token di produzione o chiavi segrete su siti web di terze parti rischia di esporre identificatori di sessione, indirizzi email e chiavi HMAC nei log dei server e nei proxy cloud.",
+          faq1Q: "Il mio token JWT o la chiave segreta vengono memorizzati altrove?",
+          faq1A: "Assolutamente no. Tutte le operazioni di decodifica e verifica avvengono rigorosamente nella memoria RAM del browser locale. Alla chiusura della scheda, tutti i dati vengono rimossi all'istante.",
+          faq2Q: "Cosa significa il claim di timestamp 'exp'?",
+          faq2A: "Il claim exp (Expiration Time) specifica il timestamp Unix dopo il quale il token non deve più essere accettato. VantorKit converte questo valore nel tuo fuso orario locale mostrando il tempo residuo o la scadenza.",
+          faq3Q: "Come posso verificare chiavi segrete codificate in Base64?",
+          faq3A: "Seleziona la casella 'Il segreto è codificato in base64' sotto il campo di input. Il verificatore decodificherà i byte Base64 prima di importare la chiave HMAC nell'API Web Crypto.",
+          faq4Q: "Questo strumento può verificare token RSA (RS256) o ECDSA (ES256)?",
+          faq4A: "Il decoder è in grado di analizzare e mostrare i claim di tutti gli algoritmi JWT standard (RS256, ES256, EdDSA, HS256, ecc.). La verifica crittografica locale istantanea è implementata per gli algoritmi simmetrici HMAC (HS256, HS384, HS512).",
           footerPriv: "Privacy Policy",
           footerTerms: "Termini di servizio",
           footerAbout: "Chi siamo",
@@ -1544,7 +2259,22 @@
         }
       };
 
+      // --- State ---
+      let currentLang = localStorage.getItem('vantorkit_lang') || 'en';
+      let currentParsedToken = null;
+
       // --- DOM Elements ---
+      const htmlRoot = document.getElementById('htmlRoot');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      const tabDecodeBtn = document.getElementById('tabDecodeBtn');
+      const tabSignBtn = document.getElementById('tabSignBtn');
+      const decoderView = document.getElementById('decoderView');
+      const generatorView = document.getElementById('generatorView');
+
       const jwtInput = document.getElementById('jwtInput');
       const tokenLengthBadge = document.getElementById('tokenLengthBadge');
       const tokenColorPreview = document.getElementById('tokenColorPreview');
@@ -1552,25 +2282,21 @@
       const jsonPayloadView = document.getElementById('jsonPayloadView');
       const headerAlgBadge = document.getElementById('headerAlgBadge');
       const payloadClaimsCount = document.getElementById('payloadClaimsCount');
+      const sigAlgDisplay = document.getElementById('sigAlgDisplay');
+
       const timestampCard = document.getElementById('timestampCard');
       const timestampList = document.getElementById('timestampList');
 
       const jwtSecretInput = document.getElementById('jwtSecretInput');
-      const chkSecretBase64 = document.getElementById('chkSecretBase64');
       const btnToggleSecret = document.getElementById('btnToggleSecret');
       const eyeIcon = document.getElementById('eyeIcon');
-      const sigAlgDisplay = document.getElementById('sigAlgDisplay');
-      const signatureStatusBanner = document.getElementById('signatureStatusBanner');
-      const signatureStatusText = document.getElementById('signatureStatusText');
+      const chkBase64Secret = document.getElementById('chkBase64Secret');
+      const sigStatusBadge = document.getElementById('sigStatusBadge');
+      const sigStatusText = document.getElementById('sigStatusText');
 
       const btnLoadValidSample = document.getElementById('btnLoadValidSample');
       const btnLoadExpiredSample = document.getElementById('btnLoadExpiredSample');
       const btnClearToken = document.getElementById('btnClearToken');
-
-      const tabDecode = document.getElementById('tabDecode');
-      const tabSign = document.getElementById('tabSign');
-      const decoderView = document.getElementById('decoderView');
-      const signerView = document.getElementById('signerView');
 
       const signerHeaderInput = document.getElementById('signerHeaderInput');
       const signerPayloadInput = document.getElementById('signerPayloadInput');
@@ -1579,16 +2305,11 @@
       const generatedTokenWrap = document.getElementById('generatedTokenWrap');
       const generatedTokenPreview = document.getElementById('generatedTokenPreview');
       const btnCopyGeneratedToken = document.getElementById('btnCopyGeneratedToken');
+
       const toastBox = document.getElementById('toastBox');
       const toastMsg = document.getElementById('toastMsg');
 
-      // --- Language Switcher ---
-      const langToggleBtn = document.getElementById('langToggleBtn');
-      const langMenu = document.getElementById('langMenu');
-      const currentLangLabel = document.getElementById('currentLangLabel');
-      const langOptions = document.querySelectorAll('.lang-option');
-      let currentLang = localStorage.getItem('vantorkit_lang') || 'en';
-
+      // --- Language Selector Setup ---
       function setLanguage(lang) {
         if (!I18N[lang]) lang = 'en';
         currentLang = lang;
@@ -1606,10 +2327,20 @@
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
           const key = el.dataset.i18n;
-          if (dict[key]) el.textContent = dict[key];
+          if (dict[key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+              el.placeholder = dict[key];
+            } else {
+              el.textContent = dict[key];
+            }
+          }
         });
 
-        verifySignature();
+        // Re-evaluate signature and timestamps with new locale strings
+        if (jwtInput.value.trim()) {
+          decodeJWT(jwtInput.value.trim());
+          verifySignature();
+        }
       }
 
       langToggleBtn.addEventListener('click', (e) => {
@@ -1633,90 +2364,105 @@
         }
       });
 
-      // --- Tabs Switching ---
-      tabDecode.addEventListener('click', () => {
-        tabDecode.classList.add('active');
-        tabSign.classList.remove('active');
-        decoderView.style.display = 'grid';
-        signerView.style.display = 'none';
-      });
-
-      tabSign.addEventListener('click', () => {
-        tabSign.classList.add('active');
-        tabDecode.classList.remove('active');
-        decoderView.style.display = 'none';
-        signerView.style.display = 'flex';
-      });
-
-      // --- Show/Hide Secret Eye Toggle ---
-      btnToggleSecret.addEventListener('click', () => {
-        const isPassword = jwtSecretInput.type === 'password';
-        jwtSecretInput.type = isPassword ? 'text' : 'password';
-        eyeIcon.innerHTML = isPassword
-          ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
-          : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
-      });
-
       // --- Toast Notification Helper ---
+      let toastTimer = null;
       function showToast(msg) {
         toastMsg.textContent = msg;
         toastBox.classList.add('show');
-        setTimeout(() => {
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
           toastBox.classList.remove('show');
-        }, 2500);
+        }, 2200);
       }
+
+      // --- Tab Switching ---
+      tabDecodeBtn.addEventListener('click', () => {
+        tabDecodeBtn.classList.add('active');
+        tabSignBtn.classList.remove('active');
+        decoderView.style.display = 'grid';
+        generatorView.classList.remove('active');
+      });
+
+      tabSignBtn.addEventListener('click', () => {
+        tabSignBtn.classList.add('active');
+        tabDecodeBtn.classList.remove('active');
+        decoderView.style.display = 'none';
+        generatorView.classList.add('active');
+      });
+
+      // --- Secret Input Visibility Toggle ---
+      let secretVisible = false;
+      btnToggleSecret.addEventListener('click', () => {
+        secretVisible = !secretVisible;
+        jwtSecretInput.type = secretVisible ? 'text' : 'password';
+        eyeIcon.innerHTML = secretVisible
+          ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>'
+          : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+      });
 
       // --- Base64URL Helpers ---
       function base64UrlDecode(str) {
-        let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
-        while (b64.length % 4) b64 += '=';
+        let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (base64.length % 4) {
+          base64 += '=';
+        }
         try {
-          const binary = atob(b64);
+          const binary = atob(base64);
           const bytes = new Uint8Array(binary.length);
           for (let i = 0; i < binary.length; i++) {
             bytes[i] = binary.charCodeAt(i);
           }
-          return new TextDecoder().decode(bytes);
+          return new TextDecoder('utf-8').decode(bytes);
         } catch (e) {
-          throw new Error('Invalid Base64URL string encoding');
+          return null;
         }
       }
 
-      function base64UrlEncode(strOrBuffer) {
-        let b64 = '';
-        if (typeof strOrBuffer === 'string') {
-          const bytes = new TextEncoder().encode(strOrBuffer);
-          let binary = '';
-          for (let i = 0; i < bytes.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
+      function base64UrlDecodeToBytes(str) {
+        let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (base64.length % 4) {
+          base64 += '=';
+        }
+        try {
+          const binary = atob(base64);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
           }
-          b64 = btoa(binary);
-        } else {
-          const bytes = new Uint8Array(strOrBuffer);
-          let binary = '';
-          for (let i = 0; i < bytes.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
-          }
-          b64 = btoa(binary);
+          return bytes;
+        } catch (e) {
+          return null;
         }
-        return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
       }
 
-      function base64ToUint8Array(b64) {
-        let clean = b64.replace(/-/g, '+').replace(/_/g, '/');
-        while (clean.length % 4) clean += '=';
-        const binary = atob(clean);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
+      function base64UrlEncode(str) {
+        const bytes = new TextEncoder().encode(str);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
         }
-        return bytes;
+        return btoa(binary)
+          .replace(/=/g, '')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_');
       }
 
-      // --- JSON Syntax Colorizer ---
+      function base64UrlEncodeBuffer(buffer) {
+        const bytes = new Uint8Array(buffer);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary)
+          .replace(/=/g, '')
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_');
+      }
+
+      // --- JSON Syntax Highlighter ---
       function syntaxHighlight(json) {
         if (typeof json !== 'string') {
-          json = JSON.stringify(json, undefined, 2);
+          json = JSON.stringify(json, null, 2);
         }
         json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
@@ -1736,103 +2482,171 @@
         });
       }
 
-      // --- Human-Friendly Timestamp Parser ---
-      function formatRelativeTime(epochSeconds) {
-        const now = Math.floor(Date.now() / 1000);
-        const diff = epochSeconds - now;
-        const absDiff = Math.abs(diff);
-
-        let durationStr = '';
-        if (absDiff < 60) durationStr = `${absDiff} seconds`;
-        else if (absDiff < 3600) durationStr = `${Math.floor(absDiff / 60)} minutes`;
-        else if (absDiff < 86400) durationStr = `${Math.floor(absDiff / 3600)} hours, ${Math.floor((absDiff % 3600) / 60)} minutes`;
-        else durationStr = `${Math.floor(absDiff / 86400)} days, ${Math.floor((absDiff % 86400) / 3600)} hours`;
-
+      // --- Human-Friendly Timestamp Formatter ---
+      function formatTimestamp(epochSeconds, claimName) {
         const date = new Date(epochSeconds * 1000);
-        const utcStr = date.toUTCString();
+        if (isNaN(date.getTime())) return null;
+
+        const now = Date.now();
+        const diffSec = Math.floor((date.getTime() - now) / 1000);
+        const isFuture = diffSec > 0;
+        const absDiff = Math.abs(diffSec);
+
+        let relativeStr = '';
+        if (absDiff < 60) {
+          relativeStr = absDiff + 's';
+        } else if (absDiff < 3600) {
+          relativeStr = Math.floor(absDiff / 60) + 'm';
+        } else if (absDiff < 86400) {
+          relativeStr = Math.floor(absDiff / 3600) + 'h ' + Math.floor((absDiff % 3600) / 60) + 'm';
+        } else {
+          relativeStr = Math.floor(absDiff / 86400) + 'd ' + Math.floor((absDiff % 86400) / 3600) + 'h';
+        }
+
+        const dateStr = date.toUTCString();
+        const localStr = date.toLocaleString();
+
+        let badgeClass = 'valid';
+        let statusLabel = '';
+
+        if (claimName === 'exp') {
+          if (isFuture) {
+            badgeClass = 'valid';
+            statusLabel = 'Expires in ' + relativeStr;
+            if (currentLang === 'ar') statusLabel = 'ينتهي خلال ' + relativeStr;
+            else if (currentLang === 'fr') statusLabel = 'Expire dans ' + relativeStr;
+            else if (currentLang === 'it') statusLabel = 'Scade tra ' + relativeStr;
+          } else {
+            badgeClass = 'expired';
+            statusLabel = 'Expired ' + relativeStr + ' ago';
+            if (currentLang === 'ar') statusLabel = 'انتهى منذ ' + relativeStr;
+            else if (currentLang === 'fr') statusLabel = 'Expiré il y a ' + relativeStr;
+            else if (currentLang === 'it') statusLabel = 'Scaduto da ' + relativeStr;
+          }
+        } else if (claimName === 'iat') {
+          statusLabel = 'Issued ' + relativeStr + ' ago';
+          if (currentLang === 'ar') statusLabel = 'صدر منذ ' + relativeStr;
+          else if (currentLang === 'fr') statusLabel = 'Émis il y a ' + relativeStr;
+          else if (currentLang === 'it') statusLabel = 'Emesso da ' + relativeStr;
+        } else if (claimName === 'nbf') {
+          if (isFuture) {
+            badgeClass = 'expired';
+            statusLabel = 'Not active for ' + relativeStr;
+            if (currentLang === 'ar') statusLabel = 'غير نشط لمدة ' + relativeStr;
+            else if (currentLang === 'fr') statusLabel = 'Inactif pendant ' + relativeStr;
+            else if (currentLang === 'it') statusLabel = 'Non attivo per ' + relativeStr;
+          } else {
+            badgeClass = 'valid';
+            statusLabel = 'Active since ' + relativeStr + ' ago';
+            if (currentLang === 'ar') statusLabel = 'نشط منذ ' + relativeStr;
+            else if (currentLang === 'fr') statusLabel = 'Actif depuis ' + relativeStr;
+            else if (currentLang === 'it') statusLabel = 'Attivo da ' + relativeStr;
+          }
+        }
 
         return {
-          diff,
-          isExpired: diff < 0,
-          durationStr,
-          utcStr
+          claim: claimName,
+          dateUtc: dateStr,
+          dateLocal: localStr,
+          statusLabel: statusLabel,
+          badgeClass: badgeClass,
+          epoch: epochSeconds
         };
       }
 
-      // --- Core Token Decoding Handler ---
-      let currentHeaderObj = null;
-      let currentPayloadObj = null;
-      let currentRawHeader = '';
-      let currentRawPayload = '';
-      let currentRawSig = '';
-
-      function handleDecode() {
-        const raw = jwtInput.value.trim().replace(/^Bearer\s+/i, '');
-        tokenLengthBadge.textContent = `${raw.length} chars`;
-
+      // --- JWT Decoder Core ---
+      function decodeJWT(raw) {
         if (!raw) {
-          tokenColorPreview.innerHTML = '<span style="color:#64748b;font-style:italic">Paste a valid token above to inspect segmentation...</span>';
-          jsonHeaderView.textContent = '{\n  "alg": "HS256",\n  "typ": "JWT"\n}';
-          jsonPayloadView.textContent = '{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "iat": 1516239022\n}';
-          headerAlgBadge.textContent = 'HS256';
-          payloadClaimsCount.textContent = '0 Claims';
+          tokenLengthBadge.textContent = '0 chars';
+          tokenColorPreview.innerHTML = '<span style="color:#64748b;font-style:italic">Paste a valid 3-part token above to inspect color segmentation...</span>';
+          jsonHeaderView.innerHTML = '{}';
+          jsonPayloadView.innerHTML = '{}';
           timestampCard.style.display = 'none';
-          currentHeaderObj = null;
-          currentPayloadObj = null;
-          updateSigBanner('neutral', I18N[currentLang].sigStatusNeutral);
+          currentParsedToken = null;
+          updateSigBadge('neutral', I18N[currentLang].sigStatusNeutral);
           return;
         }
 
-        const parts = raw.split('.');
+        tokenLengthBadge.textContent = raw.length + ' chars';
+
+        // Strip "Bearer " if present
+        let clean = raw.trim();
+        if (clean.toLowerCase().startsWith('bearer ')) {
+          clean = clean.substring(7).trim();
+        }
+
+        const parts = clean.split('.');
+
+        // Render visual color preview
+        if (parts.length === 3) {
+          tokenColorPreview.innerHTML =
+            '<span class="token-part-header">' + escapeHtml(parts[0]) + '</span>' +
+            '<span class="token-dot">.</span>' +
+            '<span class="token-part-payload">' + escapeHtml(parts[1]) + '</span>' +
+            '<span class="token-dot">.</span>' +
+            '<span class="token-part-sig">' + escapeHtml(parts[2]) + '</span>';
+        } else if (parts.length === 2) {
+          tokenColorPreview.innerHTML =
+            '<span class="token-part-header">' + escapeHtml(parts[0]) + '</span>' +
+            '<span class="token-dot">.</span>' +
+            '<span class="token-part-payload">' + escapeHtml(parts[1]) + '</span>' +
+            '<span style="color:#ef4444;font-size:0.75rem;margin-inline-start:8px">[Missing Signature Segment]</span>';
+        } else {
+          tokenColorPreview.innerHTML = '<span style="color:#ef4444">' + escapeHtml(clean) + ' (Invalid JWT format: expected 3 dot-separated parts)</span>';
+        }
+
         if (parts.length < 2) {
-          tokenColorPreview.innerHTML = '<span style="color:#ef4444">⚠️ Invalid JWT format (Must have at least 2 parts separated by dots)</span>';
-          updateSigBanner('invalid', 'Invalid JWT structure (less than 2 parts)');
+          jsonHeaderView.innerHTML = '<span style="color:#ef4444">// Invalid JWT structure</span>';
+          jsonPayloadView.innerHTML = '<span style="color:#ef4444">// Missing payload segment</span>';
+          timestampCard.style.display = 'none';
+          currentParsedToken = null;
           return;
         }
-
-        currentRawHeader = parts[0];
-        currentRawPayload = parts[1];
-        currentRawSig = parts[2] || '';
-
-        // Render Colorized Segmentation
-        tokenColorPreview.innerHTML = `
-          <span class="token-part-header" title="Header (Algorithm & Token Type)">${escapeHtml(currentRawHeader)}</span>
-          <span class="token-dot">.</span>
-          <span class="token-part-payload" title="Payload (Claims & Data)">${escapeHtml(currentRawPayload)}</span>
-          ${currentRawSig ? `<span class="token-dot">.</span><span class="token-part-sig" title="Digital Signature">${escapeHtml(currentRawSig)}</span>` : '<span style="color:#64748b"> (Unsecured Token - No Signature)</span>'}
-        `;
 
         // Decode Header
-        try {
-          const headerJson = base64UrlDecode(currentRawHeader);
-          currentHeaderObj = JSON.parse(headerJson);
-          jsonHeaderView.innerHTML = syntaxHighlight(currentHeaderObj);
-          const alg = currentHeaderObj.alg || 'None';
-          headerAlgBadge.textContent = alg;
-          sigAlgDisplay.textContent = alg;
-        } catch (e) {
-          jsonHeaderView.innerHTML = `<span style="color:#ef4444">Error decoding Header: ${escapeHtml(e.message)}</span>`;
-          currentHeaderObj = null;
+        let headerObj = null;
+        const headerJson = base64UrlDecode(parts[0]);
+        if (headerJson) {
+          try {
+            headerObj = JSON.parse(headerJson);
+            jsonHeaderView.innerHTML = syntaxHighlight(headerObj);
+            headerAlgBadge.textContent = headerObj.alg || 'UNKNOWN';
+            sigAlgDisplay.textContent = headerObj.alg || 'HS256';
+          } catch (e) {
+            jsonHeaderView.innerHTML = '<span style="color:#ef4444">// Failed to parse Header JSON: ' + escapeHtml(headerJson) + '</span>';
+          }
+        } else {
+          jsonHeaderView.innerHTML = '<span style="color:#ef4444">// Invalid Base64URL encoding in Header</span>';
         }
 
         // Decode Payload
-        try {
-          const payloadJson = base64UrlDecode(currentRawPayload);
-          currentPayloadObj = JSON.parse(payloadJson);
-          jsonPayloadView.innerHTML = syntaxHighlight(currentPayloadObj);
+        let payloadObj = null;
+        const payloadJson = base64UrlDecode(parts[1]);
+        if (payloadJson) {
+          try {
+            payloadObj = JSON.parse(payloadJson);
+            jsonPayloadView.innerHTML = syntaxHighlight(payloadObj);
+            const claimCount = Object.keys(payloadObj).length;
+            payloadClaimsCount.textContent = claimCount + ' Claim' + (claimCount !== 1 ? 's' : '');
 
-          const claimCount = Object.keys(currentPayloadObj).length;
-          payloadClaimsCount.textContent = `${claimCount} Claims`;
-
-          // Parse Timestamps
-          inspectTimestamps(currentPayloadObj);
-        } catch (e) {
-          jsonPayloadView.innerHTML = `<span style="color:#ef4444">Error decoding Payload: ${escapeHtml(e.message)}</span>`;
-          currentPayloadObj = null;
+            renderTimestamps(payloadObj);
+          } catch (e) {
+            jsonPayloadView.innerHTML = '<span style="color:#ef4444">// Failed to parse Payload JSON: ' + escapeHtml(payloadJson) + '</span>';
+            timestampCard.style.display = 'none';
+          }
+        } else {
+          jsonPayloadView.innerHTML = '<span style="color:#ef4444">// Invalid Base64URL encoding in Payload</span>';
           timestampCard.style.display = 'none';
         }
 
-        // Run Verification
+        currentParsedToken = {
+          headerRaw: parts[0],
+          payloadRaw: parts[1],
+          signatureRaw: parts[2] || '',
+          header: headerObj,
+          payload: payloadObj
+        };
+
         verifySignature();
       }
 
@@ -1840,195 +2654,209 @@
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
-      function inspectTimestamps(payload) {
-        timestampList.innerHTML = '';
-        let hasAnyTs = false;
+      function renderTimestamps(payloadObj) {
+        const timeClaims = ['exp', 'iat', 'nbf', 'auth_time'];
+        const found = [];
 
-        const tsFields = [
-          { key: 'exp', label: 'exp (Expiration Time)' },
-          { key: 'iat', label: 'iat (Issued At)' },
-          { key: 'nbf', label: 'nbf (Not Before)' },
-          { key: 'auth_time', label: 'auth_time (Auth Time)' }
-        ];
-
-        tsFields.forEach(field => {
-          if (typeof payload[field.key] === 'number') {
-            hasAnyTs = true;
-            const tsInfo = formatRelativeTime(payload[field.key]);
-            const row = document.createElement('div');
-            row.className = 'timestamp-item';
-
-            let badgeHtml = '';
-            if (field.key === 'exp') {
-              if (tsInfo.isExpired) {
-                badgeHtml = `<span class="ts-badge expired">⚠️ Expired ${tsInfo.durationStr} ago</span>`;
-              } else {
-                badgeHtml = `<span class="ts-badge valid">✅ Active (Valid for ${tsInfo.durationStr})</span>`;
-              }
-            } else if (field.key === 'nbf') {
-              if (tsInfo.isExpired) {
-                badgeHtml = `<span class="ts-badge valid">Active (Became valid ${tsInfo.durationStr} ago)</span>`;
-              } else {
-                badgeHtml = `<span class="ts-badge expired">⚠️ Future Token (Not valid for ${tsInfo.durationStr})</span>`;
-              }
-            } else {
-              badgeHtml = `<span class="ts-badge neutral">${tsInfo.durationStr} ago</span>`;
-            }
-
-            row.innerHTML = `
-              <div>
-                <span class="ts-label">${field.label}:</span>
-                <span style="font-family:'JetBrains Mono',monospace;margin-left:0.4rem;color:#f8fafc">${tsInfo.utcStr}</span>
-              </div>
-              <div>${badgeHtml}</div>
-            `;
-            timestampList.appendChild(row);
+        timeClaims.forEach(c => {
+          if (payloadObj && typeof payloadObj[c] === 'number') {
+            const parsed = formatTimestamp(payloadObj[c], c);
+            if (parsed) found.push(parsed);
           }
         });
 
-        timestampCard.style.display = hasAnyTs ? 'block' : 'none';
+        if (found.length === 0) {
+          timestampCard.style.display = 'none';
+          return;
+        }
+
+        timestampList.innerHTML = found.map(item => `
+          <div class="ts-item">
+            <div style="display:flex;align-items:center;gap:0.4rem;">
+              <span class="ts-name">${item.claim.toUpperCase()}:</span>
+              <span style="font-family:'JetBrains Mono',monospace;color:#fff;">${item.epoch}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <span style="color:var(--text-muted);font-size:0.75rem;">${item.dateLocal}</span>
+              <span class="ts-badge ${item.badgeClass}">${item.statusLabel}</span>
+            </div>
+          </div>
+        `).join('');
+
+        timestampCard.style.display = 'block';
       }
 
-      function updateSigBanner(type, message) {
-        signatureStatusBanner.className = `status-banner ${type}`;
-        signatureStatusText.textContent = message;
-      }
-
-      // --- Native Web Crypto HMAC Signature Verification ---
+      // --- Web Crypto Native Signature Verification ---
       async function verifySignature() {
         const dict = I18N[currentLang];
         const secret = jwtSecretInput.value;
 
-        if (!currentRawHeader || !currentRawPayload) {
-          updateSigBanner('neutral', dict.sigStatusNeutral);
-          return;
-        }
-
-        if (!currentRawSig) {
-          updateSigBanner('neutral', 'Unsecured token without signature (alg: "none").');
+        if (!currentParsedToken || !currentParsedToken.signatureRaw) {
+          updateSigBadge('neutral', dict.sigStatusNeutral);
           return;
         }
 
         if (!secret) {
-          updateSigBanner('neutral', dict.sigStatusNeutral);
+          updateSigBadge('neutral', dict.sigStatusNeutral);
           return;
         }
 
-        const alg = (currentHeaderObj && currentHeaderObj.alg) ? currentHeaderObj.alg.toUpperCase() : 'HS256';
+        const alg = (currentParsedToken.header && currentParsedToken.header.alg) ? currentParsedToken.header.alg : 'HS256';
 
-        // Map algorithm to Web Crypto hash
+        // Check if supported HMAC algorithm
         let hashName = null;
         if (alg === 'HS256') hashName = 'SHA-256';
         else if (alg === 'HS384') hashName = 'SHA-384';
         else if (alg === 'HS512') hashName = 'SHA-512';
 
         if (!hashName) {
-          updateSigBanner('neutral', `Asymmetric algorithm (${alg}) detected. In-memory HMAC supports HS256/HS384/HS512.`);
+          updateSigBadge('neutral', 'Algorithm ' + alg + ' requires asymmetric keys (RSA/ECDSA). Local verification active for HS256/384/512.');
           return;
         }
 
         try {
-          // Prepare Secret Key Buffer
-          let keyData;
-          if (chkSecretBase64.checked) {
-            keyData = base64ToUint8Array(secret);
+          const enc = new TextEncoder();
+          let keyBytes;
+
+          if (chkBase64Secret.checked) {
+            keyBytes = base64UrlDecodeToBytes(secret);
+            if (!keyBytes) {
+              updateSigBadge('invalid', 'Invalid Base64 format in Secret Key');
+              return;
+            }
           } else {
-            keyData = new TextEncoder().encode(secret);
+            keyBytes = enc.encode(secret);
           }
 
           const cryptoKey = await window.crypto.subtle.importKey(
             'raw',
-            keyData,
+            keyBytes,
             { name: 'HMAC', hash: hashName },
             false,
             ['verify']
           );
 
-          // Data to verify: ASCII(header + "." + payload)
-          const dataToVerify = new TextEncoder().encode(currentRawHeader + '.' + currentRawPayload);
-          const signatureBytes = base64ToUint8Array(currentRawSig);
+          const dataToVerify = enc.encode(currentParsedToken.headerRaw + '.' + currentParsedToken.payloadRaw);
+          const sigBytes = base64UrlDecodeToBytes(currentParsedToken.signatureRaw);
+
+          if (!sigBytes) {
+            updateSigBadge('invalid', dict.sigStatusInvalid + ' (Corrupt Base64 in Signature)');
+            return;
+          }
 
           const isValid = await window.crypto.subtle.verify(
             'HMAC',
             cryptoKey,
-            signatureBytes,
+            sigBytes,
             dataToVerify
           );
 
           if (isValid) {
-            updateSigBanner('valid', `✅ ${dict.sigStatusValid} (${alg})`);
+            updateSigBadge('valid', dict.sigStatusValid);
           } else {
-            updateSigBanner('invalid', `❌ ${dict.sigStatusInvalid} (${alg} signature mismatch)`);
+            updateSigBadge('invalid', dict.sigStatusInvalid);
           }
         } catch (err) {
-          console.warn('Verification error:', err);
-          updateSigBanner('invalid', `❌ Verification Error: ${err.message}`);
+          updateSigBadge('invalid', 'Verification Error: ' + err.message);
         }
       }
 
-      jwtInput.addEventListener('input', handleDecode);
-      jwtSecretInput.addEventListener('input', verifySignature);
-      chkSecretBase64.addEventListener('change', verifySignature);
+      function updateSigBadge(state, text) {
+        sigStatusBadge.className = 'sig-status-badge ' + state;
+        sigStatusText.textContent = text;
+        const iconSvg = sigStatusBadge.querySelector('svg');
+        if (state === 'valid') {
+          iconSvg.setAttribute('stroke', '#10b981');
+          iconSvg.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+        } else if (state === 'invalid') {
+          iconSvg.setAttribute('stroke', '#ef4444');
+          iconSvg.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>';
+        } else {
+          iconSvg.setAttribute('stroke', '#94a3b8');
+          iconSvg.innerHTML = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+        }
+      }
 
-      // --- Sample Token Loaders ---
-      btnLoadValidSample.addEventListener('click', () => {
-        const now = Math.floor(Date.now() / 1000);
-        const header = { alg: "HS256", typ: "JWT" };
-        const payload = {
-          sub: "usr_vantorkit_9824",
-          name: "Alex Morgan",
-          email: "alex.morgan@example.com",
-          role: "DevOps Engineer",
-          iat: now - 3600,
-          exp: now + 7200
-        };
-
-        const secret = "vantorkit-in-memory-demo-secret-key-256";
-        signSampleToken(header, payload, secret, false).then(token => {
-          jwtInput.value = token;
-          jwtSecretInput.value = secret;
-          chkSecretBase64.checked = false;
-          handleDecode();
-        });
+      // --- Interactive Event Listeners ---
+      jwtInput.addEventListener('input', () => {
+        decodeJWT(jwtInput.value);
       });
 
-      btnLoadExpiredSample.addEventListener('click', () => {
-        const now = Math.floor(Date.now() / 1000);
-        const header = { alg: "HS256", typ: "JWT" };
-        const payload = {
-          sub: "usr_expired_session",
-          name: "Jordan Lee",
-          email: "jordan.lee@example.com",
-          role: "Security Analyst",
-          iat: now - 86400,
-          exp: now - 7200
-        };
+      jwtSecretInput.addEventListener('input', () => {
+        verifySignature();
+      });
 
-        const secret = "vantorkit-expired-token-secret-2026";
-        signSampleToken(header, payload, secret, false).then(token => {
-          jwtInput.value = token;
-          jwtSecretInput.value = secret;
-          chkSecretBase64.checked = false;
-          handleDecode();
-        });
+      chkBase64Secret.addEventListener('change', () => {
+        verifySignature();
       });
 
       btnClearToken.addEventListener('click', () => {
         jwtInput.value = '';
         jwtSecretInput.value = '';
-        handleDecode();
+        decodeJWT('');
+      });
+
+      // --- Sample Token Loaders ---
+      btnLoadValidSample.addEventListener('click', () => {
+        const now = Math.floor(Date.now() / 1000);
+        const header = { alg: 'HS256', typ: 'JWT' };
+        const payload = {
+          sub: 'usr_vantor_8819',
+          name: 'Alex Vance',
+          role: 'Security Engineer',
+          scope: 'admin:write user:read',
+          iat: now - 3600,
+          exp: now + 7200
+        };
+        const secret = 'vantorkit-super-secret-key-32chars!';
+
+        signSampleToken(header, payload, secret, false).then(token => {
+          jwtInput.value = token;
+          jwtSecretInput.value = secret;
+          chkBase64Secret.checked = false;
+          decodeJWT(token);
+          showToast('Sample active token loaded & verified!');
+        });
+      });
+
+      btnLoadExpiredSample.addEventListener('click', () => {
+        const now = Math.floor(Date.now() / 1000);
+        const header = { alg: 'HS256', typ: 'JWT' };
+        const payload = {
+          sub: 'usr_vantor_expired',
+          name: 'Expired Session',
+          role: 'viewer',
+          iat: now - 86400,
+          exp: now - 3600
+        };
+        const secret = 'vantorkit-super-secret-key-32chars!';
+
+        signSampleToken(header, payload, secret, false).then(token => {
+          jwtInput.value = token;
+          jwtSecretInput.value = secret;
+          chkBase64Secret.checked = false;
+          decodeJWT(token);
+          showToast('Sample expired token loaded!');
+        });
       });
 
       // --- In-Memory Signing Helper for Samples and Signer Mode ---
       async function signSampleToken(headerObj, payloadObj, secretStr, isBase64) {
+        const enc = new TextEncoder();
         const headerB64 = base64UrlEncode(JSON.stringify(headerObj));
         const payloadB64 = base64UrlEncode(JSON.stringify(payloadObj));
-        const message = headerB64 + '.' + payloadB64;
+        const dataToSign = headerB64 + '.' + payloadB64;
 
-        let keyData = isBase64 ? base64ToUint8Array(secretStr) : new TextEncoder().encode(secretStr);
+        let keyBytes;
+        if (isBase64) {
+          keyBytes = base64UrlDecodeToBytes(secretStr);
+        } else {
+          keyBytes = enc.encode(secretStr);
+        }
+
         const cryptoKey = await window.crypto.subtle.importKey(
           'raw',
-          keyData,
+          keyBytes,
           { name: 'HMAC', hash: 'SHA-256' },
           false,
           ['sign']
@@ -2037,14 +2865,14 @@
         const sigBuffer = await window.crypto.subtle.sign(
           'HMAC',
           cryptoKey,
-          new TextEncoder().encode(message)
+          enc.encode(dataToSign)
         );
 
-        const sigB64 = base64UrlEncode(sigBuffer);
-        return message + '.' + sigB64;
+        const sigB64 = base64UrlEncodeBuffer(sigBuffer);
+        return dataToSign + '.' + sigB64;
       }
 
-      // --- Token Signer Button Handler ---
+      // --- Token Signer Generate Button ---
       btnSignToken.addEventListener('click', async () => {
         try {
           const header = JSON.parse(signerHeaderInput.value);
@@ -2052,32 +2880,36 @@
           const secret = signerSecretInput.value;
 
           if (!secret) {
-            alert('Please enter an HMAC secret key for signing.');
+            alert('Please specify an HMAC secret key.');
             return;
           }
 
           const token = await signSampleToken(header, payload, secret, false);
+          generatedTokenWrap.style.display = 'flex';
           const parts = token.split('.');
-
-          generatedTokenPreview.innerHTML = `
-            <span class="token-part-header">${parts[0]}</span><span class="token-dot">.</span><span class="token-part-payload">${parts[1]}</span><span class="token-dot">.</span><span class="token-part-sig">${parts[2]}</span>
-          `;
-          generatedTokenWrap.style.display = 'block';
+          generatedTokenPreview.innerHTML =
+            '<span class="token-part-header">' + escapeHtml(parts[0]) + '</span>' +
+            '<span class="token-dot">.</span>' +
+            '<span class="token-part-payload">' + escapeHtml(parts[1]) + '</span>' +
+            '<span class="token-dot">.</span>' +
+            '<span class="token-part-sig">' + escapeHtml(parts[2]) + '</span>';
 
           btnCopyGeneratedToken.onclick = () => {
             navigator.clipboard.writeText(token).then(() => {
-              showToast('JWT copied to clipboard!');
+              showToast('Generated token copied to clipboard!');
             });
           };
 
-          showToast('JWT successfully signed & generated!');
+          showToast('Token signed & generated!');
         } catch (e) {
-          alert('Error signing JWT: ' + e.message);
+          alert('Error signing token: Invalid JSON formatting in Header or Payload.');
         }
       });
 
       // Initialize with sample token on first load
       btnLoadValidSample.click();
+
+      // Initialize language
       setLanguage(currentLang);
     })();
   </script>

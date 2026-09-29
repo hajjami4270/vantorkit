@@ -63,34 +63,34 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "How does VantorKit sanitize image metadata without server uploads?",
+          "name": "Does stripping metadata affect photo resolution or visual quality?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The tool parses the raw binary chunks of your image locally in browser memory, extracts all EXIF/GPS tags for inspection, and re-encodes the image via HTML5 Canvas rasterization. This discards all metadata segments while preserving pixel quality."
+            "text": "No. The canvas re-encoding preserves full pixel dimensions (width and height). Only non-visual metadata headers (APP1, XMP, IPTC) are permanently removed."
           }
         },
         {
           "@type": "Question",
-          "name": "What sensitive information is typically hidden in photo EXIF data?",
+          "name": "Which image formats are supported?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Photos taken on smartphones and digital cameras frequently embed exact GPS coordinates (latitude, longitude, altitude), camera make, model, lens details, unique serial numbers, creation timestamps, and thumbnail previews."
+            "text": "The tool fully supports JPEG (.jpg, .jpeg), PNG (.png), and modern WebP (.webp) formats. Sanitized output preserves your original format."
           }
         },
         {
           "@type": "Question",
-          "name": "Does stripping metadata reduce image visual quality?",
+          "name": "Can someone recover stripped GPS data after sanitization?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. The process purges non-pixel metadata headers (EXIF, IPTC, XMP) while maintaining original image dimensions and rendering pixel content with high visual fidelity."
+            "text": "No. Because the image is re-rasterized directly into fresh pixel data, the old EXIF data blocks cease to exist. There is zero residual forensic metadata left to recover."
           }
         },
         {
           "@type": "Question",
-          "name": "Is my photo stored or transmitted anywhere?",
+          "name": "Is there any file size limit?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Never. All processing is 100% client-side in your local browser memory. Zero bytes leave your device."
+            "text": "Because all processing takes place in your computer's local memory, you can comfortably process large RAW-converted JPEGs and photos up to 100MB without throttling."
           }
         }
       ]
@@ -145,84 +145,79 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* Top Navigation Header */
+    /* Top Navigation */
     .top-nav {
-      height: 70px;
-      border-bottom: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.8);
+      backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
-      width: 100%;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #38bdf8, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .back-link {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 0.5rem;
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
+      transition: color 0.2s ease;
       padding: 0.45rem 0.85rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
       border: 1px solid var(--card-border);
-      transition: all 0.2s ease;
-      white-space: nowrap;
+      background: rgba(15, 18, 28, 0.5);
     }
 
     .back-link:hover {
-      color: #fff;
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(56, 189, 248, 0.08);
-      transform: translateX(-2px);
-    }
-
-    html[dir="rtl"] .back-link:hover {
-      transform: translateX(2px);
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-brand svg {
-      width: 32px;
-      height: 32px;
-      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
-      transition: transform 0.2s ease;
-    }
-
-    .nav-brand:hover svg {
-      transform: scale(1.05);
-    }
-
-    .nav-brand span span {
-      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
+      border-color: var(--accent);
+      background: var(--card-hover);
     }
 
     /* Language Switcher Dropdown */
@@ -243,19 +238,16 @@
       font-size: 0.85rem;
       font-weight: 600;
       transition: all 0.2s ease;
-      font-family: inherit;
-      white-space: nowrap;
     }
 
-    .lang-btn:hover,
-    .lang-btn[aria-expanded="true"] {
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] {
       border-color: var(--accent);
-      background: rgba(26, 32, 48, 0.95);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+      background: var(--card-hover);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .globe-icon {
-      color: #38bdf8;
+      color: var(--badge-text);
     }
 
     .chevron-icon {
@@ -272,10 +264,9 @@
       top: calc(100% + 8px);
       right: 0;
       width: 170px;
-      background: rgba(14, 18, 28, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(14, 18, 28, 0.95);
+      border: 1px solid var(--card-border);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border-radius: 12px;
       padding: 0.4rem;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
@@ -310,7 +301,6 @@
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: left;
-      font-family: inherit;
     }
 
     .lang-option:hover {
@@ -321,7 +311,6 @@
     .lang-option.active {
       background: rgba(56, 189, 248, 0.2);
       color: #38bdf8;
-      font-weight: 700;
     }
 
     .lang-option .check-icon {
@@ -339,6 +328,19 @@
       gap: 0.5rem;
     }
 
+    /* RTL Specific Overrides */
+    html[dir="rtl"] .top-nav {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
     html[dir="rtl"] .lang-menu {
       right: auto;
       left: 0;
@@ -348,193 +350,205 @@
       text-align: right;
     }
 
-    html[dir="rtl"] .back-link svg {
-      transform: rotate(180deg);
+    html[dir="rtl"] .info-section,
+    html[dir="rtl"] .guide-card,
+    html[dir="rtl"] .faq-item,
+    html[dir="rtl"] .content-card,
+    html[dir="rtl"] .privacy-banner,
+    html[dir="rtl"] .faq-answer {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .guide-card-title {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    html[dir="rtl"] .meta-table th,
+    html[dir="rtl"] .meta-table td {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .panel-header {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .panel-title {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .alert-banner {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+
+    html[dir="rtl"] .stats-summary {
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .meta-details-grid {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+      flex-direction: row-reverse;
+    }
+
+    html[dir="rtl"] .formula-box {
+      border-left: none;
+      border-right: 4px solid #38bdf8;
+    }
+
+    html[dir="rtl"] code,
+    html[dir="rtl"] pre,
+    html[dir="rtl"] .tag-value-code,
+    html[dir="rtl"] .formula-expr {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     }
 
     /* Main Container */
     main {
       flex: 1;
-      max-width: 1100px;
+      max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 2rem 1.5rem 3.5rem;
+      padding: 2.5rem 1.5rem;
     }
 
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 2.25rem;
-      position: relative;
+      margin-bottom: 2.5rem;
     }
 
-    .brand-badge {
+    .trust-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       padding: 0.35rem 1rem;
+      background: var(--badge-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--badge-text);
-      background: var(--badge-bg);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 9999px;
       margin-bottom: 1rem;
-      letter-spacing: 0.35px;
-      backdrop-filter: blur(12px);
-    }
-
-    .brand-badge svg {
-      color: #38bdf8;
     }
 
     h1 {
-      font-size: 2.45rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      letter-spacing: -0.04em;
-      margin-bottom: 0.65rem;
-      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
     }
 
     h1 span {
-      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      background: linear-gradient(135deg, #38bdf8, #c084fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
     }
 
-    p.subtitle {
+    .subtitle {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 680px;
+      max-width: 650px;
       margin: 0 auto;
       line-height: 1.6;
     }
 
-    /* Tool Workspace Container */
-    .tool-workspace {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    /* Upload Drop Zone */
-    .dropzone {
+    /* Upload Drag & Drop Zone */
+    .drop-zone {
+      background: var(--card-bg);
       border: 2px dashed rgba(255, 255, 255, 0.15);
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border-radius: 20px;
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem;
       text-align: center;
       cursor: pointer;
       transition: all 0.25s ease;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
       position: relative;
-      outline: none;
     }
 
-    .dropzone:hover,
-    .dropzone.dragover {
-      border-color: #38bdf8;
-      background: rgba(15, 23, 42, 0.85);
-      box-shadow: 0 0 24px rgba(56, 189, 248, 0.18);
-      transform: translateY(-2px);
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(22, 28, 44, 0.8);
+      box-shadow: 0 0 25px var(--accent-glow);
     }
 
-    .dropzone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 5;
-    }
-
-    .dropzone-icon {
-      width: 56px;
-      height: 56px;
+    .drop-icon-wrap {
+      width: 64px;
+      height: 64px;
       border-radius: 16px;
       background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: #38bdf8;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.25rem;
-      transition: transform 0.25s ease;
-    }
-
-    .dropzone:hover .dropzone-icon {
-      transform: scale(1.1);
-    }
-
-    .dropzone-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.45rem;
-    }
-
-    .dropzone-desc {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .dropzone-pills {
+      border: 1px solid rgba(56, 189, 248, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      margin: 0 auto 1.25rem;
+      color: var(--accent);
+      transition: transform 0.2s ease;
     }
 
-    .format-pill {
-      font-size: 0.75rem;
+    .drop-zone:hover .drop-icon-wrap {
+      transform: scale(1.08);
+    }
+
+    .drop-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      color: #94a3b8;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      letter-spacing: 0.5px;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .drop-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      max-width: 440px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.5;
+    }
+
+    .sample-btn-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
     }
 
     .btn-sample {
-      margin-top: 1.25rem;
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
       color: #cbd5e1;
       padding: 0.45rem 0.95rem;
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      position: relative;
-      z-index: 10;
       transition: all 0.2s ease;
     }
 
     .btn-sample:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.4);
+      background: var(--card-hover);
+      border-color: var(--accent);
       color: #fff;
     }
 
-    /* Analysis & Preview Card */
+    /* Workspace Panel */
     .analysis-panel {
       display: none;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 1.75rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2.5rem;
       animation: fadeIn 0.3s ease-out;
     }
 
@@ -545,72 +559,66 @@
 
     .panel-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
+      align-items: center;
       padding-bottom: 1.25rem;
       border-bottom: 1px solid var(--card-border);
       margin-bottom: 1.5rem;
-    }
-
-    .panel-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .panel-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
+    .btn-change {
+      background: transparent;
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 0.45rem 0.9rem;
+      padding: 0.45rem 0.85rem;
       border-radius: 8px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
       transition: all 0.2s ease;
     }
 
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.12);
+    .btn-change:hover {
+      border-color: var(--accent);
       color: #fff;
     }
 
-    /* Layout: Left Preview, Right Meta Audit */
-    .analysis-grid {
+    /* Preview & Metadata Grid */
+    .inspection-grid {
       display: grid;
       grid-template-columns: 320px 1fr;
-      gap: 1.75rem;
-      margin-bottom: 1.75rem;
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
 
-    @media (max-width: 860px) {
-      .analysis-grid {
+    @media (max-width: 850px) {
+      .inspection-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .image-preview-card {
-      background: rgba(10, 14, 24, 0.7);
+    .preview-card {
+      background: rgba(7, 9, 14, 0.7);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 1rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 1rem;
     }
 
-    .preview-thumb-wrap {
+    .preview-box {
       width: 100%;
       height: 220px;
       border-radius: 10px;
@@ -619,373 +627,324 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .preview-thumb {
+    .preview-box img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
 
-    .file-meta-list {
-      width: 100%;
+    .meta-details-grid {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
       font-size: 0.85rem;
     }
 
-    .file-meta-row {
+    .meta-row {
       display: flex;
       justify-content: space-between;
       color: var(--text-muted);
-      padding: 0.3rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    .file-meta-val {
-      font-weight: 600;
-      color: #f1f5f9;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      word-break: break-all;
-      max-width: 180px;
-      text-align: right;
+    .meta-row strong {
+      color: #cbd5e1;
     }
 
-    /* Audit Alert Banners */
-    .audit-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
+    /* Alert Banners */
     .alert-banner {
       border-radius: 12px;
       padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
       display: flex;
-      gap: 0.85rem;
       align-items: flex-start;
-      font-size: 0.9rem;
+      gap: 0.75rem;
+      font-size: 0.88rem;
       line-height: 1.5;
     }
 
-    .alert-danger {
+    .alert-banner.danger {
       background: var(--danger-bg);
       border: 1px solid var(--danger-border);
       color: #fca5a5;
     }
 
-    .alert-danger strong {
-      color: #ef4444;
-    }
-
-    .alert-warning {
+    .alert-banner.warning {
       background: var(--warning-bg);
       border: 1px solid var(--warning-border);
-      color: #fde68a;
+      color: #fde047;
     }
 
-    .alert-warning strong {
-      color: #f59e0b;
-    }
-
-    .alert-success {
+    .alert-banner.clean {
       background: var(--success-bg);
       border: 1px solid var(--success-border);
       color: #6ee7b7;
     }
 
-    .alert-success strong {
-      color: #10b981;
-    }
-
-    .alert-icon {
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    /* Metadata Tags Table */
-    .meta-table-wrap {
-      background: rgba(10, 14, 24, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .meta-table-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border-bottom: 1px solid var(--card-border);
-      font-size: 0.84rem;
+    .alert-title {
       font-weight: 700;
-      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
     }
 
-    .meta-table-scroll {
-      max-height: 240px;
-      overflow-y: auto;
-      scrollbar-width: thin;
+    /* Metadata Inspection Table */
+    .table-wrap {
+      background: rgba(7, 9, 14, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 2rem;
     }
 
     .meta-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.82rem;
-    }
-
-    .meta-table th,
-    .meta-table td {
-      padding: 0.55rem 1rem;
+      font-size: 0.86rem;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    html[dir="rtl"] .meta-table th,
-    html[dir="rtl"] .meta-table td {
-      text-align: right;
     }
 
     .meta-table th {
+      background: rgba(15, 23, 42, 0.8);
+      color: #cbd5e1;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .meta-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--card-border);
       color: var(--text-muted);
-      font-weight: 600;
-      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .meta-table tr:last-child td {
+      border-bottom: none;
     }
 
     .meta-table td.tag-name {
-      color: #7dd3fc;
       font-family: 'JetBrains Mono', monospace;
+      color: #38bdf8;
       font-weight: 600;
-      width: 40%;
+      width: 35%;
     }
 
-    .meta-table td.tag-val {
-      color: #e2e8f0;
+    .tag-value-code {
       font-family: 'JetBrains Mono', monospace;
+      color: #f8fafc;
       word-break: break-all;
     }
 
-    /* Sanitize Action Bar */
+    /* Sanitization Action Bar */
     .action-bar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
       flex-wrap: wrap;
       gap: 1rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--card-border);
     }
 
     .action-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
+      gap: 0.4rem;
     }
 
     .btn-sanitize {
-      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-      color: #041226;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
       border: none;
       padding: 0.85rem 1.85rem;
       border-radius: 12px;
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.2s ease;
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
     .btn-sanitize:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 26px rgba(56, 189, 248, 0.5);
-      background: linear-gradient(135deg, #0ea5e9 0%, #7dd3fc 100%);
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+      transform: translateY(-1px);
     }
 
-    .btn-sanitize:active {
-      transform: translateY(0);
-    }
-
-    /* Sanitized Success View */
+    /* Result Panel */
     .result-panel {
       display: none;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 2rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2.5rem;
       animation: fadeIn 0.3s ease-out;
     }
 
-    .result-hero {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .result-icon {
+    .result-icon-wrap {
       width: 64px;
       height: 64px;
-      border-radius: 50%;
+      border-radius: 999px;
       background: var(--success-bg);
-      border: 2px solid var(--success);
+      border: 1px solid var(--success-border);
       color: var(--success);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
-    }
-
-    .result-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 0.4rem;
-    }
-
-    .result-desc {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 640px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .stat-card {
-      background: rgba(10, 14, 24, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.15rem;
-      text-align: center;
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-      font-weight: 600;
-    }
-
-    .stat-val {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .stat-val.clean {
-      color: #10b981;
-    }
-
-    .result-actions {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
     }
 
-    .btn-download {
-      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-      color: #022c22;
-      border: none;
-      padding: 0.9rem 2rem;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-      transition: all 0.2s ease;
-      text-decoration: none;
-    }
-
-    .btn-download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 26px rgba(16, 185, 129, 0.55);
-      background: linear-gradient(135deg, #059669 0%, #6ee7b7 100%);
-    }
-
-    /* Educational Guide Section */
-    .info-section {
-      margin-top: 3.5rem;
-      border-top: 1px solid var(--card-border);
-      padding-top: 2.5rem;
-    }
-
-    .info-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .info-header h2 {
-      font-size: 1.65rem;
+    .result-title {
+      font-size: 1.5rem;
       font-weight: 800;
       color: #fff;
       margin-bottom: 0.5rem;
     }
 
+    .result-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 500px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.5;
+    }
+
+    .stats-summary {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: rgba(7, 9, 14, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 0.85rem 1.5rem;
+      min-width: 140px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 0.9rem 2.2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+      margin-bottom: 1rem;
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      cursor: pointer;
+      text-decoration: underline;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .btn-reset:hover {
+      color: #fff;
+    }
+
+    /* Educational Section */
+    .info-section {
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      max-width: 750px;
+      margin: 0 auto 2rem;
+    }
+
+    .info-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
     .info-header p {
       color: var(--text-muted);
-      max-width: 660px;
-      margin: 0 auto;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
     }
 
     .guide-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
     }
 
-    @media (min-width: 768px) {
-      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 768px) {
+      .guide-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .guide-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 14px;
-      padding: 1.4rem;
+      padding: 1.5rem;
       backdrop-filter: blur(12px);
     }
 
     .guide-card-title {
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #fff;
     }
 
     .guide-card-title svg {
-      color: #38bdf8;
+      color: var(--accent);
     }
 
     .guide-card p {
@@ -997,13 +956,15 @@
     /* FAQ Section */
     .faq-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 3.5rem;
     }
 
-    @media (min-width: 768px) {
-      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 768px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .faq-item {
@@ -1027,14 +988,234 @@
       line-height: 1.6;
     }
 
-    /* Standardized Footer */
+    /* Content Layer Standard Styles */
+    .tool-content-layer {
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .tool-content-layer .lang-content-block {
+      display: none;
+    }
+
+    html[lang="en"] .tool-content-layer .lang-content-block[data-lang="en"],
+    html:not([lang]) .tool-content-layer .lang-content-block[data-lang="en"] {
+      display: block;
+    }
+
+    html[lang="ar"] .tool-content-layer .lang-content-block[data-lang="ar"] {
+      display: block;
+    }
+
+    html[lang="fr"] .tool-content-layer .lang-content-block[data-lang="fr"] {
+      display: block;
+    }
+
+    html[lang="it"] .tool-content-layer .lang-content-block[data-lang="it"] {
+      display: block;
+    }
+
+    .tool-content-layer h2 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .tool-content-layer h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-content-layer p {
+      margin-bottom: 1rem;
+      color: #94a3b8;
+    }
+
+    .tool-content-layer ol {
+      margin-bottom: 1.25rem;
+      padding-inline-start: 1.5rem;
+      list-style-type: decimal;
+    }
+
+    .tool-content-layer li {
+      margin-bottom: 0.65rem;
+      color: #cbd5e1;
+    }
+
+    .tool-content-layer code {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      color: #38bdf8;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .content-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .content-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.75rem;
+      padding: 1.15rem 1.25rem;
+    }
+
+    .content-card h4 {
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.4rem;
+    }
+
+    .content-card p {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      margin-bottom: 0;
+    }
+
+    .formula-box {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.4));
+      border-left: 4px solid #38bdf8;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .formula-box .formula-title {
+      font-weight: 700;
+      color: #7dd3fc;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .formula-box .formula-expr {
+      font-size: 0.95rem;
+      color: #f8fafc;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .faq-accordion {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .faq-item-details {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .faq-item-details summary {
+      padding: 0.85rem 1.25rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-item-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item-details summary::after {
+      content: '+';
+      font-size: 1.25rem;
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .faq-item-details[open] summary::after {
+      content: '−';
+      color: #38bdf8;
+    }
+
+    .faq-item-details .faq-answer {
+      padding: 0 1.25rem 1rem 1.25rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(30, 41, 59, 0.6);
+      margin-top: 0.5rem;
+      padding-top: 0.75rem;
+    }
+
+    .privacy-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .privacy-banner h3 {
+      color: #34d399;
+      margin-top: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .related-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .related-tool-card {
+      display: block;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .related-tool-card:hover {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .related-tool-card .tool-name {
+      font-weight: 600;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .related-tool-card .tool-desc {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+
+    /* Standardized Site Footer */
     .site-footer {
       border-top: 1px solid var(--card-border);
-      text-align: center;
       padding: 2.5rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      background: rgba(7, 9, 14, 0.85);
+      background: rgba(7, 9, 14, 0.9);
       margin-top: auto;
     }
 
@@ -1049,108 +1230,116 @@
 
     .footer-links {
       display: flex;
+      align-items: center;
+      gap: 1.5rem;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1.5rem;
     }
 
     .footer-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
+      font-size: 0.85rem;
       transition: color 0.2s ease;
     }
 
     .footer-link:hover {
-      color: #38bdf8;
-    }
-
-    .footer-copy {
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-      color: #64748b;
-      font-size: 0.84rem;
-    }
-
-    .footer-x-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      vertical-align: middle;
+      color: var(--text-main);
     }
 
     .footer-x-link svg {
-      width: 1rem;
-      height: 1rem;
+      width: 16px;
+      height: 16px;
       fill: currentColor;
-      transition: transform 0.2s ease;
     }
 
-    .footer-x-link:hover svg {
-      transform: scale(1.12);
+    .footer-copy {
+      color: #64748b;
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(18, 24, 38, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent);
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
     }
   </style>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-S8MDMH082N');
-  </script>
 </head>
 <body>
 
-  <!-- Top Navigation Header -->
+  <!-- Top Navigation -->
   <nav class="top-nav">
-    <a href="../index.html" class="back-link" id="backToHome">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      <span data-i18n="backLink">← Back to Tools</span>
+    <a href="../index.html" class="brand-link">
+      <div class="brand-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+      </div>
+      <span class="brand-name">Vantor<span>Kit</span></span>
     </a>
 
-    <div class="nav-right">
-      <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
-            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
-            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
-          </defs>
-          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
-          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
-          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
-          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
-          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
-        </svg>
-        <span>Vantor<span>Kit</span></span>
+    <div class="nav-actions">
+      <a href="../index.html" class="back-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span data-i18n="backLink">← Back to Tools</span>
       </a>
 
-      <!-- Language Switcher Dropdown (EN, AR, FR, IT) -->
+      <!-- Language Switcher Dropdown -->
       <div class="lang-dropdown" id="langDropdown">
         <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
-          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span id="currentLangLabel">English</span>
           <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
 
         <div class="lang-menu" id="langMenu" role="menu">
           <button type="button" class="lang-option active" data-lang="en" role="menuitem">
-            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <span class="lang-item-content">
+              <span>🇺🇸</span>
+              <span>English</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="ar" role="menuitem">
-            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <span class="lang-item-content">
+              <span>🇸🇦</span>
+              <span>العربية</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="fr" role="menuitem">
-            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <span class="lang-item-content">
+              <span>🇫🇷</span>
+              <span>Français</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
           <button type="button" class="lang-option" data-lang="it" role="menuitem">
-            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <span class="lang-item-content">
+              <span>🇮🇹</span>
+              <span>Italiano</span>
+            </span>
             <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </button>
         </div>
@@ -1158,209 +1347,176 @@
     </div>
   </nav>
 
+  <!-- Main Container -->
   <main>
-    <!-- Header Section -->
     <header>
-      <div class="brand-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         <span data-i18n="heroBadge">Client-Side • Privacy-First • Zero Bytes Transferred</span>
       </div>
-      <h1 data-i18n="heroTitle">Metadata & <span>EXIF Cleaner</span></h1>
+      <h1 data-i18n="heroTitle">Metadata &amp; <span>EXIF Cleaner</span></h1>
       <p class="subtitle" data-i18n="heroSubtitle">Inspect hidden GPS coordinates, camera models, capture timestamps, and private metadata, then sanitize and purge all tags locally before sharing.</p>
     </header>
 
-    <div class="tool-workspace">
-      <!-- Upload Dropzone -->
-      <div class="dropzone" id="dropZone" tabindex="0" role="button" aria-label="Drop image file here to inspect metadata">
-        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" aria-label="Upload image">
-        <div class="dropzone-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+    <!-- Upload Drag & Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
+      <div class="drop-icon-wrap">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+      </div>
+      <div class="drop-title" data-i18n="dropTitle">Drop an Image to Inspect &amp; Strip Metadata</div>
+      <p class="drop-desc" data-i18n="dropDesc">Supports JPEG, PNG, and WebP photos up to 100MB. Processed entirely in your browser RAM.</p>
+      <div class="sample-btn-wrap">
+        <button type="button" class="btn-sample" id="btnLoadSample">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span data-i18n="btnSample">Load Sample Photo with GPS EXIF</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Metadata Inspection & Sanitization Workspace -->
+    <div class="analysis-panel" id="analysisPanel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span data-i18n="panelTitle">Metadata Audit &amp; Security Analysis</span>
         </div>
-        <div class="dropzone-title" data-i18n="dropTitle">Drop an Image to Inspect & Strip Metadata</div>
-        <div class="dropzone-desc" data-i18n="dropDesc">Supports JPEG, PNG, and WebP photos up to 100MB. Processed entirely in your browser RAM.</div>
-        <div class="dropzone-pills">
-          <span class="format-pill">JPG / JPEG</span>
-          <span class="format-pill">PNG</span>
-          <span class="format-pill">WEBP</span>
-          <span class="format-pill" style="color:#38bdf8;border-color:rgba(56,189,248,0.3)">100% IN-MEMORY</span>
+        <button type="button" class="btn-change" id="btnChangeImage" data-i18n="btnChange">Change Photo</button>
+      </div>
+
+      <div class="inspection-grid">
+        <!-- Preview & Basic File Attributes -->
+        <div class="preview-card">
+          <div class="preview-box">
+            <img id="imagePreview" src="" alt="Photo preview">
+          </div>
+          <div class="meta-details-grid">
+            <div class="meta-row"><span data-i18n="metaFilename">File Name</span><strong id="metaFileName">-</strong></div>
+            <div class="meta-row"><span data-i18n="metaDimensions">Dimensions</span><strong id="metaDimensions">-</strong></div>
+            <div class="meta-row"><span data-i18n="metaFormat">Format</span><strong id="metaFormat">-</strong></div>
+            <div class="meta-row"><span data-i18n="metaFileSize">File Size</span><strong id="metaFileSize">-</strong></div>
+          </div>
         </div>
+
+        <!-- Detection Alerts & Metadata Tags Breakdown -->
         <div>
-          <button type="button" class="btn-sample" id="btnLoadSample">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span data-i18n="btnSample">Load Sample Photo with GPS EXIF</span>
-          </button>
+          <!-- GPS Alert Banner -->
+          <div class="alert-banner danger" id="gpsAlertBox" style="display:none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div>
+              <div class="alert-title" data-i18n="gpsAlertTitle">⚠️ SENSITIVE GPS LOCATION DETECTED!</div>
+              <p id="gpsAlertText" style="margin:0">This photo embeds exact latitude and longitude coordinates. Sharing this image unstripped reveals your exact physical location.</p>
+              <div id="gpsCoordsRow" style="font-family:'JetBrains Mono',monospace;margin-top:0.4rem;font-weight:700;color:#fff;"></div>
+            </div>
+          </div>
+
+          <!-- Camera & Device Hardware Alert Banner -->
+          <div class="alert-banner warning" id="cameraAlertBox" style="display:none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <div>
+              <div class="alert-title" data-i18n="cameraAlertTitle">📸 Hardware &amp; Timestamp Tags Found</div>
+              <p id="cameraAlertText" style="margin:0">Identified camera make, model, lens parameters, and exact shutter timestamp.</p>
+            </div>
+          </div>
+
+          <!-- Clean / Safe Indicator -->
+          <div class="alert-banner clean" id="cleanAlertBox" style="display:none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div>
+              <div class="alert-title" data-i18n="cleanAlertTitle">✅ No High-Risk Metadata Detected</div>
+              <p data-i18n="cleanAlertText" style="margin:0">No GPS coordinates found in standard EXIF tags. Re-sanitizing ensures any residual chunks are purged.</p>
+            </div>
+          </div>
+
+          <!-- Table of Detected Tags -->
+          <div class="table-wrap">
+            <table class="meta-table">
+              <thead>
+                <tr>
+                  <th data-i18n="thTag">Tag Name</th>
+                  <th data-i18n="thValue">Embedded Value</th>
+                </tr>
+              </thead>
+              <tbody id="metaTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Action Bar -->
+          <div class="action-bar">
+            <div class="action-note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="actionNote">100% In-Memory Canvas Purge. Zero server logging.</span>
+            </div>
+            <button type="button" class="btn-sanitize" id="btnSanitize">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+              <span data-i18n="btnSanitize">Strip Metadata &amp; Sanitize</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sanitization Complete / Download Panel -->
+    <div class="result-panel" id="resultPanel">
+      <div class="result-icon-wrap">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="result-title" data-i18n="resultTitle">Photo Successfully Sanitized!</div>
+      <p class="result-desc" data-i18n="resultDesc">All EXIF tags, GPS coordinates, and camera footprints have been permanently stripped from memory.</p>
+
+      <div class="stats-summary">
+        <div class="stat-box">
+          <div class="stat-label" data-i18n="statTagsRemoved">Metadata Tags Purged</div>
+          <div class="stat-value" id="statTagsRemoved" style="color:#38bdf8">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label" data-i18n="statGpsStatus">GPS Status</div>
+          <div class="stat-value" id="statGpsStatus" style="color:#10b981">Cleaned</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label" data-i18n="statFileSize">Sanitized Size</div>
+          <div class="stat-value" id="statCleanSize">-</div>
         </div>
       </div>
 
-      <!-- Analysis & Preview Card (Revealed after image upload) -->
-      <div class="analysis-panel" id="analysisPanel">
-        <div class="panel-header">
-          <div class="panel-title-wrap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <div class="panel-title" data-i18n="panelTitle">Metadata Audit & Security Analysis</div>
-          </div>
-          <button type="button" class="btn-secondary" id="btnChangeImage">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-            <span data-i18n="btnChange">Change Photo</span>
-          </button>
-        </div>
+      <button type="button" class="btn-download" id="btnDownload">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span data-i18n="btnDownload">Download Sanitized Image</span>
+      </button>
 
-        <div class="analysis-grid">
-          <!-- Left: Preview & File Stats -->
-          <div class="image-preview-card">
-            <div class="preview-thumb-wrap">
-              <img id="imagePreview" class="preview-thumb" alt="Original Image Preview">
-            </div>
-            <div class="file-meta-list">
-              <div class="file-meta-row">
-                <span data-i18n="metaFilename">File Name</span>
-                <span class="file-meta-val" id="metaFileName">-</span>
-              </div>
-              <div class="file-meta-row">
-                <span data-i18n="metaDimensions">Dimensions</span>
-                <span class="file-meta-val" id="metaDimensions">-</span>
-              </div>
-              <div class="file-meta-row">
-                <span data-i18n="metaFormat">Format</span>
-                <span class="file-meta-val" id="metaFormat">-</span>
-              </div>
-              <div class="file-meta-row">
-                <span data-i18n="metaFileSize">File Size</span>
-                <span class="file-meta-val" id="metaFileSize">-</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Security Audit & Tags Table -->
-          <div class="audit-section">
-            <!-- Dynamic Alert Banners -->
-            <div id="gpsAlertBox" class="alert-banner alert-danger" style="display:none">
-              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-              <div>
-                <strong data-i18n="gpsAlertTitle">⚠️ SENSITIVE GPS LOCATION DETECTED!</strong>
-                <p id="gpsAlertText">Exact physical coordinates are embedded in this file. Sharing it will expose your location.</p>
-                <div id="gpsCoordsRow" style="margin-top:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700"></div>
-              </div>
-            </div>
-
-            <div id="cameraAlertBox" class="alert-banner alert-warning" style="display:none">
-              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              <div>
-                <strong data-i18n="cameraAlertTitle">📸 Hardware & Timestamp Tags Found</strong>
-                <p id="cameraAlertText">Device model, software build, or capture timestamps are embedded.</p>
-              </div>
-            </div>
-
-            <div id="cleanAlertBox" class="alert-banner alert-success" style="display:none">
-              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              <div>
-                <strong data-i18n="cleanAlertTitle">✅ No High-Risk Metadata Detected</strong>
-                <p data-i18n="cleanAlertText">No GPS coordinates found in standard EXIF tags. Re-sanitizing ensures any residual chunks are purged.</p>
-              </div>
-            </div>
-
-            <!-- Metadata Breakdown Table -->
-            <div class="meta-table-wrap">
-              <div class="meta-table-header">
-                <span data-i18n="detectedTagsTitle">Detected Metadata Tags</span>
-                <span id="detectedTagsCount" style="color:#38bdf8">0 Tags</span>
-              </div>
-              <div class="meta-table-scroll">
-                <table class="meta-table">
-                  <thead>
-                    <tr>
-                      <th data-i18n="thTag">Tag Name</th>
-                      <th data-i18n="thValue">Embedded Value</th>
-                    </tr>
-                  </thead>
-                  <tbody id="metaTableBody">
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Bar -->
-        <div class="action-bar">
-          <div class="action-note">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span data-i18n="actionNote">100% In-Memory Canvas Purge. Zero server logging.</span>
-          </div>
-          <button type="button" class="btn-sanitize" id="btnSanitize">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span data-i18n="btnSanitize">Strip Metadata & Sanitize</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Result Card (Shown after stripping) -->
-      <div class="result-panel" id="resultPanel">
-        <div class="result-hero">
-          <div class="result-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          </div>
-          <div class="result-title" data-i18n="resultTitle">Photo Successfully Sanitized!</div>
-          <div class="result-desc" data-i18n="resultDesc">All EXIF tags, GPS coordinates, and camera footprints have been permanently stripped from memory.</div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="statTagsRemoved">Metadata Tags Purged</div>
-            <div class="stat-val clean" id="statTagsRemoved">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="statGpsStatus">GPS Status</div>
-            <div class="stat-val clean" id="statGpsStatus">0 Coordinates (Safe)</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label" data-i18n="statFileSize">Sanitized Size</div>
-            <div class="stat-val" id="statCleanSize">-</div>
-          </div>
-        </div>
-
-        <div class="result-actions">
-          <a id="btnDownload" class="btn-download" download="sanitized_image.jpg">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span data-i18n="btnDownload">Download Sanitized Image</span>
-          </a>
-          <button type="button" class="btn-secondary" id="btnResetTool">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-            <span data-i18n="btnReset">Sanitize Another Photo</span>
-          </button>
-        </div>
-      </div>
+      <button type="button" class="btn-reset" id="btnResetTool" data-i18n="btnReset">Sanitize Another Photo</button>
     </div>
 
     <!-- Educational & Technical Guide Section -->
     <section class="info-section">
       <div class="info-header">
-        <h2 data-i18n="guideHeading">Understanding Image Metadata & Privacy Protection</h2>
-        <p data-i18n="guideSubheading">Learn why modern smartphones embed sensitive forensic data into your photos and how local sanitization safeguards your identity.</p>
+        <h2 data-i18n="guideHeading">Why Stripping Image Metadata is Essential for Digital Privacy</h2>
+        <p data-i18n="guideSubheading">Understand how EXIF, IPTC, and GPS tags are created, what risks they pose, and how browser-side sanitization keeps you safe.</p>
       </div>
 
       <div class="guide-grid">
         <div class="guide-card">
           <div class="guide-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span data-i18n="g1Title">What is EXIF Data?</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span data-i18n="g1Title">Why Strip Metadata?</span>
           </div>
-          <p data-i18n="g1Desc">Exchangeable Image File Format (EXIF) is an industry specification that embeds camera hardware metadata, exposure configurations, timestamps, and precise GPS coordinates into image files.</p>
+          <p data-i18n="g1Desc">Smartphone and digital camera photos automatically embed latitude, longitude, altitude, capture timestamps, and device serial numbers. Publishing unstripped photos exposes home addresses, daily routines, and sensitive workplace locations.</p>
         </div>
         <div class="guide-card">
           <div class="guide-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span data-i18n="g2Title">Zero-Leak Client-Side Purge</span>
+            <span data-i18n="g2Title">How Canvas Sanitization Works</span>
           </div>
-          <p data-i18n="g2Desc">Unlike cloud-based image strippers that upload your photos to remote servers, VantorKit executes 100% of the extraction and Canvas re-encoding in local browser RAM. No bytes are transmitted.</p>
+          <p data-i18n="g2Desc">VantorKit decodes the image and rasterizes the raw visual pixels onto an isolated in-memory HTML5 Canvas buffer. Re-encoding this canvas into a new image file discards all non-pixel EXIF, IPTC, and XMP chunks completely without reducing visual clarity.</p>
         </div>
         <div class="guide-card">
           <div class="guide-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span data-i18n="g3Title">Essential for Privacy</span>
+            <span data-i18n="g3Title">Zero-Server Guarantee</span>
           </div>
-          <p data-i18n="g3Desc">Crucial for journalists, confidential sources, activists, real estate sellers, and families sharing home photos online who must protect home addresses and sensitive locations.</p>
+          <p data-i18n="g3Desc">Unlike commercial image tools that upload your files to cloud servers, VantorKit processes 100% of the extraction and sanitization inside your browser RAM. Zero bytes are ever sent over the network, ensuring total confidentiality for journalists, legal teams, and families.</p>
         </div>
       </div>
 
@@ -1384,6 +1540,401 @@
         </div>
       </div>
     </section>
+
+    <!-- Content Layer injected for SEO & i18n -->
+    <article class="tool-content-layer max-w-4xl mx-auto mt-16 px-4 py-8 border-t border-slate-800/80 text-slate-300">
+      <!-- Language Block: EN -->
+      <div class="lang-content-block" data-lang="en">
+        <h2>What is it &amp; Practical Utility</h2>
+        <p>The VantorKit In-Browser Metadata &amp; EXIF Cleaner is an essential digital security tool created for investigative journalists, human rights defenders, real estate professionals, photographers, and privacy-conscious individuals. When digital cameras and modern smartphones capture photos, they silently inject technical metadata into hidden segments of the image container. This information, collectively standardized under EXIF, IPTC, and Adobe XMP specifications, often contains exact GPS satellite coordinates, device serial numbers, and timestamps.</p>
+        <p>Sharing uncleaned images on web forums, classifieds, or messaging platforms can inadvertently expose your exact residential address, daily commuting routes, and sensitive meeting places. Running completely client-side in browser RAM, this utility strips all identifying metadata tags before your photos ever leave your personal device.</p>
+
+        <h2>Step-by-Step Guide</h2>
+        <ol>
+          <li><strong>Select or Drop an Image:</strong> Drag and drop your JPEG, PNG, or WebP photo into the designated upload zone. The client-side parser reads the file structure in local memory without transmitting data.</li>
+          <li><strong>Audit Embedded Metadata:</strong> Inspect the live detection dashboard detailing camera hardware make, model, exposure settings, creation timestamps, and high-risk GPS location alerts.</li>
+          <li><strong>Sanitize &amp; Download:</strong> Click "Strip Metadata &amp; Sanitize" to re-encode the pure visual raster data via HTML5 Canvas. Download your clean, privacy-hardened image immediately.</li>
+        </ol>
+
+        <h2>The Engine &amp; Binary Sanitization Mechanics</h2>
+        <div class="formula-box">
+          <div class="formula-title">Client-Side Canvas Rasterization Pipeline</div>
+          <div class="formula-expr"><code>Image_Binary -> Memory_Raster(Canvas2D) -> Fresh_Container(Blob, APP0_Only) -> Sanitized_File</code></div>
+        </div>
+        <p>Traditional file editors often attempt to delete individual metadata tags by rewriting header bytes, which frequently leaves orphaned thumbnail caches and XMP sidecar fragments intact. VantorKit utilizes a definitive raster-purge architecture: the raw image is parsed into memory and drawn directly onto an unlinked HTML5 Canvas context. During <code>canvas.toBlob()</code> serialization, the browser generates an entirely pristine image container containing solely visual pixel arrays, guaranteed to be free of APP1 (EXIF), APP13 (IPTC), and APP2 (ICC) blocks.</p>
+
+        <h2>Real-World Practical Scenarios</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Protecting Source Confidentiality in Field Reporting</h4>
+            <p>An investigative journalist receives whistleblower photographs taken at an undisclosed corporate facility. Stripping EXIF metadata eliminates the camera serial number and GPS altitude data, preventing forensic adversaries from tracking down the leaker.</p>
+          </div>
+          <div class="content-card">
+            <h4>Safe Online Marketplace and Social Listings</h4>
+            <p>A homeowner posting photographs of high-value electronics on community classifieds strips location tags prior to uploading. Potential thieves browsing online listings cannot triangulate the exact residential coordinates of the seller.</p>
+          </div>
+        </div>
+
+        <h2>Common Mistakes to Avoid</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Relying on Social Media Compression to Strip Metadata</h4>
+            <p>While some major platforms strip EXIF tags upon upload, many direct messaging apps, cloud drives, and email clients transmit uncompressed files with full GPS coordinates intact.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Cropping Photos in Mobile Editors Without Purging</h4>
+            <p>Basic photo cropping and editing applications frequently copy all original EXIF and GPS headers into the modified image output, maintaining the original leak.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confusing File Timestamps with Embedded EXIF Dates</h4>
+            <p>Renaming a file or altering filesystem modified times does not erase the immutable internal <code>DateTimeOriginal</code> tag embedded inside the JPEG binary payload.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+          <p>Every phase of image decoding, binary inspection, canvas rasterization, and download execution occurs locally within your browser sandbox. Zero bytes of your photographs are ever transmitted over the network.</p>
+        </div>
+
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>Does stripping metadata affect photo resolution or visual quality?</summary>
+            <div class="faq-answer">
+              <p>No. The canvas re-encoding preserves full pixel dimensions (width and height). Only non-visual metadata headers (APP1, XMP, IPTC) are permanently removed.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Which image formats are supported?</summary>
+            <div class="faq-answer">
+              <p>The tool fully supports JPEG (.jpg, .jpeg), PNG (.png), and modern WebP (.webp) formats. Sanitized output preserves your original format.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Can someone recover stripped GPS data after sanitization?</summary>
+            <div class="faq-answer">
+              <p>No. Because the image is re-rasterized directly into fresh pixel data, the old EXIF data blocks cease to exist. There is zero residual forensic metadata left to recover.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Is there any file size limit?</summary>
+            <div class="faq-answer">
+              <p>Because all processing takes place in your computer's local memory, you can comfortably process large RAW-converted JPEGs and photos up to 100MB without throttling.</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Related Image &amp; Media Tools</h2>
+        <div class="related-tools-grid">
+          <a href="./image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Image Compressor &amp; WebP Optimizer</div>
+            <div class="tool-desc">Compress JPG, PNG, and WebP images locally with split comparison sliders.</div>
+          </a>
+          <a href="./image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Image Resizer &amp; Crop</div>
+            <div class="tool-desc">Adjust pixel dimensions and crop photos locally with aspect ratio presets.</div>
+          </a>
+          <a href="./image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Image to Base64 Converter</div>
+            <div class="tool-desc">Convert sanitized images into inline data URIs for embedding in HTML and CSS.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: AR -->
+      <div class="lang-content-block" data-lang="ar" dir="rtl">
+        <h2>ما هي الأداة وفائدتها العملية</h2>
+        <p>تعد أداة فحص وتنظيف البيانات الوصفية و EXIF للصور عبر المتصفح من فانتور كيت أداة أمنية أساسية مخصصة للصحفيين الاستقصائيين ونشطاء حقوق الإنسان وأصحاب العقارات والمصورين والمستخدمين المهتمين بالخصوصية الرقمية. عند التقاط الصور عبر الكاميرات الرقمية أو الهواتف الذكية الحديثة، تقوم الأجهزة بحقن كم هائل من المعلومات التقنية داخل ملف الصورة تلقائياً. تتضمن هذه البيانات، وفق مواصفات EXIF و IPTC و XMP، إحداثيات GPS الدقيقة لخطوط الطول والعرض، والارتفاع عن سطح البحر، والرقم التسلسلي للكاميرا، وتاريخ وتوقيت الالتقاط الدقيق.</p>
+        <p>إن مشاركة الصور غير المطهرة على مواقع التواصل الاجتماعي أو منصات البيع قد يكشف عن موقع منزلك الفعلي أو مسارات تنقلك اليومية دون علمك. تعمل هذه الأداة محلياً بالكامل داخل متصفحك لإزالة هذه البيانات الحساسة قبل مشاركة الصور مع أي طرف ثالث.</p>
+
+        <h2>دليل الاستخدام خطوة بخطوة</h2>
+        <ol>
+          <li><strong>اختيار أو إفلات الصورة:</strong> قم بسحب وإفلات صورة بصيغة JPEG أو PNG أو WebP داخل منطقة الفحص. يقرأ المحلل الثنائي المحلي بنية الملف مباشرة في ذاكرة جهازك دون رفع أي بيانات.</li>
+          <li><strong>تدقيق البيانات الوصفية وإحداثيات الموقع:</strong> راجع لوحة الفحص الشاملة التي توضح نوع الكاميرا المستخدمة، وإعدادات العدسة، والوقت، وتنبيهات الأمان في حال وجود إحداثيات جغرافية GPS.</li>
+          <li><strong>تطهير الصورة وتحميلها:</strong> انقر على زر "إزالة البيانات الوصفية وتطهير الصورة" لإعادة بناء بكسلات الصورة النقية عبر HTML5 Canvas، ثم حمّل النسخة الآمنة والمطهرة فوراً.</li>
+        </ol>
+
+        <h2>آلية العمل والتطهير الثنائي في المتصفح</h2>
+        <div class="formula-box">
+          <div class="formula-title">مسار المعالجة والتطهير المعتمد على Canvas</div>
+          <div class="formula-expr"><code>Image_Binary -> Memory_Raster(Canvas2D) -> Fresh_Container(Blob, APP0_Only) -> Sanitized_File</code></div>
+        </div>
+        <p>تحاول العديد من البرامج التقليدية حذف وسوم البيانات الوصفية عبر تعديل بايتات الترويسة، مما يترك أحياناً صوراً مصغرة متبقية أو أجزاء من وسوم XMP. بينما تعتمد فانتور كيت على معمارية التطهير بالرسم المباشر: يتم تفكيك الصورة ورسم بكسلاتها المرئية فقط على لوحة HTML5 Canvas معزولة. وعند إعادة حفظ الصورة كملف جديد عبر <code>canvas.toBlob</code>، ينشئ المتصفح حاوية صورة نقية تماماً خالية من وسوم APP1 و IPTC و ICC نهائياً وبنفس الجودة المرئية.</p>
+
+        <h2>أمثلة وسيناريوهات واقعية</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>حماية سرية المصادر في التحقيقات الصحفية</h4>
+            <p>يتلقى صحفي استقصائي صوراً حساسة من مصادر موثوقة داخل منشأة خاصة. يضمن تنظيف بيانات EXIF إزالة الرقم التسلسلي لكاميرا الهاتف وإحداثيات الموقع الدقيقة، مما يمنع تعقب هوية المصدر أو موقعه.</p>
+          </div>
+          <div class="content-card">
+            <h4>أمان الإعلانات المبوبة ومنصات البيع الإلكترونية</h4>
+            <p>يقوم مستخدم بنشر صور لمقتنيات ثمينة يرغب في بيعها على مواقع الإعلانات. إزالة إحداثيات GPS تمنع اللصوص من تحديد الموقع الجغرافي الدقيق لمنزل البائع من خلال ملفات الصور المنشورة.</p>
+          </div>
+        </div>
+
+        <h2>أخطاء شائعة يجب تجنبها</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ الاعتماد على ضغط منصات التواصل لحذف البيانات</h4>
+            <p>على الرغم من أن بعض الشبكات الاجتماعية تحذف وسوم EXIF عند النشر، فإن العديد من تطبيقات المراسلة المباشرة وخدمات التخزين السحابي تنقل الملفات الأصلية بكافة إحداثيات GPS المدمجة دون تعديل.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ قص الصور في تطبيقات الهاتف دون تنظيفها</h4>
+            <p>تقوم معظم تطبيقات تحرير الصور البسيطة بنسخ ترويسة EXIF الأصلية بالكامل إلى الصورة الجديدة بعد القص، مما يبقي إحداثيات الموقع والبيانات الحساسة موجودة دون تغيير.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ الاعتقاد بأن تغيير اسم الملف يحذف البيانات الوصفية</h4>
+            <p>إن إعادة تسمية الملف أو تعديل تاريخ حفظه في نظام التشغيل لا يؤثر على وسم <code>DateTimeOriginal</code> الثابت والمشفر داخلياً في البنية الثنائية للصورة.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 ضمان الخصوصية التامة على جهازك</h3>
+          <p>تتم كافة مراحل فحص الصورة، وتحليل الوسوم، وتطهير البكسلات عبر Canvas محلياً 100% داخل ذاكرة متصفحك. لا يتم إرسال أي بايت من صورك الخاصة عبر الإنترنت إطلاقاً.</p>
+        </div>
+
+        <h2>الأسئلة الشائعة (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>هل يؤثر حذف البيانات الوصفية على دقة أو جودة الصورة؟</summary>
+            <div class="faq-answer">
+              <p>كلا، إطلاقاً. تحافظ عملية إعادة الترميز على الأبعاد الكاملة بالبكسل (العرض والارتفاع). يتم فقط حذف كتل البيانات الوصفية غير المرئية (APP1 و XMP و IPTC) بشكل دائم.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>ما هي صيغ الصور المدعومة؟</summary>
+            <div class="faq-answer">
+              <p>تدعم الأداة صيغ JPEG (.jpg, .jpeg) و PNG (.png) وصيغة WebP (.webp) الحديثة بالكامل، ويتم حفظ الملف المطهر بنفس الصيغة الأصلية.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>هل يمكن لأي شخص استرجاع إحداثيات GPS بعد التطهير؟</summary>
+            <div class="faq-answer">
+              <p>مستحيل تماماً. نظراً لإعادة رسم الصورة مباشرة كبكسلات نقية جديدة، تنعدم كتل بيانات EXIF الأصلية تماماً ولا يتبقى أي أثر جنائي أو بيانات رقمية مخفية.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>هل يوجد حد أقصى لحجم الملف المرفوع؟</summary>
+            <div class="faq-answer">
+              <p>نظراً لأن جميع المعالجات تتم مباشرة في ذاكرة جهازك المحلية دون رفع إلى خوادم، يمكنك معالجة الصور الكبيرة وصور JPEG الناتجة عن كاميرات RAW حتى 100 ميجابايت بكل سلاسة وبدون قيود.</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>أدوات معالجة الصور ذات الصلة</h2>
+        <div class="related-tools-grid">
+          <a href="./image-compressor.html" class="related-tool-card">
+            <div class="tool-name">ضاغط الصور ومحسن WebP</div>
+            <div class="tool-desc">ضغط وتصغير حجم صور JPG و PNG محلياً مع المقارنة البصرية.</div>
+          </a>
+          <a href="./image-resizer.html" class="related-tool-card">
+            <div class="tool-name">تعديل أبعاد وقص الصور</div>
+            <div class="tool-desc">تغيير مقاسات البكسل وقص الصور مع الحفاظ على نسبة التناسب.</div>
+          </a>
+          <a href="./image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">تحويل الصور إلى Base64</div>
+            <div class="tool-desc">تحويل الصور المطهرة إلى كود Base64 للتضمين المباشر في HTML.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: FR -->
+      <div class="lang-content-block" data-lang="fr">
+        <h2>Présentation &amp; Utilité Pratique</h2>
+        <p>Le nettoyeur de métadonnées et d'EXIF en ligne de VantorKit est un utilitaire de sécurité numérique conçu pour les journalistes d'investigation, défenseurs des droits de l'homme, agents immobiliers et particuliers soucieux de leur vie privée. Lorsque vous prenez une photo avec un smartphone moderne ou un appareil reflex, le système y insère une multitude d'informations techniques invisibles. Ces métadonnées, encadrées par les normes EXIF, IPTC et XMP, comportent très souvent les coordonnées GPS exactes du lieu de prise de vue, le modèle d'appareil et l'heure précise.</p>
+        <p>Partager ces clichés sur des sites d'annonces ou des forums publics peut involontairement dévoiler votre adresse résidentielle ou vos habitudes de déplacement. En s'exécutant à 100% dans la mémoire de votre navigateur, cet outil supprime définitivement toutes les balises d'identification avant tout partage.</p>
+
+        <h2>Guide Étape par Étape</h2>
+        <ol>
+          <li><strong>Sélectionnez ou Déposez une Image :</strong> Glissez votre fichier JPEG, PNG ou WebP dans la zone dédiée. Le décodeur binaire local analyse la structure de l'image en RAM sans aucun transfert distant.</li>
+          <li><strong>Auditez les Métadonnées Détectées :</strong> Consultez le tableau d'analyse présentant le modèle de l'appareil, les données d'exposition, l'horodatage et les alertes de localisation GPS sensible.</li>
+          <li><strong>Assainissez &amp; Téléchargez :</strong> Cliquez sur « Purger les métadonnées &amp; Assainir » pour recréer une image aux pixels purs via HTML5 Canvas. Téléchargez ensuite instantanément votre photo assainie.</li>
+        </ol>
+
+        <h2>Le Moteur &amp; La Mécanique d'Assainissement</h2>
+        <div class="formula-box">
+          <div class="formula-title">Pipeline de Restitution et Assainissement Canvas</div>
+          <div class="formula-expr"><code>Image_Binary -> Memory_Raster(Canvas2D) -> Fresh_Container(Blob, APP0_Only) -> Sanitized_File</code></div>
+        </div>
+        <p>De nombreux logiciels tentent d'effacer les balises en modifiant les octets d'en-tête, ce qui laisse souvent subsister des miniatures résiduelles ou des blocs XMP secondaires. VantorKit adopte une méthode radicale et infaillible : l'image est restituée sous forme de pixels bruts sur un canevas HTML5 en mémoire. Lors de l'exportation via <code>canvas.toBlob()</code>, le navigateur crée un tout nouveau conteneur d'image exempt de tout en-tête APP1 (EXIF), IPTC ou profil colorimétrique superflu tout en conservant la résolution originale.</p>
+
+        <h2>Cas d'Usage Réels</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Protection des Sources et Journalisme de Terrain</h4>
+            <p>Un journaliste reçoit des documents photographiques pris dans un lieu confidentiel. Supprimer les métadonnées élimine le numéro de série de l'appareil et les données d'altitude GPS, empêchant toute identification forensique de la source.</p>
+          </div>
+          <div class="content-card">
+            <h4>Publication Sécurisée sur les Sites de Petites Annonces</h4>
+            <p>Un particulier photographiant un bien de valeur pour le vendre en ligne nettoie la photo au préalable. Les acheteurs potentiels ne peuvent ainsi pas géolocaliser l'adresse de son domicile depuis l'image.</p>
+          </div>
+        </div>
+
+        <h2>Erreurs Fréquentes à Éviter</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Compter sur les Réseaux Sociaux pour Nettoyer les Photos</h4>
+            <p>Si certains réseaux sociaux compressent les images, de nombreuses applications de messagerie privée, emails et disques partagés transmettent les fichiers originaux avec l'intégralité des données GPS.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Rogner une Photo sans Purger les Métadonnées</h4>
+            <p>Les éditeurs photo basiques recopient l'intégralité des en-têtes EXIF dans le fichier rogné, maintenant ainsi la présence des coordonnées de géolocalisation.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondre Date de Fichier et Date de Prise de Vue</h4>
+            <p>Renommer un fichier ou modifier la date du système d'exploitation ne supprime pas la balise interne <code>DateTimeOriginal</code> incrustée dans la structure binaire de la photo.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 Garantie de Confidentialité 100% Côté Client</h3>
+          <p>L'analyse binaire, la détection des balises, l'assainissement sur canevas et le téléchargement sont exécutés intégralement sur votre appareil. Aucun octet de vos photos ne transite sur nos serveurs.</p>
+        </div>
+
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>La suppression des métadonnées affecte-t-elle la résolution ou la qualité de l'image ?</summary>
+            <div class="faq-answer">
+              <p>Non. Le ré-encodage sur canevas préserve l'intégralité des dimensions en pixels (largeur et hauteur). Seules les métadonnées non visuelles (APP1, XMP, IPTC) sont définitivement supprimées.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Quels formats d'image sont pris en charge ?</summary>
+            <div class="faq-answer">
+              <p>L'outil prend en charge les formats JPEG (.jpg, .jpeg), PNG (.png) et WebP (.webp). Le fichier assaini conserve son format d'origine.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Peut-on récupérer les données GPS supprimées après l'assainissement ?</summary>
+            <div class="faq-answer">
+              <p>Non. L'image étant entièrement restituée à partir de nouveaux pixels bruts, les anciens blocs de données EXIF cessent d'exister. Aucune métadonnée résiduelle ne peut être récupérée.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Existe-t-il une limite de taille de fichier ?</summary>
+            <div class="faq-answer">
+              <p>Comme tout le traitement est effectué localement dans la mémoire de votre appareil, vous pouvez traiter de volumineux fichiers JPEG ou photos haute résolution jusqu'à 100 Mo sans ralentissement.</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Outils Multimédia Associés</h2>
+        <div class="related-tools-grid">
+          <a href="./image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compresseur d'Images &amp; WebP</div>
+            <div class="tool-desc">Compressez vos fichiers JPG, PNG et WebP localement avec comparateur visuel.</div>
+          </a>
+          <a href="./image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Redimensionner &amp; Rogner l'Image</div>
+            <div class="tool-desc">Ajustez les dimensions en pixels et recadrez vos photos facilement.</div>
+          </a>
+          <a href="./image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Convertisseur Image vers Base64</div>
+            <div class="tool-desc">Convertissez vos images assainies en données URI pour l'intégration web.</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Language Block: IT -->
+      <div class="lang-content-block" data-lang="it">
+        <h2>Cos'è &amp; Utilità Pratica</h2>
+        <p>Il pulitore di metadati ed EXIF in locale di VantorKit è uno strumento di sicurezza digitale pensato per giornalisti d'inchiesta, attivisti, operatori immobiliari e chiunque desideri proteggere la propria privacy. Quando si scatta una fotografia con uno smartphone moderno o una reflex, il dispositivo inserisce automaticamente numerosi parametri tecnici all'interno del file. Questi dati, standardizzati secondo le specifiche EXIF, IPTC e XMP, contengono frequentemente le coordinate satellitari GPS esatte, il modello dell'apparecchio e la data precisa dello scatto.</p>
+        <p>Condividere immagini online senza una preventiva pulizia può rivelare inavvertitamente la posizione della propria abitazione o i percorsi quotidiani. Operando al 100% nella memoria RAM del browser, questo strumento rimuove ogni traccia identificativa prima che la foto lasci il computer.</p>
+
+        <h2>Guida Passo Passo</h2>
+        <ol>
+          <li><strong>Carica o Trascina un'Immagine:</strong> Trascina la tua foto JPEG, PNG o WebP nell'area designata. L'analizzatore legge la struttura binaria nella memoria locale senza alcun caricamento su server.</li>
+          <li><strong>Ispeziona i Metadati Rilevati:</strong> Esamina il pannello con i dati del dispositivo, i parametri di scatto, l'orario e gli avvisi di presenza di coordinate GPS ad alto rischio.</li>
+          <li><strong>Sanifica e Scarica la Foto:</strong> Clicca su « Rimuovi metadati &amp; Sanifica » per ricreare l'immagine con pixel purificati tramite HTML5 Canvas e scarica immediatamente il file pulito.</li>
+        </ol>
+
+        <h2>Architettura del Motore &amp; Sanificazione Binaria</h2>
+        <div class="formula-box">
+          <div class="formula-title">Pipeline di Sanificazione su Canvas</div>
+          <div class="formula-expr"><code>Image_Binary -> Memory_Raster(Canvas2D) -> Fresh_Container(Blob, APP0_Only) -> Sanitized_File</code></div>
+        </div>
+        <p>Molti software convenzionali cercano di cancellare i tag modificando gli header del file, lasciando spesso residui di miniature o metadati XMP secondari. VantorKit adotta un approccio radicale: l'immagine viene decodificata e renderizzata come dati pixel puri su un elemento HTML5 Canvas in memoria. Durante la serializzazione con <code>canvas.toBlob()</code>, il browser genera un contenitore completamente nuovo privo di blocchi APP1 (EXIF), IPTC o profili ICC, preservando al 100% la risoluzione visiva originale.</p>
+
+        <h2>Scenari Applicativi Reali</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>Tutela delle Fonti nel Giornalismo Investigativo</h4>
+            <p>Un giornalista riceve fotografie confidenziali scattate in un'area riservata. La rimozione dei metadati EXIF cancella il seriale della fotocamera e l'altitudine GPS, proteggendo l'anonimato della fonte da analisi forensi.</p>
+          </div>
+          <div class="content-card">
+            <h4>Vendite Sicure su Piattaforme di Annunci Online</h4>
+            <p>Chi mette in vendita oggetti di valore su siti di annunci locali pulisce le immagini prima della pubblicazione. Gli utenti online non potranno così risalire alle coordinate esatte dell'abitazione del venditore.</p>
+          </div>
+        </div>
+
+        <h2>Errori Comuni da Evitare</h2>
+        <div class="content-card-grid">
+          <div class="content-card">
+            <h4>⚠️ Affidarsi alla Compressione dei Social Network</h4>
+            <p>Sebbene alcune piattaforme rimuovano i tag EXIF, molte app di messaggistica e servizi cloud conservano il file originale intatto con tutti i dati GPS incorporati.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Ritagliare le Foto con Editor di Base Senza Pulizia</h4>
+            <p>I programmi di fotoritocco basilari copiano frequentemente l'intera intestazione EXIF nel file modificato, lasciando inalterate le coordinate di geolocalizzazione.</p>
+          </div>
+          <div class="content-card">
+            <h4>⚠️ Confondere la Data del File con la Data EXIF di Scatto</h4>
+            <p>Rinominare un file o modificare la data di sistema non elimina il tag <code>DateTimeOriginal</code> memorizzato all'interno della struttura binaria dell'immagine.</p>
+          </div>
+        </div>
+
+        <div class="privacy-banner">
+          <h3>🔒 Garanzia di Privacy 100% Lato Client</h3>
+          <p>Tutti i processi di scansione binaria, verifica dei tag, sanificazione tramite canvas e download avvengono esclusivamente all'interno del tuo browser. Nessun byte delle tue foto viene trasmesso in rete.</p>
+        </div>
+
+        <h2>Domande Frequenti (FAQ)</h2>
+        <div class="faq-accordion">
+          <details class="faq-item-details">
+            <summary>La rimozione dei metadati influisce sulla risoluzione o sulla qualità della foto?</summary>
+            <div class="faq-answer">
+              <p>No. La ricodifica tramite canvas preserva integralmente le dimensioni in pixel (larghezza e altezza). Vengono rimosse esclusivamente le intestazioni non visive (APP1, XMP, IPTC).</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Quali formati di immagine sono supportati?</summary>
+            <div class="faq-answer">
+              <p>Lo strumento supporta i formati JPEG (.jpg, .jpeg), PNG (.png) e il moderno WebP (.webp). L'output sanificato mantiene il formato d'origine.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>È possibile recuperare le coordinate GPS rimosse dopo la sanificazione?</summary>
+            <div class="faq-answer">
+              <p>No. Poiché l'immagine viene ri-renderizzata direttamente in dati pixel completamente nuovi, i vecchi blocchi EXIF cessano di esistere, senza alcun residuo forense recuperabile.</p>
+            </div>
+          </details>
+          <details class="faq-item-details">
+            <summary>Esiste un limite di dimensione per i file?</summary>
+            <div class="faq-answer">
+              <p>Poiché tutte le operazioni avvengono nella memoria locale del tuo dispositivo senza upload, puoi elaborare senza limitazioni file JPEG di grandi dimensioni e foto fino a 100 MB.</p>
+            </div>
+          </details>
+        </div>
+
+        <h2>Strumenti di Immagine Correlati</h2>
+        <div class="related-tools-grid">
+          <a href="./image-compressor.html" class="related-tool-card">
+            <div class="tool-name">Compressore Immagini &amp; WebP</div>
+            <div class="tool-desc">Comprimi immagini JPG, PNG e WebP in locale con cursore comparativo.</div>
+          </a>
+          <a href="./image-resizer.html" class="related-tool-card">
+            <div class="tool-name">Ridimensiona &amp; Ritaglia Immagine</div>
+            <div class="tool-desc">Regola le dimensioni in pixel e ritaglia le foto mantenendo le proporzioni.</div>
+          </a>
+          <a href="./image-to-base64.html" class="related-tool-card">
+            <div class="tool-name">Da Immagine a Base64</div>
+            <div class="tool-desc">Converti le immagini sanificate in URI dati per l'incorporamento diretto in HTML.</div>
+          </a>
+        </div>
+      </div>
+    </article>
   </main>
 
   <!-- Standardized Site Footer -->
@@ -1403,6 +1954,12 @@
       <p class="footer-copy" data-i18n="footerCopy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
     </div>
   </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastBox">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Action complete</span>
+  </div>
 
   <!-- Application Logic & EXIF Binary Parser -->
   <script>
@@ -1442,6 +1999,22 @@
           statFileSize: "Sanitized Size",
           btnDownload: "Download Sanitized Image",
           btnReset: "Sanitize Another Photo",
+          guideHeading: "Why Stripping Image Metadata is Essential for Digital Privacy",
+          guideSubheading: "Understand how EXIF, IPTC, and GPS tags are created, what risks they pose, and how browser-side sanitization keeps you safe.",
+          g1Title: "Why Strip Metadata?",
+          g1Desc: "Smartphone and digital camera photos automatically embed latitude, longitude, altitude, capture timestamps, and device serial numbers. Publishing unstripped photos exposes home addresses, daily routines, and sensitive workplace locations.",
+          g2Title: "How Canvas Sanitization Works",
+          g2Desc: "VantorKit decodes the image and rasterizes the raw visual pixels onto an isolated in-memory HTML5 Canvas buffer. Re-encoding this canvas into a new image file discards all non-pixel EXIF, IPTC, and XMP chunks completely without reducing visual clarity.",
+          g3Title: "Zero-Server Guarantee",
+          g3Desc: "Unlike commercial image tools that upload your files to cloud servers, VantorKit processes 100% of the extraction and sanitization inside your browser RAM. Zero bytes are ever sent over the network, ensuring total confidentiality for journalists, legal teams, and families.",
+          faq1Q: "Does stripping metadata affect photo resolution or visual quality?",
+          faq1A: "No. The canvas re-encoding preserves full pixel dimensions (width and height). Only non-visual metadata headers (APP1, XMP, IPTC) are permanently removed.",
+          faq2Q: "Which image formats are supported?",
+          faq2A: "The tool fully supports JPEG (.jpg, .jpeg), PNG (.png), and modern WebP (.webp) formats. Sanitized output preserves your original format.",
+          faq3Q: "Can someone recover stripped GPS data after sanitization?",
+          faq3A: "No. Because the image is re-rasterized directly into fresh pixel data, the old EXIF data blocks cease to exist. There is zero residual forensic metadata left to recover.",
+          faq4Q: "Is there any file size limit?",
+          faq4A: "Because all processing takes place in your computer's local memory, you can comfortably process large RAW-converted JPEGs and photos up to 100MB without throttling.",
           footerPriv: "Privacy Policy",
           footerTerms: "Terms of Service",
           footerAbout: "About Us",
@@ -1479,23 +2052,39 @@
           statFileSize: "الحجم بعد التنظيف",
           btnDownload: "تحميل الصورة المطهرة",
           btnReset: "تطهير صورة أخرى",
+          guideHeading: "أهمية إزالة البيانات الوصفية للصور لحماية الخصوصية الرقمية",
+          guideSubheading: "تعرف على كيفية إنشاء وسوم EXIF و IPTC وإحداثيات GPS، وما هي المخاطر التي تفرضها، وكيف تحميك المعالجة داخل المتصفح.",
+          g1Title: "لماذا يجب حذف البيانات الوصفية؟",
+          g1Desc: "تقوم الهواتف الذكية والكاميرات الرقمية بتضمين خطوط الطول والعرض، والارتفاع، وتوقيت الالتقاط، والرقم التسلسلي للجهاز داخل الصور تلقائياً. يؤدي نشر هذه الصور دون تطهير إلى كشف موقع منزلك وعناوين عملك ومساراتك اليومية.",
+          g2Title: "كيف تعمل آلية التطهير عبر Canvas؟",
+          g2Desc: "تقوم الأداة بفك تشفير الصورة ورسم بكسلاتها المرئية فقط على لوحة HTML5 Canvas معزولة في الذاكرة. ثم يُعاد ترميزها كملف صورة جديد يطرح تماماً كل وسوم EXIF و IPTC و XMP دون المساس بدقة وجودة الصورة الأصلية.",
+          g3Title: "ضمان المعالجة المحلية بدون خوادم",
+          g3Desc: "على عكس أدوات الصور السحابية التي ترسل ملفاتك إلى خوادم خارجية، تعمل أداة فانتور كيت بنسبة 100% داخل ذاكرة متصفحك المؤقتة. لا يتم إرسال أي بايت عبر الإنترنت، مما يوفر سرية مطلقة للصحفيين والمحامين والعائلات.",
+          faq1Q: "هل يؤثر حذف البيانات الوصفية على دقة أو جودة الصورة؟",
+          faq1A: "كلا، إطلاقاً. تحافظ عملية إعادة الترميز على الأبعاد الكاملة بالبكسل (العرض والارتفاع). يتم فقط حذف كتل البيانات الوصفية غير المرئية (APP1 و XMP و IPTC) بشكل دائم.",
+          faq2Q: "ما هي صيغ الصور المدعومة؟",
+          faq2A: "تدعم الأداة صيغ JPEG (.jpg, .jpeg) و PNG (.png) وصيغة WebP (.webp) الحديثة بالكامل، ويتم حفظ الملف المطهر بنفس الصيغة الأصلية.",
+          faq3Q: "هل يمكن لأي شخص استرجاع إحداثيات GPS بعد التطهير؟",
+          faq3A: "مستحيل تماماً. نظراً لإعادة رسم الصورة مباشرة كبكسلات نقية جديدة، تنعدم كتل بيانات EXIF الأصلية تماماً ولا يتبقى أي أثر جنائي أو بيانات رقمية مخفية.",
+          faq4Q: "هل يوجد حد أقصى لحجم الملف المرفوع؟",
+          faq4A: "نظراً لأن جميع المعالجات تتم مباشرة في ذاكرة جهازك المحلية دون رفع إلى خوادم، يمكنك معالجة الصور الكبيرة وصور JPEG الناتجة عن كاميرات RAW حتى 100 ميجابايت بكل سلاسة وبدون قيود.",
           footerPriv: "سياسة الخصوصية",
           footerTerms: "شروط الخدمة",
           footerAbout: "من نحن",
           footerContact: "اتصل بنا",
-          footerCopy: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
+          footerCopy: "© 2026 فانتوركيت. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
         },
         fr: {
           langLabel: "Français",
           backLink: "← Retour aux outils",
-          heroBadge: "Côté Client • Confidentialité Totale • Aucun Upload",
+          heroBadge: "Côté Client • Confidentialité Absolue • Zéro Donnée Transférée",
           heroTitle: "Nettoyeur de Métadonnées & EXIF",
-          heroSubtitle: "Inspectez les coordonnées GPS, modèles d'appareils et horodatages cachés, puis purgez toutes les métadonnées localement avant de partager vos photos.",
+          heroSubtitle: "Inspectez les coordonnées GPS cachées, modèles d'appareils et horodatages, puis supprimez définitivement tous les marqueurs en mémoire locale avant de partager.",
           dropTitle: "Déposez une image pour inspecter et supprimer les métadonnées",
-          dropDesc: "Prend en charge JPEG, PNG et WebP jusqu'à 100 Mo. Traité intégralement dans la mémoire de votre navigateur.",
-          btnSample: "Charger une photo test avec GPS EXIF",
-          panelTitle: "Audit de sécurité et analyse des métadonnées",
-          btnChange: "Changer d'image",
+          dropDesc: "Prend en charge les photos JPEG, PNG et WebP jusqu'à 100 Mo. Traitement 100% local en RAM.",
+          btnSample: "Charger une photo d'exemple avec GPS EXIF",
+          panelTitle: "Audit de Sécurité et Analyse des Métadonnées",
+          btnChange: "Changer de photo",
           metaFilename: "Nom du fichier",
           metaDimensions: "Dimensions",
           metaFormat: "Format",
@@ -1516,6 +2105,22 @@
           statFileSize: "Taille assainie",
           btnDownload: "Télécharger l'image assainie",
           btnReset: "Assainir une autre photo",
+          guideHeading: "Pourquoi Supprimer les Métadonnées d'Images est Essentiel",
+          guideSubheading: "Comprenez comment sont générées les balises EXIF, IPTC et GPS, quels risques elles présentent et comment l'assainissement local vous protège.",
+          g1Title: "Pourquoi Supprimer les Métadonnées ?",
+          g1Desc: "Les smartphones et appareils photo intègrent automatiquement la latitude, la longitude, l'altitude, l'heure exacte et le numéro de série de l'appareil. Publier des photos sans les nettoyer expose votre domicile et vos déplacements quotidiens.",
+          g2Title: "Fonctionnement de l'Assainissement Canvas",
+          g2Desc: "VantorKit décode l'image et restitue uniquement les pixels visuels sur un canevas HTML5 en mémoire. Le ré-encodage produit un nouveau fichier d'image exempt de toute balise EXIF, IPTC ou XMP résiduelle tout en préservant la qualité.",
+          g3Title: "Garantie Zéro Serveur",
+          g3Desc: "Contrairement aux outils cloud qui téléversent vos fichiers vers des serveurs distants, VantorKit effectue 100% du traitement dans la RAM de votre navigateur. Aucun octet n'est transmis sur le réseau, garantissant une confidentialité totale.",
+          faq1Q: "La suppression des métadonnées affecte-t-elle la résolution ou la qualité de l'image ?",
+          faq1A: "Non. Le ré-encodage sur canevas préserve l'intégralité des dimensions en pixels (largeur et hauteur). Seules les métadonnées non visuelles (APP1, XMP, IPTC) sont définitivement supprimées.",
+          faq2Q: "Quels formats d'image sont pris en charge ?",
+          faq2A: "L'outil prend en charge les formats JPEG (.jpg, .jpeg), PNG (.png) et WebP (.webp). Le fichier assaini conserve son format d'origine.",
+          faq3Q: "Peut-on récupérer les données GPS supprimées après l'assainissement ?",
+          faq3A: "Non. L'image étant entièrement restituée à partir de nouveaux pixels bruts, les anciens blocs de données EXIF cessent d'exister. Aucune métadonnée résiduelle ne peut être récupérée.",
+          faq4Q: "Existe-t-il une limite de taille de fichier ?",
+          faq4A: "Comme tout le traitement est effectué localement dans la mémoire de votre appareil, vous pouvez traiter de volumineux fichiers JPEG ou photos haute résolution jusqu'à 100 Mo sans ralentissement.",
           footerPriv: "Politique de confidentialité",
           footerTerms: "Conditions d'utilisation",
           footerAbout: "À propos",
@@ -1553,6 +2158,22 @@
           statFileSize: "Dimensione sanificata",
           btnDownload: "Scarica immagine sanificata",
           btnReset: "Sanifica un'altra foto",
+          guideHeading: "Perché Rimuovere i Metadati delle Immagini è Essenziale",
+          guideSubheading: "Scopri come vengono generati i tag EXIF, IPTC e GPS, quali rischi comportano e in che modo la sanificazione locale protegge la tua privacy.",
+          g1Title: "Perché Rimuovere i Metadati?",
+          g1Desc: "Le foto scattate con smartphone e fotocamere incorporano latitudine, longitudine, altitudine, timestamp precisi e numeri di serie. La condivisione di immagini non sanificate espone indirizzi privati e luoghi di lavoro sensibili.",
+          g2Title: "Come Funziona la Pulizia con Canvas",
+          g2Desc: "VantorKit decodifica l'immagine e renderizza i singoli pixel visivi su un buffer HTML5 Canvas isolato nella memoria. La ricodifica genera un nuovo file ripulito da qualsiasi intestazione EXIF, IPTC o XMP senza compromettere la qualità.",
+          g3Title: "Garanzia Zero Server",
+          g3Desc: "A differenza degli strumenti online tradizionali che caricano i file su server remoti, VantorKit elabora il 100% delle immagini nella RAM locale del browser. Nessun dato lascia il dispositivo, garantendo la massima riservatezza.",
+          faq1Q: "La rimozione dei metadati influisce sulla risoluzione o sulla qualità della foto?",
+          faq1A: "No. La ricodifica tramite canvas preserva integralmente le dimensioni in pixel (larghezza e altezza). Vengono rimosse esclusivamente le intestazioni non visive (APP1, XMP, IPTC).",
+          faq2Q: "Quali formati di immagine sono supportati?",
+          faq2A: "Lo strumento supporta i formati JPEG (.jpg, .jpeg), PNG (.png) e il moderno WebP (.webp). L'output sanificato mantiene il formato d'origine.",
+          faq3Q: "È possibile recuperare le coordinate GPS rimosse dopo la sanificazione?",
+          faq3A: "No. Poiché l'immagine viene ri-renderizzata direttamente in dati pixel completamente nuovi, i vecchi blocchi EXIF cessano di esistere, senza alcun residuo forense recuperabile.",
+          faq4Q: "Esiste un limite di dimensione per i file?",
+          faq4A: "Poiché tutte le operazioni avvengono nella memoria locale del tuo dispositivo senza upload, puoi elaborare senza limitazioni file JPEG di grandi dimensioni e foto fino a 100 MB.",
           footerPriv: "Privacy Policy",
           footerTerms: "Termini di servizio",
           footerAbout: "Chi siamo",
@@ -1592,9 +2213,7 @@
       const cameraAlertText = document.getElementById('cameraAlertText');
       const cleanAlertBox = document.getElementById('cleanAlertBox');
 
-      const detectedTagsCount = document.getElementById('detectedTagsCount');
       const metaTableBody = document.getElementById('metaTableBody');
-
       const statTagsRemoved = document.getElementById('statTagsRemoved');
       const statGpsStatus = document.getElementById('statGpsStatus');
       const statCleanSize = document.getElementById('statCleanSize');
@@ -1667,423 +2286,398 @@
       dropZone.addEventListener('drop', (e) => {
         const files = e.dataTransfer.files;
         if (files && files.length > 0) {
-          processFile(files[0]);
+          handleFile(files[0]);
         }
+      });
+
+      dropZone.addEventListener('click', (e) => {
+        if (e.target.closest('#btnLoadSample')) return;
+        fileInput.click();
       });
 
       fileInput.addEventListener('change', () => {
         if (fileInput.files && fileInput.files.length > 0) {
-          processFile(fileInput.files[0]);
+          handleFile(fileInput.files[0]);
         }
       });
 
       btnChangeImage.addEventListener('click', () => {
-        resetTool();
         fileInput.click();
       });
 
-      btnResetTool.addEventListener('click', resetTool);
-
-      function resetTool() {
+      btnResetTool.addEventListener('click', () => {
+        resultPanel.style.display = 'none';
+        analysisPanel.style.display = 'none';
+        dropZone.style.display = 'block';
         currentFile = null;
         currentImageObj = null;
-        currentParsedTags = {};
         sanitizedBlob = null;
         fileInput.value = '';
-        analysisPanel.style.display = 'none';
-        resultPanel.style.display = 'none';
-        dropZone.style.display = 'block';
-      }
+      });
 
-      function formatBytes(bytes) {
-        if (!bytes || bytes === 0) return '0 B';
-        const k = 1024;
-        const sizes = ['B', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-      }
-
-      // --- Main Process File Function ---
-      function processFile(file) {
-        if (!file.type.match(/^image\/(jpeg|png|webp)$/i) && !file.name.match(/\.(jpe?g|png|webp)$/i)) {
+      // --- File Processing Core ---
+      function handleFile(file) {
+        if (!file.type.match(/^image\/(jpeg|png|webp)/i) && !file.name.match(/\.(jpe?g|png|webp)$/i)) {
           alert('Please select a valid image file (JPEG, PNG, or WebP).');
           return;
         }
 
         currentFile = file;
+        dropZone.style.display = 'none';
+        resultPanel.style.display = 'none';
+        analysisPanel.style.display = 'block';
+
+        metaFileName.textContent = file.name;
+        metaFileSize.textContent = formatBytes(file.size);
+        metaFormat.textContent = file.type ? file.type.replace('image/', '').toUpperCase() : 'UNKNOWN';
+
         const reader = new FileReader();
-
-        reader.onload = function(e) {
-          const arrayBuffer = e.target.result;
-          const parsedData = parseImageMetadata(arrayBuffer, file.type || 'image/jpeg');
-          currentParsedTags = parsedData.tags;
-
-          // Load image for rendering dimensions & canvas rasterization
-          const blobUrl = URL.createObjectURL(file);
+        reader.onload = (e) => {
           const img = new Image();
-          img.onload = function() {
+          img.onload = () => {
             currentImageObj = img;
-            imagePreview.src = blobUrl;
-
-            metaFileName.textContent = file.name;
-            metaDimensions.textContent = `${img.naturalWidth} × ${img.naturalHeight} px`;
-            metaFormat.textContent = (file.type.split('/')[1] || 'jpeg').toUpperCase();
-            metaFileSize.textContent = formatBytes(file.size);
-
-            renderAuditAnalysis(parsedData);
-
-            dropZone.style.display = 'none';
-            resultPanel.style.display = 'none';
-            analysisPanel.style.display = 'block';
+            metaDimensions.textContent = img.naturalWidth + ' × ' + img.naturalHeight + ' px';
+            imagePreview.src = img.src;
           };
-          img.src = blobUrl;
+          img.src = e.target.result;
         };
+        reader.readAsDataURL(file);
 
-        reader.readAsArrayBuffer(file);
+        // Read binary for EXIF analysis
+        const binReader = new FileReader();
+        binReader.onload = (e) => {
+          const buffer = e.target.result;
+          parseImageMetadata(buffer, file);
+        };
+        binReader.readAsArrayBuffer(file);
       }
 
-      // --- Render Audit & Table ---
-      function renderAuditAnalysis(parsedData) {
-        const tags = parsedData.tags;
-        const tagKeys = Object.keys(tags);
-        detectedTagsCount.textContent = `${tagKeys.length} Tags Detected`;
+      // --- Pure Client-Side Binary EXIF / Metadata Parser ---
+      function parseImageMetadata(buffer, file) {
+        const view = new DataView(buffer);
+        const tags = {};
+        let hasGps = false;
+        let hasCamera = false;
+        let gpsInfo = null;
 
-        // Check GPS
-        const hasGps = parsedData.hasGps || tags['GPSLatitude'] || tags['GPSLongitude'];
-        if (hasGps) {
-          gpsAlertBox.style.display = 'flex';
-          const lat = tags['GPSLatitude'] || '37° 46\' 29.8" N';
-          const lon = tags['GPSLongitude'] || '122° 25\' 10.1" W';
-          const dec = tags['GPSDecimal'] || '37.774929, -122.419416';
-          gpsAlertText.textContent = `Coordinates exposed: ${lat}, ${lon} (${dec})`;
-          gpsCoordsRow.innerHTML = `<a href="https://www.google.com/maps?q=${encodeURIComponent(dec)}" target="_blank" rel="noopener noreferrer" style="color:#f87171;text-decoration:underline">📍 View Map Location (Coordinates Exposed)</a>`;
-        } else {
-          gpsAlertBox.style.display = 'none';
+        if (file.type === 'image/jpeg' || file.name.match(/\.jpe?g$/i)) {
+          // JPEG SOI marker 0xFFD8
+          if (view.getUint16(0, false) === 0xFFD8) {
+            let offset = 2;
+            const length = view.byteLength;
+
+            while (offset < length - 4) {
+              const marker = view.getUint16(offset, false);
+              offset += 2;
+
+              if (marker === 0xFFE1) {
+                // APP1 (EXIF / XMP)
+                const segLength = view.getUint16(offset, false);
+                const segStart = offset + 2;
+
+                // Check "Exif  "
+                if (segStart + 6 <= length) {
+                  const exifHeader = String.fromCharCode(
+                    view.getUint8(segStart),
+                    view.getUint8(segStart + 1),
+                    view.getUint8(segStart + 2),
+                    view.getUint8(segStart + 3)
+                  );
+
+                  if (exifHeader === 'Exif') {
+                    const exifResults = parseExifSegment(view, segStart + 6, segLength - 8);
+                    Object.assign(tags, exifResults.tags);
+                    if (exifResults.hasGps) {
+                      hasGps = true;
+                      gpsInfo = exifResults.gpsInfo;
+                    }
+                    if (exifResults.hasCamera) hasCamera = true;
+                  }
+                }
+
+                offset += segLength;
+              } else if (marker >= 0xFFE0 && marker <= 0xFFEF) {
+                // Other APP segments (IPTC, ICC, XMP, etc.)
+                const segLength = view.getUint16(offset, false);
+                const appName = 'APP' + (marker & 0x0F);
+                tags['Segment: ' + appName] = 'Detected (' + segLength + ' bytes)';
+                offset += segLength;
+              } else if (marker === 0xFFDA) {
+                // Start of Scan (Image Data Begins)
+                break;
+              } else {
+                const segLength = view.getUint16(offset, false);
+                offset += segLength;
+              }
+            }
+          }
+        } else if (file.type === 'image/png' || file.name.match(/\.png$/i)) {
+          // PNG Chunk Analysis
+          if (view.getUint32(0, false) === 0x89504E47) {
+            let offset = 8;
+            const length = view.byteLength;
+
+            while (offset < length - 8) {
+              const chunkLen = view.getUint32(offset, false);
+              const chunkType = String.fromCharCode(
+                view.getUint8(offset + 4),
+                view.getUint8(offset + 5),
+                view.getUint8(offset + 6),
+                view.getUint8(offset + 7)
+              );
+
+              if (['tEXt', 'zTXt', 'iTXt', 'eXIf'].includes(chunkType)) {
+                tags['PNG Chunk: ' + chunkType] = 'Metadata present (' + chunkLen + ' bytes)';
+                if (chunkType === 'eXIf') hasCamera = true;
+              }
+
+              offset += 12 + chunkLen;
+            }
+          }
         }
 
-        // Check Camera / Device
-        const make = tags['Make'] || tags['CameraMake'];
-        const model = tags['Model'] || tags['CameraModel'];
-        const date = tags['DateTimeOriginal'] || tags['DateTime'];
-        if (make || model || date) {
+        currentParsedTags = tags;
+        renderMetadataTable(tags, hasGps, gpsInfo, hasCamera);
+      }
+
+      function parseExifSegment(view, tiffStart, maxLen) {
+        const tags = {};
+        let hasGps = false;
+        let hasCamera = false;
+        let gpsInfo = null;
+
+        const endian = view.getUint16(tiffStart, false);
+        const littleEndian = endian === 0x4949; // 'II'
+
+        if (view.getUint16(tiffStart + 2, littleEndian) !== 0x002A) {
+          return { tags, hasGps, hasCamera, gpsInfo };
+        }
+
+        const ifd0Offset = view.getUint32(tiffStart + 4, littleEndian);
+        let ifdOffset = tiffStart + ifd0Offset;
+
+        if (ifdOffset >= view.byteLength) return { tags, hasGps, hasCamera, gpsInfo };
+
+        const numEntries = view.getUint16(ifdOffset, littleEndian);
+        let cur = ifdOffset + 2;
+
+        let exifSubIfdOffset = 0;
+        let gpsIfdOffset = 0;
+
+        for (let i = 0; i < numEntries; i++) {
+          if (cur + 12 > view.byteLength) break;
+          const tagId = view.getUint16(cur, littleEndian);
+          const type = view.getUint16(cur + 2, littleEndian);
+          const count = view.getUint32(cur + 4, littleEndian);
+          const valueOffset = cur + 8;
+
+          if (tagId === 0x010F) {
+            tags['Camera Make'] = readAscii(view, tiffStart, valueOffset, count, littleEndian);
+            hasCamera = true;
+          } else if (tagId === 0x0110) {
+            tags['Camera Model'] = readAscii(view, tiffStart, valueOffset, count, littleEndian);
+            hasCamera = true;
+          } else if (tagId === 0x0131) {
+            tags['Software'] = readAscii(view, tiffStart, valueOffset, count, littleEndian);
+          } else if (tagId === 0x0132) {
+            tags['Modify Date'] = readAscii(view, tiffStart, valueOffset, count, littleEndian);
+          } else if (tagId === 0x8769) {
+            exifSubIfdOffset = view.getUint32(valueOffset, littleEndian);
+          } else if (tagId === 0x8825) {
+            gpsIfdOffset = view.getUint32(valueOffset, littleEndian);
+          }
+
+          cur += 12;
+        }
+
+        // Parse Exif SubIFD if present
+        if (exifSubIfdOffset > 0 && tiffStart + exifSubIfdOffset < view.byteLength) {
+          const subCur = tiffStart + exifSubIfdOffset;
+          const subEntries = view.getUint16(subCur, littleEndian);
+          let subPtr = subCur + 2;
+
+          for (let j = 0; j < subEntries; j++) {
+            if (subPtr + 12 > view.byteLength) break;
+            const subTag = view.getUint16(subPtr, littleEndian);
+            const subCount = view.getUint32(subPtr + 4, littleEndian);
+            const subValOffset = subPtr + 8;
+
+            if (subTag === 0x9003) {
+              tags['Date Time Original'] = readAscii(view, tiffStart, subValOffset, subCount, littleEndian);
+            } else if (subTag === 0x9004) {
+              tags['Date Time Digitized'] = readAscii(view, tiffStart, subValOffset, subCount, littleEndian);
+            } else if (subTag === 0xA434) {
+              tags['Lens Model'] = readAscii(view, tiffStart, subValOffset, subCount, littleEndian);
+            } else if (subTag === 0xA431) {
+              tags['Body Serial Number'] = readAscii(view, tiffStart, subValOffset, subCount, littleEndian);
+            }
+
+            subPtr += 12;
+          }
+        }
+
+        // Parse GPS IFD if present
+        if (gpsIfdOffset > 0 && tiffStart + gpsIfdOffset < view.byteLength) {
+          hasGps = true;
+          const gpsCur = tiffStart + gpsIfdOffset;
+          const gpsEntries = view.getUint16(gpsCur, littleEndian);
+          let gpsPtr = gpsCur + 2;
+
+          let latRef = 'N';
+          let lonRef = 'E';
+          let latVal = null;
+          let lonVal = null;
+
+          for (let k = 0; k < gpsEntries; k++) {
+            if (gpsPtr + 12 > view.byteLength) break;
+            const gTag = view.getUint16(gpsPtr, littleEndian);
+            const gCount = view.getUint32(gpsPtr + 4, littleEndian);
+            const gValOff = gpsPtr + 8;
+
+            if (gTag === 0x0001) latRef = String.fromCharCode(view.getUint8(gValOff));
+            else if (gTag === 0x0002) latVal = readRationalArray(view, tiffStart, gValOff, 3, littleEndian);
+            else if (gTag === 0x0003) lonRef = String.fromCharCode(view.getUint8(gValOff));
+            else if (gTag === 0x0004) lonVal = readRationalArray(view, tiffStart, gValOff, 3, littleEndian);
+
+            gpsPtr += 12;
+          }
+
+          if (latVal && lonVal) {
+            const latDeg = latVal[0] + latVal[1]/60 + latVal[2]/3600;
+            const lonDeg = lonVal[0] + lonVal[1]/60 + lonVal[2]/3600;
+            gpsInfo = {
+              lat: (latRef === 'S' ? -latDeg : latDeg).toFixed(6),
+              lon: (lonRef === 'W' ? -lonDeg : lonDeg).toFixed(6),
+              display: latDeg.toFixed(4) + '° ' + latRef + ', ' + lonDeg.toFixed(4) + '° ' + lonRef
+            };
+            tags['GPS Latitude'] = gpsInfo.lat + ' (' + latRef + ')';
+            tags['GPS Longitude'] = gpsInfo.lon + ' (' + lonRef + ')';
+          } else {
+            tags['GPS Data'] = 'Embedded GPS Tags Detected';
+          }
+        }
+
+        return { tags, hasGps, hasCamera, gpsInfo };
+      }
+
+      function readAscii(view, tiffStart, offset, count, littleEndian) {
+        let strOffset = offset;
+        if (count > 4) {
+          strOffset = tiffStart + view.getUint32(offset, littleEndian);
+        }
+        let str = '';
+        for (let i = 0; i < count; i++) {
+          if (strOffset + i >= view.byteLength) break;
+          const charCode = view.getUint8(strOffset + i);
+          if (charCode === 0) break;
+          str += String.fromCharCode(charCode);
+        }
+        return str.trim();
+      }
+
+      function readRationalArray(view, tiffStart, offset, count, littleEndian) {
+        const arrOffset = tiffStart + view.getUint32(offset, littleEndian);
+        const res = [];
+        for (let i = 0; i < count; i++) {
+          const num = view.getUint32(arrOffset + (i * 8), littleEndian);
+          const den = view.getUint32(arrOffset + (i * 8) + 4, littleEndian);
+          res.push(den === 0 ? 0 : num / den);
+        }
+        return res;
+      }
+
+      function renderMetadataTable(tags, hasGps, gpsInfo, hasCamera) {
+        metaTableBody.innerHTML = '';
+        const tagKeys = Object.keys(tags);
+
+        if (hasGps) {
+          gpsAlertBox.style.display = 'flex';
+          cleanAlertBox.style.display = 'none';
+          if (gpsInfo && gpsInfo.display) {
+            gpsCoordsRow.textContent = '📍 ' + gpsInfo.display + ' (Coordinates: ' + gpsInfo.lat + ', ' + gpsInfo.lon + ')';
+          } else {
+            gpsCoordsRow.textContent = '📍 GPS Satellite Coordinates and Timestamp Embedded';
+          }
+        } else {
+          gpsAlertBox.style.display = 'none';
+          cleanAlertBox.style.display = 'flex';
+        }
+
+        if (hasCamera) {
           cameraAlertBox.style.display = 'flex';
-          let devStr = '';
-          if (make || model) devStr += `Device: ${make || ''} ${model || ''}. `;
-          if (date) devStr += `Captured: ${date}.`;
-          cameraAlertText.textContent = devStr;
         } else {
           cameraAlertBox.style.display = 'none';
         }
 
-        // Clean banner if nothing sensitive
-        if (!hasGps && !make && !model) {
-          cleanAlertBox.style.display = 'flex';
-        } else {
-          cleanAlertBox.style.display = 'none';
-        }
-
-        // Populate Table
-        metaTableBody.innerHTML = '';
         if (tagKeys.length === 0) {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td colspan="2" style="text-align:center;color:#64748b;padding:1.5rem">No standard EXIF metadata tags found in this file. Sanitization will still verify clean rasterization.</td>`;
-          metaTableBody.appendChild(row);
+          metaTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--text-muted);padding:1.5rem">No standard EXIF metadata tags detected. Re-sanitizing will ensure all residual chunks are stripped.</td></tr>';
         } else {
-          tagKeys.forEach(tag => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td class="tag-name">${escapeHtml(tag)}</td>
-              <td class="tag-val">${escapeHtml(String(tags[tag]))}</td>
-            `;
-            metaTableBody.appendChild(row);
+          tagKeys.forEach(key => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td class="tag-name">' + escapeHtml(key) + '</td><td class="tag-value-code">' + escapeHtml(tags[key]) + '</td>';
+            metaTableBody.appendChild(tr);
           });
         }
       }
 
-      function escapeHtml(str) {
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-      }
-
-      // --- Pure Client-Side Binary EXIF Parser ---
-      function parseImageMetadata(buffer, mimeType) {
-        const view = new DataView(buffer);
-        const tags = {};
-        let hasGps = false;
-
-        // Check if JPEG
-        if (view.byteLength >= 4 && view.getUint16(0, false) === 0xFFD8) {
-          let offset = 2;
-          const length = view.byteLength;
-
-          while (offset < length - 1) {
-            if (view.getUint8(offset) !== 0xFF) break;
-            const marker = view.getUint8(offset + 1);
-
-            // APP1 marker (EXIF / XMP)
-            if (marker === 0xE1) {
-              const app1Len = view.getUint16(offset + 2, false);
-              if (offset + 4 + 4 <= length) {
-                const headerStr = String.fromCharCode(
-                  view.getUint8(offset + 4),
-                  view.getUint8(offset + 5),
-                  view.getUint8(offset + 6),
-                  view.getUint8(offset + 7)
-                );
-
-                if (headerStr === 'Exif') {
-                  const tiffStart = offset + 10;
-                  if (tiffStart + 8 <= length) {
-                    const byteOrder = view.getUint16(tiffStart, false);
-                    const littleEndian = byteOrder === 0x4949; // 'II'
-
-                    if (byteOrder === 0x4949 || byteOrder === 0x4D4D) {
-                      const firstIfdOffset = tiffStart + view.getUint32(tiffStart + 4, littleEndian);
-                      parseIFD(view, tiffStart, firstIfdOffset, littleEndian, tags);
-                    }
-                  }
-                }
-              }
-              offset += 2 + app1Len;
-            } else if (marker === 0xDA || marker === 0xD9) { // SOS or EOI
-              break;
-            } else {
-              offset += 2 + view.getUint16(offset + 2, false);
-            }
-          }
-        } else if (view.byteLength >= 8) {
-          // Check for PNG
-          const isPng = (view.getUint32(0, false) === 0x89504E47 && view.getUint32(4, false) === 0x0D0A1A0A);
-          if (isPng) {
-            tags['FormatHeader'] = 'PNG Image (Checked for chunks)';
-            parsePngChunks(view, tags);
-          }
-        }
-
-        if (tags['GPSLatitude'] || tags['GPSLongitude'] || tags['GPS_RAW_EXISTS']) {
-          hasGps = true;
-        }
-
-        return { hasGps, tags };
-      }
-
-      function parseIFD(view, tiffStart, ifdOffset, le, tags) {
-        if (ifdOffset >= view.byteLength - 2) return;
-        const count = view.getUint16(ifdOffset, le);
-        let p = ifdOffset + 2;
-
-        const TAG_NAMES = {
-          0x010E: 'ImageDescription',
-          0x010F: 'Make',
-          0x0110: 'Model',
-          0x0112: 'Orientation',
-          0x011A: 'XResolution',
-          0x011B: 'YResolution',
-          0x0128: 'ResolutionUnit',
-          0x0131: 'Software',
-          0x0132: 'DateTime',
-          0x013B: 'Artist',
-          0x8298: 'Copyright',
-          0x8769: 'ExifSubIFD',
-          0x8825: 'GPSInfoIFD',
-          0x9003: 'DateTimeOriginal',
-          0x9004: 'DateTimeDigitized',
-          0x920A: 'FocalLength',
-          0x9209: 'Flash',
-          0x829A: 'ExposureTime',
-          0x829D: 'FNumber',
-          0x8827: 'ISO',
-          0xA434: 'LensModel'
-        };
-
-        for (let i = 0; i < count; i++) {
-          if (p + 12 > view.byteLength) break;
-          const tagId = view.getUint16(p, le);
-          const type = view.getUint16(p + 2, le);
-          const numValues = view.getUint32(p + 4, le);
-          const valOffset = p + 8;
-
-          if (tagId === 0x8769) { // Exif sub-IFD
-            const subOffset = tiffStart + view.getUint32(valOffset, le);
-            parseIFD(view, tiffStart, subOffset, le, tags);
-          } else if (tagId === 0x8825) { // GPS IFD
-            const gpsOffset = tiffStart + view.getUint32(valOffset, le);
-            parseGPS(view, tiffStart, gpsOffset, le, tags);
-          } else if (TAG_NAMES[tagId]) {
-            const name = TAG_NAMES[tagId];
-            if (type === 2) { // ASCII string
-              let strOffset = numValues <= 4 ? valOffset : tiffStart + view.getUint32(valOffset, le);
-              let str = '';
-              for (let j = 0; j < numValues - 1; j++) {
-                if (strOffset + j < view.byteLength) {
-                  str += String.fromCharCode(view.getUint8(strOffset + j));
-                }
-              }
-              tags[name] = str.trim();
-            } else if (type === 3) { // SHORT
-              tags[name] = view.getUint16(valOffset, le);
-            } else if (type === 4) { // LONG
-              tags[name] = view.getUint32(valOffset, le);
-            }
-          }
-          p += 12;
-        }
-      }
-
-      function parseGPS(view, tiffStart, gpsOffset, le, tags) {
-        if (gpsOffset >= view.byteLength - 2) return;
-        tags['GPS_RAW_EXISTS'] = true;
-        const count = view.getUint16(gpsOffset, le);
-        let p = gpsOffset + 2;
-
-        let latRef = 'N';
-        let lonRef = 'E';
-        let latVal = null;
-        let lonVal = null;
-
-        for (let i = 0; i < count; i++) {
-          if (p + 12 > view.byteLength) break;
-          const tagId = view.getUint16(p, le);
-          const type = view.getUint16(p + 2, le);
-          const numValues = view.getUint32(p + 4, le);
-          const valOffset = p + 8;
-
-          if (tagId === 1) { // LatRef
-            latRef = String.fromCharCode(view.getUint8(valOffset));
-            tags['GPSLatitudeRef'] = latRef;
-          } else if (tagId === 2) { // Lat
-            latVal = readRationalTriplet(view, tiffStart, valOffset, le);
-            if (latVal) tags['GPSLatitude'] = `${latVal[0]}° ${latVal[1]}' ${latVal[2].toFixed(1)}" ${latRef}`;
-          } else if (tagId === 3) { // LonRef
-            lonRef = String.fromCharCode(view.getUint8(valOffset));
-            tags['GPSLongitudeRef'] = lonRef;
-          } else if (tagId === 4) { // Lon
-            lonVal = readRationalTriplet(view, tiffStart, valOffset, le);
-            if (lonVal) tags['GPSLongitude'] = `${lonVal[0]}° ${lonVal[1]}' ${lonVal[2].toFixed(1)}" ${lonRef}`;
-          } else if (tagId === 6) { // Altitude
-            tags['GPSAltitude'] = 'Embedded Altitude Data';
-          }
-          p += 12;
-        }
-
-        if (latVal && lonVal) {
-          let decLat = latVal[0] + latVal[1]/60 + latVal[2]/3600;
-          if (latRef === 'S') decLat = -decLat;
-          let decLon = lonVal[0] + lonVal[1]/60 + lonVal[2]/3600;
-          if (lonRef === 'W') decLon = -decLon;
-          tags['GPSDecimal'] = `${decLat.toFixed(6)}, ${decLon.toFixed(6)}`;
-        }
-      }
-
-      function readRationalTriplet(view, tiffStart, valOffset, le) {
-        const offset = tiffStart + view.getUint32(valOffset, le);
-        if (offset + 24 > view.byteLength) return null;
-        const deg = view.getUint32(offset, le) / (view.getUint32(offset + 4, le) || 1);
-        const min = view.getUint32(offset + 8, le) / (view.getUint32(offset + 12, le) || 1);
-        const sec = view.getUint32(offset + 16, le) / (view.getUint32(offset + 20, le) || 1);
-        return [deg, min, sec];
-      }
-
-      function parsePngChunks(view, tags) {
-        let p = 8;
-        while (p < view.byteLength - 8) {
-          const chunkLen = view.getUint32(p, false);
-          const chunkType = String.fromCharCode(
-            view.getUint8(p + 4),
-            view.getUint8(p + 5),
-            view.getUint8(p + 6),
-            view.getUint8(p + 7)
-          );
-          if (['tEXt', 'zTXt', 'iTXt', 'eXIf'].includes(chunkType)) {
-            tags['PNG_' + chunkType] = `Detected ${chunkType} metadata chunk (${chunkLen} bytes)`;
-          }
-          p += 12 + chunkLen;
-        }
-      }
-
-      // --- One-Click Strip Metadata & Sanitize Action ---
+      // --- Pure In-Memory Canvas Sanitization ---
       btnSanitize.addEventListener('click', () => {
-        if (!currentImageObj || !currentFile) return;
+        if (!currentImageObj) return;
 
-        btnSanitize.disabled = true;
-        btnSanitize.innerHTML = `
-          <svg class="spin-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
-          <span>Sanitizing...</span>
-        `;
+        const canvas = document.createElement('canvas');
+        canvas.width = currentImageObj.naturalWidth;
+        canvas.height = currentImageObj.naturalHeight;
+        const ctx = canvas.getContext('2d');
 
-        setTimeout(() => {
-          try {
-            // HTML5 Canvas pure rasterization completely purges all EXIF / metadata blocks
-            const canvas = document.createElement('canvas');
-            canvas.width = currentImageObj.naturalWidth;
-            canvas.height = currentImageObj.naturalHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(currentImageObj, 0, 0);
+        // Draw fresh pixels to in-memory raster buffer
+        ctx.drawImage(currentImageObj, 0, 0);
 
-            let mime = currentFile.type || 'image/jpeg';
-            if (mime !== 'image/png' && mime !== 'image/webp') mime = 'image/jpeg';
-            const quality = mime === 'image/png' ? undefined : 0.95;
+        let mimeType = currentFile.type || 'image/jpeg';
+        let quality = 0.95;
 
-            canvas.toBlob((blob) => {
-              if (!blob) {
-                alert('Could not encode sanitized image.');
-                btnSanitize.disabled = false;
-                btnSanitize.innerHTML = `<span>Strip Metadata & Sanitize</span>`;
-                return;
-              }
+        canvas.toBlob((blob) => {
+          sanitizedBlob = blob;
+          analysisPanel.style.display = 'none';
+          resultPanel.style.display = 'block';
 
-              sanitizedBlob = blob;
-              const sanitizedUrl = URL.createObjectURL(blob);
-              btnDownload.href = sanitizedUrl;
-              btnDownload.download = `sanitized_${currentFile.name.replace(/\.[^/.]+$/, '')}.${mime.split('/')[1]}`;
+          statTagsRemoved.textContent = Object.keys(currentParsedTags).length || 'Purged';
+          statCleanSize.textContent = formatBytes(blob.size);
 
-              // Update stats
-              const removedCount = Math.max(Object.keys(currentParsedTags).length, 1);
-              statTagsRemoved.textContent = `${removedCount} Tags Purged`;
-              statGpsStatus.textContent = '0 (Completely Stripped)';
-              statCleanSize.textContent = formatBytes(blob.size);
-
-              analysisPanel.style.display = 'none';
-              resultPanel.style.display = 'block';
-
-              btnSanitize.disabled = false;
-              btnSanitize.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Strip Metadata & Sanitize</span>
-              `;
-            }, mime, quality);
-          } catch (err) {
-            console.error('Sanitization error:', err);
-            alert('Error during in-memory sanitization: ' + err.message);
-            btnSanitize.disabled = false;
-          }
-        }, 150);
+          window.scrollTo({ top: resultPanel.offsetTop - 50, behavior: 'smooth' });
+        }, mimeType, quality);
       });
 
-      // --- Load Sample Image with GPS Data ---
+      // --- Download Sanitized Image ---
+      btnDownload.addEventListener('click', () => {
+        if (!sanitizedBlob) return;
+
+        const url = URL.createObjectURL(sanitizedBlob);
+        const a = document.createElement('a');
+        let origName = currentFile ? currentFile.name : 'photo.jpg';
+        a.download = 'sanitized_' + origName;
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      });
+
+      // --- Sample Photo Generator with Synthetic EXIF ---
       btnLoadSample.addEventListener('click', (e) => {
         e.stopPropagation();
-        // Create an in-memory sample JPEG with synthetic simulated EXIF
-        const sampleTags = {
-          'Make': 'Apple',
-          'Model': 'iPhone 15 Pro Max',
-          'Software': 'iOS 18.2',
-          'DateTimeOriginal': '2026:09:28 14:22:45',
-          'LensModel': 'iPhone 15 Pro Max back triple camera 6.86mm f/1.78',
-          'FNumber': 1.78,
-          'ExposureTime': '1/240',
-          'ISO': 64,
-          'GPSLatitude': '37° 46\' 29.8" N',
-          'GPSLongitude': '122° 25\' 10.1" W',
-          'GPSDecimal': '37.774929, -122.419416'
-        };
+        createSampleImageWithExif().then(file => {
+          handleFile(file);
+        });
+      });
 
-        // Create sample canvas
-        const sampleCanvas = document.createElement('canvas');
-        sampleCanvas.width = 1200;
-        sampleCanvas.height = 800;
-        const ctx = sampleCanvas.getContext('2d');
+      async function createSampleImageWithExif() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 800;
+        const ctx = canvas.getContext('2d');
 
-        // Draw an aesthetic test photo
+        // Draw a simulated scenic sample photo
         const grad = ctx.createLinearGradient(0, 0, 1200, 800);
         grad.addColorStop(0, '#0f172a');
         grad.addColorStop(0.5, '#1e293b');
@@ -2091,40 +2685,107 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 1200, 800);
 
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 42px sans-serif';
+        // Sun / Mountain graphic
+        ctx.beginPath();
+        ctx.arc(600, 300, 90, 0, Math.PI * 2);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fill();
+
+        ctx.font = 'bold 36px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = '#f8fafc';
         ctx.textAlign = 'center';
-        ctx.fillText('Sample Camera Photo with Embedded GPS', 600, 380);
+        ctx.fillText('VantorKit Sample Photo with Embedded GPS EXIF', 600, 480);
 
+        ctx.font = '20px monospace';
         ctx.fillStyle = '#94a3b8';
-        ctx.font = '24px sans-serif';
-        ctx.fillText('San Francisco, CA • iPhone 15 Pro Max • 37.7749° N, 122.4194° W', 600, 440);
+        ctx.fillText('Coordinates: 37.7749° N, 122.4194° W (San Francisco, CA)', 600, 530);
 
-        sampleCanvas.toBlob((blob) => {
-          const sampleFile = new File([blob], 'IMG_4829_SanFrancisco.jpg', { type: 'image/jpeg' });
-          currentFile = sampleFile;
-          currentParsedTags = sampleTags;
+        return new Promise((resolve) => {
+          canvas.toBlob((blob) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const baseBuffer = reader.result;
+              const exifBuffer = injectMockExif(baseBuffer);
+              const sampleFile = new File([exifBuffer], 'sample_vacation_gps.jpg', { type: 'image/jpeg' });
+              resolve(sampleFile);
+            };
+            reader.readAsArrayBuffer(blob);
+          }, 'image/jpeg', 0.92);
+        });
+      }
 
-          const blobUrl = URL.createObjectURL(blob);
-          const img = new Image();
-          img.onload = function() {
-            currentImageObj = img;
-            imagePreview.src = blobUrl;
+      function injectMockExif(jpegBuffer) {
+        // Construct standard APP1 EXIF segment with GPS and camera info
+        const exifData = [
+          0x45, 0x78, 0x69, 0x66, 0x00, 0x00, // "Exif  "
+          0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, // TIFF header (Little Endian, offset 8)
+          0x06, 0x00, // 6 IFD0 entries
+          0x0F, 0x01, 0x02, 0x00, 0x06, 0x00, 0x00, 0x00, 0x56, 0x00, 0x00, 0x00, // Make: "Apple "
+          0x10, 0x01, 0x02, 0x00, 0x10, 0x00, 0x00, 0x00, 0x5C, 0x00, 0x00, 0x00, // Model: "iPhone 15 Pro "
+          0x31, 0x01, 0x02, 0x00, 0x09, 0x00, 0x00, 0x00, 0x6C, 0x00, 0x00, 0x00, // Software: "iOS 18.1 "
+          0x32, 0x01, 0x02, 0x00, 0x14, 0x00, 0x00, 0x00, 0x76, 0x00, 0x00, 0x00, // Modify Date
+          0x69, 0x87, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x8C, 0x00, 0x00, 0x00, // ExifSubIFD Offset
+          0x25, 0x88, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0xB0, 0x00, 0x00, 0x00, // GPS IFD Offset
+          0x00, 0x00, 0x00, 0x00, // Next IFD offset
+          // Strings:
+          0x41, 0x70, 0x70, 0x6C, 0x65, 0x00, // "Apple "
+          0x69, 0x50, 0x68, 0x6F, 0x6E, 0x65, 0x20, 0x31, 0x35, 0x20, 0x50, 0x72, 0x6F, 0x00, 0x00, // "iPhone 15 Pro "
+          0x69, 0x4F, 0x53, 0x20, 0x31, 0x38, 0x2E, 0x31, 0x00, // "iOS 18.1 "
+          0x32, 0x30, 0x32, 0x36, 0x3A, 0x30, 0x39, 0x3A, 0x32, 0x39, 0x20, 0x31, 0x34, 0x3A, 0x33, 0x30, 0x3A, 0x30, 0x30, 0x00, // Date
+          // SubIFD (2 entries):
+          0x02, 0x00,
+          0x03, 0x90, 0x02, 0x00, 0x14, 0x00, 0x00, 0x00, 0x76, 0x00, 0x00, 0x00, // DateTimeOriginal
+          0x34, 0xA4, 0x02, 0x00, 0x16, 0x00, 0x00, 0x00, 0xD4, 0x00, 0x00, 0x00, // Lens Model
+          0x00, 0x00, 0x00, 0x00,
+          // GPS IFD (4 entries):
+          0x04, 0x00,
+          0x01, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, // LatRef: 'N'
+          0x02, 0x00, 0x05, 0x00, 0x03, 0x00, 0x00, 0x00, 0xEA, 0x00, 0x00, 0x00, // Latitude
+          0x03, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x57, 0x00, 0x00, 0x00, // LonRef: 'W'
+          0x04, 0x00, 0x05, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, // Longitude
+          0x00, 0x00, 0x00, 0x00,
+          // Lens String:
+          0x69, 0x50, 0x68, 0x6F, 0x6E, 0x65, 0x20, 0x31, 0x35, 0x20, 0x50, 0x72, 0x6F, 0x20, 0x6D, 0x61, 0x69, 0x6E, 0x20, 0x63, 0x61, 0x6D, // Lens
+          // Lat values: 37/1, 46/1, 2964/100 -> 37° 46' 29.64" N
+          0x25, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+          0x2E, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+          0x94, 0x0B, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00,
+          // Lon values: 122/1, 25/1, 984/100 -> 122° 25' 9.84" W
+          0x7A, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+          0x19, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+          0xD8, 0x03, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00
+        ];
 
-            metaFileName.textContent = sampleFile.name;
-            metaDimensions.textContent = `${img.naturalWidth} × ${img.naturalHeight} px`;
-            metaFormat.textContent = 'JPEG';
-            metaFileSize.textContent = formatBytes(sampleFile.size);
+        const segLen = exifData.length + 2;
+        const app1Header = [0xFF, 0xE1, (segLen >> 8) & 0xFF, segLen & 0xFF];
 
-            renderAuditAnalysis({ hasGps: true, tags: sampleTags });
+        const origBytes = new Uint8Array(jpegBuffer);
+        const combined = new Uint8Array(origBytes.length + app1Header.length + exifData.length);
 
-            dropZone.style.display = 'none';
-            resultPanel.style.display = 'none';
-            analysisPanel.style.display = 'block';
-          };
-          img.src = blobUrl;
-        }, 'image/jpeg', 0.95);
-      });
+        // SOI marker (2 bytes)
+        combined.set(origBytes.subarray(0, 2), 0);
+        // APP1 header
+        combined.set(app1Header, 2);
+        // APP1 payload
+        combined.set(exifData, 6);
+        // Rest of original JPEG
+        combined.set(origBytes.subarray(2), 6 + exifData.length);
+
+        return combined.buffer;
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+      }
+
+      function escapeHtml(str) {
+        if (typeof str !== 'string') return String(str);
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
 
       // Initialize language
       setLanguage(currentLang);
