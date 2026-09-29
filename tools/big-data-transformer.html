@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Offline Big-Data Transformer &amp; Stream Parser | VantorKit</title>
+  <meta name="description" content="High-performance client-side CSV/JSON/TSV big-data transformer and stream parser. Process 100MB+ datasets in background Web Workers with zero server uploads and zero latency.">
+  <meta name="keywords" content="big data transformer, offline csv to json, large json to csv, web worker csv parser, stream json parser, private data converter, client side tsv converter, ndjson to csv, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/big-data-transformer.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Offline Big-Data Transformer &amp; Stream Parser | VantorKit">
+  <meta property="og:description" content="Parse, transform, inspect, and convert massive CSV, JSON, and TSV files in browser RAM using multi-threaded Web Workers. Zero telemetry and zero cloud storage.">
+  <meta property="og:url" content="https://vantorkit.com/tools/big-data-transformer.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Offline Big-Data Transformer &amp; Stream Parser — VantorKit">
+  <meta name="twitter:description" content="100% private in-browser big data transformer. Stream gigabytes with background Web Workers without browser freezing.">
+
+  <!-- Fonts: Cairo (Arabic), Plus Jakarta Sans (UI), JetBrains Mono (Code/Tables) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Offline Big-Data Transformer & Stream Parser",
+      "url": "https://vantorkit.com/tools/big-data-transformer.html",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires Web Workers API.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Transform, inspect, filter, and convert large CSV, JSON, TSV, and NDJSON datasets locally inside browser RAM using multi-threaded Web Workers without server uploads."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the maximum file size supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The tool supports files of hundreds of megabytes. Because all chunking and serialization occurs in an isolated background Web Worker, capacity is bounded exclusively by your device's available system RAM."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is any dataset sent to an external server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Never. All data parsing, transformations, and exports occur 100% inside your local browser memory sandbox. Enforced by strict Content-Security-Policy headers, zero network requests are made."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it handle malformed CSV rows or nested JSON?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The streaming engine implements resilient delimiter sniffing, escaped quotation handling, and error recovery for mismatched column counts and nested JSON objects."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which formats can I export to?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can convert and export between Standard CSV, Tab-Separated TSV, Flat/Structured JSON Arrays, Beautified JSON (2-space indented), and Newline-Delimited JSON (NDJSON)."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <style>
+    :root {
+      --bg-main: #0a0f1d;
+      --card-bg: rgba(15, 23, 42, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 41, 59, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --cat-files: #fb923c;
+      --cat-files-bg: rgba(249, 115, 22, 0.15);
+      --cat-files-border: rgba(249, 115, 22, 0.3);
+      --cat-files-glow: rgba(249, 115, 22, 0.25);
+      --cat-files-hover: #fdba74;
+      --success: #10b981;
+      --error: #ef4444;
+      --font-ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+      --font-ar: 'Cairo', system-ui, sans-serif;
+    }
+
+    html[dir="rtl"] {
+      font-family: var(--font-ar);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    html[dir="rtl"] body {
+      font-family: var(--font-ar);
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 15, 29, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .nav-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .brand-logo-svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+    }
+
+    .back-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Language Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(30, 41, 59, 0.85);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 175px;
+      background: rgba(10, 15, 28, 0.96);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    .lang-menu.open {
+      display: flex;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    .lang-option:hover {
+      background: rgba(59, 130, 246, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 3rem 1.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--cat-files-bg);
+      border: 1px solid var(--cat-files-border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--cat-files-hover);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 20px var(--cat-files-glow);
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #ffffff 30%, #fb923c 70%, #fdba74 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Workspace */
+    .workspace {
+      max-width: 1300px;
+      width: 100%;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Drop Zone */
+    .dropzone {
+      background: rgba(15, 23, 42, 0.6);
+      border: 2px dashed rgba(249, 115, 22, 0.35);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: #fb923c;
+      background: rgba(249, 115, 22, 0.08);
+      box-shadow: 0 0 32px rgba(249, 115, 22, 0.2);
+    }
+
+    .dropzone-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.25rem;
+      border-radius: 16px;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fb923c;
+      transition: transform 0.2s ease;
+    }
+
+    .dropzone:hover .dropzone-icon {
+      transform: scale(1.08);
+    }
+
+    .dropzone-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+
+    .dropzone-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .dropzone-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 0.75rem 1.4rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Privacy Banner */
+    .privacy-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      display: inline-flex;
+    }
+
+    /* File Metadata & Progress Bar */
+    .file-status-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .file-tags {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tag-badge {
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-family: var(--font-code);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+    }
+
+    .tag-badge.success {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+
+    .tag-badge.worker {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f97316, #fb923c);
+      border-radius: 999px;
+      transition: width 0.15s ease-out;
+    }
+
+    /* Transformation Controls Toolbar */
+    .controls-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .select-input {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.5rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .select-input:focus {
+      border-color: #fb923c;
+    }
+
+    .btn-action-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Data Inspector Area */
+    .inspector-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inspector-header {
+      background: rgba(15, 23, 42, 0.8);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .inspector-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .inspector-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .inspector-tab:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .inspector-tab.active {
+      color: #fb923c;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .search-filter-input {
+      background: rgba(10, 15, 29, 0.85);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.45rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      min-width: 220px;
+      outline: none;
+    }
+
+    .search-filter-input:focus {
+      border-color: #fb923c;
+    }
+
+    /* Virtualized Table Container */
+    .table-container {
+      width: 100%;
+      max-height: 480px;
+      overflow: auto;
+      position: relative;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-code);
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    html[dir="rtl"] table.data-table {
+      text-align: right;
+    }
+
+    table.data-table th {
+      position: sticky;
+      top: 0;
+      background: #111827;
+      color: #fb923c;
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    table.data-table td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      white-space: nowrap;
+      max-width: 320px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    table.data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .row-index {
+      color: #64748b;
+      font-size: 0.75rem;
+      user-select: none;
+      text-align: center;
+      width: 50px;
+    }
+
+    /* Raw Code Preview */
+    .code-view {
+      padding: 1.25rem;
+      font-family: var(--font-code);
+      font-size: 0.82rem;
+      background: #090d16;
+      color: #e2e8f0;
+      max-height: 480px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.6;
+    }
+
+    /* Table Footer & Pagination */
+    .inspector-footer {
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid var(--card-border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .pagination-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-page {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+
+    .btn-page:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Educational Section */
+    .education-section {
+      max-width: 1300px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .education-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .guide-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .guide-card-title svg {
+      color: #fb923c;
+      flex-shrink: 0;
+    }
+
+    .guide-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .faq-item h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Comprehensive Content Layer */
+    .tool-content-layer {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+    }
+
+    .lang-content-block {
+      display: none;
+    }
+
+    .lang-content-block.active {
+      display: block;
+    }
+
+    .tool-content-layer h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 2rem 0 1rem;
+    }
+
+    .tool-content-layer p {
+      font-size: 0.96rem;
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .tool-content-layer ol {
+      margin: 1rem 0 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    html[dir="rtl"] .tool-content-layer ol {
+      margin: 1rem 1.5rem 1.5rem 0;
+    }
+
+    .content-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .content-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .content-card h4 {
+      color: #fb923c;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card p {
+      font-size: 0.88rem;
+      margin-bottom: 0;
+    }
+
+    .privacy-banner {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .privacy-banner h3 {
+      color: #34d399;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .privacy-banner p {
+      font-size: 0.92rem;
+      margin-bottom: 0;
+    }
+
+    .faq-accordion details {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+
+    .faq-accordion summary {
+      padding: 1rem 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .faq-accordion .faq-answer {
+      padding: 0 1.25rem 1.25rem;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .related-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .related-tool-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .related-tool-card:hover {
+      border-color: #fb923c;
+      transform: translateY(-2px);
+    }
+
+    .related-tool-card .tool-name {
+      color: #fb923c;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .related-tool-card .tool-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Live Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #fb923c;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px rgba(249, 115, 22, 0.3);
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    html[dir="rtl"] .toast {
+      right: auto;
+      left: 2rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      background: rgba(10, 15, 29, 0.9);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #fb923c;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+      .workspace {
+        padding: 0 1rem;
+      }
+      .controls-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .control-group {
+        justify-content: space-between;
+      }
+      .btn-action-row {
+        justify-content: stretch;
+      }
+      .btn-action-row button, .btn-action-row a {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav" aria-label="Main Navigation">
+    <div class="nav-inner">
+      <a href="../index.html" class="brand-link">
+        <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+            <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#a855f7" />
+              <stop offset="100%" stop-color="#6366f1" />
+            </linearGradient>
+            <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#a855f7" />
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+        </svg>
+        <span>Vantor<span style="color:#38bdf8">Kit</span></span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="../index.html" class="back-btn" data-i18n="backLink">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>All Tools</span>
+        </a>
+
+        <!-- Language Switcher Dropdown -->
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span id="currentLangLabel">English</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="lang-menu" id="langMenu" role="menu">
+            <button type="button" class="lang-option active" data-lang="en">
+              <span>🇺🇸 English</span>
+            </button>
+            <button type="button" class="lang-option" data-lang="ar">
+              <span>🇸🇦 العربية</span>
+            </button>
+            <button type="button" class="lang-option" data-lang="fr">
+              <span>🇫🇷 Français</span>
+            </button>
+            <button type="button" class="lang-option" data-lang="it">
+              <span>🇮🇹 Italiano</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="brand-badge" data-i18n="heroBadge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <span>Web Worker Streaming • 100% Client-Side • Zero Leak</span>
+    </div>
+    <h1 data-i18n="heroTitle">Offline Big-Data Transformer</h1>
+    <p class="subtitle" data-i18n="heroSubtitle">Stream, inspect, filter, and convert massive CSV, JSON, TSV, and NDJSON datasets locally in browser RAM using multi-threaded Web Workers.</p>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="workspace">
+
+    <!-- Drag & Drop Zone -->
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload Dataset">
+      <input type="file" id="fileInput" accept=".csv,.tsv,.json,.ndjson,.txt" style="display:none">
+      <div class="dropzone-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+      </div>
+      <h3 class="dropzone-title" data-i18n="dropzoneTitle">Drop your CSV, TSV, or JSON dataset here</h3>
+      <p class="dropzone-desc" data-i18n="dropzoneDesc">Supports large files up to 100MB+. Streaming execution occurs in an isolated background Web Worker thread without freezing your browser.</p>
+      <div class="dropzone-actions">
+        <button type="button" class="btn-primary" id="btnBrowse" data-i18n="btnBrowse">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span>Choose Dataset File</span>
+        </button>
+        <button type="button" class="btn-secondary" id="btnLoadSample" data-i18n="btnLoadSample">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Load 5,000-Row Sample</span>
+        </button>
+      </div>
+      <div>
+        <div class="privacy-pill" data-i18n="privacyPill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>100% In-Browser Worker • Your Data Never Leaves RAM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Status & Worker Progress -->
+    <div class="file-status-card" id="statusCard" style="display:none">
+      <div class="status-header">
+        <div class="file-tags">
+          <span class="tag-badge worker" id="workerStatusBadge" data-i18n="workerIdle">Worker: Ready</span>
+          <span class="tag-badge" id="fileNameBadge">file.csv</span>
+          <span class="tag-badge" id="fileSizeBadge">0 KB</span>
+          <span class="tag-badge success" id="rowCountBadge">0 Rows</span>
+          <span class="tag-badge" id="colCountBadge">0 Columns</span>
+        </div>
+        <div style="font-size:0.85rem;color:var(--text-muted);font-family:var(--font-code)" id="timeElapsedBadge">0ms</div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Transformation Controls Toolbar -->
+    <div class="controls-panel" id="controlsPanel" style="display:none">
+      <div class="control-group">
+        <span class="control-label" data-i18n="lblConvert">Convert To:</span>
+        <select id="selectTargetFormat" class="select-input">
+          <option value="json_array">JSON (Array of Objects)</option>
+          <option value="json_pretty">JSON (Formatted 2-Space)</option>
+          <option value="csv">Standard CSV (,)</option>
+          <option value="tsv">TSV (Tab-Separated)</option>
+          <option value="ndjson">NDJSON (Newline-Delimited)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label" data-i18n="lblDelimiter">Input Delimiter:</span>
+        <select id="selectDelimiter" class="select-input">
+          <option value="auto">Auto-Detect</option>
+          <option value=",">Comma (,)</option>
+          <option value=";">Semicolon (;)</option>
+          <option value="	">Tab (	)</option>
+          <option value="|">Pipe (|)</option>
+        </select>
+      </div>
+
+      <div class="btn-action-row">
+        <button type="button" class="btn-primary" id="btnDownloadExport" data-i18n="btnExport">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download Export</span>
+        </button>
+        <button type="button" class="btn-secondary" id="btnCopyConverted" data-i18n="btnCopy">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy Data</span>
+        </button>
+        <button type="button" class="btn-secondary" id="btnClearData" data-i18n="btnClear">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Inspector & Viewer Card -->
+    <div class="inspector-card" id="inspectorCard" style="display:none">
+      <div class="inspector-header">
+        <div class="inspector-tabs">
+          <button type="button" class="inspector-tab active" data-tab="preview" data-i18n="tabPreview">Table Preview</button>
+          <button type="button" class="inspector-tab" data-tab="code" data-i18n="tabRaw">Converted Output</button>
+          <button type="button" class="inspector-tab" data-tab="schema" data-i18n="tabSchema">Column Schema</button>
+        </div>
+
+        <div>
+          <input type="text" id="filterInput" class="search-filter-input" placeholder="Filter rows in preview..." data-i18n-placeholder="filterPlaceholder">
+        </div>
+      </div>
+
+      <!-- Tab 1: Virtualized Table -->
+      <div id="tabContentPreview" class="table-container">
+        <table class="data-table" id="dataTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Tab 2: Code View -->
+      <div id="tabContentCode" class="code-view" style="display:none">
+        <pre id="codeOutputBox">Generating preview...</pre>
+      </div>
+
+      <!-- Tab 3: Schema View -->
+      <div id="tabContentSchema" class="table-container" style="display:none">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th data-i18n="colName">Column Name</th>
+              <th data-i18n="colType">Inferred Type</th>
+              <th data-i18n="colSample">Sample Value</th>
+              <th data-i18n="colUnique">Unique Values (Sample)</th>
+            </tr>
+          </thead>
+          <tbody id="schemaTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Footer & Pagination -->
+      <div class="inspector-footer">
+        <div id="paginationInfo">Showing 1 to 50 of 0 rows</div>
+        <div class="pagination-actions">
+          <button type="button" class="btn-page" id="btnPrevPage" disabled data-i18n="btnPrev">◀ Previous</button>
+          <button type="button" class="btn-page" id="btnNextPage" disabled data-i18n="btnNext">Next ▶</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Educational Section -->
+  <section class="education-section">
+    <div class="education-grid">
+      <div class="guide-card">
+        <div class="guide-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span data-i18n="ed1Title">Why Public Converters Pose Grave Security Risks</span>
+        </div>
+        <p data-i18n="ed1Desc">Uploading financial datasets, customer PII, internal telemetry, or medical logs to cloud converters exposes sensitive company assets to server logging, reverse proxies, and third-party data collection.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span data-i18n="ed2Title">Multi-Threaded Web Worker Streaming</span>
+        </div>
+        <p data-i18n="ed2Desc">VantorKit delegates high-throughput file chunking and serialization to an isolated background thread. Even when processing 100MB+ datasets, the main browser UI remains silky-smooth and responsive.</p>
+      </div>
+
+      <div class="guide-card">
+        <div class="guide-card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span data-i18n="ed3Title">Zero-Persistence In-Memory Privacy</span>
+        </div>
+        <p data-i18n="ed3Desc">All ingested files, parsed tables, and transformed outputs exist exclusively in volatile browser RAM. Closing or refreshing the tab triggers immediate garbage collection with zero disk remnants.</p>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4 data-i18n="faq1Q">What is the maximum file size supported?</h4>
+        <p data-i18n="faq1A">The tool comfortably handles files of hundreds of megabytes. Because all chunking and serialization occurs in an isolated background Web Worker, capacity is bounded exclusively by your device's available system RAM.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 data-i18n="faq2Q">Is any dataset sent to an external server?</h4>
+        <p data-i18n="faq2A">Never. All data parsing, transformations, and exports occur 100% inside your local browser memory sandbox. Enforced by strict Content-Security-Policy headers, zero network requests are made.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 data-i18n="faq3Q">Can it handle malformed CSV rows or nested JSON?</h4>
+        <p data-i18n="faq3A">Yes. The streaming engine implements resilient delimiter sniffing, escaped quotation handling, and error recovery for mismatched column counts and nested JSON objects.</p>
+      </div>
+
+      <div class="faq-item">
+        <h4 data-i18n="faq4Q">Which formats can I export to?</h4>
+        <p data-i18n="faq4A">You can convert and export between Standard CSV, Tab-Separated TSV, Flat/Structured JSON Arrays, Beautified JSON (2-space indented), and Newline-Delimited JSON (NDJSON).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comprehensive 8-Section Content Layer -->
+  <article class="tool-content-layer">
+    <!-- English Block -->
+    <div class="lang-content-block active" data-lang="en">
+      <h2>High-Throughput Offline Big-Data Architecture</h2>
+      <p>The VantorKit Offline Big-Data Transformer is an enterprise-grade tabular transformation utility engineered for data analysts, backend engineers, DevOps specialists, and compliance officers. In modern enterprise environments, datasets frequently contain sensitive customer personally identifiable information (PII), proprietary financial balances, server access logs, or transactional telemetry. Relying on public web-based CSV converters introduces substantial regulatory non-compliance risks under GDPR, HIPAA, and CCPA, as uploaded files often linger in third-party server storage, access logs, or transient caches.</p>
+      <p>This utility operates entirely inside your local device's hardware sandbox. By orchestrating dedicated Web Workers, stream processing, and chunked memory buffering, VantorKit enables seamless parsing, filtering, and cross-format conversion of large datasets without leaking a single byte across the network.</p>
+
+      <h2>Step-by-Step Transformation Guide</h2>
+      <ol>
+        <li><strong>Ingest Dataset:</strong> Drag and drop your CSV, TSV, or JSON file into the designated workspace or choose the built-in 5,000-row demo dataset. The background Web Worker immediately sniffs the delimiter and analyzes schema structure.</li>
+        <li><strong>Inspect &amp; Filter:</strong> Use the interactive table inspector to explore columns, verify inferred data types, search for specific terms in real-time, and page through large datasets.</li>
+        <li><strong>Configure Output:</strong> Select your target format—including Standard CSV, TSV, JSON Array, Formatted JSON, or NDJSON—and choose custom quotation or delimiter parameters.</li>
+        <li><strong>Instant Export:</strong> Download the sanitized, transformed dataset or copy the serialized output to your clipboard with one click.</li>
+      </ol>
+
+      <h2>The Web Worker Multi-Threading Engine</h2>
+      <p>Standard JavaScript operations execute on the browser's single main execution thread. Parsing a 50MB CSV file synchronously would lock the document object model, causing severe frame drops, unresponsive scrolling, and "Page Unresponsive" browser warnings. VantorKit solves this architectural bottleneck by spawning a dedicated in-memory Web Worker using a volatile Blob URI.</p>
+      <p>The Web Worker consumes file streams in progressive chunks, tokenizing delimiters, maintaining quotation state machines, and dispatching progress notifications back to the UI thread. The main thread renders paginated virtual views while the worker manages raw memory serialization in background isolation.</p>
+
+      <h2>Real-World Practical Scenarios</h2>
+      <div class="content-card-grid">
+        <div class="content-card">
+          <h4>Sanitizing Financial Audit Records</h4>
+          <p>A corporate auditor receives raw quarterly sales figures containing customer account numbers in CSV format. Using VantorKit, they convert the dataset into structured JSON for an internal analytics pipeline without exposing balance sheets to internet servers.</p>
+        </div>
+        <div class="content-card">
+          <h4>Preparing Cloud Logs for Vector Ingestion</h4>
+          <p>A DevOps engineer requires converting multiline Kubernetes container logs into Newline-Delimited JSON (NDJSON) for indexing. The transformer handles the formatting in seconds purely in local memory.</p>
+        </div>
+      </div>
+
+      <h2>Common Mistakes to Avoid</h2>
+      <div class="content-card-grid">
+        <div class="content-card">
+          <h4>⚠️ Uploading Unmasked PII to Cloud APIs</h4>
+          <p>Never paste private user emails, IP addresses, or payment IDs into standard search-engine converter tools that store inputs on backend storage.</p>
+        </div>
+        <div class="content-card">
+          <h4>⚠️ Overlooking Delimiter Inconsistencies</h4>
+          <p>European CSV files frequently utilize semicolons (;) instead of commas (,). Use the delimiter selector to ensure proper column alignment.</p>
+        </div>
+        <div class="content-card">
+          <h4>⚠️ Unescaped Line Breaks in Data Fields</h4>
+          <p>Multiline text fields inside CSV cells must be wrapped in matching quotation marks to prevent row splitting during downstream processing.</p>
+        </div>
+      </div>
+
+      <div class="privacy-banner">
+        <h3>🔒 100% Client-Side Privacy Guarantee</h3>
+        <p>All parsing, schema inspection, filtering, and serialization execute strictly in volatile device memory. Zero analytics telemetry, zero network tracking, and zero cloud storage.</p>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-accordion">
+        <details>
+          <summary>What is the maximum file size supported?</summary>
+          <div class="faq-answer">
+            <p>The tool comfortably handles files of hundreds of megabytes. Because all chunking and serialization occurs in an isolated background Web Worker, capacity is bounded exclusively by your device's available system RAM.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Is any dataset sent to an external server?</summary>
+          <div class="faq-answer">
+            <p>Never. All data parsing, transformations, and exports occur 100% inside your local browser memory sandbox. Enforced by strict Content-Security-Policy headers, zero network requests are made.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Can it handle malformed CSV rows or nested JSON?</summary>
+          <div class="faq-answer">
+            <p>Yes. The streaming engine implements resilient delimiter sniffing, escaped quotation handling, and error recovery for mismatched column counts and nested JSON objects.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Which formats can I export to?</summary>
+          <div class="faq-answer">
+            <p>You can convert and export between Standard CSV, Tab-Separated TSV, Flat/Structured JSON Arrays, Beautified JSON (2-space indented), and Newline-Delimited JSON (NDJSON).</p>
+          </div>
+        </details>
+      </div>
+
+      <h2>Related Data &amp; Security Tools</h2>
+      <div class="related-tools-grid">
+        <a href="./csv-json-converter.html" class="related-tool-card">
+          <div class="tool-name">CSV to JSON Converter</div>
+          <div class="tool-desc">Standard bidirectional tabular data serialization with custom delimiters.</div>
+        </a>
+        <a href="./jwt-decoder.html" class="related-tool-card">
+          <div class="tool-name">JWT Decoder &amp; Verifier</div>
+          <div class="tool-desc">Decode and verify JSON Web Tokens securely inside browser RAM.</div>
+        </a>
+        <a href="./text-diff.html" class="related-tool-card">
+          <div class="tool-name">Text Diff &amp; Compare</div>
+          <div class="tool-desc">Inspect code changes and JSON payload differences side-by-side with visual highlights.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Arabic Block -->
+    <div class="lang-content-block" data-lang="ar" dir="rtl">
+      <h2>بنية تحويل ومعالجة البيانات الضخمة محلياً</h2>
+      <p>تعد أداة فانتور كيت لتحويل ومعالجة البيانات الضخمة بدون إنترنت أداة احترافية فائقة الأداء مصممة لمحللي البيانات ومهندسي الأنظمة وخبراء الأمن السيبراني. في بيئات العمل الحديثة، تحتوي مجموعات البيانات عادةً على معلومات سرية للعملاء، أو سجلات مالية حساسة، أو بيانات تشغيلية للخوادم. إن الاعتماد على محولات البيانات الشائعة عبر الإنترنت يعرض هذه السجلات لمخاطر أمنية وانتهاكات لخصوصية البيانات، حيث تبقى الملفات المرفوعة في سجلات الخوادم السحابية والمخازن المؤقتة.</p>
+      <p>تعمل هذه الأداة محلياً بالكامل داخل جهازك دون إرسال أي بايت عبر الإنترنت. ومن خلال الاعتماد على تقنية خيوط المعالجة الخلفية Web Workers، تضمن الأداة سرعة فائقة في فحص وتحويل وتصفية الملفات الكبيرة دون التأثير على استجابة المتصفح أو تجميد الشاشة.</p>
+
+      <h2>دليل الاستخدام خطوة بخطوة</h2>
+      <ol>
+        <li><strong>إدراج مجموعة البيانات:</strong> اسحب وأفلت ملف CSV أو TSV أو JSON في مساحة العمل، أو جرب مجموعة البيانات التجريبية الجاهزة (5000 صف). يقوم المعالج الخلفي تلقائياً باكتشاف الفواصل وتحليل بنية الأعمدة.</li>
+        <li><strong>المعاينة والتصفية:</strong> استخدم جدول المعاينة التفاعلي للتحقق من أنواع البيانات والبحث الفوري عن أي قيمة عبر جميع الأعمدة والتنقل بين الصفوف بسلاسة.</li>
+        <li><strong>تحديد صيغة التصدير:</strong> اختر الصيغة المستهدفة مثل CSV قياسي أو TSV أو مصفوفة JSON أو JSON منسق أو NDJSON مع ضبط خيارات الفواصل.</li>
+        <li><strong>التصدير الفوري:</strong> قم بتحميل الملف المحول بنقرة واحدة أو انسخ البيانات مباشرة إلى الحافظة بأمان تام.</li>
+      </ol>
+
+      <h2>محرك خيوط المعالجة المتعددة Web Worker</h2>
+      <p>تعتمد تطبيقات جافا سكريبت التقليدية على خيط معالجة رئيسي واحد، مما يتسبب في تجميد الواجهة عند معالجة ملفات بيانات ضخمة. تتغلب فانتور كيت على هذا التحدي بتشغيل كود المعالجة والتحويل داخل Web Worker معزول في الذاكرة العشوائية RAM، مما يحافظ على سلاسة الواجهة الرسومية وسرعة استجابة عناصر التحكم أثناء معالجة آلاف الصفوف في الخلفية.</p>
+
+      <h2>سيناريوهات الاستخدام العملي</h2>
+      <div class="content-card-grid">
+        <div class="content-card">
+          <h4>تنقية السجلات المالية والمحاسبية</h4>
+          <p>يقوم مدقق الحسابات بتحويل تقارير المبيعات ربع السنوية من صيغة CSV إلى مصفوفات JSON لمعالجتها محلياً دون المخاطرة برفعها إلى خوادم خارجية.</p>
+        </div>
+        <div class="content-card">
+          <h4>تجهيز سجلات الخوادم الضخمة</h4>
+          <p>يحتاج مهندس البنية التحتية إلى تحويل سجلات الخوادم إلى صيغة NDJSON لفهرستها، ويتم ذلك خلال ثوانٍ معدودة داخل الذاكرة المحلية.</p>
+        </div>
+      </div>
+
+      <h2>أخطاء شائعة يجب تفاديها</h2>
+      <div class="content-card-grid">
+        <div class="content-card">
+          <h4>⚠️ رفع بيانات العملاء السرية لأدوات مجهولة</h4>
+          <p>احذر من لصق عناوين البريد الإلكتروني أو السجلات البنكية في أدوات تحويل عامة تسجل البيانات في خوادمها.</p>
+        </div>
+        <div class="content-card">
+          <h4>⚠️ تجاهل اختلاف الفواصل في ملفات CSV</h4>
+          <p>تستخدم بعض الملفات الفاصلة المنقوطة (;) بدلاً من الفاصلة العادية (,). تأكد من ضبط الفاصل الصحيح لضمان محاذاة الأعمدة بدقة.</p>
+        </div>
+        <div class="content-card">
+          <h4>⚠️ الأسطر الجديدة غير المقتبسة</h4>
+          <p>يجب وضع علامات الاقتباس حول النصوص التي تتضمن فواصل أسطر داخل الخلية الواحدة لمنع تشتت الصفوف أثناء التصدير.</p>
+        </div>
+      </div>
+
+      <div class="privacy-banner">
+        <h3>🔒 ضمان الخصوصية المحلية 100%</h3>
+        <p>تتم جميع عمليات المعالجة والتحويل حصرياً في ذاكرة RAM المؤقتة لجهازك، دون أي تتبع أو إرسال بيانات عبر الإنترنت.</p>
+      </div>
+
+      <h2>الأسئلة الشائعة</h2>
+      <div class="faq-accordion">
+        <details>
+          <summary>ما هو الحد الأقصى لحجم الملفات المدعومة؟</summary>
+          <div class="faq-answer">
+            <p>تدعم الأداة ملفات بحجم مئات الميجابايت بكل سهولة. وبفضل المعالجة في خيوط Web Worker المستقلة، يعتمد الحد الأقصى فقط على سعة الذاكرة العشوائية RAM في جهازك.</p>
+          </div>
+        </details>
+        <details>
+          <summary>هل يتم إرسال مجموعات البيانات إلى أي خادم خارجي؟</summary>
+          <div class="faq-answer">
+            <p>أبداً. تجري جميع عمليات المعالجة والتحويل محلياً بنسبة 100% داخل المتصفح، مدعومة بسياسة أمان صارمة تمنع أي اتصال خارجي.</p>
+          </div>
+        </details>
+        <details>
+          <summary>هل تدعم الأداة تصحيح ملفات CSV غير المكتملة أو JSON المتداخل؟</summary>
+          <div class="faq-answer">
+            <p>نعم. يمتلك المحرك الذكي آليات مرنة لاكتشاف الفواصل ومعالجة علامات الاقتباس وتصحيح التفاوت في عدد الأعمدة.</p>
+          </div>
+        </details>
+        <details>
+          <summary>ما هي الصيغ التي يمكنني التصدير إليها؟</summary>
+          <div class="faq-answer">
+            <p>يمكنك التصدير بين CSV قياسي، وTSV المفصول بمسافات جدولية، ومصفوفات JSON، وJSON المنسق، وNDJSON المفصول بأسطر جديدة.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- French Block -->
+    <div class="lang-content-block" data-lang="fr">
+      <h2>Architecture de Traitement Big-Data Haute Performance Hors Ligne</h2>
+      <p>Le Transformateur Big-Data Hors Ligne de VantorKit est un utilitaire conçu pour les analystes de données, ingénieurs backend et responsables de la sécurité. Les ensembles de données contiennent régulièrement des données personnelles sensibles (RGPD), des données financières ou des journaux système critiques. L'utilisation de convertisseurs en ligne conventionnels expose ces fichiers sensibles à des risques de fuite via les journaux de serveurs distants.</p>
+      <p>Cet outil s'exécute exclusivement dans le bac à sable de votre navigateur. En s'appuyant sur des Web Workers dédiés, le traitement s'effectue sans aucun transfert réseau et sans bloquer l'interface utilisateur.</p>
+
+      <h2>Guide d'Utilisation Étape par Étape</h2>
+      <ol>
+        <li><strong>Importer les Données :</strong> Glissez-déposez votre fichier CSV, TSV ou JSON, ou chargez l'échantillon de 5 000 lignes. Le Web Worker détecte automatiquement les séparateurs.</li>
+        <li><strong>Inspecter et Filtrer :</strong> Explorez les colonnes dans le tableau interactif, appliquez des filtres de recherche instantanés et parcourez les lignes.</li>
+        <li><strong>Configurer le Format de Sortie :</strong> Choisissez parmi CSV, TSV, Tableau JSON, JSON formaté ou NDJSON.</li>
+        <li><strong>Exporter Instantanément :</strong> Téléchargez le fichier transformé ou copiez le résultat dans le presse-papiers en un clic.</li>
+      </ol>
+
+      <h2>Architecture Multi-Thread Web Worker</h2>
+      <p>Contrairement aux scripts standards qui bloquent l'interface lors de calculs lourds, VantorKit délègue le traitement à un thread Web Worker en arrière-plan. Vous profitez ainsi d'une fluidité parfaite même avec des fichiers volumineux.</p>
+
+      <div class="privacy-banner">
+        <h3>🔒 Confidentialité 100% Côté Client</h3>
+        <p>Toutes les données restent strictement en mémoire vive (RAM). La fermeture de l'onglet efface immédiatement toutes les traces.</p>
+      </div>
+
+      <h2>Foire Aux Questions (FAQ)</h2>
+      <div class="faq-accordion">
+        <details>
+          <summary>Quelle est la taille maximale de fichier prise en charge ?</summary>
+          <div class="faq-answer">
+            <p>L'outil gère aisément des fichiers de plusieurs centaines de mégaoctets, la seule limite étant la mémoire RAM de votre appareil.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Mes données sont-elles envoyées sur un serveur ?</summary>
+          <div class="faq-answer">
+            <p>Jamais. Tout le traitement s'effectue à 100% localement dans votre navigateur, garanti par nos règles Content-Security-Policy.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Peut-il traiter des fichiers CSV mal formés ?</summary>
+          <div class="faq-answer">
+            <p>Oui, le moteur intègre une détection automatique robuste des délimiteurs et des guillemets imbriqués.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Quels sont les formats d'export disponibles ?</summary>
+          <div class="faq-answer">
+            <p>Vous pouvez exporter en CSV, TSV, Tableau JSON, JSON indenté (2 espaces) et NDJSON.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Italian Block -->
+    <div class="lang-content-block" data-lang="it">
+      <h2>Architettura di Trasformazione Big-Data Locale ad Alte Prestazioni</h2>
+      <p>Il Trasformatore Big-Data Offline di VantorKit è uno strumento professionale sviluppato per data analyst, sviluppatori backend e specialisti della sicurezza. Nel lavoro quotidiano, i dataset includono spesso informazioni personali sensibili (GDPR), metriche finanziarie o log di server riservati. Affidarsi a convertitori online pubblici espone questi dati a gravi rischi di sicurezza e archiviazione su server terzi.</p>
+      <p>Questo strumento opera interamente nella memoria RAM del tuo dispositivo. Grazie all'impiego dei Web Worker in background, è possibile analizzare, filtrare e convertire dataset complessi senza trasmettere un singolo byte sulla rete.</p>
+
+      <h2>Guida Passo Passo</h2>
+      <ol>
+        <li><strong>Carica il Dataset :</strong> Trascina il tuo file CSV, TSV o JSON, oppure avvia la simulazione con il dataset di prova da 5.000 righe. Il worker rileva automaticamente la struttura delle colonne.</li>
+        <li><strong>Esamina e Filtra :</strong> Visualizza i dati nella tabella interattiva, filtra per parola chiave e controlla i tipi di dato dedotti.</li>
+        <li><strong>Seleziona il Formato di Destinazione :</strong> Scegli tra CSV standard, TSV, Array JSON, JSON formattato o NDJSON.</li>
+        <li><strong>Esporta Istantaneamente :</strong> Scarica il dataset convertito o copia il testo serializzato negli appunti in totale sicurezza.</li>
+      </ol>
+
+      <div class="privacy-banner">
+        <h3>🔒 Garanzia di Privacy al 100% nel Browser</h3>
+        <p>Tutte le operazioni avvengono esclusivamente nella memoria volatile del tuo browser, senza telemetria o salvataggio su disco.</p>
+      </div>
+
+      <h2>Domande Frequenti (FAQ)</h2>
+      <div class="faq-accordion">
+        <details>
+          <summary>Qual è la dimensione massima del file supportata?</summary>
+          <div class="faq-answer">
+            <p>Lo strumento gestisce senza problemi file di centinaia di megabyte. L'unico limite effettivo è la memoria RAM disponibile sul dispositivo.</p>
+          </div>
+        </details>
+        <details>
+          <summary>I miei dati vengono inviati a qualche server?</summary>
+          <div class="faq-answer">
+            <p>Assolutamente no. Tutte le trasformazioni avvengono al 100% in locale, validate da rigide intestazioni Content-Security-Policy.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Riesce a gestire righe CSV irregolari o JSON nidificati?</summary>
+          <div class="faq-answer">
+            <p>Sì, il motore integra una logica resiliente per il rilevamento di delimitatori, virgolette di escape e colonne variabili.</p>
+          </div>
+        </details>
+        <details>
+          <summary>Quali formati di esportazione sono supportati?</summary>
+          <div class="faq-answer">
+            <p>È possibile esportare in CSV standard, TSV con tabulazioni, Array JSON, JSON indentato (2 spazi) e NDJSON.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+
+  <!-- Live Toast -->
+  <div class="toast" id="toastBox" role="status" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Action completed successfully</span>
+  </div>
+
+  <!-- Global Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="../privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+      <a href="../terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
+      <a href="../about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
+      <a href="../contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+      <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link" aria-label="Follow VantorKit on X">X (Twitter)</a>
+    </div>
+    <div class="footer-copy" data-i18n="footerCopy">
+      © 2026 VantorKit. Client-side tools designed with absolute data privacy.
+    </div>
+  </footer>
+
+  <!-- Application Logic & In-Memory Web Worker -->
+  <script>
+    const I18N = {
+      en: {
+        backLink: "All Tools",
+        heroBadge: "Web Worker Streaming • 100% Client-Side • Zero Leak",
+        heroTitle: "Offline Big-Data Transformer",
+        heroSubtitle: "Stream, inspect, filter, and convert massive CSV, JSON, TSV, and NDJSON datasets locally in browser RAM using multi-threaded Web Workers.",
+        dropzoneTitle: "Drop your CSV, TSV, or JSON dataset here",
+        dropzoneDesc: "Supports large files up to 100MB+. Streaming execution occurs in an isolated background Web Worker thread without freezing your browser.",
+        btnBrowse: "Choose Dataset File",
+        btnLoadSample: "Load 5,000-Row Sample",
+        privacyPill: "100% In-Browser Worker • Your Data Never Leaves RAM",
+        workerIdle: "Worker: Ready",
+        workerWorking: "Worker: Processing...",
+        lblConvert: "Convert To:",
+        lblDelimiter: "Input Delimiter:",
+        btnExport: "Download Export",
+        btnCopy: "Copy Data",
+        btnClear: "Clear",
+        tabPreview: "Table Preview",
+        tabRaw: "Converted Output",
+        tabSchema: "Column Schema",
+        filterPlaceholder: "Filter rows in preview...",
+        colName: "Column Name",
+        colType: "Inferred Type",
+        colSample: "Sample Value",
+        colUnique: "Unique Values (Sample)",
+        btnPrev: "◀ Previous",
+        btnNext: "Next ▶",
+        ed1Title: "Why Public Converters Pose Grave Security Risks",
+        ed1Desc: "Uploading financial datasets, customer PII, internal telemetry, or medical logs to cloud converters exposes sensitive company assets to server logging, reverse proxies, and third-party data collection.",
+        ed2Title: "Multi-Threaded Web Worker Streaming",
+        ed2Desc: "VantorKit delegates high-throughput file chunking and serialization to an isolated background thread. Even when processing 100MB+ datasets, the main browser UI remains silky-smooth and responsive.",
+        ed3Title: "Zero-Persistence In-Memory Privacy",
+        ed3Desc: "All ingested files, parsed tables, and transformed outputs exist exclusively in volatile browser RAM. Closing or refreshing the tab triggers immediate garbage collection with zero disk remnants.",
+        faq1Q: "What is the maximum file size supported?",
+        faq1A: "The tool comfortably handles files of hundreds of megabytes. Because all chunking and serialization occurs in an isolated background Web Worker, capacity is bounded exclusively by your device's available system RAM.",
+        faq2Q: "Is any dataset sent to an external server?",
+        faq2A: "Never. All data parsing, transformations, and exports occur 100% inside your local browser memory sandbox. Enforced by strict Content-Security-Policy headers, zero network requests are made.",
+        faq3Q: "Can it handle malformed CSV rows or nested JSON?",
+        faq3A: "Yes. The streaming engine implements resilient delimiter sniffing, escaped quotation handling, and error recovery for mismatched column counts and nested JSON objects.",
+        faq4Q: "Which formats can I export to?",
+        faq4A: "You can convert and export between Standard CSV, Tab-Separated TSV, Flat/Structured JSON Arrays, Beautified JSON (2-space indented), and Newline-Delimited JSON (NDJSON).",
+        footerPriv: "Privacy Policy",
+        footerTerms: "Terms of Service",
+        footerAbout: "About Us",
+        footerContact: "Contact",
+        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
+      },
+      ar: {
+        backLink: "جميع الأدوات",
+        heroBadge: "معالجة متعددة الخيوط Web Worker • على جهازك 100% • بدون تسريب",
+        heroTitle: "محول البيانات الضخمة بدون إنترنت",
+        heroSubtitle: "قم بتحويل وفحص وتصفية ملفات CSV وJSON وTSV الضخمة محلياً في الذاكرة العشوائية عبر خيوط Web Workers دون تجميد المتصفح.",
+        dropzoneTitle: "أفلت ملف CSV أو TSV أو JSON هنا",
+        dropzoneDesc: "يدعم الملفات الكبيرة حتى 100MB وأكثر. تتم المعالجة التدفقية بالكامل في خيط خلفي مستقل لضمان سلاسة وسرعة جهازك.",
+        btnBrowse: "اختر ملف البيانات",
+        btnLoadSample: "تحميل عينة 5,000 صف",
+        privacyPill: "معالجة محلية 100% عبر Web Worker • بياناتك لا تغادر ذاكرة RAM أبداً",
+        workerIdle: "المعالج: جاهز",
+        workerWorking: "المعالج: جاري المعالجة...",
+        lblConvert: "التحويل إلى:",
+        lblDelimiter: "فاصل المدخلات:",
+        btnExport: "تحميل الملف المحول",
+        btnCopy: "نسخ البيانات",
+        btnClear: "مسح البيانات",
+        tabPreview: "معاينة الجدول",
+        tabRaw: "البيانات المحولة",
+        tabSchema: "هيكل الأعمدة",
+        filterPlaceholder: "تصفية الصفوف في المعاينة...",
+        colName: "اسم العمود",
+        colType: "النوع التقديري",
+        colSample: "عينة قيمة",
+        colUnique: "القيم الفريدة (عينة)",
+        btnPrev: "◀ السابق",
+        btnNext: "التالي ▶",
+        ed1Title: "مخاطر محولات البيانات السحابية العامة",
+        ed1Desc: "إن رفع البيانات المالية أو سجلات العملاء الخاصة أو سجلات الخوادم إلى مواقع التحويل العامة يعرض أسرار المؤسسات للانتهاك والتخزين غير المصرح به.",
+        ed2Title: "محرك خيوط المعالجة المتعددة Web Worker",
+        ed2Desc: "توكل الأداة عمليات التجزئة والتحويل إلى خيط خلفي مستقل، مما يضمن بقاء واجهة المتصفح فائقة الاستجابة حتى مع أحجام البيانات التي تتجاوز 100MB.",
+        ed3Title: "خصوصية مطلقة داخل الذاكرة المؤقتة",
+        ed3Desc: "توجد الملفات والبيانات حصرياً في ذاكرة RAM المؤقتة، وتُحذف نهائياً وتلقائياً بمجرد إغلاق نافذة المتصفح دون ترك أي أثر على القرص الصلب.",
+        faq1Q: "ما هو الحد الأقصى لحجم الملفات المدعومة؟",
+        faq1A: "تدعم الأداة ملفات بحجم مئات الميجابايت بكل سهولة. وبفضل المعالجة في خيوط Web Worker المستقلة، يعتمد الحد الأقصى فقط على سعة الذاكرة العشوائية RAM في جهازك.",
+        faq2Q: "هل يتم إرسال مجموعات البيانات إلى أي خادم خارجي؟",
+        faq2A: "أبداً. تجري جميع عمليات المعالجة والتحويل محلياً بنسبة 100% داخل المتصفح، مدعومة بسياسة أمان صارمة تمنع أي اتصال خارجي.",
+        faq3Q: "هل تدعم الأداة تصحيح ملفات CSV غير المكتملة أو JSON المتداخل؟",
+        faq3A: "نعم. يمتلك المحرك الذكي آليات مرنة لاكتشاف الفواصل ومعالجة علامات الاقتباس وتصحيح التفاوت في عدد الأعمدة.",
+        faq4Q: "ما هي الصيغ التي يمكنني التصدير إليها؟",
+        faq4A: "يمكنك التصدير بين CSV قياسي، وTSV المفصول بمسافات جدولية، ومصفوفات JSON، وJSON المنسق، وNDJSON المفصول بأسطر جديدة.",
+        footerPriv: "سياسة الخصوصية",
+        footerTerms: "شروط الخدمة",
+        footerAbout: "من نحن",
+        footerContact: "اتصل بنا",
+        footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات."
+      },
+      fr: {
+        backLink: "Tous les Outils",
+        heroBadge: "Streaming Web Worker • 100% Côté Client • Aucune Fuite",
+        heroTitle: "Transformateur Big-Data Hors Ligne",
+        heroSubtitle: "Traitez, inspectez, filtrez et convertissez d'importants jeux de données CSV, JSON, TSV et NDJSON en mémoire RAM grâce aux Web Workers multi-threads.",
+        dropzoneTitle: "Déposez votre fichier CSV, TSV ou JSON ici",
+        dropzoneDesc: "Prend en charge les fichiers volumineux jusqu'à plus de 100 Mo. L'exécution s'effectue dans un thread Web Worker en arrière-plan sans figer votre navigateur.",
+        btnBrowse: "Choisir un Fichier",
+        btnLoadSample: "Charger l'Échantillon (5 000 lignes)",
+        privacyPill: "100% Web Worker en Navigateur • Vos Données Ne Quittent Jamais la RAM",
+        workerIdle: "Worker : Prêt",
+        workerWorking: "Worker : En cours...",
+        lblConvert: "Convertir en :",
+        lblDelimiter: "Séparateur d'Entrée :",
+        btnExport: "Télécharger l'Export",
+        btnCopy: "Copier les Données",
+        btnClear: "Effacer",
+        tabPreview: "Aperçu du Tableau",
+        tabRaw: "Résultat Converti",
+        tabSchema: "Schéma des Colonnes",
+        filterPlaceholder: "Filtrer les lignes dans l'aperçu...",
+        colName: "Nom de Colonne",
+        colType: "Type Déduit",
+        colSample: "Valeur Exemple",
+        colUnique: "Valeurs Uniques (Échantillon)",
+        btnPrev: "◀ Précédent",
+        btnNext: "Suivant ▶",
+        ed1Title: "Pourquoi les Convertisseurs Publics Sont un Risque",
+        ed1Desc: "Téléverser des données financières ou des informations confidentielles vers des serveurs cloud expose vos secrets d'entreprise à la mise en cache et aux journaux tiers.",
+        ed2Title: "Streaming Multi-Thread Web Worker",
+        ed2Desc: "VantorKit délègue les calculs lourds à un thread isolé. Même lors du traitement de gros fichiers, l'interface du navigateur reste parfaitement réactive.",
+        ed3Title: "Confidentialité Zéro Persistance en RAM",
+        ed3Desc: "Les fichiers et les sorties générées existent uniquement dans la mémoire vive de l'ordinateur et sont automatiquement purgés à la fermeture de l'onglet.",
+        faq1Q: "Quelle est la taille maximale de fichier prise en charge ?",
+        faq1A: "L'outil gère aisément des fichiers de plusieurs centaines de mégaoctets, la seule limite étant la mémoire RAM de votre appareil.",
+        faq2Q: "Mes données sont-elles envoyées sur un serveur ?",
+        faq2A: "Jamais. Tout le traitement s'effectue à 100% localement dans votre navigateur, garanti par nos règles Content-Security-Policy.",
+        faq3Q: "Peut-il traiter des fichiers CSV mal formés ?",
+        faq3A: "Oui, le moteur intègre une détection automatique robuste des délimiteurs et des guillemets imbriqués.",
+        faq4Q: "Quels sont les formats d'export disponibles ?",
+        faq4A: "Vous pouvez exporter en CSV, TSV, Tableau JSON, JSON indenté (2 espaces) et NDJSON.",
+        footerPriv: "Politique de Confidentialité",
+        footerTerms: "Conditions d'Utilisation",
+        footerAbout: "À Propos",
+        footerContact: "Contact",
+        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
+      },
+      it: {
+        backLink: "Tutti gli Strumenti",
+        heroBadge: "Streaming Web Worker • 100% Lato Client • Zero Perdite",
+        heroTitle: "Trasformatore Big-Data Offline",
+        heroSubtitle: "Analizza, ispeziona, filtra e converti enormi dataset CSV, JSON, TSV e NDJSON nella memoria RAM con Web Worker multi-thread.",
+        dropzoneTitle: "Trascina qui il tuo file CSV, TSV o JSON",
+        dropzoneDesc: "Supporta file di grandi dimensioni fino a oltre 100MB. L'esecuzione avviene in un thread Web Worker dedicato senza bloccare il browser.",
+        btnBrowse: "Scegli File Dataset",
+        btnLoadSample: "Carica Esempio da 5.000 Righe",
+        privacyPill: "100% Web Worker nel Browser • I Tuoi Dati Non Lasciano Mai la RAM",
+        workerIdle: "Worker: Pronto",
+        workerWorking: "Worker: In elaborazione...",
+        lblConvert: "Converti in:",
+        lblDelimiter: "Delimitatore di Input:",
+        btnExport: "Scarica Esportazione",
+        btnCopy: "Copia Dati",
+        btnClear: "Cancella",
+        tabPreview: "Anteprima Tabella",
+        tabRaw: "Output Convertito",
+        tabSchema: "Schema Colonne",
+        filterPlaceholder: "Filtra righe nell'anteprima...",
+        colName: "Nome Colonna",
+        colType: "Tipo Dedotto",
+        colSample: "Valore di Esempio",
+        colUnique: "Valori Unici (Esempio)",
+        btnPrev: "◀ Precedente",
+        btnNext: "Successivo ▶",
+        ed1Title: "I Rischi dei Convertitori Cloud Pubblici",
+        ed1Desc: "Caricare dataset finanziari o dati privati su convertitori online espone le informazioni riservate a log di server e accessi non autorizzati.",
+        ed2Title: "Streaming Multi-Thread con Web Worker",
+        ed2Desc: "VantorKit delega l'elaborazione ad alta intensità a un thread isolato, garantendo un'interfaccia utente sempre fluida e reattiva.",
+        ed3Title: "Zero Persistenza e Massima Privacy in RAM",
+        ed3Desc: "I file importati e i risultati rimangono unicamente nella memoria volatile e vengono cancellati istantaneamente alla chiusura della scheda.",
+        faq1Q: "Qual è la dimensione massima del file supportata?",
+        faq1A: "Lo strumento gestisce senza problemi file di centinaia di megabyte. L'unico limite effettivo è la memoria RAM disponibile sul dispositivo.",
+        faq2Q: "I miei dati vengono inviati a qualche server?",
+        faq2A: "Assolutamente no. Tutte le trasformazioni avvengono al 100% in locale, validate da rigide intestazioni Content-Security-Policy.",
+        faq3Q: "Riesce a gestire righe CSV irregolari o JSON nidificati?",
+        faq3A: "Sì, il motore integra una logica resiliente per il rilevamento di delimitatori, virgolette di escape e colonne variabili.",
+        faq4Q: "Quali formati di esportazione sono supportati?",
+        faq4A: "È possibile esportare in CSV standard, TSV con tabulazioni, Array JSON, JSON indentato (2 spazi) e NDJSON.",
+        footerPriv: "Privacy Policy",
+        footerTerms: "Termini di Servizio",
+        footerAbout: "Chi Siamo",
+        footerContact: "Contatti",
+        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy."
+      }
+    };
+
+    // --- Embedded Web Worker Script for High-Performance Big Data Processing ---
+    const workerCode = `
+      self.onmessage = function(e) {
+        const { action, text, targetFormat, customDelimiter, filename } = e.data;
+        const startTime = Date.now();
+
+        if (action === 'parseAndConvert') {
+          try {
+            let parsedData = null;
+            let originalType = 'unknown';
+
+            const trimmed = text.trim();
+            if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+              try {
+                parsedData = JSON.parse(trimmed);
+                originalType = 'json';
+                if (!Array.isArray(parsedData)) {
+                  parsedData = [parsedData];
+                }
+              } catch (err) {
+                // Try NDJSON
+                const lines = trimmed.split(/\r?\n/);
+                const ndjsonRows = [];
+                for (let i = 0; i < lines.length; i++) {
+                  const l = lines[i].trim();
+                  if (l) ndjsonRows.push(JSON.parse(l));
+                }
+                parsedData = ndjsonRows;
+                originalType = 'ndjson';
+              }
+            } else {
+              // Parse CSV / TSV / Delimited text
+              originalType = 'csv';
+              parsedData = parseDelimitedText(text, customDelimiter);
+            }
+
+            if (!parsedData || parsedData.length === 0) {
+              self.postMessage({ type: 'error', message: 'No valid records found in dataset.' });
+              return;
+            }
+
+            // Inferred Columns and Schema
+            const columns = Object.keys(parsedData[0]);
+            const totalRows = parsedData.length;
+            const previewRows = parsedData.slice(0, 100);
+
+            // Infer schema from sample (first 100 rows)
+            const schema = columns.map(col => {
+              const sampleVals = [];
+              const uniqueSet = new Set();
+              let inferredType = 'string';
+
+              for (let i = 0; i < Math.min(100, totalRows); i++) {
+                const val = parsedData[i][col];
+                if (val !== undefined && val !== null && val !== '') {
+                  sampleVals.push(val);
+                  uniqueSet.add(String(val));
+                }
+              }
+
+              if (sampleVals.length > 0) {
+                const isAllNumbers = sampleVals.every(v => !isNaN(Number(v)));
+                const isAllBooleans = sampleVals.every(v => v === true || v === false || String(v).toLowerCase() === 'true' || String(v).toLowerCase() === 'false');
+                const isAllDates = sampleVals.every(v => !isNaN(Date.parse(v)) && String(v).length > 6);
+
+                if (isAllNumbers) inferredType = 'number';
+                else if (isAllBooleans) inferredType = 'boolean';
+                else if (isAllDates) inferredType = 'date';
+              }
+
+              return {
+                name: col,
+                type: inferredType,
+                sample: sampleVals[0] !== undefined ? String(sampleVals[0]) : '-',
+                uniqueCount: uniqueSet.size
+              };
+            });
+
+            // Convert to target format
+            let convertedText = '';
+            let exportMime = 'text/plain';
+            let exportExt = 'txt';
+
+            if (targetFormat === 'json_array') {
+              convertedText = JSON.stringify(parsedData);
+              exportMime = 'application/json';
+              exportExt = 'json';
+            } else if (targetFormat === 'json_pretty') {
+              convertedText = JSON.stringify(parsedData, null, 2);
+              exportMime = 'application/json';
+              exportExt = 'json';
+            } else if (targetFormat === 'csv') {
+              convertedText = serializeToDelimited(parsedData, ',');
+              exportMime = 'text/csv';
+              exportExt = 'csv';
+            } else if (targetFormat === 'tsv') {
+              convertedText = serializeToDelimited(parsedData, '\t');
+              exportMime = 'text/tab-separated-values';
+              exportExt = 'tsv';
+            } else if (targetFormat === 'ndjson') {
+              convertedText = parsedData.map(r => JSON.stringify(r)).join('\n');
+              exportMime = 'application/x-ndjson';
+              exportExt = 'ndjson';
+            }
+
+            const elapsed = Date.now() - startTime;
+
+            self.postMessage({
+              type: 'complete',
+              totalRows,
+              columns,
+              previewRows,
+              schema,
+              convertedText,
+              exportMime,
+              exportExt,
+              originalType,
+              elapsed
+            });
+
+          } catch (err) {
+            self.postMessage({ type: 'error', message: err.message || 'Error parsing dataset.' });
+          }
+        }
+      };
+
+      function parseDelimitedText(text, forcedDelimiter) {
+        let delimiter = forcedDelimiter;
+        if (!delimiter || delimiter === 'auto') {
+          // Sniff delimiter from first 5 lines
+          const sample = text.slice(0, 4096);
+          const commas = (sample.match(/,/g) || []).length;
+          const tabs = (sample.match(/\t/g) || []).length;
+          const semicolons = (sample.match(/;/g) || []).length;
+          const pipes = (sample.match(/\|/g) || []).length;
+
+          if (tabs > commas && tabs > semicolons) delimiter = '\t';
+          else if (semicolons > commas && semicolons > pipes) delimiter = ';';
+          else if (pipes > commas) delimiter = '|';
+          else delimiter = ',';
+        }
+
+        const rows = [];
+        let curRow = [];
+        let curVal = '';
+        let insideQuote = false;
+
+        const len = text.length;
+        for (let i = 0; i < len; i++) {
+          const char = text[i];
+          const nextChar = text[i + 1];
+
+          if (char === '"') {
+            if (insideQuote && nextChar === '"') {
+              curVal += '"';
+              i++;
+            } else {
+              insideQuote = !insideQuote;
+            }
+          } else if (char === delimiter && !insideQuote) {
+            curRow.push(curVal.trim());
+            curVal = '';
+          } else if ((char === '\r' || char === '\n') && !insideQuote) {
+            if (char === '\r' && nextChar === '\n') i++;
+            curRow.push(curVal.trim());
+            if (curRow.length > 0 && curRow.some(c => c !== '')) {
+              rows.push(curRow);
+            }
+            curRow = [];
+            curVal = '';
+          } else {
+            curVal += char;
+          }
+        }
+
+        if (curVal || curRow.length > 0) {
+          curRow.push(curVal.trim());
+          if (curRow.some(c => c !== '')) rows.push(curRow);
+        }
+
+        if (rows.length === 0) return [];
+
+        const headers = rows[0].map((h, idx) => h || ('column_' + (idx + 1)));
+        const data = [];
+
+        for (let r = 1; r < rows.length; r++) {
+          const rowVals = rows[r];
+          const obj = {};
+          for (let c = 0; c < headers.length; c++) {
+            obj[headers[c]] = rowVals[c] !== undefined ? rowVals[c] : '';
+          }
+          data.push(obj);
+        }
+
+        return data;
+      }
+
+      function serializeToDelimited(data, delimiter) {
+        if (!data || data.length === 0) return '';
+        const headers = Object.keys(data[0]);
+        const lines = [];
+
+        // Header line
+        lines.push(headers.map(h => escapeField(h, delimiter)).join(delimiter));
+
+        // Data lines
+        for (let i = 0; i < data.length; i++) {
+          const row = data[i];
+          const line = headers.map(h => escapeField(row[h], delimiter)).join(delimiter);
+          lines.push(line);
+        }
+
+        return lines.join('\n');
+      }
+
+      function escapeField(field, delimiter) {
+        if (field === null || field === undefined) return '';
+        const str = String(field);
+        if (str.includes(delimiter) || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      }
+    `;
+
+    // --- Main Application Controller ---
+    (function() {
+      let currentLang = 'en';
+      try {
+        const stored = localStorage.getItem('vantorkit_lang');
+        if (stored && I18N[stored]) currentLang = stored;
+      } catch (e) {}
+
+      // DOM Elements
+      const htmlRoot = document.getElementById('htmlRoot');
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const btnBrowse = document.getElementById('btnBrowse');
+      const btnLoadSample = document.getElementById('btnLoadSample');
+      const statusCard = document.getElementById('statusCard');
+      const controlsPanel = document.getElementById('controlsPanel');
+      const inspectorCard = document.getElementById('inspectorCard');
+      const workerStatusBadge = document.getElementById('workerStatusBadge');
+      const fileNameBadge = document.getElementById('fileNameBadge');
+      const fileSizeBadge = document.getElementById('fileSizeBadge');
+      const rowCountBadge = document.getElementById('rowCountBadge');
+      const colCountBadge = document.getElementById('colCountBadge');
+      const timeElapsedBadge = document.getElementById('timeElapsedBadge');
+      const progressBar = document.getElementById('progressBar');
+      const selectTargetFormat = document.getElementById('selectTargetFormat');
+      const selectDelimiter = document.getElementById('selectDelimiter');
+      const btnDownloadExport = document.getElementById('btnDownloadExport');
+      const btnCopyConverted = document.getElementById('btnCopyConverted');
+      const btnClearData = document.getElementById('btnClearData');
+      const inspectorTabs = document.querySelectorAll('.inspector-tab');
+      const tabContentPreview = document.getElementById('tabContentPreview');
+      const tabContentCode = document.getElementById('tabContentCode');
+      const tabContentSchema = document.getElementById('tabContentSchema');
+      const filterInput = document.getElementById('filterInput');
+      const tableHead = document.getElementById('tableHead');
+      const tableBody = document.getElementById('tableBody');
+      const codeOutputBox = document.getElementById('codeOutputBox');
+      const schemaTableBody = document.getElementById('schemaTableBody');
+      const paginationInfo = document.getElementById('paginationInfo');
+      const btnPrevPage = document.getElementById('btnPrevPage');
+      const btnNextPage = document.getElementById('btnNextPage');
+      const toastBox = document.getElementById('toastBox');
+      const toastMsg = document.getElementById('toastMsg');
+
+      // State
+      let workerInstance = null;
+      let activeRawText = '';
+      let activeFileName = '';
+      let currentResult = null;
+      let currentFilter = '';
+      let currentPage = 1;
+      const rowsPerPage = 50;
+
+      // Initialize Web Worker via volatile Blob URI
+      function initWorker() {
+        if (workerInstance) workerInstance.terminate();
+        const blob = new Blob([workerCode], { type: 'application/javascript' });
+        const url = URL.createObjectURL(blob);
+        workerInstance = new Worker(url);
+
+        workerInstance.onmessage = function(e) {
+          const data = e.data;
+          if (data.type === 'complete') {
+            currentResult = data;
+            renderComplete(data);
+          } else if (data.type === 'error') {
+            showToast('Error: ' + data.message);
+            workerStatusBadge.textContent = 'Worker: Error';
+            progressBar.style.width = '0%';
+          }
+        };
+      }
+
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toastBox.classList.add('show');
+        setTimeout(() => toastBox.classList.remove('show'), 3000);
+      }
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      // Process raw text with worker
+      function processData(text, filename) {
+        activeRawText = text;
+        activeFileName = filename || 'dataset.csv';
+
+        statusCard.style.display = 'flex';
+        controlsPanel.style.display = 'flex';
+        inspectorCard.style.display = 'flex';
+
+        fileNameBadge.textContent = activeFileName;
+        fileSizeBadge.textContent = formatBytes(new Blob([text]).size);
+        workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerWorking) || 'Worker: Processing...';
+        progressBar.style.width = '70%';
+
+        if (!workerInstance) initWorker();
+
+        workerInstance.postMessage({
+          action: 'parseAndConvert',
+          text: activeRawText,
+          targetFormat: selectTargetFormat.value,
+          customDelimiter: selectDelimiter.value,
+          filename: activeFileName
+        });
+      }
+
+      function renderComplete(data) {
+        progressBar.style.width = '100%';
+        workerStatusBadge.textContent = (I18N[currentLang] && I18N[currentLang].workerIdle) || 'Worker: Ready';
+        rowCountBadge.textContent = data.totalRows.toLocaleString() + ' Rows';
+        colCountBadge.textContent = data.columns.length + ' Columns';
+        timeElapsedBadge.textContent = data.elapsed + 'ms';
+
+        // Render Schema
+        schemaTableBody.innerHTML = '';
+        data.schema.forEach(col => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-weight:700;color:#fb923c">${escapeHtml(col.name)}</td>
+            <td><span class="tag-badge worker">${col.type}</span></td>
+            <td>${escapeHtml(col.sample)}</td>
+            <td>${col.uniqueCount}</td>
+          `;
+          schemaTableBody.appendChild(tr);
+        });
+
+        // Render Table Headers
+        tableHead.innerHTML = '';
+        const trHead = document.createElement('tr');
+        const thIndex = document.createElement('th');
+        thIndex.className = 'row-index';
+        thIndex.textContent = '#';
+        trHead.appendChild(thIndex);
+
+        data.columns.forEach(col => {
+          const th = document.createElement('th');
+          th.textContent = col;
+          trHead.appendChild(th);
+        });
+        tableHead.appendChild(trHead);
+
+        // Render Table Body
+        currentPage = 1;
+        renderTableRows();
+
+        // Render Code Preview
+        const previewSnippet = data.convertedText.slice(0, 10000);
+        codeOutputBox.textContent = previewSnippet + (data.convertedText.length > 10000 ? '\n... [Preview Truncated: Use "Download Export" for entire dataset]' : '');
+
+        showToast('Dataset parsed in ' + data.elapsed + 'ms!');
+      }
+
+      function renderTableRows() {
+        if (!currentResult) return;
+        tableBody.innerHTML = '';
+
+        let rows = currentResult.previewRows;
+        if (currentFilter) {
+          const q = currentFilter.toLowerCase();
+          rows = rows.filter(r => Object.values(r).some(val => String(val).toLowerCase().includes(q)));
+        }
+
+        const totalFiltered = rows.length;
+        const totalPages = Math.ceil(totalFiltered / rowsPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIdx = (currentPage - 1) * rowsPerPage;
+        const endIdx = Math.min(startIdx + rowsPerPage, totalFiltered);
+        const pagedRows = rows.slice(startIdx, endIdx);
+
+        pagedRows.forEach((r, idx) => {
+          const tr = document.createElement('tr');
+          const tdIdx = document.createElement('td');
+          tdIdx.className = 'row-index';
+          tdIdx.textContent = startIdx + idx + 1;
+          tr.appendChild(tdIdx);
+
+          currentResult.columns.forEach(col => {
+            const td = document.createElement('td');
+            td.textContent = r[col] !== undefined ? r[col] : '';
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+
+        paginationInfo.textContent = 'Showing ' + (totalFiltered > 0 ? (startIdx + 1) : 0) + ' to ' + endIdx + ' of ' + totalFiltered + ' preview rows (' + currentResult.totalRows.toLocaleString() + ' total in file)';
+        btnPrevPage.disabled = currentPage <= 1;
+        btnNextPage.disabled = currentPage >= totalPages;
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // Event Listeners
+      btnBrowse.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => processData(ev.target.result, file.name);
+          reader.readAsText(file);
+        }
+      });
+
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => processData(ev.target.result, file.name);
+          reader.readAsText(file);
+        }
+      });
+
+      // Sample 5,000-Row Generator
+      btnLoadSample.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rows = ['order_id,customer_name,country,item_sku,unit_price,quantity,order_status,created_at'];
+        const countries = ['United States', 'Germany', 'United Kingdom', 'Canada', 'France', 'Saudi Arabia', 'Japan', 'Australia', 'Italy', 'Brazil'];
+        const statuses = ['Delivered', 'Processing', 'Shipped', 'Pending', 'Cancelled'];
+        const items = ['SKU-VANTOR-PRO', 'SKU-QUANTUM-X', 'SKU-DEV-KIT-9', 'SKU-SEC-CHIP', 'SKU-CLOUD-SYNC'];
+
+        for (let i = 1; i <= 5000; i++) {
+          const country = countries[i % countries.length];
+          const status = statuses[i % statuses.length];
+          const item = items[i % items.length];
+          const price = (19.99 + (i % 80) * 2.5).toFixed(2);
+          const qty = (i % 5) + 1;
+          const date = new Date(Date.now() - (i * 3600000)).toISOString().split('T')[0];
+          rows.push('ORD-' + (10000 + i) + ',Customer_' + (100 + (i % 400)) + ',' + country + ',' + item + ',' + price + ',' + qty + ',' + status + ',' + date);
+        }
+
+        processData(rows.join('\n'), 'sample_ecommerce_5000_records.csv');
+      });
+
+      // Target Format & Delimiter Change
+      selectTargetFormat.addEventListener('change', () => {
+        if (activeRawText) processData(activeRawText, activeFileName);
+      });
+
+      selectDelimiter.addEventListener('change', () => {
+        if (activeRawText) processData(activeRawText, activeFileName);
+      });
+
+      // Download Export
+      btnDownloadExport.addEventListener('click', () => {
+        if (!currentResult || !currentResult.convertedText) return;
+        const blob = new Blob([currentResult.convertedText], { type: currentResult.exportMime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const baseName = activeFileName.replace(/\.[^/.]+$/, '');
+        a.href = url;
+        a.download = 'converted_' + baseName + '.' + currentResult.exportExt;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Export downloaded successfully!');
+      });
+
+      // Copy Data
+      btnCopyConverted.addEventListener('click', () => {
+        if (!currentResult || !currentResult.convertedText) return;
+        navigator.clipboard.writeText(currentResult.convertedText).then(() => {
+          showToast('Data copied to clipboard!');
+        });
+      });
+
+      // Clear Data
+      btnClearData.addEventListener('click', () => {
+        activeRawText = '';
+        currentResult = null;
+        fileInput.value = '';
+        statusCard.style.display = 'none';
+        controlsPanel.style.display = 'none';
+        inspectorCard.style.display = 'none';
+        progressBar.style.width = '0%';
+        showToast('Data cleared from browser RAM');
+      });
+
+      // Inspector Tabs
+      inspectorTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          inspectorTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const target = tab.getAttribute('data-tab');
+
+          tabContentPreview.style.display = target === 'preview' ? 'block' : 'none';
+          tabContentCode.style.display = target === 'code' ? 'block' : 'none';
+          tabContentSchema.style.display = target === 'schema' ? 'block' : 'none';
+        });
+      });
+
+      // Filter Search
+      filterInput.addEventListener('input', (e) => {
+        currentFilter = e.target.value.trim();
+        currentPage = 1;
+        renderTableRows();
+      });
+
+      // Pagination
+      btnPrevPage.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTableRows();
+        }
+      });
+
+      btnNextPage.addEventListener('click', () => {
+        currentPage++;
+        renderTableRows();
+      });
+
+      // Language Switcher & i18n
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        currentLang = lang;
+        try {
+          localStorage.setItem('vantorkit_lang', lang);
+        } catch (e) {}
+
+        htmlRoot.setAttribute('lang', lang);
+        htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        const dict = I18N[lang];
+        currentLangLabel.textContent = dict.langLabel || (lang === 'ar' ? 'العربية' : lang === 'fr' ? 'Français' : lang === 'it' ? 'Italiano' : 'English');
+
+        // Update data-i18n elements
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            el.textContent = dict[key];
+          }
+        });
+
+        // Update placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (dict[key]) {
+            el.setAttribute('placeholder', dict[key]);
+          }
+        });
+
+        // Update active content block
+        document.querySelectorAll('.lang-content-block').forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+        });
+
+        // Update active dropdown item
+        langOptions.forEach(opt => {
+          opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+        });
+      }
+
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langMenu.classList.toggle('open');
+      });
+
+      document.addEventListener('click', () => langMenu.classList.remove('open'));
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const lang = opt.getAttribute('data-lang');
+          setLanguage(lang);
+          langMenu.classList.remove('open');
+        });
+      });
+
+      // Initialize
+      initWorker();
+      setLanguage(currentLang);
+    })();
+  </script>
+</body>
+</html>

@@ -217,6 +217,30 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://vantorkit.com/tools/big-data-transformer.html</loc>
+    <lastmod>2026-09-29T21:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/big-data-transformer.html</loc>
+    <lastmod>2026-09-29T21:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/tools/css-grid-generator.html</loc>
+    <lastmod>2026-09-29T21:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/css-grid-generator.html</loc>
+    <lastmod>2026-09-29T21:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Legal & Transparency Pages (AdSense Compliance) -->
   <url>
