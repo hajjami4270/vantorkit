@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>JWT Decoder & Verifier – Safe In-Memory Token Inspector | VantorKit</title>
+  <meta name="description" content="Safe, zero-leak client-side JWT decoder and HMAC signer. Inspect headers, payload claims, timestamps, and verify HS256/HS384/HS512 signatures locally in browser RAM without server leaks.">
+  <meta name="keywords" content="jwt decoder, jwt verifier, decode jwt, jwt io alternative, verify hs256 signature, json web token inspector, client side jwt, private jwt debugger, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/jwt-decoder.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/jwt-decoder.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/jwt-decoder.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/jwt-decoder.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/jwt-decoder.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/jwt-decoder.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="JWT Decoder & Verifier – Safe In-Memory Token Inspector | VantorKit">
+  <meta property="og:description" content="Safe client-side JWT debugger and signature verifier. Inspect headers, claims, expiration timestamps, and verify HMAC secret signatures entirely in browser memory.">
+  <meta property="og:url" content="https://vantorkit.com/tools/jwt-decoder.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JWT Decoder & Verifier — VantorKit">
+  <meta name="twitter:description" content="Zero-leak alternative to jwt.io. Inspect claims and verify HMAC signatures locally in browser memory without transmitting tokens.">
+
+  <!-- Fonts: Cairo (Arabic), Plus Jakarta Sans (UI), JetBrains Mono (Code/Tokens) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "JWT Decoder & Verifier",
+      "url": "https://vantorkit.com/tools/jwt-decoder.html",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires Web Crypto API.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Decode, inspect, and verify JSON Web Tokens (JWT) locally inside browser RAM using native Web Crypto API without transmitting tokens or secret keys."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why is decoding JWTs locally safer than using online decoders?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Many online tools send your pasted tokens and cryptographic secret keys to backend servers or log them in cloud proxies. VantorKit decodes and verifies tokens entirely in your browser's local RAM using Web Crypto API, meaning zero sensitive claims or API credentials are ever transmitted."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which cryptographic signature algorithms are supported for verification?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The tool supports native HMAC SHA-256 (HS256), HMAC SHA-384 (HS384), and HMAC SHA-512 (HS512) verification and signing directly through the W3C Web Crypto API. Both plaintext and Base64-encoded secrets are supported."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the timestamp humanizer work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The decoder extracts standard Unix epoch timestamp claims (iat, exp, nbf, auth_time), converts them into human-readable UTC and local date formats, and computes real-time active or expired status relative to your device's current clock."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I also generate and sign new JWT tokens with this tool?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Switch to the Token Signer tab, customize your header and payload JSON claims, enter your HMAC secret, and generate a freshly signed, valid JWT token in real time."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --badge-bg: rgba(15, 23, 42, 0.7);
+      --badge-text: #7dd3fc;
+      --jwt-header: #f43f5e;
+      --jwt-payload: #c084fc;
+      --jwt-sig: #38bdf8;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.16);
+      --success-border: rgba(16, 185, 129, 0.35);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --warning-border: rgba(245, 158, 11, 0.35);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.16);
+      --danger-border: rgba(239, 68, 68, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Header */
+    .top-nav {
+      height: 70px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateX(-2px);
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+      transition: transform 0.2s ease;
+    }
+
+    .nav-brand:hover svg {
+      transform: scale(1.05);
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: rgba(26, 32, 48, 0.95);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .globe-icon {
+      color: #38bdf8;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .lang-option:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #38bdf8;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3.5rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.35px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-badge svg {
+      color: #38bdf8;
+    }
+
+    h1 {
+      font-size: 2.45rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.65rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Toolbar Controls & Mode Tabs */
+    .workspace-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .mode-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover {
+      color: #fff;
+    }
+
+    .mode-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-tool-sm {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-tool-sm:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #fff;
+    }
+
+    /* Dual Pane Workspace */
+    .jwt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .jwt-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Pane: Encoded Token */
+    .pane-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pane-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.85rem;
+    }
+
+    .pane-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .jwt-input-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 220px;
+    }
+
+    .jwt-textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      background: rgba(10, 14, 24, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      word-break: break-all;
+    }
+
+    .jwt-textarea:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    /* Token Visual Highlights Display */
+    .token-color-preview {
+      background: rgba(10, 14, 24, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      word-break: break-all;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .token-part-header { color: var(--jwt-header); font-weight: 600; }
+    .token-dot { color: #64748b; font-weight: 700; }
+    .token-part-payload { color: var(--jwt-payload); font-weight: 600; }
+    .token-part-sig { color: var(--jwt-sig); font-weight: 600; }
+
+    /* Right Pane: Decoded Claims */
+    .decoded-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .claim-box {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .claim-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .claim-box-header.header-tag { color: var(--jwt-header); }
+    .claim-box-header.payload-tag { color: var(--jwt-payload); }
+    .claim-box-header.sig-tag { color: var(--jwt-sig); }
+
+    .json-code-box {
+      padding: 1rem;
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      overflow-x: auto;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    /* JSON Syntax Highlighting Colors */
+    .json-key { color: #f43f5e; font-weight: 600; }
+    .json-string { color: #38bdf8; }
+    .json-number { color: #f59e0b; }
+    .json-boolean { color: #10b981; font-weight: 700; }
+    .json-null { color: #94a3b8; font-style: italic; }
+
+    /* Timestamps Interpretation Card */
+    .timestamp-card {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+    }
+
+    .timestamp-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .timestamp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+    }
+
+    .timestamp-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .timestamp-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .ts-label {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .ts-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .ts-badge.valid {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #6ee7b7;
+    }
+
+    .ts-badge.expired {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: #fca5a5;
+    }
+
+    .ts-badge.neutral {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+    }
+
+    /* Signature Verification Box */
+    .sig-verify-box {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .secret-input-row {
+      display: flex;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .secret-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.65rem 2.5rem 0.65rem 0.85rem;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .secret-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .btn-toggle-eye {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .btn-toggle-eye:hover {
+      color: #fff;
+    }
+
+    html[dir="rtl"] .secret-input {
+      padding-left: 2.5rem;
+      padding-right: 0.85rem;
+    }
+
+    html[dir="rtl"] .btn-toggle-eye {
+      right: auto;
+      left: 0.65rem;
+    }
+
+    .secret-options {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .secret-options input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: #38bdf8;
+    }
+
+    /* Verification Status Banner */
+    .status-banner {
+      border-radius: 10px;
+      padding: 0.85rem 1.15rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.25s ease;
+    }
+
+    .status-banner.valid {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #6ee7b7;
+    }
+
+    .status-banner.invalid {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: #fca5a5;
+    }
+
+    .status-banner.neutral {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #7dd3fc;
+    }
+
+    /* Signer Mode Editor */
+    .signer-panel {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      gap: 1.5rem;
+      flex-direction: column;
+    }
+
+    .signer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 860px) {
+      .signer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor-box-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .editor-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .code-editor {
+      width: 100%;
+      height: 180px;
+      background: rgba(10, 14, 24, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.85rem;
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      outline: none;
+      resize: vertical;
+    }
+
+    .code-editor:focus {
+      border-color: #38bdf8;
+    }
+
+    .btn-generate-jwt {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      color: #041226;
+      border: none;
+      padding: 0.85rem 1.85rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-generate-jwt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(56, 189, 248, 0.5);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.96);
+      color: #fff;
+      border: 1px solid #38bdf8;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    html[dir="rtl"] .toast {
+      right: auto;
+      left: 24px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Educational Guide Section */
+    .info-section {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+    }
+
+    .guide-card-title svg {
+      color: #38bdf8;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Standardized Footer */
+    .site-footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #38bdf8;
+    }
+
+    .footer-copy {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      color: #64748b;
+      font-size: 0.84rem;
+    }
+
+    .footer-x-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+
+    .footer-x-link svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .footer-x-link:hover svg {
+      transform: scale(1.12);
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S8MDMH082N');
+  </script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <nav class="top-nav">
+    <a href="index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Switcher Dropdown (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Header Section -->
+    <header>
+      <div class="brand-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="heroBadge">Zero Server Transmission • In-Browser RAM Only • Safe for Production Keys</span>
+      </div>
+      <h1 data-i18n="heroTitle">JWT Decoder & <span>HMAC Verifier</span></h1>
+      <p class="subtitle" data-i18n="heroSubtitle">Decode, inspect claims, format timestamps, and verify HMAC HS256 signatures securely in your browser RAM without leaking credentials to third parties.</p>
+    </header>
+
+    <!-- Toolbar: Tabs & Sample Loaders -->
+    <div class="workspace-toolbar">
+      <div class="mode-pills">
+        <button type="button" class="mode-btn active" id="tabDecode" data-i18n="tabDecode">Decode & Verify</button>
+        <button type="button" class="mode-btn" id="tabSign" data-i18n="tabSign">Token Signer / Generator</button>
+      </div>
+
+      <div class="quick-actions">
+        <button type="button" class="btn-tool-sm" id="btnLoadValidSample">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="btnSampleValid">Sample Active JWT</span>
+        </button>
+        <button type="button" class="btn-tool-sm" id="btnLoadExpiredSample">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span data-i18n="btnSampleExpired">Sample Expired JWT</span>
+        </button>
+        <button type="button" class="btn-tool-sm" id="btnClearToken">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <span data-i18n="btnClear">Clear</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode 1: Decode & Verify Workspace -->
+    <div class="jwt-grid" id="decoderView">
+      <!-- Left Column: Encoded Input -->
+      <div class="pane-card">
+        <div class="pane-header">
+          <div class="pane-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span data-i18n="encodedTitle">Encoded JWT String</span>
+          </div>
+          <span id="tokenLengthBadge" style="font-size:0.75rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace">0 chars</span>
+        </div>
+
+        <div class="jwt-input-wrap">
+          <textarea id="jwtInput" class="jwt-textarea" placeholder="Paste your Bearer token or eyJ... JWT string here..." spellcheck="false" autocomplete="off"></textarea>
+        </div>
+
+        <!-- Token Part Segmentation Preview -->
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:var(--text-muted);margin-bottom:0.4rem;" data-i18n="tokenStructureTitle">Token Segmentation & Structure:</div>
+          <div class="token-color-preview" id="tokenColorPreview">
+            <span style="color:#64748b;font-style:italic">Paste a valid 3-part token above to inspect color segmentation...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Decoded Payload & Signature Verification -->
+      <div class="decoded-section">
+        <!-- Header JSON -->
+        <div class="claim-box">
+          <div class="claim-box-header header-tag">
+            <span>HEADER: ALGORITHM &amp; TOKEN TYPE</span>
+            <span id="headerAlgBadge" style="font-size:0.75rem;padding:2px 8px;border-radius:6px;background:rgba(244,63,94,0.15);color:#f43f5e">HS256</span>
+          </div>
+          <pre class="json-code-box" id="jsonHeaderView">{
+  <span class="json-key">"alg"</span>: <span class="json-string">"HS256"</span>,
+  <span class="json-key">"typ"</span>: <span class="json-string">"JWT"</span>
+}</pre>
+        </div>
+
+        <!-- Payload JSON -->
+        <div class="claim-box">
+          <div class="claim-box-header payload-tag">
+            <span>PAYLOAD: DATA &amp; CLAIMS</span>
+            <span id="payloadClaimsCount" style="font-size:0.75rem;padding:2px 8px;border-radius:6px;background:rgba(192,132,252,0.15);color:#c084fc">0 Claims</span>
+          </div>
+          <pre class="json-code-box" id="jsonPayloadView">{
+  <span class="json-key">"sub"</span>: <span class="json-string">"1234567890"</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"John Doe"</span>,
+  <span class="json-key">"iat"</span>: <span class="json-number">1516239022</span>
+}</pre>
+        </div>
+
+        <!-- Human-Friendly Timestamp Translation -->
+        <div class="timestamp-card" id="timestampCard" style="display:none">
+          <div class="timestamp-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            <span data-i18n="tsTitle">Timestamp Analysis & Expiration Status</span>
+          </div>
+          <div class="timestamp-list" id="timestampList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Signature Verification Section -->
+        <div class="sig-verify-box">
+          <div style="font-size:0.85rem;font-weight:700;color:#cbd5e1;display:flex;justify-content:space-between">
+            <span data-i18n="sigVerifyTitle">VERIFY SIGNATURE (HMAC-SHA256)</span>
+            <span id="sigAlgDisplay" style="color:#38bdf8;font-family:'JetBrains Mono',monospace">HS256</span>
+          </div>
+
+          <div class="secret-input-row">
+            <input type="password" id="jwtSecretInput" class="secret-input" placeholder="Enter HMAC secret key to verify signature..." autocomplete="off">
+            <button type="button" class="btn-toggle-eye" id="btnToggleSecret" title="Show/Hide secret">
+              <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+
+          <label class="secret-options">
+            <input type="checkbox" id="chkSecretBase64">
+            <span data-i18n="chkBase64">Secret is base64 encoded</span>
+          </label>
+
+          <!-- Signature Status Banner -->
+          <div class="status-banner neutral" id="signatureStatusBanner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span id="signatureStatusText" data-i18n="sigStatusNeutral">Enter your HMAC secret key above to verify signature locally.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode 2: Token Generator & Signer Panel -->
+    <div class="signer-panel" id="signerView">
+      <div style="border-bottom:1px solid var(--card-border);padding-bottom:1rem">
+        <h3 style="font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:0.25rem" data-i18n="signerTitle">Generate & Cryptographically Sign a JWT</h3>
+        <p style="font-size:0.88rem;color:var(--text-muted)" data-i18n="signerDesc">Customize claims and sign with HMAC (HS256) directly in client RAM using native Web Crypto API.</p>
+      </div>
+
+      <div class="signer-grid">
+        <div class="editor-box-wrap">
+          <div class="editor-label">
+            <span>HEADER (JSON)</span>
+            <span style="color:var(--jwt-header)">HS256</span>
+          </div>
+          <textarea id="signerHeaderInput" class="code-editor" spellcheck="false">{
+  "alg": "HS256",
+  "typ": "JWT"
+}</textarea>
+        </div>
+
+        <div class="editor-box-wrap">
+          <div class="editor-label">
+            <span>PAYLOAD (JSON)</span>
+            <span style="color:var(--jwt-payload)">Claims</span>
+          </div>
+          <textarea id="signerPayloadInput" class="code-editor" spellcheck="false">{
+  "sub": "usr_9482103",
+  "name": "Sarah Connor",
+  "role": "admin",
+  "iat": 1759168000,
+  "exp": 1790704000
+}</textarea>
+        </div>
+      </div>
+
+      <div class="sig-verify-box">
+        <div class="editor-label">
+          <span data-i18n="signingSecretTitle">HMAC SECRET KEY FOR SIGNING</span>
+        </div>
+        <div class="secret-input-row">
+          <input type="text" id="signerSecretInput" class="secret-input" value="vantorkit-super-secret-key-32chars!" placeholder="Enter HMAC secret key...">
+        </div>
+        <button type="button" class="btn-generate-jwt" id="btnSignToken">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-i18n="btnSignGenerate">Cryptographically Sign & Generate JWT</span>
+        </button>
+      </div>
+
+      <div class="pane-card" id="generatedTokenWrap" style="display:none">
+        <div class="pane-header">
+          <div class="pane-title" style="color:#10b981">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span data-i18n="generatedTitle">Generated Signed Token (HS256)</span>
+          </div>
+          <button type="button" class="btn-tool-sm" id="btnCopyGeneratedToken">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span data-i18n="btnCopy">Copy Token</span>
+          </button>
+        </div>
+        <div class="token-color-preview" id="generatedTokenPreview"></div>
+      </div>
+    </div>
+
+    <!-- Educational & Technical Guide Section -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="guideHeading">Understanding JSON Web Tokens & Zero-Leak Security</h2>
+        <p data-i18n="guideSubheading">Learn the mechanics of JWT authentication tokens, signature verification, and why offline decoders are essential for API security.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span data-i18n="g1Title">The 3-Part JWT Architecture</span>
+          </div>
+          <p data-i18n="g1Desc">A JWT consists of Header (algorithm & type), Payload (user claims, roles, timestamps), and Signature separated by dots. The header and payload are simply Base64URL-encoded JSON, not encrypted.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="g2Title">Native Web Crypto Verification</span>
+          </div>
+          <p data-i18n="g2Desc">Verification executes using the browser's hardware-accelerated <code>crypto.subtle</code> API. Your HMAC secret key is ingested directly into non-exportable cryptographic memory without external API calls.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span data-i18n="g3Title">Why Online Decoders are Risky</span>
+          </div>
+          <p data-i18n="g3Desc">Pasting production JWTs or API signing secrets into third-party websites risks exposing session identifiers, email addresses, and HMAC keys to server logs, proxy caches, or malicious extensions.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Is my JWT or secret key stored anywhere?</h4>
+          <p data-i18n="faq1A">No. All decoding and verification takes place strictly in volatile browser RAM. When you close the tab, all memory is immediately reclaimed by the garbage collector.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">What does the "exp" timestamp claim mean?</h4>
+          <p data-i18n="faq2A">The <code>exp</code> (Expiration Time) claim identifies the exact expiration time on or after which the JWT must not be accepted for processing. VantorKit humanizes this timestamp into local time and relative countdowns.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">How do I verify Base64 encoded secrets?</h4>
+          <p data-i18n="faq3A">Check the "Secret is base64 encoded" box under the secret key input. The tool will decode the Base64 bytes prior to importing the HMAC key into Web Crypto.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Can this tool verify RSA (RS256) or ECDSA (ES256) tokens?</h4>
+          <p data-i18n="faq4A">The decoder parses all JWT algorithms (RS256, ES256, EdDSA, HS256, etc.) into readable claims. Built-in instant cryptographic verification is optimized for HMAC symmetric algorithms (HS256, HS384, HS512).</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Standardized Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal & Support">
+        <a href="privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+        <a href="terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
+        <a href="about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
+        <a href="contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+        <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      </nav>
+      <p class="footer-copy" data-i18n="footerCopy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toastBox">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    <span id="toastMsg">Copied to clipboard!</span>
+  </div>
+
+  <!-- Application Logic & Web Crypto Verification -->
+  <script>
+    (function() {
+      'use strict';
+
+      // --- Translations Dictionary (EN, AR, FR, IT) ---
+      const I18N = {
+        en: {
+          langLabel: "English",
+          backLink: "← Back to Tools",
+          heroBadge: "Zero Server Transmission • In-Browser RAM Only • Safe for Production Keys",
+          heroTitle: "JWT Decoder & HMAC Verifier",
+          heroSubtitle: "Decode, inspect claims, format timestamps, and verify HMAC HS256 signatures securely in your browser RAM without leaking credentials to third parties.",
+          tabDecode: "Decode & Verify",
+          tabSign: "Token Signer / Generator",
+          btnSampleValid: "Sample Active JWT",
+          btnSampleExpired: "Sample Expired JWT",
+          btnClear: "Clear",
+          encodedTitle: "Encoded JWT String",
+          tokenStructureTitle: "Token Segmentation & Structure:",
+          tsTitle: "Timestamp Analysis & Expiration Status",
+          sigVerifyTitle: "VERIFY SIGNATURE (HMAC-SHA256)",
+          chkBase64: "Secret is base64 encoded",
+          sigStatusNeutral: "Enter your HMAC secret key above to verify signature locally.",
+          sigStatusValid: "Signature Verified (HMAC Match)",
+          sigStatusInvalid: "Invalid Signature (Mismatch)",
+          signerTitle: "Generate & Cryptographically Sign a JWT",
+          signerDesc: "Customize claims and sign with HMAC (HS256) directly in client RAM using native Web Crypto API.",
+          signingSecretTitle: "HMAC SECRET KEY FOR SIGNING",
+          btnSignGenerate: "Cryptographically Sign & Generate JWT",
+          generatedTitle: "Generated Signed Token (HS256)",
+          btnCopy: "Copy Token",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Terms of Service",
+          footerAbout: "About Us",
+          footerContact: "Contact",
+          footerCopy: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
+        },
+        ar: {
+          langLabel: "العربية",
+          backLink: "→ العودة للأدوات",
+          heroBadge: "بدون إرسال للخوادم • في ذاكرة المتصفح فقط • آمن للمفاتيح الحساسة",
+          heroTitle: "مفكك ومحقق توكنات JWT مع التحقق من التوقيع",
+          heroSubtitle: "قم بفك تشفير توكنات JWT، وفحص المطالبات والبيانات، والتحقق من تواقيع HMAC HS256 محلياً في ذاكرة متصفحك بأمان تام.",
+          tabDecode: "فك التشفير والتحقق",
+          tabSign: "توليد وتوقيع التوكن",
+          btnSampleValid: "توكن تجريبي نشط",
+          btnSampleExpired: "توكن تجريبي منتهي الصلاحية",
+          btnClear: "مسح",
+          encodedTitle: "سلسلة JWT المشفرة",
+          tokenStructureTitle: "بنية وتلوين أجزاء التوكن:",
+          tsTitle: "تحليل الطوابع الزمنية وصلاحية التوكن",
+          sigVerifyTitle: "التحقق من التوقيع الرقمي (HMAC-SHA256)",
+          chkBase64: "المفتاح السري مشفر بصيغة Base64",
+          sigStatusNeutral: "أدخل المفتاح السري لـ HMAC للتحقق من التوقيع محلياً.",
+          sigStatusValid: "التوقيع سليم وصالح (تطابق تام)",
+          sigStatusInvalid: "توقيع غير صالح (عدم تطابق في التوقيع)",
+          signerTitle: "توليد وتوقيع توكن JWT مشفر",
+          signerDesc: "قم بتخصيص المطالبات والتوقيع عبر خوارزمية HMAC (HS256) محلياً بدون إرسال أي بيانات.",
+          signingSecretTitle: "المفتاح السري لتوقيع HMAC",
+          btnSignGenerate: "توقيع وتوليد توكن JWT",
+          generatedTitle: "التوكن الموقع الناتج (HS256)",
+          btnCopy: "نسخ التوكن",
+          footerPriv: "سياسة الخصوصية",
+          footerTerms: "شروط الخدمة",
+          footerAbout: "من نحن",
+          footerContact: "اتصل بنا",
+          footerCopy: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
+        },
+        fr: {
+          langLabel: "Français",
+          backLink: "← Retour aux outils",
+          heroBadge: "Aucune Transmission Serveur • Mémoire Locale • Sécurisé pour Clés de Prod",
+          heroTitle: "Décodeur & Vérificateur JWT HMAC",
+          heroSubtitle: "Décodez, inspectez les claims, formatez les horodatages et vérifiez les signatures HMAC HS256 dans votre RAM sans fuite de secrets.",
+          tabDecode: "Décoder & Vérifier",
+          tabSign: "Générateur & Signataire",
+          btnSampleValid: "JWT Actif d'exemple",
+          btnSampleExpired: "JWT Expiré d'exemple",
+          btnClear: "Effacer",
+          encodedTitle: "Chaîne JWT Encodée",
+          tokenStructureTitle: "Segmentation & Structure du Jeton :",
+          tsTitle: "Analyse des Horodatages & Validité",
+          sigVerifyTitle: "VÉRIFIER LA SIGNATURE (HMAC-SHA256)",
+          chkBase64: "La clé secrète est encodée en base64",
+          sigStatusNeutral: "Saisissez votre clé secrète HMAC ci-dessus pour vérifier la signature.",
+          sigStatusValid: "Signature Validée (Correspondance HMAC)",
+          sigStatusInvalid: "Signature Invalide (Non conforme)",
+          signerTitle: "Générer & Signer un Jeton JWT",
+          signerDesc: "Personnalisez les claims et signez avec HMAC (HS256) directement dans la RAM locale.",
+          signingSecretTitle: "CLÉ SECRÈTE HMAC POUR SIGNER",
+          btnSignGenerate: "Signer & Générer le JWT",
+          generatedTitle: "Jeton Signé Généré (HS256)",
+          btnCopy: "Copier le jeton",
+          footerPriv: "Politique de confidentialité",
+          footerTerms: "Conditions d'utilisation",
+          footerAbout: "À propos",
+          footerContact: "Contact",
+          footerCopy: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits."
+        },
+        it: {
+          langLabel: "Italiano",
+          backLink: "← Torna agli strumenti",
+          heroBadge: "Nessun Invio a Server • Solo RAM del Browser • Sicuro per Chiavi di Produzione",
+          heroTitle: "Decoder JWT & Verificatore HMAC",
+          heroSubtitle: "Decodifica, ispeziona i claim, visualizza i timestamp e verifica le firme HMAC HS256 direttamente nella memoria locale senza rischi.",
+          tabDecode: "Decodifica & Verifica",
+          tabSign: "Generatore & Firma Token",
+          btnSampleValid: "Esempio JWT Valido",
+          btnSampleExpired: "Esempio JWT Scaduto",
+          btnClear: "Cancella",
+          encodedTitle: "Stringa JWT Codificata",
+          tokenStructureTitle: "Struttura e Segmentazione Token:",
+          tsTitle: "Analisi Timestamp & Scadenza",
+          sigVerifyTitle: "VERIFICA FIRMA (HMAC-SHA256)",
+          chkBase64: "Il segreto è codificato in base64",
+          sigStatusNeutral: "Inserisci la chiave segreta HMAC in alto per verificare la firma.",
+          sigStatusValid: "Firma Verificata (Corrispondenza HMAC)",
+          sigStatusInvalid: "Firma Non Valida (Mancata corrispondenza)",
+          signerTitle: "Genera e Firma un Token JWT",
+          signerDesc: "Personalizza i claim e firma con HMAC (HS256) direttamente nella RAM del browser.",
+          signingSecretTitle: "CHIAVE SEGRETA HMAC PER LA FIRMA",
+          btnSignGenerate: "Firma e Genera JWT",
+          generatedTitle: "Token Firmato Generato (HS256)",
+          btnCopy: "Copia Token",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Termini di servizio",
+          footerAbout: "Chi siamo",
+          footerContact: "Contatto",
+          footerCopy: "© 2026 VantorKit. Strumenti web veloci, privati e gratuiti."
+        }
+      };
+
+      // --- DOM Elements ---
+      const jwtInput = document.getElementById('jwtInput');
+      const tokenLengthBadge = document.getElementById('tokenLengthBadge');
+      const tokenColorPreview = document.getElementById('tokenColorPreview');
+      const jsonHeaderView = document.getElementById('jsonHeaderView');
+      const jsonPayloadView = document.getElementById('jsonPayloadView');
+      const headerAlgBadge = document.getElementById('headerAlgBadge');
+      const payloadClaimsCount = document.getElementById('payloadClaimsCount');
+      const timestampCard = document.getElementById('timestampCard');
+      const timestampList = document.getElementById('timestampList');
+
+      const jwtSecretInput = document.getElementById('jwtSecretInput');
+      const chkSecretBase64 = document.getElementById('chkSecretBase64');
+      const btnToggleSecret = document.getElementById('btnToggleSecret');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const sigAlgDisplay = document.getElementById('sigAlgDisplay');
+      const signatureStatusBanner = document.getElementById('signatureStatusBanner');
+      const signatureStatusText = document.getElementById('signatureStatusText');
+
+      const btnLoadValidSample = document.getElementById('btnLoadValidSample');
+      const btnLoadExpiredSample = document.getElementById('btnLoadExpiredSample');
+      const btnClearToken = document.getElementById('btnClearToken');
+
+      const tabDecode = document.getElementById('tabDecode');
+      const tabSign = document.getElementById('tabSign');
+      const decoderView = document.getElementById('decoderView');
+      const signerView = document.getElementById('signerView');
+
+      const signerHeaderInput = document.getElementById('signerHeaderInput');
+      const signerPayloadInput = document.getElementById('signerPayloadInput');
+      const signerSecretInput = document.getElementById('signerSecretInput');
+      const btnSignToken = document.getElementById('btnSignToken');
+      const generatedTokenWrap = document.getElementById('generatedTokenWrap');
+      const generatedTokenPreview = document.getElementById('generatedTokenPreview');
+      const btnCopyGeneratedToken = document.getElementById('btnCopyGeneratedToken');
+      const toastBox = document.getElementById('toastBox');
+      const toastMsg = document.getElementById('toastMsg');
+
+      // --- Language Switcher ---
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+      let currentLang = localStorage.getItem('vantorkit_lang') || 'en';
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        currentLang = lang;
+        localStorage.setItem('vantorkit_lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        const dict = I18N[lang];
+        currentLangLabel.textContent = dict.langLabel;
+
+        langOptions.forEach(opt => {
+          if (opt.dataset.lang === lang) opt.classList.add('active');
+          else opt.classList.remove('active');
+        });
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) el.textContent = dict[key];
+        });
+
+        verifySignature();
+      }
+
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langMenu.classList.toggle('open');
+        langToggleBtn.setAttribute('aria-expanded', langMenu.classList.contains('open'));
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          setLanguage(opt.dataset.lang);
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('langDropdown').contains(e.target)) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // --- Tabs Switching ---
+      tabDecode.addEventListener('click', () => {
+        tabDecode.classList.add('active');
+        tabSign.classList.remove('active');
+        decoderView.style.display = 'grid';
+        signerView.style.display = 'none';
+      });
+
+      tabSign.addEventListener('click', () => {
+        tabSign.classList.add('active');
+        tabDecode.classList.remove('active');
+        decoderView.style.display = 'none';
+        signerView.style.display = 'flex';
+      });
+
+      // --- Show/Hide Secret Eye Toggle ---
+      btnToggleSecret.addEventListener('click', () => {
+        const isPassword = jwtSecretInput.type === 'password';
+        jwtSecretInput.type = isPassword ? 'text' : 'password';
+        eyeIcon.innerHTML = isPassword
+          ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`
+          : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
+      });
+
+      // --- Toast Notification Helper ---
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toastBox.classList.add('show');
+        setTimeout(() => {
+          toastBox.classList.remove('show');
+        }, 2500);
+      }
+
+      // --- Base64URL Helpers ---
+      function base64UrlDecode(str) {
+        let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+        while (b64.length % 4) b64 += '=';
+        try {
+          const binary = atob(b64);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+          }
+          return new TextDecoder().decode(bytes);
+        } catch (e) {
+          throw new Error('Invalid Base64URL string encoding');
+        }
+      }
+
+      function base64UrlEncode(strOrBuffer) {
+        let b64 = '';
+        if (typeof strOrBuffer === 'string') {
+          const bytes = new TextEncoder().encode(strOrBuffer);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          b64 = btoa(binary);
+        } else {
+          const bytes = new Uint8Array(strOrBuffer);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          b64 = btoa(binary);
+        }
+        return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+      }
+
+      function base64ToUint8Array(b64) {
+        let clean = b64.replace(/-/g, '+').replace(/_/g, '/');
+        while (clean.length % 4) clean += '=';
+        const binary = atob(clean);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
+      }
+
+      // --- JSON Syntax Colorizer ---
+      function syntaxHighlight(json) {
+        if (typeof json !== 'string') {
+          json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+          let cls = 'json-number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'json-key';
+            } else {
+              cls = 'json-string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'json-boolean';
+          } else if (/null/.test(match)) {
+            cls = 'json-null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        });
+      }
+
+      // --- Human-Friendly Timestamp Parser ---
+      function formatRelativeTime(epochSeconds) {
+        const now = Math.floor(Date.now() / 1000);
+        const diff = epochSeconds - now;
+        const absDiff = Math.abs(diff);
+
+        let durationStr = '';
+        if (absDiff < 60) durationStr = `${absDiff} seconds`;
+        else if (absDiff < 3600) durationStr = `${Math.floor(absDiff / 60)} minutes`;
+        else if (absDiff < 86400) durationStr = `${Math.floor(absDiff / 3600)} hours, ${Math.floor((absDiff % 3600) / 60)} minutes`;
+        else durationStr = `${Math.floor(absDiff / 86400)} days, ${Math.floor((absDiff % 86400) / 3600)} hours`;
+
+        const date = new Date(epochSeconds * 1000);
+        const utcStr = date.toUTCString();
+
+        return {
+          diff,
+          isExpired: diff < 0,
+          durationStr,
+          utcStr
+        };
+      }
+
+      // --- Core Token Decoding Handler ---
+      let currentHeaderObj = null;
+      let currentPayloadObj = null;
+      let currentRawHeader = '';
+      let currentRawPayload = '';
+      let currentRawSig = '';
+
+      function handleDecode() {
+        const raw = jwtInput.value.trim().replace(/^Bearer\s+/i, '');
+        tokenLengthBadge.textContent = `${raw.length} chars`;
+
+        if (!raw) {
+          tokenColorPreview.innerHTML = '<span style="color:#64748b;font-style:italic">Paste a valid token above to inspect segmentation...</span>';
+          jsonHeaderView.textContent = '{\n  "alg": "HS256",\n  "typ": "JWT"\n}';
+          jsonPayloadView.textContent = '{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "iat": 1516239022\n}';
+          headerAlgBadge.textContent = 'HS256';
+          payloadClaimsCount.textContent = '0 Claims';
+          timestampCard.style.display = 'none';
+          currentHeaderObj = null;
+          currentPayloadObj = null;
+          updateSigBanner('neutral', I18N[currentLang].sigStatusNeutral);
+          return;
+        }
+
+        const parts = raw.split('.');
+        if (parts.length < 2) {
+          tokenColorPreview.innerHTML = '<span style="color:#ef4444">⚠️ Invalid JWT format (Must have at least 2 parts separated by dots)</span>';
+          updateSigBanner('invalid', 'Invalid JWT structure (less than 2 parts)');
+          return;
+        }
+
+        currentRawHeader = parts[0];
+        currentRawPayload = parts[1];
+        currentRawSig = parts[2] || '';
+
+        // Render Colorized Segmentation
+        tokenColorPreview.innerHTML = `
+          <span class="token-part-header" title="Header (Algorithm & Token Type)">${escapeHtml(currentRawHeader)}</span>
+          <span class="token-dot">.</span>
+          <span class="token-part-payload" title="Payload (Claims & Data)">${escapeHtml(currentRawPayload)}</span>
+          ${currentRawSig ? `<span class="token-dot">.</span><span class="token-part-sig" title="Digital Signature">${escapeHtml(currentRawSig)}</span>` : '<span style="color:#64748b"> (Unsecured Token - No Signature)</span>'}
+        `;
+
+        // Decode Header
+        try {
+          const headerJson = base64UrlDecode(currentRawHeader);
+          currentHeaderObj = JSON.parse(headerJson);
+          jsonHeaderView.innerHTML = syntaxHighlight(currentHeaderObj);
+          const alg = currentHeaderObj.alg || 'None';
+          headerAlgBadge.textContent = alg;
+          sigAlgDisplay.textContent = alg;
+        } catch (e) {
+          jsonHeaderView.innerHTML = `<span style="color:#ef4444">Error decoding Header: ${escapeHtml(e.message)}</span>`;
+          currentHeaderObj = null;
+        }
+
+        // Decode Payload
+        try {
+          const payloadJson = base64UrlDecode(currentRawPayload);
+          currentPayloadObj = JSON.parse(payloadJson);
+          jsonPayloadView.innerHTML = syntaxHighlight(currentPayloadObj);
+
+          const claimCount = Object.keys(currentPayloadObj).length;
+          payloadClaimsCount.textContent = `${claimCount} Claims`;
+
+          // Parse Timestamps
+          inspectTimestamps(currentPayloadObj);
+        } catch (e) {
+          jsonPayloadView.innerHTML = `<span style="color:#ef4444">Error decoding Payload: ${escapeHtml(e.message)}</span>`;
+          currentPayloadObj = null;
+          timestampCard.style.display = 'none';
+        }
+
+        // Run Verification
+        verifySignature();
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function inspectTimestamps(payload) {
+        timestampList.innerHTML = '';
+        let hasAnyTs = false;
+
+        const tsFields = [
+          { key: 'exp', label: 'exp (Expiration Time)' },
+          { key: 'iat', label: 'iat (Issued At)' },
+          { key: 'nbf', label: 'nbf (Not Before)' },
+          { key: 'auth_time', label: 'auth_time (Auth Time)' }
+        ];
+
+        tsFields.forEach(field => {
+          if (typeof payload[field.key] === 'number') {
+            hasAnyTs = true;
+            const tsInfo = formatRelativeTime(payload[field.key]);
+            const row = document.createElement('div');
+            row.className = 'timestamp-item';
+
+            let badgeHtml = '';
+            if (field.key === 'exp') {
+              if (tsInfo.isExpired) {
+                badgeHtml = `<span class="ts-badge expired">⚠️ Expired ${tsInfo.durationStr} ago</span>`;
+              } else {
+                badgeHtml = `<span class="ts-badge valid">✅ Active (Valid for ${tsInfo.durationStr})</span>`;
+              }
+            } else if (field.key === 'nbf') {
+              if (tsInfo.isExpired) {
+                badgeHtml = `<span class="ts-badge valid">Active (Became valid ${tsInfo.durationStr} ago)</span>`;
+              } else {
+                badgeHtml = `<span class="ts-badge expired">⚠️ Future Token (Not valid for ${tsInfo.durationStr})</span>`;
+              }
+            } else {
+              badgeHtml = `<span class="ts-badge neutral">${tsInfo.durationStr} ago</span>`;
+            }
+
+            row.innerHTML = `
+              <div>
+                <span class="ts-label">${field.label}:</span>
+                <span style="font-family:'JetBrains Mono',monospace;margin-left:0.4rem;color:#f8fafc">${tsInfo.utcStr}</span>
+              </div>
+              <div>${badgeHtml}</div>
+            `;
+            timestampList.appendChild(row);
+          }
+        });
+
+        timestampCard.style.display = hasAnyTs ? 'block' : 'none';
+      }
+
+      function updateSigBanner(type, message) {
+        signatureStatusBanner.className = `status-banner ${type}`;
+        signatureStatusText.textContent = message;
+      }
+
+      // --- Native Web Crypto HMAC Signature Verification ---
+      async function verifySignature() {
+        const dict = I18N[currentLang];
+        const secret = jwtSecretInput.value;
+
+        if (!currentRawHeader || !currentRawPayload) {
+          updateSigBanner('neutral', dict.sigStatusNeutral);
+          return;
+        }
+
+        if (!currentRawSig) {
+          updateSigBanner('neutral', 'Unsecured token without signature (alg: "none").');
+          return;
+        }
+
+        if (!secret) {
+          updateSigBanner('neutral', dict.sigStatusNeutral);
+          return;
+        }
+
+        const alg = (currentHeaderObj && currentHeaderObj.alg) ? currentHeaderObj.alg.toUpperCase() : 'HS256';
+
+        // Map algorithm to Web Crypto hash
+        let hashName = null;
+        if (alg === 'HS256') hashName = 'SHA-256';
+        else if (alg === 'HS384') hashName = 'SHA-384';
+        else if (alg === 'HS512') hashName = 'SHA-512';
+
+        if (!hashName) {
+          updateSigBanner('neutral', `Asymmetric algorithm (${alg}) detected. In-memory HMAC supports HS256/HS384/HS512.`);
+          return;
+        }
+
+        try {
+          // Prepare Secret Key Buffer
+          let keyData;
+          if (chkSecretBase64.checked) {
+            keyData = base64ToUint8Array(secret);
+          } else {
+            keyData = new TextEncoder().encode(secret);
+          }
+
+          const cryptoKey = await window.crypto.subtle.importKey(
+            'raw',
+            keyData,
+            { name: 'HMAC', hash: hashName },
+            false,
+            ['verify']
+          );
+
+          // Data to verify: ASCII(header + "." + payload)
+          const dataToVerify = new TextEncoder().encode(currentRawHeader + '.' + currentRawPayload);
+          const signatureBytes = base64ToUint8Array(currentRawSig);
+
+          const isValid = await window.crypto.subtle.verify(
+            'HMAC',
+            cryptoKey,
+            signatureBytes,
+            dataToVerify
+          );
+
+          if (isValid) {
+            updateSigBanner('valid', `✅ ${dict.sigStatusValid} (${alg})`);
+          } else {
+            updateSigBanner('invalid', `❌ ${dict.sigStatusInvalid} (${alg} signature mismatch)`);
+          }
+        } catch (err) {
+          console.warn('Verification error:', err);
+          updateSigBanner('invalid', `❌ Verification Error: ${err.message}`);
+        }
+      }
+
+      jwtInput.addEventListener('input', handleDecode);
+      jwtSecretInput.addEventListener('input', verifySignature);
+      chkSecretBase64.addEventListener('change', verifySignature);
+
+      // --- Sample Token Loaders ---
+      btnLoadValidSample.addEventListener('click', () => {
+        const now = Math.floor(Date.now() / 1000);
+        const header = { alg: "HS256", typ: "JWT" };
+        const payload = {
+          sub: "usr_vantorkit_9824",
+          name: "Alex Morgan",
+          email: "alex.morgan@example.com",
+          role: "DevOps Engineer",
+          iat: now - 3600,
+          exp: now + 7200
+        };
+
+        const secret = "vantorkit-in-memory-demo-secret-key-256";
+        signSampleToken(header, payload, secret, false).then(token => {
+          jwtInput.value = token;
+          jwtSecretInput.value = secret;
+          chkSecretBase64.checked = false;
+          handleDecode();
+        });
+      });
+
+      btnLoadExpiredSample.addEventListener('click', () => {
+        const now = Math.floor(Date.now() / 1000);
+        const header = { alg: "HS256", typ: "JWT" };
+        const payload = {
+          sub: "usr_expired_session",
+          name: "Jordan Lee",
+          email: "jordan.lee@example.com",
+          role: "Security Analyst",
+          iat: now - 86400,
+          exp: now - 7200
+        };
+
+        const secret = "vantorkit-expired-token-secret-2026";
+        signSampleToken(header, payload, secret, false).then(token => {
+          jwtInput.value = token;
+          jwtSecretInput.value = secret;
+          chkSecretBase64.checked = false;
+          handleDecode();
+        });
+      });
+
+      btnClearToken.addEventListener('click', () => {
+        jwtInput.value = '';
+        jwtSecretInput.value = '';
+        handleDecode();
+      });
+
+      // --- In-Memory Signing Helper for Samples and Signer Mode ---
+      async function signSampleToken(headerObj, payloadObj, secretStr, isBase64) {
+        const headerB64 = base64UrlEncode(JSON.stringify(headerObj));
+        const payloadB64 = base64UrlEncode(JSON.stringify(payloadObj));
+        const message = headerB64 + '.' + payloadB64;
+
+        let keyData = isBase64 ? base64ToUint8Array(secretStr) : new TextEncoder().encode(secretStr);
+        const cryptoKey = await window.crypto.subtle.importKey(
+          'raw',
+          keyData,
+          { name: 'HMAC', hash: 'SHA-256' },
+          false,
+          ['sign']
+        );
+
+        const sigBuffer = await window.crypto.subtle.sign(
+          'HMAC',
+          cryptoKey,
+          new TextEncoder().encode(message)
+        );
+
+        const sigB64 = base64UrlEncode(sigBuffer);
+        return message + '.' + sigB64;
+      }
+
+      // --- Token Signer Button Handler ---
+      btnSignToken.addEventListener('click', async () => {
+        try {
+          const header = JSON.parse(signerHeaderInput.value);
+          const payload = JSON.parse(signerPayloadInput.value);
+          const secret = signerSecretInput.value;
+
+          if (!secret) {
+            alert('Please enter an HMAC secret key for signing.');
+            return;
+          }
+
+          const token = await signSampleToken(header, payload, secret, false);
+          const parts = token.split('.');
+
+          generatedTokenPreview.innerHTML = `
+            <span class="token-part-header">${parts[0]}</span><span class="token-dot">.</span><span class="token-part-payload">${parts[1]}</span><span class="token-dot">.</span><span class="token-part-sig">${parts[2]}</span>
+          `;
+          generatedTokenWrap.style.display = 'block';
+
+          btnCopyGeneratedToken.onclick = () => {
+            navigator.clipboard.writeText(token).then(() => {
+              showToast('JWT copied to clipboard!');
+            });
+          };
+
+          showToast('JWT successfully signed & generated!');
+        } catch (e) {
+          alert('Error signing JWT: ' + e.message);
+        }
+      });
+
+      // Initialize with sample token on first load
+      btnLoadValidSample.click();
+      setLanguage(currentLang);
+    })();
+  </script>
+</body>
+</html>

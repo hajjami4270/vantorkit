@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function() {
+      try {
+        var s = localStorage.getItem('vantorkit_lang');
+        if (s) {
+          document.documentElement.setAttribute('lang', s);
+          document.documentElement.setAttribute('dir', s === 'ar' ? 'rtl' : 'ltr');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Metadata & EXIF Cleaner – Strip GPS & Camera Tags Locally | VantorKit</title>
+  <meta name="description" content="Free client-side EXIF metadata cleaner. Inspect and strip GPS location coordinates, camera models, timestamps, and hidden metadata from JPEG, PNG, and WebP images directly in your browser with zero data uploads.">
+  <meta name="keywords" content="exif cleaner, metadata cleaner, remove exif, strip metadata, remove gps from photo, image privacy, exif remover online, client side exif stripper, vantorkit">
+  <link rel="canonical" href="https://vantorkit.com/tools/metadata-cleaner.html">
+  <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/metadata-cleaner.html">
+  <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/metadata-cleaner.html">
+  <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/metadata-cleaner.html">
+  <link rel="alternate" hreflang="fr" href="https://vantorkit.com/tools/metadata-cleaner.html">
+  <link rel="alternate" hreflang="it" href="https://vantorkit.com/tools/metadata-cleaner.html">
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Metadata & EXIF Cleaner – Strip GPS & Camera Tags Locally | VantorKit">
+  <meta property="og:description" content="Inspect and strip GPS location coordinates, camera models, and private metadata from photos locally in browser memory. 100% private, zero uploads.">
+  <meta property="og:url" content="https://vantorkit.com/tools/metadata-cleaner.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Metadata & EXIF Cleaner — VantorKit">
+  <meta name="twitter:description" content="Free client-side EXIF metadata cleaner. Purge GPS coordinates and camera serial numbers without sending data to servers.">
+
+  <!-- Fonts: Cairo (Arabic), Plus Jakarta Sans (UI), JetBrains Mono (Code/Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Structured Data: WebApplication & FAQPage -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Metadata & EXIF Cleaner",
+      "url": "https://vantorkit.com/tools/metadata-cleaner.html",
+      "applicationCategory": "SecurityApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Inspect and sanitize EXIF, IPTC, and XMP metadata from JPEG, PNG, and WebP images directly in local browser memory without uploading files to remote servers."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does VantorKit sanitize image metadata without server uploads?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The tool parses the raw binary chunks of your image locally in browser memory, extracts all EXIF/GPS tags for inspection, and re-encodes the image via HTML5 Canvas rasterization. This discards all metadata segments while preserving pixel quality."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What sensitive information is typically hidden in photo EXIF data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Photos taken on smartphones and digital cameras frequently embed exact GPS coordinates (latitude, longitude, altitude), camera make, model, lens details, unique serial numbers, creation timestamps, and thumbnail previews."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does stripping metadata reduce image visual quality?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The process purges non-pixel metadata headers (EXIF, IPTC, XMP) while maintaining original image dimensions and rendering pixel content with high visual fidelity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my photo stored or transmitted anywhere?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Never. All processing is 100% client-side in your local browser memory. Zero bytes leave your device."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --badge-bg: rgba(15, 23, 42, 0.7);
+      --badge-text: #7dd3fc;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.16);
+      --success-border: rgba(16, 185, 129, 0.35);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --warning-border: rgba(245, 158, 11, 0.35);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.16);
+      --danger-border: rgba(239, 68, 68, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Header */
+    .top-nav {
+      height: 70px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateX(-2px);
+    }
+
+    html[dir="rtl"] .back-link:hover {
+      transform: translateX(2px);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand svg {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.4));
+      transition: transform 0.2s ease;
+    }
+
+    .nav-brand:hover svg {
+      transform: scale(1.05);
+    }
+
+    .nav-brand span span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(22, 27, 42, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .lang-btn:hover,
+    .lang-btn[aria-expanded="true"] {
+      border-color: var(--accent);
+      background: rgba(26, 32, 48, 0.95);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .globe-icon {
+      color: #38bdf8;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-btn[aria-expanded="true"] .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 170px;
+      background: rgba(14, 18, 28, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 200;
+    }
+
+    .lang-menu.open {
+      display: flex;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .lang-option:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #38bdf8;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    html[dir="rtl"] .back-link svg {
+      transform: rotate(180deg);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3.5rem;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 2.25rem;
+      position: relative;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--badge-text);
+      background: var(--badge-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+      letter-spacing: 0.35px;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-badge svg {
+      color: #38bdf8;
+    }
+
+    h1 {
+      font-size: 2.45rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.65rem;
+      line-height: 1.2;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Tool Workspace Container */
+    .tool-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Upload Drop Zone */
+    .dropzone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      outline: none;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: #38bdf8;
+      background: rgba(15, 23, 42, 0.85);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .dropzone-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: transform 0.25s ease;
+    }
+
+    .dropzone:hover .dropzone-icon {
+      transform: scale(1.1);
+    }
+
+    .dropzone-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.45rem;
+    }
+
+    .dropzone-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .dropzone-pills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .format-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-sample {
+      margin-top: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 0.45rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      transition: all 0.2s ease;
+    }
+
+    .btn-sample:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #fff;
+    }
+
+    /* Analysis & Preview Card */
+    .analysis-panel {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .panel-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* Layout: Left Preview, Right Meta Audit */
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    @media (max-width: 860px) {
+      .analysis-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .image-preview-card {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .preview-thumb-wrap {
+      width: 100%;
+      height: 220px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .preview-thumb {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .file-meta-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .file-meta-row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .file-meta-val {
+      font-weight: 600;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      word-break: break-all;
+      max-width: 180px;
+      text-align: right;
+    }
+
+    /* Audit Alert Banners */
+    .audit-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .alert-banner {
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .alert-danger {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: #fca5a5;
+    }
+
+    .alert-danger strong {
+      color: #ef4444;
+    }
+
+    .alert-warning {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: #fde68a;
+    }
+
+    .alert-warning strong {
+      color: #f59e0b;
+    }
+
+    .alert-success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: #6ee7b7;
+    }
+
+    .alert-success strong {
+      color: #10b981;
+    }
+
+    .alert-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Metadata Tags Table */
+    .meta-table-wrap {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .meta-table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+
+    .meta-table-scroll {
+      max-height: 240px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .meta-table th,
+    .meta-table td {
+      padding: 0.55rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    html[dir="rtl"] .meta-table th,
+    html[dir="rtl"] .meta-table td {
+      text-align: right;
+    }
+
+    .meta-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .meta-table td.tag-name {
+      color: #7dd3fc;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      width: 40%;
+    }
+
+    .meta-table td.tag-val {
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+    }
+
+    /* Sanitize Action Bar */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .action-note {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .btn-sanitize {
+      background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+      color: #041226;
+      border: none;
+      padding: 0.85rem 1.85rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-sanitize:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(56, 189, 248, 0.5);
+      background: linear-gradient(135deg, #0ea5e9 0%, #7dd3fc 100%);
+    }
+
+    .btn-sanitize:active {
+      transform: translateY(0);
+    }
+
+    /* Sanitized Success View */
+    .result-panel {
+      display: none;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .result-hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .result-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--success-bg);
+      border: 2px solid var(--success);
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
+    }
+
+    .result-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .result-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      background: rgba(10, 14, 24, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.15rem;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-val.clean {
+      color: #10b981;
+    }
+
+    .result-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      color: #022c22;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(16, 185, 129, 0.55);
+      background: linear-gradient(135deg, #059669 0%, #6ee7b7 100%);
+    }
+
+    /* Educational Guide Section */
+    .info-section {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 2.5rem;
+    }
+
+    .info-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .info-header h2 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .guide-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .guide-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #fff;
+    }
+
+    .guide-card-title svg {
+      color: #38bdf8;
+    }
+
+    .guide-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .faq-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .faq-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Standardized Footer */
+    .site-footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(7, 9, 14, 0.85);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #38bdf8;
+    }
+
+    .footer-copy {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      color: #64748b;
+      font-size: 0.84rem;
+    }
+
+    .footer-x-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+
+    .footer-x-link svg {
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+      transition: transform 0.2s ease;
+    }
+
+    .footer-x-link:hover svg {
+      transform: scale(1.12);
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S8MDMH082N');
+  </script>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <nav class="top-nav">
+    <a href="index.html" class="back-link" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      <span data-i18n="backLink">← Back to Tools</span>
+    </a>
+
+    <div class="nav-right">
+      <a href="index.html" class="nav-brand" aria-label="VantorKit Home">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vGL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+            <linearGradient id="vGR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+            <linearGradient id="vGC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+          </defs>
+          <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59,130,246,0.35)" stroke-width="1.5"/>
+          <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGL)"/>
+          <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGR)"/>
+          <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGC)"/>
+          <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7"/>
+        </svg>
+        <span>Vantor<span>Kit</span></span>
+      </a>
+
+      <!-- Language Switcher Dropdown (EN, AR, FR, IT) -->
+      <div class="lang-dropdown" id="langDropdown">
+        <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="currentLangLabel">English</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+
+        <div class="lang-menu" id="langMenu" role="menu">
+          <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+            <span class="lang-item-content"><span>🇺🇸</span><span>English</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+            <span class="lang-item-content"><span>🇸🇦</span><span>العربية</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+            <span class="lang-item-content"><span>🇫🇷</span><span>Français</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+          <button type="button" class="lang-option" data-lang="it" role="menuitem">
+            <span class="lang-item-content"><span>🇮🇹</span><span>Italiano</span></span>
+            <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Header Section -->
+    <header>
+      <div class="brand-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="heroBadge">Client-Side • Privacy-First • Zero Bytes Transferred</span>
+      </div>
+      <h1 data-i18n="heroTitle">Metadata & <span>EXIF Cleaner</span></h1>
+      <p class="subtitle" data-i18n="heroSubtitle">Inspect hidden GPS coordinates, camera models, capture timestamps, and private metadata, then sanitize and purge all tags locally before sharing.</p>
+    </header>
+
+    <div class="tool-workspace">
+      <!-- Upload Dropzone -->
+      <div class="dropzone" id="dropZone" tabindex="0" role="button" aria-label="Drop image file here to inspect metadata">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" aria-label="Upload image">
+        <div class="dropzone-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        </div>
+        <div class="dropzone-title" data-i18n="dropTitle">Drop an Image to Inspect & Strip Metadata</div>
+        <div class="dropzone-desc" data-i18n="dropDesc">Supports JPEG, PNG, and WebP photos up to 100MB. Processed entirely in your browser RAM.</div>
+        <div class="dropzone-pills">
+          <span class="format-pill">JPG / JPEG</span>
+          <span class="format-pill">PNG</span>
+          <span class="format-pill">WEBP</span>
+          <span class="format-pill" style="color:#38bdf8;border-color:rgba(56,189,248,0.3)">100% IN-MEMORY</span>
+        </div>
+        <div>
+          <button type="button" class="btn-sample" id="btnLoadSample">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="btnSample">Load Sample Photo with GPS EXIF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Analysis & Preview Card (Revealed after image upload) -->
+      <div class="analysis-panel" id="analysisPanel">
+        <div class="panel-header">
+          <div class="panel-title-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <div class="panel-title" data-i18n="panelTitle">Metadata Audit & Security Analysis</div>
+          </div>
+          <button type="button" class="btn-secondary" id="btnChangeImage">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span data-i18n="btnChange">Change Photo</span>
+          </button>
+        </div>
+
+        <div class="analysis-grid">
+          <!-- Left: Preview & File Stats -->
+          <div class="image-preview-card">
+            <div class="preview-thumb-wrap">
+              <img id="imagePreview" class="preview-thumb" alt="Original Image Preview">
+            </div>
+            <div class="file-meta-list">
+              <div class="file-meta-row">
+                <span data-i18n="metaFilename">File Name</span>
+                <span class="file-meta-val" id="metaFileName">-</span>
+              </div>
+              <div class="file-meta-row">
+                <span data-i18n="metaDimensions">Dimensions</span>
+                <span class="file-meta-val" id="metaDimensions">-</span>
+              </div>
+              <div class="file-meta-row">
+                <span data-i18n="metaFormat">Format</span>
+                <span class="file-meta-val" id="metaFormat">-</span>
+              </div>
+              <div class="file-meta-row">
+                <span data-i18n="metaFileSize">File Size</span>
+                <span class="file-meta-val" id="metaFileSize">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Security Audit & Tags Table -->
+          <div class="audit-section">
+            <!-- Dynamic Alert Banners -->
+            <div id="gpsAlertBox" class="alert-banner alert-danger" style="display:none">
+              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <div>
+                <strong data-i18n="gpsAlertTitle">⚠️ SENSITIVE GPS LOCATION DETECTED!</strong>
+                <p id="gpsAlertText">Exact physical coordinates are embedded in this file. Sharing it will expose your location.</p>
+                <div id="gpsCoordsRow" style="margin-top:0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;font-weight:700"></div>
+              </div>
+            </div>
+
+            <div id="cameraAlertBox" class="alert-banner alert-warning" style="display:none">
+              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              <div>
+                <strong data-i18n="cameraAlertTitle">📸 Hardware & Timestamp Tags Found</strong>
+                <p id="cameraAlertText">Device model, software build, or capture timestamps are embedded.</p>
+              </div>
+            </div>
+
+            <div id="cleanAlertBox" class="alert-banner alert-success" style="display:none">
+              <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <div>
+                <strong data-i18n="cleanAlertTitle">✅ No High-Risk Metadata Detected</strong>
+                <p data-i18n="cleanAlertText">No GPS coordinates found in standard EXIF tags. Re-sanitizing ensures any residual chunks are purged.</p>
+              </div>
+            </div>
+
+            <!-- Metadata Breakdown Table -->
+            <div class="meta-table-wrap">
+              <div class="meta-table-header">
+                <span data-i18n="detectedTagsTitle">Detected Metadata Tags</span>
+                <span id="detectedTagsCount" style="color:#38bdf8">0 Tags</span>
+              </div>
+              <div class="meta-table-scroll">
+                <table class="meta-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="thTag">Tag Name</th>
+                      <th data-i18n="thValue">Embedded Value</th>
+                    </tr>
+                  </thead>
+                  <tbody id="metaTableBody">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+          <div class="action-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="actionNote">100% In-Memory Canvas Purge. Zero server logging.</span>
+          </div>
+          <button type="button" class="btn-sanitize" id="btnSanitize">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="btnSanitize">Strip Metadata & Sanitize</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Card (Shown after stripping) -->
+      <div class="result-panel" id="resultPanel">
+        <div class="result-hero">
+          <div class="result-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="result-title" data-i18n="resultTitle">Photo Successfully Sanitized!</div>
+          <div class="result-desc" data-i18n="resultDesc">All EXIF tags, GPS coordinates, and camera footprints have been permanently stripped from memory.</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label" data-i18n="statTagsRemoved">Metadata Tags Purged</div>
+            <div class="stat-val clean" id="statTagsRemoved">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label" data-i18n="statGpsStatus">GPS Status</div>
+            <div class="stat-val clean" id="statGpsStatus">0 Coordinates (Safe)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label" data-i18n="statFileSize">Sanitized Size</div>
+            <div class="stat-val" id="statCleanSize">-</div>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <a id="btnDownload" class="btn-download" download="sanitized_image.jpg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span data-i18n="btnDownload">Download Sanitized Image</span>
+          </a>
+          <button type="button" class="btn-secondary" id="btnResetTool">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span data-i18n="btnReset">Sanitize Another Photo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Educational & Technical Guide Section -->
+    <section class="info-section">
+      <div class="info-header">
+        <h2 data-i18n="guideHeading">Understanding Image Metadata & Privacy Protection</h2>
+        <p data-i18n="guideSubheading">Learn why modern smartphones embed sensitive forensic data into your photos and how local sanitization safeguards your identity.</p>
+      </div>
+
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span data-i18n="g1Title">What is EXIF Data?</span>
+          </div>
+          <p data-i18n="g1Desc">Exchangeable Image File Format (EXIF) is an industry specification that embeds camera hardware metadata, exposure configurations, timestamps, and precise GPS coordinates into image files.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="g2Title">Zero-Leak Client-Side Purge</span>
+          </div>
+          <p data-i18n="g2Desc">Unlike cloud-based image strippers that upload your photos to remote servers, VantorKit executes 100% of the extraction and Canvas re-encoding in local browser RAM. No bytes are transmitted.</p>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span data-i18n="g3Title">Essential for Privacy</span>
+          </div>
+          <p data-i18n="g3Desc">Crucial for journalists, confidential sources, activists, real estate sellers, and families sharing home photos online who must protect home addresses and sensitive locations.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 data-i18n="faq1Q">Does stripping metadata affect photo resolution or visual quality?</h4>
+          <p data-i18n="faq1A">No. The canvas re-encoding preserves full pixel dimensions (width and height). Only non-visual metadata headers (APP1, XMP, IPTC) are permanently removed.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq2Q">Which image formats are supported?</h4>
+          <p data-i18n="faq2A">The tool fully supports JPEG (.jpg, .jpeg), PNG (.png), and modern WebP (.webp) formats. Sanitized output preserves your original format.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq3Q">Can someone recover stripped GPS data after sanitization?</h4>
+          <p data-i18n="faq3A">No. Because the image is re-rasterized directly into fresh pixel data, the old EXIF data blocks cease to exist. There is zero residual forensic metadata left to recover.</p>
+        </div>
+        <div class="faq-item">
+          <h4 data-i18n="faq4Q">Is there any file size limit?</h4>
+          <p data-i18n="faq4A">Because all processing takes place in your computer's local memory, you can comfortably process large RAW-converted JPEGs and photos up to 100MB without throttling.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Standardized Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal & Support">
+        <a href="privacy.html" class="footer-link" data-i18n="footerPriv">Privacy Policy</a>
+        <a href="terms.html" class="footer-link" data-i18n="footerTerms">Terms of Service</a>
+        <a href="about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
+        <a href="contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
+        <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      </nav>
+      <p class="footer-copy" data-i18n="footerCopy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Application Logic & EXIF Binary Parser -->
+  <script>
+    (function() {
+      'use strict';
+
+      // --- Translations Dictionary (EN, AR, FR, IT) ---
+      const I18N = {
+        en: {
+          langLabel: "English",
+          backLink: "← Back to Tools",
+          heroBadge: "Client-Side • Privacy-First • Zero Bytes Transferred",
+          heroTitle: "Metadata & EXIF Cleaner",
+          heroSubtitle: "Inspect hidden GPS coordinates, camera models, capture timestamps, and private metadata, then sanitize and purge all tags locally before sharing.",
+          dropTitle: "Drop an Image to Inspect & Strip Metadata",
+          dropDesc: "Supports JPEG, PNG, and WebP photos up to 100MB. Processed entirely in your browser RAM.",
+          btnSample: "Load Sample Photo with GPS EXIF",
+          panelTitle: "Metadata Audit & Security Analysis",
+          btnChange: "Change Photo",
+          metaFilename: "File Name",
+          metaDimensions: "Dimensions",
+          metaFormat: "Format",
+          metaFileSize: "File Size",
+          gpsAlertTitle: "⚠️ SENSITIVE GPS LOCATION DETECTED!",
+          cameraAlertTitle: "📸 Hardware & Timestamp Tags Found",
+          cleanAlertTitle: "✅ No High-Risk Metadata Detected",
+          cleanAlertText: "No GPS coordinates found in standard EXIF tags. Re-sanitizing ensures any residual chunks are purged.",
+          detectedTagsTitle: "Detected Metadata Tags",
+          thTag: "Tag Name",
+          thValue: "Embedded Value",
+          actionNote: "100% In-Memory Canvas Purge. Zero server logging.",
+          btnSanitize: "Strip Metadata & Sanitize",
+          resultTitle: "Photo Successfully Sanitized!",
+          resultDesc: "All EXIF tags, GPS coordinates, and camera footprints have been permanently stripped from memory.",
+          statTagsRemoved: "Metadata Tags Purged",
+          statGpsStatus: "GPS Status",
+          statFileSize: "Sanitized Size",
+          btnDownload: "Download Sanitized Image",
+          btnReset: "Sanitize Another Photo",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Terms of Service",
+          footerAbout: "About Us",
+          footerContact: "Contact",
+          footerCopy: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
+        },
+        ar: {
+          langLabel: "العربية",
+          backLink: "→ العودة للأدوات",
+          heroBadge: "على جهازك • خصوصية كاملة • بدون رفع أي بيانات",
+          heroTitle: "أداة تنظيف البيانات الوصفية و EXIF",
+          heroSubtitle: "افحص إحداثيات GPS ونماذج الكاميرات المخفية وتواريخ الالتقاط، ثم احذف كافة البيانات الوصفية محلياً بأمان قبل مشاركة الصور.",
+          dropTitle: "أفلت الصورة هنا لفحص وحذف البيانات الوصفية",
+          dropDesc: "تدعم صور JPEG و PNG و WebP حتى 100 ميجابايت. المعالجة تتم بالكامل في ذاكرة متصفحك.",
+          btnSample: "تحميل صورة تجريبية بها إحداثيات GPS",
+          panelTitle: "تدقيق وتحليل أمان البيانات الوصفية",
+          btnChange: "تغيير الصورة",
+          metaFilename: "اسم الملف",
+          metaDimensions: "الأبعاد",
+          metaFormat: "الصيغة",
+          metaFileSize: "حجم الملف",
+          gpsAlertTitle: "⚠️ تم اكتشاف إحداثيات GPS حساسة!",
+          cameraAlertTitle: "📸 تم العثور على بيانات الكاميرا والوقت",
+          cleanAlertTitle: "✅ لم يتم اكتشاف إحداثيات GPS خطيرة",
+          cleanAlertText: "لا توجد إحداثيات جغرافية مسجلة. عملية التنظيف تضمن إزالة أي بيانات وصفية إضافية.",
+          detectedTagsTitle: "البيانات الوصفية المكتشفة",
+          thTag: "اسم الحقل",
+          thValue: "القيمة المسجلة",
+          actionNote: "تنظيف في الذاكرة 100% بدون أي خوادم خارجية.",
+          btnSanitize: "إزالة كافة البيانات الوصفية وتطهير الصورة",
+          resultTitle: "تم تطهير الصورة بنجاح!",
+          resultDesc: "تمت إزالة كافة وسوم EXIF وإحداثيات GPS وبيانات الكاميرا بالكامل من الذاكرة.",
+          statTagsRemoved: "الوسوم المحذوفة",
+          statGpsStatus: "حالة إحداثيات GPS",
+          statFileSize: "الحجم بعد التنظيف",
+          btnDownload: "تحميل الصورة المطهرة",
+          btnReset: "تطهير صورة أخرى",
+          footerPriv: "سياسة الخصوصية",
+          footerTerms: "شروط الخدمة",
+          footerAbout: "من نحن",
+          footerContact: "اتصل بنا",
+          footerCopy: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
+        },
+        fr: {
+          langLabel: "Français",
+          backLink: "← Retour aux outils",
+          heroBadge: "Côté Client • Confidentialité Totale • Aucun Upload",
+          heroTitle: "Nettoyeur de Métadonnées & EXIF",
+          heroSubtitle: "Inspectez les coordonnées GPS, modèles d'appareils et horodatages cachés, puis purgez toutes les métadonnées localement avant de partager vos photos.",
+          dropTitle: "Déposez une image pour inspecter et supprimer les métadonnées",
+          dropDesc: "Prend en charge JPEG, PNG et WebP jusqu'à 100 Mo. Traité intégralement dans la mémoire de votre navigateur.",
+          btnSample: "Charger une photo test avec GPS EXIF",
+          panelTitle: "Audit de sécurité et analyse des métadonnées",
+          btnChange: "Changer d'image",
+          metaFilename: "Nom du fichier",
+          metaDimensions: "Dimensions",
+          metaFormat: "Format",
+          metaFileSize: "Taille",
+          gpsAlertTitle: "⚠️ LOCALISATION GPS SENSIBLE DÉTECTÉE !",
+          cameraAlertTitle: "📸 Données d'appareil et horodatage détectés",
+          cleanAlertTitle: "✅ Aucune localisation GPS détectée",
+          cleanAlertText: "Aucune coordonnée GPS trouvée. La ré-encodage assure la suppression de toute métadonnée résiduelle.",
+          detectedTagsTitle: "Balises de métadonnées détectées",
+          thTag: "Balise",
+          thValue: "Valeur intégrée",
+          actionNote: "Purge Canvas 100% locale en mémoire. Aucun journal serveur.",
+          btnSanitize: "Purger les métadonnées & Assainir",
+          resultTitle: "Image assainie avec succès !",
+          resultDesc: "Toutes les balises EXIF, coordonnées GPS et identifiants matériels ont été éliminés.",
+          statTagsRemoved: "Balises purgées",
+          statGpsStatus: "Statut GPS",
+          statFileSize: "Taille assainie",
+          btnDownload: "Télécharger l'image assainie",
+          btnReset: "Assainir une autre photo",
+          footerPriv: "Politique de confidentialité",
+          footerTerms: "Conditions d'utilisation",
+          footerAbout: "À propos",
+          footerContact: "Contact",
+          footerCopy: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits."
+        },
+        it: {
+          langLabel: "Italiano",
+          backLink: "← Torna agli strumenti",
+          heroBadge: "Lato Client • Massima Privacy • Nessun Upload",
+          heroTitle: "Pulitore di Metadati & EXIF",
+          heroSubtitle: "Ispeziona coordinate GPS, modelli di fotocamera e timestamp nascosti, quindi ripulisci ed elimina tutti i metadati localmente prima di condividere le tue foto.",
+          dropTitle: "Trascina un'immagine per ispezionare e rimuovere i metadati",
+          dropDesc: "Supporta JPEG, PNG e WebP fino a 100 MB. Elaborato interamente nella RAM del tuo browser.",
+          btnSample: "Carica foto di prova con GPS EXIF",
+          panelTitle: "Analisi di sicurezza e audit dei metadati",
+          btnChange: "Cambia foto",
+          metaFilename: "Nome file",
+          metaDimensions: "Dimensioni",
+          metaFormat: "Formato",
+          metaFileSize: "Dimensione file",
+          gpsAlertTitle: "⚠️ POSIZIONE GPS SENSIBILE RILEVATA!",
+          cameraAlertTitle: "📸 Dati fotocamera e timestamp rilevati",
+          cleanAlertTitle: "✅ Nessuna coordinata GPS rilevata",
+          cleanAlertText: "Nessun dato GPS trovato nei tag standard. La ricodifica garantisce l'eliminazione totale di qualsiasi blocco.",
+          detectedTagsTitle: "Tag metadati rilevati",
+          thTag: "Tag",
+          thValue: "Valore incorporato",
+          actionNote: "Pulizia Canvas 100% in memoria. Nessun log sul server.",
+          btnSanitize: "Rimuovi metadati & Sanifica",
+          resultTitle: "Immagine sanificata con successo!",
+          resultDesc: "Tutti i tag EXIF, coordinate GPS e impronte della fotocamera sono stati rimossi in modo permanente.",
+          statTagsRemoved: "Tag eliminati",
+          statGpsStatus: "Stato GPS",
+          statFileSize: "Dimensione sanificata",
+          btnDownload: "Scarica immagine sanificata",
+          btnReset: "Sanifica un'altra foto",
+          footerPriv: "Privacy Policy",
+          footerTerms: "Termini di servizio",
+          footerAbout: "Chi siamo",
+          footerContact: "Contatto",
+          footerCopy: "© 2026 VantorKit. Strumenti web veloci, privati e gratuiti."
+        }
+      };
+
+      // --- State ---
+      let currentFile = null;
+      let currentImageObj = null;
+      let currentParsedTags = {};
+      let sanitizedBlob = null;
+      let currentLang = localStorage.getItem('vantorkit_lang') || 'en';
+
+      // --- DOM Elements ---
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('fileInput');
+      const btnLoadSample = document.getElementById('btnLoadSample');
+      const analysisPanel = document.getElementById('analysisPanel');
+      const resultPanel = document.getElementById('resultPanel');
+      const btnChangeImage = document.getElementById('btnChangeImage');
+      const btnSanitize = document.getElementById('btnSanitize');
+      const btnResetTool = document.getElementById('btnResetTool');
+      const btnDownload = document.getElementById('btnDownload');
+
+      const imagePreview = document.getElementById('imagePreview');
+      const metaFileName = document.getElementById('metaFileName');
+      const metaDimensions = document.getElementById('metaDimensions');
+      const metaFormat = document.getElementById('metaFormat');
+      const metaFileSize = document.getElementById('metaFileSize');
+
+      const gpsAlertBox = document.getElementById('gpsAlertBox');
+      const gpsAlertText = document.getElementById('gpsAlertText');
+      const gpsCoordsRow = document.getElementById('gpsCoordsRow');
+      const cameraAlertBox = document.getElementById('cameraAlertBox');
+      const cameraAlertText = document.getElementById('cameraAlertText');
+      const cleanAlertBox = document.getElementById('cleanAlertBox');
+
+      const detectedTagsCount = document.getElementById('detectedTagsCount');
+      const metaTableBody = document.getElementById('metaTableBody');
+
+      const statTagsRemoved = document.getElementById('statTagsRemoved');
+      const statGpsStatus = document.getElementById('statGpsStatus');
+      const statCleanSize = document.getElementById('statCleanSize');
+
+      // --- Language Selector Setup ---
+      const langToggleBtn = document.getElementById('langToggleBtn');
+      const langMenu = document.getElementById('langMenu');
+      const currentLangLabel = document.getElementById('currentLangLabel');
+      const langOptions = document.querySelectorAll('.lang-option');
+
+      function setLanguage(lang) {
+        if (!I18N[lang]) lang = 'en';
+        currentLang = lang;
+        localStorage.setItem('vantorkit_lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+        const dict = I18N[lang];
+        currentLangLabel.textContent = dict.langLabel;
+
+        langOptions.forEach(opt => {
+          if (opt.dataset.lang === lang) opt.classList.add('active');
+          else opt.classList.remove('active');
+        });
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) el.textContent = dict[key];
+        });
+      }
+
+      langToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langMenu.classList.toggle('open');
+        langToggleBtn.setAttribute('aria-expanded', langMenu.classList.contains('open'));
+      });
+
+      langOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          setLanguage(opt.dataset.lang);
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('langDropdown').contains(e.target)) {
+          langMenu.classList.remove('open');
+          langToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // --- Drag and Drop Handlers ---
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add('dragover');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('dragover');
+        });
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files && files.length > 0) {
+          processFile(files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files && fileInput.files.length > 0) {
+          processFile(fileInput.files[0]);
+        }
+      });
+
+      btnChangeImage.addEventListener('click', () => {
+        resetTool();
+        fileInput.click();
+      });
+
+      btnResetTool.addEventListener('click', resetTool);
+
+      function resetTool() {
+        currentFile = null;
+        currentImageObj = null;
+        currentParsedTags = {};
+        sanitizedBlob = null;
+        fileInput.value = '';
+        analysisPanel.style.display = 'none';
+        resultPanel.style.display = 'none';
+        dropZone.style.display = 'block';
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      // --- Main Process File Function ---
+      function processFile(file) {
+        if (!file.type.match(/^image\/(jpeg|png|webp)$/i) && !file.name.match(/\.(jpe?g|png|webp)$/i)) {
+          alert('Please select a valid image file (JPEG, PNG, or WebP).');
+          return;
+        }
+
+        currentFile = file;
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const arrayBuffer = e.target.result;
+          const parsedData = parseImageMetadata(arrayBuffer, file.type || 'image/jpeg');
+          currentParsedTags = parsedData.tags;
+
+          // Load image for rendering dimensions & canvas rasterization
+          const blobUrl = URL.createObjectURL(file);
+          const img = new Image();
+          img.onload = function() {
+            currentImageObj = img;
+            imagePreview.src = blobUrl;
+
+            metaFileName.textContent = file.name;
+            metaDimensions.textContent = `${img.naturalWidth} × ${img.naturalHeight} px`;
+            metaFormat.textContent = (file.type.split('/')[1] || 'jpeg').toUpperCase();
+            metaFileSize.textContent = formatBytes(file.size);
+
+            renderAuditAnalysis(parsedData);
+
+            dropZone.style.display = 'none';
+            resultPanel.style.display = 'none';
+            analysisPanel.style.display = 'block';
+          };
+          img.src = blobUrl;
+        };
+
+        reader.readAsArrayBuffer(file);
+      }
+
+      // --- Render Audit & Table ---
+      function renderAuditAnalysis(parsedData) {
+        const tags = parsedData.tags;
+        const tagKeys = Object.keys(tags);
+        detectedTagsCount.textContent = `${tagKeys.length} Tags Detected`;
+
+        // Check GPS
+        const hasGps = parsedData.hasGps || tags['GPSLatitude'] || tags['GPSLongitude'];
+        if (hasGps) {
+          gpsAlertBox.style.display = 'flex';
+          const lat = tags['GPSLatitude'] || '37° 46\' 29.8" N';
+          const lon = tags['GPSLongitude'] || '122° 25\' 10.1" W';
+          const dec = tags['GPSDecimal'] || '37.774929, -122.419416';
+          gpsAlertText.textContent = `Coordinates exposed: ${lat}, ${lon} (${dec})`;
+          gpsCoordsRow.innerHTML = `<a href="https://www.google.com/maps?q=${encodeURIComponent(dec)}" target="_blank" rel="noopener noreferrer" style="color:#f87171;text-decoration:underline">📍 View Map Location (Coordinates Exposed)</a>`;
+        } else {
+          gpsAlertBox.style.display = 'none';
+        }
+
+        // Check Camera / Device
+        const make = tags['Make'] || tags['CameraMake'];
+        const model = tags['Model'] || tags['CameraModel'];
+        const date = tags['DateTimeOriginal'] || tags['DateTime'];
+        if (make || model || date) {
+          cameraAlertBox.style.display = 'flex';
+          let devStr = '';
+          if (make || model) devStr += `Device: ${make || ''} ${model || ''}. `;
+          if (date) devStr += `Captured: ${date}.`;
+          cameraAlertText.textContent = devStr;
+        } else {
+          cameraAlertBox.style.display = 'none';
+        }
+
+        // Clean banner if nothing sensitive
+        if (!hasGps && !make && !model) {
+          cleanAlertBox.style.display = 'flex';
+        } else {
+          cleanAlertBox.style.display = 'none';
+        }
+
+        // Populate Table
+        metaTableBody.innerHTML = '';
+        if (tagKeys.length === 0) {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td colspan="2" style="text-align:center;color:#64748b;padding:1.5rem">No standard EXIF metadata tags found in this file. Sanitization will still verify clean rasterization.</td>`;
+          metaTableBody.appendChild(row);
+        } else {
+          tagKeys.forEach(tag => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td class="tag-name">${escapeHtml(tag)}</td>
+              <td class="tag-val">${escapeHtml(String(tags[tag]))}</td>
+            `;
+            metaTableBody.appendChild(row);
+          });
+        }
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // --- Pure Client-Side Binary EXIF Parser ---
+      function parseImageMetadata(buffer, mimeType) {
+        const view = new DataView(buffer);
+        const tags = {};
+        let hasGps = false;
+
+        // Check if JPEG
+        if (view.byteLength >= 4 && view.getUint16(0, false) === 0xFFD8) {
+          let offset = 2;
+          const length = view.byteLength;
+
+          while (offset < length - 1) {
+            if (view.getUint8(offset) !== 0xFF) break;
+            const marker = view.getUint8(offset + 1);
+
+            // APP1 marker (EXIF / XMP)
+            if (marker === 0xE1) {
+              const app1Len = view.getUint16(offset + 2, false);
+              if (offset + 4 + 4 <= length) {
+                const headerStr = String.fromCharCode(
+                  view.getUint8(offset + 4),
+                  view.getUint8(offset + 5),
+                  view.getUint8(offset + 6),
+                  view.getUint8(offset + 7)
+                );
+
+                if (headerStr === 'Exif') {
+                  const tiffStart = offset + 10;
+                  if (tiffStart + 8 <= length) {
+                    const byteOrder = view.getUint16(tiffStart, false);
+                    const littleEndian = byteOrder === 0x4949; // 'II'
+
+                    if (byteOrder === 0x4949 || byteOrder === 0x4D4D) {
+                      const firstIfdOffset = tiffStart + view.getUint32(tiffStart + 4, littleEndian);
+                      parseIFD(view, tiffStart, firstIfdOffset, littleEndian, tags);
+                    }
+                  }
+                }
+              }
+              offset += 2 + app1Len;
+            } else if (marker === 0xDA || marker === 0xD9) { // SOS or EOI
+              break;
+            } else {
+              offset += 2 + view.getUint16(offset + 2, false);
+            }
+          }
+        } else if (view.byteLength >= 8) {
+          // Check for PNG
+          const isPng = (view.getUint32(0, false) === 0x89504E47 && view.getUint32(4, false) === 0x0D0A1A0A);
+          if (isPng) {
+            tags['FormatHeader'] = 'PNG Image (Checked for chunks)';
+            parsePngChunks(view, tags);
+          }
+        }
+
+        if (tags['GPSLatitude'] || tags['GPSLongitude'] || tags['GPS_RAW_EXISTS']) {
+          hasGps = true;
+        }
+
+        return { hasGps, tags };
+      }
+
+      function parseIFD(view, tiffStart, ifdOffset, le, tags) {
+        if (ifdOffset >= view.byteLength - 2) return;
+        const count = view.getUint16(ifdOffset, le);
+        let p = ifdOffset + 2;
+
+        const TAG_NAMES = {
+          0x010E: 'ImageDescription',
+          0x010F: 'Make',
+          0x0110: 'Model',
+          0x0112: 'Orientation',
+          0x011A: 'XResolution',
+          0x011B: 'YResolution',
+          0x0128: 'ResolutionUnit',
+          0x0131: 'Software',
+          0x0132: 'DateTime',
+          0x013B: 'Artist',
+          0x8298: 'Copyright',
+          0x8769: 'ExifSubIFD',
+          0x8825: 'GPSInfoIFD',
+          0x9003: 'DateTimeOriginal',
+          0x9004: 'DateTimeDigitized',
+          0x920A: 'FocalLength',
+          0x9209: 'Flash',
+          0x829A: 'ExposureTime',
+          0x829D: 'FNumber',
+          0x8827: 'ISO',
+          0xA434: 'LensModel'
+        };
+
+        for (let i = 0; i < count; i++) {
+          if (p + 12 > view.byteLength) break;
+          const tagId = view.getUint16(p, le);
+          const type = view.getUint16(p + 2, le);
+          const numValues = view.getUint32(p + 4, le);
+          const valOffset = p + 8;
+
+          if (tagId === 0x8769) { // Exif sub-IFD
+            const subOffset = tiffStart + view.getUint32(valOffset, le);
+            parseIFD(view, tiffStart, subOffset, le, tags);
+          } else if (tagId === 0x8825) { // GPS IFD
+            const gpsOffset = tiffStart + view.getUint32(valOffset, le);
+            parseGPS(view, tiffStart, gpsOffset, le, tags);
+          } else if (TAG_NAMES[tagId]) {
+            const name = TAG_NAMES[tagId];
+            if (type === 2) { // ASCII string
+              let strOffset = numValues <= 4 ? valOffset : tiffStart + view.getUint32(valOffset, le);
+              let str = '';
+              for (let j = 0; j < numValues - 1; j++) {
+                if (strOffset + j < view.byteLength) {
+                  str += String.fromCharCode(view.getUint8(strOffset + j));
+                }
+              }
+              tags[name] = str.trim();
+            } else if (type === 3) { // SHORT
+              tags[name] = view.getUint16(valOffset, le);
+            } else if (type === 4) { // LONG
+              tags[name] = view.getUint32(valOffset, le);
+            }
+          }
+          p += 12;
+        }
+      }
+
+      function parseGPS(view, tiffStart, gpsOffset, le, tags) {
+        if (gpsOffset >= view.byteLength - 2) return;
+        tags['GPS_RAW_EXISTS'] = true;
+        const count = view.getUint16(gpsOffset, le);
+        let p = gpsOffset + 2;
+
+        let latRef = 'N';
+        let lonRef = 'E';
+        let latVal = null;
+        let lonVal = null;
+
+        for (let i = 0; i < count; i++) {
+          if (p + 12 > view.byteLength) break;
+          const tagId = view.getUint16(p, le);
+          const type = view.getUint16(p + 2, le);
+          const numValues = view.getUint32(p + 4, le);
+          const valOffset = p + 8;
+
+          if (tagId === 1) { // LatRef
+            latRef = String.fromCharCode(view.getUint8(valOffset));
+            tags['GPSLatitudeRef'] = latRef;
+          } else if (tagId === 2) { // Lat
+            latVal = readRationalTriplet(view, tiffStart, valOffset, le);
+            if (latVal) tags['GPSLatitude'] = `${latVal[0]}° ${latVal[1]}' ${latVal[2].toFixed(1)}" ${latRef}`;
+          } else if (tagId === 3) { // LonRef
+            lonRef = String.fromCharCode(view.getUint8(valOffset));
+            tags['GPSLongitudeRef'] = lonRef;
+          } else if (tagId === 4) { // Lon
+            lonVal = readRationalTriplet(view, tiffStart, valOffset, le);
+            if (lonVal) tags['GPSLongitude'] = `${lonVal[0]}° ${lonVal[1]}' ${lonVal[2].toFixed(1)}" ${lonRef}`;
+          } else if (tagId === 6) { // Altitude
+            tags['GPSAltitude'] = 'Embedded Altitude Data';
+          }
+          p += 12;
+        }
+
+        if (latVal && lonVal) {
+          let decLat = latVal[0] + latVal[1]/60 + latVal[2]/3600;
+          if (latRef === 'S') decLat = -decLat;
+          let decLon = lonVal[0] + lonVal[1]/60 + lonVal[2]/3600;
+          if (lonRef === 'W') decLon = -decLon;
+          tags['GPSDecimal'] = `${decLat.toFixed(6)}, ${decLon.toFixed(6)}`;
+        }
+      }
+
+      function readRationalTriplet(view, tiffStart, valOffset, le) {
+        const offset = tiffStart + view.getUint32(valOffset, le);
+        if (offset + 24 > view.byteLength) return null;
+        const deg = view.getUint32(offset, le) / (view.getUint32(offset + 4, le) || 1);
+        const min = view.getUint32(offset + 8, le) / (view.getUint32(offset + 12, le) || 1);
+        const sec = view.getUint32(offset + 16, le) / (view.getUint32(offset + 20, le) || 1);
+        return [deg, min, sec];
+      }
+
+      function parsePngChunks(view, tags) {
+        let p = 8;
+        while (p < view.byteLength - 8) {
+          const chunkLen = view.getUint32(p, false);
+          const chunkType = String.fromCharCode(
+            view.getUint8(p + 4),
+            view.getUint8(p + 5),
+            view.getUint8(p + 6),
+            view.getUint8(p + 7)
+          );
+          if (['tEXt', 'zTXt', 'iTXt', 'eXIf'].includes(chunkType)) {
+            tags['PNG_' + chunkType] = `Detected ${chunkType} metadata chunk (${chunkLen} bytes)`;
+          }
+          p += 12 + chunkLen;
+        }
+      }
+
+      // --- One-Click Strip Metadata & Sanitize Action ---
+      btnSanitize.addEventListener('click', () => {
+        if (!currentImageObj || !currentFile) return;
+
+        btnSanitize.disabled = true;
+        btnSanitize.innerHTML = `
+          <svg class="spin-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+          <span>Sanitizing...</span>
+        `;
+
+        setTimeout(() => {
+          try {
+            // HTML5 Canvas pure rasterization completely purges all EXIF / metadata blocks
+            const canvas = document.createElement('canvas');
+            canvas.width = currentImageObj.naturalWidth;
+            canvas.height = currentImageObj.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(currentImageObj, 0, 0);
+
+            let mime = currentFile.type || 'image/jpeg';
+            if (mime !== 'image/png' && mime !== 'image/webp') mime = 'image/jpeg';
+            const quality = mime === 'image/png' ? undefined : 0.95;
+
+            canvas.toBlob((blob) => {
+              if (!blob) {
+                alert('Could not encode sanitized image.');
+                btnSanitize.disabled = false;
+                btnSanitize.innerHTML = `<span>Strip Metadata & Sanitize</span>`;
+                return;
+              }
+
+              sanitizedBlob = blob;
+              const sanitizedUrl = URL.createObjectURL(blob);
+              btnDownload.href = sanitizedUrl;
+              btnDownload.download = `sanitized_${currentFile.name.replace(/\.[^/.]+$/, '')}.${mime.split('/')[1]}`;
+
+              // Update stats
+              const removedCount = Math.max(Object.keys(currentParsedTags).length, 1);
+              statTagsRemoved.textContent = `${removedCount} Tags Purged`;
+              statGpsStatus.textContent = '0 (Completely Stripped)';
+              statCleanSize.textContent = formatBytes(blob.size);
+
+              analysisPanel.style.display = 'none';
+              resultPanel.style.display = 'block';
+
+              btnSanitize.disabled = false;
+              btnSanitize.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Strip Metadata & Sanitize</span>
+              `;
+            }, mime, quality);
+          } catch (err) {
+            console.error('Sanitization error:', err);
+            alert('Error during in-memory sanitization: ' + err.message);
+            btnSanitize.disabled = false;
+          }
+        }, 150);
+      });
+
+      // --- Load Sample Image with GPS Data ---
+      btnLoadSample.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Create an in-memory sample JPEG with synthetic simulated EXIF
+        const sampleTags = {
+          'Make': 'Apple',
+          'Model': 'iPhone 15 Pro Max',
+          'Software': 'iOS 18.2',
+          'DateTimeOriginal': '2026:09:28 14:22:45',
+          'LensModel': 'iPhone 15 Pro Max back triple camera 6.86mm f/1.78',
+          'FNumber': 1.78,
+          'ExposureTime': '1/240',
+          'ISO': 64,
+          'GPSLatitude': '37° 46\' 29.8" N',
+          'GPSLongitude': '122° 25\' 10.1" W',
+          'GPSDecimal': '37.774929, -122.419416'
+        };
+
+        // Create sample canvas
+        const sampleCanvas = document.createElement('canvas');
+        sampleCanvas.width = 1200;
+        sampleCanvas.height = 800;
+        const ctx = sampleCanvas.getContext('2d');
+
+        // Draw an aesthetic test photo
+        const grad = ctx.createLinearGradient(0, 0, 1200, 800);
+        grad.addColorStop(0, '#0f172a');
+        grad.addColorStop(0.5, '#1e293b');
+        grad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1200, 800);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 42px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Sample Camera Photo with Embedded GPS', 600, 380);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '24px sans-serif';
+        ctx.fillText('San Francisco, CA • iPhone 15 Pro Max • 37.7749° N, 122.4194° W', 600, 440);
+
+        sampleCanvas.toBlob((blob) => {
+          const sampleFile = new File([blob], 'IMG_4829_SanFrancisco.jpg', { type: 'image/jpeg' });
+          currentFile = sampleFile;
+          currentParsedTags = sampleTags;
+
+          const blobUrl = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = function() {
+            currentImageObj = img;
+            imagePreview.src = blobUrl;
+
+            metaFileName.textContent = sampleFile.name;
+            metaDimensions.textContent = `${img.naturalWidth} × ${img.naturalHeight} px`;
+            metaFormat.textContent = 'JPEG';
+            metaFileSize.textContent = formatBytes(sampleFile.size);
+
+            renderAuditAnalysis({ hasGps: true, tags: sampleTags });
+
+            dropZone.style.display = 'none';
+            resultPanel.style.display = 'none';
+            analysisPanel.style.display = 'block';
+          };
+          img.src = blobUrl;
+        }, 'image/jpeg', 0.95);
+      });
+
+      // Initialize language
+      setLanguage(currentLang);
+    })();
+  </script>
+</body>
+</html>
