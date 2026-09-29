@@ -1014,25 +1014,25 @@
     .tool-card[data-category="math"]:hover .card-arrow { color: var(--cat-math); }
 
     /* PDF & Files (Orange/Amber tone) */
-    .tool-card[data-category="files"] .tool-category { color: var(--cat-files); }
-    .tool-card[data-category="files"] .tool-icon-wrap {
+    .tool-card[data-category="files"] .tool-category, .tool-card[data-category="pdf"] .tool-category { color: var(--cat-files); }
+    .tool-card[data-category="files"] .tool-icon-wrap, .tool-card[data-category="pdf"] .tool-icon-wrap {
       background: var(--cat-files-bg);
       border-color: var(--cat-files-border);
       color: var(--cat-files);
     }
-    .tool-card[data-category="files"]:hover {
+    .tool-card[data-category="files"]:hover, .tool-card[data-category="pdf"]:hover {
       border-color: rgba(251, 146, 60, 0.4);
       box-shadow: 0 16px 36px -8px var(--cat-files-glow), 0 0 0 1px rgba(251, 146, 60, 0.2);
     }
-    .tool-card[data-category="files"]:hover::before {
+    .tool-card[data-category="files"]:hover::before, .tool-card[data-category="pdf"]:hover::before {
       background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.6), transparent);
     }
-    .tool-card[data-category="files"]:hover .tool-icon-wrap {
+    .tool-card[data-category="files"]:hover .tool-icon-wrap, .tool-card[data-category="pdf"]:hover .tool-icon-wrap {
       background: rgba(249, 115, 22, 0.22);
       border-color: rgba(251, 146, 60, 0.4);
       color: var(--cat-files-hover);
     }
-    .tool-card[data-category="files"]:hover .card-arrow { color: var(--cat-files); }
+    .tool-card[data-category="files"]:hover .card-arrow, .tool-card[data-category="pdf"]:hover .card-arrow { color: var(--cat-files); }
 
     /* Images & Vector (Pink/Magenta tone) */
     .tool-card[data-category="images"] .tool-category { color: var(--cat-images); }
@@ -1474,7 +1474,7 @@
         <!-- Live Tool Count Pill -->
         <div class="badge-tools-count">
           <span class="pulse-dot"></span>
-          <span id="navToolCount" data-i18n="toolsCount">29 Tools Available</span>
+          <span id="navToolCount" data-i18n="toolsCount">30 Tools Available</span>
         </div>
 
         <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
@@ -1546,7 +1546,7 @@
     <!-- Hero Search Bar -->
     <div class="search-wrapper">
       <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <input type="text" id="toolSearch" class="search-box" placeholder="Search 29 tools (e.g. percentage, pdf, video, diff)..." autocomplete="off" spellcheck="false">
+      <input type="text" id="toolSearch" class="search-box" placeholder="Search 30 tools (e.g. percentage, pdf, video, diff)..." autocomplete="off" spellcheck="false">
       <kbd class="search-kbd" id="searchKbd" title="Press ⌘K or Ctrl+K to search">⌘K</kbd>
       <button type="button" class="search-clear" id="searchClear" aria-label="Clear Search">✕</button>
     </div>
@@ -1770,6 +1770,28 @@
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
             <div class="tool-title" data-tool-field="title">PDF to Word Converter</div>
             <div class="tool-desc" data-tool-field="desc">Export PDF text content as editable .docx files with layout reconstruction, entirely in your browser.</div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+            <!-- Files: PDF Redactor & Signer -->
+      <a href="tools/pdf-redactor.html" class="tool-card" data-tool-id="pdf-redactor" data-category="pdf" data-tags="pdf, redact, blackout, sign, privacy, legal">
+        <div class="card-top">
+          <div class="tool-meta">
+            <div class="tool-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            </div>
+            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
+          </div>
+          <div>
+            <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
+            <div class="tool-title" data-tool-field="title">PDF Redactor &amp; Signer</div>
+            <div class="tool-desc" data-tool-field="desc">Permanently blackout sensitive text with pixel flattening and apply digital signatures 100% locally.</div>
           </div>
         </div>
         <div class="card-footer">
@@ -2266,10 +2288,10 @@
       const TRANSLATIONS = {
         en: {
           langLabel: "English",
-          toolsCount: "29 Tools Available",
+          toolsCount: "30 Tools Available",
           brandBadge: "Client-Side • Privacy-First • No Logs",
           heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
-          searchPlaceholder: "Search 29 tools (e.g. percentage, pdf, video, diff)...",
+          searchPlaceholder: "Search 30 tools (e.g. percentage, pdf, video, diff)...",
           noResultsTitle: "No tools found",
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
@@ -2410,6 +2432,10 @@
               title: "JWT Decoder & Verifier",
               desc: "Decode JSON Web Tokens, inspect claims, format timestamps, and verify HMAC signatures locally."
             },
+                        "pdf-redactor": {
+              title: "PDF Redactor & Signer",
+              desc: "Permanently blackout sensitive text with pixel flattening and apply digital signatures 100% locally."
+            },
             "request-a-tool": {
               title: "Request a Tool",
               desc: "Need a specific browser utility? Tell us what client-side tool to build next."
@@ -2418,10 +2444,10 @@
         },
         ar: {
           langLabel: "العربية",
-          toolsCount: "29 أداة متاحة",
+          toolsCount: "30 أداة متاحة",
           brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
           heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
-          searchPlaceholder: "ابحث في 29 أداة (مثل النسبة المئوية، PDF، الفيديو، المقارنة)...",
+          searchPlaceholder: "ابحث في 30 أداة (مثل النسبة المئوية، PDF، الفيديو، المقارنة)...",
           noResultsTitle: "لم يتم العثور على نتائج",
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
@@ -2562,7 +2588,11 @@
               title: "محلل ومتحقق رموز JWT",
               desc: "فك تشفير وفحص ترويسة وبيانات رموز JWT وتحقق من توقيع HMAC محلياً في المتصفح."
             },
-            "request-a-tool": {
+                        "pdf-redactor": {
+              title: "طمس وتوقيع مستندات PDF",
+              desc: "احجب النصوص والأرقام الحساسة مع تسطيح آمن للبكسلات وأضف توقيعك الرقمي محلياً بالكامل."
+            },
+"request-a-tool": {
               title: "اقتراح أداة جديدة",
               desc: "هل تحتاج إلى أداة تصفح معينة؟ أخبرنا بما ترغب في بنائه مستقبلاً."
             }
@@ -2570,10 +2600,10 @@
         },
         fr: {
           langLabel: "Français",
-          toolsCount: "29 Outils Disponibles",
+          toolsCount: "30 Outils Disponibles",
           brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
           heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
-          searchPlaceholder: "Rechercher parmi 29 outils (ex: pourcentage, pdf, vidéo, diff)...",
+          searchPlaceholder: "Rechercher parmi 30 outils (ex: pourcentage, pdf, vidéo, diff)...",
           noResultsTitle: "Aucun outil trouvé",
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
@@ -2714,7 +2744,11 @@
               title: "Décodeur & Vérificateur JWT",
               desc: "Décodez les jetons JWT, inspectez les réclamations et vérifiez les signatures HMAC localement."
             },
-            "request-a-tool": {
+                        "pdf-redactor": {
+              title: "Biffure & Signature PDF",
+              desc: "Masquez définitivement les données sensibles par aplatissement de pixels et signez vos PDF localement."
+            },
+"request-a-tool": {
               title: "Proposer un outil",
               desc: "Besoin d'un outil spécifique ? Dites-nous quel outil développer ensuite."
             }
@@ -2722,10 +2756,10 @@
         },
         it: {
           langLabel: "Italiano",
-          toolsCount: "29 Strumenti Disponibili",
+          toolsCount: "30 Strumenti Disponibili",
           brandBadge: "Lato Client • Massima Privacy • Nessun Log",
           heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
-          searchPlaceholder: "Cerca tra 29 strumenti (es: percentuale, pdf, video, diff)...",
+          searchPlaceholder: "Cerca tra 30 strumenti (es: percentuale, pdf, video, diff)...",
           noResultsTitle: "Nessun risultato",
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
@@ -2866,7 +2900,11 @@
               title: "Decodificatore & Verificatore JWT",
               desc: "Decodifica token JWT, ispeziona i payload e verifica le firme HMAC localmente nel browser."
             },
-            "request-a-tool": {
+                        "pdf-redactor": {
+              title: "Oscuramento & Firma PDF",
+              desc: "Cancella in modo permanente dati sensibili con appiattimento dei pixel e firma digitalmente i PDF in locale."
+            },
+"request-a-tool": {
               title: "Richiedi uno strumento",
               desc: "Hai bisogno di un'utilità specifica? Suggeriscici il prossimo strumento."
             }
@@ -3023,8 +3061,9 @@
             enKeywords = TRANSLATIONS.en.tools[toolId].title.toLowerCase() + ' ' + TRANSLATIONS.en.tools[toolId].desc.toLowerCase();
           }
 
-          const matchesQuery = query === '' || title.includes(query) || desc.includes(query) || enKeywords.includes(query);
-          const matchesCategory = (activeCat === 'all' || category === activeCat);
+          const matchesQuery = query === '' || title.includes(query) || desc.includes(query) || enKeywords.includes(query) || tags.includes(query);
+          const tags = card.dataset.tags ? card.dataset.tags.toLowerCase() : '';
+          const matchesCategory = (activeCat === 'all' || category === activeCat || (activeCat === 'files' && category === 'pdf'));
 
           if (matchesQuery && matchesCategory) {
             card.style.display = 'flex';
