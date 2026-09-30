@@ -19,6 +19,7 @@
   <meta name="description" content="High-performance client-side CSV/JSON/TSV big-data transformer and stream parser. Process 100MB+ datasets in background Web Workers with zero server uploads and zero latency.">
   <meta name="keywords" content="big data transformer, offline csv to json, large json to csv, web worker csv parser, stream json parser, private data converter, client side tsv converter, ndjson to csv, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/big-data-transformer.html">
+  <link rel="stylesheet" href="../sidebar.css">
   <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/big-data-transformer.html">
   <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/big-data-transformer.html">
   <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/big-data-transformer.html">
@@ -1077,7 +1078,15 @@
   <!-- Top Navigation -->
   <nav class="top-nav" aria-label="Main Navigation">
     <div class="nav-inner">
-      <a href="../index.html" class="brand-link">
+      <div class="vk-sidebar-nav-left" style="display:flex;align-items:center;gap:0.75rem;">
+        <button type="button" class="vk-sidebar-toggle" id="vkSidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="vkSidebarDrawer">
+        <svg class="vk-sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
+        <a href="../index.html" class="brand-link">
         <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1101,6 +1110,7 @@
         </svg>
         <span>Vantor<span style="color:#38bdf8">Kit</span></span>
       </a>
+      </div>
 
       <div class="nav-actions">
         <a href="../index.html" class="back-btn" data-i18n="backLink">
@@ -2786,5 +2796,6 @@
       setLanguage(currentLang);
     })();
   </script>
+  <script src="../sidebar.js" defer></script>
 </body>
 </html>

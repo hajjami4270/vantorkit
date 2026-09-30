@@ -243,5 +243,31 @@ To enforce VantorKit's "100% Client-Side, Zero-Server Processing" guarantee and 
 - **Structured JSON-LD Schema:** Validated `@graph` embedding `WebApplication` and `FAQPage` (4 rich Q&As per tool).
 - **CSP Compliance:** Operates seamlessly under production Content Security Policy (`worker-src blob:`, `style-src 'unsafe-inline'`).
 
+---
+
+## Phase 5: Global Collapsible Navigation Sidebar & LocalStorage Favorites
+
+**Completed Date:** September 30, 2026  
+**Status:** 100% Implemented & Verified (444 / 444 Automated Assertions Passing)
+
+### Implemented Features
+1. **Global Header Hamburger Toggle (☰):**
+   - Seamlessly placed to the far left of the VantorKit logo in LTR layouts (English, French, Italian) and to the far right in RTL (Arabic, matching reading direction).
+   - Fully accessible with dynamic, localized `aria-label` ("Open menu" / "فتح القائمة" / "Ouvrir le menu" / "Apri menu") and `aria-expanded` state.
+2. **Smooth Overlay Drawer & Backdrop:**
+   - 220ms slide-in overlay (from left in LTR, from right in RTL) with dark frosted glassmorphism (`backdrop-filter: blur(24px)`).
+   - Semi-transparent backdrop dismissing the drawer on click; Escape key support; complete focus trap and automatic focus return to trigger button upon close.
+3. **Recently Used Tools Engine:**
+   - Automatically tracks visited tools in `localStorage` (`vantorkit_recent_tools`), presenting up to 5 tools in reverse chronological order with exact SVG icons, localized names, category badges, and quick links.
+   - Graceful fallback with clean empty state ("No tools used yet").
+4. **Interactive Homepage Favorites (Star Pins):**
+   - Micro-animated star button (`.vk-sidebar-fav-btn`) on all 32 homepage tool cards toggles favorite status in `localStorage` (`vantorkit_favorite_tools`) without triggering link navigation.
+   - Synchronized live with the sidebar's "Favorites" section; persists across page reloads.
+5. **All Categories Quick Navigation:**
+   - Direct navigation to the 6 primary VantorKit categories (All Tools, Math & Finance, PDF & Files, Images, Text Tools, Everyday) styled with authentic theme colors.
+6. **Zero Backend, Scoped CSS & Security Compliance:**
+   - 100% client-side `localStorage` persistence wrapped in `try/catch` guards.
+   - All styling strictly scoped under `.vk-sidebar-*` to preserve design token fidelity and prevent any stylesheet contamination.
+
 
 

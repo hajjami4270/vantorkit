@@ -19,6 +19,7 @@
   <meta name="description" content="Convert CSV spreadsheets to structured JSON and reverse arrays back to tabular files. RFC 4180 parsing runs in-memory with zero cloud exposure.">
   <meta name="keywords" content="csv to json, json to csv, csv converter, json converter, flatten json to csv, online csv converter, data converter, vantorkit">
   <link rel="canonical" href="https://vantorkit.com/tools/csv-json-converter.html">
+  <link rel="stylesheet" href="../sidebar.css">
   <link rel="alternate" hreflang="x-default" href="https://vantorkit.com/tools/csv-json-converter.html">
   <link rel="alternate" hreflang="en" href="https://vantorkit.com/tools/csv-json-converter.html">
   <link rel="alternate" hreflang="ar" href="https://vantorkit.com/tools/csv-json-converter.html">
@@ -1303,6 +1304,13 @@
     </a>
 
     <div class="nav-right" style="display:flex;align-items:center;gap:.85rem">
+      <button type="button" class="vk-sidebar-toggle" id="vkSidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="vkSidebarDrawer">
+        <svg class="vk-sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
       <a href="../index.html" class="nav-brand" aria-label="VantorKit Home">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -2923,5 +2931,6 @@
     }
   })();
   </script>
+  <script src="../sidebar.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,16 @@
+# Environment & Secrets
+.env
+*.env
+automation/.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+automation/publish.log
+.venv/
+env/
+venv/
+# Scratch & Local Test Scripts
+scratch/

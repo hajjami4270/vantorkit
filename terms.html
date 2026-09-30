@@ -18,6 +18,7 @@
   <title>Terms of Service — VantorKit</title>
   <meta name="description" content="VantorKit Terms of Service: Read our terms governing fair use, client-side utility disclaimers, intellectual property, and limitations of liability.">
   <link rel="canonical" href="https://vantorkit.com/terms.html">
+  <link rel="stylesheet" href="./sidebar.css">
 
   <!-- Google Fonts: Plus Jakarta Sans for Latin, Cairo for Arabic -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -506,6 +507,13 @@
     </a>
 
     <div class="nav-right">
+      <button type="button" class="vk-sidebar-toggle" id="vkSidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="vkSidebarDrawer">
+        <svg class="vk-sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
       <a href="./" class="nav-brand" aria-label="VantorKit Home">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -794,5 +802,6 @@
       }
     })();
   </script>
+  <script src="./sidebar.js" defer></script>
 </body>
 </html>
