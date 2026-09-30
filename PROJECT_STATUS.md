@@ -269,5 +269,27 @@ To enforce VantorKit's "100% Client-Side, Zero-Server Processing" guarantee and 
    - 100% client-side `localStorage` persistence wrapped in `try/catch` guards.
    - All styling strictly scoped under `.vk-sidebar-*` to preserve design token fidelity and prevent any stylesheet contamination.
 
+---
+
+## Phase 6: Official GitHub Repository Linking in Global Footer & Collapsible Sidebar
+
+**Completed Date:** September 30, 2026  
+**Status:** 100% Implemented & Verified (536 / 536 QA Assertions Passing)
+
+### Implemented Features
+1. **Official GitHub Repository Link Detection & Formatting:**
+   - Detected repository remote origin (`https://github.com/hajjami4270/vantorkit.git`) and cleanly standardized as HTTPS URL: `https://github.com/hajjami4270/vantorkit`.
+2. **Collapsible Sidebar Footer Integration:**
+   - Prominently integrated into the bottom actions bar of `sidebar.js` with localized label ("GitHub") and official Octocat SVG icon.
+   - Built with strict security and accessibility attributes: `target="_blank"`, `rel="noopener noreferrer"`, and `aria-label="View VantorKit on GitHub"`.
+3. **Global Site Footer Integration Across All 43 Pages:**
+   - Added official GitHub link into `<nav class="footer-links" aria-label="Legal & Support">` immediately preceding the X (Twitter) link across `index.html`, all 32 tools in `tools/`, and 10 root static pages.
+   - Scoped styling in `sidebar.css` (`.vk-sidebar-github-link`, `.vk-sidebar-github-icon`, `.footer-github-link`, `.footer-github-icon`) ensuring responsive layout, scale-on-hover micro-interactions, and high-contrast accessibility focus rings without altering any existing tool logic.
+4. **Comprehensive Automated Verification:**
+   - 259 / 259 Full Regression Suite tests passed (100%).
+   - 277 / 277 Sidebar & Footer Suite tests passed (100%).
+   - Headless Chrome CDP automation tests passed with screenshots verifying DOM presence, attributes, and visual alignment in both LTR/RTL viewports.
+
+
 
 

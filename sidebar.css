@@ -612,3 +612,32 @@ html[dir="rtl"] .vk-sidebar-cat-item:hover .vk-sidebar-cat-arrow {
   width: 14px;
   height: 14px;
 }
+
+/* ==========================================================================
+   Global Footer GitHub Link
+   Styles the GitHub repository icon link in the global footer across all pages
+   ========================================================================== */
+.vk-sidebar-github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.vk-sidebar-github-link .vk-sidebar-github-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.vk-sidebar-github-link:hover .vk-sidebar-github-icon {
+  transform: scale(1.12);
+}
+
+.vk-sidebar-github-link:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+
