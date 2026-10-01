@@ -1688,6 +1688,7 @@
     // --- State Variables ---
     let currentPdfDoc = null;
     let pdfRawBytes = null;
+    let currentFile = null;
     let originalFileName = 'document.pdf';
     let currentPageNum = 1;
     let totalPages = 1;
@@ -1780,23 +1781,32 @@
     }
 
     // --- File Handling & Loading ---
-    async function loadPdfArrayBuffer(arrayBuffer, fileName) {
+    async function loadPdfArrayBuffer(arrayBuffer, fileName, fileInstance) {
       try {
-        pdfRawBytes = new Uint8Array(arrayBuffer);
-        originalFileName = fileName || 'document.pdf';
+        if (fileInstance) {
+          currentFile = fileInstance;
+        } else if (!currentFile || currentFile.name !== fileName) {
+          currentFile = new File([arrayBuffer], fileName || 'document.pdf', { type: 'application/pdf' });
+        }
+        originalFileName = fileName || (currentFile ? currentFile.name : 'document.pdf');
+
+        const masterBuffer = await currentFile.arrayBuffer();
+        pdfRawBytes = new Uint8Array(masterBuffer.slice(0));
+        const renderBuffer = masterBuffer.slice(0);
 
         const loadingTask = pdfjsLib.getDocument({
-          data: pdfRawBytes,
-          cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+          data: renderBuffer,
+          cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
           cMapPacked: true,
-          standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+          standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/',
+          enableXfa: true
         });
         currentPdfDoc = await loadingTask.promise;
         totalPages = currentPdfDoc.numPages;
 
         docName.textContent = originalFileName;
         docPages.textContent = totalPages;
-        docSize.textContent = formatBytes(pdfRawBytes.length);
+        docSize.textContent = formatBytes(currentFile.size);
         pageTotal.textContent = totalPages;
         currentPageNum = 1;
         pageNumInput.value = 1;
@@ -2250,7 +2260,7 @@
 
     // --- Export Engine (True Pixel Flattening via pdf-lib) ---
     btnExport.addEventListener('click', async () => {
-      if (!currentPdfDoc || !pdfRawBytes) return;
+      if (!currentPdfDoc || (!pdfRawBytes && !currentFile)) return;
 
       btnExport.disabled = true;
       const originalText = btnExport.innerHTML;
@@ -2258,7 +2268,8 @@
 
       try {
         const { PDFDocument } = PDFLib;
-        const originalDoc = await PDFDocument.load(pdfRawBytes);
+        const sourceBuffer = currentFile ? await currentFile.arrayBuffer() : pdfRawBytes;
+        const originalDoc = await PDFDocument.load(sourceBuffer);
         const newPdfDoc = await PDFDocument.create();
 
         const total = currentPdfDoc.numPages;
@@ -2396,7 +2407,8 @@
         page2.drawText("Auditor Sign-off: Certified Public Accountant #881293", { x: 50, y: 580, size: 12, font });
 
         const bytes = await sampleDoc.save();
-        await loadPdfArrayBuffer(bytes.buffer, 'sample_agreement.pdf');
+        currentFile = new File([bytes.buffer], 'sample_agreement.pdf', { type: 'application/pdf' });
+        await loadPdfArrayBuffer(bytes.buffer, 'sample_agreement.pdf', currentFile);
       } catch (err) {
         console.error(err);
         showToast('Error generating sample PDF');
@@ -2405,12 +2417,12 @@
 
     // File input triggers
     btnBrowse.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', (e) => {
+    fileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = (ev) => loadPdfArrayBuffer(ev.target.result, file.name);
-        reader.readAsArrayBuffer(file);
+        currentFile = file;
+        const buffer = await file.arrayBuffer();
+        await loadPdfArrayBuffer(buffer, file.name, file);
       }
     });
 
@@ -2421,14 +2433,14 @@
 
     dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
 
-    dropZone.addEventListener('drop', (e) => {
+    dropZone.addEventListener('drop', async (e) => {
       e.preventDefault();
       dropZone.classList.remove('drag-over');
       const file = e.dataTransfer.files[0];
-      if (file && file.type === 'application/pdf') {
-        const reader = new FileReader();
-        reader.onload = (ev) => loadPdfArrayBuffer(ev.target.result, file.name);
-        reader.readAsArrayBuffer(file);
+      if (file && (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'))) {
+        currentFile = file;
+        const buffer = await file.arrayBuffer();
+        await loadPdfArrayBuffer(buffer, file.name, file);
       } else {
         showToast('Please upload a valid PDF document.');
       }
@@ -2438,6 +2450,7 @@
       dropZone.style.display = 'block';
       workspace.style.display = 'none';
       fileInput.value = '';
+      currentFile = null;
     });
 
     // --- Authoritative Language Controller ---
