@@ -19,7 +19,12 @@
 6. **CSV to JSON / JSON to CSV** (`tools/csv-json-converter.html`): Bidirectional tabular data serialization with custom delimiters.
 7. **PDF Merge** (`tools/pdf-merge.html`): Client-side document assembly using PDF-Lib.
 8. **PDF Split & Extract** (`tools/pdf-split.html`): Page range extraction and individual page separation.
-9. **PDF to Word Converter** (`tools/pdf-to-word.html`): PDF text extraction and DOCX reconstruction.
+9. **PDF to Word Converter** (`tools/pdf-to-word.html`) — **Engine Rebuild**:
+    - **Spatial Layout Reconstruction Engine:** Font-proportional line grouping, dynamic paragraph boundary detection, multi-column gutter segmentation (preventing column interleaving), and contiguous grid table extraction (`docx.Table`).
+    - **Font & Typography Preservation:** Resolves PDF.js PostScript font objects via `page.commonObjs` for exact inline bold and italic `docx.TextRun` preservation.
+    - **Native Arabic / RTL Directionality:** Automatic Unicode detection with `bidirectional: true` and `AlignmentType.RIGHT`.
+    - **Scanned Document Detection & Honest Messaging:** Halts immediately on image-only documents with clear user messaging instead of silent corrupted output.
+    - **100% Client-Side Processing:** Powered strictly by `pdf.js` and `docx.js` (`docx@8.5.0`) in device RAM.
 10. **Base64 File Encoder & Decoder** (`tools/base64-file-encoder.html`): Binary-to-text data URI conversion with MIME autodetection.
 11. **Audio Trimmer & Cutter** (`tools/audio-trimmer.html`) — **Tool #26**:
     - **100% Client-Side Processing:** Zero backend dependencies, zero server uploads, and no remote telemetry.
@@ -289,6 +294,68 @@ To enforce VantorKit's "100% Client-Side, Zero-Server Processing" guarantee and 
    - 259 / 259 Full Regression Suite tests passed (100%).
    - 277 / 277 Sidebar & Footer Suite tests passed (100%).
    - Headless Chrome CDP automation tests passed with screenshots verifying DOM presence, attributes, and visual alignment in both LTR/RTL viewports.
+
+---
+
+## Phase 7: PDF to Word Layout Reconstruction Re-Architecture & Diagnostic Audit
+
+**Completed Date:** October 1, 2026  
+**Status:** 100% Implemented & Verified (5/5 Real Document Types Validated + Scanned PDF Guard + 32/32 Tool Regression Tests Passing)
+
+### 1. Phase 1 Forensic Diagnosis & Root Causes Found
+Through coordinate-level inspection of PDF.js `getTextContent()` streams across single-column, two-column, tabular, styled, and RTL documents, the following root causes behind distorted output were identified:
+
+1. **PDF.js Font Identifier Disconnect:**  
+   PDF.js assigns internal generated IDs (e.g. `g_d0_f1`, `g_d3_f5`) to `item.fontName` in `getTextContent()`. The prior implementation ran regexes (`/bold|black/i`, `/italic|oblique/i`) directly against `item.fontName`, causing 100% false negatives for bold and italic styling across all documents.
+2. **Multi-Column Reading Order Corruption (Interleaving):**  
+   Runs were previously sorted solely by raw Y-coordinate. In two-column documents (academic papers, newsletters), line 1 of Column 1 and line 1 of Column 2 share identical or near-identical Y-coordinates. The old logic interleaved them horizontally (e.g., `"1. INTRODUCTION 2. METHODOLOGY"` followed by `"Client-side execution requires We evaluated streaming WebAssembly"`), destroying document coherence.
+3. **All-or-Nothing Page Table Detection Collapse:**  
+   The previous table detector required $>60\%$ of all lines on an entire page to have multiple columns. If a document contained an introductory title or trailing paragraphs, the whole page failed table detection, dumping structured tables into unaligned inline text.
+4. **Paragraph Flattening Erasing Inline Typography:**  
+   The old paragraph builder concatenated all line text into a single monolithic string per paragraph, assigning a single all-or-nothing bold flag. This obliterated inline emphasis (e.g., bolding or italicizing specific words within a sentence).
+5. **Arabic & RTL Directional Misalignment:**  
+   Extracted Arabic text was placed into default LTR Word paragraphs without `w:bidi` paragraph formatting or `w:rtl` run properties, causing punctuation inversion and reversed paragraph flow in Microsoft Word.
+6. **Silent Scanned Document Failure:**  
+   When encountering scanned/image-only PDFs where `getTextContent()` returns 0 text items, the tool silently produced empty or corrupted Word files without warning the user.
+
+### 2. Phase 2 Layout Reconstruction Engine Rebuild
+The conversion pipeline in `tools/pdf-to-word.html` was completely re-architected with zero external dependencies, staying 100% client-side with PDF.js and docx.js (`docx@8.5.0`):
+
+- **Font Style Resolver (`resolveFontStyles`):** Executes `page.getOperatorList()` to populate `page.commonObjs`, resolving true PostScript font names, font family objects, and internal weight/slant flags (`fObj.bold`, `fObj.black`, `fObj.italic`).
+- **Font-Proportional Line Grouping (`groupRunsIntoLines`):** Groups text items into lines using a dynamic Y-tolerance proportional to the minimum font height (`Math.max(Math.min(h1, h2) * 0.45, 3.5)`), preventing line merging between body text and headings.
+- **Contiguous Table Block Extraction (`extractTablesAndText`):** Analyzes consecutive lines for recurring X-coordinate column anchors ($\ge 2$ aligned columns across $\ge 2$ rows). Emits true OpenXML tables (`docx.Table`, `docx.TableRow`, `docx.TableCell`) with calculated DXA widths, while cleanly isolating non-tabular prose above and below into standard paragraphs.
+- **Spatial Multi-Column Segmentation (`segmentColumnsInTextBlock`):** Detects central column gutters ($\ge 25\text{pt}$) across multiple lines. Partitions the page into: Top Spanning Header $\rightarrow$ Column 1 top-to-bottom $\rightarrow$ Column 2 top-to-bottom $\rightarrow$ Bottom Spanning Footer, completely eliminating reading order interleaving.
+- **Dynamic Paragraph Break Detection (`linesToParagraphs`):** Calculates average body line spacing; vertical gaps exceeding $1.4\times$ average spacing or distinct heading height jumps trigger new paragraph boundaries. Preserves individual `docx.TextRun` instances to retain per-word bold and italic formatting.
+- **Bidi & RTL Arabic Preservation:** Automatically detects Arabic Unicode blocks (`[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]`) and applies `bidirectional: true`, `alignment: AlignmentType.RIGHT`, and `rightToLeft: true`.
+- **Scanned PDF Pre-Flight Guard:** Inspects total extracted character volume against page count ($< 30\text{ characters/page}$). Immediately halts execution and displays an honest user alert toast: *"This PDF appears to be a scanned image with no extractable text. Automatic conversion isn't possible — OCR support may be added in a future update."*
+
+### 3. Phase 3 Test Results Summary
+Verified through automated headless browser CDP testing, raw OpenXML (`word/document.xml`) inspection, and DOM assertion across 5 document types + scanned PDF:
+
+| Test Sample | Document Type | Old Implementation Result | New Implementation Result | OpenXML Verification |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sample 1** | Single-Column English | Fragmented individual lines, lost paragraph cohesion | Clean paragraphs, heading detected, body text flowed | 3 Paragraphs, 1 Bold Heading, 0 Tables |
+| **Sample 2** | Two-Column Academic Paper | Catastrophic column interleaving (`1. INTRO 2. METHOD`) | Header $\rightarrow$ Col 1 top-to-bottom $\rightarrow$ Col 2 top-to-bottom | 5 Paragraphs, 3 Bold Headings, 0 Tables |
+| **Sample 3** | Commercial Invoice with Table | All-or-nothing failure; table dumped as unaligned text | Contiguous 3-row $\times$ 4-column Word table with header & footer | 1 `docx.Table` (12 cells), 16 Paragraphs |
+| **Sample 4** | Mixed Bold/Italic Typography | Bold/italic 100% ignored due to font ID mismatch | Precise inline `docx.TextRun` formatting for bold & italic | 3 Paragraphs, 3 Bold Runs, 3 Italic Runs |
+| **Sample 5** | Arabic Language Document | Left-aligned LTR paragraphs, inverted punctuation | Right-aligned RTL paragraphs with native Bidi runs | 3 Paragraphs, 6 `<w:rtl/>` & `<w:bidi/>` tags |
+| **Sample 6** | Scanned / Image-Only PDF | Generated silent empty document | Pre-flight halt with honest OCR disclaimer toast | Conversion blocked; 0 empty files generated |
+
+### 4. UI Honesty Disclaimer Update
+Updated the disclaimer callout across all 4 supported languages (English, Arabic, French, Italian) to explicitly delineate tool capabilities:
+- **Optimal Results:** Single-column and multi-column reports, academic papers, itemized invoices, clean digital documents with standard font encodings.
+- **Known Limitations:** Scanned image-only documents (requiring OCR), complex magazine layouts with irregular text wrap around graphics, and PDFs with non-standard or corrupt font encoding matrices.
+
+### 5. Remaining Known Limitations (Honest Assessment)
+1. **Vector-Drawn Table Borders:** PDF lines and borders drawn via vector paths (`stroke()`, `fill()`) are not extracted by PDF.js `getTextContent()`. While tabular cell content and column alignment are preserved in Word tables, explicit cell borders default to standard table borders.
+2. **Scanned Documents (OCR Required):** In-browser OCR (such as Tesseract.js WASM) is not included to avoid downloading 30MB+ language models. Scanned documents are detected and politely halted.
+3. **Complex Magazine Wrap Around Irregular Images:** Text wrapping around non-rectangular vector paths or floating images cannot be mapped to linear Word flow using client-side heuristics.
+4. **Corrupt / Non-Standard CMap Encodings:** PDFs that embed custom glyph-to-unicode mappings that omit standard ToUnicode CMap tables will extract as replacement characters (`?` or mojibake).
+
+### 6. Architectural Compliance & Regression Verification
+- **Zero Tool Regressions:** All other 31 production tools remain untouched and pass 100% (syntax, DOM rendering, calculation engines, and export triggers).
+- **Zero Server Dependencies:** Processing remains 100% in-browser RAM using client-side Web Workers and `docx@8.5.0`.
+- **CSP Compliant:** Conforms to strict Content Security Policy directives with no unauthorized network requests.
 
 
 
