@@ -18,12 +18,24 @@
   <title>VantorKit — Free Fast Online Utility Tools</title>
   <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files. 100% client-side with zero logs.">
   <link rel="canonical" href="https://vantorkit.com/">
-  <link rel="stylesheet" href="./sidebar.css">
 
-  <!-- Google Fonts: Plus Jakarta Sans for Latin, Cairo for Arabic -->
+  <!-- Google Fonts Preconnect Hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Non-blocking Google Fonts with display=swap -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  </noscript>
+
+  <!-- Non-blocking Sidebar Stylesheet -->
+  <link rel="preload" href="./sidebar.css" as="style">
+  <link rel="stylesheet" href="./sidebar.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="./sidebar.css">
+  </noscript>
 
   <style>
     :root {
@@ -1432,7 +1444,7 @@
 <body>
 
   <!-- Modern SaaS Navbar -->
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Main Navigation">
     <div class="nav-container">
       <div class="vk-sidebar-nav-left" style="display:flex;align-items:center;gap:0.75rem;">
         <button type="button" class="vk-sidebar-toggle" id="vkSidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="vkSidebarDrawer">
@@ -1442,7 +1454,7 @@
             <line x1="4" y1="18" x2="20" y2="18"></line>
           </svg>
         </button>
-        <a href="./" class="brand-link" aria-label="VantorKit Home">
+        <a href="./" class="brand-link" aria-label="VantorKit v1.0 Home">
           <!-- Sleek Custom Geometric 'V' SVG Logo -->
           <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -1489,7 +1501,7 @@
 
         <!-- Language Dropdown Switcher (EN, AR, FR, IT) -->
         <div class="lang-dropdown" id="langDropdown">
-          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
             <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span id="currentLangLabel">English</span>
             <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1565,30 +1577,30 @@
   <main>
     <!-- Categories Filter Pills (Sliding Indicator) -->
     <div class="categories-wrapper" id="category-filters">
-      <div class="categories-bar" id="categoriesBar" role="tablist">
+      <div class="categories-bar" id="categoriesBar" role="tablist" aria-label="Tool Categories">
         <!-- Floating Sliding Pill Indicator -->
         <div class="category-pill-indicator" id="categoryPillIndicator" aria-hidden="true"></div>
-      <button type="button" class="category-btn active" data-cat="all">
+      <button type="button" class="category-btn active" data-cat="all" role="tab" aria-selected="true">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
         <span data-i18n="cat_all">All Tools</span>
       </button>
-      <button type="button" class="category-btn" data-cat="math">
+      <button type="button" class="category-btn" data-cat="math" role="tab" aria-selected="false">
         <span class="cat-dot cat-dot-math" aria-hidden="true"></span>
         <span data-i18n="cat_math">Math &amp; Finance</span>
       </button>
-      <button type="button" class="category-btn" data-cat="files">
+      <button type="button" class="category-btn" data-cat="files" role="tab" aria-selected="false">
         <span class="cat-dot cat-dot-files" aria-hidden="true"></span>
         <span data-i18n="cat_files">PDF &amp; Files</span>
       </button>
-      <button type="button" class="category-btn" data-cat="images">
+      <button type="button" class="category-btn" data-cat="images" role="tab" aria-selected="false">
         <span class="cat-dot cat-dot-images" aria-hidden="true"></span>
         <span data-i18n="cat_images">Images</span>
       </button>
-      <button type="button" class="category-btn" data-cat="text">
+      <button type="button" class="category-btn" data-cat="text" role="tab" aria-selected="false">
         <span class="cat-dot cat-dot-text" aria-hidden="true"></span>
         <span data-i18n="cat_text">Text Tools</span>
       </button>
-      <button type="button" class="category-btn" data-cat="everyday">
+      <button type="button" class="category-btn" data-cat="everyday" role="tab" aria-selected="false">
         <span class="cat-dot cat-dot-everyday" aria-hidden="true"></span>
         <span data-i18n="cat_everyday">Everyday</span>
       </button>
