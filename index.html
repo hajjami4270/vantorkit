@@ -1283,7 +1283,36 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+      align-items: center;
       gap: 1.5rem;
+    }
+
+    .footer-fazier-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      opacity: 0.85;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      border-radius: 6px;
+    }
+
+    .footer-fazier-link:hover,
+    .footer-fazier-link:focus-visible {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .footer-fazier-link:focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+    .footer-fazier-link img {
+      display: block;
+      height: 32px;
+      width: auto;
+      max-height: 32px;
     }
 
     .footer-link {
@@ -2328,6 +2357,9 @@
           <svg class="footer-x-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
           </svg>
+        </a>
+        <a href="https://fazier.com/launches/vantorkit.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center opacity-85 hover:opacity-100 transition-opacity footer-fazier-link" aria-label="Fazier badge">
+          <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width="120" height="32" alt="Fazier badge" />
         </a>
       </nav>
       <p class="footer-copy" id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
