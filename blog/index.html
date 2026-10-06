@@ -268,7 +268,9 @@
     .lang-menu.open,
     .lang-menu.show,
     .lang-dropdown.active .lang-menu,
-    .lang-dropdown.active .lang-dropdown-menu {
+    .lang-dropdown.active .lang-dropdown-menu,
+    .lang-dropdown-menu.show,
+    .lang-dropdown-menu.open {
       display: flex !important;
       animation: menuFadeIn 0.15s ease-out;
     }
@@ -1060,12 +1062,15 @@
         </div>
       </a>
 
-      <!-- Architecture Preview Card 2: Metadata Sanitization -->
-      <div class="article-card">
+      <!-- Flagship Article 2: Metadata Sanitization -->
+      <a href="/blog/why-metadata-stripping-fails.html" class="article-card">
         <div class="card-top">
           <div class="article-meta-row">
             <span class="category-badge cat-privacy" data-i18n="card2_cat">Forensics &amp; Privacy</span>
-            <span class="pill-preview" data-i18n="badge_coming_soon">Coming Soon</span>
+            <span class="read-time">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="card2_read_time">5 min read</span>
+            </span>
           </div>
           <h3 class="article-title" data-i18n="card2_title">Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP &amp; Document Streams</h3>
           <p class="article-excerpt" data-i18n="card2_excerpt">
@@ -1076,18 +1081,24 @@
           <div class="author-info">
             <span data-i18n="card2_author">By VantorKit Research</span>
             <span>•</span>
-            <span data-i18n="card2_date">Research Preview</span>
+            <span data-i18n="card2_date">Oct 2026</span>
           </div>
-          <span class="pill-preview" data-i18n="card2_read_time">5 min read</span>
+          <span class="cta-link-text">
+            <span data-i18n="card2_cta">Read Guide</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
-      </div>
+      </a>
 
-      <!-- Architecture Preview Card 3: Big Data in Browser -->
-      <div class="article-card">
+      <!-- Flagship Article 3: Big Data in Browser -->
+      <a href="/blog/client-side-big-data-processing.html" class="article-card">
         <div class="card-top">
           <div class="article-meta-row">
             <span class="category-badge cat-perf" data-i18n="card3_cat">Performance &amp; Wasm</span>
-            <span class="pill-preview" data-i18n="badge_coming_soon">Coming Soon</span>
+            <span class="read-time">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="card3_read_time">7 min read</span>
+            </span>
           </div>
           <h3 class="article-title" data-i18n="card3_title">Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM</h3>
           <p class="article-excerpt" data-i18n="card3_excerpt">
@@ -1096,13 +1107,16 @@
         </div>
         <div class="card-bottom">
           <div class="author-info">
-            <span data-i18n="card2_author">By VantorKit Performance Lab</span>
+            <span data-i18n="card3_author">By VantorKit Performance Lab</span>
             <span>•</span>
-            <span data-i18n="card3_date">Engineering Lab</span>
+            <span data-i18n="card3_date">Oct 2026</span>
           </div>
-          <span class="pill-preview" data-i18n="card3_read_time">7 min read</span>
+          <span class="cta-link-text">
+            <span data-i18n="card3_cta">Read Guide</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
         </div>
-      </div>
+      </a>
 
     </div>
 

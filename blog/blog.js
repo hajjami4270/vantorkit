@@ -50,16 +50,18 @@
       card2_title: 'Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP & Document Streams',
       card2_excerpt: 'Standard file cleaners often leave hidden camera serial numbers, GPS coordinates, and revision histories intact in document binary trees. An analysis of client-side binary tree purges.',
       card2_author: 'By VantorKit Research',
-      card2_date: 'Research Preview',
+      card2_date: 'Oct 2026',
       card2_read_time: '5 min read',
+      card2_cta: 'Read Guide',
 
       // Article Card 3
       card3_cat: 'Performance & Wasm',
       card3_title: 'Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM',
       card3_excerpt: 'How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.',
       card3_author: 'By VantorKit Performance Lab',
-      card3_date: 'Engineering Lab',
+      card3_date: 'Oct 2026',
       card3_read_time: '7 min read',
+      card3_cta: 'Read Guide',
 
       // RSS Callout Banner
       rss_callout_title: 'Zero Trackers. Pure Open Web RSS Syndication.',
@@ -190,16 +192,18 @@
       card2_title: 'لماذا تفشل أدوات إزالة البيانات الوصفية التقليدية: فحص بيانات EXIF وXMP محلياً',
       card2_excerpt: 'غالباً ما تترك برامج التنظيف التقليدية الأرقام التسلسلية للكاميرات وإحداثيات الموقع وتواريخ التعديل سليمة داخل الملف الثنائي. دراسة لتنظيف الأشجار الثنائية داخل المتصفح.',
       card2_author: 'قسم أبحاث فانتوركيت',
-      card2_date: 'نظرة أولية',
+      card2_date: 'أكتوبر 2026',
       card2_read_time: 'قراءة في 5 دقائق',
+      card2_cta: 'اقرأ الدليل',
 
       // Article Card 3
       card3_cat: 'الأداء وWebAssembly',
       card3_title: 'تحويل البيانات الضخمة داخل المتصفح: معالجة ملفات بحجم 500 ميغابايت بذاكرة RAM',
       card3_excerpt: 'كيف تعمل خيوط Web Workers ومصفوفات ArrayBuffers وتقنيات WebAssembly على معالجة ملفات JSON وCSV الضخمة محلياً دون أي تكاليف سحابية.',
       card3_author: 'مختبر أداء فانتوركيت',
-      card3_date: 'المختبر الهندسي',
+      card3_date: 'أكتوبر 2026',
       card3_read_time: 'قراءة في 7 دقائق',
+      card3_cta: 'اقرأ الدليل',
 
       // RSS Callout Banner
       rss_callout_title: 'بدون أي تتبع. تغذية RSS قياسية ومفتوحة بالكامل.',
@@ -330,16 +334,18 @@
       card2_title: 'Pourquoi le nettoyage classique de métadonnées échoue : analyse locale d\'EXIF et XMP',
       card2_excerpt: 'Les nettoyeurs de fichiers laissent souvent les numéros de série, balises GPS et historiques intacts dans les flux binaires. Analyse de la purge binaire côté client.',
       card2_author: 'Par la Recherche VantorKit',
-      card2_date: 'Aperçu recherche',
+      card2_date: 'Oct 2026',
       card2_read_time: '5 min de lecture',
+      card2_cta: 'Lire le guide',
 
       // Article Card 3
       card3_cat: 'Performance & Wasm',
       card3_title: 'Transformation de mégadonnées côté client : traitement de 500 Mo en mémoire RAM',
       card3_excerpt: 'Comment les Web Workers, les ArrayBuffers et WebAssembly traitent des flux JSON/CSV massifs côté client avec zéro coût d\'infrastructure cloud.',
       card3_author: 'Par le Lab Performance VantorKit',
-      card3_date: 'Laboratoire Ingénierie',
+      card3_date: 'Oct 2026',
       card3_read_time: '7 min de lecture',
+      card3_cta: 'Lire le guide',
 
       // RSS Callout Banner
       rss_callout_title: 'Zéro traqueur. Syndication RSS ouverte et respectueuse.',
@@ -470,16 +476,18 @@
       card2_title: 'Perché la pulizia tradizionale dei metadati fallisce: ispezione locale di EXIF e XMP',
       card2_excerpt: 'I software di pulizia tradizionali lasciano intatti numeri di serie della fotocamera, coordinate GPS e cronologie. Un\'analisi della rimozione binaria lato client.',
       card2_author: 'Della Ricerca VantorKit',
-      card2_date: 'Anteprima ricerca',
+      card2_date: 'Ott 2026',
       card2_read_time: '5 min di lettura',
+      card2_cta: 'Leggi la guida',
 
       // Article Card 3
       card3_cat: 'Prestazioni & Wasm',
       card3_title: 'Trasformazione di Big Data lato client: elaborazione di payload da 500MB nella RAM',
       card3_excerpt: 'Come Web Workers in streaming, ArrayBuffer trasferibili e WebAssembly analizzano grandi file JSON/CSV lato client senza costi cloud.',
       card3_author: 'Del Laboratorio Prestazioni VantorKit',
-      card3_date: 'Laboratorio Ingegneria',
+      card3_date: 'Ott 2026',
       card3_read_time: '7 min di lettura',
+      card3_cta: 'Leggi la guida',
 
       // RSS Callout Banner
       rss_callout_title: 'Zero tracciamento. Feed RSS aperto e standard.',
@@ -626,21 +634,32 @@
 
   // --- Dropdown Management ---
   function initLangDropdown() {
-    const dropdown = document.getElementById('langDropdown') || document.querySelector('.lang-dropdown');
-    const toggleBtn = document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
-    const menu = document.getElementById('blog-lang-menu') || document.getElementById('langMenu') || document.querySelector('.lang-dropdown-menu') || document.querySelector('.lang-menu');
-    if (!toggleBtn || !menu) return;
+    function getDropdown() {
+      return document.getElementById('langDropdown') || document.querySelector('.lang-dropdown');
+    }
+    function getToggleBtn() {
+      return document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
+    }
+    function getMenu() {
+      return document.getElementById('blog-lang-menu') || document.getElementById('langMenu') || document.querySelector('.lang-dropdown-menu') || document.querySelector('.lang-menu');
+    }
 
     function openDropdown() {
-      if (dropdown) dropdown.classList.add('active');
-      menu.classList.add('show', 'open');
-      toggleBtn.setAttribute('aria-expanded', 'true');
+      const dd = getDropdown();
+      const m = getMenu();
+      const btn = getToggleBtn();
+      if (dd) dd.classList.add('active', 'show');
+      if (m) m.classList.add('active', 'show', 'open');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
     }
 
     function closeDropdown() {
-      if (dropdown) dropdown.classList.remove('active');
-      menu.classList.remove('show', 'open');
-      toggleBtn.setAttribute('aria-expanded', 'false');
+      const dd = getDropdown();
+      const m = getMenu();
+      const btn = getToggleBtn();
+      if (dd) dd.classList.remove('active', 'show');
+      if (m) m.classList.remove('active', 'show', 'open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
     }
 
     function toggleDropdown(e) {
@@ -648,7 +667,10 @@
         e.preventDefault();
         e.stopPropagation();
       }
-      const isOpen = (dropdown && dropdown.classList.contains('active')) || menu.classList.contains('show') || menu.classList.contains('open');
+      const dd = getDropdown();
+      const m = getMenu();
+      const isOpen = (dd && (dd.classList.contains('active') || dd.classList.contains('show'))) ||
+                     (m && (m.classList.contains('show') || m.classList.contains('open') || m.classList.contains('active')));
       if (isOpen) {
         closeDropdown();
       } else {
@@ -656,43 +678,72 @@
       }
     }
 
-    // Toggle button click
-    toggleBtn.addEventListener('click', toggleDropdown);
+    // Direct binding if element exists
+    const btn = getToggleBtn();
+    if (btn && !btn._bound) {
+      btn._bound = true;
+      btn.addEventListener('click', toggleDropdown);
+    }
 
-    // Outside click closes menu
-    document.addEventListener('click', function (e) {
-      if (dropdown) {
-        if (!dropdown.contains(e.target)) {
-          closeDropdown();
+    // Document event delegation for resilient interception
+    if (!document._blogDropdownDelegated) {
+      document._blogDropdownDelegated = true;
+
+      document.addEventListener('click', function (e) {
+        const toggleClick = e.target.closest('#blog-lang-btn, #langToggleBtn, .lang-btn');
+        if (toggleClick) {
+          toggleDropdown(e);
+          return;
         }
-      } else {
-        if (!toggleBtn.contains(e.target) && !menu.contains(e.target)) {
-          closeDropdown();
+
+        const optionClick = e.target.closest('.lang-option');
+        if (optionClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          const selectedLang = optionClick.getAttribute('data-lang');
+          if (selectedLang) {
+            try {
+              localStorage.setItem('vantorkit_lang', selectedLang);
+            } catch (err) {}
+            applyLang(selectedLang);
+            closeDropdown();
+          }
+          return;
         }
-      }
-    });
 
-    // Escape key closes menu
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        closeDropdown();
-      }
-    });
-
-    // Language options
-    menu.querySelectorAll('.lang-option').forEach(btn => {
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        const selectedLang = btn.getAttribute('data-lang');
-        if (selectedLang) {
-          try {
-            localStorage.setItem('vantorkit_lang', selectedLang);
-          } catch (err) {}
-          applyLang(selectedLang);
+        // Outside click
+        const dd = getDropdown();
+        if (dd && !dd.contains(e.target)) {
           closeDropdown();
         }
       });
-    });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeDropdown();
+        }
+      });
+    }
+
+    const m = getMenu();
+    if (m) {
+      m.querySelectorAll('.lang-option').forEach(opt => {
+        if (!opt._bound) {
+          opt._bound = true;
+          opt.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const selectedLang = opt.getAttribute('data-lang');
+            if (selectedLang) {
+              try {
+                localStorage.setItem('vantorkit_lang', selectedLang);
+              } catch (err) {}
+              applyLang(selectedLang);
+              closeDropdown();
+            }
+          });
+        }
+      });
+    }
   }
 
   // --- Strict BiDi & i18n Translation Dispatch ---
