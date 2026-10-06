@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>VantorKit Blog</title>
+    <link>https://vantorkit.com/blog/</link>
+    <description>Client-side engineering, web performance, and browser privacy guides</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 06 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <atom:link href="https://vantorkit.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads</title>
+      <link>https://vantorkit.com/blog/how-to-redact-pdf-locally.html</link>
+      <guid isPermaLink="true">https://vantorkit.com/blog/how-to-redact-pdf-locally.html</guid>
+      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Learn how true in-browser PDF redaction works, why drawing black boxes in standard editors leaks data, and how to flatten sensitive documents locally.</description>
+      <category>PDF Security</category>
+    </item>
+  </channel>
+</rss>

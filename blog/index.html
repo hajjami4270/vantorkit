@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../i18n-bootstrap.js"></script>
+
+  <title>VantorKit Engineering &amp; Privacy Guides — Client-Side Web Architecture</title>
+  <meta name="description" content="VantorKit Engineering &amp; Privacy Guides. In-depth technical articles on zero-server browser tools, local WebAssembly execution, true PDF redaction, and client-side data security.">
+  <link rel="canonical" href="https://vantorkit.com/blog/">
+  <link rel="alternate" type="application/rss+xml" title="VantorKit Blog RSS Feed" href="https://vantorkit.com/blog/feed.xml">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vantorkit.com/blog/">
+  <meta property="og:title" content="VantorKit Engineering &amp; Privacy Guides">
+  <meta property="og:description" content="In-depth technical articles on zero-server browser tools, local WebAssembly execution, true PDF redaction, and client-side data security.">
+  <meta property="og:image" content="https://vantorkit.com/favicon.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VantorKit Engineering &amp; Privacy Guides">
+  <meta name="twitter:description" content="In-depth technical articles on zero-server browser tools, local WebAssembly execution, true PDF redaction, and client-side data security.">
+
+  <!-- Google Fonts Preconnect Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(15, 18, 28, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 32, 48, 0.9);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #3b82f6;
+      --accent-cyan: #38bdf8;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --nav-height: 72px;
+      --success: #10b981;
+      --amber: #f59e0b;
+      --orange: #fb923c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 38px;
+      height: 38px;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45));
+      transition: transform 0.3s ease;
+    }
+
+    .brand-link:hover .brand-logo-svg {
+      transform: scale(1.05) rotate(-3deg);
+    }
+
+    .brand-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .blog-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-tools-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-tools-link:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .nav-rss-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #fdba74;
+      background: rgba(249, 115, 22, 0.12);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-rss-btn:hover {
+      background: rgba(249, 115, 22, 0.22);
+      border-color: rgba(249, 115, 22, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.2);
+    }
+
+    /* Language Switcher Dropdown */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 0.45rem 0.8rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .lang-btn:hover, .lang-dropdown.active .lang-btn {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(30, 41, 59, 0.85);
+    }
+
+    .globe-icon {
+      color: #38bdf8;
+    }
+
+    .chevron-icon {
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .lang-dropdown.active .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+      padding: 0.4rem;
+      min-width: 140px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 150;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    .lang-dropdown.active .lang-menu {
+      display: flex;
+    }
+
+    .lang-option {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    .lang-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      color: #38bdf8;
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .lang-option .check-icon {
+      opacity: 0;
+    }
+
+    .lang-option.active .check-icon {
+      opacity: 1;
+    }
+
+    /* Ambient Hero Glows */
+    .hero-section {
+      position: relative;
+      padding: 4.5rem 1.5rem 3.5rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-ambient-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(90px);
+      -webkit-filter: blur(90px);
+    }
+
+    .glow-cyan {
+      width: 480px;
+      height: 380px;
+      top: -10%;
+      left: 15%;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+    }
+
+    .glow-purple {
+      width: 460px;
+      height: 400px;
+      top: 5%;
+      right: 15%;
+      background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.16) 0%, transparent 70%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.95rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #93c5fd;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.75px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    h1 {
+      font-size: 2.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: #94a3b8;
+      font-size: 1.12rem;
+      line-height: 1.7;
+      max-width: 740px;
+      margin: 0 auto 2rem;
+      font-weight: 400;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .hero-feat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    .hero-feat-item svg {
+      color: #38bdf8;
+    }
+
+    /* Main Content Container */
+    main {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 4rem;
+      flex: 1;
+    }
+
+    /* Section Header */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1.2em;
+      background: linear-gradient(180deg, #38bdf8, #a855f7);
+      border-radius: 2px;
+    }
+
+    .feed-link-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #fdba74;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .feed-link-inline:hover {
+      color: #fb923c;
+      text-decoration: underline;
+    }
+
+    /* Article Grid */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Article Card */
+    .article-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .article-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.12);
+      background: var(--card-hover);
+    }
+
+    .article-card:hover::before {
+      opacity: 1;
+    }
+
+    .article-card.featured {
+      border-color: rgba(56, 189, 248, 0.25);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(10, 14, 24, 0.9) 100%);
+    }
+
+    .card-top {
+      margin-bottom: 1.25rem;
+    }
+
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cat-pdf {
+      background: rgba(249, 115, 22, 0.12);
+      color: #fb923c;
+      border: 1px solid rgba(249, 115, 22, 0.25);
+    }
+
+    .cat-privacy {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .cat-perf {
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+
+    .read-time {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .article-title {
+      font-size: 1.28rem;
+      font-weight: 700;
+      line-height: 1.45;
+      color: #ffffff;
+      margin-bottom: 0.85rem;
+      transition: color 0.2s ease;
+    }
+
+    .article-card:hover .article-title {
+      color: #38bdf8;
+    }
+
+    .article-excerpt {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .card-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .author-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .cta-link-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #38bdf8;
+      transition: transform 0.2s ease;
+    }
+
+    .article-card:hover .cta-link-text {
+      transform: translateX(3px);
+    }
+
+    html[dir="rtl"] .article-card:hover .cta-link-text {
+      transform: translateX(-3px);
+    }
+
+    /* Card Badge Pill */
+    .pill-preview {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Newsletter / RSS Box */
+    .rss-callout-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(20, 24, 38, 0.85) 100%);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rss-callout-card::after {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .rss-callout-left {
+      max-width: 650px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .rss-callout-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .rss-callout-desc {
+      color: var(--text-muted);
+      font-size: 0.94rem;
+      line-height: 1.6;
+    }
+
+    .rss-callout-right {
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .rss-big-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: #f97316;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(249, 115, 22, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .rss-big-btn:hover {
+      background: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(249, 115, 22, 0.45);
+    }
+
+    /* Footer */
+    footer, .site-footer {
+      position: relative;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      text-align: center;
+      padding: 3.5rem 1.5rem 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: linear-gradient(180deg, rgba(14, 18, 28, 0.65) 0%, rgba(7, 9, 14, 0.95) 100%);
+      backdrop-filter: blur(16px);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .footer-link:hover, .footer-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-x-link, .footer-github-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-x-link:hover, .footer-github-link:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .footer-copy {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      color: #94a3b8;
+      font-size: 0.84rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.15rem;
+      }
+      .articles-grid {
+        grid-template-columns: 1fr;
+      }
+      .rss-callout-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .rss-big-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .nav-tools-link span {
+        display: none;
+      }
+    }
+  </style>
+
+  <!-- Structured Data: CollectionPage & Blog -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": "https://vantorkit.com/blog/#blog",
+        "name": "VantorKit Engineering & Privacy Guides",
+        "description": "In-depth technical articles on zero-server browser tools, local WebAssembly execution, true PDF redaction, and client-side data security.",
+        "url": "https://vantorkit.com/blog/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "VantorKit",
+          "url": "https://vantorkit.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://vantorkit.com/favicon.svg"
+          }
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://vantorkit.com/blog/#webpage",
+        "url": "https://vantorkit.com/blog/",
+        "name": "VantorKit Engineering & Privacy Guides — Client-Side Web Architecture",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vantorkit.com/#website",
+          "name": "VantorKit",
+          "url": "https://vantorkit.com/"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <div class="brand-group">
+        <a href="../" class="brand-link" aria-label="VantorKit Home">
+          <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#3b82f6" />
+              </linearGradient>
+              <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#818cf8" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+              <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#60a5fa" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+              <filter id="vGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.35"/>
+              </filter>
+            </defs>
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+            <g filter="url(#vGlow)">
+              <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+              <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+              <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+              <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+            </g>
+          </svg>
+          <span class="brand-name">Vantor<span>Kit</span></span>
+        </a>
+        <span class="blog-badge">Blog</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Link Back to Main Tools -->
+        <a href="../" class="nav-tools-link" aria-label="Explore All 32 Utilities">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>All 32 Utilities</span>
+        </a>
+
+        <!-- RSS Link -->
+        <a href="./feed.xml" class="nav-rss-btn" title="RSS 2.0 Feed" aria-label="RSS Feed">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+          <span>RSS</span>
+        </a>
+
+        <!-- Language Selector -->
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language">
+            <svg class="globe-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span id="currentLangLabel">English</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="lang-menu" id="langMenu" role="menu">
+            <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+              <span>🇺🇸 English</span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+              <span>🇸🇦 العربية</span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+              <span>🇫🇷 Français</span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="it" role="menuitem">
+              <span>🇮🇹 Italiano</span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-ambient-bg" aria-hidden="true">
+      <div class="ambient-glow glow-cyan"></div>
+      <div class="ambient-glow glow-purple"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge-pill">
+        <span class="pulse-dot"></span>
+        <span>Client-Side Architecture &amp; Research</span>
+      </div>
+
+      <h1>VantorKit <span>Engineering &amp; Privacy</span> Guides</h1>
+      
+      <p class="hero-subtitle">
+        Architectural deep dives, cryptographic sandboxing, and practical engineering guides for true client-side web applications. Discover how to inspect, redact, and transform sensitive documents directly inside browser RAM without ever uploading data to the cloud.
+      </p>
+
+      <div class="hero-features">
+        <div class="hero-feat-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>0 Bytes Server Uploads</span>
+        </div>
+        <div class="hero-feat-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>In-Browser RAM Execution</span>
+        </div>
+        <div class="hero-feat-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span>Open Web &amp; Wasm Standards</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main>
+    <div class="section-header">
+      <h2 class="section-title">Latest Technical Articles</h2>
+      <a href="./feed.xml" class="feed-link-inline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+        <span>Subscribe via RSS</span>
+      </a>
+    </div>
+
+    <div class="articles-grid">
+
+      <!-- Flagship Article 1: How to Permanently Redact PDF Files Locally -->
+      <a href="./how-to-redact-pdf-locally.html" class="article-card featured">
+        <div class="card-top">
+          <div class="article-meta-row">
+            <span class="category-badge cat-pdf">PDF Security &amp; Privacy</span>
+            <span class="read-time">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              6 min read
+            </span>
+          </div>
+          <h3 class="article-title">How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads</h3>
+          <p class="article-excerpt">
+            Drawing black boxes over text in standard PDF viewers creates visual masks that retain underlying vector characters. Learn why traditional redaction fails and how true HTML5 Canvas rasterization flattens documents locally in RAM.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="author-info">
+            <span>By VantorKit Security Team</span>
+            <span>•</span>
+            <span>Oct 2026</span>
+          </div>
+          <span class="cta-link-text">
+            Read Guide
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Architecture Preview Card 2: Metadata Sanitization -->
+      <div class="article-card">
+        <div class="card-top">
+          <div class="article-meta-row">
+            <span class="category-badge cat-privacy">Forensics &amp; Privacy</span>
+            <span class="pill-preview">Coming Soon</span>
+          </div>
+          <h3 class="article-title">Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP &amp; Document Streams</h3>
+          <p class="article-excerpt">
+            Standard file cleaners often leave hidden camera serial numbers, GPS coordinates, and revision histories intact in document binary trees. An analysis of client-side binary tree purges.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="author-info">
+            <span>By VantorKit Research</span>
+            <span>•</span>
+            <span>Research Preview</span>
+          </div>
+          <span class="pill-preview">5 min read</span>
+        </div>
+      </div>
+
+      <!-- Architecture Preview Card 3: Big Data in Browser -->
+      <div class="article-card">
+        <div class="card-top">
+          <div class="article-meta-row">
+            <span class="category-badge cat-perf">Performance &amp; Wasm</span>
+            <span class="pill-preview">Coming Soon</span>
+          </div>
+          <h3 class="article-title">Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM</h3>
+          <p class="article-excerpt">
+            How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="author-info">
+            <span>By VantorKit Performance Lab</span>
+            <span>•</span>
+            <span>Engineering Lab</span>
+          </div>
+          <span class="pill-preview">7 min read</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RSS Callout Card -->
+    <div class="rss-callout-card">
+      <div class="rss-callout-left">
+        <h3 class="rss-callout-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.5"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+          Zero Trackers. Pure Open Web RSS Syndication.
+        </h3>
+        <p class="rss-callout-desc">
+          We don't collect your email address, run newsletter tracking pixels, or store cookies. Stay updated on our latest client-side browser engineering guides and cryptographic tools directly via standard RSS 2.0.
+        </p>
+      </div>
+      <div class="rss-callout-right">
+        <a href="./feed.xml" class="rss-big-btn" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+          Open RSS Feed (`/blog/feed.xml`)
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal &amp; Support">
+        <a href="../privacy.html" class="footer-link">Privacy Policy</a>
+        <a href="../terms.html" class="footer-link">Terms of Service</a>
+        <a href="../about.html" class="footer-link">About Us</a>
+        <a href="../contact.html" class="footer-link">Contact</a>
+        <a href="./" class="footer-link active">Blog</a>
+        <a href="https://github.com/hajjami4270/vantorkit" target="_blank" rel="noopener noreferrer" class="footer-link footer-github-link" aria-label="View VantorKit on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://fazier.com/launches/vantorkit.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center opacity-85 hover:opacity-100 transition-opacity footer-fazier-link" aria-label="Fazier badge">
+          <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width="120" height="32" alt="Fazier badge" />
+        </a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Subsystem Scripts -->
+  <script src="./blog.js" defer></script>
+</body>
+</html>

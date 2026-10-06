@@ -242,6 +242,20 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Engineering & Privacy Guides Blog Subsystem -->
+  <url>
+    <loc>https://vantorkit.com/blog/</loc>
+    <lastmod>2026-10-06T12:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/blog/how-to-redact-pdf-locally.html</loc>
+    <lastmod>2026-10-06T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Legal & Transparency Pages (AdSense Compliance) -->
   <url>
     <loc>https://vantorkit.com/privacy.html</loc>
