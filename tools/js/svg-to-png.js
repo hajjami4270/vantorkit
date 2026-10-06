@@ -4,6 +4,7 @@
       // --- Internationalization (i18n) Dictionary ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           backLink: "← Back to Tools",
           brandBadge: "Images & Vector • 100% Client-Side • Ultra-HD Rasterizer",
           pageTitle: "SVG to <span>PNG Converter</span>",
@@ -54,6 +55,7 @@
           loadedFileToast: "SVG loaded successfully!"
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           backLink: "← العودة إلى الأدوات",
           brandBadge: "الصور والمتجهات • محلي 100% في المتصفح • تنقيط فائق الدقة",
           pageTitle: "تحويل SVG إلى <span>صورة PNG</span>",
@@ -103,6 +105,7 @@
           loadedFileToast: "تم تحميل ملف SVG بنجاح!"
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           backLink: "← Retour aux outils",
           brandBadge: "Images & Vecteur • 100% Côté Client • Rastériseur Ultra-HD",
           pageTitle: "Convertisseur <span>SVG en PNG</span>",
@@ -152,6 +155,7 @@
           loadedFileToast: "Fichier SVG chargé avec succès !"
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           backLink: "← Torna agli strumenti",
           brandBadge: "Immagini & Vettoriale • 100% Lato Client • Rasterizzatore Ultra-HD",
           pageTitle: "Convertitore da <span>SVG a PNG</span>",

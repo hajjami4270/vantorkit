@@ -501,7 +501,7 @@
         dispSavingsSub.textContent = `Pay off ${timeStr} earlier!`;
         savingsCallout.style.display = 'flex';
         savingsTitle.textContent = `Accelerated Payoff Benefit (${timeStr} saved):`;
-        savingsDesc.textContent = `You will save ${formatCompactCurrency(res.interestSaved)} in interest charges`;
+        savingsDesc.textContent = "You will save " + formatCompactCurrency(res.interestSaved) + " in interest charges";
         savingsTotal.textContent = `${formatCompactCurrency(res.interestSaved)} Saved`;
       } else {
         dispSavingsSub.textContent = dict().subOnSchedule;

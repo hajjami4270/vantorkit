@@ -640,4 +640,44 @@ html[dir="rtl"] .vk-sidebar-cat-item:hover .vk-sidebar-cat-arrow {
   outline-offset: 2px;
 }
 
+/* ==========================================================================
+   Dropzone Privacy Trust Badge
+   Subtle, localized security micro-badge adjacent to drag-and-drop areas
+   ========================================================================== */
+.dropzone-privacy-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.85rem;
+  margin-bottom: 0.85rem;
+  text-align: center;
+}
+
+.dropzone-privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 9999px;
+  padding: 0.38rem 0.95rem;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dropzone-privacy-badge:hover {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.38);
+}
+
+
 

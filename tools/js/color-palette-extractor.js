@@ -4,6 +4,7 @@
       // --- Multi-Language (i18n) Translations ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           backLink: "← Back to Tools",
           brandBadge: "Images & Design • 100% Client-Side • Canvas Quantization",
           pageTitle: "Color Palette <span>Extractor</span>",
@@ -65,6 +66,7 @@
           sampleLoadedToast: "Sample image loaded successfully!"
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           backLink: "← العودة إلى الأدوات",
           brandBadge: "الصور والتصميم • محلي 100% في المتصفح • تكميم الألوان بالكانفاس",
           pageTitle: "استخراج <span>لوحة الألوان</span>",
@@ -125,6 +127,7 @@
           sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!"
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           backLink: "← Retour aux Outils",
           brandBadge: "Images & Design • 100% Côté Client • Quantification Canvas",
           pageTitle: "Extracteur de <span>Palette de Couleurs</span>",
@@ -185,6 +188,7 @@
           sampleLoadedToast: "Image exemple chargée avec succès !"
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           backLink: "← Torna agli Strumenti",
           brandBadge: "Immagini & Design • 100% Lato Client • Quantizzazione Canvas",
           pageTitle: "Estrattore di <span>Palette Colori</span>",

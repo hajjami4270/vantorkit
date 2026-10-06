@@ -5,6 +5,7 @@
 
     const TRANSLATIONS = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "← Back to Tools",
         badgePill: "Client-Side • Privacy-First • No Logs",
         toolTitle: "Audio Trimmer & Cutter",
@@ -56,6 +57,7 @@
         footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "الرجوع إلى الأدوات ←",
         badgePill: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
         toolTitle: "قص وتقطيع الصوت",
@@ -107,6 +109,7 @@
         footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "← Retour aux outils",
         badgePill: "Côté client • Confidentialité totale • Zéro journal",
         toolTitle: "Découpeur audio & Trimmer",
@@ -158,6 +161,7 @@
         footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tous les traitements s'effectuent dans votre navigateur."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "← Torna agli strumenti",
         badgePill: "Lato Client • Massima Privacy • Zero Log",
         toolTitle: "Taglia Audio & Trimmer",

@@ -2,6 +2,7 @@
     // 4-Language Translation Dictionaries
     const I18N = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "← Back to Tools",
         badgePill: "100% Client-Side • Canvas Powered • Multi-Resolution Packaging",
         toolTitle: "Multi-Size Favicon Builder",
@@ -58,6 +59,7 @@
         faq4A: "Our builder packages a genuine multi-resolution binary ICO container containing 16×16, 32×32, and 48×48 frames with full 32-bit alpha transparency for seamless desktop rendering."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "الرجوع إلى الأدوات ←",
         badgePill: "100% داخل المتصفح • يعتمد على Canvas • حزمة متعددة الدقات",
         toolTitle: "منشئ أيقونات Favicon المتعددة",
@@ -114,6 +116,7 @@
         faq4A: "ينتج أداتنا ملف ICO ثنائي حقيقي متعدد الدقات يضم إطارات 16×16 و 32×32 و 48×48 مع شفافية ألفا 32 بت كاملة لأداء رائع على كافة أنظمة سطح المكتب."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "← Retour aux outils",
         badgePill: "100% Côté Client • Technologie Canvas • Export Multi-Résolution",
         toolTitle: "Générateur de Favicon Multi-Tailles",
@@ -170,6 +173,7 @@
         faq4A: "Notre outil assemble un conteneur binaire ICO multi-trames (16×16, 32×32 et 48×48) avec une transparence alpha 32 bits authentique."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "← Torna agli strumenti",
         badgePill: "100% Lato Client • Motore Canvas • Pacchetto Multi-Risoluzione",
         toolTitle: "Generatore di Favicon Multi-Dimensione",

@@ -4,6 +4,7 @@
       // --- Translations Dictionary (EN, AR, FR, IT) ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           langLabel: "English",
           backLink: "← Back to Tools",
           heroBadge: "Client-Side • Privacy-First • Zero Bytes Transferred",
@@ -57,6 +58,7 @@
           footerCopy: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           langLabel: "العربية",
           backLink: "→ العودة للأدوات",
           heroBadge: "على جهازك • خصوصية كاملة • بدون رفع أي بيانات",
@@ -110,6 +112,7 @@
           footerCopy: "© 2026 فانتوركيت. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           langLabel: "Français",
           backLink: "← Retour aux outils",
           heroBadge: "Côté Client • Confidentialité Absolue • Zéro Donnée Transférée",
@@ -163,6 +166,7 @@
           footerCopy: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits."
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           langLabel: "Italiano",
           backLink: "← Torna agli strumenti",
           heroBadge: "Lato Client • Massima Privacy • Nessun Upload",
@@ -260,6 +264,8 @@
       const langOptions = document.querySelectorAll('.lang-option');
 
       function setLanguage(lang) {
+        window.setLanguage = setLanguage;
+        window.applyLanguage = setLanguage;
         if (!I18N[lang]) lang = 'en';
         currentLang = lang;
         localStorage.setItem('vantorkit_lang', lang);

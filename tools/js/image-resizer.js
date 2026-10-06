@@ -4,6 +4,7 @@
       // --- Multi-Language (i18n) Translations ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           backLink: "← Back to Tools",
           brandBadge: "Images & Vector • 100% Client-Side • In-Browser Resampling",
           pageTitle: "Image Resizer <span>&amp; Crop</span>",
@@ -63,6 +64,7 @@
           sampleLoadedToast: "Sample image loaded successfully!"
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           backLink: "← العودة إلى الأدوات",
           brandBadge: "الصور والرسومات • محلي 100% في المتصفح • إعادة تشكيل دقيقة",
           pageTitle: "تعديل أبعاد <span>وقص الصور</span>",
@@ -121,6 +123,7 @@
           sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!"
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           backLink: "← Retour aux Outils",
           brandBadge: "Images & Vecteurs • 100% Côté Client • Rééchantillonnage Local",
           pageTitle: "Redimensionner <span>&amp; Rogner l'Image</span>",
@@ -179,6 +182,7 @@
           sampleLoadedToast: "Image exemple chargée avec succès !"
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           backLink: "← Torna agli Strumenti",
           brandBadge: "Immagini & Vettori • 100% Lato Client • Ricampionamento nel Browser",
           pageTitle: "Ridimensiona <span>&amp; Ritaglia Immagine</span>",

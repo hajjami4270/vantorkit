@@ -1,5 +1,6 @@
 const I18N = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "← Back to Tools",
         brandBadge: "Client-Side • True Flattening • Zero Server Uploads",
         heroSubtitle: "Permanently blackout sensitive text, redact private records with unrecoverable pixel flattening, and place digital signatures—100% locally in your browser.",
@@ -53,6 +54,7 @@ const I18N = {
         footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "الرجوع إلى الأدوات ←",
         brandBadge: "معالجة محلية • تسطيح كامل • بدون خوادم",
         heroSubtitle: "احجب النصوص السرية والمعلومات الحساسة نهائياً بتسطيح البكسلات غير القابل للاسترجاع وضع توقيعك الرقمي—محلياً بنسبة 100% في متصفحك.",
@@ -106,6 +108,7 @@ const I18N = {
         footerCopy: "© 2026 فانتوركيت. أدوات ويب صممت بخصوصية بيانات مطلقة ومعالجة محلية."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "← Retour aux outils",
         brandBadge: "Côté Client • Aplatissement Réel • Zéro Téléversement",
         heroSubtitle: "Masquez définitivement les données confidentielles par aplatissement de pixels et apposez votre signature numérique—100% localement dans votre navigateur.",
@@ -159,6 +162,7 @@ const I18N = {
         footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "← Torna agli strumenti",
         brandBadge: "Lato Client • Appiattimento Reale • Zero Server",
         heroSubtitle: "Oscura permanentemente dati sensibili con appiattimento irreversibile dei pixel e apponi firme digitali—100% in locale nel browser.",
@@ -990,6 +994,8 @@ const I18N = {
     };
 
     function setLanguage(lang) {
+      window.setLanguage = setLanguage;
+      window.applyLanguage = setLanguage;
       if (!I18N[lang]) lang = 'en';
       try { localStorage.setItem('vantorkit_lang', lang); } catch (e) {}
 

@@ -5,6 +5,7 @@
     }
     const I18N={
       en:{
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         langLabel:'English',backLink:'\u2190 Back to Tools',
         brandBadge:'PDF & Files \u2022 100% Client-Side \u2022 Zero Cloud Uploads',
         pageSubtitle:'Extract text from PDF documents and export a structured .docx file entirely in your browser. No uploads. Total privacy.',
@@ -41,6 +42,7 @@
         toastCleared:'\u{1f5d1}\ufe0f File cleared.',toastLibErr:'\u26a0\ufe0f Libraries not yet loaded. Please wait.',toastNoFile:'\u{1f4c4} Please select a PDF file first.'
       },
       ar:{
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         langLabel:'\u0627\u0644\u0639\u0631\u0628\u064a\u0629',backLink:'\u2190 \u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0623\u062f\u0648\u0627\u062a',
         brandBadge:'PDF \u0648\u0627\u0644\u0645\u0644\u0641\u0627\u062a \u2022 \u0645\u0639\u0627\u0644\u062c\u0629 \u0645\u062d\u0644\u064a\u0629 100% \u2022 \u0644\u0627 \u0631\u0641\u0639 \u0644\u0644\u0645\u0644\u0641\u0627\u062a',
         pageSubtitle:'\u0627\u0633\u062a\u062e\u0631\u062c \u0627\u0644\u0646\u0635\u0648\u0635 \u0645\u0646 \u0645\u0644\u0641\u0627\u062a PDF \u0648\u0635\u062f\u0651\u0631\u0647\u0627 \u0643\u0645\u0644\u0641 .docx \u062f\u0627\u062e\u0644 \u0645\u062a\u0635\u0641\u062d\u0643 \u062a\u0645\u0627\u0645\u0627\u064b. \u0628\u062f\u0648\u0646 \u0631\u0641\u0639. \u062e\u0635\u0648\u0635\u064a\u0629 \u0643\u0627\u0645\u0644\u0629.',
@@ -73,6 +75,7 @@
         toastCleared:'\u{1f5d1}\ufe0f \u062a\u0645 \u0627\u0644\u0645\u0633\u062d.',toastLibErr:'\u26a0\ufe0f \u0627\u0644\u0645\u0643\u062a\u0628\u0627\u062a \u0644\u0645 \u062a\u064f\u062d\u0645\u0651\u0644 \u0628\u0639\u062f.',toastNoFile:'\u{1f4c4} \u064a\u0631\u062c\u0649 \u0627\u062e\u062a\u064a\u0627\u0631 \u0645\u0644\u0641 PDF \u0623\u0648\u0644\u0627\u064b.'
       },
       fr:{
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         langLabel:'Fran\u00e7ais',backLink:'\u2190 Retour aux Outils',
         brandBadge:'PDF & Fichiers \u2022 100% C\u00f4t\u00e9 Client \u2022 Z\u00e9ro Upload Cloud',
         pageSubtitle:'Extrayez le texte de vos PDF et exportez un fichier .docx structur\u00e9 enti\u00e8rement dans votre navigateur. Z\u00e9ro upload. Confidentialit\u00e9 totale.',
@@ -106,6 +109,7 @@
         toastCleared:'\u{1f5d1}\ufe0f Fichier effac\u00e9.',toastLibErr:'\u26a0\ufe0f Biblioth\u00e8ques pas encore charg\u00e9es.',toastNoFile:"\u{1f4c4} Veuillez d'abord s\u00e9lectionner un fichier PDF."
       },
       it:{
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         langLabel:'Italiano',backLink:'\u2190 Torna agli Strumenti',
         brandBadge:'PDF & File \u2022 100% Lato Client \u2022 Zero Upload Cloud',
         pageSubtitle:'Estrai testo da PDF e genera un file .docx strutturato interamente nel tuo browser. Nessun upload. Privacy totale.',

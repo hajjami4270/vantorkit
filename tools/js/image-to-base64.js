@@ -1,6 +1,7 @@
 (function() {
     const I18N = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         langLabel: "English",
         backLink: "← Back to Tools",
         badgePill: "100% Client-Side • Zero Cloud Uploads • Instant Encoding",
@@ -46,6 +47,7 @@
         toastCleared: "Workspace cleared."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         langLabel: "العربية",
         backLink: "الرجوع إلى الأدوات ←",
         badgePill: "100% محلي في المتصفح • بدون رفع للسحابة • ترميز فوري",
@@ -91,6 +93,7 @@
         toastCleared: "تم تفريغ مساحة العمل."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         langLabel: "Français",
         backLink: "← Retour aux outils",
         badgePill: "100% Côté Client • Zéro Téléversement Cloud • Encodage Instantané",
@@ -136,6 +139,7 @@
         toastCleared: "Espace de travail réinitialisé."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         langLabel: "Italiano",
         backLink: "← Torna agli strumenti",
         badgePill: "100% Lato Client • Zero Caricamenti Cloud • Codifica Istantanea",

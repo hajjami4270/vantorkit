@@ -4,6 +4,7 @@
       // --- Internationalization (i18n) Dictionary ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           backLink: "← Back to Tools",
           brandBadge: "PDF & Files • 100% Client-Side • Zero Cloud Uploads",
           pageTitle: "PDF Split & <span>Extract Pages</span>",
@@ -57,6 +58,7 @@
           downloadZipSuccess: "ZIP archive downloaded successfully!"
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           backLink: "← العودة إلى الأدوات",
           brandBadge: "ملفات PDF • محلي 100% في المتصفح • بدون رفع للسحابة",
           pageTitle: "تقسيم ملفات PDF / <span>استخراج الصفحات</span>",
@@ -109,6 +111,7 @@
           downloadZipSuccess: "تم تنزيل أرشيف ZIP بنجاح!"
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           backLink: "← Retour aux outils",
           brandBadge: "PDF & Fichiers • 100% Côté Client • Zéro Téléversement",
           pageTitle: "Division PDF / <span>Extraire des pages</span>",
@@ -161,6 +164,7 @@
           downloadZipSuccess: "Archive ZIP téléchargée avec succès !"
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           backLink: "← Torna agli strumenti",
           brandBadge: "PDF & File • 100% Lato Client • Zero Caricamenti Cloud",
           pageTitle: "Dividi PDF / <span>Estrai pagine</span>",

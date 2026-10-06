@@ -5,6 +5,7 @@
 
     const TRANSLATIONS = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "← Back to Tools",
         badgePill: "Client-Side • Privacy-First • No Logs",
         toolTitle: "Image Compressor & WebP Optimizer",
@@ -60,6 +61,7 @@
         toastError: "Unable to process image format."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "← العودة إلى الأدوات",
         badgePill: "على جهازك 100% • خصوصية تامة • دون خوادم",
         toolTitle: "ضاغط الصور ومُحسّن WEBP",
@@ -115,6 +117,7 @@
         toastError: "تعذر معالجة تنسيق الصورة."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "← Retour aux Outils",
         badgePill: "Côté Client • Confidentialité Totale • Zéro Log",
         toolTitle: "Compresseur d'Images & Optimiseur WebP",
@@ -170,6 +173,7 @@
         toastError: "Impossible de traiter ce format d'image."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "← Torna agli Strumenti",
         badgePill: "Lato Client • Massima Privacy • Zero Log",
         toolTitle: "Compressore Immagini & Ottimizzatore WebP",

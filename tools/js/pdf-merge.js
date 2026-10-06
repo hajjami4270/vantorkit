@@ -4,6 +4,7 @@
       // --- Internationalization (i18n) Dictionary ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           backLink: "← Back to Tools",
           clientBadge: "Client-Side • Privacy-First",
           brandBadge: "PDF & Files • 100% Client-Side • Zero Cloud Uploads",
@@ -50,6 +51,7 @@
           mergeFailed: "Failed to merge PDFs: "
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           backLink: "← العودة إلى الأدوات",
           clientBadge: "محلي بالكامل • الأولوية للخصوصية",
           brandBadge: "ملفات PDF • محلي 100% في المتصفح • بدون رفع للسحابة",
@@ -96,6 +98,7 @@
           mergeFailed: "فشل دمج ملفات PDF: "
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           backLink: "← Retour aux outils",
           clientBadge: "Côté Client • Priorité Confidentialité",
           brandBadge: "PDF & Fichiers • 100% Côté Client • Zéro Téléversement",
@@ -142,6 +145,7 @@
           mergeFailed: "Échec de la fusion des PDF : "
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           backLink: "← Torna agli strumenti",
           clientBadge: "Lato Client • Privacy Garantita",
           brandBadge: "PDF & File • 100% Lato Client • Zero Caricamenti Cloud",

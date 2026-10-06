@@ -1,5 +1,6 @@
 const I18N = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "All Tools",
         heroBadge: "Web Worker Streaming • 100% Client-Side • Zero Leak",
         heroTitle: "Offline Big-Data Transformer",
@@ -49,6 +50,7 @@ const I18N = {
         footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "جميع الأدوات",
         heroBadge: "معالجة متعددة الخيوط Web Worker • على جهازك 100% • بدون تسريب",
         heroTitle: "محول البيانات الضخمة بدون إنترنت",
@@ -98,6 +100,7 @@ const I18N = {
         footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "Tous les Outils",
         heroBadge: "Streaming Web Worker • 100% Côté Client • Aucune Fuite",
         heroTitle: "Transformateur Big-Data Hors Ligne",
@@ -145,6 +148,7 @@ const I18N = {
         footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "Tutti gli Strumenti",
         heroBadge: "Streaming Web Worker • 100% Lato Client • Zero Perdite",
         heroTitle: "Trasformatore Big-Data Offline",
@@ -1085,6 +1089,8 @@ const I18N = {
 
       // Language Switcher & i18n
       function setLanguage(lang) {
+        window.setLanguage = setLanguage;
+        window.applyLanguage = setLanguage;
         if (!I18N[lang]) lang = 'en';
         currentLang = lang;
         try {

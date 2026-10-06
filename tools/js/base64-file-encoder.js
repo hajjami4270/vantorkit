@@ -5,6 +5,7 @@
 
     const TRANSLATIONS = {
       en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
         backLink: "← Back to Tools",
         badgePill: "Client-Side • Privacy-First • No Logs",
         toolTitle: "Base64 File Encoder & Decoder",
@@ -45,6 +46,7 @@
         toastCleared: "Workspace cleared."
       },
       ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
         backLink: "← العودة إلى الأدوات",
         badgePill: "على جهازك 100% • خصوصية تامة • دون خوادم",
         toolTitle: "محول ومفكك تشفير ملفات Base64",
@@ -85,6 +87,7 @@
         toastCleared: "تم مسح مساحة العمل."
       },
       fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
         backLink: "← Retour aux Outils",
         badgePill: "Côté Client • Confidentialité Totale • Zéro Log",
         toolTitle: "Encodeur & Décodeur de Fichiers Base64",
@@ -125,6 +128,7 @@
         toastCleared: "Espace de travail réinitialisé."
       },
       it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
         backLink: "← Torna agli Strumenti",
         badgePill: "Lato Client • Massima Privacy • Zero Log",
         toolTitle: "Codificatore & Decodificatore File Base64",

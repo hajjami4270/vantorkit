@@ -377,6 +377,7 @@
       // --- i18n Translation Dictionary ---
       const I18N = {
         en: {
+        dropzonePrivacyBadge: "🔒 100% Private: Processed locally in browser RAM (0 bytes uploaded)",
           langLabel: "English",
           backLink: "← Back to Tools",
           brandBadge: "PDF &amp; Files • Client-Side • Zero Server Uploads",
@@ -410,6 +411,7 @@
           footerText: "© 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally."
         },
         ar: {
+        dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
           langLabel: "العربية",
           backLink: "← العودة إلى الأدوات",
           brandBadge: "ملفات وPDF • معالجة محلية • بدون رفع على الخوادم",
@@ -443,6 +445,7 @@
           footerText: "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً على جهازك."
         },
         fr: {
+        dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
           langLabel: "Français",
           backLink: "← Retour aux outils",
           brandBadge: "PDF &amp; Fichiers • Côté Client • Zéro Téléversement Serveur",
@@ -476,6 +479,7 @@
           footerText: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits. Tout le traitement est effectué localement."
         },
         it: {
+        dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
           langLabel: "Italiano",
           backLink: "← Torna agli strumenti",
           brandBadge: "PDF &amp; File • Lato Client • Zero Caricamenti su Server",
