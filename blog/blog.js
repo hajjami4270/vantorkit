@@ -617,43 +617,79 @@
     });
   }
 
+  const LANG_FLAGS = {
+    en: '🇺🇸',
+    ar: '🇸🇦',
+    fr: '🇫🇷',
+    it: '🇮🇹'
+  };
+
   // --- Dropdown Management ---
   function initLangDropdown() {
-    const dropdown = document.getElementById('langDropdown');
-    const toggleBtn = document.getElementById('langToggleBtn');
-    const menu = document.getElementById('langMenu');
-    if (!dropdown || !toggleBtn || !menu) return;
+    const dropdown = document.getElementById('langDropdown') || document.querySelector('.lang-dropdown');
+    const toggleBtn = document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
+    const menu = document.getElementById('blog-lang-menu') || document.getElementById('langMenu') || document.querySelector('.lang-dropdown-menu') || document.querySelector('.lang-menu');
+    if (!toggleBtn || !menu) return;
 
-    toggleBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle('active');
-      toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
+    function openDropdown() {
+      if (dropdown) dropdown.classList.add('active');
+      menu.classList.add('show', 'open');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    }
 
+    function closeDropdown() {
+      if (dropdown) dropdown.classList.remove('active');
+      menu.classList.remove('show', 'open');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleDropdown(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const isOpen = (dropdown && dropdown.classList.contains('active')) || menu.classList.contains('show') || menu.classList.contains('open');
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+
+    // Toggle button click
+    toggleBtn.addEventListener('click', toggleDropdown);
+
+    // Outside click closes menu
     document.addEventListener('click', function (e) {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('active');
-        toggleBtn.setAttribute('aria-expanded', 'false');
+      if (dropdown) {
+        if (!dropdown.contains(e.target)) {
+          closeDropdown();
+        }
+      } else {
+        if (!toggleBtn.contains(e.target) && !menu.contains(e.target)) {
+          closeDropdown();
+        }
       }
     });
 
+    // Escape key closes menu
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        dropdown.classList.remove('active');
-        toggleBtn.setAttribute('aria-expanded', 'false');
+        closeDropdown();
       }
     });
 
+    // Language options
     menu.querySelectorAll('.lang-option').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
         const selectedLang = btn.getAttribute('data-lang');
         if (selectedLang) {
           try {
             localStorage.setItem('vantorkit_lang', selectedLang);
           } catch (err) {}
           applyLang(selectedLang);
-          dropdown.classList.remove('active');
-          toggleBtn.setAttribute('aria-expanded', 'false');
+          closeDropdown();
         }
       });
     });
@@ -664,13 +700,25 @@
     if (!LANG_NAMES[lang]) lang = 'en';
     const isRtl = lang === 'ar';
 
-    // 1. Strict Root Direction & Lang Attributes
+    // 1. Strict Root Direction, Lang Attributes, and Alignment
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
     document.documentElement.setAttribute('lang', lang);
     document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+    document.documentElement.style.direction = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.style.textAlign = isRtl ? 'right' : 'left';
 
-    // 2. Active Label in Navbar Dropdown
+    // 2. Active Label & Accessible Label in Navbar Dropdown
     const label = document.getElementById('currentLangLabel');
     if (label) label.textContent = LANG_NAMES[lang];
+
+    const flagEl = document.getElementById('currentLangFlag');
+    if (flagEl && LANG_FLAGS[lang]) flagEl.textContent = LANG_FLAGS[lang];
+
+    const toggleBtn = document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-label', 'Select Language (' + LANG_NAMES[lang] + ')');
+    }
 
     // 3. Mark Active Option in Menu
     document.querySelectorAll('.lang-option').forEach(opt => {
