@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./i18n-bootstrap.js"></script>
+  <script src="/i18n-bootstrap.js" defer></script>
 
   <title>VantorKit — Free Fast Online Utility Tools</title>
   <meta name="description" content="A fast, private, and secure suite of free online web tools for text, math, productivity, images, and files. 100% client-side with zero logs.">
@@ -13,18 +13,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Non-blocking Google Fonts with display=swap -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <!-- Google Fonts with display=swap -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-  </noscript>
 
-  <!-- Non-blocking Sidebar Stylesheet -->
-  <link rel="preload" href="./sidebar.css" as="style">
-  <link rel="stylesheet" href="./sidebar.css">
+  <!-- Non-blocking Sidebar Stylesheet Preload (Full stylesheet loaded before body closing tag) -->
+  <link rel="preload" href="/sidebar.css" as="style">
   <noscript>
-    <link rel="stylesheet" href="./sidebar.css">
+    <link rel="stylesheet" href="/sidebar.css">
   </noscript>
 
   <style>
@@ -124,6 +119,53 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    /* Critical Sidebar Toggle (Above-the-Fold Navbar) */
+    .vk-sidebar-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .vk-sidebar-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main, #f8fafc);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      flex-shrink: 0;
+      outline: none;
+    }
+
+    .vk-sidebar-toggle:hover,
+    .vk-sidebar-toggle:focus-visible {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(30, 41, 59, 0.85);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      transform: scale(1.04);
+    }
+
+    .vk-sidebar-toggle[aria-expanded="true"] {
+      border-color: rgba(56, 189, 248, 0.6);
+      background: rgba(14, 165, 233, 0.15);
+      color: #38bdf8;
+    }
+
+    .vk-sidebar-toggle-icon {
+      width: 20px;
+      height: 20px;
+      display: block;
     }
 
     .brand-link {
@@ -1474,7 +1516,7 @@
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
-  <script src="./gtag-init.js" defer></script>
+  <script src="/gtag-init.js" defer></script>
 </head>
 <body>
 
@@ -2391,6 +2433,9 @@
       <p class="footer-copy" id="footerCopyright" data-i18n="footerText">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
     </div>
   </footer>
+
+  <!-- Sidebar Stylesheet (Non-critical, preloaded in head) -->
+  <link rel="stylesheet" href="/sidebar.css">
 
   <!-- Complete Multi-Language (i18n) Engine & Interactive Filtering -->
   <script src="./js/index.js" defer></script>
