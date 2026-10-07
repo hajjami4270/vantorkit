@@ -1,0 +1,54 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#07090e" />
+  <circle cx="200" cy="150" r="400" fill="#3b82f6" fill-opacity="0.12" filter="blur(140px)" />
+  <circle cx="1000" cy="480" r="450" fill="#a855f7" fill-opacity="0.12" filter="blur(160px)" />
+  <rect x="40" y="40" width="1120" height="550" rx="24" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
+  
+  <g transform="translate(100, 165)">
+    <!-- Logo 160x160 -->
+    <g transform="scale(4)">
+      <defs>
+        <linearGradient id="ogGradL" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#38bdf8" />
+          <stop offset="100%" stop-color="#3b82f6" />
+        </linearGradient>
+        <linearGradient id="ogGradR" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#818cf8" />
+          <stop offset="100%" stop-color="#c084fc" />
+        </linearGradient>
+        <linearGradient id="ogGradC" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#60a5fa" />
+          <stop offset="100%" stop-color="#a855f7" />
+        </linearGradient>
+      </defs>
+      <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.4)" stroke-width="1.5" />
+      <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#ogGradL)" />
+      <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#ogGradR)" />
+      <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#ogGradC)" />
+      <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+    </g>
+
+    <!-- Typography -->
+    <text x="200" y="85" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="76" letter-spacing="-1.5">Vantor<tspan fill="#38bdf8">Kit</tspan></text>
+    <rect x="540" y="28" width="70" height="34" rx="8" fill="rgba(56, 189, 248, 0.15)" stroke="rgba(56, 189, 248, 0.3)" />
+    <text x="553" y="51" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="16">v1.0</text>
+    
+    <text x="205" y="145" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="500" font-size="32">Fast, Private &amp; Free Web Utilities</text>
+    <text x="205" y="195" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="400" font-size="22">100% Client-Side In-Browser Processing • Zero Server Logs • Offline Capable</text>
+  </g>
+
+  <!-- Feature Pills -->
+  <g transform="translate(100, 480)">
+    <rect x="0" y="0" width="220" height="48" rx="24" fill="rgba(30, 41, 59, 0.7)" stroke="rgba(255, 255, 255, 0.1)" />
+    <text x="32" y="31" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="18">🔒 Zero Server Logs</text>
+    
+    <rect x="240" y="0" width="230" height="48" rx="24" fill="rgba(30, 41, 59, 0.7)" stroke="rgba(255, 255, 255, 0.1)" />
+    <text x="272" y="31" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="18">⚡ Instant Execution</text>
+
+    <rect x="490" y="0" width="240" height="48" rx="24" fill="rgba(30, 41, 59, 0.7)" stroke="rgba(255, 255, 255, 0.1)" />
+    <text x="522" y="31" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="18">🛡️ Client-Side Privacy</text>
+
+    <rect x="750" y="0" width="250" height="48" rx="24" fill="rgba(30, 41, 59, 0.7)" stroke="rgba(255, 255, 255, 0.1)" />
+    <text x="782" y="31" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="18">🌐 32 Free Online Tools</text>
+  </g>
+</svg>
