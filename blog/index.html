@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../i18n-bootstrap.js"></script>
+  <script src="/i18n-bootstrap.js"></script>
 
   <title>VantorKit Engineering &amp; Privacy Guides — Client-Side Web Architecture</title>
   <meta name="description" content="VantorKit Engineering &amp; Privacy Guides. In-depth technical articles on zero-server browser tools, local WebAssembly execution, true PDF redaction, and client-side data security.">
@@ -63,6 +63,14 @@
 
     html[dir="rtl"] * {
       font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] code,
+    html[dir="rtl"] pre,
+    html[dir="rtl"] .mono-val {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     }
 
     body {
@@ -945,13 +953,13 @@
 
         <!-- Language Selector -->
         <div class="lang-dropdown" id="langDropdown">
-          <button type="button" class="lang-btn" id="blog-lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
             <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span id="currentLangLabel">English</span>
             <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           
-          <div class="lang-menu lang-dropdown-menu" id="blog-lang-menu" role="menu">
+          <div class="lang-menu lang-dropdown-menu" id="langMenu" role="menu">
             <button type="button" class="lang-option active" data-lang="en" role="menuitem">
               <span class="lang-item-content">
                 <span>🇺🇸</span>
@@ -1168,6 +1176,6 @@
   </footer>
 
   <!-- Subsystem Scripts -->
-  <script src="./blog.js" defer></script>
+  <script src="/blog/blog.js" defer></script>
 </body>
 </html>

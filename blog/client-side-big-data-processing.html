@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" id="htmlRoot">
 <head>
+  <script src="/i18n-bootstrap.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
@@ -738,6 +739,17 @@
       .comparison-grid { grid-template-columns: 1fr; }
       .btn-launch-large { width: 100%; justify-content: center; }
     }
+  
+    html[dir="rtl"] pre,
+    html[dir="rtl"] code,
+    html[dir="rtl"] .code-box pre,
+    html[dir="rtl"] .code-box code {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      unicode-bidi: isolate;
+    }
+
   </style>
 
   <!-- JSON-LD: Article & FAQPage Schemas -->
@@ -851,18 +863,18 @@
         <!-- Launch Big Data Transformer Tool -->
         <a href="https://vantorkit.com/tools/big-data-transformer.html" class="nav-launch-tool" target="_blank" rel="noopener">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          <span>Open Big-Data Transformer</span>
+          <span data-i18n="a3_nav_launch">Open Big-Data Transformer</span>
         </a>
 
         <!-- Language Selector -->
         <div class="lang-dropdown" id="langDropdown">
-          <button type="button" class="lang-btn" id="blog-lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
             <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span id="currentLangLabel">English</span>
             <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           
-          <div class="lang-menu lang-dropdown-menu" id="blog-lang-menu" role="menu">
+          <div class="lang-menu lang-dropdown-menu" id="langMenu" role="menu">
             <button type="button" class="lang-option active" data-lang="en" role="menuitem">
               <span class="lang-item-content">
                 <span>🇺🇸</span>
@@ -902,41 +914,41 @@
     
     <header class="article-header">
       <div class="article-breadcrumbs">
-        <a href="/blog/">Blog</a>
+        <a href="/blog/" data-i18n="blog_badge">Blog</a>
         <span>/</span>
-        <span>Performance &amp; Wasm</span>
+        <span data-i18n="a3_badge_cat">Performance &amp; Wasm</span>
       </div>
 
       <div class="badge-pill-row">
-        <span class="badge-category" data-i18n="card3_cat">Performance &amp; Wasm</span>
+        <span class="badge-category" data-i18n="a3_badge_cat">Performance &amp; Wasm</span>
         <span class="badge-verified">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>100% In-Browser Execution</span>
+          <span data-i18n="a3_badge_verified">100% In-Browser Execution</span>
         </span>
       </div>
 
-      <h1 data-i18n="card3_title">Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM</h1>
+      <h1 data-i18n="a3_h1">Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM</h1>
 
-      <p class="article-lead" data-i18n="card3_excerpt">
+      <p class="article-lead" data-i18n="a3_lead">
         How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.
       </p>
 
       <div class="article-meta-box">
         <div class="meta-item">
-          <span>Author: </span>
-          <strong data-i18n="card3_author">By VantorKit Performance Lab</strong>
+          <span data-i18n="a3_meta_author_label">Author: </span>
+          <strong data-i18n="a3_meta_author_val">By VantorKit Performance Lab</strong>
         </div>
         <div class="meta-item">
-          <span>Published: </span>
-          <strong data-i18n="card3_date">October 2026</strong>
+          <span data-i18n="a3_meta_pub_label">Published: </span>
+          <strong data-i18n="a3_meta_pub_val">October 2026</strong>
         </div>
         <div class="meta-item">
-          <span>Read Time: </span>
-          <strong data-i18n="card3_read_time">7 min read</strong>
+          <span data-i18n="a3_meta_time_label">Read Time: </span>
+          <strong data-i18n="a3_meta_time_val">7 min read</strong>
         </div>
         <div class="meta-item">
-          <span>Exfiltration: </span>
-          <strong style="color: #34d399;">0 Bytes (Client-Side)</strong>
+          <span data-i18n="a3_meta_exfil_label">Exfiltration: </span>
+          <strong style="color: #34d399;" data-i18n="a3_meta_exfil_val">0 Bytes (Client-Side)</strong>
         </div>
       </div>
     </header>
@@ -945,14 +957,14 @@
     <div class="toc-card">
       <div class="toc-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-        Table of Contents
+        <span data-i18n="a3_toc_title">Table of Contents</span>
       </div>
       <ul class="toc-list">
-        <li><a href="#section-1">1. The Death of JSON.parse(): Memory Spikes in V8</a></li>
-        <li><a href="#section-2">2. Zero-Copy Architecture via Transferable ArrayBuffers</a></li>
-        <li><a href="#section-3">3. Interactive Tool: VantorKit Big-Data Transformer</a></li>
-        <li><a href="#section-4">4. Chunked WebAssembly &amp; Off-Thread Web Workers</a></li>
-        <li><a href="#section-5">5. Frequently Asked Questions</a></li>
+        <li><a href="#section-1" data-i18n="a3_toc_1">1. The Death of JSON.parse(): Memory Spikes in V8</a></li>
+        <li><a href="#section-2" data-i18n="a3_toc_2">2. Zero-Copy Architecture via Transferable ArrayBuffers</a></li>
+        <li><a href="#section-3" data-i18n="a3_toc_3">3. Interactive Tool: VantorKit Big-Data Transformer</a></li>
+        <li><a href="#section-4" data-i18n="a3_toc_4">4. Chunked WebAssembly &amp; Off-Thread Web Workers</a></li>
+        <li><a href="#section-5" data-i18n="a3_toc_5">5. Frequently Asked Questions</a></li>
       </ul>
     </div>
 
@@ -960,45 +972,39 @@
     <div class="article-content">
       
       <section id="section-1">
-        <h2>1. The Death of JSON.parse(): Memory Spikes in V8</h2>
-        <p>
-          Most front-end developers assume that modern JavaScript engines cannot handle multi-gigabyte or 500MB data payloads. When a user tries to parse a 200MB JSON or CSV string using standard <code>JSON.parse()</code>, the browser tab instantly freezes, turns unresponsive, and frequently crashes with an <code>Out of Memory (OOM)</code> error code.
-        </p>
-        <p>
-          The failure is not inherent to modern client hardware—today's laptops and workstations commonly have 16GB to 64GB of RAM. The bottleneck is the <strong>V8 single-threaded heap model</strong>. When a 200MB string is parsed into millions of object instances, the JavaScript heap overhead multiplies the memory footprint by 4x to 8x, creating massive garbage collection pauses and choking the 60fps rendering thread.
-        </p>
+        <h2 data-i18n="a3_sec1_h2">1. The Death of JSON.parse(): Memory Spikes in V8</h2>
+        <p data-i18n="a3_sec1_p1">Most front-end developers assume that modern JavaScript engines cannot handle multi-gigabyte or 500MB data payloads. When a user tries to parse a 200MB JSON or CSV string using standard <code>JSON.parse()</code>, the browser tab instantly freezes, turns unresponsive, and frequently crashes with an <code>Out of Memory (OOM)</code> error code.</p>
+        <p data-i18n="a3_sec1_p2">The failure is not inherent to modern client hardware—today's laptops and workstations commonly have 16GB to 64GB of RAM. The bottleneck is the <strong>V8 single-threaded heap model</strong>. When a 200MB string is parsed into millions of object instances, the JavaScript heap overhead multiplies the memory footprint by 4x to 8x, creating massive garbage collection pauses and choking the 60fps rendering thread.</p>
 
         <div class="comparison-grid">
           <div class="comparison-card danger">
-            <div class="comparison-header">❌ Traditional Main Thread Parsing</div>
+            <div class="comparison-header" data-i18n="a3_comp_danger_title">❌ Traditional Main Thread Parsing</div>
             <ul class="comparison-list">
-              <li>• Freezes the UI and blocks user interaction</li>
-              <li>• Object allocation causes 4x–8x memory explosion</li>
-              <li>• Triggers V8 heap garbage collection pauses</li>
-              <li>• Crashes mobile devices and low-spec laptops</li>
+              <li><span data-i18n="a3_comp_danger_1">• Freezes the UI and blocks user interaction</span></li>
+              <li><span data-i18n="a3_comp_danger_2">• Object allocation causes 4x–8x memory explosion</span></li>
+              <li><span data-i18n="a3_comp_danger_3">• Triggers V8 heap garbage collection pauses</span></li>
+              <li><span data-i18n="a3_comp_danger_4">• Crashes mobile devices and low-spec laptops</span></li>
             </ul>
           </div>
           <div class="comparison-card secure">
-            <div class="comparison-header">✅ VantorKit Streaming Web Worker</div>
+            <div class="comparison-header" data-i18n="a3_comp_secure_title">✅ VantorKit Streaming Web Worker</div>
             <ul class="comparison-list">
-              <li>• Runs on background CPU threads with 0 UI drops</li>
-              <li>• Zero-copy Transferable ArrayBuffers</li>
-              <li>• Chunked stream processing with fixed memory limits</li>
-              <li>• Handles 500MB+ datasets without server upload</li>
+              <li><span data-i18n="a3_comp_secure_1">• Runs on background CPU threads with 0 UI drops</span></li>
+              <li><span data-i18n="a3_comp_secure_2">• Zero-copy Transferable ArrayBuffers</span></li>
+              <li><span data-i18n="a3_comp_secure_3">• Chunked stream processing with fixed memory limits</span></li>
+              <li><span data-i18n="a3_comp_secure_4">• Handles 500MB+ datasets without server upload</span></li>
             </ul>
           </div>
         </div>
       </section>
 
       <section id="section-2">
-        <h2>2. Zero-Copy Architecture via Transferable ArrayBuffers</h2>
-        <p>
-          To process massive datasets without copying them multiple times across memory boundaries, VantorKit utilizes <strong>Transferable Objects</strong>. Unlike standard <code>worker.postMessage(data)</code>, which performs a structured clone that duplicates byte arrays in RAM, Transferable Objects transfer ownership instantly with zero CPU copying:
-        </p>
+        <h2 data-i18n="a3_sec2_h2">2. Zero-Copy Architecture via Transferable ArrayBuffers</h2>
+        <p data-i18n="a3_sec2_p1">To process massive datasets without copying them multiple times across memory boundaries, VantorKit utilizes <strong>Transferable Objects</strong>. Unlike standard <code>worker.postMessage(data)</code>, which performs a structured clone that duplicates byte arrays in RAM, Transferable Objects transfer ownership instantly with zero CPU copying:</p>
         <ul>
-          <li><strong>Memory Transfer Time:</strong> 0.1 milliseconds for a 500MB payload.</li>
-          <li><strong>Zero Heap Allocation:</strong> The main thread's pointer is severed, preventing simultaneous dual allocation.</li>
-          <li><strong>Off-Thread Stream Slicing:</strong> The worker slices the buffer into fixed 64KB chunks to maintain linear CPU cache efficiency.</li>
+          <li data-i18n="a3_sec2_li1"><strong>Memory Transfer Time:</strong> 0.1 milliseconds for a 500MB payload.</li>
+          <li data-i18n="a3_sec2_li2"><strong>Zero Heap Allocation:</strong> The main thread's pointer is severed, preventing simultaneous dual allocation.</li>
+          <li data-i18n="a3_sec2_li3"><strong>Off-Thread Stream Slicing:</strong> The worker slices the buffer into fixed 64KB chunks to maintain linear CPU cache efficiency.</li>
         </ul>
       </section>
 
@@ -1007,24 +1013,20 @@
         <div class="tool-callout-card">
           <div class="tool-badge-pill">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            100% In-Browser RAM Execution
+            <span data-i18n="a3_sec3_badge">100% In-Browser RAM Execution</span>
           </div>
-          <h3 class="tool-callout-title">Open Big-Data Transformer — 100% Client-Side</h3>
-          <p class="tool-callout-desc">
-            Convert, filter, and aggregate huge CSV, JSON, and TSV files up to 500MB directly in your browser. All computations run in isolated Web Workers without sending a single byte to external servers.
-          </p>
+          <h3 class="tool-callout-title" data-i18n="a3_sec3_title">Open Big-Data Transformer — 100% Client-Side</h3>
+          <p class="tool-callout-desc" data-i18n="a3_sec3_desc">Convert, filter, and aggregate huge CSV, JSON, and TSV files up to 500MB directly in your browser. All computations run in isolated Web Workers without sending a single byte to external servers.</p>
           <a href="https://vantorkit.com/tools/big-data-transformer.html" class="btn-launch-large" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            <span>Launch Big-Data Transformer Tool</span>
+            <span data-i18n="a3_sec3_btn">Launch Big-Data Transformer Tool</span>
           </a>
         </div>
       </section>
 
       <section id="section-4">
-        <h2>4. Chunked WebAssembly &amp; Off-Thread Web Workers</h2>
-        <p>
-          Here is how VantorKit transfers large file buffers to a background worker using zero-copy semantics:
-        </p>
+        <h2 data-i18n="a3_sec4_h2">4. Chunked WebAssembly &amp; Off-Thread Web Workers</h2>
+        <p data-i18n="a3_sec4_p1">Here is how VantorKit transfers large file buffers to a background worker using zero-copy semantics:</p>
         <div class="code-box">
           <pre><code>// 1. Read large file as ArrayBuffer from local disk
 const fileBuffer = await file.arrayBuffer();
@@ -1045,49 +1047,39 @@ worker.onmessage = function(e) {
   }
 };</code></pre>
         </div>
-        <p>
-          Inside the Web Worker, WebAssembly or native typed arrays parse byte streams directly into columnar format, allowing fast filtering and transformation while the main thread maintains a fluid 60 frames per second.
-        </p>
+        <p data-i18n="a3_sec4_p2">Inside the Web Worker, WebAssembly or native typed arrays parse byte streams directly into columnar format, allowing fast filtering and transformation while the main thread maintains a fluid 60 frames per second.</p>
       </section>
 
       <section id="section-5" class="faq-block">
-        <h2>5. Frequently Asked Questions</h2>
+        <h2 data-i18n="a3_sec5_h2">5. Frequently Asked Questions</h2>
         
         <div class="faq-item">
-          <div class="faq-q">Can a web browser process 500MB JSON or CSV files without crashing?</div>
-          <div class="faq-a">
-            Yes. While standard JSON.parse() on the main UI thread will cause an out-of-memory freeze on huge strings, streaming chunks into a Dedicated Web Worker using Transferable Objects bypasses the main thread heap and runs smoothly in isolated memory.
-          </div>
+          <div class="faq-q" data-i18n="a3_faq1_q">Can a web browser process 500MB JSON or CSV files without crashing?</div>
+          <div class="faq-a" data-i18n="a3_faq1_a">Yes. While standard JSON.parse() on the main UI thread will cause an out-of-memory freeze on huge strings, streaming chunks into a Dedicated Web Worker using Transferable Objects bypasses the main thread heap and runs smoothly in isolated memory.</div>
         </div>
 
         <div class="faq-item">
-          <div class="faq-q">What are Transferable Objects and why do they prevent memory duplication?</div>
-          <div class="faq-a">
-            Transferable Objects, such as ArrayBuffers, transfer byte ownership directly from the main thread to a Web Worker with zero-copy memory semantics. The source thread relinquishes its pointer instantly, preventing double allocation in RAM.
-          </div>
+          <div class="faq-q" data-i18n="a3_faq2_q">What are Transferable Objects and why do they prevent memory duplication?</div>
+          <div class="faq-a" data-i18n="a3_faq2_a">Transferable Objects, such as ArrayBuffers, transfer byte ownership directly from the main thread to a Web Worker with zero-copy memory semantics. The source thread relinquishes its pointer instantly, preventing double allocation in RAM.</div>
         </div>
 
         <div class="faq-item">
-          <div class="faq-q">Why is client-side data parsing better for confidential enterprise datasets?</div>
-          <div class="faq-a">
-            Uploading multi-gigabyte financial ledgers or medical logs to cloud servers creates legal compliance risks, bandwidth bottlenecks, and cloud compute costs. Client-side execution keeps sensitive records strictly inside your device perimeter.
-          </div>
+          <div class="faq-q" data-i18n="a3_faq3_q">Why is client-side data parsing better for confidential enterprise datasets?</div>
+          <div class="faq-a" data-i18n="a3_faq3_a">Uploading multi-gigabyte financial ledgers or medical logs to cloud servers creates legal compliance risks, bandwidth bottlenecks, and cloud compute costs. Client-side execution keeps sensitive records strictly inside your device perimeter.</div>
         </div>
       </section>
 
       <!-- Wrap-up CTA -->
       <section style="margin-top: 3.5rem;">
         <div class="tool-callout-card" style="margin: 0; padding: 2rem;">
-          <h3 class="tool-callout-title" style="font-size: 1.4rem;">Process Large Datasets Instantly</h3>
-          <p class="tool-callout-desc" style="margin-bottom: 1.25rem;">
-            Experience lightning-fast client-side data conversion without uploading gigabytes of proprietary data to external cloud providers.
-          </p>
+          <h3 class="tool-callout-title" style="font-size: 1.4rem;" data-i18n="a3_cta_title">Process Large Datasets Instantly</h3>
+          <p class="tool-callout-desc" style="margin-bottom: 1.25rem;" data-i18n="a3_cta_desc">Experience lightning-fast client-side data conversion without uploading gigabytes of proprietary data to external cloud providers.</p>
           <div style="display:flex;gap:1rem;flex-wrap:wrap;">
             <a href="https://vantorkit.com/tools/big-data-transformer.html" class="btn-launch-large" target="_blank" rel="noopener">
-              <span>Open Big-Data Transformer →</span>
+              <span data-i18n="a3_cta_btn1">Open Big-Data Transformer →</span>
             </a>
             <a href="/blog/" class="nav-back-link" style="padding: 0.75rem 1.25rem; font-size: 0.95rem;">
-              <span>Explore More Engineering Guides</span>
+              <span data-i18n="a3_cta_btn2">Explore More Engineering Guides</span>
             </a>
           </div>
         </div>
@@ -1097,6 +1089,7 @@ worker.onmessage = function(e) {
   </article>
 
   <!-- Global Footer -->
+    <!-- Global Footer -->
   <footer class="site-footer">
     <div class="footer-container">
       <nav class="footer-links" aria-label="Legal &amp; Support">
@@ -1105,12 +1098,25 @@ worker.onmessage = function(e) {
         <a href="../about.html" class="footer-link" data-i18n="footer_about">About Us</a>
         <a href="../contact.html" class="footer-link" data-i18n="footer_contact">Contact</a>
         <a href="/blog/" class="footer-link active" data-i18n="footer_blog">Blog</a>
+        <a href="https://github.com/hajjami4270/vantorkit" target="_blank" rel="noopener noreferrer" class="footer-link footer-github-link" aria-label="View VantorKit on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://fazier.com/launches/vantorkit.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center opacity-85 hover:opacity-100 transition-opacity footer-fazier-link" aria-label="Fazier badge">
+          <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width="120" height="32" alt="Fazier badge" />
+        </a>
       </nav>
       <p class="footer-copy" data-i18n="footer_copy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
     </div>
   </footer>
 
   <!-- Subsystem Scripts -->
-  <script src="./blog.js" defer></script>
+  <script src="/blog/blog.js" defer></script>
 </body>
 </html>

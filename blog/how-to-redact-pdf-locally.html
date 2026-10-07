@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../i18n-bootstrap.js"></script>
+  <script src="/i18n-bootstrap.js"></script>
 
   <title>How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads | VantorKit</title>
   <meta name="description" content="Learn how true in-browser PDF redaction works, why drawing black boxes in standard editors leaks data, and how to flatten sensitive documents locally.">
@@ -69,6 +69,14 @@
 
     html[dir="rtl"] * {
       font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] code,
+    html[dir="rtl"] pre,
+    html[dir="rtl"] .mono-val {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
     }
 
     body {
@@ -1046,13 +1054,13 @@
 
         <!-- Language Selector -->
         <div class="lang-dropdown" id="langDropdown">
-          <button type="button" class="lang-btn" id="blog-lang-btn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
             <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span id="currentLangLabel">English</span>
             <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           
-          <div class="lang-menu lang-dropdown-menu" id="blog-lang-menu" role="menu">
+          <div class="lang-menu lang-dropdown-menu" id="langMenu" role="menu">
             <button type="button" class="lang-option active" data-lang="en" role="menuitem">
               <span class="lang-item-content">
                 <span>🇺🇸</span>
@@ -1157,12 +1165,12 @@
         </p>
 
         <ul>
-          <li><strong>Content Streams:</strong> Sequential vector draw instructions containing text blocks (<code>BT ... ET</code> operators), font encoding matrices (<code>/ToUnicode</code> dictionaries), and kerning coordinates.</li>
-          <li><strong>Annotation Dictionaries:</strong> Overlay elements (<code>/Square</code>, <code>/Highlight</code>, or <code>/FreeText</code>) positioned at coordinate bounding boxes on top of the visual stack.</li>
-          <li><strong>Document Metadata:</strong> Hidden document information dictionaries (<code>/Author</code>, <code>/CreationDate</code>) and XMP metadata trees.</li>
+          <li data-i18n="sec1_li1"><strong>Content Streams:</strong> Sequential vector draw instructions containing text blocks (<code>BT ... ET</code> operators), font encoding matrices (<code>/ToUnicode</code> dictionaries), and kerning coordinates.</li>
+          <li data-i18n="sec1_li2"><strong>Annotation Dictionaries:</strong> Overlay elements (<code>/Square</code>, <code>/Highlight</code>, or <code>/FreeText</code>) positioned at coordinate bounding boxes on top of the visual stack.</li>
+          <li data-i18n="sec1_li3"><strong>Document Metadata:</strong> Hidden document information dictionaries (<code>/Author</code>, <code>/CreationDate</code>) and XMP metadata trees.</li>
         </ul>
 
-        <p>
+        <p data-i18n="sec1_p3">
           When you draw a black rectangle in basic PDF editors or word processors, the application simply creates a vector shape annotation or fill rectangle and places it at a higher z-index over the text. <strong>The original text layer beneath the rectangle remains 100% intact in the binary stream.</strong>
         </p>
 
@@ -1197,11 +1205,11 @@
           </div>
         </div>
 
-        <p>
+        <p data-i18n="sec1_p4">
           Anyone who downloads a visually masked PDF can simply press <kbd>Ctrl+A</kbd> (or <kbd>Cmd+A</kbd>), copy the entire clipboard, and paste the unredacted text into Notepad or Word. Alternatively, running a standard terminal command like <code>pdftotext leaked-file.pdf - | grep -i "secret"</code> extracts the supposedly "redacted" text in milliseconds.
         </p>
 
-        <p>
+        <p data-i18n="sec1_p5">
           True redaction requires <strong>destructive flattening</strong>: vector glyphs and font coordinates must be converted to raster pixels, redacted areas must be overwritten with opaque black pixel buffers, and the document must be reassembled without the underlying textual object streams.
         </p>
       </section>
@@ -1210,7 +1218,7 @@
       <section id="interactive-tool">
         <h2 data-i18n="sec2_h2">2. Interactive Tool: VantorKit PDF Redactor</h2>
 
-        <p>
+        <p data-i18n="sec2_p1">
           Traditional online PDF redactors force you to upload your sensitive contracts, tax records, and medical reports to third-party cloud servers. This exposes your documents to cloud storage breaches, employee access risks, and GDPR/HIPAA compliance violations.
         </p>
 
@@ -1263,7 +1271,7 @@
       <section id="technical-guide">
         <h2 data-i18n="sec3_h2">3. Step-by-Step Technical Guide for Sanitizing Documents</h2>
 
-        <p>
+        <p data-i18n="sec3_lead">
           Here is the practical, 3-step walkthrough for securely sanitizing legal contracts, medical filings, and financial records using VantorKit's local client-side architecture:
         </p>
 
@@ -1299,22 +1307,22 @@
       <section id="security-deep-dive">
         <h2 data-i18n="sec4_h2">4. Security Deep Dive: WebAssembly, Canvas Pixels &amp; RAM Sandboxing</h2>
 
-        <p>
+        <p data-i18n="sec4_lead">
           How does client-side PDF flattening guarantee that data cannot be reconstructed? Let's inspect the underlying architectural pipeline that powers VantorKit's browser engine:
         </p>
 
         <h3 data-i18n="sec4_sub1">The Canvas Rasterization &amp; Pixel Overwrite Pipeline</h3>
-        <p>
+        <p data-i18n="sec4_p1">
           In a standard PDF document, character rendering is governed by vector paths. For example, rendering the letter "A" executes Bézier curve commands referencing font glyph metrics stored in an embedded TrueType or Type1 font program:
         </p>
 
         <!-- Code Box: PDF Font Stream Sample -->
         <div class="code-box">
           <div class="code-header">
-            <span>Insecure Standard PDF Vector Content Stream</span>
+            <span data-i18n="code1_header">Insecure Standard PDF Vector Content Stream</span>
             <button type="button" class="code-copy-btn" data-target="codeSnippet1">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Copy</span>
+              <span data-i18n="btn_copy">Copy</span>
             </button>
           </div>
           <pre><code id="codeSnippet1">BT
@@ -1328,17 +1336,17 @@ ET
 f                        % &lt;-- Text underneath is STILL completely readable!</code></pre>
         </div>
 
-        <p>
+        <p data-i18n="sec4_p2">
           In contrast, VantorKit's client-side redaction engine parses the page using PDF.js and renders the vector commands directly to a hardware-accelerated <code>CanvasRenderingContext2D</code>. During this step, vector instructions are converted into a flat <code>ImageData</code> buffer (RGBA pixel matrix):
         </p>
 
         <!-- Code Box: Canvas Flattening Algorithm -->
         <div class="code-box">
           <div class="code-header">
-            <span>VantorKit Flattening &amp; Pixel Overwrite (RAM Only)</span>
+            <span data-i18n="code2_header">VantorKit Flattening &amp; Pixel Overwrite (RAM Only)</span>
             <button type="button" class="code-copy-btn" data-target="codeSnippet2">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Copy</span>
+              <span data-i18n="btn_copy">Copy</span>
             </button>
           </div>
           <pre><code id="codeSnippet2">// 1. Render page to high-DPI HTML5 Canvas in RAM
@@ -1363,19 +1371,19 @@ const newPage = doc.addPage([pageWidth, pageHeight]);
 newPage.drawImage(img, { x: 0, y: 0, width: pageWidth, height: pageHeight });</code></pre>
         </div>
 
-        <p>
+        <p data-i18n="sec4_p3">
           Once <code>ctx.fillRect()</code> writes zeroes (RGBA: <code>[0, 0, 0, 255]</code>) over the memory coordinates of the sensitive text, <strong>the previous pixel values cease to exist in system memory</strong>. When the flattened image is converted into JPEG/PNG bytes and re-embedded into a clean PDF, there are no font objects, no <code>/ToUnicode</code> mapping tables, and no textual annotations.
         </p>
 
         <h3 data-i18n="sec4_sub2">Self-Verification: How to Audit Your Redacted PDF</h3>
-        <p>
+        <p data-i18n="sec4_p4">
           Security teams and compliance officers do not need to take our word for it. You can independently verify the sanitization of any PDF exported from VantorKit using command-line forensic utilities:
         </p>
 
         <ul>
-          <li><strong>Text Extraction Test:</strong> Run <code>pdftotext sanitized.pdf -</code>. The command will output zero characters because the PDF contains only rasterized image frames.</li>
-          <li><strong>Binary String Grep:</strong> Run <code>strings sanitized.pdf | grep -i "SSN"</code>. The command will return empty because character streams were never encoded into the PDF dictionary.</li>
-          <li><strong>Network Tab Telemetry Audit:</strong> Open your browser's Developer Tools (<kbd>F12</kbd>), navigate to the <strong>Network</strong> tab, and filter by <code>Fetch/XHR</code>. Perform an entire redaction workflow from start to finish. You will observe exactly <strong>0 requests</strong> made to any external server.</li>
+          <li data-i18n="sec4_audit_1"><strong>Text Extraction Test:</strong> Run <code>pdftotext sanitized.pdf -</code>. The command will output zero characters because the PDF contains only rasterized image frames.</li>
+          <li data-i18n="sec4_audit_2"><strong>Binary String Grep:</strong> Run <code>strings sanitized.pdf | grep -i "SSN"</code>. The command will return empty because character streams were never encoded into the PDF dictionary.</li>
+          <li data-i18n="sec4_audit_3"><strong>Network Tab Telemetry Audit:</strong> Open your browser's Developer Tools (<kbd>F12</kbd>), navigate to the <strong>Network</strong> tab, and filter by <code>Fetch/XHR</code>. Perform an entire redaction workflow from start to finish. You will observe exactly <strong>0 requests</strong> made to any external server.</li>
         </ul>
       </section>
 
@@ -1454,6 +1462,6 @@ newPage.drawImage(img, { x: 0, y: 0, width: pageWidth, height: pageHeight });</c
   </footer>
 
   <!-- Subsystem Scripts -->
-  <script src="./blog.js" defer></script>
+  <script src="/blog/blog.js" defer></script>
 </body>
 </html>

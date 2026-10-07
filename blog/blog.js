@@ -1,11 +1,1143 @@
 /**
- * VantorKit Blog Subsystem — 4-Language i18n & BiDi Architecture Engine
- * Zero Backend • Strict CSP Compliant • Client-Side Only
- * Languages: English (en), Arabic (ar, RTL), French (fr), Italian (it)
+ * VantorKit Blog Subsystem Controller
+ * Provides client-side i18n, Reading Progress Tracking, and Code Copying
+ * Fully isolated from root site scripts and preserves rich DOM markup.
  */
 
 (function () {
   'use strict';
+
+  // --- Multi-Language Dictionary ---
+  const I18N_DICTS = {
+  "en": {
+    "blog_badge": "Blog",
+    "nav_all_tools": "All 32 Utilities",
+    "nav_rss": "RSS",
+    "nav_back_blog": "Blog Hub",
+    "nav_launch_redactor": "Open PDF Redactor",
+    "hero_badge": "Client-Side Architecture & Research",
+    "hero_title": "VantorKit <span>Engineering & Privacy</span> Guides",
+    "hero_subtitle": "Architectural deep dives, cryptographic sandboxing, and practical engineering guides for true client-side web applications. Discover how to inspect, redact, and transform sensitive documents directly inside browser RAM without ever uploading data to the cloud.",
+    "feat_zero_uploads": "0 Bytes Server Uploads",
+    "feat_in_browser": "In-Browser RAM Execution",
+    "feat_open_standards": "Open Web & Wasm Standards",
+    "sec_latest_articles": "Latest Technical Articles",
+    "sec_subscribe_rss": "Subscribe via RSS",
+    "card1_cat": "PDF Security & Privacy",
+    "card1_read_time": "6 min read",
+    "card1_title": "How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads",
+    "card1_excerpt": "Drawing black boxes over text in standard PDF viewers creates visual masks that retain underlying vector characters. Learn why traditional redaction fails and how true HTML5 Canvas rasterization flattens documents locally in RAM.",
+    "card1_author": "By VantorKit Security Team",
+    "card1_date": "Oct 2026",
+    "card1_cta": "Read Guide",
+    "card2_cat": "Forensics & Privacy",
+    "badge_coming_soon": "Coming Soon",
+    "card2_title": "Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP & Document Streams",
+    "card2_excerpt": "Standard file cleaners often leave hidden camera serial numbers, GPS coordinates, and revision histories intact in document binary trees. An analysis of client-side binary tree purges.",
+    "card2_author": "By VantorKit Research",
+    "card2_date": "Oct 2026",
+    "card2_read_time": "5 min read",
+    "card2_cta": "Read Guide",
+    "card3_cat": "Performance & Wasm",
+    "card3_title": "Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM",
+    "card3_excerpt": "How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.",
+    "card3_author": "By VantorKit Performance Lab",
+    "card3_date": "Oct 2026",
+    "card3_read_time": "7 min read",
+    "card3_cta": "Read Guide",
+    "rss_callout_title": "Zero Trackers. Pure Open Web RSS Syndication.",
+    "rss_callout_desc": "We don't collect your email address, run newsletter tracking pixels, or store cookies. Stay updated on our latest client-side browser engineering guides and cryptographic tools directly via standard RSS 2.0.",
+    "rss_callout_btn": "Open RSS Feed (/blog/feed.xml)",
+    "footer_privacy": "Privacy Policy",
+    "footer_terms": "Terms of Service",
+    "footer_about": "About Us",
+    "footer_contact": "Contact",
+    "footer_blog": "Blog",
+    "footer_copy": "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.",
+    "btn_copy": "Copy",
+    "art_badge_category": "PDF Security & Privacy",
+    "art_badge_verified": "100% In-Browser Execution",
+    "art_h1": "How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads",
+    "art_lead": "Drawing black boxes over text in standard PDF readers does not delete the characters underneath. Discover why visual redactions leak confidential data, how true canvas flattening works, and how to sanitize legal and financial documents entirely inside your browser's local RAM.",
+    "art_meta_author_label": "Author: ",
+    "art_meta_author_val": "VantorKit Security Team",
+    "art_meta_pub_label": "Published: ",
+    "art_meta_pub_val": "October 6, 2026",
+    "art_meta_time_label": "Read Time: ",
+    "art_meta_time_val": "6 min read",
+    "art_meta_exfil_label": "Network Exfiltration: ",
+    "art_meta_exfil_val": "0 Bytes (Client-Side)",
+    "art_toc_heading": "Table of Contents",
+    "art_toc_1": "1. Executive Answer: Visual Masking vs. True Raster Flattening",
+    "art_toc_2": "2. Interactive Tool: VantorKit PDF Redactor",
+    "art_toc_3": "3. Step-by-Step Technical Guide for Sanitizing Documents",
+    "art_toc_4": "4. Security Deep Dive: WebAssembly, Canvas Pixels & RAM Sandboxing",
+    "art_toc_5": "5. Frequently Asked Questions (PDF Redaction Security)",
+    "sec1_h2": "1. The Executive Answer: Visual Masking vs. True Raster Flattening",
+    "sec1_p1": "Every year, major law firms, intelligence agencies, and healthcare providers accidentally leak confidential data through flawed PDF redaction. High-profile court dockets—including filings in the Paul Manafort federal trials and corporate antitrust litigation—have famously leaked classified names and bank account numbers because an attorney simply drew a black rectangle over text using an everyday PDF viewer.",
+    "sec1_p2": "To understand why this happens, you must understand how the PDF file specification (ISO 32000) stores data. A PDF is not a flat bitmap image; it is an object graph containing independent layers:",
+    "sec1_li1": "<strong>Content Streams:</strong> Sequential vector draw instructions containing text blocks (<code>BT ... ET</code> operators), font encoding matrices (<code>/ToUnicode</code> dictionaries), and kerning coordinates.",
+    "sec1_li2": "<strong>Annotation Dictionaries:</strong> Overlay elements (<code>/Square</code>, <code>/Highlight</code>, or <code>/FreeText</code>) positioned at coordinate bounding boxes on top of the visual stack.",
+    "sec1_li3": "<strong>Document Metadata:</strong> Hidden document information dictionaries (<code>/Author</code>, <code>/CreationDate</code>) and XMP metadata trees.",
+    "sec1_p3": "When you draw a black rectangle in basic PDF editors or word processors, the application simply creates a vector shape annotation or fill rectangle and places it at a higher z-index over the text. <strong>The original text layer beneath the rectangle remains 100% intact in the binary stream.</strong>",
+    "comp_danger_title": "Visual Masking (High Risk)",
+    "comp_danger_1": "❌ Character glyphs stay intact in binary stream",
+    "comp_danger_2": "❌ Anyone can copy text via Ctrl+A / Cmd+C",
+    "comp_danger_3": "❌ Scripted tools (e.g. pdftotext) extract text in ms",
+    "comp_danger_4": "❌ Underlying vector objects can be deleted in Acrobat",
+    "comp_danger_5": "❌ Metadata & OCR text layers remain searchable",
+    "comp_secure_title": "True Raster Flattening (Secure)",
+    "comp_secure_1": "✅ Vectors & fonts baked into raw pixel matrix in RAM",
+    "comp_secure_2": "✅ Blackout coordinates overwrite pixel buffers directly",
+    "comp_secure_3": "✅ Text streams are obliterated from the file dictionary",
+    "comp_secure_4": "✅ Mathematically irreversible: 0 glyphs survive",
+    "comp_secure_5": "✅ Zero cloud uploads: documents never leave client RAM",
+    "sec1_p4": "Anyone who downloads a visually masked PDF can simply press <kbd>Ctrl+A</kbd> (or <kbd>Cmd+A</kbd>), copy the entire clipboard, and paste the unredacted text into Notepad or Word. Alternatively, running a standard terminal command like <code>pdftotext leaked-file.pdf - | grep -i \"secret\"</code> extracts the supposedly \"redacted\" text in milliseconds.",
+    "sec1_p5": "True redaction requires <strong>destructive flattening</strong>: vector glyphs and font coordinates must be converted to raster pixels, redacted areas must be overwritten with opaque black pixel buffers, and the document must be reassembled without the underlying textual object streams.",
+    "sec2_h2": "2. Interactive Tool: VantorKit PDF Redactor",
+    "sec2_p1": "Traditional online PDF redactors force you to upload your sensitive contracts, tax records, and medical reports to third-party cloud servers. This exposes your documents to cloud storage breaches, employee access risks, and GDPR/HIPAA compliance violations.",
+    "tool_badge": "100% Client-Side Browser Sandbox",
+    "tool_title": "Launch VantorKit PDF Redactor — 100% Client-Side",
+    "tool_desc": "Sanitize, blackout, and flatten sensitive PDF documents instantly with zero cloud uploads. Your documents are rendered and redacted entirely within your device's memory using HTML5 Canvas and WebAssembly.",
+    "tool_p1": "0 Bytes Transferred (Zero Logs)",
+    "tool_p2": "High-DPI Multi-Page Rendering",
+    "tool_p3": "Irreversible Canvas Pixel Baking",
+    "tool_p4": "Instant Offline Execution",
+    "tool_btn": "Launch PDF Redactor Tool",
+    "tool_guarantee": "Free forever • No account required • Zero server telemetry",
+    "sec3_h2": "3. Step-by-Step Technical Guide for Sanitizing Documents",
+    "sec3_lead": "Here is the practical, 3-step walkthrough for securely sanitizing legal contracts, medical filings, and financial records using VantorKit's local client-side architecture:",
+    "step1_h3": "Ingest File Locally Into Browser RAM",
+    "step1_desc": "Open the VantorKit PDF Redactor and drop your document onto the dropzone. The application calls the standard HTML5 FileReader.readAsArrayBuffer() API. Notice that in your browser's Developer Tools (Network Tab), zero HTTP POST requests are made. The binary buffer is held exclusively in your local device memory.",
+    "step2_h3": "Apply Precision Coordinate Blackouts",
+    "step2_desc": "VantorKit renders each page onto an HTML5 <canvas> element at a high device pixel ratio (2x scale for crisp readability). Click and drag over social security numbers, banking IBANs, confidential client names, or signature blocks. You will see black blackout overlays with live coordinate tracking.",
+    "step3_h3": "Export the Flattened, Purged Document",
+    "step3_desc": "Click Download Redacted PDF. The rasterizer bakes your blackout coordinates directly into the Canvas 2D image buffer, permanently overwriting the pixel colors with pure #000000. The engine then compiles a sanitized PDF container using local JavaScript. All underlying vector font streams, text dictionaries, revision histories, and hidden metadata are completely stripped.",
+    "sec4_h2": "4. Security Deep Dive: WebAssembly, Canvas Pixels & RAM Sandboxing",
+    "sec4_lead": "How does client-side PDF flattening guarantee that data cannot be reconstructed? Let's inspect the underlying architectural pipeline that powers VantorKit's browser engine:",
+    "sec4_sub1": "The Canvas Rasterization & Pixel Overwrite Pipeline",
+    "sec4_p1": "In a standard PDF document, character rendering is governed by vector paths. For example, rendering the letter \"A\" executes Bézier curve commands referencing font glyph metrics stored in an embedded TrueType or Type1 font program:",
+    "code1_header": "Insecure Standard PDF Vector Content Stream",
+    "sec4_p2": "In contrast, VantorKit's client-side redaction engine parses the page using PDF.js and renders the vector commands directly to a hardware-accelerated <code>CanvasRenderingContext2D</code>. During this step, vector instructions are converted into a flat <code>ImageData</code> buffer (RGBA pixel matrix):",
+    "code2_header": "VantorKit Flattening & Pixel Overwrite (RAM Only)",
+    "sec4_p3": "Once <code>ctx.fillRect()</code> writes zeroes (RGBA: <code>[0, 0, 0, 255]</code>) over the memory coordinates of the sensitive text, <strong>the previous pixel values cease to exist in system memory</strong>. When the flattened image is converted into JPEG/PNG bytes and re-embedded into a clean PDF, there are no font objects, no <code>/ToUnicode</code> mapping tables, and no textual annotations.",
+    "sec4_sub2": "Self-Verification: How to Audit Your Redacted PDF",
+    "sec4_p4": "Security teams and compliance officers do not need to take our word for it. You can independently verify the sanitization of any PDF exported from VantorKit using command-line forensic utilities:",
+    "sec4_audit_1": "<strong>Text Extraction Test:</strong> Run <code>pdftotext sanitized.pdf -</code>. The command will output zero characters because the PDF contains only rasterized image frames.",
+    "sec4_audit_2": "<strong>Binary String Grep:</strong> Run <code>strings sanitized.pdf | grep -i \"SSN\"</code>. The command will return empty because character streams were never encoded into the PDF dictionary.",
+    "sec4_audit_3": "<strong>Network Tab Telemetry Audit:</strong> Open your browser's Developer Tools (<kbd>F12</kbd>), navigate to the <strong>Network</strong> tab, and filter by <code>Fetch/XHR</code>. Perform an entire redaction workflow from start to finish. You will observe exactly <strong>0 requests</strong> made to any external server.",
+    "sec5_h2": "5. Frequently Asked Questions (PDF Redaction Security)",
+    "faq_q1": "Can text under a black box in a standard PDF still be highlighted or copied?",
+    "faq_a1": "Yes. In standard PDF viewers (such as Adobe Acrobat Reader, macOS Preview, or web browsers), drawing a black shape merely places a visual vector annotation over the text. The underlying text stream, font glyphs, and selectable character coordinates remain completely intact in the document stream. Anyone using \"Select All\" or command-line extraction tools can extract the sensitive data in seconds.",
+    "faq_q2": "What is the difference between visual masking and true PDF redaction?",
+    "faq_a2": "Visual masking obscures text visually without deleting the underlying character data. True PDF redaction requires raster flattening or destructive stream editing, where vector text objects, metadata, and font glyph dictionaries are permanently deleted from the PDF binary structure or rendered to pixel bitmaps so no underlying data remains to be recovered.",
+    "faq_q3": "How does VantorKit's PDF Redactor ensure zero data leaves my computer?",
+    "faq_a3": "VantorKit operates 100% client-side inside your browser sandbox. The PDF is parsed into memory using WebAssembly and PDF.js, rendered onto an HTML5 Canvas in RAM, overlaid with your redaction blocks, and re-flattened into a sanitized PDF using local JavaScript. Zero bytes are uploaded to any server, eliminating cloud breach and data exfiltration risks.",
+    "final_cta_title": "Ready to redact documents securely?",
+    "final_cta_desc": "Protect your trade secrets, client financials, and personal identifiers. Use VantorKit PDF Redactor for immediate, private, client-side document sanitization.",
+    "final_cta_btn": "Open VantorKit PDF Redactor →",
+    "final_cta_more": "Explore More Engineering Guides",
+    "a2_breadcrumb_blog": "Blog",
+    "a2_breadcrumb_cat": "Forensics & Privacy",
+    "a2_badge_cat": "Forensics & Privacy",
+    "a2_badge_verified": "100% In-Browser Execution",
+    "a2_h1": "Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP & Document Streams",
+    "a2_lead": "Standard file cleaners often leave hidden camera serial numbers, GPS coordinates, and revision histories intact in document binary trees. Discover why shallow operating system cleaners fail and how true client-side memory purging obliterates forensic artifacts directly in browser RAM.",
+    "a2_meta_author_label": "Author: ",
+    "a2_meta_author": "By VantorKit Research",
+    "a2_meta_pub_label": "Published: ",
+    "a2_meta_pub": "October 2026",
+    "a2_meta_time_label": "Read Time: ",
+    "a2_meta_time": "5 min read",
+    "a2_meta_exfil_label": "Exfiltration: ",
+    "a2_meta_exfil": "0 Bytes (Client-Side)",
+    "a2_nav_launch": "Open Metadata Cleaner",
+    "a2_toc_heading": "Table of Contents",
+    "a2_toc_1": "1. The Illusion of File Properties Cleaning",
+    "a2_toc_2": "2. MakerNotes, XMP & Hidden EXIF Payload Trees",
+    "a2_toc_3": "3. Interactive Tool: VantorKit Metadata Cleaner",
+    "a2_toc_4": "4. Deep Dive: In-Memory Binary Stream Purging",
+    "a2_toc_5": "5. Frequently Asked Questions",
+    "a2_sec1_h2": "1. The Illusion of File Properties Cleaning",
+    "a2_sec1_p1": "Every day, whistleblowers, journalists, and everyday internet users upload photos and documents assuming their personal information has been removed because they selected \"Remove Properties and Personal Information\" in their operating system's file manager. In reality, forensic investigators routinely extract high-precision GPS coordinates, lens serial numbers, and camera owner names from files that were supposedly cleaned.",
+    "a2_sec1_p2": "Modern media formats—such as JPEG (JFIF/EXIF), PNG, TIFF, and PDF—do not store metadata in a single, easily scrubbed location. Instead, metadata is distributed across multiple distinct container segments, each parsed by separate application handlers.",
+    "a2_comp_danger_title": "❌ Shallow OS Stripping",
+    "a2_comp_danger_1": "• Only clears standard EXIF tags (Date, Author)",
+    "a2_comp_danger_2": "• Leaves MakerNote vendor blocks completely untouched",
+    "a2_comp_danger_3": "• Retains embedded thumbnail preview caches containing GPS",
+    "a2_comp_danger_4": "• Preserves Adobe XMP history trees and original filenames",
+    "a2_comp_secure_title": "✅ True Binary Purging",
+    "a2_comp_secure_1": "• Strips all APP1, APP2, and custom auxiliary marker segments",
+    "a2_comp_secure_2": "• Re-encodes raw pixel matrices directly into a fresh container",
+    "a2_comp_secure_3": "• Obliterates hardware serials and calibration hashes",
+    "a2_comp_secure_4": "• 100% Client-Side in browser RAM with zero server telemetry",
+    "a2_sec2_h2": "2. MakerNotes, XMP & Hidden EXIF Payload Trees",
+    "a2_sec2_p1": "The most dangerous metadata leak occurs inside the <strong>MakerNote</strong> tag (Tag 0x927c) within the EXIF IFD0 pointer tree. Camera manufacturers like Apple, Sony, Canon, and Nikon embed proprietary binary blobs inside this tag. These blobs include:",
+    "a2_sec2_li1": "<strong>Exact Camera Serial Numbers:</strong> Unique identifiers that tie anonymous photos back to a specific physical device.",
+    "a2_sec2_li2": "<strong>Internal Shutter Counts:</strong> Cryptographic verification of camera usage history.",
+    "a2_sec2_li3": "<strong>High-Resolution Thumbnail Previews:</strong> Unaltered miniature versions of the image that often show the uncropped, unredacted scene.",
+    "a2_sec2_p2": "Because MakerNote structures are proprietary and vary by firmware revision, generic operating system cleaners avoid touching them to prevent corrupting the image file structure. As a result, the most identifying forensic artifacts remain fully intact.",
+    "a2_tool_badge": "100% Client-Side Browser Tool",
+    "a2_tool_title": "Open Metadata Cleaner — 100% Client-Side",
+    "a2_tool_desc": "Instantly inspect and sanitize EXIF, XMP, IPTC, and MakerNotes directly in your browser. All processing is executed locally in your device's RAM with 0 bytes uploaded to any cloud server.",
+    "a2_tool_btn": "Launch Metadata Cleaner Tool",
+    "a2_sec4_h2": "4. Deep Dive: In-Memory Binary Stream Purging",
+    "a2_sec4_p1": "VantorKit takes a mathematically rigorous approach to metadata elimination. Rather than attempting to find and zero out individual metadata tags, our engine uses an <strong>isolation reconstruction pipeline</strong>:",
+    "a2_sec4_p2": "By decoding the visual pixels and writing them into a freshly generated container header, 100% of EXIF, XMP, IPTC, MakerNote, and ICC profile sidecars are discarded. No trace of the original camera hardware or geolocation data can survive this reconstruction.",
+    "a2_sec5_h2": "5. Frequently Asked Questions",
+    "a2_faq_q1": "Does clearing properties in Windows Explorer completely remove all photo metadata?",
+    "a2_faq_a1": "No. The built-in \"Remove Properties\" feature in Windows Explorer strips standard EXIF tags but often ignores MakerNote blocks, vendor-specific camera serial numbers, and embedded XMP metadata sidecars.",
+    "a2_faq_q2": "What is the difference between shallow metadata stripping and binary tree purging?",
+    "a2_faq_a2": "Shallow stripping overwrites known dictionary keys with null values, leaving the binary structure intact. Binary tree purging reconstructs the image or document by copying only validated raw pixel matrices and discarding all auxiliary metadata headers entirely.",
+    "a2_faq_q3": "Why is client-side metadata sanitization safer than cloud clean-up services?",
+    "a2_faq_a3": "Cloud-based tools require uploading your raw, unstripped files over the internet, transmitting your home GPS coordinates, device identifiers, and timestamps to third-party servers. In-browser RAM processing sanitizes files locally with zero network egress.",
+    "a2_final_title": "Protect Your Privacy Before Publishing",
+    "a2_final_desc": "Never post photos or share documents that contain personal location traces or hardware serial numbers. Clean them instantly with VantorKit.",
+    "a2_final_btn": "Open Metadata Cleaner →",
+    "a2_final_more": "Explore More Engineering Guides",
+    "a3_breadcrumb_blog": "Blog",
+    "a3_breadcrumb_cat": "Performance & Wasm",
+    "a3_badge_cat": "Performance & Wasm",
+    "a3_badge_verified": "100% In-Browser Execution",
+    "a3_h1": "Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM",
+    "a3_lead": "How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.",
+    "a3_meta_author_label": "Author: ",
+    "a3_meta_author": "By VantorKit Performance Lab",
+    "a3_meta_pub_label": "Published: ",
+    "a3_meta_pub": "October 2026",
+    "a3_meta_time_label": "Read Time: ",
+    "a3_meta_time": "7 min read",
+    "a3_meta_exfil_label": "Exfiltration: ",
+    "a3_meta_exfil": "0 Bytes (Client-Side)",
+    "a3_nav_launch": "Open Big-Data Transformer",
+    "a3_toc_heading": "Table of Contents",
+    "a3_toc_1": "1. The Death of JSON.parse(): Memory Spikes in V8",
+    "a3_toc_2": "2. Zero-Copy Architecture via Transferable ArrayBuffers",
+    "a3_toc_3": "3. Interactive Tool: VantorKit Big-Data Transformer",
+    "a3_toc_4": "4. Chunked WebAssembly & Off-Thread Web Workers",
+    "a3_toc_5": "5. Frequently Asked Questions",
+    "a3_sec1_h2": "1. The Death of JSON.parse(): Memory Spikes in V8",
+    "a3_sec1_p1": "Most front-end developers assume that modern JavaScript engines cannot handle multi-gigabyte or 500MB data payloads. When a user tries to parse a 200MB JSON or CSV string using standard <code>JSON.parse()</code>, the browser tab instantly freezes, turns unresponsive, and frequently crashes with an <code>Out of Memory (OOM)</code> error code.",
+    "a3_sec1_p2": "The failure is not inherent to modern client hardware—today's laptops and workstations commonly have 16GB to 64GB of RAM. The bottleneck is the <strong>V8 single-threaded heap model</strong>. When a 200MB string is parsed into millions of object instances, the JavaScript heap overhead multiplies the memory footprint by 4x to 8x, creating massive garbage collection pauses and choking the 60fps rendering thread.",
+    "a3_comp_danger_title": "❌ Traditional Main Thread Parsing",
+    "a3_comp_danger_1": "• Freezes the UI and blocks user interaction",
+    "a3_comp_danger_2": "• Object allocation causes 4x–8x memory explosion",
+    "a3_comp_danger_3": "• Triggers V8 heap garbage collection pauses",
+    "a3_comp_danger_4": "• Crashes mobile devices and low-spec laptops",
+    "a3_comp_secure_title": "✅ VantorKit Streaming Web Worker",
+    "a3_comp_secure_1": "• Runs on background CPU threads with 0 UI drops",
+    "a3_comp_secure_2": "• Zero-copy Transferable ArrayBuffers",
+    "a3_comp_secure_3": "• Chunked stream processing with fixed memory limits",
+    "a3_comp_secure_4": "• Handles 500MB+ datasets without server upload",
+    "a3_sec2_h2": "2. Zero-Copy Architecture via Transferable ArrayBuffers",
+    "a3_sec2_p1": "To process massive datasets without copying them multiple times across memory boundaries, VantorKit utilizes <strong>Transferable Objects</strong>. Unlike standard <code>worker.postMessage(data)</code>, which performs a structured clone that duplicates byte arrays in RAM, Transferable Objects transfer ownership instantly with zero CPU copying:",
+    "a3_sec2_li1": "<strong>Memory Transfer Time:</strong> 0.1 milliseconds for a 500MB payload.",
+    "a3_sec2_li2": "<strong>Zero Heap Allocation:</strong> The main thread's pointer is severed, preventing simultaneous dual allocation.",
+    "a3_sec2_li3": "<strong>Off-Thread Stream Slicing:</strong> The worker slices the buffer into fixed 64KB chunks to maintain linear CPU cache efficiency.",
+    "a3_tool_badge": "100% In-Browser RAM Execution",
+    "a3_tool_title": "Open Big-Data Transformer — 100% Client-Side",
+    "a3_tool_desc": "Convert, filter, and aggregate huge CSV, JSON, and TSV files up to 500MB directly in your browser. All computations run in isolated Web Workers without sending a single byte to external servers.",
+    "a3_tool_btn": "Launch Big-Data Transformer Tool",
+    "a3_sec4_h2": "4. Chunked WebAssembly & Off-Thread Web Workers",
+    "a3_sec4_p1": "Here is how VantorKit transfers large file buffers to a background worker using zero-copy semantics:",
+    "a3_sec4_p2": "Inside the Web Worker, WebAssembly or native typed arrays parse byte streams directly into columnar format, allowing fast filtering and transformation while the main thread maintains a fluid 60 frames per second.",
+    "a3_sec5_h2": "5. Frequently Asked Questions",
+    "a3_faq_q1": "Can a web browser process 500MB JSON or CSV files without crashing?",
+    "a3_faq_a1": "Yes. While standard JSON.parse() on the main UI thread will cause an out-of-memory freeze on huge strings, streaming chunks into a Dedicated Web Worker using Transferable Objects bypasses the main thread heap and runs smoothly in isolated memory.",
+    "a3_faq_q2": "What are Transferable Objects and why do they prevent memory duplication?",
+    "a3_faq_a2": "Transferable Objects, such as ArrayBuffers, transfer byte ownership directly from the main thread to a Web Worker with zero-copy memory semantics. The source thread relinquishes its pointer instantly, preventing double allocation in RAM.",
+    "a3_faq_q3": "Why is client-side data parsing better for confidential enterprise datasets?",
+    "a3_faq_a3": "Uploading multi-gigabyte financial ledgers or medical logs to cloud servers creates legal compliance risks, bandwidth bottlenecks, and cloud compute costs. Client-side execution keeps sensitive records strictly inside your device perimeter.",
+    "a3_final_title": "Process Large Datasets Instantly",
+    "a3_final_desc": "Experience lightning-fast client-side data conversion without uploading gigabytes of proprietary data to external cloud providers.",
+    "a3_final_btn": "Open Big-Data Transformer →",
+    "a3_final_more": "Explore More Engineering Guides",
+    "a2_meta_author_val": "VantorKit Research",
+    "a2_meta_pub_val": "October 2026",
+    "a2_meta_time_val": "5 min read",
+    "a2_meta_exfil_val": "0 Bytes (Client-Side)",
+    "a2_toc_title": "Table of Contents",
+    "a2_sec3_badge": "100% Client-Side Browser Tool",
+    "a2_sec3_title": "Open Metadata Cleaner — 100% Client-Side",
+    "a2_sec3_desc": "Instantly inspect and sanitize EXIF, XMP, IPTC, and MakerNotes directly in your browser. All processing is executed locally in your device's RAM with 0 bytes uploaded to any cloud server.",
+    "a2_sec3_btn": "Launch Metadata Cleaner Tool",
+    "a2_faq1_q": "Does clearing properties in Windows Explorer completely remove all photo metadata?",
+    "a2_faq1_a": "No. The built-in \"Remove Properties\" feature in Windows Explorer strips standard EXIF tags but often ignores MakerNote blocks, vendor-specific camera serial numbers, and embedded XMP metadata sidecars.",
+    "a2_faq2_q": "What is the difference between shallow metadata stripping and binary tree purging?",
+    "a2_faq2_a": "Shallow stripping overwrites known dictionary keys with null values, leaving the binary structure intact. Binary tree purging reconstructs the image or document by copying only validated raw pixel matrices and discarding all auxiliary metadata headers entirely.",
+    "a2_faq3_q": "Why is client-side metadata sanitization safer than cloud clean-up services?",
+    "a2_faq3_a": "Cloud-based tools require uploading your raw, unstripped files over the internet, transmitting your home GPS coordinates, device identifiers, and timestamps to third-party servers. In-browser RAM processing sanitizes files locally with zero network egress.",
+    "a2_cta_title": "Protect Your Privacy Before Publishing",
+    "a2_cta_desc": "Never post photos or share documents that contain personal location traces or hardware serial numbers. Clean them instantly with VantorKit.",
+    "a2_cta_btn1": "Open Metadata Cleaner →",
+    "a2_cta_btn2": "Explore More Engineering Guides",
+    "a3_meta_author_val": "VantorKit Performance Lab",
+    "a3_meta_pub_val": "October 2026",
+    "a3_meta_time_val": "7 min read",
+    "a3_meta_exfil_val": "0 Bytes (Client-Side)",
+    "a3_toc_title": "Table of Contents",
+    "a3_sec3_badge": "100% In-Browser RAM Execution",
+    "a3_sec3_title": "Open Big-Data Transformer — 100% Client-Side",
+    "a3_sec3_desc": "Convert, filter, and aggregate huge CSV, JSON, and TSV files up to 500MB directly in your browser. All computations run in isolated Web Workers without sending a single byte to external servers.",
+    "a3_sec3_btn": "Launch Big-Data Transformer Tool",
+    "a3_faq1_q": "Can a web browser process 500MB JSON or CSV files without crashing?",
+    "a3_faq1_a": "Yes. While standard JSON.parse() on the main UI thread will cause an out-of-memory freeze on huge strings, streaming chunks into a Dedicated Web Worker using Transferable Objects bypasses the main thread heap and runs smoothly in isolated memory.",
+    "a3_faq2_q": "What are Transferable Objects and why do they prevent memory duplication?",
+    "a3_faq2_a": "Transferable Objects, such as ArrayBuffers, transfer byte ownership directly from the main thread to a Web Worker with zero-copy memory semantics. The source thread relinquishes its pointer instantly, preventing double allocation in RAM.",
+    "a3_faq3_q": "Why is client-side data parsing better for confidential enterprise datasets?",
+    "a3_faq3_a": "Uploading multi-gigabyte financial ledgers or medical logs to cloud servers creates legal compliance risks, bandwidth bottlenecks, and cloud compute costs. Client-side execution keeps sensitive records strictly inside your device perimeter.",
+    "a3_cta_title": "Process Large Datasets Instantly",
+    "a3_cta_desc": "Experience lightning-fast client-side data conversion without uploading gigabytes of proprietary data to external cloud providers.",
+    "a3_cta_btn1": "Open Big-Data Transformer →",
+    "a3_cta_btn2": "Explore More Engineering Guides"
+  },
+  "ar": {
+    "blog_badge": "المدونة",
+    "nav_all_tools": "كافة الأدوات (32)",
+    "nav_rss": "خلاصة RSS",
+    "nav_back_blog": "مركز المدونة",
+    "nav_launch_redactor": "أداة تعتيم وتطهير PDF",
+    "hero_badge": "معمارية وأبحاث المعالجة داخل المتصفح",
+    "hero_title": "أدلة فانتوركيت <span>للهندسة والخصوصية</span>",
+    "hero_subtitle": "دراسات معمارية متعمقة، وعزل تشفيري، وأدلة هندسية عملية لتطبيقات الويب المستقلة عن الخوادم. اكتشف كيفية فحص وتعتيم وتحويل المستندات الحساسة داخل ذاكرة المتصفح العشوائية (RAM) دون رفع أي بايت إلى السحابة.",
+    "feat_zero_uploads": "0 بايت مرسلة للخادم (بدون رفع)",
+    "feat_in_browser": "معالجة كاملة بذاكرة المتصفح",
+    "feat_open_standards": "معايير الويب المفتوحة وWasm",
+    "sec_latest_articles": "أحدث المقالات التقنية",
+    "sec_subscribe_rss": "الاشتراك عبر RSS",
+    "card1_cat": "أمان ملفات PDF والخصوصية",
+    "card1_read_time": "قراءة في 6 دقائق",
+    "card1_title": "كيفية تعتيم وحذف النصوص الحساسة في ملفات PDF نهائياً دون رفعها للسحابة",
+    "card1_excerpt": "رسم مربعات سوداء فوق النصوص في عارضات PDF التقليدية يُنشئ أقنعة بصرية سطحية تحتفظ بالأحرف الأصلية. تعرّف على سبب فشل التعتيم التقليدي وكيف تقوم معالجة Canvas بتحويل المستند إلى بكسلات آمنة محلياً.",
+    "card1_author": "فريق أمان فانتوركيت",
+    "card1_date": "أكتوبر 2026",
+    "card1_cta": "اقرأ الدليل",
+    "card2_cat": "التحليل الجنائي والخصوصية",
+    "badge_coming_soon": "قريباً",
+    "card2_title": "لماذا تفشل أدوات إزالة البيانات الوصفية التقليدية: فحص بيانات EXIF وXMP محلياً",
+    "card2_excerpt": "غالباً ما تترك برامج التنظيف التقليدية الأرقام التسلسلية للكاميرات وإحداثيات الموقع وتواريخ التعديل سليمة داخل الملف الثنائي. دراسة لتنظيف الأشجار الثنائية داخل المتصفح.",
+    "card2_author": "قسم أبحاث فانتوركيت",
+    "card2_date": "أكتوبر 2026",
+    "card2_read_time": "قراءة في 5 دقائق",
+    "card2_cta": "اقرأ الدليل",
+    "card3_cat": "الأداء وWebAssembly",
+    "card3_title": "تحويل البيانات الضخمة داخل المتصفح: معالجة ملفات بحجم 500 ميغابايت بذاكرة RAM",
+    "card3_excerpt": "كيف تعمل خيوط Web Workers ومصفوفات ArrayBuffers وتقنيات WebAssembly على معالجة ملفات JSON وCSV الضخمة محلياً دون أي تكاليف سحابية.",
+    "card3_author": "مختبر أداء فانتوركيت",
+    "card3_date": "أكتوبر 2026",
+    "card3_read_time": "قراءة في 7 دقائق",
+    "card3_cta": "اقرأ الدليل",
+    "rss_callout_title": "بدون أي تتبع. تغذية RSS قياسية ومفتوحة بالكامل.",
+    "rss_callout_desc": "نحن لا نجمع بريدك الإلكتروني، ولا نستخدم وحدات بكسل لتتبع النشرات، ولا نخزن ملفات تعريف الارتباط. تابع أحدث أدلتنا التقنية وأدواتنا التشفيرية مباشرة عبر خلاصة RSS 2.0 القياسية.",
+    "rss_callout_btn": "افتح خلاصة RSS (/blog/feed.xml)",
+    "footer_privacy": "سياسة الخصوصية",
+    "footer_terms": "شروط الخدمة",
+    "footer_about": "من نحن",
+    "footer_contact": "اتصل بنا",
+    "footer_blog": "المدونة",
+    "footer_copy": "© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك.",
+    "btn_copy": "نسخ",
+    "art_badge_category": "أمان ملفات PDF والخصوصية",
+    "art_badge_verified": "معالجة كاملة داخل المتصفح (100%)",
+    "art_h1": "كيفية تعتيم وحذف النصوص الحساسة في ملفات PDF نهائياً دون رفعها للسحابة",
+    "art_lead": "رسم مربعات سوداء فوق النصوص في عارضات PDF لا يحذف الأحرف الموجودة أسفلها. تعرّف على أسباب تسريب التعتيم البصري للبيانات الحساسة، وكيفية تسطيح صفحات المستند عبر Canvas وتطهير العقود داخل ذاكرة المتصفح.",
+    "art_meta_author_label": "الكاتب: ",
+    "art_meta_author_val": "فريق أمان فانتوركيت",
+    "art_meta_pub_label": "تاريخ النشر: ",
+    "art_meta_pub_val": "6 أكتوبر 2026",
+    "art_meta_time_label": "وقت القراءة: ",
+    "art_meta_time_val": "6 دقائق",
+    "art_meta_exfil_label": "تسريب الشبكة: ",
+    "art_meta_exfil_val": "0 بايت (معالجة محلية)",
+    "art_toc_heading": "فهرس المحتويات",
+    "art_toc_1": "1. الإجابة التنفيذية: التعتيم البصري مقابل التسطيح النقطي الفعلي",
+    "art_toc_2": "2. الأداة التفاعلية: أداة تنقيح وتعتيم PDF من فانتوركيت",
+    "art_toc_3": "3. الدليل التقني خطوة بخطوة لتطهير المستندات",
+    "art_toc_4": "4. تحليل أمني معمق: WebAssembly وبكسلات Canvas وعزل الذاكرة",
+    "art_toc_5": "5. الأسئلة الشائعة حول أمان تعتيم مستندات PDF",
+    "sec1_h2": "1. الإجابة التنفيذية: التعتيم البصري مقابل التسطيح النقطي الفعلي",
+    "sec1_p1": "في كل عام، تسرّب مكاتب المحاماة الكبرى والجهات الطبية بيانات سرية بالخطأ بسبب التعتيم غير الصحيح لمستندات PDF. وقد شهدت قضايا فيدرالية شهيرة تسريبات محرجة لأسماء سرية وأرقام حسابات بنكية لأن المحامي قام ببساطة برسم مستطيل أسود فوق النص باستخدام عارض ملفات عادي.",
+    "sec1_p2": "لفهم سبب حدوث ذلك، يجب معرفة بنية مواصفات PDF (ISO 32000). ملف PDF ليس صورة نقطية مسطحة، بل هو رسم بياني للكائنات يحتوي على طبقات مستقلة:",
+    "sec1_li1": "<strong>تدفقات المحتوى:</strong> تعليمات رسم المتجهات المتسلسلة التي تحتوي على كتل النصوص (معاملات <code>BT ... ET</code>)، ومصفوفات ترميز الخطوط (قواميس <code>/ToUnicode</code>)، وإحداثيات التباعد.",
+    "sec1_li2": "<strong>قواميس التعليقات التوضيحية:</strong> عناصر التراكب (مثل <code>/Square</code> أو <code>/Highlight</code> أو <code>/FreeText</code>) الموضوعة فوق المكدس المرئي عند مربعات إحداثيات محددة.",
+    "sec1_li3": "<strong>البيانات الوصفية للمستند:</strong> قواميس معلومات المستند المخفية (مثل <code>/Author</code> و<code>/CreationDate</code>) وأشجار بيانات XMP الوصفية.",
+    "sec1_p3": "عند رسم مستطيل أسود في برامج تحرير PDF الأساسية أو معالجات الكلمات، ينشئ التطبيق ببساطة شكلاً توضيحياً أو مستطيلاً معبأ بلون ويوضع في ترتيب أعلى (z-index) فوق النص. <strong>تظل طبقة النص الأصلية الواقعة أسفل المستطيل سليمة بنسبة 100% داخل الملف الثنائي.</strong>",
+    "comp_danger_title": "التعتيم البصري السطحي (شديد الخطورة)",
+    "comp_danger_1": "❌ رموز الأحرف تظل سليمة داخل الملف الثنائي",
+    "comp_danger_2": "❌ يمكن لأي شخص نسخ النص عبر Ctrl+A ثم Ctrl+C",
+    "comp_danger_3": "❌ تستخرج الأدوات البرمجية (مثل pdftotext) النص في أجزاء من الثانية",
+    "comp_danger_4": "❌ يمكن إزالة الأشكال السوداء بسهولة في برامج التعديل",
+    "comp_danger_5": "❌ تظل البيانات الوصفية وطبقات OCR قابلة للبحث والتعرف",
+    "comp_secure_title": "التسطيح النقطي الفعلي (آمن بنسبة 100%)",
+    "comp_secure_1": "✅ حرق المتجهات والخطوط في مصفوفة بكسلات مباشرة بالذاكرة",
+    "comp_secure_2": "✅ إحداثيات التعتيم تستبدل قيم البكسل باللون الأسود مباشرة",
+    "comp_secure_3": "✅ إزالة تدفقات النصوص تماماً من هيكل المستند",
+    "comp_secure_4": "✅ عملية غير قابلة للاسترجاع رياضياً: لا يتبقى أي حرف",
+    "comp_secure_5": "✅ لا يتم رفع أي ملف: المستندات لا تغادر جهازك أبداً",
+    "sec1_p4": "يمكن لأي شخص يحمّل ملف PDF معتّم بصرياً أن يضغط ببساطة على <kbd>Ctrl+A</kbd> (أو <kbd>Cmd+A</kbd>)، وينسخ كل المحتوى إلى الحافظة، ثم يلصق النص غير المنقّح في أي محرر نصوص. أو بتشغيل أمر سطر أوامر بسيط مثل <code>pdftotext leaked-file.pdf - | grep -i \"secret\"</code> ليتم استخراج النص المزعوم حجبه في أجزاء من الثانية.",
+    "sec1_p5": "يتطلب التنقيح الحقيقي <strong>تسطيحاً تدميرياً</strong>: يجب تحويل رموز المتجهات وإحداثيات الخطوط إلى بكسلات نقطية، واستبدال المناطق المنقحة بمصفوفات بكسلات سوداء معتمة، وإعادة بناء المستند كلياً دون أي تدفقات نصية سابقة.",
+    "sec2_h2": "2. الأداة التفاعلية: أداة تنقيح وتعتيم PDF من فانتوركيت",
+    "sec2_p1": "تجبرك أدوات تنقيح PDF السحابية التقليدية على رفع عقودك الحساسة وسجلاتك الضريبية والطبية إلى خوادم خارجية. هذا يعرض مستنداتك لمخاطر اختراق التخزين السحابي وتسريب البيانات وانتهاك معايير الامتثال (مثل GDPR وHIPAA).",
+    "tool_badge": "بيئة معزولة 100% داخل المتصفح",
+    "tool_title": "تشغيل أداة تنقيح وتعتيم PDF — 100% داخل المتصفح",
+    "tool_desc": "قم بتعتيم وحذف البيانات الحساسة وتسطيح ملفات PDF فورياً دون إرسالها إلى السحابة. تتم معالجة مستنداتك وتعتيمها بالكامل داخل ذاكرة جهازك باستخدام تقنيات HTML5 Canvas وWebAssembly.",
+    "tool_p1": "0 بايت مرسلة (بدون سجلات)",
+    "tool_p2": "عرض عالي الدقة متعدد الصفحات",
+    "tool_p3": "حرق بكسلات Canvas بشكل لا رجعة فيه",
+    "tool_p4": "تشغيل فوري دون اتصال بالإنترنت",
+    "tool_btn": "تشغيل أداة تعتيم PDF الآن",
+    "tool_guarantee": "مجانية دائماً • لا تتطلب حساباً • بدون إرسال أي بيانات",
+    "sec3_h2": "3. الدليل التقني خطوة بخطوة لتطهير المستندات",
+    "sec3_lead": "إليك الدليل العملي المكوّن من 3 خطوات لتطهير العقود القانونية والملفات الطبية والسجلات المالية بأمان تام باستخدام معمارية فانتوركيت المحلية داخل المتصفح:",
+    "step1_h3": "تحميل الملف محلياً إلى ذاكرة المتصفح (RAM)",
+    "step1_desc": "افتح أداة تنقيح PDF وأسقط مستندك في منطقة الإسقاط. يستخدم التطبيق واجهة FileReader.readAsArrayBuffer القياسية. ستلاحظ في لوحة المطورين (قسم الشبكة) أنه لا يتم إرسال أي طلب POST خارجي، ويبقى الملف محلياً في الذاكرة.",
+    "step2_h3": "تطبيق تعتيم دقيق حسب الإحداثيات",
+    "step2_desc": "يقوم فانتوركيت بعرض كل صفحة على عنصر Canvas بدقة عالية مضاعفة (مقياس 2x). انقر واسحب فوق الأرقام القومية أو الحسابات المصرفية أو التوقيعات لتطبيق التعتيم الأسود مع تتبع حي للإحداثيات.",
+    "step3_h3": "تصدير المستند المطهّر والمبسّط نهائياً",
+    "step3_desc": "انقر فوق تنزيل ملف PDF المنقّح. يقوم المحول بحرق إحداثيات التعتيم مباشرة في بكسلات الصورة بلون #000000 الصافي، ثم يتم تجميع ملف PDF جديد كلياً يحذف الخطوط والنصوص والبيانات الوصفية السابقة.",
+    "sec4_h2": "4. تحليل أمني معمق: WebAssembly وبكسلات Canvas وعزل الذاكرة",
+    "sec4_lead": "كيف يضمن تسطيح مستندات PDF محلياً استحالة استرجاع البيانات المحذوفة؟ دعنا نفحص خط المعالجة المعماري الذي يدعم محرك متصفح فانتوركيت:",
+    "sec4_sub1": "تسلسل تحويل Canvas وتجاوز البكسلات",
+    "sec4_p1": "في مستندات PDF القياسية، يخضع عرض الأحرف لمسارات المتجهات. على سبيل المثال، يعتمد رسم الحرف \"A\" على تنفيذ منحنيات بيزييه تشير إلى مقاييس رموز الخطوط المخزنة في برنامج خط TrueType أو Type1 مدمج:",
+    "code1_header": "تدفق محتوى متجهات PDF غير الآمن في العارضات التقليدية",
+    "sec4_p2": "على النقيض من ذلك، يقوم محرك فانتوركيت المحلي بتحليل الصفحة باستخدام PDF.js وعرض أوامر المتجهات مباشرة على عنصر <code>CanvasRenderingContext2D</code> المسرّع عتادياً. وخلال هذه الخطوة، يتم تحويل تعليمات المتجهات إلى مصفوفة بكسلات مسطحة <code>ImageData</code> (بكسلات RGBA):",
+    "code2_header": "تسطيح فانتوركيت وكتابة البكسلات المباشرة (في الذاكرة فقط)",
+    "sec4_p3": "بمجرد أن يقوم <code>ctx.fillRect()</code> بكتابة أصفار البكسل (RGBA: <code>[0, 0, 0, 255]</code>) فوق إحداثيات النص الحساس في الذاكرة، <strong>تنعدم قيم البكسل السابقة تماماً من ذاكرة النظام</strong>. وعند تحويل الصورة المسطحة إلى ملف PDF نظيف، لا يتبقى أي كائن خط، ولا جداول <code>/ToUnicode</code>، ولا أي تعليقات نصية.",
+    "sec4_sub2": "التحقق الذاتي: كيف تفحص مستندك المنقح بنفسك",
+    "sec4_p4": "لا يتعين على فرق الأمان ومسؤولي الامتثال الاعتماد على كلامنا فقط. يمكنك التحقق بشكل مستقل من تطهير أي مستند PDF تم تصديره من فانتوركيت باستخدام أدوات الفحص الجنائي عبر سطر الأوامر:",
+    "sec4_audit_1": "<strong>اختبار استخراج النصوص:</strong> شغّل الأمر <code>pdftotext sanitized.pdf -</code>. لن يخرج الأمر أي حرف على الإطلاق لأن ملف PDF يحتوي فقط على إطارات صور نقطية مسطحة.",
+    "sec4_audit_2": "<strong>فحص السلاسل الثنائية (Grep):</strong> شغّل الأمر <code>strings sanitized.pdf | grep -i \"SSN\"</code>. ستكون النتيجة فارغة تماماً لأن تدفقات الأحرف لم يتم تضمينها في قاموس المستند.",
+    "sec4_audit_3": "<strong>تدقيق شبكة الاتصال:</strong> افتح أدوات المطور في متصفحك (<kbd>F12</kbd>)، وانتقل إلى علامة تبويب <strong>Network</strong>، ثم رشّح عبر <code>Fetch/XHR</code>. قم بتنفيذ عملية تعتيم كاملة من البداية للنهاية؛ ستلاحظ تسجيل <strong>0 طلبات</strong> مرسلة لأي خادم خارجي.",
+    "sec5_h2": "5. الأسئلة الشائعة حول أمان تعتيم مستندات PDF",
+    "faq_q1": "هل يمكن تحديد أو نسخ النص الموجود أسفل المربع الأسود في ملف PDF عادي؟",
+    "faq_a1": "نعم. في عارضات PDF التقليدية، وضع شكل أسود يضيف مجرد علامة بصرية سطحية فوق النص، بينما تظل أحرف النص وإحداثياته سليمة تماماً داخل تدفق الملف. يمكن لأي شخص الضغط على \"تحديد الكل\" أو استخدام أدوات سطر الأوامر لاستخراج البيانات الحساسة فوراً.",
+    "faq_q2": "ما هو الفرق بين التعتيم البصري والتنقيح الفعلي لملف PDF؟",
+    "faq_a2": "التعتيم البصري يخفي النص عن العين فقط دون حذف أحرفه من الملف. أما التنقيح الفعلي فيتطلب تسطيح الصفحة إلى بكسلات أو حذف كائنات النصوص والخطوط والبيانات الوصفية نهائياً من بنية الملف بحيث يستحيل استرجاعها رياضياً.",
+    "faq_q3": "كيف تضمن أداة تنقيح PDF من فانتوركيت عدم مغادرة أي بيانات لجهازي؟",
+    "faq_a3": "تعمل أداة فانتوركيت بنسبة 100% داخل بيئة متصفحك المعزولة. تتم معالجة الملف في الذاكرة عبر WebAssembly وPDF.js وعرضه على Canvas ثم إعادة تجميعه عبر جافاسكريبت محلياً. لا يتم إرسال أي بايت لأي خادم، مما يقضي تماماً على مخاطر الاختراق السحابي.",
+    "final_cta_title": "هل أنت مستعد لتعتيم وتطهير مستنداتك بأمان؟",
+    "final_cta_desc": "احمِ أسرارك التجارية وبيانات عملائك المالية وهوياتك الشخصية. استخدم أداة تنقيح PDF لتطهير فوري وخاص داخل جهازك.",
+    "final_cta_btn": "تشغيل أداة تعتيم وتطهير PDF ←",
+    "final_cta_more": "استكشف المزيد من الأدلة الهندسية",
+    "a2_breadcrumb_blog": "المدونة",
+    "a2_breadcrumb_cat": "التحليل الجنائي والخصوصية",
+    "a2_badge_cat": "الأدلة الجنائية والخصوصية",
+    "a2_badge_verified": "تنفيذ محلي 100% في المتصفح",
+    "a2_h1": "لماذا يفشل الحذف التقليدي للبيانات الوصفية: فحص هياكل EXIF وXMP وتدفقات المستندات",
+    "a2_lead": "غالبًا ما تترك برامج تنظيف الملفات القياسية الأرقام التسلسلية للكاميرات وإحداثيات GPS وسجلات التعديل سليمة داخل الأشجار الثنائية للمستندات. اكتشف سبب فشل أدوات نظام التشغيل السطحية وكيف يقوم التطهير الثنائي في ذاكرة RAM بمحو الآثار الجنائية بالكامل محليًا داخل متصفحك.",
+    "a2_meta_author_label": "الكاتب: ",
+    "a2_meta_author": "قسم أبحاث فانتوركيت",
+    "a2_meta_pub_label": "تاريخ النشر: ",
+    "a2_meta_pub": "أكتوبر 2026",
+    "a2_meta_time_label": "وقت القراءة: ",
+    "a2_meta_time": "5 دقائق",
+    "a2_meta_exfil_label": "تسريب البيانات: ",
+    "a2_meta_exfil": "0 بايت (معالجة محلية)",
+    "a2_nav_launch": "افتح منظف البيانات الوصفية",
+    "a2_toc_heading": "فهرس المحتويات",
+    "a2_toc_1": "1. وهم تنظيف خصائص الملفات في أنظمة التشغيل",
+    "a2_toc_2": "2. وسوم MakerNotes وXMP وشبكات حمولات EXIF المخفية",
+    "a2_toc_3": "3. أداة تفاعلية: منظف البيانات الوصفية من VantorKit",
+    "a2_toc_4": "4. تحليل عميق: التطهير الثنائي في ذاكرة RAM",
+    "a2_toc_5": "5. الأسئلة الشائعة",
+    "a2_sec1_h2": "1. وهم تنظيف خصائص الملفات في أنظمة التشغيل",
+    "a2_sec1_p1": "يقوم الصحفيون والناشطون والمستخدمون يوميًا برفع الصور والمستندات ظنًا منهم أن بياناتهم الشخصية قد حُذفت لمجرد النقر على \"إزالة الخصائص والمعلومات الشخصية\" في مدير ملفات نظام التشغيل. في الواقع، يستخرج المحققون الجنائيون الرقميون بانتظام إحداثيات GPS فائقة الدقة والأرقام التسلسلية للعدسات وأسماء مالكي الكاميرات من ملفات يُفترض أنها نظيفة تمامًا.",
+    "a2_sec1_p2": "لا تخزن تنسيقات الوسائط الحديثة — مثل JPEG (JFIF/EXIF) وPNG وTIFF وPDF — البيانات الوصفية في موقع موحد يسهل مسحه، بل يتم توزيعها عبر قطاعات حاويات متعددة ومستقلة، يعالج كل منها معالج برمجي منفصل.",
+    "a2_comp_danger_title": "❌ التنظيف السطحي لنظام التشغيل",
+    "a2_comp_danger_1": "• يمسح فقط وسوم EXIF القياسية العامة (التاريخ، المؤلف)",
+    "a2_comp_danger_2": "• يترك كتل MakerNote الخاصة بالمصنعين دون أي مساس",
+    "a2_comp_danger_3": "• يحتفظ بمعاينات الصور المصغرة المضمنة المحتوية على إحداثيات GPS",
+    "a2_comp_danger_4": "• يحافظ على شجرة سجل تعديلات Adobe XMP والأسماء الأصلية",
+    "a2_comp_secure_title": "✅ التطهير الثنائي الحقيقي",
+    "a2_comp_secure_1": "• يجرد كافة علامات APP1 وAPP2 وقطاعات العلامات الإضافية",
+    "a2_comp_secure_2": "• يعيد ترميز مصفوفات البكسل الخام مباشرة في حاوية ملفات نقية",
+    "a2_comp_secure_3": "• يمحو تمامًا الأرقام التسلسلية للأجهزة وتجزئات المعايرة",
+    "a2_comp_secure_4": "• تنفيذ محلي 100% في ذاكرة RAM للمتصفح دون أي إرسال للخوادم",
+    "a2_sec2_h2": "2. وسوم MakerNotes وXMP وشبكات حمولات EXIF المخفية",
+    "a2_sec2_p1": "يحدث أخطر تسريب للبيانات الوصفية داخل وسم <strong>MakerNote</strong> (الوسم 0x927c) ضمن شجرة مؤشرات EXIF IFD0. تقوم الشركات المصنعة للكاميرات مثل Apple وSony وCanon وNikon بتضمين كتل ثنائية مملوكة لها داخل هذا الوسم، تشمل ما يلي:",
+    "a2_sec2_li1": "<strong>الأرقام التسلسلية الدقيقة للكاميرا:</strong> معرفات فريدة تربط الصور المجهولة بجهاز فيزيائي محدد.",
+    "a2_sec2_li2": "<strong>عدد مرات فتح المصراع الداخلي:</strong> إثبات رياضي دقيق لتاريخ استخدام الجهاز.",
+    "a2_sec2_li3": "<strong>معاينات الصور المصغرة عالية الدقة:</strong> نسخ مصغرة غير معدلة للمشهد غالبًا ما تكشف الأجزاء المقصوصة أو المحجوبة.",
+    "a2_sec2_p2": "نظرًا لأن هياكل MakerNote ملكية خاصة وتختلف باختلاف إصدار البرامج الثابتة، فإن أدوات تنظيف أنظمة التشغيل تتجنب تعديلها لمنع تلف بنية ملف الصورة. ونتيجة لذلك، تظل هذه الأدلة الجنائية الأكثر حساسية سليمة تمامًا.",
+    "a2_tool_badge": "أداة متصفح معزولة 100% محلياً",
+    "a2_tool_title": "تشغيل أداة تنظيف وتطهير البيانات الوصفية — 100% داخل المتصفح",
+    "a2_tool_desc": "افحص وطهّر بيانات EXIF وXMP وIPTC وMakerNotes فورياً داخل متصفحك. تجري جميع المعالجات محلياً في ذاكرة جهازك مع 0 بايت مرسلة لأي خادم سحابي.",
+    "a2_tool_btn": "تشغيل أداة تنظيف البيانات الوصفية",
+    "a2_sec4_h2": "4. تحليل عميق: التطهير الثنائي في ذاكرة RAM",
+    "a2_sec4_p1": "تتبع منصة VantorKit منهجية رياضية دقيقة لإزالة البيانات الوصفية نهائيًا؛ فبدلًا من البحث عن وسوم فردية ومحاولة تصفيرها، يعتمد محركنا على <strong>خط أنابيب إعادة البناء بالعزل التام</strong>:",
+    "a2_sec4_p2": "من خلال فك تشفير البكسلات المرئية وكتابتها في ترويسة حاوية ملفات تم إنشاؤها حديثًا، يتم استبعاد 100% من بيانات EXIF وXMP وIPTC وMakerNote وملفات تعريف ICC الملحقة. لن يتبقى أي أثر لعتاد الكاميرا الأصلي أو إحداثيات الموقع الجغرافي بعد عملية إعادة البناء هذه.",
+    "a2_sec5_h2": "5. الأسئلة الشائعة",
+    "a2_faq_q1": "هل إزالة الخصائص في مستكشف Windows تحذف كافة البيانات الوصفية للصور؟",
+    "a2_faq_a1": "كلا. الميزة المدمجة في نظام Windows تحذف وسوم EXIF القياسية فقط، لكنها تتجاهل كتل MakerNote والأرقام التسلسلية الاحتكارية للعتاد وملفات XMP المدمجة.",
+    "a2_faq_q2": "ما الفرق بين المسح السطحي للبيانات والتطهير الثنائي للملفات؟",
+    "a2_faq_a2": "المسح السطحي يستبدل قيم المفاتيح المعروفة بقيم فارغة مع بقاء الهيكل الثنائي، بينما التطهير الثنائي يعيد بناء الصورة أو المستند بنسخ مصفوفات البكسل النقية فقط وإسقاط كافة الترويسات الملحقة تماماً.",
+    "a2_faq_q3": "لماذا يعد تطهير البيانات الوصفية داخل المتصفح أكثر أماناً من الخدمات السحابية؟",
+    "a2_faq_a3": "الأدوات السحابية تتطلب رفع ملفاتك الخام غير المنقحة عبر الإنترنت، مما ينقل إحداثيات منزلك الدقيقة ومعرفات أجهزتك لطرف ثالث، بينما تحمي المعالجة المحلية داخل المتصفح ملفاتك داخل جهازك دون أي تسريب عبر الشبكة.",
+    "a2_final_title": "احمِ خصوصيتك قبل نشر المستندات والصور",
+    "a2_final_desc": "لا تنشر صوراً أو تشارك مستندات تحوي آثار موقعك الشخصي أو الأرقام التسلسلية لأجهزتك. طهّرها فوراً عبر فانتوركيت.",
+    "a2_final_btn": "فتح أداة تنظيف البيانات الوصفية ←",
+    "a2_final_more": "استكشف المزيد من الأدلة الهندسية",
+    "a3_breadcrumb_blog": "المدونة",
+    "a3_breadcrumb_cat": "الأداء وWebAssembly",
+    "a3_badge_cat": "الأداء وتقنية Wasm",
+    "a3_badge_verified": "تنفيذ محلي 100% في المتصفح",
+    "a3_h1": "معالجة البيانات الضخمة من جانب العميل: تحويل حمولات 500 ميغابايت في ذاكرة RAM للمتصفح",
+    "a3_lead": "كيف تقوم خيوط Web Workers التدفقية وكائنات Transferable ArrayBuffers ومحركات WebAssembly المجزأة بمعالجة مجموعات بيانات JSON وCSV للمؤسسات محليًا مع صفر فواتير حوسبة سحابية.",
+    "a3_meta_author_label": "الكاتب: ",
+    "a3_meta_author": "مختبر أداء فانتوركيت",
+    "a3_meta_pub_label": "تاريخ النشر: ",
+    "a3_meta_pub": "أكتوبر 2026",
+    "a3_meta_time_label": "وقت القراءة: ",
+    "a3_meta_time": "7 دقائق",
+    "a3_meta_exfil_label": "تسريب البيانات: ",
+    "a3_meta_exfil": "0 بايت (معالجة محلية)",
+    "a3_nav_launch": "افتح محول البيانات الضخمة",
+    "a3_toc_heading": "فهرس المحتويات",
+    "a3_toc_1": "1. نهاية JSON.parse(): قفزات استهلاك الذاكرة في محرك V8",
+    "a3_toc_2": "2. معمارية عدم النسخ عبر مصفوفات Transferable ArrayBuffers",
+    "a3_toc_3": "3. أداة تفاعلية: محول البيانات الضخمة من VantorKit",
+    "a3_toc_4": "4. تقنية WebAssembly المجزأة وخيوط المعالجة الخلفية Web Workers",
+    "a3_toc_5": "5. الأسئلة الشائعة",
+    "a3_sec1_h2": "1. نهاية JSON.parse(): قفزات استهلاك الذاكرة في محرك V8",
+    "a3_sec1_p1": "يفترض معظم مطوري الواجهات الأمامية أن محركات جافاسكريبت الحديثة تعجز عن معالجة حمولات بيانات تتجاوز مئات الميغابايتات. عندما يحاول المستخدم تحليل نص JSON أو CSV بحجم 200 ميغابايت عبر <code>JSON.parse()</code> التقليدية، تتجمد علامة تبويب المتصفح فورًا وتتوقف عن الاستجابة وغالبًا ما تنهار بسبب خطأ نفاد الذاكرة <code>Out of Memory (OOM)</code>.",
+    "a3_sec1_p2": "هذا الفشل لا يرجع إلى ضعف عتاد أجهزة المستخدمين — فالأجهزة المحمولة اليوم تحتوي عادة على 16 إلى 64 غيغابايت من ذاكرة RAM. بل يكمن عنق الزجاجة في <strong>نموذج كومة الذاكرة V8 أحادي الخيط</strong>؛ حيث يؤدي تحويل نص 200 ميغابايت إلى ملايين الكائنات البرمجية إلى مضاعفة البصمة المكانية بمقدار 4 إلى 8 أضعاف، مما يشل خيط العرض ويعطل الرسوميات.",
+    "a3_comp_danger_title": "❌ التحليل التقليدي في خيط الواجهة الرئيسي",
+    "a3_comp_danger_1": "• يتسبب في تجميد واجهة المستخدم ومنع التفاعل",
+    "a3_comp_danger_2": "• تضخم استهلاك الذاكرة بمقدار 4 إلى 8 أضعاف",
+    "a3_comp_danger_3": "• إطلاق فترات توقف حادة لتجميع النفايات (GC) في محرك V8",
+    "a3_comp_danger_4": "• انهيار متصفحات الأجهزة المحمولة والأجهزة الضعيفة",
+    "a3_comp_secure_title": "✅ خيوط Web Worker التدفقية من VantorKit",
+    "a3_comp_secure_1": "• تعمل في خيوط معالجة خلفية مع صفر انخفاض في أداء الواجهة",
+    "a3_comp_secure_2": "• نقل صفري للنسخ عبر Transferable ArrayBuffers",
+    "a3_comp_secure_3": "• معالجة تدفقية مجزأة مع حدود ذاكرة ثابتة وصارمة",
+    "a3_comp_secure_4": "• معالجة مجموعات بيانات 500+ ميغابايت دون أي رفع للخوادم",
+    "a3_sec2_h2": "2. معمارية عدم النسخ عبر مصفوفات Transferable ArrayBuffers",
+    "a3_sec2_p1": "لمعالجة مجموعات البيانات الضخمة دون نسخها مرارًا وتكرارًا عبر حدود الذاكرة، تعتمد VantorKit على <strong>الكائنات القابلة للنقل (Transferable Objects)</strong>. خلافًا لاستدعاء <code>worker.postMessage(data)</code> التقليدي الذي يستنسخ مصفوفات البايت في RAM، تنقل الكائنات القابلة للنقل الملكية فورًا مع صفر استهلاك للمعالج:",
+    "a3_sec2_li1": "<strong>زمن نقل الذاكرة:</strong> 0.1 مللي ثانية فقط لحمولة 500 ميغابايت.",
+    "a3_sec2_li2": "<strong>صفر تخصيص في كومة الذاكرة:</strong> يتم قطع مؤشر الخيط الرئيسي فورًا لمنع التخصيص المزدوج.",
+    "a3_sec2_li3": "<strong>تقطيع تدفقي خارج الخيط الرئيسي:</strong> يقوم العامل بتقطيع المخزن المؤقت إلى أجزاء ثابتة بحجم 64 كيلوبايت للحفاظ على كفاءة الذاكرة المخبأة.",
+    "a3_tool_badge": "معالجة في الذاكرة العشوائية داخل المتصفح 100%",
+    "a3_tool_title": "تشغيل محوّل البيانات الضخمة — 100% داخل المتصفح",
+    "a3_tool_desc": "حوّل ورشّح وجمّع ملفات CSV وJSON وTSV الضخمة التي تصل إلى 500 ميغابايت مباشرة في متصفحك. تجري جميع الحسابات في خيوط Web Workers معزولة دون إرسال بايت واحد إلى خوادم خارجية.",
+    "a3_tool_btn": "تشغيل أداة محوّل البيانات الضخمة",
+    "a3_sec4_h2": "4. تقنية WebAssembly المجزأة وخيوط المعالجة الخلفية Web Workers",
+    "a3_sec4_p1": "إليك كيفية قيام VantorKit بنقل المخازن المؤقتة للملفات الكبيرة إلى خيط عمل خلفي باستخدام دلالات النقل الصفري:",
+    "a3_sec4_p2": "داخل خيط Web Worker، تقوم وحدات WebAssembly أو المصفوفات المكتوبة بتحليل تدفقات البايت مباشرة إلى تنسيق عمودي فائق السرعة، مما يتيح التصفية والتحويل الفوريين بينما يحافظ خيط الواجهة على سرعة 60 إطارًا في الثانية بسلاسة تامة.",
+    "a3_sec5_h2": "5. الأسئلة الشائعة",
+    "a3_faq_q1": "هل يستطيع متصفح الويب معالجة ملفات JSON أو CSV بحجم 500 ميغابايت دون انهيار؟",
+    "a3_faq_a1": "نعم. في حين أن استخدام JSON.parse() القياسي على خيط الواجهة يؤدي إلى تجميد المتصفح بسبب نفاد الذاكرة، فإن تقسيم البيانات إلى أجزاء ونقلها إلى خيط Web Worker مخصص يتجاوز ذاكرة الخيط الرئيسي ويعمل بسلاسة فائقة.",
+    "a3_faq_q2": "ما هي الكائنات القابلة للنقل (Transferable Objects) ولماذا تمنع تضاعف الذاكرة؟",
+    "a3_faq_a2": "الكائنات القابلة للنقل مثل ArrayBuffers تنقل ملكية البيانات مباشرة من الخيط الرئيسي إلى خيط المعالجة دون نسخ البايتات. يتخلى الخيط المصدر عن مؤشره فورياً، مما يمنع حجز الذاكرة مرتين في RAM.",
+    "a3_faq_q3": "لماذا تعد معالجة البيانات في جانب العميل أفضل لمجموعات البيانات السرية للشركات؟",
+    "a3_faq_a3": "رفع سجلات مالية أو ملفات طبية ضخمة إلى الخوادم السحابية يخلق مخاطر تتعلق بالامتثال القانوني واختناق النطاق الترددي وتكاليف الحوسبة السحابية الباهظة، بينما تبقي المعالجة المحلية بياناتك الحساسة داخل حدود جهازك فقط.",
+    "a3_final_title": "عالج مجموعات البيانات الضخمة فورياً وبأمان",
+    "a3_final_desc": "استمتع بتحويل البيانات بسرعة فائقة داخل جهازك دون رفع أي بيانات إلى مزودي الخدمات السحابية الخارجية.",
+    "a3_final_btn": "فتح محوّل البيانات الضخمة ←",
+    "a3_final_more": "استكشف المزيد من الأدلة الهندسية",
+    "a2_meta_author_val": "فريق أبحاث VantorKit",
+    "a2_meta_pub_val": "أكتوبر 2026",
+    "a2_meta_time_val": "5 دقائق قراءة",
+    "a2_meta_exfil_val": "0 بايت (من جانب العميل)",
+    "a2_toc_title": "جدول المحتويات",
+    "a2_sec3_badge": "أداة متصفح محلية 100%",
+    "a2_sec3_title": "افتح منظف البيانات الوصفية — من جانب العميل 100%",
+    "a2_sec3_desc": "افحص وطهر وسوم EXIF وXMP وIPTC وMakerNotes فورًا داخل متصفحك. تتم المعالجة بالكامل داخل ذاكرة RAM بجهازك دون رفع بايت واحد إلى أي خادم سحابي.",
+    "a2_sec3_btn": "تشغيل أداة تنظيف البيانات الوصفية",
+    "a2_faq1_q": "هل يؤدي مسح الخصائص في Windows Explorer إلى حذف كافة البيانات الوصفية للصورة؟",
+    "a2_faq1_a": "كلا؛ تزيل ميزة \"إزالة الخصائص\" المدمجة في Windows Explorer وسوم EXIF القياسية فقط، لكنها تتجاهل في أغلب الأحيان كتل MakerNote، والأرقام التسلسلية للكاميرات، وحاويات XMP الجانبية المضمنة.",
+    "a2_faq2_q": "ما الفرق بين التجفيف السطحي للبيانات الوصفية والتطهير الثنائي الكامل؟",
+    "a2_faq2_a": "يقوم التجفيف السطحي باستبدال مفاتيح القواميس المعروفة بقيم فارغة مع الإبقاء على البنية الثنائية دون تغيير، بينما يعيد التطهير الثنائي بناء المستند بنسخ مصفوفات البكسل الخام المؤكدة فقط مع التخلص التام من جميع ترويسات البيانات الوصفية الإضافية.",
+    "a2_faq3_q": "لماذا يعتبر تنظيف البيانات الوصفية داخل المتصفح أكثر أمانًا من الخدمات السحابية؟",
+    "a2_faq3_a": "تتطلب الأدوات السحابية إرسال ملفاتك الأصلية الخام عبر الإنترنت، مما يكشف إحداثيات منزلك عبر GPS ومعرفات أجهزتك وطوابعك الزمنية لخوادم أطراف ثالثة. أما المعالجة في ذاكرة RAM بالمتصفح فتطهر ملفاتك محليًا مع صفر تسريب عبر الشبكة.",
+    "a2_cta_title": "احمِ خصوصيتك قبل النشر على الإنترنت",
+    "a2_cta_desc": "لا تنشر أبدًا صورًا أو تشارك وثائق تحتوي على بيانات تتبع موقعك الجغرافي أو الأرقام التسلسلية لأجهزتك. طهرها فورًا وبأمان مع VantorKit.",
+    "a2_cta_btn1": "افتح منظف البيانات الوصفية ←",
+    "a2_cta_btn2": "استكشف المزيد من الأدلة الهندسية",
+    "a3_meta_author_val": "مختبر أداء VantorKit",
+    "a3_meta_pub_val": "أكتوبر 2026",
+    "a3_meta_time_val": "7 دقائق قراءة",
+    "a3_meta_exfil_val": "0 بايت (من جانب العميل)",
+    "a3_toc_title": "جدول المحتويات",
+    "a3_sec3_badge": "تنفيذ 100% في ذاكرة RAM للمتصفح",
+    "a3_sec3_title": "افتح محول البيانات الضخمة — محلي 100%",
+    "a3_sec3_desc": "حول وصف واجمع ملفات CSV وJSON وTSV الضخمة التي تصل إلى 500 ميغابايت مباشرة داخل متصفحك. تعمل كافة العمليات في خيوط Web Workers معزولة دون إرسال بايت واحد إلى خوادم خارجية.",
+    "a3_sec3_btn": "تشغيل أداة تحويل البيانات الضخمة",
+    "a3_faq1_q": "هل يمكن لمتصفح الويب معالجة ملفات JSON أو CSV بحجم 500 ميغابايت دون انهيار؟",
+    "a3_faq1_a": "نعم؛ بينما يتسبب استخدام JSON.parse() في خيط الواجهة الرئيسي بتجميد وانهيار الذاكرة، فإن تقسيم البيانات وتدفقها إلى خيط Web Worker مستقل عبر الكائنات القابلة للنقل يتجاوز كومة الذاكرة الرئيسية ويعمل بسلاسة مطلقة.",
+    "a3_faq2_q": "ما هي الكائنات القابلة للنقل (Transferable Objects) ولماذا تمنع ازدواجية الذاكرة؟",
+    "a3_faq2_a": "الكائنات القابلة للنقل مثل ArrayBuffers تنقل ملكية البايتات مباشرة من الخيط الرئيسي إلى خيط Web Worker بدلالات عدم النسخ، حيث يتنازل الخيط الأصلي عن مؤشره فورًا، مما يمنع الحجز المزدوج في ذاكرة RAM.",
+    "a3_faq3_q": "لماذا يعتبر تحليل البيانات محليًا أفضل للمجموعات السرية الخاصة بالمؤسسات؟",
+    "a3_faq3_a": "رفع سجلات مالية أو طبية بمليارات البايتات إلى الخوادم السحابية يثير مخاطر الامتثال القانوني وتكلفة حوسبة باهظة واختناقات في الشبكة. التنفيذ المحلي يحافظ على بياناتك الحساسة حصريًا داخل نطاق جهازك.",
+    "a3_cta_title": "عالج مجموعات البيانات الضخمة فورًا وبأمان",
+    "a3_cta_desc": "تمتع بتحويل بيانات فائق السرعة من جانب العميل دون رفع غيغابايتات من بياناتك السرية إلى أي مزود سحابي خارجي.",
+    "a3_cta_btn1": "افتح محول البيانات الضخمة ←",
+    "a3_cta_btn2": "استكشف المزيد من الأدلة الهندسية"
+  },
+  "fr": {
+    "blog_badge": "Blog",
+    "nav_all_tools": "Tous les 32 outils",
+    "nav_rss": "Flux RSS",
+    "nav_back_blog": "Hub Blog",
+    "nav_launch_redactor": "Ouvrir Rédacteur PDF",
+    "hero_badge": "Architecture & Recherche Côté Client",
+    "hero_title": "Guides <span>d'Ingénierie & Confidentialité</span> VantorKit",
+    "hero_subtitle": "Analyses architecturales approfondies, bac à sable cryptographique et guides pratiques pour applications web côté client. Découvrez comment inspecter, biffer et transformer vos documents sensibles dans la RAM sans transfert cloud.",
+    "feat_zero_uploads": "0 octet transféré au serveur",
+    "feat_in_browser": "Exécution 100% en RAM",
+    "feat_open_standards": "Standards du Web & WebAssembly",
+    "sec_latest_articles": "Derniers Articles Techniques",
+    "sec_subscribe_rss": "S'abonner via RSS",
+    "card1_cat": "Sécurité & Confidentialité PDF",
+    "card1_read_time": "6 min de lecture",
+    "card1_title": "Comment biffer définitivement le texte confidentiel d'un PDF sans envoi cloud",
+    "card1_excerpt": "Dessiner des boîtes noires dans un lecteur PDF standard crée un masque visuel qui conserve les caractères vectoriels. Découvrez pourquoi le caviardage classique échoue et comment l'aplatissement Canvas sécurise vos documents dans la RAM.",
+    "card1_author": "Par l'équipe Sécurité VantorKit",
+    "card1_date": "Oct 2026",
+    "card1_cta": "Lire le guide",
+    "card2_cat": "Forensique & Confidentialité",
+    "badge_coming_soon": "Bientôt disponible",
+    "card2_title": "Pourquoi le nettoyage classique de métadonnées échoue : analyse locale d'EXIF et XMP",
+    "card2_excerpt": "Les nettoyeurs de fichiers laissent souvent les numéros de série, balises GPS et historiques intacts dans les flux binaires. Analyse de la purge binaire côté client.",
+    "card2_author": "Par la Recherche VantorKit",
+    "card2_date": "Oct 2026",
+    "card2_read_time": "5 min de lecture",
+    "card2_cta": "Lire le guide",
+    "card3_cat": "Performance & Wasm",
+    "card3_title": "Transformation de mégadonnées côté client : traitement de 500 Mo en mémoire RAM",
+    "card3_excerpt": "Comment les Web Workers, les ArrayBuffers et WebAssembly traitent des flux JSON/CSV massifs côté client avec zéro coût d'infrastructure cloud.",
+    "card3_author": "Par le Lab Performance VantorKit",
+    "card3_date": "Oct 2026",
+    "card3_read_time": "7 min de lecture",
+    "card3_cta": "Lire le guide",
+    "rss_callout_title": "Zéro traqueur. Syndication RSS ouverte et respectueuse.",
+    "rss_callout_desc": "Nous ne collectons pas votre e-mail, n'utilisons aucun pixel espion ni cookie. Suivez nos publications techniques et nos outils cryptographiques directement via le flux RSS 2.0 standard.",
+    "rss_callout_btn": "Ouvrir le flux RSS (/blog/feed.xml)",
+    "footer_privacy": "Politique de confidentialité",
+    "footer_terms": "Conditions d'utilisation",
+    "footer_about": "À propos",
+    "footer_contact": "Contact",
+    "footer_blog": "Blog",
+    "footer_copy": "© 2026 VantorKit. Utilitaires Web rapides, gratuits et privés. Tout le traitement est effectué localement dans votre navigateur.",
+    "btn_copy": "Copier",
+    "art_badge_category": "Sécurité & Confidentialité PDF",
+    "art_badge_verified": "Exécution 100% en navigateur",
+    "art_h1": "Comment biffer définitivement le texte confidentiel d'un PDF sans envoi cloud",
+    "art_lead": "Dessiner des boîtes noires sur un PDF ne supprime pas les caractères sous-jacents. Découvrez pourquoi le masquage visuel compromet vos données et comment l'aplatissement Canvas sécurise vos contrats dans la RAM.",
+    "art_meta_author_label": "Auteur : ",
+    "art_meta_author_val": "Équipe Sécurité VantorKit",
+    "art_meta_pub_label": "Publié : ",
+    "art_meta_pub_val": "6 octobre 2026",
+    "art_meta_time_label": "Temps : ",
+    "art_meta_time_val": "6 min de lecture",
+    "art_meta_exfil_label": "Exfiltration Réseau : ",
+    "art_meta_exfil_val": "0 octet (Côté client)",
+    "art_toc_heading": "Table des matières",
+    "art_toc_1": "1. Réponse synthétique : Masquage visuel vs Aplatissement raster",
+    "art_toc_2": "2. Outil interactif : Rédacteur PDF VantorKit",
+    "art_toc_3": "3. Guide technique étape par étape pour sécuriser vos documents",
+    "art_toc_4": "4. Analyse approfondie : WebAssembly, pixels Canvas et isolation RAM",
+    "art_toc_5": "5. Foire Aux Questions (Sécurité du caviardage PDF)",
+    "sec1_h2": "1. Réponse synthétique : Masquage visuel vs Aplatissement raster",
+    "sec1_p1": "Chaque année, des cabinets juridiques renommés et des agences divulguent des données sensibles en raison d'un caviardage PDF erroné. De nombreux procès retentissants ont révélé des informations classifiées simplement parce qu'un avocat a dessiné un rectangle noir avec un lecteur PDF standard.",
+    "sec1_p2": "Pour comprendre ce phénomène, il faut observer la spécification ISO 32000 du PDF. Un document PDF n'est pas une image plate mais un ensemble d'objets avec calques indépendants :",
+    "sec1_li1": "<strong>Flux de contenu :</strong> Instructions séquentielles de dessin vectoriel contenant des blocs de texte (opérateurs <code>BT ... ET</code>), des matrices de codage de polices (dictionnaires <code>/ToUnicode</code>) et des coordonnées d'approche.",
+    "sec1_li2": "<strong>Dictionnaires d'annotations :</strong> Éléments superposés (<code>/Square</code>, <code>/Highlight</code> ou <code>/FreeText</code>) positionnés sur la pile visuelle au niveau de cadres de délimitation.",
+    "sec1_li3": "<strong>Métadonnées du document :</strong> Dictionnaires d'informations cachées du document (<code>/Author</code>, <code>/CreationDate</code>) et arbres de métadonnées XMP.",
+    "sec1_p3": "Lorsque vous dessinez un rectangle noir dans un éditeur PDF classique ou un traitement de texte, l'application crée simplement une annotation vectorielle et la positionne à un z-index supérieur sur le texte. <strong>La couche de texte originale située sous le rectangle reste 100% intacte dans le flux binaire.</strong>",
+    "comp_danger_title": "Masquage Visuel (Haut Risque)",
+    "comp_danger_1": "❌ Les glyphes restent intacts dans le flux binaire",
+    "comp_danger_2": "❌ N'importe qui peut copier le texte via Ctrl+A / Cmd+C",
+    "comp_danger_3": "❌ Des outils comme pdftotext extraient le texte en millisecondes",
+    "comp_danger_4": "❌ Les formes noires peuvent être supprimées dans Acrobat",
+    "comp_danger_5": "❌ Les métadonnées et couches OCR restent consultables",
+    "comp_secure_title": "Aplatissement Raster Réel (Sécurisé)",
+    "comp_secure_1": "✅ Vecteurs et polices convertis en matrice de pixels dans la RAM",
+    "comp_secure_2": "✅ Les zones biffées écrasent directement les tampons de pixels",
+    "comp_secure_3": "✅ Les flux de texte sont complètement détruits du dictionnaire",
+    "comp_secure_4": "✅ Mathématiquement irréversible : aucun glyphe ne subsiste",
+    "comp_secure_5": "✅ Zéro envoi cloud : le document ne quitte jamais votre RAM",
+    "sec1_p4": "Toute personne qui télécharge un PDF masqué visuellement peut simplement appuyer sur <kbd>Ctrl+A</kbd> (ou <kbd>Cmd+A</kbd>), copier tout le presse-papiers et coller le texte non biffé dans le Bloc-notes ou Word. De même, exécuter une commande terminal comme <code>pdftotext leaked-file.pdf - | grep -i \"secret\"</code> extrait le texte prétendument masqué en quelques millisecondes.",
+    "sec1_p5": "Un véritable caviardage exige un <strong>aplatissement destructif</strong> : les glyphes vectoriels et coordonnées de polices doivent être convertis en pixels matriciels, les zones masquées écrasées avec des tampons de pixels noirs opaques, et le document reconstruit sans aucun flux textuel sous-jacent.",
+    "sec2_h2": "2. Outil interactif : Rédacteur PDF VantorKit",
+    "sec2_p1": "Les outils classiques de caviardage de PDF en ligne vous obligent à téléverser vos contrats sensibles, déclarations fiscales et dossiers médicaux vers des serveurs tiers. Cela expose vos documents aux fuites de données dans le cloud et aux infractions de conformité RGPD/HIPAA.",
+    "tool_badge": "Bac à sable 100% côté client",
+    "tool_title": "Lancer le Rédacteur PDF VantorKit — 100% Côté Client",
+    "tool_desc": "Sécurisez, caviardez et aplatissez vos PDF sensibles instantanément sans transfert réseau. Le rendu et le masquage sont réalisés dans la mémoire de votre appareil via HTML5 Canvas et WebAssembly.",
+    "tool_p1": "0 octet transféré (Zéro journal)",
+    "tool_p2": "Rendu multipage haute résolution",
+    "tool_p3": "Fusion irréversible des pixels Canvas",
+    "tool_p4": "Fonctionne hors ligne instantanément",
+    "tool_btn": "Lancer le Rédacteur PDF",
+    "tool_guarantee": "Gratuit à vie • Sans compte • Zéro télémétrie serveur",
+    "sec3_h2": "3. Guide technique étape par étape pour sécuriser vos documents",
+    "sec3_lead": "Voici le guide pratique en 3 étapes pour assainir en toute sécurité vos contrats juridiques, dossiers médicaux et pièces financières via l'architecture locale de VantorKit :",
+    "step1_h3": "Charger le fichier localement dans la RAM",
+    "step1_desc": "Ouvrez le Rédacteur PDF VantorKit et déposez votre document. L'application utilise l'API standard FileReader.readAsArrayBuffer(). Dans l'onglet Réseau des outils de développement, aucune requête HTTP POST n'est émise.",
+    "step2_h3": "Appliquer des masquages précis par coordonnées",
+    "step2_desc": "VantorKit génère chaque page sur un élément Canvas à haute résolution (échelle 2x). Cliquez et glissez sur les numéros d'identification, IBAN ou signatures pour créer les zones noires avec suivi des coordonnées en temps réel.",
+    "step3_h3": "Exporter le document aplati et nettoyé",
+    "step3_desc": "Cliquez sur Télécharger le PDF biffé. Le moteur incruste les coordonnées noires directement dans le tampon 2D Canvas avec du noir #000000 pur, puis génère un nouveau PDF débarrassé de tout texte ou métadonnée sous-jacente.",
+    "sec4_h2": "4. Analyse approfondie : WebAssembly, pixels Canvas et isolation RAM",
+    "sec4_lead": "Comment l'aplatissement PDF côté client garantit-il l'impossibilité de reconstituer les données ? Examinons le pipeline architectural qui propulse le moteur de navigateur VantorKit :",
+    "sec4_sub1": "Le pipeline de pixellisation et écriture de pixels Canvas",
+    "sec4_p1": "Dans un document PDF standard, le rendu des caractères dépend de chemins vectoriels. Par exemple, le tracé de la lettre « A » exécute des courbes de Bézier référençant les glyphes intégrés dans une police TrueType ou Type1 :",
+    "code1_header": "Flux de contenu vectoriel PDF non sécurisé classique",
+    "sec4_p2": "À l'inverse, le moteur de caviardage local de VantorKit analyse la page avec PDF.js et restitue les commandes vectorielles directement sur un <code>CanvasRenderingContext2D</code> accéléré matériellement. Les instructions vectorielles sont converties en une matrice de pixels <code>ImageData</code> (RGBA) :",
+    "code2_header": "Aplatissement VantorKit & Écrasement des Pixels (RAM uniquement)",
+    "sec4_p3": "Dès que <code>ctx.fillRect()</code> écrit des zéros (RGBA : <code>[0, 0, 0, 255]</code>) sur les coordonnées en mémoire du texte sensible, <strong>les anciennes valeurs de pixels cessent d'exister dans la mémoire système</strong>. Lorsqu'une image aplatie est réintégrée dans un nouveau PDF, il n'y a plus aucun objet de police, ni table <code>/ToUnicode</code>, ni annotation textuelle.",
+    "sec4_sub2": "Vérification autonome : comment auditer votre PDF caviardé",
+    "sec4_p4": "Les équipes de sécurité et responsables de conformité peuvent vérifier de manière autonome l'assainissement de tout PDF exporté depuis VantorKit grâce à des utilitaires en ligne de commande :",
+    "sec4_audit_1": "<strong>Test d'extraction de texte :</strong> Exécutez <code>pdftotext sanitized.pdf -</code>. La commande renvoie 0 caractère car le PDF ne contient que des images matricielles.",
+    "sec4_audit_2": "<strong>Recherche de chaînes binaires :</strong> Exécutez <code>strings sanitized.pdf | grep -i \"SSN\"</code>. La commande ne renvoie rien car les flux de caractères n'ont jamais été encodés dans le fichier.",
+    "sec4_audit_3": "<strong>Audit de télémétrie réseau :</strong> Ouvrez les outils de développement (<kbd>F12</kbd>), accédez à l'onglet <strong>Réseau</strong> et filtrez par <code>Fetch/XHR</code>. Effectuez un caviardage complet : vous constaterez exactement <strong>0 requête</strong> vers un serveur externe.",
+    "sec5_h2": "5. Foire Aux Questions (Sécurité du caviardage PDF)",
+    "faq_q1": "Le texte sous une boîte noire dans un PDF standard peut-il encore être surligné ou copié ?",
+    "faq_a1": "Oui. Dans les lecteurs PDF classiques, dessiner une forme noire ajoute une simple annotation vectorielle au-dessus du texte. Les caractères et polices sous-jacents restent intacts. N'importe qui utilisant \"Tout sélectionner\" ou des outils en ligne de commande peut extraire les données en quelques secondes.",
+    "faq_q2": "Quelle est la différence entre un masquage visuel et un caviardage PDF réel ?",
+    "faq_a2": "Le masquage visuel cache le texte sans supprimer ses données binaires. Un caviardage réel requiert l'aplatissement matriciel ou la suppression destructrice des flux d'objets, métadonnées et dictionnaires de polices, rendant toute récupération impossible.",
+    "faq_q3": "Comment le Rédacteur PDF VantorKit garantit-il qu'aucune donnée ne quitte mon ordinateur ?",
+    "faq_a3": "VantorKit fonctionne à 100% côté client dans le bac à sable de votre navigateur. Le PDF est chargé en mémoire via WebAssembly et PDF.js, rendu sur un Canvas en RAM et reconstitué via JavaScript local. Zéro octet n'est envoyé vers un serveur.",
+    "final_cta_title": "Prêt à biffer vos documents en toute sécurité ?",
+    "final_cta_desc": "Protégez vos secrets d'affaires, données financières et identités personnelles. Utilisez le Rédacteur PDF VantorKit pour un assainissement immédiat et confidentiel.",
+    "final_cta_btn": "Ouvrir le Rédacteur PDF VantorKit →",
+    "final_cta_more": "Explorer d'autres guides techniques",
+    "a2_breadcrumb_blog": "Blog",
+    "a2_breadcrumb_cat": "Forensique & Confidentialité",
+    "a2_badge_cat": "Forensique & Confidentialité",
+    "a2_badge_verified": "Exécution 100% Locale dans le Navigateur",
+    "a2_h1": "Pourquoi le Nettoyage Traditionnel des Métadonnées Échoue : Inspection EXIF, XMP et Flux Documentaires",
+    "a2_lead": "Les nettoyeurs de fichiers standards laissent souvent intacts les numéros de série d'appareils, coordonnées GPS et historiques de révision dans l'arborescence binaire. Découvrez pourquoi les outils superficiels échouent et comment la purge mémoire locale élimine définitivement les traces forensiques dans la RAM.",
+    "a2_meta_author_label": "Auteur : ",
+    "a2_meta_author": "Par la Recherche VantorKit",
+    "a2_meta_pub_label": "Publié le : ",
+    "a2_meta_pub": "Octobre 2026",
+    "a2_meta_time_label": "Temps de lecture : ",
+    "a2_meta_time": "5 min de lecture",
+    "a2_meta_exfil_label": "Exfiltration : ",
+    "a2_meta_exfil": "0 octet (Côté client)",
+    "a2_nav_launch": "Ouvrir le Nettoyeur de Métadonnées",
+    "a2_toc_heading": "Table des matières",
+    "a2_toc_1": "1. L'Illusion du Nettoyage des Propriétés de Fichiers",
+    "a2_toc_2": "2. MakerNotes, XMP et Arbres de Données EXIF Cachés",
+    "a2_toc_3": "3. Outil Interactif : Nettoyeur de Métadonnées VantorKit",
+    "a2_toc_4": "4. Analyse Approfondie : Purge des Flux Binaires en Mémoire",
+    "a2_toc_5": "5. Foire Aux Questions",
+    "a2_sec1_h2": "1. L'Illusion du Nettoyage des Propriétés de Fichiers",
+    "a2_sec1_p1": "Chaque jour, lanceurs d'alerte, journalistes et internautes téléversent des photos et documents en supposant leurs données privées supprimées car ils ont cliqué sur \"Supprimer les propriétés\" dans leur gestionnaire de fichiers. En réalité, les analystes judiciaires extraient constamment des coordonnées GPS ultra-précises, numéros de série d'objectifs et noms de propriétaires depuis ces fichiers supposés sains.",
+    "a2_sec1_p2": "Les formats de médias modernes — comme JPEG (JFIF/EXIF), PNG, TIFF et PDF — ne stockent pas les métadonnées dans un emplacement unique et aisé à effacer. Elles sont réparties à travers de multiples segments de conteneurs distincts, analysés par des gestionnaires applicatifs dédiés.",
+    "a2_comp_danger_title": "❌ Nettoyage Superficiel de l'OS",
+    "a2_comp_danger_1": "• Efface uniquement les balises EXIF standard (Date, Auteur)",
+    "a2_comp_danger_2": "• Laisse les blocs propriétaires MakerNote totalement intacts",
+    "a2_comp_danger_3": "• Conserve les vignettes intégrées en cache avec coordonnées GPS",
+    "a2_comp_danger_4": "• Préserve l'historique Adobe XMP et les noms de fichiers originaux",
+    "a2_comp_secure_title": "✅ Purge Binaire Authentique",
+    "a2_comp_secure_1": "• Supprime tous les segments marqueurs APP1, APP2 et auxiliaires",
+    "a2_comp_secure_2": "• Réencode les matrices de pixels bruts dans un conteneur vierge",
+    "a2_comp_secure_3": "• Éradique les numéros de série matériels et empreintes d'étalonnage",
+    "a2_comp_secure_4": "• 100% Côté client dans la RAM du navigateur sans télémétrie serveur",
+    "a2_sec2_h2": "2. MakerNotes, XMP et Arbres de Données EXIF Cachés",
+    "a2_sec2_p1": "La fuite de métadonnées la plus dangereuse réside dans la balise <strong>MakerNote</strong> (Tag 0x927c) au sein de l'arborescence de pointeurs EXIF IFD0. Les fabricants comme Apple, Sony, Canon et Nikon y intègrent des blocs binaires propriétaires comprenant :",
+    "a2_sec2_li1": "<strong>Numéros de Série Exacts :</strong> Identifiants uniques reliant des photos anonymes à un appareil physique spécifique.",
+    "a2_sec2_li2": "<strong>Compteurs d'Obturation Internes :</strong> Preuve cryptographique de l'historique d'utilisation du boîtier.",
+    "a2_sec2_li3": "<strong>Vignettes de Prévisualisation Haute Résolution :</strong> Versions miniatures non retouchées montrant souvent la scène non rognée.",
+    "a2_sec2_p2": "Parce que les structures MakerNote sont propriétaires et varient selon les microprogrammes, les nettoyeurs d'OS évitent d'y toucher pour ne pas corrompre l'image. Par conséquent, les artéfacts les plus identifiants restent complètement préservés.",
+    "a2_tool_badge": "Outil de navigateur 100% côté client",
+    "a2_tool_title": "Lancer le Nettoyeur de Métadonnées — 100% Côté Client",
+    "a2_tool_desc": "Inspectez et assainissez instantanément EXIF, XMP, IPTC et MakerNotes dans votre navigateur. Tout le traitement est exécuté dans la RAM avec 0 octet envoyé vers un serveur.",
+    "a2_tool_btn": "Lancer l'outil de nettoyage",
+    "a2_sec4_h2": "4. Analyse Approfondie : Purge des Flux Binaires en Mémoire",
+    "a2_sec4_p1": "VantorKit applique une approche rigoureuse pour éliminer les métadonnées : plutôt que de rechercher et remettre à zéro des balises éparses, notre moteur utilise un <strong>pipeline de reconstruction par isolation</strong> :",
+    "a2_sec4_p2": "En décodant les pixels visuels et en les écrivant dans une en-tête générée à neuf, 100% des données annexes EXIF, XMP, IPTC, MakerNote et profils ICC sont rejetées. Aucune trace du matériel ou de la géolocalisation ne survit à cette reconstruction.",
+    "a2_sec5_h2": "5. Foire Aux Questions",
+    "a2_faq_q1": "Effacer les propriétés dans l'Explorateur Windows supprime-t-il toutes les métadonnées ?",
+    "a2_faq_a1": "Non. L'option native de Windows supprime les balises EXIF standard mais ignore généralement les blocs MakerNote, les numéros de série constructeur et les métadonnées XMP intégrées.",
+    "a2_faq_q2": "Quelle est la différence entre un nettoyage de surface et une purge binaire ?",
+    "a2_faq_a2": "Le nettoyage de surface remplace des valeurs connues par du vide en conservant la structure. La purge binaire reconstruit le fichier en copiant uniquement les matrices de pixels brutes et en rejetant tous les en-têtes auxiliaires.",
+    "a2_faq_q3": "Pourquoi l'assainissement côté client est-il plus sûr que les services cloud ?",
+    "a2_faq_a3": "Les outils cloud exigent le téléversement de vos fichiers non nettoyés, transmettant vos coordonnées GPS précises et identifiants d'appareils à des tiers. Le traitement en RAM assainit vos fichiers localement sans aucune fuite réseau.",
+    "a2_final_title": "Protégez votre vie privée avant de publier",
+    "a2_final_desc": "Ne partagez jamais de photos ou documents contenant des données de localisation ou numéros de série. Nettoyez-les instantanément avec VantorKit.",
+    "a2_final_btn": "Ouvrir Nettoyeur Métadonnées →",
+    "a2_final_more": "Explorer d'autres guides techniques",
+    "a3_breadcrumb_blog": "Blog",
+    "a3_breadcrumb_cat": "Performance & Wasm",
+    "a3_badge_cat": "Performance & Wasm",
+    "a3_badge_verified": "Exécution 100% Locale dans le Navigateur",
+    "a3_h1": "Transformation de Données Massives Côté Client : Traiter 500 Mo dans la RAM du Navigateur",
+    "a3_lead": "Comment les Web Workers en flux continu, les Transferable ArrayBuffers et WebAssembly analysent des jeux de données JSON/CSV volumineux côté client sans aucune facture cloud.",
+    "a3_meta_author_label": "Auteur : ",
+    "a3_meta_author": "Par le Lab Performance VantorKit",
+    "a3_meta_pub_label": "Publié le : ",
+    "a3_meta_pub": "Octobre 2026",
+    "a3_meta_time_label": "Temps de lecture : ",
+    "a3_meta_time": "7 min de lecture",
+    "a3_meta_exfil_label": "Exfiltration : ",
+    "a3_meta_exfil": "0 octet (Côté client)",
+    "a3_nav_launch": "Ouvrir le Transformateur Big Data",
+    "a3_toc_heading": "Table des matières",
+    "a3_toc_1": "1. La Fin de JSON.parse() : Pics de Mémoire dans V8",
+    "a3_toc_2": "2. Architecture Zéro-Copie via Transferable ArrayBuffers",
+    "a3_toc_3": "3. Outil Interactif : Transformateur Big Data VantorKit",
+    "a3_toc_4": "4. WebAssembly Segmenté & Web Workers en Arrière-Plan",
+    "a3_toc_5": "5. Foire Aux Questions",
+    "a3_sec1_h2": "1. La Fin de JSON.parse() : Pics de Mémoire dans V8",
+    "a3_sec1_p1": "La plupart des développeurs front-end présument que les moteurs JavaScript ne peuvent pas gérer des charges de 500 Mo. Quand un utilisateur analyse un fichier de 200 Mo avec <code>JSON.parse()</code> classique, l'onglet gèle, devient non réactif et plante fréquemment avec une erreur de mémoire saturée <code>Out of Memory (OOM)</code>.",
+    "a3_sec1_p2": "Cette limite ne provient pas du matériel moderne — les ordinateurs actuels disposent couramment de 16 à 64 Go de RAM. Le goulot d'étranglement est le <strong>modèle de tas mono-thread de V8</strong> : parser 200 Mo en millions d'objets multiplie l'empreinte mémoire par 4 à 8, provoquant des pauses massives du ramasse-miettes et paralysant le thread de rendu à 60 ips.",
+    "a3_comp_danger_title": "❌ Parsing Traditionnel sur le Thread Principal",
+    "a3_comp_danger_1": "• Gèle l'interface et bloque toute interaction utilisateur",
+    "a3_comp_danger_2": "• L'allocation d'objets multiplie la mémoire par 4 à 8",
+    "a3_comp_danger_3": "• Déclenche des pauses de garbage collection dans V8",
+    "a3_comp_danger_4": "• Plante sur appareils mobiles et ordinateurs modestes",
+    "a3_comp_secure_title": "✅ Web Worker en Streaming VantorKit",
+    "a3_comp_secure_1": "• S'exécute en arrière-plan sans aucune baisse de fluidité",
+    "a3_comp_secure_2": "• Transferable ArrayBuffers à zéro copie mémoire",
+    "a3_comp_secure_3": "• Traitement par flux segmenté avec mémoire plafonnée",
+    "a3_comp_secure_4": "• Traite 500 Mo+ de données sans téléversement serveur",
+    "a3_sec2_h2": "2. Architecture Zéro-Copie via Transferable ArrayBuffers",
+    "a3_sec2_p1": "Pour traiter des jeux de données volumineux sans copies superflues en RAM, VantorKit exploite les <strong>Objets Transférables (Transferable Objects)</strong>. Contrairement à <code>worker.postMessage(data)</code> standard qui duplique la mémoire, les objets transférables cèdent la propriété instantanément sans surcharge CPU :",
+    "a3_sec2_li1": "<strong>Temps de Transfert Mémoire :</strong> 0,1 milliseconde pour un fichier de 500 Mo.",
+    "a3_sec2_li2": "<strong>Zéro Allocation de Tas :</strong> Le pointeur du thread principal est détaché immédiatement.",
+    "a3_sec2_li3": "<strong>Découpage en Flux Hors-Thread :</strong> Le worker découpe le tampon en fragments fixes de 64 Ko pour optimiser la mémoire cache.",
+    "a3_tool_badge": "Traitement 100% en RAM navigateur",
+    "a3_tool_title": "Lancer le Transformateur Big Data — 100% Côté Client",
+    "a3_tool_desc": "Convertissez, filtrez et agrégez de volumineux fichiers CSV, JSON et TSV jusqu'à 500 Mo directement dans votre navigateur sans envoyer un seul octet à un serveur externe.",
+    "a3_tool_btn": "Lancer le Transformateur Big Data",
+    "a3_sec4_h2": "4. WebAssembly Segmenté & Web Workers en Arrière-Plan",
+    "a3_sec4_p1": "Voici comment VantorKit transfère de volumineux tampons de données vers un worker en arrière-plan avec sémantique zéro-copie :",
+    "a3_sec4_p2": "Dans le Web Worker, WebAssembly et les tableaux typés analysent les flux directement au format colonnaire, assurant un filtrage ultra-rapide pendant que l'interface conserve 60 images par seconde.",
+    "a3_sec5_h2": "5. Foire Aux Questions",
+    "a3_faq_q1": "Un navigateur peut-il traiter 500 Mo de données sans planter ?",
+    "a3_faq_a1": "Oui. Si JSON.parse() sur le thread principal provoque une saturation mémoire, l'envoi de flux vers un Web Worker dédié via des objets transférables contourne le tas principal et fonctionne en toute stabilité.",
+    "a3_faq_q2": "Que sont les objets transférables et comment évitent-ils la duplication ?",
+    "a3_faq_a2": "Les objets transférables (comme les ArrayBuffers) transmettent la propriété directe des octets entre threads. Le thread expéditeur cède immédiatement son pointeur, évitant toute double allocation en RAM.",
+    "a3_faq_q3": "Pourquoi le traitement côté client est-il préférable pour les données confidentielles d'entreprise ?",
+    "a3_faq_a3": "Envoyer des registres financiers ou fichiers médicaux vers le cloud entraîne des risques de conformité légale et des coûts d'infrastructure. L'exécution locale garde vos données sensibles dans l'enceinte sécurisée de votre terminal.",
+    "a3_final_title": "Traitez vos jeux de données massifs instantanément",
+    "a3_final_desc": "Profitez d'une conversion ultra-rapide côté client sans téléverser vos données confidentielles vers des serveurs tiers.",
+    "a3_final_btn": "Ouvrir Transformateur Big Data →",
+    "a3_final_more": "Explorer d'autres guides techniques",
+    "a2_meta_author_val": "Équipe Recherche VantorKit",
+    "a2_meta_pub_val": "Octobre 2026",
+    "a2_meta_time_val": "5 min de lecture",
+    "a2_meta_exfil_val": "0 Octet (Côté Client)",
+    "a2_toc_title": "Table des Matières",
+    "a2_sec3_badge": "Outil Navigateur 100% Côté Client",
+    "a2_sec3_title": "Ouvrir le Nettoyeur de Métadonnées — 100% Client",
+    "a2_sec3_desc": "Inspectez et assainissez instantanément EXIF, XMP, IPTC et MakerNotes directement dans votre navigateur. Tous les calculs s'exécutent dans la RAM sans aucun téléversement vers le cloud.",
+    "a2_sec3_btn": "Lancer l'Outil de Nettoyage de Métadonnées",
+    "a2_faq1_q": "La suppression des propriétés dans l'explorateur Windows retire-t-elle toutes les métadonnées ?",
+    "a2_faq1_a": "Non. La fonctionnalité intégrée de Windows efface les balises EXIF courantes mais ignore très souvent les blocs MakerNote, les numéros de série matériels et les données XMP encapsulées.",
+    "a2_faq2_q": "Quelle est la différence entre un nettoyage superficiel et une purge binaire complète ?",
+    "a2_faq2_a": "Le nettoyage superficiel réécrit des clés connues avec des valeurs nulles en gardant la structure binaire. La purge binaire reconstruit l'image en copiant uniquement les matrices de pixels brutes vérifiées et en ignorant tous les en-têtes auxiliaires.",
+    "a2_faq3_q": "Pourquoi l'assainissement côté client est-il plus sûr que les services cloud ?",
+    "a2_faq3_a": "Les services en ligne nécessitent l'envoi de vos fichiers non nettoyés sur Internet, transmettant coordonnées GPS personnelles et identifiants matériels à des tiers. Le traitement dans la RAM locale assainit vos fichiers avec 0 octet émis sur le réseau.",
+    "a2_cta_title": "Protégez Votre Vie Privée Avant Publication",
+    "a2_cta_desc": "Ne publiez jamais de photos ou documents contenant des coordonnées géographiques ou des numéros de série matériels. Nettoyez-les immédiatement avec VantorKit.",
+    "a2_cta_btn1": "Ouvrir le Nettoyeur de Métadonnées →",
+    "a2_cta_btn2": "Explorer Plus de Guides Techniques",
+    "a3_meta_author_val": "Laboratoire Performance VantorKit",
+    "a3_meta_pub_val": "Octobre 2026",
+    "a3_meta_time_val": "7 min de lecture",
+    "a3_meta_exfil_val": "0 Octet (Côté Client)",
+    "a3_toc_title": "Table des Matières",
+    "a3_sec3_badge": "Exécution 100% dans la RAM du Navigateur",
+    "a3_sec3_title": "Ouvrir le Transformateur Big Data — 100% Client",
+    "a3_sec3_desc": "Convertissez, filtrez et agrégez de volumineux fichiers CSV, JSON et TSV jusqu'à 500 Mo directement dans votre navigateur, sans aucun serveur tiers.",
+    "a3_sec3_btn": "Lancer le Transformateur Big Data",
+    "a3_faq1_q": "Un navigateur web peut-il traiter 500 Mo de fichiers JSON ou CSV sans planter ?",
+    "a3_faq1_a": "Oui. Alors que JSON.parse() sur le thread principal provoque un crash de mémoire, l'envoi de flux segmentés vers un Web Worker dédié via des Objets Transférables contourne le tas principal et s'exécute avec fluidité.",
+    "a3_faq2_q": "Que sont les Objets Transférables et comment évitent-ils la duplication de mémoire ?",
+    "a3_faq2_a": "Les Objets Transférables (tels que ArrayBuffer) cèdent directement la propriété des octets du thread principal au worker sans duplication. Le thread émetteur libère son pointeur instantanément.",
+    "a3_faq3_q": "Pourquoi l'analyse locale est-elle préférable pour les données confidentielles d'entreprise ?",
+    "a3_faq3_a": "Téléverser des registres financiers ou médicaux vers des serveurs cloud engendre des risques de conformité, des coûts de calcul et des lenteurs de réseau. L'exécution locale garde vos données strictement sur votre machine.",
+    "a3_cta_title": "Traitez Vos Données Massives Instantanément",
+    "a3_cta_desc": "Profitez d'une conversion ultra-rapide côté client sans téléverser vos données sensibles vers des fournisseurs cloud externes.",
+    "a3_cta_btn1": "Ouvrir le Transformateur Big Data →",
+    "a3_cta_btn2": "Explorer Plus de Guides Techniques"
+  },
+  "it": {
+    "blog_badge": "Blog",
+    "nav_all_tools": "Tutte le 32 utilità",
+    "nav_rss": "Feed RSS",
+    "nav_back_blog": "Hub Blog",
+    "nav_launch_redactor": "Apri Redattore PDF",
+    "hero_badge": "Architettura & Ricerca Lato Client",
+    "hero_title": "Guide <span>di Ingegneria & Privacy</span> VantorKit",
+    "hero_subtitle": "Approfondimenti architetturali, sandboxing crittografico e guide ingegneristiche per applicazioni web lato client. Scopri come ispezionare, redigere e trasformare documenti sensibili direttamente nella RAM del browser senza alcun upload cloud.",
+    "feat_zero_uploads": "0 byte inviati al server",
+    "feat_in_browser": "Esecuzione 100% in RAM",
+    "feat_open_standards": "Standard Web Aperti & WebAssembly",
+    "sec_latest_articles": "Ultimi Articoli Tecnici",
+    "sec_subscribe_rss": "Iscriviti via RSS",
+    "card1_cat": "Sicurezza & Privacy PDF",
+    "card1_read_time": "6 min di lettura",
+    "card1_title": "Come redigere in modo permanente il testo sensibile nei PDF senza upload cloud",
+    "card1_excerpt": "Disegnare rettangoli neri sui PDF nei lettori standard crea maschere visive che mantengono i caratteri vettoriali. Scopri perché l'oscuramento tradizionale fallisce e come la rasterizzazione Canvas appiattisce i documenti nella RAM.",
+    "card1_author": "Del team di sicurezza VantorKit",
+    "card1_date": "Ott 2026",
+    "card1_cta": "Leggi la guida",
+    "card2_cat": "Analisi Forense & Privacy",
+    "badge_coming_soon": "In arrivo",
+    "card2_title": "Perché la pulizia tradizionale dei metadati fallisce: ispezione locale di EXIF e XMP",
+    "card2_excerpt": "I software di pulizia tradizionali lasciano intatti numeri di serie della fotocamera, coordinate GPS e cronologie. Un'analisi della rimozione binaria lato client.",
+    "card2_author": "Della Ricerca VantorKit",
+    "card2_date": "Ott 2026",
+    "card2_read_time": "5 min di lettura",
+    "card2_cta": "Leggi la guida",
+    "card3_cat": "Prestazioni & Wasm",
+    "card3_title": "Trasformazione di Big Data lato client: elaborazione di payload da 500MB nella RAM",
+    "card3_excerpt": "Come Web Workers in streaming, ArrayBuffer trasferibili e WebAssembly analizzano grandi file JSON/CSV lato client senza costi cloud.",
+    "card3_author": "Del Laboratorio Prestazioni VantorKit",
+    "card3_date": "Ott 2026",
+    "card3_read_time": "7 min di lettura",
+    "card3_cta": "Leggi la guida",
+    "rss_callout_title": "Zero tracciamento. Feed RSS aperto e standard.",
+    "rss_callout_desc": "Non raccogliamo la tua email, non usiamo pixel di tracciamento né cookie. Rimani aggiornato sulle nostre guide tecniche e strumenti crittografici tramite feed standard RSS 2.0.",
+    "rss_callout_btn": "Apri Feed RSS (/blog/feed.xml)",
+    "footer_privacy": "Informativa sulla privacy",
+    "footer_terms": "Termini di servizio",
+    "footer_about": "Chi siamo",
+    "footer_contact": "Contatti",
+    "footer_blog": "Blog",
+    "footer_copy": "© 2026 VantorKit. Utilità web veloci, gratuite e private. Tutta l'elaborazione viene eseguita localmente nel browser.",
+    "btn_copy": "Copia",
+    "art_badge_category": "Sicurezza & Privacy PDF",
+    "art_badge_verified": "Esecuzione 100% nel browser",
+    "art_h1": "Come redigere in modo permanente il testo sensibile nei PDF senza upload cloud",
+    "art_lead": "Disegnare rettangoli neri sui testi nei PDF non elimina i caratteri sottostanti. Scopri perché l'oscuramento visivo espone dati riservati e come l'appiattimento Canvas igienizza i contratti nella RAM.",
+    "art_meta_author_label": "Autore: ",
+    "art_meta_author_val": "Team Sicurezza VantorKit",
+    "art_meta_pub_label": "Pubblicato: ",
+    "art_meta_pub_val": "6 ottobre 2026",
+    "art_meta_time_label": "Tempo: ",
+    "art_meta_time_val": "6 min di lettura",
+    "art_meta_exfil_label": "Fuga di dati: ",
+    "art_meta_exfil_val": "0 byte (Lato client)",
+    "art_toc_heading": "Indice dei contenuti",
+    "art_toc_1": "1. Risposta esecutiva: Mascheramento visivo vs Appiattimento raster",
+    "art_toc_2": "2. Strumento interattivo: Redattore PDF VantorKit",
+    "art_toc_3": "3. Guida tecnica dettagliata per igienizzare i documenti",
+    "art_toc_4": "4. Approfondimento sulla sicurezza: WebAssembly, pixel Canvas e sandbox RAM",
+    "art_toc_5": "5. Domande Frequenti (Sicurezza della redazione PDF)",
+    "sec1_h2": "1. Risposta esecutiva: Mascheramento visivo vs Appiattimento raster",
+    "sec1_p1": "Ogni anno, importanti studi legali e agenzie divulgano dati riservati a causa di una redazione PDF imperfetta. Celebri processi hanno visto trapelare nomi classificati e numeri di conto corrente semplicemente perché un avvocato ha tracciato un rettangolo nero sopra il testo con un comune lettore PDF.",
+    "sec1_p2": "Per comprendere perché ciò accade, occorre esaminare la specifica ISO 32000 dei PDF. Un documento PDF non è un'immagine piatta ma un insieme di oggetti con livelli indipendenti:",
+    "sec1_li1": "<strong>Flussi di contenuto:</strong> Istruzioni sequenziali di disegno vettoriale contenenti blocchi di testo (operatori <code>BT ... ET</code>), matrici di codifica dei caratteri (dizionari <code>/ToUnicode</code>) e coordinate di crenatura.",
+    "sec1_li2": "<strong>Dizionari di annotazione:</strong> Elementi sovrapposti (<code>/Square</code>, <code>/Highlight</code> o <code>/FreeText</code>) posizionati in riquadri di delimitazione in cima allo stack visivo.",
+    "sec1_li3": "<strong>Metadati del documento:</strong> Dizionari informativi nascosti del documento (<code>/Author</code>, <code>/CreationDate</code>) e alberi di metadati XMP.",
+    "sec1_p3": "Quando si disegna un rettangolo nero in un editor PDF di base o in un elaboratore di testi, l'applicazione crea semplicemente un'annotazione vettoriale posizionandola a un z-index superiore sopra il testo. <strong>Il livello di testo originale sotto il rettangolo rimane intatto al 100% nel flusso binario.</strong>",
+    "comp_danger_title": "Mascheramento Visivo (Alto Rischio)",
+    "comp_danger_1": "❌ I glifi dei caratteri rimangono intatti nel flusso binario",
+    "comp_danger_2": "❌ Chiunque può copiare il testo tramite Ctrl+A / Cmd+C",
+    "comp_danger_3": "❌ Strumenti come pdftotext estraggono il testo in millisecondi",
+    "comp_danger_4": "❌ Gli oggetti vettoriali sottostanti possono essere rimossi in Acrobat",
+    "comp_danger_5": "❌ Metadati e livelli OCR rimangono ricercabili",
+    "comp_secure_title": "Vero Appiattimento Raster (Sicuro)",
+    "comp_secure_1": "✅ Vettori e caratteri convertiti in matrice di pixel nella RAM",
+    "comp_secure_2": "✅ Le coordinate oscurate sovrascrivono direttamente i pixel",
+    "comp_secure_3": "✅ I flussi di testo sono completamente eliminati dal file",
+    "comp_secure_4": "✅ Matematicamente irreversibile: zero glifi sopravvivono",
+    "comp_secure_5": "✅ Zero upload cloud: i documenti non lasciano mai la RAM",
+    "sec1_p4": "Chiunque scarichi un PDF mascherato visivamente può semplicemente premere <kbd>Ctrl+A</kbd> (o <kbd>Cmd+A</kbd>), copiare l'intero contenuto negli appunti e incollare il testo non redatto nel Blocco note o in Word. In alternativa, eseguire un comando terminale come <code>pdftotext leaked-file.pdf - | grep -i \"secret\"</code> estrae il testo presumibilmente \"redatto\" in millisecondi.",
+    "sec1_p5": "Una vera redazione richiede un <strong>appiattimento distruttivo</strong>: i glifi vettoriali e le coordinate dei font devono essere convertiti in pixel raster, le aree oscurate sovrascritte con buffer di pixel neri opachi e il documento ricostruito senza flussi di testo sottostanti.",
+    "sec2_h2": "2. Strumento interattivo: Redattore PDF VantorKit",
+    "sec2_p1": "I redattori di PDF online tradizionali ti costringono a caricare contratti sensibili, documenti fiscali e cartelle cliniche su server cloud di terze parti. Ciò espone i tuoi documenti a violazioni dello storage cloud e a rischi di non conformità GDPR/HIPAA.",
+    "tool_badge": "Sandbox 100% lato client",
+    "tool_title": "Avvia il Redattore PDF VantorKit — 100% Lato Client",
+    "tool_desc": "Igienizza, oscura e appiattisci i documenti PDF sensibili istantaneamente senza upload cloud. Il rendering e la modifica avvengono nella memoria del dispositivo tramite HTML5 Canvas e WebAssembly.",
+    "tool_p1": "0 byte trasferiti (Zero log)",
+    "tool_p2": "Rendering multipagina ad alta risoluzione",
+    "tool_p3": "Fusione irreversibile dei pixel Canvas",
+    "tool_p4": "Funziona offline istantaneamente",
+    "tool_btn": "Apri lo strumento Redattore PDF",
+    "tool_guarantee": "Gratuito per sempre • Nessun account • Zero telemetria",
+    "sec3_h2": "3. Guida tecnica dettagliata per igienizzare i documenti",
+    "sec3_lead": "Ecco la guida pratica in 3 passaggi per igienizzare in totale sicurezza contratti legali, fascicoli medici e registri finanziari utilizzando l'architettura locale di VantorKit:",
+    "step1_h3": "Carica il file localmente nella RAM del browser",
+    "step1_desc": "Apri il Redattore PDF VantorKit e rilascia il documento. L'applicazione utilizza l'API standard FileReader.readAsArrayBuffer(). Nella scheda Rete degli strumenti di sviluppo, nessuna richiesta HTTP POST viene inviata.",
+    "step2_h3": "Applica oscuramenti precisi per coordinate",
+    "step2_desc": "VantorKit renderizza ogni pagina su un elemento Canvas ad alta risoluzione (scala 2x). Clicca e trascina su numeri di conto, IBAN o firme per applicare le coperture nere con monitoraggio in tempo reale.",
+    "step3_h3": "Esporta il documento appiattito e sanificato",
+    "step3_desc": "Fai clic su Scarica PDF redatto. Il rasterizzatore incorpora le coordinate nere nel buffer di immagine Canvas sovrascrivendo i pixel con nero puro #000000, generando un PDF pulito privo di testi vettoriali o metadati.",
+    "sec4_h2": "4. Approfondimento sulla sicurezza: WebAssembly, pixel Canvas e sandbox RAM",
+    "sec4_lead": "In che modo l'appiattimento PDF lato client garantisce che i dati non possano essere ricostruiti? Esaminiamo la pipeline architetturale che alimenta il motore browser di VantorKit:",
+    "sec4_sub1": "La pipeline di rasterizzazione Canvas e sovrascrittura dei pixel",
+    "sec4_p1": "In un documento PDF standard, il rendering dei caratteri è regolato da percorsi vettoriali. Ad esempio, il rendering della lettera \"A\" esegue curve di Bézier che fanno riferimento a metriche dei glifi memorizzate in font TrueType o Type1 incorporati:",
+    "code1_header": "Flusso di contenuto vettoriale PDF non sicuro standard",
+    "sec4_p2": "Al contrario, il motore di redazione locale di VantorKit analizza la pagina tramite PDF.js e converte i comandi vettoriali direttamente su un <code>CanvasRenderingContext2D</code> con accelerazione hardware in una matrice di pixel <code>ImageData</code> (RGBA):",
+    "code2_header": "Appiattimento VantorKit e Sovrascrittura Pixel (Solo RAM)",
+    "sec4_p3": "Una volta che <code>ctx.fillRect()</code> scrive zeri (RGBA: <code>[0, 0, 0, 255]</code>) sulle coordinate del testo sensibile nella memoria, <strong>i precedenti valori dei pixel cessano di esistere nella memoria di sistema</strong>. Quando l'immagine appiattita viene inserita in un PDF pulito, non rimangono oggetti font, tabelle <code>/ToUnicode</code> o annotazioni di testo.",
+    "sec4_sub2": "Verifica autonoma: come controllare il PDF redatto",
+    "sec4_p4": "I team di sicurezza e i responsabili della conformità possono verificare autonomamente l'igienizzazione di qualsiasi PDF esportato da VantorKit utilizzando utilità forensi da riga di comando:",
+    "sec4_audit_1": "<strong>Test di estrazione del testo:</strong> Esegui <code>pdftotext sanitized.pdf -</code>. Il comando restituirà zero caratteri poiché il PDF contiene solo fotogrammi rasterizzati.",
+    "sec4_audit_2": "<strong>Ricerca stringhe binarie:</strong> Esegui <code>strings sanitized.pdf | grep -i \"SSN\"</code>. Il risultato sarà vuoto perché i flussi di caratteri non sono mai stati codificati nel dizionario PDF.",
+    "sec4_audit_3": "<strong>Verifica della telemetria di rete:</strong> Apri gli strumenti per sviluppatori (<kbd>F12</kbd>), vai alla scheda <strong>Network</strong> e filtra per <code>Fetch/XHR</code>. Esegui un'intera procedura di redazione: noterai esattamente <strong>0 richieste</strong> verso qualsiasi server esterno.",
+    "sec5_h2": "5. Domande Frequenti (Sicurezza della redazione PDF)",
+    "faq_q1": "Il testo sotto un rettangolo nero in un PDF standard può essere ancora evidenziato o copiato?",
+    "faq_a1": "Sì. Nei visualizzatori PDF standard, disegnare una forma nera posiziona una semplice annotazione vettoriale sopra il testo. I caratteri e le coordinate sottostanti rimangono intatti nel documento. Chiunque usi \"Seleziona tutto\" o strumenti da terminale può estrarre i dati in pochi secondi.",
+    "faq_q2": "Qual è la differenza tra mascheramento visivo e vera redazione di un PDF?",
+    "faq_a2": "Il mascheramento visivo nasconde il testo visivamente senza eliminare i caratteri dal file. La vera redazione richiede l'appiattimento raster o l'eliminazione distruttiva dei flussi di testo e metadati, rendendo impossibile qualsiasi recupero.",
+    "faq_q3": "Come garantisce il Redattore PDF VantorKit che nessun dato lasci il mio computer?",
+    "faq_a3": "VantorKit opera al 100% lato client nella sandbox del browser. Il PDF viene elaborato nella memoria tramite WebAssembly e PDF.js, renderizzato su Canvas in RAM e ricostruito localmente in JavaScript. Nessun byte viene inviato a server esterni.",
+    "final_cta_title": "Pronto a redigere i documenti in modo sicuro?",
+    "final_cta_desc": "Proteggi i tuoi segreti industriali, i dati finanziari e l'identità dei clienti. Usa il Redattore PDF VantorKit per una sanificazione immediata e riservata.",
+    "final_cta_btn": "Apri il Redattore PDF VantorKit →",
+    "final_cta_more": "Esplora altre guide ingegneristiche",
+    "a2_breadcrumb_blog": "Blog",
+    "a2_breadcrumb_cat": "Analisi Forense & Privacy",
+    "a2_badge_cat": "Informatica Forense & Privacy",
+    "a2_badge_verified": "Esecuzione 100% Locale nel Browser",
+    "a2_h1": "Perché la Pulizia Tradizionale dei Metadati Fallisce: Ispezione di EXIF, XMP e Flussi di Documenti",
+    "a2_lead": "Gli strumenti di pulizia standard lasciano spesso inalterati numeri di serie, coordinate GPS e cronologie di revisione negli alberi binari dei documenti. Scopri perché i pulitori di sistema superficiali falliscono e come la rimozione binaria in RAM elimina totalmente le tracce forensi.",
+    "a2_meta_author_label": "Autore: ",
+    "a2_meta_author": "Della Ricerca VantorKit",
+    "a2_meta_pub_label": "Pubblicato: ",
+    "a2_meta_pub": "Ottobre 2026",
+    "a2_meta_time_label": "Tempo di lettura: ",
+    "a2_meta_time": "5 min di lettura",
+    "a2_meta_exfil_label": "Esfiltrazione: ",
+    "a2_meta_exfil": "0 byte (Lato client)",
+    "a2_nav_launch": "Apri Pulitore Metadati",
+    "a2_toc_heading": "Indice dei contenuti",
+    "a2_toc_1": "1. L'Illusione della Pulizia Proprietà File",
+    "a2_toc_2": "2. MakerNotes, XMP e Alberi di Dati EXIF Nascosti",
+    "a2_toc_3": "3. Strumento Interattivo: Pulitore Metadati VantorKit",
+    "a2_toc_4": "4. Analisi Dettagliata: Eliminazione Flussi Binari in Memoria",
+    "a2_toc_5": "5. Domande Frequenti",
+    "a2_sec1_h2": "1. L'Illusione della Pulizia Proprietà File",
+    "a2_sec1_p1": "Ogni giorno, whistleblower, giornalisti e utenti caricano foto e documenti credendo che i loro dati personali siano stati rimossi poiché hanno selezionato \"Rimuovi proprietà e informazioni personali\" nel sistema operativo. In realtà, gli esperti forensi estraggono sistematicamente coordinate GPS ad alta precisione, numeri di serie degli obiettivi e nomi dei proprietari da file presunti puliti.",
+    "a2_sec1_p2": "I moderni formati multimediali — come JPEG (JFIF/EXIF), PNG, TIFF e PDF — non memorizzano i metadati in una singola posizione facilmente cancellabile. Essi sono distribuiti attraverso segmenti multipli e distinti di contenitori, elaborati da gestori applicativi separati.",
+    "a2_comp_danger_title": "❌ Pulizia Superficiale dell'OS",
+    "a2_comp_danger_1": "• Cancella solo i tag EXIF standard (Data, Autore)",
+    "a2_comp_danger_2": "• Lascia i blocchi proprietari MakerNote totalmente intatti",
+    "a2_comp_danger_3": "• Mantiene le miniature incorporate in cache con coordinate GPS",
+    "a2_comp_danger_4": "• Preserva la cronologia Adobe XMP e i nomi file originali",
+    "a2_comp_secure_title": "✅ Vera Eliminazione Binaria",
+    "a2_comp_secure_1": "• Rimuove tutti i segmenti marcatori APP1, APP2 e ausiliari",
+    "a2_comp_secure_2": "• Ricodifica le matrici di pixel grezzi direttamente in un contenitore vergine",
+    "a2_comp_secure_3": "• Elimina i numeri di serie hardware e gli hash di calibrazione",
+    "a2_comp_secure_4": "• 100% Lato client nella RAM del browser con zero telemetria server",
+    "a2_sec2_h2": "2. MakerNotes, XMP e Alberi di Dati EXIF Nascosti",
+    "a2_sec2_p1": "La fuga di metadati più pericolosa si verifica nel tag <strong>MakerNote</strong> (Tag 0x927c) all'interno dell'albero di puntatori EXIF IFD0. I produttori come Apple, Sony, Canon e Nikon incorporano blocchi binari proprietari contenenti:",
+    "a2_sec2_li1": "<strong>Numeri di Serie Esatti:</strong> Identificatori univoci che collegano foto anonime a uno specifico dispositivo fisico.",
+    "a2_sec2_li2": "<strong>Conteggi Otturatore Interni:</strong> Verifica crittografica della cronologia di utilizzo del dispositivo.",
+    "a2_sec2_li3": "<strong>Anteprime ad Alta Risoluzione:</strong> Versioni in miniatura non alterate che spesso mostrano la scena non ritagliata.",
+    "a2_sec2_p2": "Poiché le strutture MakerNote sono proprietarie e variano a seconda del firmware, i pulitori generici dei sistemi operativi evitano di toccarle per non corrompere l'immagine. Di conseguenza, i reperti forensi più identificativi restano intatti.",
+    "a2_tool_badge": "Strumento browser 100% lato client",
+    "a2_tool_title": "Avvia il Pulitore Metadati — 100% Lato Client",
+    "a2_tool_desc": "Ispeziona e igienizza istantaneamente EXIF, XMP, IPTC e MakerNotes direttamente nel browser. L'intera elaborazione avviene nella RAM del dispositivo con 0 byte inviati a server cloud.",
+    "a2_tool_btn": "Avvia lo strumento Pulitore Metadati",
+    "a2_sec4_h2": "4. Analisi Dettagliata: Eliminazione Flussi Binari in Memoria",
+    "a2_sec4_p1": "VantorKit adotta un approccio matematicamente rigoroso per eliminare i metadati. Invece di tentare di azzerare singoli tag, il nostro motore utilizza una <strong>pipeline di ricostruzione per isolamento</strong>:",
+    "a2_sec4_p2": "Decodificando i pixel visivi e riscrivendoli in un'intestazione di contenitore appena generata, il 100% dei dati ausiliari EXIF, XMP, IPTC, MakerNote e profili ICC viene scartato. Nessuna traccia dell'hardware o della geolocalizzazione sopravvive a questa ricostruzione.",
+    "a2_sec5_h2": "5. Domande Frequenti",
+    "a2_faq_q1": "La rimozione delle proprietà in Windows Explorer cancella tutti i metadati?",
+    "a2_faq_a1": "No. La funzione integrata in Windows cancella i tag EXIF comuni ma spesso ignora i blocchi MakerNote, i numeri di serie dei produttori e i metadati XMP incorporati.",
+    "a2_faq_q2": "Qual è la differenza tra pulizia superficiale e purga binaria?",
+    "a2_faq_a2": "La pulizia superficiale sovrascrive le chiavi note con valori nulli mantenendo la struttura. La purga binaria ricostruisce il file copiando unicamente le matrici di pixel validate e scartando tutti gli header ausiliari.",
+    "a2_faq_q3": "Perché la sanificazione lato client è più sicura dei servizi cloud?",
+    "a2_faq_a3": "I servizi cloud richiedono l'upload dei tuoi file non modificati su Internet, trasmettendo coordinate GPS e identificatori del dispositivo a terzi. L'elaborazione locale igienizza i file nella RAM senza alcuna fuga di rete.",
+    "a2_final_title": "Proteggi la tua privacy prima di condividere",
+    "a2_final_desc": "Non pubblicare mai foto o documenti contenenti dati di localizzazione o numeri di serie hardware. Puliscili istantaneamente con VantorKit.",
+    "a2_final_btn": "Apri Pulitore Metadati →",
+    "a2_final_more": "Esplora altre guide ingegneristiche",
+    "a3_breadcrumb_blog": "Blog",
+    "a3_breadcrumb_cat": "Prestazioni & Wasm",
+    "a3_badge_cat": "Performance & Wasm",
+    "a3_badge_verified": "Esecuzione 100% Locale nel Browser",
+    "a3_h1": "Trasformazione Big Data Lato Client: Elaborazione di 500MB nella RAM del Browser",
+    "a3_lead": "Come Web Workers in streaming, Transferable ArrayBuffers e runtime WebAssembly elaborano dataset aziendali JSON/CSV sul client senza costi di computazione cloud.",
+    "a3_meta_author_label": "Autore: ",
+    "a3_meta_author": "Del Laboratorio Prestazioni VantorKit",
+    "a3_meta_pub_label": "Pubblicato: ",
+    "a3_meta_pub": "Ottobre 2026",
+    "a3_meta_time_label": "Tempo di lettura: ",
+    "a3_meta_time": "7 min di lettura",
+    "a3_meta_exfil_label": "Esfiltrazione: ",
+    "a3_meta_exfil": "0 byte (Lato client)",
+    "a3_nav_launch": "Apri Trasformatore Big Data",
+    "a3_toc_heading": "Indice dei contenuti",
+    "a3_toc_1": "1. La Fine di JSON.parse(): Picchi di Memoria in V8",
+    "a3_toc_2": "2. Architettura Zero-Copy tramite Transferable ArrayBuffers",
+    "a3_toc_3": "3. Strumento Interattivo: Trasformatore Big Data VantorKit",
+    "a3_toc_4": "4. WebAssembly a Blocchi & Web Workers Fuori dal Thread UI",
+    "a3_toc_5": "5. Domande Frequenti",
+    "a3_sec1_h2": "1. La Fine di JSON.parse(): Picchi di Memoria in V8",
+    "a3_sec1_p1": "La maggior parte degli sviluppatori presume che i motori JavaScript non possano gestire carichi di dati da 500MB. Quando un utente analizza 200MB con <code>JSON.parse()</code> tradizionale, la scheda si blocca e va frequentemente in crash con errore <code>Out of Memory (OOM)</code>.",
+    "a3_sec1_p2": "Questo limite non dipende dall'hardware moderno — i dispositivi attuali dispongono tipicamente di 16-64GB di RAM. Il collo di bottiglia è il <strong>modello heap a thread singolo di V8</strong>: convertire 200MB in milioni di oggetti moltiplica la memoria da 4 a 8 volte, provocando pause di garbage collection e bloccando i 60fps.",
+    "a3_comp_danger_title": "❌ Parsing Tradizionale sul Thread Principale",
+    "a3_comp_danger_1": "• Congela l'interfaccia e blocca le interazioni",
+    "a3_comp_danger_2": "• L'allocazione di oggetti causa un'esplosione di memoria 4x–8x",
+    "a3_comp_danger_3": "• Provoca pause prolungate di garbage collection in V8",
+    "a3_comp_danger_4": "• Causa il blocco di dispositivi mobili e laptop",
+    "a3_comp_secure_title": "✅ Web Worker in Streaming di VantorKit",
+    "a3_comp_secure_1": "• Viene eseguito in background con zero cali di frame",
+    "a3_comp_secure_2": "• Transferable ArrayBuffers con architettura zero-copy",
+    "a3_comp_secure_3": "• Elaborazione a blocchi con limiti di memoria prefissati",
+    "a3_comp_secure_4": "• Gestisce dataset da 500MB+ senza caricamento su server",
+    "a3_sec2_h2": "2. Architettura Zero-Copy tramite Transferable ArrayBuffers",
+    "a3_sec2_p1": "Per elaborare grandi dataset senza copie duplicate in RAM, VantorKit impiega gli <strong>Oggetti Trasferibili (Transferable Objects)</strong>. A differenza di <code>worker.postMessage(data)</code> standard, gli oggetti trasferibili cedono la proprietà dei byte all'istante senza overhead CPU:",
+    "a3_sec2_li1": "<strong>Tempo di Trasferimento Memoria:</strong> 0,1 millisecondi per un carico da 500MB.",
+    "a3_sec2_li2": "<strong>Zero Allocazione Heap:</strong> Il puntatore del thread principale viene rilasciato subito.",
+    "a3_sec2_li3": "<strong>Segmentazione Flusso Fuori Thread:</strong> Il worker suddivide il buffer in blocchi da 64KB per massimizzare la cache CPU.",
+    "a3_tool_badge": "Elaborazione 100% nella RAM del browser",
+    "a3_tool_title": "Avvia il Trasformatore Big Data — 100% Lato Client",
+    "a3_tool_desc": "Converti, filtra e aggrega file CSV, JSON e TSV fino a 500MB direttamente nel tuo browser. Tutti i calcoli vengono eseguiti in Web Workers isolati senza inviare un singolo byte a server esterni.",
+    "a3_tool_btn": "Avvia lo strumento Trasformatore Big Data",
+    "a3_sec4_h2": "4. WebAssembly a Blocchi & Web Workers Fuori dal Thread UI",
+    "a3_sec4_p1": "Ecco come VantorKit trasferisce buffer di file di grandi dimensioni a un worker in background con semantica zero-copy:",
+    "a3_sec4_p2": "All'interno del Web Worker, WebAssembly e tipologie di array native elaborano i flussi di byte in formato colonnare, consentendo filtraggi rapidi mentre il thread principale conserva 60 fotogrammi al secondo.",
+    "a3_sec5_h2": "5. Domande Frequenti",
+    "a3_faq_q1": "Un browser web può elaborare 500MB di file JSON o CSV senza bloccarsi?",
+    "a3_faq_a1": "Sì. Se il parsing con JSON.parse() sul thread principale provoca un blocco per memoria esaurita, l'invio a blocchi a un Web Worker dedicato tramite oggetti trasferibili bypassa l'heap principale e opera in modo impeccabile.",
+    "a3_faq_q2": "Cosa sono gli oggetti trasferibili e perché evitano la duplicazione di memoria?",
+    "a3_faq_a2": "Gli oggetti trasferibili (come gli ArrayBuffer) cedono la proprietà diretta della memoria tra thread. Il thread di origine rilascia istantaneamente il puntatore, evitando qualsiasi doppia allocazione nella RAM.",
+    "a3_faq_q3": "Perché l'elaborazione lato client è preferibile per i dataset aziendali riservati?",
+    "a3_faq_a3": "Caricare registri contabili o referti medici su server cloud crea rischi normativi e costi elevati di infrastruttura. L'elaborazione lato client mantiene i file sensibili esclusivamente all'interno del tuo dispositivo.",
+    "a3_final_title": "Elabora grandi moli di dati istantaneamente",
+    "a3_final_desc": "Sperimenta la conversione di file ad alta velocità direttamente nel browser senza dover caricare dati proprietari nel cloud.",
+    "a3_final_btn": "Apri Trasformatore Big Data →",
+    "a3_final_more": "Esplora altre guide ingegneristiche",
+    "a2_meta_author_val": "Team Ricerca VantorKit",
+    "a2_meta_pub_val": "Ottobre 2026",
+    "a2_meta_time_val": "5 min di lettura",
+    "a2_meta_exfil_val": "0 Byte (Lato Client)",
+    "a2_toc_title": "Indice dei Contenuti",
+    "a2_sec3_badge": "Strumento Browser 100% Lato Client",
+    "a2_sec3_title": "Apri Pulitore Metadati — 100% Lato Client",
+    "a2_sec3_desc": "Ispeziona e sanifica istantaneamente EXIF, XMP, IPTC e MakerNotes direttamente nel tuo browser. Tutte le operazioni avvengono nella RAM locale senza alcun caricamento su server esterni.",
+    "a2_sec3_btn": "Avvia Strumento Pulitore Metadati",
+    "a2_faq1_q": "La rimozione delle proprietà in Esplora File elimina tutti i metadati della foto?",
+    "a2_faq1_a": "No. La funzione integrata in Windows cancella i tag EXIF standard ma ignora quasi sempre i blocchi MakerNote, i numeri di serie hardware e i metadati XMP incorporati.",
+    "a2_faq2_q": "Qual è la differenza tra pulizia superficiale ed eliminazione binaria completa?",
+    "a2_faq2_a": "La pulizia superficiale sovrascrive chiavi note con valori nulli mantenendo la struttura del file. L'eliminazione binaria ricostruisce l'immagine copiando solo le matrici di pixel verificate e scartando ogni intestazione ausiliaria.",
+    "a2_faq3_q": "Perché la sanificazione lato client è più sicura dei servizi cloud?",
+    "a2_faq3_a": "I servizi online richiedono di caricare file non puliti su Internet, esponendo coordinate GPS private e codici seriali a server terzi. L'elaborazione locale nella RAM sanifica i file con zero traffico di rete in uscita.",
+    "a2_cta_title": "Proteggi la Tua Privacy Prima di Pubblicare",
+    "a2_cta_desc": "Non pubblicare mai foto o documenti contenenti coordinate GPS o numeri di serie hardware. Sanificali subito con VantorKit.",
+    "a2_cta_btn1": "Apri Pulitore Metadati →",
+    "a2_cta_btn2": "Esplora Altre Guide Ingegneristiche",
+    "a3_meta_author_val": "Laboratorio Performance VantorKit",
+    "a3_meta_pub_val": "Ottobre 2026",
+    "a3_meta_time_val": "7 min di lettura",
+    "a3_meta_exfil_val": "0 Byte (Lato Client)",
+    "a3_toc_title": "Indice dei Contenuti",
+    "a3_sec3_badge": "Esecuzione 100% nella RAM del Browser",
+    "a3_sec3_title": "Apri Trasformatore Big Data — 100% Client",
+    "a3_sec3_desc": "Converti, filtra e aggrega file CSV, JSON e TSV fino a 500MB direttamente nel tuo browser, senza alcun server esterno.",
+    "a3_sec3_btn": "Avvia Strumento Trasformatore Big Data",
+    "a3_faq1_q": "Può un browser web elaborare file JSON o CSV da 500MB senza bloccarsi?",
+    "a3_faq1_a": "Sì. Mentre JSON.parse() sul thread principale causa il blocco per memoria esaurita, l'invio di flussi a blocchi a un Web Worker dedicato tramite Oggetti Trasferibili supera i limiti dell'heap ed è fluido.",
+    "a3_faq2_q": "Cosa sono gli Oggetti Trasferibili e perché evitano la duplicazione di memoria?",
+    "a3_faq2_a": "Gli Oggetti Trasferibili (come gli ArrayBuffer) trasferiscono la proprietà dei byte direttamente al worker con semantica zero-copy. Il thread di origine rilascia il puntatore all'istante.",
+    "a3_faq3_q": "Perché l'elaborazione locale è migliore per i dati aziendali riservati?",
+    "a3_faq3_a": "Caricare registri finanziari o cartelle cliniche su server cloud comporta rischi di conformità, costi di elaborazione e colli di bottiglia di rete. L'esecuzione lato client protegge i tuoi dati all'interno del tuo dispositivo.",
+    "a3_cta_title": "Elabora Dataset Enormi Istantaneamente",
+    "a3_cta_desc": "Sperimenta conversioni dati fulminee lato client senza inviare gigabyte di dati riservati a provider cloud esterni.",
+    "a3_cta_btn1": "Apri Trasformatore Big Data →",
+    "a3_cta_btn2": "Esplora Altre Guide Ingegneristiche"
+  }
+};
 
   const LANG_NAMES = {
     en: 'English',
@@ -14,773 +1146,136 @@
     it: 'Italiano'
   };
 
-  const BLOG_I18N = {
-    en: {
-      // Navbar
-      blog_badge: 'Blog',
-      nav_all_tools: 'All 32 Utilities',
-      nav_rss: 'RSS',
-      nav_back_blog: 'Blog Hub',
-      nav_launch_redactor: 'Open PDF Redactor',
+  const RTL_LANGS = ['ar'];
 
-      // Blog Hub Hero (blog/index.html)
-      hero_badge: 'Client-Side Architecture & Research',
-      hero_title: 'VantorKit <span>Engineering & Privacy</span> Guides',
-      hero_subtitle: 'Architectural deep dives, cryptographic sandboxing, and practical engineering guides for true client-side web applications. Discover how to inspect, redact, and transform sensitive documents directly inside browser RAM without ever uploading data to the cloud.',
-      feat_zero_uploads: '0 Bytes Server Uploads',
-      feat_in_browser: 'In-Browser RAM Execution',
-      feat_open_standards: 'Open Web & Wasm Standards',
-
-      // Section Headers
-      sec_latest_articles: 'Latest Technical Articles',
-      sec_subscribe_rss: 'Subscribe via RSS',
-
-      // Article Card 1 (Flagship)
-      card1_cat: 'PDF Security & Privacy',
-      card1_read_time: '6 min read',
-      card1_title: 'How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads',
-      card1_excerpt: 'Drawing black boxes over text in standard PDF viewers creates visual masks that retain underlying vector characters. Learn why traditional redaction fails and how true HTML5 Canvas rasterization flattens documents locally in RAM.',
-      card1_author: 'By VantorKit Security Team',
-      card1_date: 'Oct 2026',
-      card1_cta: 'Read Guide',
-
-      // Article Card 2
-      card2_cat: 'Forensics & Privacy',
-      badge_coming_soon: 'Coming Soon',
-      card2_title: 'Why Traditional Metadata Stripping Fails: Inspecting EXIF, XMP & Document Streams',
-      card2_excerpt: 'Standard file cleaners often leave hidden camera serial numbers, GPS coordinates, and revision histories intact in document binary trees. An analysis of client-side binary tree purges.',
-      card2_author: 'By VantorKit Research',
-      card2_date: 'Oct 2026',
-      card2_read_time: '5 min read',
-      card2_cta: 'Read Guide',
-
-      // Article Card 3
-      card3_cat: 'Performance & Wasm',
-      card3_title: 'Client-Side Big Data Transformation: Processing 500MB Payloads in Browser RAM',
-      card3_excerpt: 'How streaming Web Workers, Transferable ArrayBuffers, and chunked WebAssembly runtimes parse enterprise JSON/CSV datasets on the client with zero cloud computation bills.',
-      card3_author: 'By VantorKit Performance Lab',
-      card3_date: 'Oct 2026',
-      card3_read_time: '7 min read',
-      card3_cta: 'Read Guide',
-
-      // RSS Callout Banner
-      rss_callout_title: 'Zero Trackers. Pure Open Web RSS Syndication.',
-      rss_callout_desc: "We don't collect your email address, run newsletter tracking pixels, or store cookies. Stay updated on our latest client-side browser engineering guides and cryptographic tools directly via standard RSS 2.0.",
-      rss_callout_btn: 'Open RSS Feed (/blog/feed.xml)',
-
-      // Article Page (blog/how-to-redact-pdf-locally.html)
-      art_badge_category: 'PDF Security & Privacy',
-      art_badge_verified: '100% In-Browser Execution',
-      art_h1: 'How to Permanently Redact Sensitive Text in PDF Files Without Cloud Uploads',
-      art_lead: 'Drawing black boxes over text in standard PDF readers does not delete the characters underneath. Discover why visual redactions leak confidential data, how true canvas flattening works, and how to sanitize legal and financial documents entirely inside your browser\'s local RAM.',
-      art_meta_author_label: 'Author: ',
-      art_meta_author_val: 'VantorKit Security Team',
-      art_meta_pub_label: 'Published: ',
-      art_meta_pub_val: 'October 6, 2026',
-      art_meta_time_label: 'Read Time: ',
-      art_meta_time_val: '6 min read',
-      art_meta_exfil_label: 'Network Exfiltration: ',
-      art_meta_exfil_val: '0 Bytes (Client-Side)',
-
-      // Article Table of Contents
-      art_toc_heading: 'Table of Contents',
-      art_toc_1: '1. Executive Answer: Visual Masking vs. True Raster Flattening',
-      art_toc_2: '2. Interactive Tool: VantorKit PDF Redactor',
-      art_toc_3: '3. Step-by-Step Technical Guide for Sanitizing Documents',
-      art_toc_4: '4. Security Deep Dive: WebAssembly, Canvas Pixels & RAM Sandboxing',
-      art_toc_5: '5. Frequently Asked Questions (PDF Redaction Security)',
-
-      // Article Section 1
-      sec1_h2: '1. The Executive Answer: Visual Masking vs. True Raster Flattening',
-      sec1_p1: 'Every year, major law firms, intelligence agencies, and healthcare providers accidentally leak confidential data through flawed PDF redaction. High-profile court dockets—including filings in the Paul Manafort federal trials and corporate antitrust litigation—have famously leaked classified names and bank account numbers because an attorney simply drew a black rectangle over text using an everyday PDF viewer.',
-      sec1_p2: 'To understand why this happens, you must understand how the PDF file specification (ISO 32000) stores data. A PDF is not a flat bitmap image; it is an object graph containing independent layers:',
-      comp_danger_title: 'Visual Masking (High Risk)',
-      comp_danger_1: '❌ Character glyphs stay intact in binary stream',
-      comp_danger_2: '❌ Anyone can copy text via Ctrl+A / Cmd+C',
-      comp_danger_3: '❌ Scripted tools (e.g. pdftotext) extract text in ms',
-      comp_danger_4: '❌ Underlying vector objects can be deleted in Acrobat',
-      comp_danger_5: '❌ Metadata & OCR text layers remain searchable',
-      comp_secure_title: 'True Raster Flattening (Secure)',
-      comp_secure_1: '✅ Vectors & fonts baked into raw pixel matrix in RAM',
-      comp_secure_2: '✅ Blackout coordinates overwrite pixel buffers directly',
-      comp_secure_3: '✅ Text streams are obliterated from the file dictionary',
-      comp_secure_4: '✅ Mathematically irreversible: 0 glyphs survive',
-      comp_secure_5: '✅ Zero cloud uploads: documents never leave client RAM',
-
-      // Article Section 2 Tool CTA Card
-      sec2_h2: '2. Interactive Tool: VantorKit PDF Redactor',
-      tool_badge: '100% Client-Side Browser Sandbox',
-      tool_title: 'Launch VantorKit PDF Redactor — 100% Client-Side',
-      tool_desc: 'Sanitize, blackout, and flatten sensitive PDF documents instantly with zero cloud uploads. Your documents are rendered and redacted entirely within your device\'s memory using HTML5 Canvas and WebAssembly.',
-      tool_p1: '0 Bytes Transferred (Zero Logs)',
-      tool_p2: 'High-DPI Multi-Page Rendering',
-      tool_p3: 'Irreversible Canvas Pixel Baking',
-      tool_p4: 'Instant Offline Execution',
-      tool_btn: 'Launch PDF Redactor Tool',
-      tool_guarantee: 'Free forever • No account required • Zero server telemetry',
-
-      // Article Section 3 Steps
-      sec3_h2: '3. Step-by-Step Technical Guide for Sanitizing Documents',
-      step1_h3: 'Ingest File Locally Into Browser RAM',
-      step1_desc: "Open the VantorKit PDF Redactor and drop your document onto the dropzone. The application calls the standard HTML5 FileReader.readAsArrayBuffer() API. Notice that in your browser's Developer Tools (Network Tab), zero HTTP POST requests are made. The binary buffer is held exclusively in your local device memory.",
-      step2_h3: 'Apply Precision Coordinate Blackouts',
-      step2_desc: 'VantorKit renders each page onto an HTML5 <canvas> element at a high device pixel ratio (2x scale for crisp readability). Click and drag over social security numbers, banking IBANs, confidential client names, or signature blocks. You will see black blackout overlays with live coordinate tracking.',
-      step3_h3: 'Export the Flattened, Purged Document',
-      step3_desc: 'Click Download Redacted PDF. The rasterizer bakes your blackout coordinates directly into the Canvas 2D image buffer, permanently overwriting the pixel colors with pure #000000. The engine then compiles a sanitized PDF container using local JavaScript. All underlying vector font streams, text dictionaries, revision histories, and hidden metadata are completely stripped.',
-
-      // Article Section 4
-      sec4_h2: '4. Security Deep Dive: WebAssembly, Canvas Pixels & RAM Sandboxing',
-      sec4_sub1: 'The Canvas Rasterization & Pixel Overwrite Pipeline',
-      sec4_sub2: 'Self-Verification: How to Audit Your Redacted PDF',
-
-      // Article Section 5 FAQs
-      sec5_h2: '5. Frequently Asked Questions (PDF Redaction Security)',
-      faq_q1: 'Can text under a black box in a standard PDF still be highlighted or copied?',
-      faq_a1: 'Yes. In standard PDF viewers (such as Adobe Acrobat Reader, macOS Preview, or web browsers), drawing a black shape merely places a visual vector annotation over the text. The underlying text stream, font glyphs, and selectable character coordinates remain completely intact in the document stream. Anyone using "Select All" or command-line extraction tools can extract the sensitive data in seconds.',
-      faq_q2: 'What is the difference between visual masking and true PDF redaction?',
-      faq_a2: 'Visual masking obscures text visually without deleting the underlying character data. True PDF redaction requires raster flattening or destructive stream editing, where vector text objects, metadata, and font glyph dictionaries are permanently deleted from the PDF binary structure or rendered to pixel bitmaps so no underlying data remains to be recovered.',
-      faq_q3: 'How does VantorKit\'s PDF Redactor ensure zero data leaves my computer?',
-      faq_a3: 'VantorKit operates 100% client-side inside your browser sandbox. The PDF is parsed into memory using WebAssembly and PDF.js, rendered onto an HTML5 Canvas in RAM, overlaid with your redaction blocks, and re-flattened into a sanitized PDF using local JavaScript. Zero bytes are uploaded to any server, eliminating cloud breach and data exfiltration risks.',
-
-      // Wrap-up CTA
-      final_cta_title: 'Ready to redact documents securely?',
-      final_cta_desc: 'Protect your trade secrets, client financials, and personal identifiers. Use VantorKit PDF Redactor for immediate, private, client-side document sanitization.',
-      final_cta_btn: 'Open VantorKit PDF Redactor →',
-      final_cta_more: 'Explore More Engineering Guides',
-
-      // Footer
-      footer_privacy: 'Privacy Policy',
-      footer_terms: 'Terms of Service',
-      footer_about: 'About Us',
-      footer_contact: 'Contact',
-      footer_blog: 'Blog',
-      footer_copy: '© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.'
-    },
-
-    ar: {
-      // Navbar
-      blog_badge: 'المدونة',
-      nav_all_tools: 'كافة الأدوات (32)',
-      nav_rss: 'خلاصة RSS',
-      nav_back_blog: 'مركز المدونة',
-      nav_launch_redactor: 'أداة تعتيم وتطهير PDF',
-
-      // Blog Hub Hero (blog/index.html)
-      hero_badge: 'معمارية وأبحاث المعالجة داخل المتصفح',
-      hero_title: 'أدلة فانتوركيت <span>للهندسة والخصوصية</span>',
-      hero_subtitle: 'دراسات معمارية متعمقة، وعزل تشفيري، وأدلة هندسية عملية لتطبيقات الويب المستقلة عن الخوادم. اكتشف كيفية فحص وتعتيم وتحويل المستندات الحساسة داخل ذاكرة المتصفح العشوائية (RAM) دون رفع أي بايت إلى السحابة.',
-      feat_zero_uploads: '0 بايت مرسلة للخادم (بدون رفع)',
-      feat_in_browser: 'معالجة كاملة بذاكرة المتصفح',
-      feat_open_standards: 'معايير الويب المفتوحة وWasm',
-
-      // Section Headers
-      sec_latest_articles: 'أحدث المقالات التقنية',
-      sec_subscribe_rss: 'الاشتراك عبر RSS',
-
-      // Article Card 1 (Flagship)
-      card1_cat: 'أمان ملفات PDF والخصوصية',
-      card1_read_time: 'قراءة في 6 دقائق',
-      card1_title: 'كيفية تعتيم وحذف النصوص الحساسة في ملفات PDF نهائياً دون رفعها للسحابة',
-      card1_excerpt: 'رسم مربعات سوداء فوق النصوص في عارضات PDF التقليدية يُنشئ أقنعة بصرية سطحية تحتفظ بالأحرف الأصلية. تعرّف على سبب فشل التعتيم التقليدي وكيف تقوم معالجة Canvas بتحويل المستند إلى بكسلات آمنة محلياً.',
-      card1_author: 'فريق أمان فانتوركيت',
-      card1_date: 'أكتوبر 2026',
-      card1_cta: 'اقرأ الدليل',
-
-      // Article Card 2
-      card2_cat: 'التحليل الجنائي والخصوصية',
-      badge_coming_soon: 'قريباً',
-      card2_title: 'لماذا تفشل أدوات إزالة البيانات الوصفية التقليدية: فحص بيانات EXIF وXMP محلياً',
-      card2_excerpt: 'غالباً ما تترك برامج التنظيف التقليدية الأرقام التسلسلية للكاميرات وإحداثيات الموقع وتواريخ التعديل سليمة داخل الملف الثنائي. دراسة لتنظيف الأشجار الثنائية داخل المتصفح.',
-      card2_author: 'قسم أبحاث فانتوركيت',
-      card2_date: 'أكتوبر 2026',
-      card2_read_time: 'قراءة في 5 دقائق',
-      card2_cta: 'اقرأ الدليل',
-
-      // Article Card 3
-      card3_cat: 'الأداء وWebAssembly',
-      card3_title: 'تحويل البيانات الضخمة داخل المتصفح: معالجة ملفات بحجم 500 ميغابايت بذاكرة RAM',
-      card3_excerpt: 'كيف تعمل خيوط Web Workers ومصفوفات ArrayBuffers وتقنيات WebAssembly على معالجة ملفات JSON وCSV الضخمة محلياً دون أي تكاليف سحابية.',
-      card3_author: 'مختبر أداء فانتوركيت',
-      card3_date: 'أكتوبر 2026',
-      card3_read_time: 'قراءة في 7 دقائق',
-      card3_cta: 'اقرأ الدليل',
-
-      // RSS Callout Banner
-      rss_callout_title: 'بدون أي تتبع. تغذية RSS قياسية ومفتوحة بالكامل.',
-      rss_callout_desc: 'نحن لا نجمع بريدك الإلكتروني، ولا نستخدم وحدات بكسل لتتبع النشرات، ولا نخزن ملفات تعريف الارتباط. تابع أحدث أدلتنا التقنية وأدواتنا التشفيرية مباشرة عبر خلاصة RSS 2.0 القياسية.',
-      rss_callout_btn: 'افتح خلاصة RSS (/blog/feed.xml)',
-
-      // Article Page (blog/how-to-redact-pdf-locally.html)
-      art_badge_category: 'أمان ملفات PDF والخصوصية',
-      art_badge_verified: 'معالجة كاملة داخل المتصفح (100%)',
-      art_h1: 'كيفية تعتيم وحذف النصوص الحساسة في ملفات PDF نهائياً دون رفعها للسحابة',
-      art_lead: 'رسم مربعات سوداء فوق النصوص في عارضات PDF لا يحذف الأحرف الموجودة أسفلها. تعرّف على أسباب تسريب التعتيم البصري للبيانات الحساسة، وكيفية تسطيح صفحات المستند عبر Canvas وتطهير العقود داخل ذاكرة المتصفح.',
-      art_meta_author_label: 'الكاتب: ',
-      art_meta_author_val: 'فريق أمان فانتوركيت',
-      art_meta_pub_label: 'تاريخ النشر: ',
-      art_meta_pub_val: '6 أكتوبر 2026',
-      art_meta_time_label: 'وقت القراءة: ',
-      art_meta_time_val: '6 دقائق',
-      art_meta_exfil_label: 'تسريب الشبكة: ',
-      art_meta_exfil_val: '0 بايت (معالجة محلية)',
-
-      // Article Table of Contents
-      art_toc_heading: 'فهرس المحتويات',
-      art_toc_1: '1. الإجابة التنفيذية: التعتيم البصري مقابل التسطيح النقطي الفعلي',
-      art_toc_2: '2. الأداة التفاعلية: أداة تنقيح وتعتيم PDF من فانتوركيت',
-      art_toc_3: '3. الدليل التقني خطوة بخطوة لتطهير المستندات',
-      art_toc_4: '4. تحليل أمني معمق: WebAssembly وبكسلات Canvas وعزل الذاكرة',
-      art_toc_5: '5. الأسئلة الشائعة حول أمان تعتيم مستندات PDF',
-
-      // Article Section 1
-      sec1_h2: '1. الإجابة التنفيذية: التعتيم البصري مقابل التسطيح النقطي الفعلي',
-      sec1_p1: 'في كل عام، تسرّب مكاتب المحاماة الكبرى والجهات الطبية بيانات سرية بالخطأ بسبب التعتيم غير الصحيح لمستندات PDF. وقد شهدت قضايا فيدرالية شهيرة تسريبات محرجة لأسماء سرية وأرقام حسابات بنكية لأن المحامي قام ببساطة برسم مستطيل أسود فوق النص باستخدام عارض ملفات عادي.',
-      sec1_p2: 'لفهم سبب حدوث ذلك، يجب معرفة بنية مواصفات PDF (ISO 32000). ملف PDF ليس صورة نقطية مسطحة، بل هو رسم بياني للكائنات يحتوي على طبقات مستقلة:',
-      comp_danger_title: 'التعتيم البصري السطحي (شديد الخطورة)',
-      comp_danger_1: '❌ رموز الأحرف تظل سليمة داخل الملف الثنائي',
-      comp_danger_2: '❌ يمكن لأي شخص نسخ النص عبر Ctrl+A ثم Ctrl+C',
-      comp_danger_3: '❌ تستخرج الأدوات البرمجية (مثل pdftotext) النص في أجزاء من الثانية',
-      comp_danger_4: '❌ يمكن إزالة الأشكال السوداء بسهولة في برامج التعديل',
-      comp_danger_5: '❌ تظل البيانات الوصفية وطبقات OCR قابلة للبحث والتعرف',
-      comp_secure_title: 'التسطيح النقطي الفعلي (آمن بنسبة 100%)',
-      comp_secure_1: '✅ حرق المتجهات والخطوط في مصفوفة بكسلات مباشرة بالذاكرة',
-      comp_secure_2: '✅ إحداثيات التعتيم تستبدل قيم البكسل باللون الأسود مباشرة',
-      comp_secure_3: '✅ إزالة تدفقات النصوص تماماً من هيكل المستند',
-      comp_secure_4: '✅ عملية غير قابلة للاسترجاع رياضياً: لا يتبقى أي حرف',
-      comp_secure_5: '✅ لا يتم رفع أي ملف: المستندات لا تغادر جهازك أبداً',
-
-      // Article Section 2 Tool CTA Card
-      sec2_h2: '2. الأداة التفاعلية: أداة تنقيح وتعتيم PDF من فانتوركيت',
-      tool_badge: 'بيئة معزولة 100% داخل المتصفح',
-      tool_title: 'تشغيل أداة تنقيح وتعتيم PDF — 100% داخل المتصفح',
-      tool_desc: 'قم بتعتيم وحذف البيانات الحساسة وتسطيح ملفات PDF فورياً دون إرسالها إلى السحابة. تتم معالجة مستنداتك وتعتيمها بالكامل داخل ذاكرة جهازك باستخدام تقنيات HTML5 Canvas وWebAssembly.',
-      tool_p1: '0 بايت مرسلة (بدون سجلات)',
-      tool_p2: 'عرض عالي الدقة متعدد الصفحات',
-      tool_p3: 'حرق بكسلات Canvas بشكل لا رجعة فيه',
-      tool_p4: 'تشغيل فوري دون اتصال بالإنترنت',
-      tool_btn: 'تشغيل أداة تعتيم PDF الآن',
-      tool_guarantee: 'مجانية دائماً • لا تتطلب حساباً • بدون إرسال أي بيانات',
-
-      // Article Section 3 Steps
-      sec3_h2: '3. الدليل التقني خطوة بخطوة لتطهير المستندات',
-      step1_h3: 'تحميل الملف محلياً إلى ذاكرة المتصفح (RAM)',
-      step1_desc: 'افتح أداة تنقيح PDF وأسقط مستندك في منطقة الإسقاط. يستخدم التطبيق واجهة FileReader.readAsArrayBuffer القياسية. ستلاحظ في لوحة المطورين (قسم الشبكة) أنه لا يتم إرسال أي طلب POST خارجي، ويبقى الملف محلياً في الذاكرة.',
-      step2_h3: 'تطبيق تعتيم دقيق حسب الإحداثيات',
-      step2_desc: 'يقوم فانتوركيت بعرض كل صفحة على عنصر Canvas بدقة عالية مضاعفة (مقياس 2x). انقر واسحب فوق الأرقام القومية أو الحسابات المصرفية أو التوقيعات لتطبيق التعتيم الأسود مع تتبع حي للإحداثيات.',
-      step3_h3: 'تصدير المستند المطهّر والمبسّط نهائياً',
-      step3_desc: 'انقر فوق تنزيل ملف PDF المنقّح. يقوم المحول بحرق إحداثيات التعتيم مباشرة في بكسلات الصورة بلون #000000 الصافي، ثم يتم تجميع ملف PDF جديد كلياً يحذف الخطوط والنصوص والبيانات الوصفية السابقة.',
-
-      // Article Section 4
-      sec4_h2: '4. تحليل أمني معمق: WebAssembly وبكسلات Canvas وعزل الذاكرة',
-      sec4_sub1: 'تسلسل تحويل Canvas وتجاوز البكسلات',
-      sec4_sub2: 'التحقق الذاتي: كيف تفحص مستندك المنقح بنفسك',
-
-      // Article Section 5 FAQs
-      sec5_h2: '5. الأسئلة الشائعة حول أمان تعتيم مستندات PDF',
-      faq_q1: 'هل يمكن تحديد أو نسخ النص الموجود أسفل المربع الأسود في ملف PDF عادي؟',
-      faq_a1: 'نعم. في عارضات PDF التقليدية، وضع شكل أسود يضيف مجرد علامة بصرية سطحية فوق النص، بينما تظل أحرف النص وإحداثياته سليمة تماماً داخل تدفق الملف. يمكن لأي شخص الضغط على "تحديد الكل" أو استخدام أدوات سطر الأوامر لاستخراج البيانات الحساسة فوراً.',
-      faq_q2: 'ما هو الفرق بين التعتيم البصري والتنقيح الفعلي لملف PDF؟',
-      faq_a2: 'التعتيم البصري يخفي النص عن العين فقط دون حذف أحرفه من الملف. أما التنقيح الفعلي فيتطلب تسطيح الصفحة إلى بكسلات أو حذف كائنات النصوص والخطوط والبيانات الوصفية نهائياً من بنية الملف بحيث يستحيل استرجاعها رياضياً.',
-      faq_q3: 'كيف تضمن أداة تنقيح PDF من فانتوركيت عدم مغادرة أي بيانات لجهازي؟',
-      faq_a3: 'تعمل أداة فانتوركيت بنسبة 100% داخل بيئة متصفحك المعزولة. تتم معالجة الملف في الذاكرة عبر WebAssembly وPDF.js وعرضه على Canvas ثم إعادة تجميعه عبر جافاسكريبت محلياً. لا يتم إرسال أي بايت لأي خادم، مما يقضي تماماً على مخاطر الاختراق السحابي.',
-
-      // Wrap-up CTA
-      final_cta_title: 'هل أنت مستعد لتعتيم وتطهير مستنداتك بأمان؟',
-      final_cta_desc: 'احمِ أسرارك التجارية وبيانات عملائك المالية وهوياتك الشخصية. استخدم أداة تنقيح PDF لتطهير فوري وخاص داخل جهازك.',
-      final_cta_btn: 'تشغيل أداة تعتيم وتطهير PDF ←',
-      final_cta_more: 'استكشف المزيد من الأدلة الهندسية',
-
-      // Footer
-      footer_privacy: 'سياسة الخصوصية',
-      footer_terms: 'شروط الخدمة',
-      footer_about: 'من نحن',
-      footer_contact: 'اتصل بنا',
-      footer_blog: 'المدونة',
-      footer_copy: '© 2026 فانتوركيت. أدوات ويب سريعة ومجانية تحترم الخصوصية. تتم جميع المعالجة محلياً في متصفحك.'
-    },
-
-    fr: {
-      // Navbar
-      blog_badge: 'Blog',
-      nav_all_tools: 'Tous les 32 outils',
-      nav_rss: 'Flux RSS',
-      nav_back_blog: 'Hub Blog',
-      nav_launch_redactor: 'Ouvrir Rédacteur PDF',
-
-      // Blog Hub Hero (blog/index.html)
-      hero_badge: 'Architecture & Recherche Côté Client',
-      hero_title: 'Guides <span>d\'Ingénierie & Confidentialité</span> VantorKit',
-      hero_subtitle: 'Analyses architecturales approfondies, bac à sable cryptographique et guides pratiques pour applications web côté client. Découvrez comment inspecter, biffer et transformer vos documents sensibles dans la RAM sans transfert cloud.',
-      feat_zero_uploads: '0 octet transféré au serveur',
-      feat_in_browser: 'Exécution 100% en RAM',
-      feat_open_standards: 'Standards du Web & WebAssembly',
-
-      // Section Headers
-      sec_latest_articles: 'Derniers Articles Techniques',
-      sec_subscribe_rss: 'S\'abonner via RSS',
-
-      // Article Card 1 (Flagship)
-      card1_cat: 'Sécurité & Confidentialité PDF',
-      card1_read_time: '6 min de lecture',
-      card1_title: 'Comment biffer définitivement le texte confidentiel d\'un PDF sans envoi cloud',
-      card1_excerpt: 'Dessiner des boîtes noires dans un lecteur PDF standard crée un masque visuel qui conserve les caractères vectoriels. Découvrez pourquoi le caviardage classique échoue et comment l\'aplatissement Canvas sécurise vos documents dans la RAM.',
-      card1_author: 'Par l\'équipe Sécurité VantorKit',
-      card1_date: 'Oct 2026',
-      card1_cta: 'Lire le guide',
-
-      // Article Card 2
-      card2_cat: 'Forensique & Confidentialité',
-      badge_coming_soon: 'Bientôt disponible',
-      card2_title: 'Pourquoi le nettoyage classique de métadonnées échoue : analyse locale d\'EXIF et XMP',
-      card2_excerpt: 'Les nettoyeurs de fichiers laissent souvent les numéros de série, balises GPS et historiques intacts dans les flux binaires. Analyse de la purge binaire côté client.',
-      card2_author: 'Par la Recherche VantorKit',
-      card2_date: 'Oct 2026',
-      card2_read_time: '5 min de lecture',
-      card2_cta: 'Lire le guide',
-
-      // Article Card 3
-      card3_cat: 'Performance & Wasm',
-      card3_title: 'Transformation de mégadonnées côté client : traitement de 500 Mo en mémoire RAM',
-      card3_excerpt: 'Comment les Web Workers, les ArrayBuffers et WebAssembly traitent des flux JSON/CSV massifs côté client avec zéro coût d\'infrastructure cloud.',
-      card3_author: 'Par le Lab Performance VantorKit',
-      card3_date: 'Oct 2026',
-      card3_read_time: '7 min de lecture',
-      card3_cta: 'Lire le guide',
-
-      // RSS Callout Banner
-      rss_callout_title: 'Zéro traqueur. Syndication RSS ouverte et respectueuse.',
-      rss_callout_desc: 'Nous ne collectons pas votre e-mail, n\'utilisons aucun pixel espion ni cookie. Suivez nos publications techniques et nos outils cryptographiques directement via le flux RSS 2.0 standard.',
-      rss_callout_btn: 'Ouvrir le flux RSS (/blog/feed.xml)',
-
-      // Article Page (blog/how-to-redact-pdf-locally.html)
-      art_badge_category: 'Sécurité & Confidentialité PDF',
-      art_badge_verified: 'Exécution 100% en navigateur',
-      art_h1: 'Comment biffer définitivement le texte confidentiel d\'un PDF sans envoi cloud',
-      art_lead: 'Dessiner des boîtes noires sur un PDF ne supprime pas les caractères sous-jacents. Découvrez pourquoi le masquage visuel compromet vos données et comment l\'aplatissement Canvas sécurise vos contrats dans la RAM.',
-      art_meta_author_label: 'Auteur : ',
-      art_meta_author_val: 'Équipe Sécurité VantorKit',
-      art_meta_pub_label: 'Publié : ',
-      art_meta_pub_val: '6 octobre 2026',
-      art_meta_time_label: 'Temps : ',
-      art_meta_time_val: '6 min de lecture',
-      art_meta_exfil_label: 'Exfiltration Réseau : ',
-      art_meta_exfil_val: '0 octet (Côté client)',
-
-      // Article Table of Contents
-      art_toc_heading: 'Table des matières',
-      art_toc_1: '1. Réponse synthétique : Masquage visuel vs Aplatissement raster',
-      art_toc_2: '2. Outil interactif : Rédacteur PDF VantorKit',
-      art_toc_3: '3. Guide technique étape par étape pour sécuriser vos documents',
-      art_toc_4: '4. Analyse approfondie : WebAssembly, pixels Canvas et isolation RAM',
-      art_toc_5: '5. Foire Aux Questions (Sécurité du caviardage PDF)',
-
-      // Article Section 1
-      sec1_h2: '1. Réponse synthétique : Masquage visuel vs Aplatissement raster',
-      sec1_p1: 'Chaque année, des cabinets juridiques renommés et des agences divulguent des données sensibles en raison d\'un caviardage PDF erroné. De nombreux procès retentissants ont révélé des informations classifiées simplement parce qu\'un avocat a dessiné un rectangle noir avec un lecteur PDF standard.',
-      sec1_p2: 'Pour comprendre ce phénomène, il faut observer la spécification ISO 32000 du PDF. Un document PDF n\'est pas une image plate mais un ensemble d\'objets avec calques indépendants :',
-      comp_danger_title: 'Masquage Visuel (Haut Risque)',
-      comp_danger_1: '❌ Les glyphes restent intacts dans le flux binaire',
-      comp_danger_2: '❌ N\'importe qui peut copier le texte via Ctrl+A / Cmd+C',
-      comp_danger_3: '❌ Des outils comme pdftotext extraient le texte en millisecondes',
-      comp_danger_4: '❌ Les formes noires peuvent être supprimées dans Acrobat',
-      comp_danger_5: '❌ Les métadonnées et couches OCR restent consultables',
-      comp_secure_title: 'Aplatissement Raster Réel (Sécurisé)',
-      comp_secure_1: '✅ Vecteurs et polices convertis en matrice de pixels dans la RAM',
-      comp_secure_2: '✅ Les zones biffées écrasent directement les tampons de pixels',
-      comp_secure_3: '✅ Les flux de texte sont complètement détruits du dictionnaire',
-      comp_secure_4: '✅ Mathématiquement irréversible : aucun glyphe ne subsiste',
-      comp_secure_5: '✅ Zéro envoi cloud : le document ne quitte jamais votre RAM',
-
-      // Article Section 2 Tool CTA Card
-      sec2_h2: '2. Outil interactif : Rédacteur PDF VantorKit',
-      tool_badge: 'Bac à sable 100% côté client',
-      tool_title: 'Lancer le Rédacteur PDF VantorKit — 100% Côté Client',
-      tool_desc: 'Sécurisez, caviardez et aplatissez vos PDF sensibles instantanément sans transfert réseau. Le rendu et le masquage sont réalisés dans la mémoire de votre appareil via HTML5 Canvas et WebAssembly.',
-      tool_p1: '0 octet transféré (Zéro journal)',
-      tool_p2: 'Rendu multipage haute résolution',
-      tool_p3: 'Fusion irréversible des pixels Canvas',
-      tool_p4: 'Fonctionne hors ligne instantanément',
-      tool_btn: 'Lancer le Rédacteur PDF',
-      tool_guarantee: 'Gratuit à vie • Sans compte • Zéro télémétrie serveur',
-
-      // Article Section 3 Steps
-      sec3_h2: '3. Guide technique étape par étape pour sécuriser vos documents',
-      step1_h3: 'Charger le fichier localement dans la RAM',
-      step1_desc: 'Ouvrez le Rédacteur PDF VantorKit et déposez votre document. L\'application utilise l\'API standard FileReader.readAsArrayBuffer(). Dans l\'onglet Réseau des outils de développement, aucune requête HTTP POST n\'est émise.',
-      step2_h3: 'Appliquer des masquages précis par coordonnées',
-      step2_desc: 'VantorKit génère chaque page sur un élément Canvas à haute résolution (échelle 2x). Cliquez et glissez sur les numéros d\'identification, IBAN ou signatures pour créer les zones noires avec suivi des coordonnées en temps réel.',
-      step3_h3: 'Exporter le document aplati et nettoyé',
-      step3_desc: 'Cliquez sur Télécharger le PDF biffé. Le moteur incruste les coordonnées noires directement dans le tampon 2D Canvas avec du noir #000000 pur, puis génère un nouveau PDF débarrassé de tout texte ou métadonnée sous-jacente.',
-
-      // Article Section 4
-      sec4_h2: '4. Analyse approfondie : WebAssembly, pixels Canvas et isolation RAM',
-      sec4_sub1: 'Le pipeline de pixellisation et écriture de pixels Canvas',
-      sec4_sub2: 'Vérification autonome : comment auditer votre PDF caviardé',
-
-      // Article Section 5 FAQs
-      sec5_h2: '5. Foire Aux Questions (Sécurité du caviardage PDF)',
-      faq_q1: 'Le texte sous une boîte noire dans un PDF standard peut-il encore être surligné ou copié ?',
-      faq_a1: 'Oui. Dans les lecteurs PDF classiques, dessiner une forme noire ajoute une simple annotation vectorielle au-dessus du texte. Les caractères et polices sous-jacents restent intacts. N\'importe qui utilisant "Tout sélectionner" ou des outils en ligne de commande peut extraire les données en quelques secondes.',
-      faq_q2: 'Quelle est la différence entre un masquage visuel et un caviardage PDF réel ?',
-      faq_a2: 'Le masquage visuel cache le texte sans supprimer ses données binaires. Un caviardage réel requiert l\'aplatissement matriciel ou la suppression destructrice des flux d\'objets, métadonnées et dictionnaires de polices, rendant toute récupération impossible.',
-      faq_q3: 'Comment le Rédacteur PDF VantorKit garantit-il qu\'aucune donnée ne quitte mon ordinateur ?',
-      faq_a3: 'VantorKit fonctionne à 100% côté client dans le bac à sable de votre navigateur. Le PDF est chargé en mémoire via WebAssembly et PDF.js, rendu sur un Canvas en RAM et reconstitué via JavaScript local. Zéro octet n\'est envoyé vers un serveur.',
-
-      // Wrap-up CTA
-      final_cta_title: 'Prêt à biffer vos documents en toute sécurité ?',
-      final_cta_desc: 'Protégez vos secrets d\'affaires, données financières et identités personnelles. Utilisez le Rédacteur PDF VantorKit pour un assainissement immédiat et confidentiel.',
-      final_cta_btn: 'Ouvrir le Rédacteur PDF VantorKit →',
-      final_cta_more: 'Explorer d\'autres guides techniques',
-
-      // Footer
-      footer_privacy: 'Politique de confidentialité',
-      footer_terms: 'Conditions d\'utilisation',
-      footer_about: 'À propos',
-      footer_contact: 'Contact',
-      footer_blog: 'Blog',
-      footer_copy: '© 2026 VantorKit. Utilitaires Web rapides, gratuits et privés. Tout le traitement est effectué localement dans votre navigateur.'
-    },
-
-    it: {
-      // Navbar
-      blog_badge: 'Blog',
-      nav_all_tools: 'Tutte le 32 utilità',
-      nav_rss: 'Feed RSS',
-      nav_back_blog: 'Hub Blog',
-      nav_launch_redactor: 'Apri Redattore PDF',
-
-      // Blog Hub Hero (blog/index.html)
-      hero_badge: 'Architettura & Ricerca Lato Client',
-      hero_title: 'Guide <span>di Ingegneria & Privacy</span> VantorKit',
-      hero_subtitle: 'Approfondimenti architetturali, sandboxing crittografico e guide ingegneristiche per applicazioni web lato client. Scopri come ispezionare, redigere e trasformare documenti sensibili direttamente nella RAM del browser senza alcun upload cloud.',
-      feat_zero_uploads: '0 byte inviati al server',
-      feat_in_browser: 'Esecuzione 100% in RAM',
-      feat_open_standards: 'Standard Web Aperti & WebAssembly',
-
-      // Section Headers
-      sec_latest_articles: 'Ultimi Articoli Tecnici',
-      sec_subscribe_rss: 'Iscriviti via RSS',
-
-      // Article Card 1 (Flagship)
-      card1_cat: 'Sicurezza & Privacy PDF',
-      card1_read_time: '6 min di lettura',
-      card1_title: 'Come redigere in modo permanente il testo sensibile nei PDF senza upload cloud',
-      card1_excerpt: 'Disegnare rettangoli neri sui PDF nei lettori standard crea maschere visive che mantengono i caratteri vettoriali. Scopri perché l\'oscuramento tradizionale fallisce e come la rasterizzazione Canvas appiattisce i documenti nella RAM.',
-      card1_author: 'Del team di sicurezza VantorKit',
-      card1_date: 'Ott 2026',
-      card1_cta: 'Leggi la guida',
-
-      // Article Card 2
-      card2_cat: 'Analisi Forense & Privacy',
-      badge_coming_soon: 'In arrivo',
-      card2_title: 'Perché la pulizia tradizionale dei metadati fallisce: ispezione locale di EXIF e XMP',
-      card2_excerpt: 'I software di pulizia tradizionali lasciano intatti numeri di serie della fotocamera, coordinate GPS e cronologie. Un\'analisi della rimozione binaria lato client.',
-      card2_author: 'Della Ricerca VantorKit',
-      card2_date: 'Ott 2026',
-      card2_read_time: '5 min di lettura',
-      card2_cta: 'Leggi la guida',
-
-      // Article Card 3
-      card3_cat: 'Prestazioni & Wasm',
-      card3_title: 'Trasformazione di Big Data lato client: elaborazione di payload da 500MB nella RAM',
-      card3_excerpt: 'Come Web Workers in streaming, ArrayBuffer trasferibili e WebAssembly analizzano grandi file JSON/CSV lato client senza costi cloud.',
-      card3_author: 'Del Laboratorio Prestazioni VantorKit',
-      card3_date: 'Ott 2026',
-      card3_read_time: '7 min di lettura',
-      card3_cta: 'Leggi la guida',
-
-      // RSS Callout Banner
-      rss_callout_title: 'Zero tracciamento. Feed RSS aperto e standard.',
-      rss_callout_desc: 'Non raccogliamo la tua email, non usiamo pixel di tracciamento né cookie. Rimani aggiornato sulle nostre guide tecniche e strumenti crittografici tramite feed standard RSS 2.0.',
-      rss_callout_btn: 'Apri Feed RSS (/blog/feed.xml)',
-
-      // Article Page (blog/how-to-redact-pdf-locally.html)
-      art_badge_category: 'Sicurezza & Privacy PDF',
-      art_badge_verified: 'Esecuzione 100% nel browser',
-      art_h1: 'Come redigere in modo permanente il testo sensibile nei PDF senza upload cloud',
-      art_lead: 'Disegnare rettangoli neri sui testi nei PDF non elimina i caratteri sottostanti. Scopri perché l\'oscuramento visivo espone dati riservati e come l\'appiattimento Canvas igienizza i contratti nella RAM.',
-      art_meta_author_label: 'Autore: ',
-      art_meta_author_val: 'Team Sicurezza VantorKit',
-      art_meta_pub_label: 'Pubblicato: ',
-      art_meta_pub_val: '6 ottobre 2026',
-      art_meta_time_label: 'Tempo: ',
-      art_meta_time_val: '6 min di lettura',
-      art_meta_exfil_label: 'Fuga di dati: ',
-      art_meta_exfil_val: '0 byte (Lato client)',
-
-      // Article Table of Contents
-      art_toc_heading: 'Indice dei contenuti',
-      art_toc_1: '1. Risposta esecutiva: Mascheramento visivo vs Appiattimento raster',
-      art_toc_2: '2. Strumento interattivo: Redattore PDF VantorKit',
-      art_toc_3: '3. Guida tecnica dettagliata per igienizzare i documenti',
-      art_toc_4: '4. Approfondimento sulla sicurezza: WebAssembly, pixel Canvas e sandbox RAM',
-      art_toc_5: '5. Domande Frequenti (Sicurezza della redazione PDF)',
-
-      // Article Section 1
-      sec1_h2: '1. Risposta esecutiva: Mascheramento visivo vs Appiattimento raster',
-      sec1_p1: 'Ogni anno, importanti studi legali e agenzie divulgano dati riservati a causa di una redazione PDF imperfetta. Celebri processi hanno visto trapelare nomi classificati e numeri di conto corrente semplicemente perché un avvocato ha tracciato un rettangolo nero sopra il testo con un comune lettore PDF.',
-      sec1_p2: 'Per comprendere perché ciò accade, occorre esaminare la specifica ISO 32000 dei PDF. Un documento PDF non è un\'immagine piatta ma un insieme di oggetti con livelli indipendenti:',
-      comp_danger_title: 'Mascheramento Visivo (Alto Rischio)',
-      comp_danger_1: '❌ I glifi dei caratteri rimangono intatti nel flusso binario',
-      comp_danger_2: '❌ Chiunque può copiare il testo tramite Ctrl+A / Cmd+C',
-      comp_danger_3: '❌ Strumenti come pdftotext estraggono il testo in millisecondi',
-      comp_danger_4: '❌ Gli oggetti vettoriali sottostanti possono essere rimossi in Acrobat',
-      comp_danger_5: '❌ Metadati e livelli OCR rimangono ricercabili',
-      comp_secure_title: 'Vero Appiattimento Raster (Sicuro)',
-      comp_secure_1: '✅ Vettori e caratteri convertiti in matrice di pixel nella RAM',
-      comp_secure_2: '✅ Le coordinate oscurate sovrascrivono direttamente i pixel',
-      comp_secure_3: '✅ I flussi di testo sono completamente eliminati dal file',
-      comp_secure_4: '✅ Matematicamente irreversibile: zero glifi sopravvivono',
-      comp_secure_5: '✅ Zero upload cloud: i documenti non lasciano mai la RAM',
-
-      // Article Section 2 Tool CTA Card
-      sec2_h2: '2. Strumento interattivo: Redattore PDF VantorKit',
-      tool_badge: 'Sandbox 100% lato client',
-      tool_title: 'Avvia il Redattore PDF VantorKit — 100% Lato Client',
-      tool_desc: 'Igienizza, oscura e appiattisci i documenti PDF sensibili istantaneamente senza upload cloud. Il rendering e la modifica avvengono nella memoria del dispositivo tramite HTML5 Canvas e WebAssembly.',
-      tool_p1: '0 byte trasferiti (Zero log)',
-      tool_p2: 'Rendering multipagina ad alta risoluzione',
-      tool_p3: 'Fusione irreversibile dei pixel Canvas',
-      tool_p4: 'Funziona offline istantaneamente',
-      tool_btn: 'Apri lo strumento Redattore PDF',
-      tool_guarantee: 'Gratuito per sempre • Nessun account • Zero telemetria',
-
-      // Article Section 3 Steps
-      sec3_h2: '3. Guida tecnica dettagliata per igienizzare i documenti',
-      step1_h3: 'Carica il file localmente nella RAM del browser',
-      step1_desc: 'Apri il Redattore PDF VantorKit e rilascia il documento. L\'applicazione utilizza l\'API standard FileReader.readAsArrayBuffer(). Nella scheda Rete degli strumenti di sviluppo, nessuna richiesta HTTP POST viene inviata.',
-      step2_h3: 'Applica oscuramenti precisi per coordinate',
-      step2_desc: 'VantorKit renderizza ogni pagina su un elemento Canvas ad alta risoluzione (scala 2x). Clicca e trascina su numeri di conto, IBAN o firme per applicare le coperture nere con monitoraggio in tempo reale.',
-      step3_h3: 'Esporta il documento appiattito e sanificato',
-      step3_desc: 'Fai clic su Scarica PDF redatto. Il rasterizzatore incorpora le coordinate nere nel buffer di immagine Canvas sovrascrivendo i pixel con nero puro #000000, generando un PDF pulito privo di testi vettoriali o metadati.',
-
-      // Article Section 4
-      sec4_h2: '4. Approfondimento sulla sicurezza: WebAssembly, pixel Canvas e sandbox RAM',
-      sec4_sub1: 'La pipeline di rasterizzazione Canvas e sovrascrittura dei pixel',
-      sec4_sub2: 'Verifica autonoma: come controllare il PDF redatto',
-
-      // Article Section 5 FAQs
-      sec5_h2: '5. Domande Frequenti (Sicurezza della redazione PDF)',
-      faq_q1: 'Il testo sotto un rettangolo nero in un PDF standard può essere ancora evidenziato o copiato?',
-      faq_a1: 'Sì. Nei visualizzatori PDF standard, disegnare una forma nera posiziona una semplice annotazione vettoriale sopra il testo. I caratteri e le coordinate sottostanti rimangono intatti nel documento. Chiunque usi "Seleziona tutto" o strumenti da terminale può estrarre i dati in pochi secondi.',
-      faq_q2: 'Qual è la differenza tra mascheramento visivo e vera redazione di un PDF?',
-      faq_a2: 'Il mascheramento visivo nasconde il testo visivamente senza eliminare i caratteri dal file. La vera redazione richiede l\'appiattimento raster o l\'eliminazione distruttiva dei flussi di testo e metadati, rendendo impossibile qualsiasi recupero.',
-      faq_q3: 'Come garantisce il Redattore PDF VantorKit che nessun dato lasci il mio computer?',
-      faq_a3: 'VantorKit opera al 100% lato client nella sandbox del browser. Il PDF viene elaborato nella memoria tramite WebAssembly e PDF.js, renderizzato su Canvas in RAM e ricostruito localmente in JavaScript. Nessun byte viene inviato a server esterni.',
-
-      // Wrap-up CTA
-      final_cta_title: 'Pronto a redigere i documenti in modo sicuro?',
-      final_cta_desc: 'Proteggi i tuoi segreti industriali, i dati finanziari e l\'identità dei clienti. Usa il Redattore PDF VantorKit per una sanificazione immediata e riservata.',
-      final_cta_btn: 'Apri il Redattore PDF VantorKit →',
-      final_cta_more: 'Esplora altre guide ingegneristiche',
-
-      // Footer
-      footer_privacy: 'Informativa sulla privacy',
-      footer_terms: 'Termini di servizio',
-      footer_about: 'Chi siamo',
-      footer_contact: 'Contatti',
-      footer_blog: 'Blog',
-      footer_copy: '© 2026 VantorKit. Utilità web veloci, gratuite e private. Tutta l\'elaborazione viene eseguita localmente nel browser.'
-    }
-  };
-
-  // --- Reading Progress Indicator ---
+  // --- Reading Progress Tracker ---
   function initReadingProgress() {
     const progressBar = document.getElementById('readingProgress');
     if (!progressBar) return;
 
     window.addEventListener('scroll', function () {
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      if (docHeight <= 0) return;
-      const scrolled = (window.scrollY / docHeight) * 100;
-      progressBar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        const scrolled = (window.scrollY / docHeight) * 100;
+        progressBar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
+      }
     }, { passive: true });
   }
 
-  // --- Code Copy Buttons ---
+  // --- Code Copy Interaction ---
   function initCodeCopy() {
-    const copyButtons = document.querySelectorAll('.code-copy-btn');
-    copyButtons.forEach(btn => {
+    document.querySelectorAll('.btn-copy-code').forEach(btn => {
       btn.addEventListener('click', function () {
-        const targetId = btn.getAttribute('data-target');
-        const codeEl = targetId ? document.getElementById(targetId) : btn.closest('.code-box')?.querySelector('code');
-        if (!codeEl) return;
-
-        const textToCopy = codeEl.textContent || '';
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          const originalText = btn.innerHTML;
-          btn.innerHTML = `
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span style="color:#10b981;">Copied!</span>
-          `;
-          btn.classList.add('copied');
+        const pre = this.closest('.code-box')?.querySelector('pre');
+        if (!pre) return;
+        const codeText = pre.innerText || pre.textContent;
+        navigator.clipboard.writeText(codeText).then(() => {
+          const originalText = this.textContent;
+          this.textContent = 'Copied!';
+          this.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+          this.style.color = '#34d399';
           setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.classList.remove('copied');
+            this.textContent = originalText;
+            this.style.borderColor = '';
+            this.style.color = '';
           }, 2000);
-        }).catch(() => {
-          // Fallback if clipboard API is unavailable
+        }).catch(err => {
+          console.error('Copy failed:', err);
         });
       });
     });
   }
 
-  const LANG_FLAGS = {
-    en: '🇺🇸',
-    ar: '🇸🇦',
-    fr: '🇫🇷',
-    it: '🇮🇹'
-  };
-
-  // --- Dropdown Management ---
+  // --- Language Selector Dropdown Interaction ---
   function initLangDropdown() {
-    function getDropdown() {
-      return document.getElementById('langDropdown') || document.querySelector('.lang-dropdown');
-    }
-    function getToggleBtn() {
-      return document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
-    }
-    function getMenu() {
-      return document.getElementById('blog-lang-menu') || document.getElementById('langMenu') || document.querySelector('.lang-dropdown-menu') || document.querySelector('.lang-menu');
-    }
+    // Support both ID naming conventions
+    const toggleBtn = document.getElementById('langToggleBtn') || document.getElementById('blog-lang-btn');
+    const menu = document.getElementById('langMenu') || document.getElementById('blog-lang-menu');
+    const dropdown = document.getElementById('langDropdown') || toggleBtn?.closest('.lang-dropdown');
 
-    function openDropdown() {
-      const dd = getDropdown();
-      const m = getMenu();
-      const btn = getToggleBtn();
-      if (dd) dd.classList.add('active', 'show');
-      if (m) m.classList.add('active', 'show', 'open');
-      if (btn) btn.setAttribute('aria-expanded', 'true');
-    }
+    if (!toggleBtn || !menu) return;
 
-    function closeDropdown() {
-      const dd = getDropdown();
-      const m = getMenu();
-      const btn = getToggleBtn();
-      if (dd) dd.classList.remove('active', 'show');
-      if (m) m.classList.remove('active', 'show', 'open');
-      if (btn) btn.setAttribute('aria-expanded', 'false');
-    }
-
-    function toggleDropdown(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      const dd = getDropdown();
-      const m = getMenu();
-      const isOpen = (dd && (dd.classList.contains('active') || dd.classList.contains('show'))) ||
-                     (m && (m.classList.contains('show') || m.classList.contains('open') || m.classList.contains('active')));
-      if (isOpen) {
-        closeDropdown();
-      } else {
-        openDropdown();
-      }
-    }
-
-    // Direct binding if element exists
-    const btn = getToggleBtn();
-    if (btn && !btn._bound) {
-      btn._bound = true;
-      btn.addEventListener('click', toggleDropdown);
-    }
-
-    // Document event delegation for resilient interception
-    if (!document._blogDropdownDelegated) {
-      document._blogDropdownDelegated = true;
-
-      document.addEventListener('click', function (e) {
-        const toggleClick = e.target.closest('#blog-lang-btn, #langToggleBtn, .lang-btn');
-        if (toggleClick) {
-          toggleDropdown(e);
-          return;
-        }
-
-        const optionClick = e.target.closest('.lang-option');
-        if (optionClick) {
-          e.preventDefault();
-          e.stopPropagation();
-          const selectedLang = optionClick.getAttribute('data-lang');
-          if (selectedLang) {
-            try {
-              localStorage.setItem('vantorkit_lang', selectedLang);
-            } catch (err) {}
-            applyLang(selectedLang);
-            closeDropdown();
-          }
-          return;
-        }
-
-        // Outside click
-        const dd = getDropdown();
-        if (dd && !dd.contains(e.target)) {
-          closeDropdown();
-        }
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-          closeDropdown();
-        }
-      });
-    }
-
-    const m = getMenu();
-    if (m) {
-      m.querySelectorAll('.lang-option').forEach(opt => {
-        if (!opt._bound) {
-          opt._bound = true;
-          opt.addEventListener('click', function (e) {
-            e.stopPropagation();
-            const selectedLang = opt.getAttribute('data-lang');
-            if (selectedLang) {
-              try {
-                localStorage.setItem('vantorkit_lang', selectedLang);
-              } catch (err) {}
-              applyLang(selectedLang);
-              closeDropdown();
-            }
-          });
-        }
-      });
-    }
-  }
-
-  // --- Strict BiDi & i18n Translation Dispatch ---
-  function applyLang(lang) {
-    if (!LANG_NAMES[lang]) lang = 'en';
-    const isRtl = lang === 'ar';
-
-    // 1. Strict Root Direction, Lang Attributes, and Alignment
-    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-    document.documentElement.lang = lang;
-    document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
-    document.documentElement.style.direction = isRtl ? 'rtl' : 'ltr';
-    document.documentElement.style.textAlign = isRtl ? 'right' : 'left';
-
-    // 2. Active Label & Accessible Label in Navbar Dropdown
-    const label = document.getElementById('currentLangLabel');
-    if (label) label.textContent = LANG_NAMES[lang];
-
-    const flagEl = document.getElementById('currentLangFlag');
-    if (flagEl && LANG_FLAGS[lang]) flagEl.textContent = LANG_FLAGS[lang];
-
-    const toggleBtn = document.getElementById('blog-lang-btn') || document.getElementById('langToggleBtn') || document.querySelector('.lang-btn');
-    if (toggleBtn) {
-      toggleBtn.setAttribute('aria-label', 'Select Language (' + LANG_NAMES[lang] + ')');
-    }
-
-    // 3. Mark Active Option in Menu
-    document.querySelectorAll('.lang-option').forEach(opt => {
-      opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+    // Toggle menu
+    toggleBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      const newState = !isExpanded;
+      toggleBtn.setAttribute('aria-expanded', String(newState));
+      menu.classList.toggle('active', newState);
+      if (dropdown) dropdown.classList.toggle('active', newState);
     });
 
-    // 4. Translate All [data-i18n] Elements
-    const dict = BLOG_I18N[lang] || BLOG_I18N.en;
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!toggleBtn.contains(e.target) && !menu.contains(e.target)) {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('active');
+        if (dropdown) dropdown.classList.remove('active');
+      }
+    });
+
+    // Handle language selection
+    menu.querySelectorAll('.lang-option').forEach(option => {
+      option.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const selectedLang = this.getAttribute('data-lang');
+        if (selectedLang && LANG_NAMES[selectedLang]) {
+          setLanguage(selectedLang);
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          menu.classList.remove('active');
+          if (dropdown) dropdown.classList.remove('active');
+        }
+      });
+    });
+  }
+
+  // --- Set Language & Persist ---
+  function setLanguage(lang) {
+    if (!LANG_NAMES[lang]) return;
+    try {
+      localStorage.setItem('vantorkit_lang', lang);
+    } catch (e) {
+      console.warn('localStorage access failed:', e);
+    }
+    applyLang(lang);
+  }
+
+  // --- Apply Language to DOM ---
+  function applyLang(lang) {
+    const dict = I18N_DICTS[lang] || I18N_DICTS['en'];
+    const isRtl = RTL_LANGS.includes(lang);
+
+    // 1. Update document root language and text direction
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+
+    // 2. Update Language Toggle Label & Menu Active Item
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    if (currentLangLabel) {
+      currentLangLabel.textContent = LANG_NAMES[lang] || 'English';
+    }
+
+    const toggleBtn = document.getElementById('langToggleBtn') || document.getElementById('blog-lang-btn');
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-label', `Select Language (${LANG_NAMES[lang] || 'English'})`);
+    }
+
+    const menu = document.getElementById('langMenu') || document.getElementById('blog-lang-menu');
+    if (menu) {
+      menu.querySelectorAll('.lang-option').forEach(option => {
+        if (option.getAttribute('data-lang') === lang) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+    }
+
+    // 3. Update Elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (dict[key] !== undefined) {
+        // If the translation contains HTML tags (like <span>, <strong>, <code>), inject innerHTML
         if (dict[key].includes('<') && dict[key].includes('>')) {
           el.innerHTML = dict[key];
         } else {
@@ -789,7 +1284,7 @@
       }
     });
 
-    // 5. Update Accessible ARIA Labels or Tooltips
+    // 4. Update Accessible ARIA Labels
     document.querySelectorAll('[data-i18n-aria]').forEach(el => {
       const key = el.getAttribute('data-i18n-aria');
       if (dict[key] !== undefined) {
