@@ -1,6 +1,52 @@
 {
-  "cleanUrls": true,
+  "cleanUrls": false,
   "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/base64-file-encoder",
+      "destination": "/tools/base64-file-encoder.html"
+    },
+    {
+      "source": "/base64-file-encoder.html",
+      "destination": "/tools/base64-file-encoder.html"
+    },
+    {
+      "source": "/audio-trimmer",
+      "destination": "/tools/audio-trimmer.html"
+    },
+    {
+      "source": "/audio-trimmer.html",
+      "destination": "/tools/audio-trimmer.html"
+    },
+    {
+      "source": "/image-resizer",
+      "destination": "/tools/image-resizer.html"
+    },
+    {
+      "source": "/image-resizer.html",
+      "destination": "/tools/image-resizer.html"
+    },
+    {
+      "source": "/tools/:slug",
+      "destination": "/tools/:slug.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
