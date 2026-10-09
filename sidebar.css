@@ -75,6 +75,13 @@
   display: block;
 }
 
+/* Desktop Header & Toggle: Hide hamburger on desktop (1024px+); fully visible and operational on mobile & tablet (< 1024px) */
+@media (min-width: 1024px) {
+  .vk-sidebar-toggle {
+    display: none !important;
+  }
+}
+
 /* Helper Brand/Toggle Wrapper */
 .vk-sidebar-nav-left {
   display: flex;
@@ -639,8 +646,188 @@ body {
 
 .tool-card:hover {
   background-color: #1e293b !important;
-  border-color: #334155 !important;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
+  border-color: rgba(6, 182, 212, 0.45) !important;
+  box-shadow: 0 12px 28px -4px rgba(6, 182, 212, 0.15), 0 0 0 1px rgba(6, 182, 212, 0.2) !important;
+}
+
+/* Harmonized Slate Icon Containers across all 32 cards with Brand Cyan Accent */
+.tool-icon-wrap {
+  background: rgba(30, 41, 59, 0.8) !important; /* bg-slate-800/80 */
+  border: 1px solid rgba(51, 65, 85, 0.6) !important; /* border-slate-700/60 */
+  color: #94a3b8 !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.tool-card:hover .tool-icon-wrap {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border-color: rgba(6, 182, 212, 0.5) !important;
+  color: #38bdf8 !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.2) !important;
+}
+
+/* High-contrast tool descriptions & visible slate card arrows */
+.tool-desc {
+  color: #cbd5e1 !important; /* text-slate-300 */
+}
+
+.card-arrow {
+  color: #94a3b8 !important; /* text-slate-400 */
+  opacity: 0.85 !important;
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+}
+
+.tool-card:hover .card-arrow {
+  color: #38bdf8 !important; /* text-cyan-400 */
+  opacity: 1 !important;
+}
+
+/* Full-Width Community CTA Dock ("Suggest New Tool" / "اقتراح أداة جديدة") */
+.tool-card.card-request-tool {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+  background-color: #0f172a !important; /* Clean Slate-900 */
+  border: 1px solid #1e293b !important; /* Subtle border-slate-800 */
+  border-radius: 16px !important;
+  padding: 1.5rem 2rem !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.5rem !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4) !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.tool-card.card-request-tool:hover {
+  background-color: #1e293b !important;
+  border-color: #06b6d4 !important;
+  box-shadow: 0 12px 32px -4px rgba(6, 182, 212, 0.18), 0 0 0 1px rgba(6, 182, 212, 0.2) !important;
+  transform: translateY(-2px) !important;
+}
+
+.card-request-dock-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.tool-card.card-request-tool .tool-icon-wrap {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  border-radius: 12px !important;
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+  color: #38bdf8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.tool-card.card-request-tool:hover .tool-icon-wrap {
+  border-color: #06b6d4 !important;
+  background: rgba(6, 182, 212, 0.15) !important;
+  color: #38bdf8 !important;
+  transform: scale(1.05) !important;
+}
+
+.card-request-dock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.card-request-dock-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tool-card.card-request-tool .tool-badge.request-badge {
+  background: rgba(6, 182, 212, 0.12) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(6, 182, 212, 0.3) !important;
+  font-size: 0.7rem !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+}
+
+.card-request-dock-action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+.card-request-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #38bdf8;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tool-card.card-request-tool:hover .card-request-action-btn {
+  background: #06b6d4 !important;
+  border-color: #06b6d4 !important;
+  color: #020617 !important;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35) !important;
+}
+
+.card-request-action-btn .card-arrow {
+  color: currentColor !important;
+  opacity: 1 !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tool-card.card-request-tool:hover .card-arrow {
+  transform: translateX(4px) !important;
+}
+
+html[dir="rtl"] .tool-card.card-request-tool:hover .card-arrow {
+  transform: translateX(-4px) rotate(180deg) !important;
+}
+
+@media (max-width: 640px) {
+  .tool-card.card-request-tool {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1.25rem !important;
+    gap: 1rem !important;
+  }
+
+  .card-request-dock-content {
+    align-items: flex-start !important;
+    gap: 0.85rem !important;
+  }
+
+  .card-request-dock-action {
+    width: 100% !important;
+    justify-content: flex-end !important;
+    margin-inline-start: 0 !important;
+  }
 }
 
 /* Eliminate neon glowing borders and pulsing glow effects */

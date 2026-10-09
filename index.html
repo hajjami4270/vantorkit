@@ -178,6 +178,13 @@
       display: block;
     }
 
+    /* Desktop Header & Toggle: Hide hamburger on desktop (1024px+); fully visible and operational on mobile & tablet (< 1024px) */
+    @media (min-width: 1024px) {
+      .vk-sidebar-toggle {
+        display: none !important;
+      }
+    }
+
     .brand-link {
       display: flex;
       align-items: center;
@@ -910,12 +917,30 @@
       box-shadow: 0 0 18px rgba(59, 130, 246, 0.25), 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* Tools Grid — Flexbox with Centered Incomplete Rows (Dynamic for any count) */
+    /* Tools Grid — 4-Column Balanced Grid with Full-Width CTA Dock */
     .tools-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1.25rem;
+      width: 100%;
+    }
+
+    @media (max-width: 1200px) {
+      .tools-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 880px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     .tool-card {
@@ -932,34 +957,9 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-      flex: 0 0 calc((100% - 3 * 1.25rem) / 4);
-      max-width: calc((100% - 3 * 1.25rem) / 4);
-      width: calc((100% - 3 * 1.25rem) / 4);
+      width: 100%;
       box-sizing: border-box;
-    }
-
-    @media (max-width: 1200px) {
-      .tool-card {
-        flex: 0 0 calc((100% - 2 * 1.25rem) / 3);
-        max-width: calc((100% - 2 * 1.25rem) / 3);
-        width: calc((100% - 2 * 1.25rem) / 3);
-      }
-    }
-
-    @media (max-width: 880px) {
-      .tool-card {
-        flex: 0 0 calc((100% - 1 * 1.25rem) / 2);
-        max-width: calc((100% - 1 * 1.25rem) / 2);
-        width: calc((100% - 1 * 1.25rem) / 2);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .tool-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-        width: 100%;
-      }
+      min-width: 0;
     }
 
     .tool-card::before {
@@ -969,16 +969,16 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+      background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.6), transparent);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     .tool-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(96, 165, 250, 0.4);
+      border-color: rgba(6, 182, 212, 0.45);
       background: var(--card-hover);
-      box-shadow: 0 16px 36px -8px var(--accent-glow), 0 0 0 1px rgba(96, 165, 250, 0.2);
+      box-shadow: 0 16px 36px -8px rgba(6, 182, 212, 0.15), 0 0 0 1px rgba(6, 182, 212, 0.2);
     }
 
     .tool-card:hover::before {
@@ -998,24 +998,27 @@
       gap: 0.5rem;
     }
 
+    /* Harmonized Slate Icon Containers across all 32 cards (Slate-800/80 + Slate-700/60) with Brand Cyan Accent */
     .tool-icon-wrap {
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      background: rgba(30, 41, 59, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #60a5fa;
-      transition: all 0.2s ease;
+      color: #94a3b8;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-shrink: 0;
     }
 
     .tool-card:hover .tool-icon-wrap {
-      background: rgba(59, 130, 246, 0.2);
-      border-color: rgba(96, 165, 250, 0.3);
-      color: #93c5fd;
+      background: rgba(30, 41, 59, 0.95);
+      border-color: rgba(6, 182, 212, 0.5);
+      color: #38bdf8;
       transform: scale(1.05);
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
     }
 
     .tool-badge {
@@ -1039,12 +1042,6 @@
       border: 1px solid rgba(192, 132, 252, 0.3);
     }
 
-    .tool-badge.live {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      border: 1px solid rgba(96, 165, 250, 0.3);
-    }
-
     .tool-category {
       font-size: 0.72rem;
       font-weight: 700;
@@ -1053,152 +1050,160 @@
       letter-spacing: 0.6px;
     }
 
-    /* Category Specific Card Styling */
-    /* Math & Finance (Green tone) */
+    /* Category Specific Text Styling */
     .tool-card[data-category="math"] .tool-category { color: var(--cat-math); }
-    .tool-card[data-category="math"] .tool-icon-wrap {
-      background: var(--cat-math-bg);
-      border-color: var(--cat-math-border);
-      color: var(--cat-math);
-    }
-    .tool-card[data-category="math"]:hover {
-      border-color: rgba(52, 211, 153, 0.4);
-      box-shadow: 0 16px 36px -8px var(--cat-math-glow), 0 0 0 1px rgba(52, 211, 153, 0.2);
-    }
-    .tool-card[data-category="math"]:hover::before {
-      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.6), transparent);
-    }
-    .tool-card[data-category="math"]:hover .tool-icon-wrap {
-      background: rgba(16, 185, 129, 0.22);
-      border-color: rgba(52, 211, 153, 0.4);
-      color: var(--cat-math-hover);
-    }
-    .tool-card[data-category="math"]:hover .card-arrow { color: var(--cat-math); }
-
-    /* PDF & Files (Orange/Amber tone) */
     .tool-card[data-category="files"] .tool-category, .tool-card[data-category="pdf"] .tool-category { color: var(--cat-files); }
-    .tool-card[data-category="files"] .tool-icon-wrap, .tool-card[data-category="pdf"] .tool-icon-wrap {
-      background: var(--cat-files-bg);
-      border-color: var(--cat-files-border);
-      color: var(--cat-files);
-    }
-    .tool-card[data-category="files"]:hover, .tool-card[data-category="pdf"]:hover {
-      border-color: rgba(251, 146, 60, 0.4);
-      box-shadow: 0 16px 36px -8px var(--cat-files-glow), 0 0 0 1px rgba(251, 146, 60, 0.2);
-    }
-    .tool-card[data-category="files"]:hover::before, .tool-card[data-category="pdf"]:hover::before {
-      background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.6), transparent);
-    }
-    .tool-card[data-category="files"]:hover .tool-icon-wrap, .tool-card[data-category="pdf"]:hover .tool-icon-wrap {
-      background: rgba(249, 115, 22, 0.22);
-      border-color: rgba(251, 146, 60, 0.4);
-      color: var(--cat-files-hover);
-    }
-    .tool-card[data-category="files"]:hover .card-arrow, .tool-card[data-category="pdf"]:hover .card-arrow { color: var(--cat-files); }
-
-    /* Images & Vector (Pink/Magenta tone) */
     .tool-card[data-category="images"] .tool-category { color: var(--cat-images); }
-    .tool-card[data-category="images"] .tool-icon-wrap {
-      background: var(--cat-images-bg);
-      border-color: var(--cat-images-border);
-      color: var(--cat-images);
-    }
-    .tool-card[data-category="images"]:hover {
-      border-color: rgba(244, 114, 182, 0.4);
-      box-shadow: 0 16px 36px -8px var(--cat-images-glow), 0 0 0 1px rgba(244, 114, 182, 0.2);
-    }
-    .tool-card[data-category="images"]:hover::before {
-      background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.6), transparent);
-    }
-    .tool-card[data-category="images"]:hover .tool-icon-wrap {
-      background: rgba(236, 72, 153, 0.22);
-      border-color: rgba(244, 114, 182, 0.4);
-      color: var(--cat-images-hover);
-    }
-    .tool-card[data-category="images"]:hover .card-arrow { color: var(--cat-images); }
-
-    /* Text Tools (Purple/Violet tone) */
     .tool-card[data-category="text"] .tool-category { color: var(--cat-text); }
-    .tool-card[data-category="text"] .tool-icon-wrap {
-      background: var(--cat-text-bg);
-      border-color: var(--cat-text-border);
-      color: var(--cat-text);
-    }
-    .tool-card[data-category="text"]:hover {
-      border-color: rgba(192, 132, 252, 0.4);
-      box-shadow: 0 16px 36px -8px var(--cat-text-glow), 0 0 0 1px rgba(192, 132, 252, 0.2);
-    }
-    .tool-card[data-category="text"]:hover::before {
-      background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.6), transparent);
-    }
-    .tool-card[data-category="text"]:hover .tool-icon-wrap {
-      background: rgba(168, 85, 247, 0.22);
-      border-color: rgba(192, 132, 252, 0.4);
-      color: var(--cat-text-hover);
-    }
-    .tool-card[data-category="text"]:hover .card-arrow { color: var(--cat-text); }
-
-    /* Everyday Tools (Blue tone) */
     .tool-card[data-category="everyday"] .tool-category { color: var(--cat-everyday); }
-    .tool-card[data-category="everyday"] .tool-icon-wrap {
-      background: var(--cat-everyday-bg);
-      border-color: var(--cat-everyday-border);
-      color: var(--cat-everyday);
-    }
-    .tool-card[data-category="everyday"]:hover {
-      border-color: rgba(96, 165, 250, 0.4);
-      box-shadow: 0 16px 36px -8px var(--cat-everyday-glow), 0 0 0 1px rgba(96, 165, 250, 0.2);
-    }
-    .tool-card[data-category="everyday"]:hover::before {
-      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), transparent);
-    }
-    .tool-card[data-category="everyday"]:hover .tool-icon-wrap {
-      background: rgba(59, 130, 246, 0.22);
-      border-color: rgba(96, 165, 250, 0.4);
-      color: var(--cat-everyday-hover);
-    }
-    .tool-card[data-category="everyday"]:hover .card-arrow { color: var(--cat-everyday); }
+    .tool-card[data-category="request"] .tool-category { color: #38bdf8; }
 
-    /* Enhancement 1: 26th Card — Request a Tool (Dashed Border SaaS Styling) */
+    /* Full-Width Community CTA Dock ("Suggest New Tool" / "اقتراح أداة جديدة") */
     .tool-card.card-request-tool {
-      border: 1px dashed rgba(255, 255, 255, 0.18);
-      background: rgba(15, 20, 32, 0.4);
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+      background: #0f172a; /* Clean Slate-900 */
+      border: 1px solid #1e293b; /* Subtle border-slate-800 */
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-sizing: border-box;
+      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4);
       cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .tool-card.card-request-tool:hover {
-      border-color: rgba(96, 165, 250, 0.5);
-      background: rgba(26, 34, 52, 0.6);
-      box-shadow: 0 16px 36px -8px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(96, 165, 250, 0.2);
+      background: #1e293b;
+      border-color: #06b6d4;
+      box-shadow: 0 12px 32px -4px rgba(6, 182, 212, 0.18), 0 0 0 1px rgba(6, 182, 212, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .card-request-dock-content {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      min-width: 0;
+      flex: 1 1 auto;
     }
 
     .tool-card.card-request-tool .tool-icon-wrap {
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px dashed rgba(96, 165, 250, 0.35);
-      color: #60a5fa;
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
     .tool-card.card-request-tool:hover .tool-icon-wrap {
-      background: rgba(59, 130, 246, 0.22);
-      border-color: rgba(96, 165, 250, 0.6);
-      color: #93c5fd;
-      box-shadow: 0 0 18px rgba(59, 130, 246, 0.4);
-      transform: scale(1.06);
+      border-color: #06b6d4;
+      background: rgba(6, 182, 212, 0.15);
+      color: #38bdf8;
+      transform: scale(1.05);
+    }
+
+    .card-request-dock-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    .card-request-dock-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .tool-card.card-request-tool .tool-badge.request-badge {
-      background: rgba(59, 130, 246, 0.12);
-      color: #93c5fd;
-      border: 1px dashed rgba(96, 165, 250, 0.35);
+      background: rgba(6, 182, 212, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .card-request-dock-action {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-inline-start: auto;
+    }
+
+    .card-request-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 10px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tool-card.card-request-tool:hover .card-request-action-btn {
+      background: #06b6d4;
+      border-color: #06b6d4;
+      color: #020617;
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+    }
+
+    .card-request-action-btn .card-arrow {
+      color: currentColor;
+      opacity: 1;
+      display: inline-flex;
+      align-items: center;
     }
 
     .tool-card.card-request-tool:hover .card-arrow {
-      color: #60a5fa;
+      transform: translateX(4px);
     }
 
-    .tool-card[data-category="request"] .tool-category {
-      color: #60a5fa;
+    html[dir="rtl"] .tool-card.card-request-tool:hover .card-arrow {
+      transform: translateX(-4px) rotate(180deg);
+    }
+
+    @media (max-width: 640px) {
+      .tool-card.card-request-tool {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.25rem;
+        gap: 1rem;
+      }
+
+      .card-request-dock-content {
+        align-items: flex-start;
+        gap: 0.85rem;
+      }
+
+      .card-request-dock-action {
+        width: 100%;
+        justify-content: flex-end;
+        margin-inline-start: 0;
+      }
     }
 
     .tool-title {
@@ -1211,7 +1216,7 @@
 
     .tool-desc {
       font-size: 0.88rem;
-      color: var(--text-muted);
+      color: #cbd5e1; /* text-slate-300 high contrast */
       line-height: 1.5;
       margin-top: 0.35rem;
     }
@@ -1225,23 +1230,25 @@
       border-top: 1px solid rgba(255, 255, 255, 0.04);
     }
 
-    /* Enhancement 3: Card Arrow Micro-Interactions */
+    /* Card Arrow Affordance: visible slate default transitioning smoothly to electric cyan */
     .card-arrow {
-      color: var(--text-muted);
-      opacity: 0.4;
+      color: #94a3b8; /* text-slate-400 visible slate */
+      opacity: 0.85;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
       display: flex;
       align-items: center;
     }
 
     .tool-card:hover .card-arrow {
-      color: var(--accent);
+      color: #38bdf8; /* text-cyan-400 electric cyan */
       opacity: 1;
-      transform: translateX(3px);
+      transform: translateX(4px);
     }
 
     html[dir="rtl"] .tool-card:hover .card-arrow {
-      transform: translateX(-3px) rotate(180deg);
+      color: #38bdf8;
+      opacity: 1;
+      transform: translateX(-4px) rotate(180deg);
     }
 
     html[dir="rtl"] .card-arrow svg {
@@ -1250,6 +1257,7 @@
 
     /* No Results State */
     .no-results {
+      grid-column: 1 / -1;
       width: 100%;
       flex: 0 0 100%;
       text-align: center;
@@ -1923,7 +1931,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
@@ -1944,7 +1951,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
@@ -1987,7 +1993,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
@@ -2009,7 +2014,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_files">PDF &amp; Files</div>
@@ -2158,7 +2162,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_images">Images</div>
@@ -2391,7 +2394,6 @@
             <div class="tool-icon-wrap">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
             </div>
-            <span class="tool-badge live" data-i18n="badge_live">Live Now</span>
           </div>
           <div>
             <div class="tool-category" data-i18n="cat_text">Text Tools</div>
@@ -2406,27 +2408,30 @@
         </div>
       </a>
 
-      <!-- 26th Utility Card: Request a Tool (Grid Harmony & Balanced Bottom Row) -->
+      <!-- 26th Utility Card: Request a Tool (Full-Width Community CTA Dock) -->
       <a href="mailto:support@vantorkit.com?subject=Tool%20Request" class="tool-card card-request-tool" data-tool-id="request-a-tool" data-category="request">
-        <div class="card-top">
-          <div class="tool-meta">
-            <div class="tool-icon-wrap request-icon-wrap">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </div>
-            <span class="tool-badge request-badge" data-i18n="badge_request">Suggest</span>
+        <div class="card-request-dock-content">
+          <div class="tool-icon-wrap request-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
           </div>
-          <div>
-            <div class="tool-category" data-i18n="cat_request">Community</div>
+          <div class="card-request-dock-info">
+            <div class="card-request-dock-meta">
+              <span class="tool-category" data-i18n="cat_request">Community</span>
+              <span class="tool-badge request-badge" data-i18n="badge_request">Suggest</span>
+            </div>
             <div class="tool-title" data-tool-field="title">Request a Tool</div>
             <div class="tool-desc" data-tool-field="desc">Need a specific browser utility? Tell us what client-side tool to build next.</div>
           </div>
         </div>
-        <div class="card-footer">
-          <span class="card-arrow">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        <div class="card-request-dock-action">
+          <span class="card-request-action-btn">
+            <span data-i18n="badge_request">Suggest</span>
+            <span class="card-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </span>
           </span>
         </div>
       </a>
