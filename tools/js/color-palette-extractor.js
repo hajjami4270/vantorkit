@@ -14,6 +14,7 @@
           dropTitle: "Drop an Image Here or Click to Browse",
           dropDesc: "Supports PNG, JPG, WEBP, and SVG (all processed locally)",
           btnBrowse: "Choose Image File",
+          btnReplaceImage: "Replace image",
           lblSamples: "Load Sample:",
           sampleSunset: "Sunset Horizon",
           sampleCyberpunk: "Cyberpunk Neon",
@@ -76,6 +77,7 @@
           dropTitle: "اسحب صورة هنا أو انقر للاختيار",
           dropDesc: "يدعم PNG و JPG و WEBP و SVG (تتم المعالجة محلياً بالكامل)",
           btnBrowse: "اختر ملف صورة",
+          btnReplaceImage: "استبدال الصورة",
           lblSamples: "تحميل عينة:",
           sampleSunset: "شفق الغروب",
           sampleCyberpunk: "سايبربانك نيون",
@@ -137,6 +139,7 @@
           dropTitle: "Déposez une image ici ou cliquez pour parcourir",
           dropDesc: "Prend en charge PNG, JPG, WEBP et SVG (traitement local)",
           btnBrowse: "Choisir une Image",
+          btnReplaceImage: "Remplacer l'image",
           lblSamples: "Charger un exemple :",
           sampleSunset: "Coucher de Soleil",
           sampleCyberpunk: "Néon Cyberpunk",
@@ -198,6 +201,7 @@
           dropTitle: "Trascina un'immagine qui o clicca per sfogliare",
           dropDesc: "Supporta PNG, JPG, WEBP e SVG (tutto elaborato in locale)",
           btnBrowse: "Scegli File Immagine",
+          btnReplaceImage: "Sostituisci immagine",
           lblSamples: "Carica Esempio:",
           sampleSunset: "Orizzonte al Tramonto",
           sampleCyberpunk: "Neon Cyberpunk",
@@ -394,6 +398,12 @@
       const fileName = document.getElementById('fileName');
       const fileDimensions = document.getElementById('fileDimensions');
       const btnClearFile = document.getElementById('btnClearFile');
+      const dropDefaultContent = document.getElementById('dropDefaultContent');
+      const dropCompactPreview = document.getElementById('dropCompactPreview');
+      const compactThumbImg = document.getElementById('compactThumbImg');
+      const compactFileName = document.getElementById('compactFileName');
+      const compactFileDim = document.getElementById('compactFileDim');
+      const btnReplaceImage = document.getElementById('btnReplaceImage');
 
       const samplePills = document.querySelectorAll('.sample-pill');
       const canvasContainer = document.getElementById('canvasContainer');
@@ -719,8 +729,27 @@
         const ext = activeFileName.split('.').pop().toUpperCase();
         fileTypeBadge.textContent = ext.length <= 4 ? ext : 'IMG';
 
+        // Collapse dropzone into compact preview thumbnail
+        if (dropZone) dropZone.classList.add('has-image');
+        if (dropDefaultContent) dropDefaultContent.style.display = 'none';
+        if (dropCompactPreview) dropCompactPreview.style.display = 'flex';
+        if (compactThumbImg) compactThumbImg.src = img.src || previewCanvas.toDataURL();
+        if (compactFileName) compactFileName.textContent = activeFileName;
+        if (compactFileDim) compactFileDim.textContent = `${w} × ${h} px`;
+
         // Run Palette Extraction
         recalculatePalette();
+
+        // Ensure swatches are visible on mobile; fallback smooth scroll respecting prefers-reduced-motion
+        const resultsHeading = document.getElementById('resultsHeading') || document.querySelector('.palette-gallery-header') || document.getElementById('swatchesGrid');
+        if (resultsHeading) {
+          resultsHeading.setAttribute('tabindex', '-1');
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (window.innerWidth <= 860) {
+            resultsHeading.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+          }
+          resultsHeading.focus({ preventScroll: true });
+        }
       }
 
       function recalculatePalette() {
@@ -1195,8 +1224,19 @@
 
       btnClearFile.addEventListener('click', () => {
         fileInput.value = '';
+        if (dropZone) dropZone.classList.remove('has-image');
+        if (dropDefaultContent) dropDefaultContent.style.display = 'block';
+        if (dropCompactPreview) dropCompactPreview.style.display = 'none';
         loadSample('sunset');
       });
+
+      if (btnReplaceImage) {
+        btnReplaceImage.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          fileInput.click();
+        });
+      }
 
       // --- Sample Images Loader ---
       function loadSample(key) {

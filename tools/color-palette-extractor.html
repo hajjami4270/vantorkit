@@ -425,8 +425,98 @@
 
     .drop-zone:hover, .drop-zone.drag-active {
       border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.08);
-      box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+      background: rgba(6, 182, 212, 0.08);
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+    }
+
+    /* Compact Dropzone State after Image Load */
+    .drop-zone.has-image {
+      padding: 0.65rem 0.85rem !important;
+      border-style: solid;
+      border-color: var(--card-border);
+      background: var(--card-surface, #1e293b);
+      cursor: default;
+    }
+
+    .drop-compact-preview {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .compact-preview-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .compact-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--card-border);
+      background: #0f172a;
+      flex-shrink: 0;
+    }
+
+    .compact-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+      text-align: left;
+    }
+
+    html[dir="rtl"] .compact-meta {
+      text-align: right;
+    }
+
+    .compact-filename {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main, #f1f5f9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .compact-dim {
+      font-size: 0.72rem;
+      color: var(--text-muted, #cbd5e1);
+    }
+
+    .btn-replace-image {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: #0f172a;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 0.5rem 0.85rem;
+      min-height: 44px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .btn-replace-image:hover,
+    .btn-replace-image:focus-visible {
+      background: #1e293b;
+      border-color: #06b6d4;
+      color: #fff;
+      outline: 2px solid #06b6d4;
+      outline-offset: 2px;
     }
 
     .drop-icon-wrap {
@@ -1615,15 +1705,31 @@
 
         <!-- Drag & Drop Zone -->
         <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Drop Image Here or Click to Upload">
-          <div class="drop-icon-wrap">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <div class="drop-default-content" id="dropDefaultContent">
+            <div class="drop-icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div class="drop-title" data-i18n="dropTitle">Drop an Image Here or Click to Browse</div>
+            <div class="drop-desc" data-i18n="dropDesc">Supports PNG, JPG, WEBP, and SVG (all processed locally)</div>
+            <button type="button" class="btn-choose-file" id="btnBrowse">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span data-i18n="btnBrowse">Choose Image File</span>
+            </button>
           </div>
-          <div class="drop-title" data-i18n="dropTitle">Drop an Image Here or Click to Browse</div>
-          <div class="drop-desc" data-i18n="dropDesc">Supports PNG, JPG, WEBP, and SVG (all processed locally)</div>
-          <button type="button" class="btn-choose-file" id="btnBrowse">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span data-i18n="btnBrowse">Choose Image File</span>
-          </button>
+          <!-- Compact Active Preview (Shown after image upload) -->
+          <div class="drop-compact-preview" id="dropCompactPreview" style="display: none;">
+            <div class="compact-preview-left">
+              <img id="compactThumbImg" class="compact-thumb" alt="Source Preview">
+              <div class="compact-meta">
+                <span class="compact-filename" id="compactFileName">image.png</span>
+                <span class="compact-dim" id="compactFileDim">1200 × 800 px</span>
+              </div>
+            </div>
+            <button type="button" class="btn-replace-image" id="btnReplaceImage" data-i18n="btnReplaceImage" aria-label="Replace image">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span data-i18n="btnReplaceImage">Replace image</span>
+            </button>
+          </div>
           <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp, image/svg+xml" style="display: none;" aria-label="Upload image to extract color palette">
         </div>
 
@@ -1769,7 +1875,7 @@
         </div>
 
         <!-- Swatches Gallery -->
-        <div class="palette-gallery-header">
+        <div class="palette-gallery-header" id="resultsHeading" tabindex="-1">
           <div class="palette-gallery-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span data-i18n="galleryTitle">Swatches &amp; Accessibility</span>

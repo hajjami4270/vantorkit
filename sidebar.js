@@ -401,6 +401,7 @@
       hamburgerAria: "Open menu",
       closeAria: "Close menu",
       recentTitle: "Recently Used",
+      clearRecent: "Clear",
       recentEmpty: "No tools used yet",
       recentEmptySub: "Tools you open will appear here for quick access",
       favoritesTitle: "Favorites",
@@ -424,6 +425,7 @@
       hamburgerAria: "فتح القائمة",
       closeAria: "إغلاق القائمة",
       recentTitle: "المستخدمة مؤخراً",
+      clearRecent: "مسح",
       recentEmpty: "لم تستخدم أي أداة بعد",
       recentEmptySub: "الأدوات التي تستخدمها ستظهر هنا للوصول السريع",
       favoritesTitle: "المفضلة",
@@ -447,6 +449,7 @@
       hamburgerAria: "Ouvrir le menu",
       closeAria: "Fermer le menu",
       recentTitle: "Récemment utilisés",
+      clearRecent: "Effacer",
       recentEmpty: "Aucun outil utilisé pour le moment",
       recentEmptySub: "Les outils consultés apparaîtront ici pour un accès rapide",
       favoritesTitle: "Favoris",
@@ -470,6 +473,7 @@
       hamburgerAria: "Apri menu",
       closeAria: "Chiudi menu",
       recentTitle: "Usati di recente",
+      clearRecent: "Cancella",
       recentEmpty: "Nessun strumento ancora utilizzato",
       recentEmptySub: "Gli strumenti che usi appariranno qui per un accesso rapido",
       favoritesTitle: "Preferiti",
@@ -560,24 +564,36 @@
 
   // --- Record current tool visit ---
   function recordCurrentTool() {
-    const path = window.location.pathname.replace(/\\/g, '/');
-    const currentFilename = path.split('/').pop().toLowerCase();
-    if (!currentFilename || currentFilename === 'index.html' || currentFilename === '') return;
+    try {
+      const rawPath = window.location.pathname.replace(/\\/g, '/');
+      const filenameOrSlug = rawPath.split('/').filter(Boolean).pop() || '';
+      const cleanSlug = filenameOrSlug.toLowerCase().replace(/\.html$/, '');
+      if (!cleanSlug || cleanSlug === 'index' || cleanSlug === 'about' || cleanSlug === 'contact' || cleanSlug === 'privacy' || cleanSlug === 'terms') return;
 
-    let matched = TOOLS_REGISTRY.find(t => t.filename.toLowerCase() === currentFilename);
-    if (!matched) {
-      const canonical = document.querySelector('link[rel="canonical"]');
-      if (canonical && canonical.href) {
-        matched = TOOLS_REGISTRY.find(t => canonical.href.toLowerCase().includes(t.filename.toLowerCase()));
+      let matched = TOOLS_REGISTRY.find(t => {
+        const toolFileSlug = t.filename.toLowerCase().replace(/\.html$/, '');
+        return t.id.toLowerCase() === cleanSlug || toolFileSlug === cleanSlug;
+      });
+
+      if (!matched) {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical && canonical.href) {
+          const canPath = new URL(canonical.href, window.location.origin).pathname.toLowerCase().replace(/\.html$/, '');
+          const canSlug = canPath.split('/').filter(Boolean).pop() || '';
+          matched = TOOLS_REGISTRY.find(t => {
+            const toolFileSlug = t.filename.toLowerCase().replace(/\.html$/, '');
+            return t.id.toLowerCase() === canSlug || toolFileSlug === canSlug;
+          });
+        }
       }
-    }
 
-    if (matched) {
-      const recents = getRecentTools().filter(id => id !== matched.id);
-      recents.unshift(matched.id);
-      if (recents.length > 5) recents.length = 5;
-      saveRecentTools(recents);
-    }
+      if (matched) {
+        const recents = getRecentTools().filter(id => id !== matched.id);
+        recents.unshift(matched.id);
+        if (recents.length > 5) recents.length = 5;
+        saveRecentTools(recents);
+      }
+    } catch (e) {}
   }
 
   // --- DOM Elements Reference ---
@@ -661,12 +677,15 @@
         <div class="vk-sidebar-body">
           <!-- Recently Used Section -->
           <div class="vk-sidebar-section">
-            <div class="vk-sidebar-section-title">
-              <svg class="vk-sidebar-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span id="vkSidebarRecentTitle">${getTranslation('recentTitle')}</span>
+            <div class="vk-sidebar-section-header">
+              <div class="vk-sidebar-section-title">
+                <svg class="vk-sidebar-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span id="vkSidebarRecentTitle">${getTranslation('recentTitle')}</span>
+              </div>
+              <button type="button" class="vk-sidebar-clear-btn" id="vkSidebarClearRecent" aria-label="${getTranslation('clearRecent')}">${getTranslation('clearRecent')}</button>
             </div>
             <div id="vkSidebarRecentList"></div>
           </div>
@@ -727,6 +746,16 @@
     }
     if (backdropEl) {
       backdropEl.addEventListener('click', closeSidebar);
+    }
+
+    // Clear recently used tools listener
+    const clearRecentBtn = document.getElementById('vkSidebarClearRecent');
+    if (clearRecentBtn) {
+      clearRecentBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        saveRecentTools([]);
+        renderRecents();
+      });
     }
 
     // Render Categories
@@ -790,7 +819,10 @@
       .map(id => TOOLS_REGISTRY.find(t => t.id === id))
       .filter(Boolean);
 
+    const clearBtn = document.getElementById('vkSidebarClearRecent');
+
     if (recentTools.length === 0) {
+      if (clearBtn) clearBtn.style.display = 'none';
       container.innerHTML = `
         <div class="vk-sidebar-empty">
           <svg class="vk-sidebar-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -803,6 +835,8 @@
       `;
       return;
     }
+
+    if (clearBtn) clearBtn.style.display = 'inline-flex';
 
     container.innerHTML = `
       <div class="vk-sidebar-list">
@@ -991,6 +1025,7 @@
     drawerEl.classList.add('vk-sidebar-open');
     if (backdropEl) backdropEl.classList.add('vk-sidebar-open');
     if (toggleBtnEl) toggleBtnEl.setAttribute('aria-expanded', 'true');
+    document.documentElement.classList.add('vk-sidebar-body-lock');
     document.body.classList.add('vk-sidebar-body-lock');
 
     // Accessibility focus move to close button
@@ -1006,12 +1041,12 @@
     drawerEl.classList.remove('vk-sidebar-open');
     if (backdropEl) backdropEl.classList.remove('vk-sidebar-open');
     if (toggleBtnEl) toggleBtnEl.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('vk-sidebar-body-lock');
     document.body.classList.remove('vk-sidebar-body-lock');
 
-    // Accessibility focus return
-    const elToFocus = (lastFocusedEl && typeof lastFocusedEl.focus === 'function') ? lastFocusedEl : toggleBtnEl;
-    if (elToFocus && typeof elToFocus.focus === 'function') {
-      setTimeout(() => elToFocus.focus(), 10);
+    // Accessibility focus return to toggle button
+    if (toggleBtnEl && typeof toggleBtnEl.focus === 'function') {
+      setTimeout(() => toggleBtnEl.focus(), 10);
     }
   }
 
@@ -1062,6 +1097,12 @@
 
     const recentTitle = document.getElementById('vkSidebarRecentTitle');
     if (recentTitle) recentTitle.textContent = getTranslation('recentTitle');
+
+    const clearRecentBtn = document.getElementById('vkSidebarClearRecent');
+    if (clearRecentBtn) {
+      clearRecentBtn.textContent = getTranslation('clearRecent');
+      clearRecentBtn.setAttribute('aria-label', getTranslation('clearRecent'));
+    }
 
     const favTitle = document.getElementById('vkSidebarFavTitle');
     if (favTitle) favTitle.textContent = getTranslation('favoritesTitle');
