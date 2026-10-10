@@ -135,40 +135,46 @@
     .vk-sidebar-nav-left {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 10px;
     }
 
     .vk-sidebar-toggle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
       padding: 0;
       border-radius: 10px;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-main, #f8fafc);
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      color: #cbd5e1;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       flex-shrink: 0;
       outline: none;
+      box-sizing: border-box;
     }
 
-    .vk-sidebar-toggle:hover,
-    .vk-sidebar-toggle:focus-visible {
-      border-color: rgba(56, 189, 248, 0.4);
-      background: rgba(30, 41, 59, 0.85);
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
+    .vk-sidebar-toggle:hover {
+      background: #1e293b;
+      border-color: #06b6d4;
       color: #38bdf8;
-      transform: scale(1.04);
+    }
+
+    .vk-sidebar-toggle:focus-visible {
+      background: #1e293b;
+      border-color: #06b6d4;
+      color: #38bdf8;
+      outline: 2px solid #06b6d4;
+      outline-offset: 2px;
     }
 
     .vk-sidebar-toggle[aria-expanded="true"] {
-      border-color: rgba(56, 189, 248, 0.6);
-      background: rgba(14, 165, 233, 0.15);
+      border-color: #06b6d4;
+      background: #1e293b;
       color: #38bdf8;
     }
 
@@ -176,13 +182,6 @@
       width: 20px;
       height: 20px;
       display: block;
-    }
-
-    /* Desktop Header & Toggle: Hide hamburger on desktop (1024px+); fully visible and operational on mobile & tablet (< 1024px) */
-    @media (min-width: 1024px) {
-      .vk-sidebar-toggle {
-        display: none !important;
-      }
     }
 
     .brand-link {
@@ -1565,7 +1564,7 @@
   <!-- Modern SaaS Navbar -->
   <nav class="navbar" aria-label="Main Navigation">
     <div class="nav-container">
-      <div class="vk-sidebar-nav-left" style="display:flex;align-items:center;gap:0.75rem;">
+      <div class="vk-sidebar-nav-left" style="display:flex;align-items:center;gap:10px;">
         <button type="button" class="vk-sidebar-toggle" id="vkSidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="vkSidebarDrawer">
           <svg class="vk-sidebar-toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="4" y1="6" x2="20" y2="6"></line>
