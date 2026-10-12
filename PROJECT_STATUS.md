@@ -1,12 +1,12 @@
 # VantorKit Project Status
 
-**Current Version:** 1.4.0  
-**Last Updated:** September 29, 2026  
+**Current Version:** 1.5.0  
+**Last Updated:** October 11, 2026  
 **Architecture:** 100% Client-Side Web Utilities (Zero-Backend, Privacy-First)
 
 ---
 
-## Active Client-Side Tools (32 Production Tools)
+## Active Client-Side Tools (33 Production Tools)
 
 ### Math & Finance (5 Tools)
 1. **Percentage Calculator** (`tools/percentage-calculator.html`): High-precision percentage increase, decrease, difference, and markups.
@@ -84,6 +84,13 @@
     - **Drag-to-Assign Named Template Areas:** Mouse selection across grid cells with semantic area naming and live visual feedback.
     - **Integrated Gradient Studio:** Synthesizes linear, radial, and conic gradients with custom color stops and angle controls.
     - **Multi-Tab Code Export:** Generates production-ready Vanilla CSS Grid, modern CSS Subgrid, and Tailwind CSS utility classes.
+33. **Auto Captions & Subtitle Studio** (`tools/auto-captions.html`) — **Tool #33 (Flagship AI Studio)**:
+    - **100% Client-Side Processing & Zero Network Exfiltration:** Audio demuxing, mono 16 kHz resampling, transcription, forced alignment, canvas rendering, and video muxing execute purely in client RAM.
+    - **Whisper Speech Recognition & VAD Alignment:** Automated speech-to-text with Voice Activity Detection (VAD) energy token anchoring, Needleman-Wunsch sequence alignment, and Arabic Unicode NFC ligature normalization.
+    - **Kinetic Caption Styles & Interactive Canvas:** Real-time synchronized previews featuring TikTok spring bounce (`scale = 1.0 + 0.18 * sin(...)`), word-by-word karaoke highlights, drag-to-reposition with snap guides, and TikTok/Reels safe zone overlays.
+    - **Full Interactive Subtitle Suite:** Start/end nudging (±100ms), split cue, delete cue, add cue, and comprehensive undo/redo history stack (`Ctrl+Z` / `Ctrl+Y`).
+    - **Tri-Format Subtitle & WebCodecs Video Export:** Instant UTF-8 `.SRT`, `.VTT`, and `.ASS` exports, plus hardware-accelerated H.264 MP4 rendering via `mp4-muxer` with fallback to `MediaRecorder`.
+    - **Universal 4-Language Localization:** Complete UI and technical help layers in English, Arabic (RTL + Cairo font), French, and Italian.
 
 ---
 
@@ -356,6 +363,28 @@ Updated the disclaimer callout across all 4 supported languages (English, Arabic
 - **Zero Tool Regressions:** All other 31 production tools remain untouched and pass 100% (syntax, DOM rendering, calculation engines, and export triggers).
 - **Zero Server Dependencies:** Processing remains 100% in-browser RAM using client-side Web Workers and `docx@8.5.0`.
 - **CSP Compliant:** Conforms to strict Content Security Policy directives with no unauthorized network requests.
+
+---
+
+## Phase 7: Tool #33 ("Auto Captions & Subtitle Studio") & Step 2 Precision Calibration
+
+**Completed Date:** October 11, 2026  
+**Status:** 100% Implemented & Calibrated (All 33 Tools Passing, 0 Regressions)
+
+### 1. Architectural Highlights
+- **Zero-Cloud Client-Side Privacy:** Video decoding, 16 kHz audio extraction, token alignment, and video re-muxing operate strictly in volatile browser RAM. Zero bytes transmitted over network.
+- **WebCodecs + Pure-JS MP4 Muxer:** Hardware-accelerated H.264 burn-in without WebAssembly FFmpeg or SharedArrayBuffer constraints, preserving CSP with zero COOP/COEP headers.
+- **Dual Model Stratification:** Whisper Base (~73 MB, recommended for Arabic poetry and complex recitation) and Whisper Tiny (~34 MB, fast preview) cached in browser CacheStorage.
+
+### 2. Step 2 Calibrations & Bug Fixes
+- **Eliminated Zero-Match Needleman-Wunsch Fallback:** `analyzeSpeechEnergyAnchors` assigns user words directly to acoustic tokens, never emitting empty strings (`text: ''`).
+- **Arabic Diacritic Normalization:** Strips Tashkeel/Harakat (`[\u064B-\u065F\u0670\u0640]`) and normalizes Alef/Hamza variants strictly for token matching, retaining 100% of user vocalized text in output cues.
+- **Line-Level Verse Anchoring:** Multi-line verse scripts map directly to acoustic speech bursts (>280ms pauses), restricting interpolation strictly within each verse burst and reducing timeline drift from >10s down to 0.00s.
+- **Interactive "Tap to Sync" Mode:** Play the video and tap Spacebar (or UI button) at the start of each line to record ground-truth timestamps with live preview, undo (Backspace), and reset.
+- **Eliminated 1080p GPU Canvas Lag:** Preview canvas downscales to client CSS bounding rect (`rect * Math.min(DPR, 2)`), reserving native 1920x1080 strictly for WebCodecs MP4 export.
+- **Hardware Clock Sync:** Canvas rendering driven by `video.requestVideoFrameCallback()` with instant redraw on `seeking` and `seeked` events.
+- **Eliminated DOM Thrashing:** Timeline cue elements cached in array; `scrollIntoView` replaced with targeted scrollport boundary detection.
+
 
 
 

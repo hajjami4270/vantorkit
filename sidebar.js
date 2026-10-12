@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  // --- 32 Tools Complete Static Registry ---
+  // --- 33 Tools Complete Static Registry ---
   const TOOLS_REGISTRY = [
   {
     "id": "percentage-calculator",
@@ -176,6 +176,18 @@
       "it": "Taglia Video & Trimmer"
     },
     "iconSvg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"2.18\" ry=\"2.18\"></rect><line x1=\"7\" y1=\"2\" x2=\"7\" y2=\"22\"></line><line x1=\"17\" y1=\"2\" x2=\"17\" y2=\"22\"></line><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><line x1=\"2\" y1=\"7\" x2=\"7\" y2=\"7\"></line><line x1=\"2\" y1=\"17\" x2=\"7\" y2=\"17\"></line><line x1=\"17\" y1=\"17\" x2=\"22\" y2=\"17\"></line><line x1=\"17\" y1=\"7\" x2=\"22\" y2=\"7\"></line></svg>"
+  },
+  {
+    "id": "auto-captions",
+    "filename": "auto-captions.html",
+    "category": "files",
+    "titles": {
+      "en": "Auto Captions & Subtitle Studio",
+      "ar": "التسميات التلقائية ومحرر الترجمة",
+      "fr": "Sous-titres Automatiques & Studio",
+      "it": "Sottotitoli Automatici & Studio"
+    },
+    "iconSvg": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"M7 15h4M15 15h2M7 11h2M13 11h4\"></path></svg>"
   },
   {
     "id": "color-palette-extractor",

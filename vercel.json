@@ -27,6 +27,14 @@
       "destination": "/tools/image-resizer.html"
     },
     {
+      "source": "/auto-captions",
+      "destination": "/tools/auto-captions.html"
+    },
+    {
+      "source": "/auto-captions.html",
+      "destination": "/tools/auto-captions.html"
+    },
+    {
       "source": "/tools/:slug",
       "destination": "/tools/:slug.html"
     },
@@ -57,7 +65,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://fazier.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; media-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+          "value": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://fazier.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; media-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://huggingface.co https://*.huggingface.co https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
         },
         {
           "key": "X-Content-Type-Options",

@@ -5,10 +5,10 @@
       const TRANSLATIONS = {
         en: {
           langLabel: "English",
-          toolsCount: "32 Tools Available",
+          toolsCount: "33 Tools Available",
           brandBadge: "Client-Side • Privacy-First • No Logs",
           heroSubtitle: "Fast, accessible, browser-based tools designed for developers, creators, and professionals. 100% private and processed locally.",
-          searchPlaceholder: "Search 32 tools (e.g. percentage, pdf, video, diff)...",
+          searchPlaceholder: "Search 33 tools (e.g. percentage, pdf, video, diff)...",
           noResultsTitle: "No tools found",
           noResultsDesc: "No tools matching your search criteria. Try a different keyword or category.",
           btnResetSearch: "Reset Search",
@@ -76,6 +76,10 @@
             "video-trimmer": {
               title: "Video Trimmer & Cutter",
               desc: "Cut, trim, and slice MP4, WebM, and MOV videos locally with dual-handle timeline and stream copy."
+            },
+            "auto-captions": {
+              title: "Auto Captions & Subtitle Studio",
+              desc: "Client-side AI video captioning, forced alignment, dynamic kinetic styles, and WebCodecs MP4 rendering."
             },
             "color-palette-extractor": {
               title: "Color Palette Extractor",
@@ -169,10 +173,10 @@
         },
         ar: {
           langLabel: "العربية",
-          toolsCount: "32 أداة متاحة",
+          toolsCount: "33 أداة متاحة",
           brandBadge: "على جهازك • خصوصية تامة • بدون حفظ سجلات",
           heroSubtitle: "أدوات متصفح فائقة السرعة وسهلة الاستخدام للمطورين والمبدعين والمحترفين. معالجة محلية 100% بدون إرسال أي بيانات.",
-          searchPlaceholder: "ابحث في 32 أداة (مثل النسبة المئوية، PDF، الفيديو، المقارنة)...",
+          searchPlaceholder: "ابحث في 33 أداة (مثل النسبة المئوية، PDF، الفيديو، المقارنة)...",
           noResultsTitle: "لم يتم العثور على نتائج",
           noResultsDesc: "لا توجد أدوات تطابق عبارة البحث الحالية. جرب كلمة مفتاحية أخرى أو قسماً آخر.",
           btnResetSearch: "إعادة ضبط البحث",
@@ -240,6 +244,10 @@
             "video-trimmer": {
               title: "قص وتعديل الفيديو",
               desc: "قص واقتطاع مقاطع الفيديو بصيغ MP4 وWebM وMOV محلياً مع شريط زمني تفاعلي ونسخ سريع للتدفقات."
+            },
+            "auto-captions": {
+              title: "التسميات التلقائية ومحرر الترجمة",
+              desc: "توليد تسميات توضيحية ذكية ومحاذاة قسرية وتنسيقات حركية وتصدير MP4 عبر WebCodecs محلياً بالكامل."
             },
             "color-palette-extractor": {
               title: "استخراج لوحة الألوان",
@@ -333,10 +341,10 @@
         },
         fr: {
           langLabel: "Français",
-          toolsCount: "32 Outils Disponibles",
+          toolsCount: "33 Outils Disponibles",
           brandBadge: "Côté Client • Confidentialité Totale • Aucun Journal",
           heroSubtitle: "Outils web rapides et accessibles conçus pour les développeurs, créateurs et professionnels. 100% privés et exécutés localement.",
-          searchPlaceholder: "Rechercher parmi 32 outils (ex: pourcentage, pdf, vidéo, diff)...",
+          searchPlaceholder: "Rechercher parmi 33 outils (ex: pourcentage, pdf, vidéo, diff)...",
           noResultsTitle: "Aucun outil trouvé",
           noResultsDesc: "Aucun outil ne correspond à vos critères de recherche. Essayez un autre mot-clé.",
           btnResetSearch: "Réinitialiser la recherche",
@@ -404,6 +412,10 @@
             "video-trimmer": {
               title: "Découpeur vidéo & Trimmer",
               desc: "Découpez et élaguez vos vidéos MP4, WebM et MOV localement avec double curseur temporel et copie rapide."
+            },
+            "auto-captions": {
+              title: "Sous-titres Automatiques & Studio",
+              desc: "Génération de sous-titres par IA, alignement forcé, animations dynamiques et rendu WebCodecs MP4 100% hors ligne."
             },
             "color-palette-extractor": {
               title: "Extracteur de Palette de Couleurs",
@@ -497,10 +509,10 @@
         },
         it: {
           langLabel: "Italiano",
-          toolsCount: "32 Strumenti Disponibili",
+          toolsCount: "33 Strumenti Disponibili",
           brandBadge: "Lato Client • Massima Privacy • Nessun Log",
           heroSubtitle: "Strumenti web veloci e accessibili per sviluppatori, creator e professionisti. 100% privati ed elaborati in locale.",
-          searchPlaceholder: "Cerca tra 32 strumenti (es: percentuale, pdf, video, diff)...",
+          searchPlaceholder: "Cerca tra 33 strumenti (es: percentuale, pdf, video, diff)...",
           noResultsTitle: "Nessun risultato",
           noResultsDesc: "Nessuno strumento trovato corrispondente alla ricerca. Prova un'altra parola chiave.",
           btnResetSearch: "Azzera ricerca",
@@ -568,6 +580,10 @@
             "video-trimmer": {
               title: "Taglia Video & Trimmer",
               desc: "Taglia e ritaglia video MP4, WebM e MOV localmente con doppi cursori temporali ed esportazione diretta."
+            },
+            "auto-captions": {
+              title: "Sottotitoli Automatici & Studio",
+              desc: "Sottotitoli video con IA locale, allineamento forzato, stili cinetici dinamici e rendering MP4 con WebCodecs."
             },
             "color-palette-extractor": {
               title: "Estrattore di Palette Colori",

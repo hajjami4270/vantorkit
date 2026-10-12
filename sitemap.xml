@@ -86,6 +86,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://vantorkit.com/tools/auto-captions.html</loc>
+    <lastmod>2026-10-11T21:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://vantorkit.com/tools/color-palette-extractor.html</loc>
     <lastmod>2026-09-26T18:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -228,6 +234,12 @@
   <url>
     <loc>https://vantorkit.com/blog/client-side-big-data-processing.html</loc>
     <lastmod>2026-10-06T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vantorkit.com/blog/how-to-trim-mp4-locally.html</loc>
+    <lastmod>2026-10-12T18:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
