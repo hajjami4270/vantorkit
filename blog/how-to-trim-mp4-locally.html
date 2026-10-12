@@ -1195,9 +1195,9 @@
     <header class="article-header">
       <div class="article-tag-row">
         <span class="badge-category" data-i18n="a4_badge_cat">Video Engineering &amp; Privacy</span>
-        <span class="badge-privacy-verified" data-i18n="a4_badge_verified">
+        <span class="badge-privacy-verified">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          100% In-Browser Execution • 0 Bytes Uploaded
+          <span data-i18n="a4_badge_verified">100% In-Browser Execution • 0 Bytes Uploaded</span>
         </span>
       </div>
 
@@ -1260,8 +1260,8 @@
         
         <div class="code-box">
           <div class="code-header">
-            <span class="code-lang-badge">Compression Pipeline (Traditional Re-encoding)</span>
-            <button type="button" class="btn-copy" data-i18n="btn_copy">Copy</button>
+            <span class="code-lang-badge" data-i18n="a4_code1_header">Compression Pipeline (Traditional Re-encoding)</span>
+            <button type="button" class="btn-copy btn-copy-code" data-i18n="btn_copy">Copy</button>
           </div>
           <pre><code>[Compressed Source Stream]
   ──&gt; Entropy Decoder (CABAC/CAVLC)
@@ -1323,8 +1323,8 @@
 
         <div class="code-box">
           <div class="code-header">
-            <span class="code-lang-badge">ISOBMFF Container Architecture</span>
-            <button type="button" class="btn-copy" data-i18n="btn_copy">Copy</button>
+            <span class="code-lang-badge" data-i18n="a4_code2_header">ISOBMFF Container Architecture</span>
+            <button type="button" class="btn-copy btn-copy-code" data-i18n="btn_copy">Copy</button>
           </div>
           <pre><code>mp4_file/
 ├── ftyp          [File Type &amp; Compatible Container Brands]
@@ -1352,7 +1352,7 @@
           <li data-i18n="a4_sec2_li4"><code>stss</code> (Sync Sample) lists the frame indices of <strong>Instantaneous Decoder Refresh (IDR) Keyframes</strong>.</li>
         </ul>
 
-        <h3>Understanding GOPs and IDR Keyframes</h3>
+        <h3 data-i18n="a4_sec2_h3">Understanding GOPs and IDR Keyframes</h3>
         <p data-i18n="a4_sec2_p3">
           Modern video codecs group frames into <strong>GOPs (Group of Pictures)</strong>. In a typical GOP:
         </p>
@@ -1397,8 +1397,8 @@
         
         <div class="code-box">
           <div class="code-header">
-            <span class="code-lang-badge">Client-Side Stream Copy Execution Flow</span>
-            <button type="button" class="btn-copy" data-i18n="btn_copy">Copy</button>
+            <span class="code-lang-badge" data-i18n="a4_code3_header">Client-Side Stream Copy Execution Flow</span>
+            <button type="button" class="btn-copy btn-copy-code" data-i18n="btn_copy">Copy</button>
           </div>
           <pre><code>// Conceptual pipeline executed inside browser Web Worker
 async function streamCopyTrim(sourceFile, startSeconds, endSeconds) {
@@ -1468,40 +1468,40 @@ async function streamCopyTrim(sourceFile, startSeconds, endSeconds) {
             </thead>
             <tbody>
               <tr>
-                <td><strong>1080p Export Speed</strong></td>
-                <td><span class="badge-metric-loss">1m 45s</span> (Upload + Encode)</td>
-                <td><span class="badge-metric-mid">45.2s</span> (1.0x Real-time)</td>
-                <td class="highlight-col"><span class="badge-metric-win">0.32s</span> (Instant)</td>
+                <td data-i18n="a4_tb_r1_metric"><strong>1080p Export Speed</strong></td>
+                <td data-i18n="a4_tb_r1_c1"><span class="badge-metric-loss">1m 45s</span> (Upload + Encode)</td>
+                <td data-i18n="a4_tb_r1_c2"><span class="badge-metric-mid">45.2s</span> (1.0x Real-time)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r1_c3"><span class="badge-metric-win">0.32s</span> (Instant)</td>
               </tr>
               <tr>
-                <td><strong>4K 30fps Export Speed</strong></td>
-                <td><span class="badge-metric-loss">6m 12s</span> (Heavy Bandwidth)</td>
-                <td><span class="badge-metric-loss">2m 18s</span> (Hardware Throttled)</td>
-                <td class="highlight-col"><span class="badge-metric-win">0.85s</span> (Instant)</td>
+                <td data-i18n="a4_tb_r2_metric"><strong>4K 30fps Export Speed</strong></td>
+                <td data-i18n="a4_tb_r2_c1"><span class="badge-metric-loss">6m 12s</span> (Heavy Bandwidth)</td>
+                <td data-i18n="a4_tb_r2_c2"><span class="badge-metric-loss">2m 18s</span> (Hardware Throttled)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r2_c3"><span class="badge-metric-win">0.85s</span> (Instant)</td>
               </tr>
               <tr>
-                <td><strong>Peak CPU Utilization</strong></td>
-                <td><span class="badge-metric-mid">25%</span> (Browser Network)</td>
-                <td><span class="badge-metric-loss">92%</span> (Thermal Throttling)</td>
-                <td class="highlight-col"><span class="badge-metric-win">2%</span> (Memory I/O Only)</td>
+                <td data-i18n="a4_tb_r3_metric"><strong>Peak CPU Utilization</strong></td>
+                <td data-i18n="a4_tb_r3_c1"><span class="badge-metric-mid">25%</span> (Browser Network)</td>
+                <td data-i18n="a4_tb_r3_c2"><span class="badge-metric-loss">92%</span> (Thermal Throttling)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r3_c3"><span class="badge-metric-win">2%</span> (Memory I/O Only)</td>
               </tr>
               <tr>
-                <td><strong>Visual Quality (PSNR)</strong></td>
-                <td><span class="badge-metric-mid">38.4 dB</span> (Generational Loss)</td>
-                <td><span class="badge-metric-mid">37.1 dB</span> (Re-quantized)</td>
-                <td class="highlight-col"><span class="badge-metric-win">Lossless (∞ dB)</span></td>
+                <td data-i18n="a4_tb_r4_metric"><strong>Visual Quality (PSNR)</strong></td>
+                <td data-i18n="a4_tb_r4_c1"><span class="badge-metric-mid">38.4 dB</span> (Generational Loss)</td>
+                <td data-i18n="a4_tb_r4_c2"><span class="badge-metric-mid">37.1 dB</span> (Re-quantized)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r4_c3"><span class="badge-metric-win">Lossless (∞ dB)</span></td>
               </tr>
               <tr>
-                <td><strong>Network Exfiltration</strong></td>
-                <td><span class="badge-metric-loss">2,100 MB</span> Uploaded to Cloud</td>
-                <td><span class="badge-metric-win">0 Bytes</span> (Local RAM)</td>
-                <td class="highlight-col"><span class="badge-metric-win">0 Bytes</span> (Local RAM)</td>
+                <td data-i18n="a4_tb_r5_metric"><strong>Network Exfiltration</strong></td>
+                <td data-i18n="a4_tb_r5_c1"><span class="badge-metric-loss">2,100 MB</span> Uploaded to Cloud</td>
+                <td data-i18n="a4_tb_r5_c2"><span class="badge-metric-win">0 Bytes</span> (Local RAM)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r5_c3"><span class="badge-metric-win">0 Bytes</span> (Local RAM)</td>
               </tr>
               <tr>
-                <td><strong>Battery Impact</strong></td>
-                <td><span class="badge-metric-mid">Moderate</span> (Wi-Fi Radio)</td>
-                <td><span class="badge-metric-loss">Severe</span> (CPU Heating)</td>
-                <td class="highlight-col"><span class="badge-metric-win">Negligible</span> (&lt;0.1% Drain)</td>
+                <td data-i18n="a4_tb_r6_metric"><strong>Battery Impact</strong></td>
+                <td data-i18n="a4_tb_r6_c1"><span class="badge-metric-mid">Moderate</span> (Wi-Fi Radio)</td>
+                <td data-i18n="a4_tb_r6_c2"><span class="badge-metric-loss">Severe</span> (CPU Heating)</td>
+                <td class="highlight-col" data-i18n="a4_tb_r6_c3"><span class="badge-metric-win">Negligible</span> (&lt;0.1% Drain)</td>
               </tr>
             </tbody>
           </table>
