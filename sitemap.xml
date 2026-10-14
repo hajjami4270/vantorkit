@@ -243,6 +243,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html</loc>
+    <lastmod>2026-10-14T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Legal & Transparency Pages (AdSense Compliance) -->
   <url>

@@ -618,6 +618,12 @@
       border: 1px solid rgba(56, 189, 248, 0.25);
     }
 
+    .cat-security {
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+
     .read-time {
       font-size: 0.78rem;
       color: var(--text-dim);
@@ -1155,6 +1161,34 @@
           </div>
           <span class="cta-link-text">
             <span data-i18n="card4_cta">Read Guide</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Flagship Article 5: How to Verify and Inspect JWT Signatures in Browser Memory -->
+      <a href="/blog/how-to-verify-jwt-in-memory.html" class="article-card">
+        <div class="card-top">
+          <div class="article-meta-row">
+            <span class="category-badge cat-security" data-i18n="card5_cat">Security &amp; Cryptography</span>
+            <span class="read-time">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span data-i18n="card5_read_time">5 min read</span>
+            </span>
+          </div>
+          <h3 class="article-title" data-i18n="card5_title">How to Verify and Inspect JWT Signatures in Browser Memory (Zero Server Uploads)</h3>
+          <p class="article-excerpt" data-i18n="card5_excerpt">
+            Pasting production JSON Web Tokens and secrets into online debuggers leaks credentials to CDN logs and analytics. Learn how to verify HS256 and RS256 signatures 100% locally in browser RAM using the native Web Crypto API.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="author-info">
+            <span data-i18n="card5_author">By Mohamed Hajjami</span>
+            <span>•</span>
+            <span data-i18n="card5_date">Oct 2026</span>
+          </div>
+          <span class="cta-link-text">
+            <span data-i18n="card5_cta">Read Guide</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </span>
         </div>

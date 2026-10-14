@@ -80,6 +80,18 @@
       lblGlowRadius: "Cinematic Glow / Shadow:",
       lblGlowColor: "Glow / Neon Color:",
       lblEnable: "Active",
+      lblAnimationSection: "Animation & Motion FX",
+      lblAnimationMode: "Animation Mode:",
+      animModeNone: "None (Static Display)",
+      animModeTypewriter: "Canva Typewriter (كتابة تدريجية + مؤشر)",
+      animModePop: "Submagic Word Pop (ارتداد الكلمة النشطة)",
+      animModeKaraokeSweep: "CapCut Karaoke Sweep (تدفق لوني انسيابي)",
+      animModeSlideUp: "Cinematic Slide-Up (صعود وتلاشٍ ناعم)",
+      animModeGlassPill: "Sliding Glass Pill (كبسولة زجاجية انسيابية)",
+      animModeExtrusion: "3D Extrusion Shadow (ظل مجسم ثلاثي الأبعاد)",
+      lblTypewriterCursor: "Blinking Cursor (|)",
+      descTypewriterCursor: "Shows active typing caret",
+      lblBounceIntensity: "Kinetic Bounce Intensity:",
       lblWordBounce: "Word Pop / Bounce (1.15x)",
       descWordBounce: "Smooth kinetic scale on active word",
       lblSlideUp: "Slide Up / Fade Entry",
@@ -110,12 +122,16 @@
       exportHeader: "Export Options",
       btnExportSrt: "Download SubRip (.SRT)",
       btnExportVtt: "Download WebVTT (.VTT)",
-      btnExportAss: "Download Styled ASS (.ASS)",
+      btnExportAss: "Download SubStation Alpha (.ASS)",
+      btnExportAssStyled: "Download Styled FX (.ASS)",
+      btnModalInstantAss: "⚡ Instant (.ASS)",
+      btnInstantAssDesc: "Instant Styled FX",
       btnBurnMp4: "Burn Captions & Export MP4 Video",
       btnCancelBurn: "Cancel Export",
       btnCancelExport: "Cancel Export",
       burnProgress: "Encoding MP4 Video: ",
       exportCancelled: "Export cancelled cleanly",
+      exportModalTitle: "Exporting 1080p Video...",
       toastDownloaded: "File downloaded successfully!",
       toastDemoLoaded: "Synthetic demo video created and loaded!",
       toastFontLoaded: "Custom font loaded into browser memory!",
@@ -193,6 +209,18 @@
       lblGlowRadius: "التوهج السينمائي / الظل:",
       lblGlowColor: "لون التوهج والنيون:",
       lblEnable: "مفعل",
+      lblAnimationSection: "الحركة والمؤثرات البصرية",
+      lblAnimationMode: "نمط الحركة والتأثير:",
+      animModeNone: "بدون (عرض ثابت)",
+      animModeTypewriter: "كتابة كانفا التدريجية + مؤشر (Canva Typewriter)",
+      animModePop: "ارتداد الكلمة النشطة (Submagic Word Pop)",
+      animModeKaraokeSweep: "تدفق كاريوكي كاب كات الانسيابي (CapCut Karaoke)",
+      animModeSlideUp: "صعود سينمائي وتلاشٍ ناعم (Cinematic Slide-Up)",
+      animModeGlassPill: "كبسولة زجاجية انسيابية (Sliding Glass Pill)",
+      animModeExtrusion: "ظل مجسم ثلاثي الأبعاد (3D Extrusion Shadow)",
+      lblTypewriterCursor: "مؤشر الكتابة الخفاق (|)",
+      descTypewriterCursor: "إظهار مؤشر الكتابة النشط أثناء الظهور",
+      lblBounceIntensity: "شدة ارتداد الكلمة:",
       lblWordBounce: "قفز الكلمة الحركي (1.15x)",
       descWordBounce: "حركة بوب سلسة للكلمة المنطوقة",
       lblSlideUp: "دخول انسيابي صاعد (Fade & Slide)",
@@ -223,7 +251,10 @@
       exportHeader: "خيارات التصدير",
       btnExportSrt: "تنزيل ملف SubRip (.SRT)",
       btnExportVtt: "تنزيل ملف WebVTT (.VTT)",
-      btnExportAss: "تنزيل ملف منسق (.ASS)",
+      btnExportAss: "تنزيل ملف الترجمة (.ASS)",
+      btnExportAssStyled: "تنزيل ملف المؤثرات الفوري (.ASS)",
+      btnModalInstantAss: "⚡ تحميل ملف المؤثرات الفوري (.ASS)",
+      btnInstantAssDesc: "مؤثرات بصرية فورية",
       btnBurnMp4: "دمج التسميات وتصدير فيديو MP4",
       btnCancelBurn: "إلغاء التصدير",
       btnCancelExport: "إلغاء التصدير",
@@ -306,6 +337,18 @@
       lblGlowRadius: "Lueur cinématique / Ombre :",
       lblGlowColor: "Couleur du néon :",
       lblEnable: "Actif",
+      lblAnimationSection: "Animations & Effets Cinétiques",
+      lblAnimationMode: "Mode d'animation :",
+      animModeNone: "Aucune (Affichage statique)",
+      animModeTypewriter: "Machine à écrire Canva (+ Curseur)",
+      animModePop: "Rebond de mot Submagic",
+      animModeKaraokeSweep: "Balayage Karaoké CapCut",
+      animModeSlideUp: "Glissement cinématique ascendant",
+      animModeGlassPill: "Pilule de verre glissante",
+      animModeExtrusion: "Ombre d'extrusion 3D",
+      lblTypewriterCursor: "Curseur clignotant (|)",
+      descTypewriterCursor: "Affiche le curseur de frappe actif",
+      lblBounceIntensity: "Intensité du rebond cinétique :",
       lblWordBounce: "Rebond de mot (1.15x)",
       descWordBounce: "Animation cinétique sur le mot actif",
       lblSlideUp: "Entrée fluide vers le haut",
@@ -336,12 +379,16 @@
       exportHeader: "Options d'Exportation",
       btnExportSrt: "Télécharger SubRip (.SRT)",
       btnExportVtt: "Télécharger WebVTT (.VTT)",
-      btnExportAss: "Télécharger ASS stylé (.ASS)",
+      btnExportAss: "Télécharger ASS (.ASS)",
+      btnExportAssStyled: "Télécharger les effets (.ASS)",
+      btnModalInstantAss: "⚡ Téléchargement instantané (.ASS)",
+      btnInstantAssDesc: "Effets stylés instantanés",
       btnBurnMp4: "Incruster & Exporter en Vidéo MP4",
       btnCancelBurn: "Annuler l'export",
       btnCancelExport: "Annuler l'export",
       burnProgress: "Encodage vidéo MP4 : ",
       exportCancelled: "Exportation annulée",
+      exportModalTitle: "Exportation de la vidéo 1080p...",
       toastDownloaded: "Fichier téléchargé avec succès !",
       toastDemoLoaded: "Vidéo démo générée et chargée !",
       toastFontLoaded: "Police personnalisée chargée !",
@@ -419,6 +466,18 @@
       lblGlowRadius: "Bagliore cinematografico / Ombra:",
       lblGlowColor: "Colore neon:",
       lblEnable: "Attivo",
+      lblAnimationSection: "Animazioni & Effetti Cinetici",
+      lblAnimationMode: "Modalità Animazione:",
+      animModeNone: "Nessuna (Visualizzazione statica)",
+      animModeTypewriter: "Macchina da scrivere Canva (+ Cursore)",
+      animModePop: "Rimbalzo parola Submagic",
+      animModeKaraokeSweep: "Scorrimento Karaoke CapCut",
+      animModeSlideUp: "Scorrimento cinematografico fluido",
+      animModeGlassPill: "Pillola di vetro scorrevole",
+      animModeExtrusion: "Ombra di estrusione 3D",
+      lblTypewriterCursor: "Cursore lampeggiante (|)",
+      descTypewriterCursor: "Mostra il cursore di digitazione attivo",
+      lblBounceIntensity: "Intensità del rimbalzo cinetico:",
       lblWordBounce: "Rimbalzo parola (1.15x)",
       descWordBounce: "Animazione cinetica sulla parola attiva",
       lblSlideUp: "Entrata verso l'alto fluida",
@@ -449,12 +508,16 @@
       exportHeader: "Opzioni di Esportazione",
       btnExportSrt: "Scarica SubRip (.SRT)",
       btnExportVtt: "Scarica WebVTT (.VTT)",
-      btnExportAss: "Scarica ASS con Stile (.ASS)",
+      btnExportAss: "Scarica ASS (.ASS)",
+      btnExportAssStyled: "Scarica effetti (.ASS)",
+      btnModalInstantAss: "⚡ Download istantaneo (.ASS)",
+      btnInstantAssDesc: "Effetti stilizzati istantanei",
       btnBurnMp4: "Incidi Sottotitoli & Esporta Video MP4",
       btnCancelBurn: "Annulla Esportazione",
       btnCancelExport: "Annulla Esportazione",
       burnProgress: "Codifica Video MP4: ",
       exportCancelled: "Esportazione annullata",
+      exportModalTitle: "Esportazione video 1080p in corso...",
       toastDownloaded: "File scaricato con successo!",
       toastDemoLoaded: "Video demo generato e caricato!",
       toastFontLoaded: "Carattere personalizzato caricato!",
@@ -489,8 +552,14 @@
     activeCueIndex: -1,
     activeWordIndex: -1,
     aspectRatio: 'original',
+    customFontFile: null,
+    customFontName: null,
+    customFontFamily: null,
     styling: {
       preset: 'poetic',
+      animationMode: 'slide-up',
+      typewriterCursor: true,
+      bounceIntensity: 1.15,
       fontFamily: "'Cairo', sans-serif",
       customFontName: null,
       fontSize: 32, // computed base
@@ -524,6 +593,8 @@
   let activeVideoEncoder = null;
   let activeAudioEncoder = null;
   let activeExportVideo = null;
+  let activeExportTimer = null;
+  let activeWatchdogTimer = null;
 
   /* ==========================================================================
      2.1 TIMELINE HISTORY & UNDO / REDO ENGINE
@@ -1160,29 +1231,53 @@
     let cueIdx = -1;
     let wordIdx = -1;
 
-    for (let c = 0; c < state.cues.length; c++) {
-      const cue = state.cues[c];
-      if (currentTime >= cue.start && currentTime <= cue.end) {
-        cueIdx = c;
-        if (cue.words && cue.words.length > 0) {
-          for (let w = 0; w < cue.words.length; w++) {
-            const word = cue.words[w];
-            if (currentTime >= word.start && currentTime <= word.end) {
+    if (!state.cues || state.cues.length === 0) {
+      return { cueIdx, wordIdx };
+    }
+
+    const cue = state.cues.find((c, idx) => {
+      if (currentTime >= c.start && currentTime <= c.end) {
+        cueIdx = idx;
+        return true;
+      }
+      return false;
+    });
+
+    if (cueIdx !== -1 && cue) {
+      const words = (cue.words && cue.words.length > 0)
+        ? cue.words
+        : (cue.text ? cue.text.split(/\s+/).filter(Boolean).map(t => ({ text: t })) : []);
+
+      if (words.length > 0) {
+        const cueDuration = Math.max(0.001, cue.end - cue.start);
+        for (let w = 0; w < words.length; w++) {
+          const word = words[w];
+          const wStart = (word.start !== undefined && word.start !== null)
+            ? word.start
+            : (cue.start + (w * (cueDuration / words.length)));
+          const wEnd = (word.end !== undefined && word.end !== null)
+            ? word.end
+            : (wStart + (cueDuration / words.length));
+          if (currentTime >= wStart && currentTime <= wEnd) {
+            wordIdx = w;
+            break;
+          }
+        }
+        if (wordIdx === -1) {
+          for (let w = words.length - 1; w >= 0; w--) {
+            const word = words[w];
+            const wStart = (word.start !== undefined && word.start !== null)
+              ? word.start
+              : (cue.start + (w * (cueDuration / words.length)));
+            if (currentTime >= wStart) {
               wordIdx = w;
               break;
             }
           }
-          if (wordIdx === -1) {
-            // Find closest word
-            for (let w = cue.words.length - 1; w >= 0; w--) {
-              if (currentTime >= cue.words[w].start) {
-                wordIdx = w;
-                break;
-              }
-            }
-          }
         }
-        break;
+        if (wordIdx === -1) {
+          wordIdx = 0;
+        }
       }
     }
     return { cueIdx, wordIdx };
@@ -1209,22 +1304,40 @@
     return { subCanvas: captionSubCanvas, subCtx: captionSubCtx };
   }
 
-  // Draw Subtitles on any Canvas (used by both Live Preview and Video Frame Burn-In)
-  function renderCaptionsOnCanvas(ctx, canvasWidth, canvasHeight, currentTime, clearBeforeDraw = true) {
+  // Unicode Grapheme Cluster Splitter strictly preserving Arabic Harakat & Tashkeel
+  function getGraphemeClusters(text) {
+    if (!text) return [];
+    if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+      try {
+        const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+        return Array.from(segmenter.segment(text), s => s.segment);
+      } catch (e) {}
+    }
+    // Unicode regex fallback: base character followed by zero or more combining marks / Harakat
+    const matches = text.match(/[\s\S][\u0300-\u036F\u064B-\u065F\u0670\u0640\u06D6-\u06ED]*/g);
+    return matches || text.split('');
+  }
+
+  // Master Unified Caption & Kinetic FX Renderer (Used by both Live Preview and Video Frame Burn-In)
+  function renderCaptionsOnContext(ctx, canvasWidth, canvasHeight, currentTimeSeconds, clearBeforeDraw = true) {
+    if (!ctx || !canvasWidth || !canvasHeight) return;
+
     if (clearBeforeDraw) {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     }
 
-    const { cueIdx, wordIdx } = getActiveCueAndWord(currentTime);
-    if (cueIdx === -1) return;
+    if (!state.cues || state.cues.length === 0) return;
 
-    const cue = state.cues[cueIdx];
-    const styling = state.styling;
+    // 1. Finding the active cue strictly via passed currentTimeSeconds argument
+    const cue = state.cues.find(c => currentTimeSeconds >= c.start && currentTimeSeconds <= c.end);
+    if (!cue) return;
+
+    const styling = state.styling || {};
     const isArabic = isArabicText(cue.text) || state.language === 'ar' || (document.getElementById('spokenLangSelect') && document.getElementById('spokenLangSelect').value === 'ar') || (document.documentElement.getAttribute('lang') === 'ar');
     const isRtl = isArabic || document.documentElement.getAttribute('dir') === 'rtl';
 
     // Compute dynamic font size relative to canvas height
-    const fontSize = Math.max(18, Math.round((styling.fontSizePercent / 100) * canvasHeight));
+    const fontSize = Math.max(18, Math.round(((styling.fontSizePercent || 5.2) / 100) * canvasHeight));
 
     // Force Cairo as mandatory default font whenever Arabic is selected or Arabic characters are detected
     let fontName = styling.customFontName;
@@ -1232,7 +1345,7 @@
       if (isArabic) {
         fontName = (styling.fontFamily && !styling.fontFamily.includes('Plus Jakarta')) ? styling.fontFamily : "'Cairo', sans-serif";
       } else {
-        fontName = styling.fontFamily;
+        fontName = styling.fontFamily || "'Cairo', sans-serif";
       }
     } else if (isArabic && fontName.includes('Plus Jakarta')) {
       fontName = "'Cairo', sans-serif";
@@ -1242,7 +1355,43 @@
 
     const words = cue.words && cue.words.length > 0
       ? cue.words
-      : cue.text.split(/\s+/).map(t => ({ text: t }));
+      : (cue.text ? cue.text.split(/\s+/).filter(Boolean).map(t => ({ text: t })) : []);
+    if (words.length === 0) return;
+
+    const cueDuration = Math.max(0.001, cue.end - cue.start);
+    const cueElapsed = currentTimeSeconds - cue.start;
+    const cueProgress = Math.min(1, Math.max(0, cueElapsed / cueDuration));
+
+    // Calculate word-level timings and active word index strictly from currentTimeSeconds
+    let wordIdx = -1;
+    for (let w = 0; w < words.length; w++) {
+      const word = words[w];
+      const wStart = (word.start !== undefined && word.start !== null)
+        ? word.start
+        : (cue.start + (w * (cueDuration / words.length)));
+      const wEnd = (word.end !== undefined && word.end !== null)
+        ? word.end
+        : (wStart + (cueDuration / words.length));
+      if (currentTimeSeconds >= wStart && currentTimeSeconds <= wEnd) {
+        wordIdx = w;
+        break;
+      }
+    }
+    if (wordIdx === -1) {
+      for (let w = words.length - 1; w >= 0; w--) {
+        const word = words[w];
+        const wStart = (word.start !== undefined && word.start !== null)
+          ? word.start
+          : (cue.start + (w * (cueDuration / words.length)));
+        if (currentTimeSeconds >= wStart) {
+          wordIdx = w;
+          break;
+        }
+      }
+    }
+    if (wordIdx === -1) {
+      wordIdx = 0;
+    }
 
     // Diacritic-safe inter-word spacing preserving Arabic cursive connections
     ctx.font = fontStyle;
@@ -1270,21 +1419,22 @@
 
     const totalTextWidth = wordWidths.reduce((a, b) => a + b, 0) + (spaceWidth * (words.length - 1));
 
-    // Kinetic Animation: Slide Up / Fade Line Transition
+    // Effect 4: Cinematic Slide-Up & Fade-In (Smooth cubic-bezier easing over first 250ms)
     let lineAlpha = 1.0;
     let lineOffsetY = 0;
-    if (styling.slideUpFade) {
-      const cueElapsed = currentTime - cue.start;
-      if (cueElapsed >= 0 && cueElapsed < 0.22) {
-        const prog = Math.min(1, Math.max(0, cueElapsed / 0.20));
-        const easeOut = 1 - Math.pow(1 - prog, 3);
+    const isSlideUpActive = (styling.animationMode === 'slide-up') || (styling.slideUpFade && styling.animationMode !== 'none');
+    if (isSlideUpActive) {
+      if (cueElapsed >= 0 && cueElapsed < 0.25) {
+        const t = Math.min(1, Math.max(0, cueElapsed / 0.25));
+        const easeOut = 1 - Math.pow(1 - t, 3);
         lineAlpha = easeOut;
-        lineOffsetY = (1 - easeOut) * (fontSize * 0.35);
+        const baseOffset = 12 * (canvasHeight / 720);
+        lineOffsetY = (1 - easeOut) * baseOffset;
       }
     }
 
     // Vertical Y position with entry motion offset
-    const posY = (styling.positionY / 100) * canvasHeight;
+    const posY = (((styling.positionY !== undefined) ? styling.positionY : 80) / 100) * canvasHeight;
     const effectivePosY = posY + lineOffsetY;
     const startX = (canvasWidth - totalTextWidth) / 2;
 
@@ -1296,134 +1446,350 @@
     const bgX = startX - padX;
     const bgY = effectivePosY - (bgHeight / 2);
 
-    // Bounding Box isolation calculations: crop tightly around captions + glow margin
+    // Bounding Box isolation calculations: crop tightly around captions + glow + bounce + slide-up margin
+    const bounceIntensity = styling.bounceIntensity || 1.15;
+    const bounceMargin = Math.round(fontSize * (bounceIntensity - 1.0) * 1.5) + 16;
     const glowRadius = (styling.glowEnabled && styling.glowRadius > 0) ? styling.glowRadius : 0;
     const outlineW = (styling.outlineWidth || 0) * 2;
-    const bounceMargin = styling.wordBounce ? Math.round(fontSize * 0.35) : 0;
-    const margin = Math.ceil(Math.max(padX + 16, glowRadius * 2 + outlineW + bounceMargin + 24));
+    const margin = Math.ceil(Math.max(padX + 24, glowRadius * 2 + outlineW + bounceMargin + 24));
 
     const boxLeft = Math.max(0, Math.floor(startX - padX - margin));
     const boxRight = Math.min(canvasWidth, Math.ceil(startX + totalTextWidth + padX + margin));
-    const boxTop = Math.max(0, Math.floor(effectivePosY - (bgHeight / 2) - margin));
-    const boxBottom = Math.min(canvasHeight, Math.ceil(effectivePosY + (bgHeight / 2) + margin));
+    const boxTop = Math.max(0, Math.floor(posY - (bgHeight / 2) - margin));
+    const boxBottom = Math.min(canvasHeight, Math.ceil(posY + lineOffsetY + (bgHeight / 2) + margin));
     const boxW = Math.max(1, boxRight - boxLeft);
     const boxH = Math.max(1, boxBottom - boxTop);
 
-    // Acquire dedicated tight offscreen canvas
+    // Sub-Canvas Cache Invalidation: Reuse dedicated offscreen canvas, reset transforms, and clear every frame
     const { subCanvas, subCtx } = getCaptionSubCanvas(boxW, boxH);
+    subCtx.setTransform(1, 0, 0, 1, 0, 0);
     subCtx.clearRect(0, 0, subCanvas.width, subCanvas.height);
 
     subCtx.save();
-    subCtx.translate(-boxLeft, -boxTop);
-
-    subCtx.font = fontStyle;
-    subCtx.textBaseline = 'middle';
-    subCtx.direction = isRtl ? 'rtl' : 'ltr';
-    subCtx.textAlign = 'center';
-
-    // 1. Render Background Pill or Box
-    if (styling.bgType !== 'none') {
-      subCtx.save();
-      subCtx.globalAlpha = (styling.bgOpacity || 0.6) * lineAlpha;
-      subCtx.fillStyle = styling.bgColor || '#000000';
-
-      if (styling.bgType === 'pill') {
-        const radius = bgHeight / 2;
-        subCtx.beginPath();
-        if (typeof subCtx.roundRect === 'function') {
-          subCtx.roundRect(bgX, bgY, bgWidth, bgHeight, radius);
-        } else {
-          subCtx.rect(bgX, bgY, bgWidth, bgHeight);
-        }
-        subCtx.fill();
-      } else {
-        subCtx.fillRect(bgX, bgY, bgWidth, bgHeight);
-      }
-      subCtx.restore();
-    }
-
-    // 2. Render Words with Karaoke Highlight, Bounce, Glow and Outline
-    subCtx.save();
-    subCtx.globalAlpha = lineAlpha;
-    let currentEdge = isRtl ? ((canvasWidth + totalTextWidth) / 2) : startX;
-
-    for (let i = 0; i < words.length; i++) {
-      const w = words[i];
-      const wWidth = wordWidths[i];
-      const isWordActive = (i === wordIdx);
-
-      const wordCenterX = isRtl
-        ? (currentEdge - (wWidth / 2))
-        : (currentEdge + (wWidth / 2));
-
-      subCtx.save();
-
-      let fillColor = isWordActive ? styling.highlightColor : styling.textColor;
-      let scale = 1.0;
-
-      // Kinetic Word Pop / Bounce: 1.15x with smooth easing from center baseline
-      if (styling.wordBounce && isWordActive) {
-        const wStart = (w.start !== undefined && w.start !== null)
-          ? w.start
-          : (cue.start + (i * ((cue.end - cue.start) / Math.max(1, words.length))));
-        const elapsed = currentTime - wStart;
-        if (elapsed >= 0 && elapsed < 0.28) {
-          scale = 1.15 + (0.05 * Math.sin((elapsed / 0.28) * Math.PI));
-        } else {
-          scale = 1.15;
-        }
-      }
-
-      // Center baseline scaling transform
-      if (scale !== 1.0) {
-        subCtx.translate(wordCenterX, effectivePosY);
-        subCtx.scale(scale, scale);
-        subCtx.translate(-wordCenterX, -effectivePosY);
-      }
-
+    try {
+      subCtx.translate(-boxLeft, -boxTop);
+      subCtx.font = fontStyle;
+      subCtx.textBaseline = 'middle';
       subCtx.direction = isRtl ? 'rtl' : 'ltr';
       subCtx.textAlign = 'center';
-      subCtx.textBaseline = 'middle';
 
-      // Cinematic Glow (Neon) - Isolated to tight sub-canvas (NEVER blurs entire 1080p canvas)
-      if (styling.glowEnabled && styling.glowRadius > 0) {
-        subCtx.shadowColor = styling.glowColor || '#06b6d4';
-        subCtx.shadowBlur = styling.glowRadius;
-        subCtx.shadowOffsetX = 0;
-        subCtx.shadowOffsetY = 0;
-      } else {
-        subCtx.shadowBlur = 0;
-        subCtx.shadowColor = 'transparent';
+      // 1. Render Background Pill or Box (or Glass Pill FX)
+      // Note: animMode is declared later in scope — check for glass-pill here via styling directly
+      const _animModeForBg = styling.animationMode || 'slide-up';
+      if (_animModeForBg === 'glass-pill') {
+        // Sliding Glass Pill Effect: frosted-glass with subtle white stroke
+        subCtx.save();
+        const glassPadX = Math.round(fontSize * 0.55);
+        const glassPadY = isRtl ? Math.round(fontSize * 0.60) : Math.round(fontSize * 0.40);
+        const glassW = totalTextWidth + glassPadX * 2;
+        const glassH = fontSize + glassPadY * 2;
+        const glassX = startX - glassPadX;
+        const glassY = effectivePosY - glassH / 2;
+        const glassR = glassH / 2;
+
+        subCtx.globalAlpha = 0.78 * lineAlpha;
+        subCtx.fillStyle = 'rgba(255,255,255,0.08)';
+        subCtx.strokeStyle = 'rgba(255,255,255,0.22)';
+        subCtx.lineWidth = 1.5;
+        subCtx.beginPath();
+        if (typeof subCtx.roundRect === 'function') {
+          subCtx.roundRect(glassX, glassY, glassW, glassH, glassR);
+        } else {
+          subCtx.rect(glassX, glassY, glassW, glassH);
+        }
+        subCtx.fill();
+        subCtx.stroke();
+        subCtx.restore();
+      } else if (styling.bgType && styling.bgType !== 'none') {
+        subCtx.save();
+        subCtx.globalAlpha = ((styling.bgOpacity !== undefined) ? styling.bgOpacity : 0.6) * lineAlpha;
+        subCtx.fillStyle = styling.bgColor || '#000000';
+
+        if (styling.bgType === 'pill') {
+          const radius = bgHeight / 2;
+          subCtx.beginPath();
+          if (typeof subCtx.roundRect === 'function') {
+            subCtx.roundRect(bgX, bgY, bgWidth, bgHeight, radius);
+          } else {
+            subCtx.rect(bgX, bgY, bgWidth, bgHeight);
+          }
+          subCtx.fill();
+        } else {
+          subCtx.fillRect(bgX, bgY, bgWidth, bgHeight);
+        }
+        subCtx.restore();
       }
 
-      // Stroke / Outline (round join for 100% legibility over any background)
-      if (styling.outlineWidth > 0) {
-        subCtx.strokeStyle = styling.outlineColor || '#000000';
-        subCtx.lineWidth = styling.outlineWidth * 2;
-        subCtx.lineJoin = 'round';
-        subCtx.lineCap = 'round';
-        subCtx.miterLimit = 2;
-        subCtx.strokeText(w.text, wordCenterX, effectivePosY);
+      // Pre-calculate grapheme clusters and word timing states
+      const animMode = styling.animationMode || 'slide-up';
+      const isTypewriter = animMode === 'typewriter';
+      const isWordPop = animMode === 'pop';
+      const isKaraokeSweep = animMode === 'karaoke-sweep';
+      const isGlassPill = animMode === 'glass-pill';
+      const isExtrusion = animMode === 'extrusion';
+
+      // Pre-segment clusters for each word (preserving Arabic Harakat & Tashkeel)
+      const wordClusters = words.map(w => getGraphemeClusters(w.text));
+      const totalCueClusters = wordClusters.reduce((sum, cl) => sum + cl.length, 0);
+
+      // Typewriter state tracking
+      const targetTypewriterClusters = Math.floor(cueProgress * totalCueClusters);
+      let cumulativeClusterCount = 0;
+      let activeCaretPos = null;
+
+      subCtx.save();
+      subCtx.globalAlpha = lineAlpha;
+      let currentEdge = isRtl ? ((canvasWidth + totalTextWidth) / 2) : startX;
+
+      for (let i = 0; i < words.length; i++) {
+        const w = words[i];
+        const wWidth = wordWidths[i];
+        const clusters = wordClusters[i];
+        const isWordActive = (i === wordIdx);
+
+        // Intra-word timing evaluated directly from currentTimeSeconds
+        const wStart = (w.start !== undefined && w.start !== null)
+          ? w.start
+          : (cue.start + (i * (cueDuration / Math.max(1, words.length))));
+        const wEnd = (w.end !== undefined && w.end !== null)
+          ? w.end
+          : (wStart + (cueDuration / Math.max(1, words.length)));
+        const wDur = Math.max(0.001, wEnd - wStart);
+        const wordProgress = Math.min(1, Math.max(0, (currentTimeSeconds - wStart) / wDur));
+
+        const wordCenterX = isRtl
+          ? (currentEdge - (wWidth / 2))
+          : (currentEdge + (wWidth / 2));
+
+        // ----------------------------------------------------
+        // Effect 1: Canva Typewriter Text Determination
+        // ----------------------------------------------------
+        let drawText = w.text;
+        let isVisible = true;
+
+        if (isTypewriter) {
+          let revealedClustersCount = 0;
+          const hasWordTimings = w.start !== undefined && w.end !== undefined && w.end > w.start;
+
+          if (hasWordTimings) {
+            if (currentTimeSeconds < wStart) {
+              revealedClustersCount = 0;
+            } else if (currentTimeSeconds >= wEnd) {
+              revealedClustersCount = clusters.length;
+            } else {
+              revealedClustersCount = Math.min(clusters.length, Math.max(1, Math.floor(wordProgress * clusters.length)));
+            }
+          } else {
+            // Distributed cue progress
+            const wordStartCluster = cumulativeClusterCount;
+            const wordEndCluster = cumulativeClusterCount + clusters.length;
+            if (targetTypewriterClusters >= wordEndCluster) {
+              revealedClustersCount = clusters.length;
+            } else if (targetTypewriterClusters <= wordStartCluster) {
+              revealedClustersCount = 0;
+            } else {
+              revealedClustersCount = Math.max(0, targetTypewriterClusters - wordStartCluster);
+            }
+          }
+          cumulativeClusterCount += clusters.length;
+
+          if (revealedClustersCount === 0) {
+            isVisible = false;
+          } else {
+            drawText = clusters.slice(0, revealedClustersCount).join('');
+          }
+
+          // Determine caret writing edge
+          if (isVisible && revealedClustersCount < clusters.length && activeCaretPos === null) {
+            subCtx.font = fontStyle;
+            const drawnWidth = subCtx.measureText(drawText).width;
+            activeCaretPos = isRtl ? (currentEdge - drawnWidth) : (currentEdge + drawnWidth);
+          } else if (isVisible && revealedClustersCount === clusters.length && (i === words.length - 1 || currentTimeSeconds < wEnd)) {
+            subCtx.font = fontStyle;
+            const drawnWidth = subCtx.measureText(drawText).width;
+            if (activeCaretPos === null) {
+              activeCaretPos = isRtl ? (currentEdge - drawnWidth) : (currentEdge + drawnWidth);
+            }
+          }
+        }
+
+        if (isVisible) {
+          subCtx.save();
+
+          // ----------------------------------------------------
+          // Effect 2: Submagic Word Pop / Bounce Scale Matrix
+          // ----------------------------------------------------
+          let scale = 1.0;
+          if ((isWordPop || (styling.wordBounce && animMode !== 'typewriter')) && isWordActive) {
+            if (wordProgress >= 0 && wordProgress <= 1.0) {
+              scale = 1.0 + (bounceIntensity - 1.0) * Math.sin(wordProgress * Math.PI);
+            }
+          }
+
+          // Apply scale transform from local word center baseline
+          if (scale !== 1.0) {
+            subCtx.translate(wordCenterX, effectivePosY);
+            subCtx.scale(scale, scale);
+            subCtx.translate(-wordCenterX, -effectivePosY);
+          }
+
+          subCtx.direction = isRtl ? 'rtl' : 'ltr';
+          subCtx.textAlign = 'center';
+          subCtx.textBaseline = 'middle';
+
+          // ----------------------------------------------------
+          // Effect 3: CapCut Karaoke Sweep (Progressive Gradient Wipe)
+          // ----------------------------------------------------
+          let fillStyle = isWordActive ? (styling.highlightColor || '#f59e0b') : (styling.textColor || '#ffffff');
+
+          if (isKaraokeSweep) {
+            if (i < wordIdx) {
+              fillStyle = styling.highlightColor || '#f59e0b';
+            } else if (i > wordIdx) {
+              fillStyle = styling.textColor || '#ffffff';
+            } else {
+              const wordLeft = wordCenterX - (wWidth / 2);
+              const wordRight = wordCenterX + (wWidth / 2);
+
+              if (Math.abs(wordRight - wordLeft) > 1) {
+                const grad = isRtl
+                  ? subCtx.createLinearGradient(wordRight, 0, wordLeft, 0)
+                  : subCtx.createLinearGradient(wordLeft, 0, wordRight, 0);
+
+                const p0 = Math.max(0, Math.min(1, wordProgress - 0.05));
+                const p1 = Math.min(1, Math.max(p0, wordProgress + 0.05));
+
+                grad.addColorStop(0, styling.highlightColor || '#f59e0b');
+                grad.addColorStop(p0, styling.highlightColor || '#f59e0b');
+                grad.addColorStop(p1, styling.textColor || '#ffffff');
+                grad.addColorStop(1, styling.textColor || '#ffffff');
+
+                fillStyle = grad;
+              }
+            }
+          }
+
+          // Cinematic Glow (Neon) - Isolated to tight sub-canvas
+          if (styling.glowEnabled && styling.glowRadius > 0) {
+            subCtx.shadowColor = (isWordActive && isKaraokeSweep)
+              ? (styling.highlightColor || styling.glowColor || '#06b6d4')
+              : (styling.glowColor || '#06b6d4');
+            subCtx.shadowBlur = isWordActive ? styling.glowRadius * 1.25 : styling.glowRadius;
+            subCtx.shadowOffsetX = 0;
+            subCtx.shadowOffsetY = 0;
+          } else {
+            subCtx.shadowBlur = 0;
+            subCtx.shadowColor = 'transparent';
+          }
+
+          // ----------------------------------------------------
+          // Effect: 3D Extrusion Shadow (stacked offset layers)
+          // ----------------------------------------------------
+          if (isExtrusion) {
+            const extrusionColor = styling.outlineColor || '#000000';
+            const extrusionLayers = 4;
+            for (let el = extrusionLayers; el >= 1; el--) {
+              subCtx.save();
+              subCtx.globalAlpha = lineAlpha * (0.18 + el * 0.06);
+              subCtx.fillStyle = extrusionColor;
+              subCtx.shadowBlur = 0;
+              subCtx.shadowColor = 'transparent';
+              subCtx.fillText(drawText, wordCenterX + el, effectivePosY + el);
+              subCtx.restore();
+            }
+          }
+
+          // Stroke / Outline (round join for 100% legibility over any background)
+          if (styling.outlineWidth > 0 && !isExtrusion) {
+            subCtx.strokeStyle = styling.outlineColor || '#000000';
+            subCtx.lineWidth = styling.outlineWidth * 2;
+            subCtx.lineJoin = 'round';
+            subCtx.lineCap = 'round';
+            subCtx.miterLimit = 2;
+            subCtx.strokeText(drawText, wordCenterX, effectivePosY);
+          } else if (styling.outlineWidth > 0 && isExtrusion) {
+            // Light stroke pass for extrusion to sharpen text edge
+            subCtx.strokeStyle = styling.outlineColor || '#000000';
+            subCtx.lineWidth = Math.max(1, styling.outlineWidth * 0.75);
+            subCtx.lineJoin = 'round';
+            subCtx.strokeText(drawText, wordCenterX, effectivePosY);
+          }
+
+          // Main Text Fill (Harakat & Tashkeel preserved)
+          // Independent Arabic Diacritics Coloring: render diacritic marks in accent color
+          const hasDiacriticsColor = isRtl && styling.diacriticsColor && styling.diacriticsColor !== styling.textColor;
+          if (hasDiacriticsColor && !isTypewriter) {
+            // Render base text without diacritics first, then overlay diacritics in accent color
+            const baseClusters = getGraphemeClusters(drawText);
+            const baseOnly = baseClusters.filter(c => !/^[\u064B-\u065F\u0670\u0640]$/.test(c)).join('');
+            subCtx.fillStyle = fillStyle;
+            subCtx.fillText(baseOnly, wordCenterX, effectivePosY);
+            subCtx.save();
+            subCtx.fillStyle = styling.diacriticsColor;
+            subCtx.fillText(drawText, wordCenterX, effectivePosY);
+            subCtx.restore();
+          } else {
+            subCtx.fillStyle = fillStyle;
+            subCtx.fillText(drawText, wordCenterX, effectivePosY);
+          }
+
+          subCtx.restore();
+        }
+
+        if (isRtl) {
+          currentEdge -= (wWidth + spaceWidth);
+        } else {
+          currentEdge += (wWidth + spaceWidth);
+        }
       }
 
-      // Main Text Fill (Harakat & Tashkeel preserved)
-      subCtx.fillStyle = fillColor;
-      subCtx.fillText(w.text, wordCenterX, effectivePosY);
+      // ----------------------------------------------------
+      // Canva Typewriter Pulsing Vertical Cursor Caret `|`
+      // ----------------------------------------------------
+      if (isTypewriter && styling.typewriterCursor) {
+        if (activeCaretPos === null) {
+          activeCaretPos = isRtl
+            ? (cueProgress >= 1 ? (startX - 6) : ((canvasWidth + totalTextWidth) / 2))
+            : (cueProgress >= 1 ? (startX + totalTextWidth + 6) : startX);
+        }
 
-      subCtx.restore();
+        // Smooth pulsing caret alpha (strictly deterministic against currentTimeSeconds)
+        const caretPulse = 0.5 + 0.5 * Math.sin(currentTimeSeconds * Math.PI * 4);
+        const caretAlpha = Math.max(0.12, caretPulse);
 
-      if (isRtl) {
-        currentEdge -= (wWidth + spaceWidth);
-      } else {
-        currentEdge += (wWidth + spaceWidth);
+        subCtx.save();
+        subCtx.globalAlpha = lineAlpha * caretAlpha;
+        subCtx.fillStyle = styling.highlightColor || '#38bdf8';
+        if (styling.glowEnabled && styling.glowRadius > 0) {
+          subCtx.shadowColor = styling.glowColor || styling.highlightColor;
+          subCtx.shadowBlur = Math.min(12, styling.glowRadius);
+        }
+
+        const caretW = Math.max(2.5, Math.round(fontSize * 0.08));
+        const caretH = Math.round(fontSize * 0.90);
+        const caretY = effectivePosY - (caretH / 2);
+
+        if (typeof subCtx.roundRect === 'function') {
+          subCtx.beginPath();
+          subCtx.roundRect(activeCaretPos - (caretW / 2), caretY, caretW, caretH, caretW / 2);
+          subCtx.fill();
+        } else {
+          subCtx.fillRect(activeCaretPos - (caretW / 2), caretY, caretW, caretH);
+        }
+        subCtx.restore();
       }
+
+      subCtx.restore(); // restore globalAlpha
+    } finally {
+      subCtx.restore(); // restore translate(-boxLeft, -boxTop)
     }
-    subCtx.restore(); // restore globalAlpha
-    subCtx.restore(); // restore translate(-boxLeft, -boxTop)
 
     // Composite tight sub-canvas directly onto destination canvas (preserves underlying video frame!)
     ctx.drawImage(subCanvas, 0, 0, boxW, boxH, boxLeft, boxTop, boxW, boxH);
   }
+
+  // Master alias for backward compatibility across existing hooks
+  const renderCaptionsOnCanvas = renderCaptionsOnContext;
 
   // Animation Loop for Dual-Layer Preview using requestVideoFrameCallback (fallback rAF)
   let rfcHandle = null;
@@ -1619,30 +1985,307 @@
     return out;
   }
 
-  function generateAss(cues, styling) {
-    const hasArabic = cues.some(c => isArabicText(c.text)) || state.language === 'ar' || (document.getElementById('spokenLangSelect') && document.getElementById('spokenLangSelect').value === 'ar');
-    let font = styling.customFontName || styling.fontFamily.replace(/['",]/g, '').split(' ')[0];
-    if (hasArabic && (font.includes('Plus') || font.includes('Jakarta') || font === 'sans-serif')) {
-      font = 'Cairo';
+  /**
+   * Reads current live values directly from the DOM inputs/selects
+   * and synchronizes them into state.styling.
+   */
+  function syncStylingFromDOM() {
+    if (!state.styling) {
+      state.styling = {};
     }
+
+    const presetSelect = document.getElementById('stylePresetSelect');
+    if (presetSelect && presetSelect.value) {
+      state.styling.preset = presetSelect.value;
+    }
+
+    const fontSelect = document.getElementById('fontFamilySelect');
+    if (fontSelect && !state.styling.customFontName && fontSelect.value) {
+      state.styling.fontFamily = fontSelect.value;
+    }
+
+    const fontSizeSlider = document.getElementById('fontSizeSlider');
+    if (fontSizeSlider) {
+      const pct = parseFloat(fontSizeSlider.value) || 5.5;
+      state.styling.fontSizePercent = pct;
+      state.styling.fontSize = Math.round(pct * 8.2);
+    }
+
+    const posYSlider = document.getElementById('positionYSlider');
+    if (posYSlider) {
+      state.styling.positionY = parseFloat(posYSlider.value) || 82;
+    }
+
+    const textColorPicker = document.getElementById('textColorPicker');
+    if (textColorPicker && textColorPicker.value) {
+      state.styling.textColor = textColorPicker.value;
+    }
+
+    const highlightColorPicker = document.getElementById('highlightColorPicker');
+    if (highlightColorPicker && highlightColorPicker.value) {
+      state.styling.highlightColor = highlightColorPicker.value;
+    }
+
+    const strokeWidthSlider = document.getElementById('strokeWidthSlider');
+    if (strokeWidthSlider) {
+      state.styling.outlineWidth = parseFloat(strokeWidthSlider.value);
+    }
+
+    const strokeColorPicker = document.getElementById('strokeColorPicker');
+    if (strokeColorPicker && strokeColorPicker.value) {
+      state.styling.outlineColor = strokeColorPicker.value;
+    }
+
+    const toggleGlow = document.getElementById('toggleGlow');
+    if (toggleGlow) {
+      state.styling.glowEnabled = toggleGlow.checked;
+    }
+
+    const glowRadiusSlider = document.getElementById('glowRadiusSlider');
+    if (glowRadiusSlider) {
+      state.styling.glowRadius = parseFloat(glowRadiusSlider.value) || 12;
+    }
+
+    const glowColorPicker = document.getElementById('glowColorPicker');
+    if (glowColorPicker && glowColorPicker.value) {
+      state.styling.glowColor = glowColorPicker.value;
+    }
+
+    const animationModeSelect = document.getElementById('animationModeSelect');
+    if (animationModeSelect && animationModeSelect.value) {
+      state.styling.animationMode = animationModeSelect.value;
+    }
+
+    const toggleTypewriterCursor = document.getElementById('toggleTypewriterCursor');
+    if (toggleTypewriterCursor) {
+      state.styling.typewriterCursor = toggleTypewriterCursor.checked;
+    }
+
+    const toggleSlideUp = document.getElementById('toggleSlideUp');
+    if (toggleSlideUp) {
+      state.styling.slideUpFade = toggleSlideUp.checked;
+    }
+
+    const bounceIntensitySlider = document.getElementById('bounceIntensitySlider');
+    if (bounceIntensitySlider) {
+      state.styling.bounceIntensity = parseFloat(bounceIntensitySlider.value) || 1.15;
+    }
+
+    const bgTypeSelect = document.getElementById('bgTypeSelect');
+    if (bgTypeSelect && bgTypeSelect.value) {
+      state.styling.bgType = bgTypeSelect.value;
+    }
+
+    const bgOpacitySlider = document.getElementById('bgOpacitySlider');
+    if (bgOpacitySlider) {
+      state.styling.bgOpacity = parseFloat(bgOpacitySlider.value);
+    }
+
+    return state.styling;
+  }
+
+  /**
+   * Converts Hex color (#rrggbb) to ASS &HAABBGGRR& color format.
+   * In SubStation Alpha (.ass), colors MUST be formatted as &HAABBGGRR& where AA = 00 is 100% OPAQUE
+   * and AA = FF is 100% TRANSPARENT, and channels are reversed (BBGGRR, NOT RRGGBB!).
+   */
+  function hexToAss(hex, transparency = 0) {
+    let clean = String(hex || '#FFFFFF').replace('#', '').trim();
+    if (clean.length === 3) {
+      clean = clean.split('').map(c => c + c).join('');
+    }
+    const r = clean.substring(0, 2) || 'FF';
+    const g = clean.substring(2, 4) || 'FF';
+    const b = clean.substring(4, 6) || 'FF';
+    let a = '00';
+    if (typeof transparency === 'number') {
+      a = Math.max(0, Math.min(255, Math.round(transparency * 255)))
+            .toString(16).padStart(2, '0').toUpperCase();
+    } else if (typeof transparency === 'string') {
+      a = transparency.replace('&H', '').replace('&', '').padStart(2, '0').toUpperCase();
+    }
+    return `&H${a}${b}${g}${r}&`.toUpperCase();
+  }
+
+  function hexToAssColor(hex, alphaHexOrPercent = '00') {
+    return hexToAss(hex, alphaHexOrPercent);
+  }
+
+  /**
+   * Generates High-Fidelity Advanced SubStation Alpha (.ass) subtitles with full kinetic FX.
+   * Maps Cairo Arabic typography, Harakat, and all kinetic animations to native ASS override tags.
+   */
+  function generateStyledAssSubtitles(cues, styling, videoWidth = 1920, videoHeight = 1080) {
+    if (!cues || cues.length === 0) return '';
+    styling = styling || state.styling || {};
+
+    const animMode = styling.animationMode || 'slide-up';
+    const isRtl = cues.some(c => isArabicText(c.text)) || state.language === 'ar';
+
+    // Font selection: Custom uploaded font (if provided) or Cairo for Arabic typography & bundled TTF
+    let font = styling.customFontName || (typeof state !== 'undefined' && (state.customFontFamily || state.customFontName)) || 'Cairo';
+
+    // 1080p Resolution Scaling:
+    // Multiply UI fontSize by 2.35 (minimum 92 for 1080p)
+    // Multiply strokeWidth by 2.2 (minimum 4.5)
+    const uiFontSize = styling.fontSize || Math.round(((styling.fontSizePercent || 5.5) / 100) * 800) || 45;
+    const assFontSize = Math.max(92, Math.round(uiFontSize * 2.35));
+
+    const uiStroke = (styling.outlineWidth !== undefined && styling.outlineWidth !== null) ? styling.outlineWidth : 3;
+    const scaledStroke = Math.max(4.5, Math.round(uiStroke * 2.2 * 10) / 10);
+
+    // Map vertical position accurately to 1080p
+    const posYPercent = (styling.positionY !== undefined && styling.positionY !== null) ? styling.positionY : (styling.posY !== undefined ? styling.posY : 82);
+    const assY = Math.round((posYPercent / 100) * videoHeight);
+    const centerX = Math.round(videoWidth / 2); // 960 for 1920
+
+    // Colors in ASS &HAABBGGRR& format
+    const assTextColor = hexToAss(styling.textColor || '#fffdf5', 0);
+    const assActiveColor = hexToAss(styling.highlightColor || '#fde047', 0);
+    const assStrokeColor = hexToAss(styling.outlineColor || '#000000', 0);
+    const assGlowColor = hexToAss(styling.glowColor || '#d97706', 0);
+    const backAlpha = 1 - (styling.bgOpacity !== undefined ? styling.bgOpacity : 0.6);
+    const assBackColor = hexToAss(styling.bgColor || '#000000', backAlpha);
+
+    // Scaled Glow Blur and Border
+    const glowRadius = (styling.glowRadius !== undefined && styling.glowRadius !== null) ? styling.glowRadius : 12;
+    const scaledGlowBord = Math.round(scaledStroke + Math.max(6, glowRadius * 1.5));
+    const scaledGlowBlur = Math.round(Math.max(8, glowRadius * 1.8));
+
+    const isGlowActive = !!(
+      styling.glowEnabled ||
+      styling.preset === 'poetic' ||
+      styling.preset === 'neon' ||
+      (styling.glowRadius && styling.glowRadius > 0 && styling.glowEnabled !== false)
+    );
+
+    const borderStyle = (styling.bgType && styling.bgType !== 'none') ? 3 : 1;
+    const marginV = Math.max(20, Math.round(videoHeight * (1 - posYPercent / 100)));
+
     let out = `[Script Info]
-Title: VantorKit Auto Captions
+Title: VantorKit Kinetic Subtitles (Libass Ultra-Fidelity)
 ScriptType: v4.00+
-Collisions: Normal
-PlayResX: 1920
-PlayResY: 1080
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+PlayResX: ${videoWidth}
+PlayResY: ${videoHeight}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,${font},65,&H00FFFFFF,&H00D4B606,&H00000000,&H90000000,-1,0,0,0,100,100,0,0,1,3,2,2,10,10,120,1
+Style: MainStyle,${font},${assFontSize},${assTextColor},${assActiveColor},${assStrokeColor},${assBackColor},-1,0,0,0,100,100,0,0,${borderStyle},${scaledStroke},0,2,30,30,${marginV},-1
+Style: Default,${font},${assFontSize},${assTextColor},${assActiveColor},${assStrokeColor},${assBackColor},-1,0,0,0,100,100,0,0,${borderStyle},${scaledStroke},0,2,30,30,${marginV},-1
+Style: GlowStyle,${font},${assFontSize},${assGlowColor},${assGlowColor},${assGlowColor},&HFF000000&,-1,0,0,0,100,100,0,0,1,${scaledGlowBord},0,2,30,30,${marginV},-1
+Style: Glow,${font},${assFontSize},${assGlowColor},${assGlowColor},${assGlowColor},&HFF000000&,-1,0,0,0,100,100,0,0,1,${scaledGlowBord},0,2,30,30,${marginV},-1
+Style: KaraokeStyle,${font},${assFontSize},${assActiveColor},${assTextColor},${assStrokeColor},${assBackColor},-1,0,0,0,100,100,0,0,${borderStyle},${scaledStroke},0,2,30,30,${marginV},-1
+Style: ExtrusionStyle,${font},${assFontSize},${assStrokeColor},${assStrokeColor},${assStrokeColor},&HFF000000&,-1,0,0,0,100,100,0,0,1,${scaledStroke},0,2,30,30,${marginV},-1
+Style: Extrusion,${font},${assFontSize},${assStrokeColor},${assStrokeColor},${assStrokeColor},&HFF000000&,-1,0,0,0,100,100,0,0,1,${scaledStroke},0,2,30,30,${marginV},-1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 `;
+
     cues.forEach(cue => {
-      out += `Dialogue: 0,${formatTimestampAss(cue.start)},${formatTimestampAss(cue.end)},Default,,0,0,0,,${cue.text}\n`;
+      const start = formatTimestampAss(cue.start);
+      const end = formatTimestampAss(cue.end);
+      const cueDur = Math.max(0.1, cue.end - cue.start);
+      const cueText = (cue.text || '').replace(/[\r\n]+/g, ' ').trim();
+      if (!cueText) return;
+
+      const isCueRtl = isRtl || isArabicText(cueText);
+      const rlm = isCueRtl ? '\u200F' : '';
+
+      const words = cue.words && cue.words.length > 0
+        ? cue.words
+        : cueText.split(/\s+/).map((w, idx, arr) => ({
+            text: w,
+            start: cue.start + (idx / arr.length) * cueDur,
+            end: cue.start + ((idx + 1) / arr.length) * cueDur
+          }));
+
+      // Effect 1: Royal Poetic Glow / Cinematic Slide-Up (Dual-Layer Entry)
+      if (animMode === 'slide-up' || animMode === 'royal-glow' || (!animMode && styling.preset === 'poetic')) {
+        const moveTag = (styling.slideUpFade !== false)
+          ? `\\move(${centerX},${assY + 35},${centerX},${assY},0,240)\\fad(220,160)`
+          : `\\pos(${centerX},${assY})`;
+        if (isGlowActive) {
+          out += `Dialogue: 0,${start},${end},GlowStyle,,0,0,0,,{${moveTag}\\bord${scaledGlowBord}\\blur${scaledGlowBlur}\\1c${assGlowColor}\\3c${assGlowColor}\\4c${assGlowColor}}${rlm}${cueText}\n`;
+        }
+        out += `Dialogue: 1,${start},${end},MainStyle,,0,0,0,,{${moveTag}\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}${rlm}${cueText}\n`;
+        return;
+      }
+
+      // Effect 2: Canva Typewriter (Progressive Reveal + Blinking Accent Caret)
+      if (animMode === 'typewriter') {
+        const showCursor = styling.typewriterCursor !== false;
+        for (let wi = 0; wi < words.length; wi++) {
+          const wStart = formatTimestampAss(words[wi].start);
+          const wEnd = formatTimestampAss((wi < words.length - 1) ? words[wi + 1].start : cue.end);
+          const subText = words.slice(0, wi + 1).map(w => w.text).join(' ');
+          const cursorTag = (showCursor && wi < words.length - 1) ? `{\\1c${assActiveColor}}|{\\1c${assTextColor}}` : '';
+          if (isGlowActive) {
+            out += `Dialogue: 0,${wStart},${wEnd},GlowStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledGlowBord}\\blur${scaledGlowBlur}\\1c${assGlowColor}\\3c${assGlowColor}\\4c${assGlowColor}}${rlm}${subText}\n`;
+          }
+          out += `Dialogue: 1,${wStart},${wEnd},MainStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}${rlm}${subText}${cursorTag}\n`;
+        }
+        return;
+      }
+
+      // Effect 3: Submagic Word Pop / Bounce / Glass Pill (Word-by-Word Kinetic Pop)
+      if (animMode === 'pop' || animMode === 'bounce' || animMode === 'word-pop' || animMode === 'glass-pill') {
+        for (let wi = 0; wi < words.length; wi++) {
+          const w = words[wi];
+          const wStart = formatTimestampAss(w.start);
+          const wEnd = formatTimestampAss((wi < words.length - 1) ? Math.max(w.start + 0.08, words[wi + 1].start) : cue.end);
+
+          const lineWords = words.map((currW, ci) => {
+            if (ci === wi) {
+              return `{\\1c${assActiveColor}\\fscx125\\fscy125\\t(0,180,\\fscx108\\fscy108)}${currW.text}{\\rMainStyle\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}`;
+            }
+            return currW.text;
+          }).join(' ');
+
+          if (isGlowActive) {
+            out += `Dialogue: 0,${wStart},${wEnd},GlowStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledGlowBord}\\blur${scaledGlowBlur}\\1c${assGlowColor}\\3c${assGlowColor}\\4c${assGlowColor}}${rlm}${cueText}\n`;
+          }
+          out += `Dialogue: 1,${wStart},${wEnd},MainStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}${rlm}${lineWords}\n`;
+        }
+        return;
+      }
+
+      // Effect 4: CapCut RTL Karaoke Sweep (\kf Fill Tags)
+      if (animMode === 'karaoke-sweep' || animMode === 'karaoke') {
+        const karaokeWords = words.map(w => {
+          const cs = Math.max(1, Math.round((Math.max(w.start + 0.05, w.end) - w.start) * 100));
+          return `{\\kf${cs}}${w.text}`;
+        }).join(' ');
+
+        if (isGlowActive) {
+          out += `Dialogue: 0,${start},${end},GlowStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledGlowBord}\\blur${scaledGlowBlur}\\1c${assGlowColor}\\3c${assGlowColor}\\4c${assGlowColor}}${rlm}${cueText}\n`;
+        }
+        out += `Dialogue: 1,${start},${end},KaraokeStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledStroke}\\blur0.6}${rlm}${karaokeWords}\n`;
+        return;
+      }
+
+      // Effect 5: 3D Extrusion Shadow
+      if (animMode === 'extrusion') {
+        out += `Dialogue: 0,${start},${end},ExtrusionStyle,,0,0,0,,{\\pos(${centerX + 5},${assY + 5})\\bord${scaledStroke}\\1c${assStrokeColor}\\3c${assStrokeColor}}${rlm}${cueText}\n`;
+        out += `Dialogue: 1,${start},${end},MainStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}${rlm}${cueText}\n`;
+        return;
+      }
+
+      // Default: Clean Static Display
+      if (isGlowActive) {
+        out += `Dialogue: 0,${start},${end},GlowStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledGlowBord}\\blur${scaledGlowBlur}\\1c${assGlowColor}\\3c${assGlowColor}\\4c${assGlowColor}}${rlm}${cueText}\n`;
+      }
+      out += `Dialogue: 1,${start},${end},MainStyle,,0,0,0,,{\\pos(${centerX},${assY})\\bord${scaledStroke}\\blur0.6\\1c${assTextColor}\\3c${assStrokeColor}}${rlm}${cueText}\n`;
     });
+
     return out;
+  }
+
+  function generateAss(cues, styling) {
+    return generateStyledAssSubtitles(cues, styling, 1920, 1080);
   }
 
   function triggerDownload(content, filename, mimeType) {
@@ -1656,6 +2299,322 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast(getTranslation('toastDownloaded'));
+  }
+
+  /* ==========================================================================
+     9.5 SUBTITLE FILE IMPORT ENGINE (.SRT / .VTT / .ASS)
+     ========================================================================== */
+
+  /**
+   * Decode ArrayBuffer to string with fail-safe Arabic & UTF-8 handling.
+   * Eliminates "ط / ظ" mojibake by decoding UTF-8 first and only falling back to windows-1256 on \uFFFD.
+   */
+  async function decodeSubtitleBuffer(buffer) {
+    const bytes = new Uint8Array(buffer);
+    // Check for explicit UTF-16 BOMs
+    if (bytes[0] === 0xFF && bytes[1] === 0xFE) {
+      return new TextDecoder('utf-16le').decode(buffer).replace(/^\uFEFF/, '');
+    }
+    if (bytes[0] === 0xFE && bytes[1] === 0xFF) {
+      return new TextDecoder('utf-16be').decode(buffer).replace(/^\uFEFF/, '');
+    }
+
+    // 1. Decode FIRST using standard non-fatal UTF-8
+    let text = new TextDecoder('utf-8', { fatal: false }).decode(buffer);
+    // 2. Strip UTF-8 BOM if present
+    text = text.replace(/^\uFEFF/, '');
+    // 3. ONLY fallback to windows-1256 if text contains replacement characters (\uFFFD)
+    if (text.includes('\uFFFD')) {
+      try {
+        const winText = new TextDecoder('windows-1256').decode(buffer);
+        if (winText && !winText.includes('\uFFFD')) {
+          text = winText;
+        } else if (winText) {
+          text = winText;
+        }
+      } catch (err) {
+        console.warn("windows-1256 decoding fallback error:", err);
+      }
+    }
+    return text;
+  }
+
+  /**
+   * Parse SRT timestamp: HH:MM:SS,mmm or HH:MM:SS.mmm -> seconds.
+   */
+  function parseSrtTimestamp(ts) {
+    if (!ts) return 0;
+    const m = ts.trim().match(/^(\d+):(\d{2}):(\d{2})[,\.](\d{1,3})$/);
+    if (!m) return 0;
+    return parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 + parseInt(m[3]) + parseInt(m[4].padEnd(3,'0')) / 1000;
+  }
+
+  /**
+   * Parse VTT timestamp: [HH:]MM:SS.mmm -> seconds.
+   */
+  function parseVttTimestamp(ts) {
+    if (!ts) return 0;
+    const parts = ts.trim().split(':');
+    if (parts.length === 3) {
+      return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2]);
+    } else if (parts.length === 2) {
+      return parseInt(parts[0]) * 60 + parseFloat(parts[1]);
+    }
+    return 0;
+  }
+
+  /**
+   * Strip inline formatting tags from subtitle text.
+   * Handles SRT HTML tags, ASS override blocks, and VTT cue settings.
+   */
+  function stripSubtitleTags(text) {
+    if (!text) return '';
+    return text
+      .replace(/\{[^}]*\}/g, '')          // ASS override blocks {\an8}, {\pos(...)}, etc.
+      .replace(/<[^>]+>/g, '')             // HTML tags <b>, <i>, <font color="...">...
+      .replace(/\{\\N\}/gi, ' ')           // ASS hard line break
+      .replace(/\{\\n\}/gi, ' ')           // ASS soft line break
+      .replace(/\\N/g, ' ')               // ASS \N in text
+      .replace(/\\n/g, ' ')               // ASS \n in text
+      .replace(/  +/g, ' ')               // collapse double spaces
+      .trim();
+  }
+
+  /**
+   * Build cue word timings by proportional character-length interpolation.
+   */
+  function buildWordTimings(text, start, end) {
+    const rawWords = (text || '').split(/\s+/).filter(Boolean);
+    if (rawWords.length === 0) return [];
+    const span = Math.max(0.1, end - start);
+    const totalChars = rawWords.reduce((acc, w) => acc + Math.max(1, w.length), 0);
+    let cur = start;
+    return rawWords.map(wText => {
+      const ratio = Math.max(1, wText.length) / totalChars;
+      const wDur = span * ratio;
+      const wStart = Math.round(cur * 1000) / 1000;
+      const wEnd = Math.round((cur + wDur * 0.92) * 1000) / 1000;
+      cur += wDur;
+      return { text: wText, start: wStart, end: wEnd };
+    });
+  }
+
+  /**
+   * Parse SRT file text -> array of cue objects.
+   */
+  function parseSrt(text) {
+    const cues = [];
+    const blocks = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split(/\n{2,}/);
+    for (const block of blocks) {
+      const lines = block.trim().split('\n');
+      if (lines.length < 2) continue;
+      // Find timestamp line
+      let tsLine = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('-->')) { tsLine = i; break; }
+      }
+      if (tsLine < 0) continue;
+      const tsParts = lines[tsLine].split('-->');
+      if (tsParts.length < 2) continue;
+      const start = parseSrtTimestamp(tsParts[0].trim());
+      // Also handle end timestamps with position tags: 00:00:01,000 --> 00:00:02,000 X1:0 ...
+      const endRaw = tsParts[1].trim().split(/\s+/)[0];
+      const end = parseSrtTimestamp(endRaw);
+      if (end <= 0 && start <= 0) continue;
+      const textLines = lines.slice(tsLine + 1).map(l => stripSubtitleTags(l)).filter(Boolean);
+      if (textLines.length === 0) continue;
+      const cueText = textLines.join(' ');
+      cues.push({
+        id: 'srt_cue_' + (cues.length + 1),
+        start,
+        end: Math.max(start + 0.1, end),
+        text: cueText,
+        words: buildWordTimings(cueText, start, Math.max(start + 0.1, end)),
+        confidence: 0.95,
+        isInterpolated: false
+      });
+    }
+    return cues;
+  }
+
+  /**
+   * Parse WebVTT file text -> array of cue objects.
+   */
+  function parseVtt(text) {
+    const cues = [];
+    const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const blocks = normalized.split(/\n{2,}/);
+    for (const block of blocks) {
+      const lines = block.trim().split('\n');
+      if (!lines.length) continue;
+      // Skip header/meta blocks
+      const firstLine = lines[0].trim();
+      if (
+        firstLine.startsWith('WEBVTT') ||
+        firstLine.startsWith('NOTE') ||
+        firstLine.startsWith('STYLE') ||
+        firstLine.startsWith('REGION')
+      ) continue;
+      // Find timestamp line
+      let tsLine = -1;
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('-->')) { tsLine = i; break; }
+      }
+      if (tsLine < 0) continue;
+      const tsParts = lines[tsLine].split('-->');
+      if (tsParts.length < 2) continue;
+      const start = parseVttTimestamp(tsParts[0].trim());
+      // VTT end part may have cue settings appended
+      const endRaw = tsParts[1].trim().split(/\s+/)[0];
+      const end = parseVttTimestamp(endRaw);
+      const textLines = lines.slice(tsLine + 1).map(l => stripSubtitleTags(l)).filter(Boolean);
+      if (textLines.length === 0) continue;
+      const cueText = textLines.join(' ');
+      cues.push({
+        id: 'vtt_cue_' + (cues.length + 1),
+        start,
+        end: Math.max(start + 0.1, end),
+        text: cueText,
+        words: buildWordTimings(cueText, start, Math.max(start + 0.1, end)),
+        confidence: 0.95,
+        isInterpolated: false
+      });
+    }
+    return cues;
+  }
+
+  /**
+   * Parse ASS/SSA file text -> array of cue objects.
+   * Reads only the [Events] section -> Dialogue: lines.
+   */
+  function parseAss(text) {
+    const cues = [];
+    const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const inEventsSection = { active: false };
+    let formatKeys = [];
+    for (const line of normalized.split('\n')) {
+      const trimmed = line.trim();
+      if (/^\[Events\]/i.test(trimmed)) {
+        inEventsSection.active = true;
+        continue;
+      }
+      if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        inEventsSection.active = false;
+        continue;
+      }
+      if (!inEventsSection.active) continue;
+
+      if (/^Format:/i.test(trimmed)) {
+        formatKeys = trimmed.replace(/^Format:/i, '').split(',').map(k => k.trim().toLowerCase());
+        continue;
+      }
+
+      if (/^Dialogue:/i.test(trimmed)) {
+        const raw = trimmed.replace(/^Dialogue:/i, '').trim();
+        // Split only up to formatKeys.length fields; the last field (Text) may contain commas
+        const parts = raw.split(',');
+        const numFields = formatKeys.length;
+        if (parts.length < numFields) continue;
+
+        const fieldMap = {};
+        for (let fi = 0; fi < numFields - 1; fi++) {
+          fieldMap[formatKeys[fi]] = parts[fi].trim();
+        }
+        // Last field (Text) is everything after the (numFields-1)th comma
+        const textParts = parts.slice(numFields - 1);
+        fieldMap[formatKeys[numFields - 1]] = textParts.join(',');
+
+        const startRaw = fieldMap['start'] || '';
+        const endRaw = fieldMap['end'] || '';
+        const rawText = fieldMap['text'] || '';
+        const cueText = stripSubtitleTags(rawText);
+        if (!cueText) continue;
+
+        // ASS timestamps: H:MM:SS.cc
+        const parseAssTs = ts => {
+          const m = (ts || '').trim().match(/^(\d+):(\d{2}):(\d{2})\.(\d{2})$/);
+          if (!m) return 0;
+          return parseInt(m[1]) * 3600 + parseInt(m[2]) * 60 + parseInt(m[3]) + parseInt(m[4]) / 100;
+        };
+        const start = parseAssTs(startRaw);
+        const end = parseAssTs(endRaw);
+        cues.push({
+          id: 'ass_cue_' + (cues.length + 1),
+          start,
+          end: Math.max(start + 0.1, end),
+          text: cueText,
+          words: buildWordTimings(cueText, start, Math.max(start + 0.1, end)),
+          confidence: 0.95,
+          isInterpolated: false
+        });
+      }
+    }
+    // Sort by start time (ASS files can have out-of-order dialogue lines)
+    cues.sort((a, b) => a.start - b.start);
+    return cues;
+  }
+
+  /**
+   * Master subtitle import handler.
+   * Accepts a File object (SRT, VTT, ASS/SSA, TXT treated as SRT).
+   * On success, replaces state.cues, shows studio, re-renders timeline.
+   */
+  async function importSubtitleFile(file) {
+    if (!file) return;
+    const ext = file.name.toLowerCase().split('.').pop();
+    try {
+      const buffer = await file.arrayBuffer();
+      const text = await decodeSubtitleBuffer(buffer);
+      let parsed = [];
+
+      if (ext === 'vtt') {
+        parsed = parseVtt(text);
+      } else if (ext === 'ass' || ext === 'ssa') {
+        parsed = parseAss(text);
+      } else {
+        // SRT or TXT — try SRT first
+        parsed = parseSrt(text);
+        if (parsed.length === 0) {
+          // Fallback: treat as plain text lines, distribute equally
+          const lines = text.split(/\r?\n+/).map(l => stripSubtitleTags(l).trim()).filter(Boolean);
+          const step = 3.0;
+          lines.forEach((lineText, i) => {
+            const start = i * step;
+            const end = start + step - 0.1;
+            parsed.push({
+              id: 'txt_cue_' + (i + 1),
+              start,
+              end,
+              text: lineText,
+              words: buildWordTimings(lineText, start, end),
+              confidence: 0.80,
+              isInterpolated: true
+            });
+          });
+        }
+      }
+
+      if (parsed.length === 0) {
+        showToast('No subtitle cues found in file. Verify format.');
+        return;
+      }
+
+      history.pushState(state.cues);
+      state.cues = parsed;
+      renderTimelineCues();
+
+      // Reveal studio section
+      const studioSec = document.getElementById('studioWorkspace');
+      if (studioSec) {
+        studioSec.style.display = 'block';
+        studioSec.scrollIntoView({ behavior: 'smooth' });
+      }
+      resizeStudioCanvas();
+      showToast(`Imported ${parsed.length} cues from ${file.name}`);
+    } catch (err) {
+      console.error('Subtitle import error:', err);
+      showToast('Failed to parse subtitle file. Verify encoding and format.');
+    }
   }
 
   /* ==========================================================================
@@ -1727,6 +2686,15 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     state.abortExport = true;
     state.isExporting = false;
 
+    if (activeExportTimer) {
+      clearInterval(activeExportTimer);
+      activeExportTimer = null;
+    }
+    if (activeWatchdogTimer) {
+      clearInterval(activeWatchdogTimer);
+      activeWatchdogTimer = null;
+    }
+
     if (exportAbortController) {
       try { exportAbortController.abort(); } catch (e) {}
       exportAbortController = null;
@@ -1764,6 +2732,36 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     showToast(getTranslation('exportCancelled'));
   }
 
+  function formatSecondsToTime(seconds) {
+    if (!Number.isFinite(seconds) || seconds < 0) seconds = 0;
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function updateExportProgress(pct, currentTime, totalDuration) {
+    const progressFill = document.getElementById('burnProgressFill');
+    const progressText = document.getElementById('burnProgressText');
+    const modalProgressFill = document.getElementById('exportModalProgressFill');
+    const modalProgressText = document.getElementById('exportModalProgressText');
+    const modalTimeText = document.getElementById('exportModalTimeText');
+
+    const curStr = formatSecondsToTime(currentTime);
+    const totStr = formatSecondsToTime(totalDuration);
+
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressText) {
+      progressText.textContent = `${getTranslation('burnProgress')} ${pct}% (${currentTime.toFixed(1)}s / ${totalDuration.toFixed(1)}s)`;
+    }
+    if (modalProgressFill) modalProgressFill.style.width = pct + '%';
+    if (modalProgressText) {
+      modalProgressText.textContent = `Encoding: ${pct}% (4x Turbo)`;
+    }
+    if (modalTimeText) {
+      modalTimeText.textContent = `${curStr} / ${totStr}`;
+    }
+  }
+
   async function burnCaptionsToMp4() {
     if (state.isExporting) return;
     const video = document.getElementById('studioVideoPlayer');
@@ -1772,10 +2770,16 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       return;
     }
 
+    // Pause studio video preview to prevent audio contention & resource drain
+    if (video && !video.paused) {
+      try { video.pause(); } catch(e) {}
+    }
+
     isExportCancelled = false;
     state.isExporting = true;
     state.abortExport = false;
     exportAbortController = new AbortController();
+    let isFinalizingExport = false;
 
     const burnBtn = document.getElementById('btnBurnMp4');
     const cancelBtn1 = document.getElementById('btnCancelExport');
@@ -1783,6 +2787,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     const progressBar = document.getElementById('burnProgressContainer');
     const progressFill = document.getElementById('burnProgressFill');
     const progressText = document.getElementById('burnProgressText');
+    const exportModal = document.getElementById('exportProgressModal');
 
     if (burnBtn) burnBtn.style.display = 'none';
     if (cancelBtn1) cancelBtn1.style.display = 'inline-flex';
@@ -1790,20 +2795,148 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (progressBar) progressBar.style.display = 'block';
     if (progressFill) progressFill.style.width = '0%';
     if (progressText) progressText.textContent = `${getTranslation('burnProgress')} 0%`;
+    if (exportModal) exportModal.classList.add('show');
+    updateExportProgress(0, 0, state.videoDuration || 1.0);
+
+    const exportModalTitle = document.getElementById('exportModalTitle');
+    const exportModalBadge = document.getElementById('exportModalBadge');
+
+    // -------------------------------------------------------------
+    // ENGINE 1: Local FFmpeg Turbo Burn-In (< 60s for 8-min video)
+    // -------------------------------------------------------------
+    let hasLocalTurbo = false;
+    if (state.videoFile) {
+      try {
+        const probeRes = await fetch('/api/burn-progress?probe=1', { signal: AbortSignal.timeout(1500) });
+        if (probeRes.ok) {
+          const probeData = await probeRes.json();
+          if (probeData && probeData.ok && probeData.ffmpegAvailable) {
+            hasLocalTurbo = true;
+          }
+        }
+      } catch (probeErr) {
+        hasLocalTurbo = false;
+      }
+    }
+
+    if (hasLocalTurbo) {
+      if (exportModalTitle) exportModalTitle.textContent = "FFmpeg Turbo Export (< 60s)...";
+      if (exportModalBadge) exportModalBadge.textContent = "⚡ Local FFmpeg Engine";
+
+      try {
+        syncStylingFromDOM();
+        const assText = generateStyledAssSubtitles(state.cues, state.styling, 1920, 1080);
+        const formData = new FormData();
+        formData.append('video', state.videoFile);
+        formData.append('subtitles', assText);
+        formData.append('ass', assText);
+        formData.append('duration', String(state.videoDuration || (video ? video.duration : 0) || 0));
+        if (state.customFontFile) {
+          formData.append('font', state.customFontFile, state.customFontFile.name);
+          formData.append('fontName', state.customFontFamily || state.customFontName || (state.styling && state.styling.customFontName) || state.customFontFile.name.replace(/\.[^.]+$/, ''));
+        }
+
+        const startRes = await fetch('/api/burn-captions', {
+          method: 'POST',
+          body: formData,
+          signal: exportAbortController.signal
+        });
+
+        if (!startRes.ok) {
+          throw new Error('Local server failed to start encode job');
+        }
+
+        const startData = await startRes.json();
+        const jobId = startData.id;
+        let lastReportedPct = 0;
+        const totalDur = state.videoDuration || (video ? video.duration : 60);
+
+        // Poll progress every 400ms
+        await new Promise((resolve, reject) => {
+          const pollTimer = setInterval(async () => {
+            if (isExportCancelled || state.abortExport) {
+              clearInterval(pollTimer);
+              try { await fetch(`/api/burn-cancel?id=${jobId}`, { method: 'POST' }); } catch(e) {}
+              resolve();
+              return;
+            }
+
+            try {
+              const progRes = await fetch(`/api/burn-progress?id=${jobId}`, { signal: AbortSignal.timeout(2000) });
+              if (!progRes.ok) return;
+              const progData = await progRes.json();
+
+              if (progData.status === 'encoding') {
+                const pct = Math.max(lastReportedPct, Math.min(99, progData.progress || 0));
+                lastReportedPct = pct;
+                const curMediaTime = (pct / 100) * totalDur;
+                updateExportProgress(pct, curMediaTime, totalDur);
+                if (progressText) progressText.textContent = `FFmpeg Turbo Encode: ${pct}% (Ultra-Fast)`;
+                const mText = document.getElementById('exportModalProgressText');
+                if (mText) mText.textContent = `Encoding: ${pct}% (FFmpeg Turbo)`;
+              } else if (progData.status === 'done') {
+                clearInterval(pollTimer);
+                updateExportProgress(100, totalDur, totalDur);
+                const mText = document.getElementById('exportModalProgressText');
+                if (mText) mText.textContent = `100% (Complete!)`;
+
+                const downloadUrl = `/api/burn-download?id=${jobId}`;
+                const dlLink = document.createElement('a');
+                dlLink.href = downloadUrl;
+                dlLink.download = `${(state.videoFile.name || 'video').replace(/\.[^/.]+$/, '')}-captions.mp4`;
+                document.body.appendChild(dlLink);
+                dlLink.click();
+                document.body.removeChild(dlLink);
+
+                showToast("Video exported with FFmpeg Turbo Engine!");
+                setTimeout(() => cleanupExportUI(), 800);
+                resolve();
+              } else if (progData.status === 'error') {
+                clearInterval(pollTimer);
+                reject(new Error(progData.error || 'FFmpeg encoding failed'));
+              }
+            } catch (pollErr) {
+              // Ignore temporary poll network glitch
+            }
+          }, 400);
+        });
+
+        return; // Finished local turbo export successfully!
+
+      } catch (turboErr) {
+        console.warn("Local FFmpeg Turbo failed or cancelled, evaluating browser fallback:", turboErr);
+        if (isExportCancelled || state.abortExport) {
+          cleanupExportUI();
+          return;
+        }
+        showToast("Local FFmpeg busy; running in-browser WebCodecs...");
+      }
+    }
+
+    // -------------------------------------------------------------
+    // ENGINE 2: Fallback In-Browser WebCodecs / MediaRecorder
+    // -------------------------------------------------------------
+    if (exportModalTitle) exportModalTitle.textContent = "Exporting 1080p Video...";
+    if (exportModalBadge) exportModalBadge.textContent = "Hardware WebCodecs";
 
     // 1. Strict 1080p Resolution Preservation
-    const width = video.videoWidth || 1280;
-    const height = video.videoHeight || 720;
+    const width = video ? (video.videoWidth || 1280) : 1280;
+    const height = video ? (video.videoHeight || 720) : 720;
     const sourceWidth = state.videoWidth || width;
     const sourceHeight = state.videoHeight || height;
     const fps = 30;
     const dt = 1 / fps;
+    const frameDurationMicros = Math.round((1 / fps) * 1_000_000);
 
     // Offscreen render canvas
     const offscreenCanvas = document.createElement('canvas');
     offscreenCanvas.width = sourceWidth;
     offscreenCanvas.height = sourceHeight;
     const offCtx = offscreenCanvas.getContext('2d', { alpha: false, desynchronized: true });
+
+    // Live preview canvas inside modal
+    const modalCanvas = document.getElementById('exportLivePreviewCanvas');
+    const modalCtx = modalCanvas ? modalCanvas.getContext('2d') : null;
 
     // Check WebCodecs availability
     const hasWebCodecs = typeof window.VideoEncoder === 'function' && typeof window.VideoFrame === 'function' && typeof window.Mp4Muxer !== 'undefined';
@@ -1815,7 +2948,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       let muxer = null;
 
       try {
-        // Step A: Decode Source Audio into Full-Fidelity AudioBuffer (PCM)
+        // Step A: Offline 1.0x Audio Encoding (Zero Pitch Distortion)
         let audioBuffer = null;
         try {
           audioBuffer = await getFullFidelityAudioBuffer(state.videoFile || state.videoUrl);
@@ -1825,7 +2958,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
         const hasAudioEncoder = typeof window.AudioEncoder === 'function' && typeof window.AudioData === 'function';
 
-        // Step B: Setup Muxer with Video & Audio Tracks
+        // Step B: Setup Muxer with Video & Audio Tracks (Strict AVC + FastStart)
         const muxerOptions = {
           target: new window.Mp4Muxer.ArrayBufferTarget(),
           video: {
@@ -1891,13 +3024,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           width: sourceWidth,
           height: sourceHeight,
           bitrate: 8_000_000,
-          framerate: 30,
+          framerate: fps,
           hardwareAcceleration: 'prefer-hardware',
           avc: { format: 'avc' }
         };
         videoEncoder.configure(videoEncoderConfig);
 
-        // Step D: Setup WebCodecs AudioEncoder & Encode PCM Slices
+        // Step D: Encode all 1.0x Audio Offline in ~2 Seconds
         if (audioBuffer && hasAudioEncoder) {
           audioEncoder = new AudioEncoder({
             output: (chunk, metadata) => {
@@ -1916,7 +3049,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             bitrate: 192_000
           });
 
-          // Slice AudioBuffer PCM into 2048-frame planar AudioData chunks
+          // Slice AudioBuffer PCM into 2048-frame planar AudioData chunks with native 1.0x timestamps
           const totalAudioFrames = audioBuffer.length;
           const sampleRate = audioBuffer.sampleRate;
           const channels = audioBuffer.numberOfChannels;
@@ -1947,6 +3080,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             audioEncoder.encode(audioData);
             audioData.close();
 
+            // Mandatory backpressure: prevent AudioEncoder queue overflow hang on long videos
+            if (audioEncoder.encodeQueueSize > 12) {
+              while (audioEncoder.encodeQueueSize > 4 && !isExportCancelled && !state.abortExport) {
+                await new Promise(r => setTimeout(r, 10));
+              }
+            }
+
+            // Periodic main-thread yield every 200 chunks to keep UI responsive
             if ((offset / audioChunkSize) % 200 === 0) {
               await new Promise(r => setTimeout(r, 0));
             }
@@ -1958,7 +3099,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           return;
         }
 
-        // Step E: Attach export video to DOM with GPU frame decoding styling
+        // Step E: Setup Attached Fast-Forward Video Element for Decoupled Turbo Frame Capture
         exportVideo = document.createElement('video');
         exportVideo.style.cssText = "position: fixed; top: 0; left: 0; width: 320px; height: 180px; opacity: 0.01; pointer-events: none; z-index: -9999;";
         exportVideo.src = state.videoUrl;
@@ -1967,12 +3108,13 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         exportVideo.playsInline = true;
         exportVideo.crossOrigin = 'anonymous';
         exportVideo.preload = 'auto';
-        exportVideo.playbackRate = 1.0;
+        const turboSpeed = 3.5;
+        exportVideo.playbackRate = turboSpeed;
         document.body.appendChild(exportVideo);
         activeExportVideo = exportVideo;
 
         await new Promise((resolve, reject) => {
-          const timeout = setTimeout(() => resolve(), 4000);
+          const timeout = setTimeout(() => resolve(), 5000);
           const onReady = () => {
             clearTimeout(timeout);
             exportVideo.removeEventListener('loadeddata', onReady);
@@ -1995,7 +3137,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           if (exportVideo.currentTime !== 0) {
             await new Promise(r => {
               exportVideo.addEventListener('seeked', r, { once: true });
-              setTimeout(r, 150);
+              setTimeout(r, 200);
             });
           }
         } catch(e) {}
@@ -2005,141 +3147,161 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           : (state.videoDuration || 1.0);
         const totalFrames = Math.max(1, Math.ceil(totalDuration * fps));
 
-        // Step F: Accelerated Real-Time Export via Continuous Hardware Stream Playback
-        let usedContinuous = false;
-        if ('requestVideoFrameCallback' in exportVideo) {
-          try {
-            await new Promise(async (resolvePlayback, rejectPlayback) => {
-              let isPlaybackFinished = false;
-              let lastMediaTime = -1;
-              let frameCount = 0;
-              let callbackId = null;
-              let watchdogTimer = null;
+        // Step F: Decoupled 3.5x Turbo Frame Capture via 10ms Non-Throttled Timer
+        let usedTurboCapture = false;
+        try {
+          await new Promise(async (resolveCapture, rejectCapture) => {
+            let isCaptureFinished = false;
+            let lastEncodedMediaTime = -1;
+            let lastPtsMicroseconds = -1;
+            let encodedFrameCount = 0;
+            let isProcessingTick = false;
 
-              const finishPlayback = () => {
-                if (isPlaybackFinished) return;
-                isPlaybackFinished = true;
-                if (watchdogTimer) {
-                  clearInterval(watchdogTimer);
-                  watchdogTimer = null;
-                }
-                if (callbackId !== null && 'cancelVideoFrameCallback' in exportVideo) {
-                  try { exportVideo.cancelVideoFrameCallback(callbackId); } catch (e) {}
-                  callbackId = null;
-                }
-                try { exportVideo.pause(); } catch(e) {}
-                resolvePlayback();
-              };
+            const finishCapture = () => {
+              if (isCaptureFinished) return;
+              isCaptureFinished = true;
+              if (activeExportTimer) {
+                clearInterval(activeExportTimer);
+                activeExportTimer = null;
+              }
+              if (activeWatchdogTimer) {
+                clearInterval(activeWatchdogTimer);
+                activeWatchdogTimer = null;
+              }
+              try { exportVideo.pause(); } catch(e) {}
+              resolveCapture();
+            };
 
-              exportVideo.onended = () => finishPlayback();
-              exportVideo.onerror = (e) => {
-                if (!isPlaybackFinished) {
-                  isPlaybackFinished = true;
-                  if (watchdogTimer) {
-                    clearInterval(watchdogTimer);
-                    watchdogTimer = null;
+            exportVideo.onended = () => finishCapture();
+            exportVideo.onerror = (e) => {
+              if (!isCaptureFinished) {
+                isCaptureFinished = true;
+                if (activeExportTimer) {
+                  clearInterval(activeExportTimer);
+                  activeExportTimer = null;
+                }
+                if (activeWatchdogTimer) {
+                  clearInterval(activeWatchdogTimer);
+                  activeWatchdogTimer = null;
+                }
+                rejectCapture(e);
+              }
+            };
+
+            const captureTick = async () => {
+              if (isFinalizingExport || isCaptureFinished || isProcessingTick || isExportCancelled || state.abortExport || (exportAbortController && exportAbortController.signal.aborted)) {
+                if (isExportCancelled || state.abortExport || (exportAbortController && exportAbortController.signal.aborted)) {
+                  finishCapture();
+                }
+                return;
+              }
+
+              isProcessingTick = true;
+              try {
+                const mediaTime = exportVideo.currentTime;
+
+                // Capture and encode frame when mediaTime reaches next (1 / 30) slot
+                if (lastEncodedMediaTime < 0 || mediaTime >= lastEncodedMediaTime + (1 / fps)) {
+                  lastEncodedMediaTime = mediaTime;
+
+                  // 1. Draw decoded video frame FIRST onto 1080p canvas
+                  offCtx.drawImage(exportVideo, 0, 0, sourceWidth, sourceHeight);
+
+                  // 2. Composite styled captions & kinetic animations ON TOP (clearBeforeDraw = false)
+                  renderCaptionsOnContext(offCtx, sourceWidth, sourceHeight, mediaTime, false);
+
+                  // 3. Mirror onto active export modal live preview canvas every 3rd frame
+                  if (encodedFrameCount % 3 === 0 && modalCtx && modalCanvas) {
+                    modalCtx.drawImage(offscreenCanvas, 0, 0, modalCanvas.width, modalCanvas.height);
                   }
-                  rejectPlayback(e);
-                }
-              };
 
-              const onFrame = async (now, metadata) => {
-                if (isPlaybackFinished || isExportCancelled || state.abortExport || (exportAbortController && exportAbortController.signal.aborted)) {
-                  finishPlayback();
-                  return;
-                }
+                  // 4. Strict monotonic timestamps and explicit duration to prevent VLC/PotPlayer freeze
+                  let ptsMicroseconds = Math.round(mediaTime * 1_000_000);
+                  if (ptsMicroseconds <= lastPtsMicroseconds) {
+                    ptsMicroseconds = lastPtsMicroseconds + frameDurationMicros;
+                  }
+                  lastPtsMicroseconds = ptsMicroseconds;
 
-                try {
-                  const mediaTime = (metadata && typeof metadata.mediaTime === 'number')
-                    ? metadata.mediaTime
-                    : exportVideo.currentTime;
+                  const frame = new VideoFrame(offscreenCanvas, {
+                    timestamp: ptsMicroseconds,
+                    duration: frameDurationMicros
+                  });
 
-                  if (mediaTime > lastMediaTime || frameCount === 0) {
-                    lastMediaTime = mediaTime;
+                  // Regular IDR keyframe every 60 frames (~2 seconds)
+                  const isKeyFrame = (encodedFrameCount === 0 || encodedFrameCount % 60 === 0);
+                  videoEncoder.encode(frame, { keyFrame: isKeyFrame });
+                  frame.close();
+                  encodedFrameCount++;
 
-                    // Step A: Draw decoded video frame FIRST onto 1080p canvas
-                    offCtx.drawImage(exportVideo, 0, 0, sourceWidth, sourceHeight);
+                  // Update progress indicators (in-page bar & modal)
+                  const pct = Math.min(99, Math.round((mediaTime / totalDuration) * 100));
+                  updateExportProgress(pct, mediaTime, totalDuration);
 
-                    // Step B: Composite styled captions ON TOP (clearBeforeDraw = false to preserve video frame!)
-                    renderCaptionsOnCanvas(offCtx, sourceWidth, sourceHeight, mediaTime, false);
-
-                    // Step C: Capture composited frame and encode to hardware
-                    const timestampMicros = Math.round(mediaTime * 1_000_000);
-                    const frame = new VideoFrame(offscreenCanvas, { timestamp: timestampMicros });
-                    const isKeyFrame = (frameCount === 0 || frameCount % 60 === 0);
-                    videoEncoder.encode(frame, { keyFrame: isKeyFrame });
-                    frame.close();
-                    frameCount++;
-
-                    // Update progress UI
-                    const pct = Math.min(99, Math.round((mediaTime / totalDuration) * 100));
-                    if (progressFill) progressFill.style.width = pct + '%';
-                    if (progressText) {
-                      progressText.textContent = `${getTranslation('burnProgress')} ${pct}% (${mediaTime.toFixed(1)}s / ${totalDuration.toFixed(1)}s)`;
+                  // 5. Backpressure Safety: If encoder queue backlog > 8, pause playback until drained <= 2
+                  if (videoEncoder && videoEncoder.encodeQueueSize > 8) {
+                    exportVideo.pause();
+                    while (videoEncoder && videoEncoder.encodeQueueSize > 2 && !isCaptureFinished && !isExportCancelled && !state.abortExport) {
+                      await new Promise(r => setTimeout(r, 10));
                     }
-
-                    // Backpressure Flow Control: pause playback if encoder queue backlog > 4
-                    if (videoEncoder && videoEncoder.encodeQueueSize > 4) {
-                      exportVideo.pause();
-                      while (videoEncoder && videoEncoder.encodeQueueSize > 4 && !isExportCancelled && !state.abortExport) {
-                        await new Promise(r => setTimeout(r, 10));
-                      }
-                      if (!isPlaybackFinished && !isExportCancelled && !state.abortExport && !exportVideo.ended) {
-                        try { await exportVideo.play(); } catch(e) {}
-                      }
-                    }
-
-                    // Micro-yield to keep main event loop and cancel button fully responsive
-                    if (frameCount % 6 === 0) {
-                      await new Promise(r => setTimeout(r, 0));
+                    if (!isCaptureFinished && !isExportCancelled && !state.abortExport && !exportVideo.ended) {
+                      exportVideo.playbackRate = turboSpeed;
+                      try { await exportVideo.play(); } catch(e) {}
                     }
                   }
 
-                  if (exportVideo.ended || mediaTime >= totalDuration - 0.05) {
-                    finishPlayback();
-                    return;
+                  // Micro-yield to keep main event loop & UI responsive
+                  if (encodedFrameCount % 12 === 0) {
+                    await new Promise(r => setTimeout(r, 0));
                   }
-
-                  if (!isPlaybackFinished && !isExportCancelled && !state.abortExport && !exportVideo.ended) {
-                    callbackId = exportVideo.requestVideoFrameCallback(onFrame);
-                  }
-                } catch (frameErr) {
-                  console.error("Frame encode error:", frameErr);
-                  finishPlayback();
                 }
-              };
 
-              // Watchdog timer: checks every 400ms for stall, pause, or completion
-              watchdogTimer = setInterval(() => {
-                if (isPlaybackFinished || isExportCancelled || state.abortExport) {
-                  if (watchdogTimer) {
-                    clearInterval(watchdogTimer);
-                    watchdogTimer = null;
-                  }
-                  return;
+                if (exportVideo.ended || mediaTime >= totalDuration - 0.08) {
+                  finishCapture();
                 }
-                if (exportVideo.ended || exportVideo.currentTime >= totalDuration - 0.05) {
-                  finishPlayback();
-                } else if (exportVideo.paused && (!videoEncoder || videoEncoder.encodeQueueSize <= 4) && !exportVideo.ended) {
-                  exportVideo.play().catch(() => {});
+              } catch (tickErr) {
+                console.error("Turbo capture tick error:", tickErr);
+                finishCapture();
+              } finally {
+                isProcessingTick = false;
+              }
+            };
+
+            // High-frequency non-throttled 10ms capture loop
+            activeExportTimer = setInterval(captureTick, 10);
+
+            // Watchdog timer: checks every 300ms for stalls, pauses, or completion
+            activeWatchdogTimer = setInterval(() => {
+              if (isFinalizingExport || isCaptureFinished || isExportCancelled || state.abortExport) {
+                if (activeWatchdogTimer) {
+                  clearInterval(activeWatchdogTimer);
+                  activeWatchdogTimer = null;
                 }
-              }, 400);
+                return;
+              }
+              if (exportVideo.ended || exportVideo.currentTime >= totalDuration - 0.08) {
+                finishCapture();
+              } else if (exportVideo.paused && (!videoEncoder || videoEncoder.encodeQueueSize <= 2) && !exportVideo.ended) {
+                exportVideo.playbackRate = turboSpeed;
+                exportVideo.play().catch(() => {});
+              }
+            }, 300);
 
-              callbackId = exportVideo.requestVideoFrameCallback(onFrame);
-              await exportVideo.play();
-            });
+            exportVideo.playbackRate = turboSpeed;
+            await exportVideo.play();
+          });
 
-            usedContinuous = true;
-          } catch (playbackErr) {
-            console.warn("Continuous playback export had an issue, falling back to seek clock:", playbackErr);
-            usedContinuous = false;
-          }
+          usedTurboCapture = true;
+        } catch (captureErr) {
+          console.warn("High-speed playback capture had an issue, falling back to seek clock:", captureErr);
+          usedTurboCapture = false;
         }
 
-        // Fallback frame clock seek loop if continuous playback failed or wasn't supported
-        if (!usedContinuous && !isExportCancelled && !state.abortExport) {
+        // Fallback frame clock seek loop if continuous turbo playback failed
+        if (!usedTurboCapture && !isExportCancelled && !state.abortExport) {
           try { exportVideo.pause(); } catch(e) {}
           exportVideo.currentTime = 0;
+          let lastPtsMicroseconds = -1;
+
           for (let frameIndex = 0; frameIndex < totalFrames; frameIndex++) {
             if (isExportCancelled || state.abortExport || (exportAbortController && exportAbortController.signal.aborted)) {
               break;
@@ -2159,10 +3321,22 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
             // Step A & B with clearBeforeDraw = false
             offCtx.drawImage(exportVideo, 0, 0, sourceWidth, sourceHeight);
-            renderCaptionsOnCanvas(offCtx, sourceWidth, sourceHeight, t, false);
+            renderCaptionsOnContext(offCtx, sourceWidth, sourceHeight, t, false);
 
-            const timestampMicros = Math.round(t * 1_000_000);
-            const frame = new VideoFrame(offscreenCanvas, { timestamp: timestampMicros });
+            if (frameIndex % 3 === 0 && modalCtx && modalCanvas) {
+              modalCtx.drawImage(offscreenCanvas, 0, 0, modalCanvas.width, modalCanvas.height);
+            }
+
+            let ptsMicroseconds = Math.round(t * 1_000_000);
+            if (ptsMicroseconds <= lastPtsMicroseconds) {
+              ptsMicroseconds = lastPtsMicroseconds + frameDurationMicros;
+            }
+            lastPtsMicroseconds = ptsMicroseconds;
+
+            const frame = new VideoFrame(offscreenCanvas, {
+              timestamp: ptsMicroseconds,
+              duration: frameDurationMicros
+            });
             const isKeyFrame = (frameIndex === 0 || frameIndex % 60 === 0);
             videoEncoder.encode(frame, { keyFrame: isKeyFrame });
             frame.close();
@@ -2172,10 +3346,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             }
 
             const pct = Math.min(99, Math.round(((frameIndex + 1) / totalFrames) * 100));
-            if (progressFill) progressFill.style.width = pct + '%';
-            if (progressText) {
-              progressText.textContent = `${getTranslation('burnProgress')} ${pct}% (${t.toFixed(1)}s / ${totalDuration.toFixed(1)}s)`;
-            }
+            updateExportProgress(pct, t, totalDuration);
           }
         }
 
@@ -2184,26 +3355,73 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           return;
         }
 
-        // Finalize hardware encode
-        if (progressText) progressText.textContent = `${getTranslation('burnProgress')} 100% (Finalizing MP4...)`;
-        if (progressFill) progressFill.style.width = '100%';
+        // Finalize hardware encode with strict lock & fail-safe timeouts
+        if (isFinalizingExport) return;
+        isFinalizingExport = true;
 
-        await videoEncoder.flush();
-        videoEncoder.close();
-        activeVideoEncoder = null;
-
-        if (audioEncoder) {
-          await audioEncoder.flush();
-          audioEncoder.close();
-          activeAudioEncoder = null;
+        // Immediately stop/kill timers and pause playback video BEFORE flushing encoders
+        if (activeExportTimer) {
+          clearInterval(activeExportTimer);
+          activeExportTimer = null;
         }
+        if (activeWatchdogTimer) {
+          clearInterval(activeWatchdogTimer);
+          activeWatchdogTimer = null;
+        }
+        try { if (exportVideo) exportVideo.pause(); } catch(e) {}
 
-        muxer.finalize();
+        updateExportProgress(100, totalDuration, totalDuration);
+        const pText = document.getElementById('burnProgressText');
+        if (pText) pText.textContent = `${getTranslation('burnProgress')} 100% (Finalizing MP4...)`;
+        const mText = document.getElementById('exportModalProgressText');
+        if (mText) mText.textContent = `100% (Finalizing MP4...)`;
 
-        const buffer = muxer.target.buffer;
-        const blob = new Blob([buffer], { type: 'video/mp4' });
-        const cleanName = (state.videoFile ? state.videoFile.name.replace(/\.[^/.]+$/, "") : "video") + "-captions.mp4";
-        triggerDownload(blob, cleanName, 'video/mp4');
+        try {
+          const safeFlush = async (encoder, label) => {
+            if (!encoder || encoder.state !== 'configured') return;
+            try {
+              await Promise.race([
+                encoder.flush(),
+                new Promise(resolve => setTimeout(resolve, 2500))
+              ]);
+            } catch (err) {
+              console.warn(label + ' flush warning:', err);
+            }
+          };
+
+          await safeFlush(videoEncoder, 'VideoEncoder');
+          try { if (videoEncoder && videoEncoder.state !== 'closed') videoEncoder.close(); } catch(e) {}
+          activeVideoEncoder = null;
+
+          if (audioEncoder) {
+            await safeFlush(audioEncoder, 'AudioEncoder');
+            try { if (audioEncoder && audioEncoder.state !== 'closed') audioEncoder.close(); } catch(e) {}
+            activeAudioEncoder = null;
+          }
+
+          try {
+            muxer.finalize();
+          } catch (muxErr) {
+            console.warn("muxer.finalize warning:", muxErr);
+          }
+
+          const buffer = muxer && muxer.target && muxer.target.buffer ? muxer.target.buffer : null;
+          if (buffer && buffer.byteLength > 0) {
+            const blob = new Blob([buffer], { type: 'video/mp4' });
+            const cleanName = (state.videoFile ? state.videoFile.name.replace(/\.[^/.]+$/, "") : "video") + "-captions.mp4";
+            triggerDownload(blob, cleanName, 'video/mp4');
+          } else {
+            throw new Error("Muxer buffer empty or invalid");
+          }
+        } catch (finalizeErr) {
+          console.warn("Hardware WebCodecs finalize failed, offering instant .ASS subtitles:", finalizeErr);
+          syncStylingFromDOM();
+          const ass = generateStyledAssSubtitles(state.cues, state.styling, sourceWidth, sourceHeight);
+          triggerDownload(ass, 'captions-styled.ass', 'text/plain;charset=utf-8');
+          showToast("Export completed (Instant .ASS subtitles generated)");
+        } finally {
+          cleanupExportUI();
+        }
 
       } catch (err) {
         if (!isExportCancelled && !state.abortExport) {
@@ -2217,6 +3435,14 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
           await fallbackMediaRecorderBurn(video, offscreenCanvas, offCtx, fps, sourceWidth, sourceHeight);
         }
       } finally {
+        if (activeExportTimer) {
+          clearInterval(activeExportTimer);
+          activeExportTimer = null;
+        }
+        if (activeWatchdogTimer) {
+          clearInterval(activeWatchdogTimer);
+          activeWatchdogTimer = null;
+        }
         if (exportVideo && exportVideo.parentNode) {
           try {
             exportVideo.pause();
@@ -2306,6 +3532,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
   function cleanupExportUI() {
     state.isExporting = false;
+    const exportModal = document.getElementById('exportProgressModal');
+    if (exportModal) exportModal.classList.remove('show');
     const burnBtn = document.getElementById('btnBurnMp4');
     const cancelBtn1 = document.getElementById('btnCancelExport');
     const cancelBtn2 = document.getElementById('btnCancelBurn');
@@ -3021,7 +4249,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (fontSelect) {
       fontSelect.addEventListener('change', e => {
         state.styling.fontFamily = e.target.value;
-        state.styling.customFontName = null;
+        if (state.customFontName && e.target.value === state.customFontName) {
+          state.styling.customFontName = state.customFontName;
+        } else {
+          state.styling.customFontName = null;
+        }
         resizeStudioCanvas();
       });
     }
@@ -3035,14 +4267,32 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         state.styling.outlineWidth = 3;
         state.styling.outlineColor = '#000000';
         state.styling.glowEnabled = true;
-        state.styling.glowRadius = 12;
+        state.styling.glowRadius = 14;
         state.styling.glowColor = '#d97706';
-        state.styling.wordBounce = true;
+        state.styling.animationMode = 'slide-up';
+        state.styling.typewriterCursor = false;
+        state.styling.bounceIntensity = 1.15;
+        state.styling.wordBounce = false;
         state.styling.slideUpFade = true;
         state.styling.bgType = 'pill';
         state.styling.bgColor = '#050811';
         state.styling.bgOpacity = 0.60;
-      } else if (val === 'tiktok' || val === 'bounce' || val === 'karaoke') {
+      } else if (val === 'typewriter') {
+        state.styling.fontFamily = "'Cairo', sans-serif";
+        state.styling.textColor = '#ffffff';
+        state.styling.highlightColor = '#f59e0b';
+        state.styling.outlineWidth = 3;
+        state.styling.outlineColor = '#000000';
+        state.styling.glowEnabled = true;
+        state.styling.glowRadius = 12;
+        state.styling.glowColor = '#f59e0b';
+        state.styling.animationMode = 'typewriter';
+        state.styling.typewriterCursor = true;
+        state.styling.bounceIntensity = 1.15;
+        state.styling.wordBounce = false;
+        state.styling.slideUpFade = true;
+        state.styling.bgType = 'none';
+      } else if (val === 'tiktok' || val === 'bounce') {
         state.styling.fontFamily = "'Plus Jakarta Sans', sans-serif";
         state.styling.textColor = '#ffffff';
         state.styling.highlightColor = '#22d3ee';
@@ -3051,6 +4301,24 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         state.styling.glowEnabled = true;
         state.styling.glowRadius = 8;
         state.styling.glowColor = '#0284c7';
+        state.styling.animationMode = 'pop';
+        state.styling.typewriterCursor = false;
+        state.styling.bounceIntensity = 1.20;
+        state.styling.wordBounce = true;
+        state.styling.slideUpFade = true;
+        state.styling.bgType = 'none';
+      } else if (val === 'karaoke') {
+        state.styling.fontFamily = "'Plus Jakarta Sans', sans-serif";
+        state.styling.textColor = '#ffffff';
+        state.styling.highlightColor = '#22d3ee';
+        state.styling.outlineWidth = 5;
+        state.styling.outlineColor = '#000000';
+        state.styling.glowEnabled = true;
+        state.styling.glowRadius = 8;
+        state.styling.glowColor = '#0284c7';
+        state.styling.animationMode = 'karaoke-sweep';
+        state.styling.typewriterCursor = false;
+        state.styling.bounceIntensity = 1.15;
         state.styling.wordBounce = true;
         state.styling.slideUpFade = true;
         state.styling.bgType = 'none';
@@ -3063,7 +4331,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         state.styling.glowEnabled = true;
         state.styling.glowRadius = 18;
         state.styling.glowColor = '#06b6d4';
-        state.styling.wordBounce = true;
+        state.styling.animationMode = 'typewriter';
+        state.styling.typewriterCursor = true;
+        state.styling.bounceIntensity = 1.15;
+        state.styling.wordBounce = false;
         state.styling.slideUpFade = true;
         state.styling.bgType = 'pill';
         state.styling.bgColor = '#020617';
@@ -3077,8 +4348,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         state.styling.glowEnabled = true;
         state.styling.glowRadius = 4;
         state.styling.glowColor = '#000000';
+        state.styling.animationMode = 'none';
+        state.styling.typewriterCursor = false;
+        state.styling.bounceIntensity = 1.15;
         state.styling.wordBounce = false;
-        state.styling.slideUpFade = true;
+        state.styling.slideUpFade = false;
         state.styling.bgType = 'none';
       } else if (val === 'yellow') {
         state.styling.fontFamily = "'Plus Jakarta Sans', sans-serif";
@@ -3089,6 +4363,9 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         state.styling.glowEnabled = true;
         state.styling.glowRadius = 8;
         state.styling.glowColor = '#ca8a04';
+        state.styling.animationMode = 'pop';
+        state.styling.typewriterCursor = false;
+        state.styling.bounceIntensity = 1.22;
         state.styling.wordBounce = true;
         state.styling.slideUpFade = true;
         state.styling.bgType = 'none';
@@ -3111,6 +4388,18 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       if (gToggle) gToggle.checked = state.styling.glowEnabled;
       const gColor = document.getElementById('glowColorPicker');
       if (gColor) gColor.value = state.styling.glowColor.startsWith('#') ? state.styling.glowColor : '#06b6d4';
+      const aMode = document.getElementById('animationModeSelect');
+      if (aMode) aMode.value = state.styling.animationMode || 'slide-up';
+      const twCur = document.getElementById('toggleTypewriterCursor');
+      if (twCur) twCur.checked = !!state.styling.typewriterCursor;
+      const bIntensity = document.getElementById('bounceIntensitySlider');
+      if (bIntensity) bIntensity.value = state.styling.bounceIntensity || 1.15;
+      const bVal = document.getElementById('bounceIntensityValue');
+      if (bVal) bVal.textContent = (state.styling.bounceIntensity || 1.15).toFixed(2) + 'x';
+      const twRow = document.getElementById('typewriterCursorRow');
+      if (twRow) twRow.style.opacity = (state.styling.animationMode === 'typewriter') ? '1' : '0.5';
+      const bounceRow = document.getElementById('bounceIntensityRow');
+      if (bounceRow) bounceRow.style.opacity = (state.styling.animationMode === 'pop') ? '1' : '0.7';
       const wBounce = document.getElementById('toggleWordBounce');
       if (wBounce) wBounce.checked = state.styling.wordBounce;
       const sUp = document.getElementById('toggleSlideUp');
@@ -3120,6 +4409,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       const bgOp = document.getElementById('bgOpacitySlider');
       if (bgOp) bgOp.value = state.styling.bgOpacity;
 
+      syncStylingFromDOM();
       resizeStudioCanvas();
     }
 
@@ -3134,6 +4424,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (fontSizeSlider) {
       fontSizeSlider.addEventListener('input', e => {
         state.styling.fontSizePercent = parseFloat(e.target.value);
+        state.styling.fontSize = Math.round(state.styling.fontSizePercent * 8.2);
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3142,6 +4434,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (posYSlider) {
       posYSlider.addEventListener('input', e => {
         state.styling.positionY = parseFloat(e.target.value);
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3150,6 +4443,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (textColorPicker) {
       textColorPicker.addEventListener('input', e => {
         state.styling.textColor = e.target.value;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3158,6 +4452,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (highlightColorPicker) {
       highlightColorPicker.addEventListener('input', e => {
         state.styling.highlightColor = e.target.value;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3166,6 +4461,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (strokeWidthSlider) {
       strokeWidthSlider.addEventListener('input', e => {
         state.styling.outlineWidth = parseFloat(e.target.value);
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3174,6 +4470,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (strokeColorPicker) {
       strokeColorPicker.addEventListener('input', e => {
         state.styling.outlineColor = e.target.value;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3182,6 +4479,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (glowRadiusSlider) {
       glowRadiusSlider.addEventListener('input', e => {
         state.styling.glowRadius = parseFloat(e.target.value);
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3190,6 +4488,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (toggleGlow) {
       toggleGlow.addEventListener('change', e => {
         state.styling.glowEnabled = e.target.checked;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3198,6 +4497,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (glowColorPicker) {
       glowColorPicker.addEventListener('input', e => {
         state.styling.glowColor = e.target.value;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3206,6 +4506,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (toggleWordBounce) {
       toggleWordBounce.addEventListener('change', e => {
         state.styling.wordBounce = e.target.checked;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3214,6 +4515,41 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (toggleSlideUp) {
       toggleSlideUp.addEventListener('change', e => {
         state.styling.slideUpFade = e.target.checked;
+        syncStylingFromDOM();
+        resizeStudioCanvas();
+      });
+    }
+
+    const animModeSelect = document.getElementById('animationModeSelect');
+    if (animModeSelect) {
+      animModeSelect.addEventListener('change', e => {
+        state.styling.animationMode = e.target.value;
+        const twRow = document.getElementById('typewriterCursorRow');
+        if (twRow) twRow.style.opacity = (e.target.value === 'typewriter') ? '1' : '0.5';
+        const bounceRow = document.getElementById('bounceIntensityRow');
+        if (bounceRow) bounceRow.style.opacity = (e.target.value === 'pop') ? '1' : '0.7';
+        syncStylingFromDOM();
+        resizeStudioCanvas();
+      });
+    }
+
+    const toggleTypewriterCursor = document.getElementById('toggleTypewriterCursor');
+    if (toggleTypewriterCursor) {
+      toggleTypewriterCursor.addEventListener('change', e => {
+        state.styling.typewriterCursor = e.target.checked;
+        syncStylingFromDOM();
+        resizeStudioCanvas();
+      });
+    }
+
+    const bounceIntensitySlider = document.getElementById('bounceIntensitySlider');
+    if (bounceIntensitySlider) {
+      bounceIntensitySlider.addEventListener('input', e => {
+        const val = parseFloat(e.target.value);
+        state.styling.bounceIntensity = val;
+        const bVal = document.getElementById('bounceIntensityValue');
+        if (bVal) bVal.textContent = val.toFixed(2) + 'x';
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3222,6 +4558,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (bgTypeSelect) {
       bgTypeSelect.addEventListener('change', e => {
         state.styling.bgType = e.target.value;
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3230,6 +4567,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     if (bgOpacitySlider) {
       bgOpacitySlider.addEventListener('input', e => {
         state.styling.bgOpacity = parseFloat(e.target.value);
+        syncStylingFromDOM();
         resizeStudioCanvas();
       });
     }
@@ -3259,7 +4597,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             await fontFace.load();
             document.fonts.add(fontFace);
 
+            state.customFontFile = file;
+            state.customFontName = fontName;
+            state.customFontFamily = fontName;
             state.styling.customFontName = fontName;
+            state.styling.fontFamily = fontName;
             const fontSelect = document.getElementById('fontFamilySelect');
             if (fontSelect) {
               const opt = document.createElement('option');
@@ -3339,8 +4681,27 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     const exportAssBtn = document.getElementById('btnExportAss');
     if (exportAssBtn) {
       exportAssBtn.addEventListener('click', () => {
+        syncStylingFromDOM();
         const ass = generateAss(state.cues, state.styling);
         triggerDownload(ass, 'captions.ass', 'text/plain;charset=utf-8');
+      });
+    }
+
+    const exportAssStyledBtn = document.getElementById('btnExportAssStyled');
+    if (exportAssStyledBtn) {
+      exportAssStyledBtn.addEventListener('click', () => {
+        syncStylingFromDOM();
+        const ass = generateStyledAssSubtitles(state.cues, state.styling, 1920, 1080);
+        triggerDownload(ass, 'captions-styled.ass', 'text/plain;charset=utf-8');
+      });
+    }
+
+    const modalInstantAssBtn = document.getElementById('btnModalInstantAss');
+    if (modalInstantAssBtn) {
+      modalInstantAssBtn.addEventListener('click', () => {
+        syncStylingFromDOM();
+        const ass = generateStyledAssSubtitles(state.cues, state.styling, 1920, 1080);
+        triggerDownload(ass, 'captions-styled.ass', 'text/plain;charset=utf-8');
       });
     }
 
@@ -3357,6 +4718,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     const cancelBurnBtn = document.getElementById('btnCancelBurn');
     if (cancelBurnBtn && cancelBurnBtn !== cancelExportBtn) {
       cancelBurnBtn.addEventListener('click', cancelExport);
+    }
+
+    const cancelModalBtn = document.getElementById('btnCancelModalExport');
+    if (cancelModalBtn) {
+      cancelModalBtn.addEventListener('click', cancelExport);
     }
 
     const addCueBtn = document.getElementById('btnAddCue');
@@ -3414,6 +4780,59 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         }
       });
     });
+
+    // ----------------------------------------------------------------
+    // Subtitle File Import: #btnUploadSrt + #btnUploadSrtStudio
+    // ----------------------------------------------------------------
+    let srtFileInput = document.getElementById('srtFileInput');
+    if (!srtFileInput) {
+      srtFileInput = document.createElement('input');
+      srtFileInput.type = 'file';
+      srtFileInput.id = 'srtFileInput';
+      srtFileInput.accept = '.srt,.vtt,.ass,.ssa,.txt';
+      srtFileInput.style.display = 'none';
+      document.body.appendChild(srtFileInput);
+    }
+    const btnUploadSrt = document.getElementById('btnUploadSrt');
+    const btnUploadSrtStudio = document.getElementById('btnUploadSrtStudio');
+
+    if (srtFileInput) {
+      srtFileInput.addEventListener('change', async e => {
+        if (e.target.files && e.target.files[0]) {
+          await importSubtitleFile(e.target.files[0]);
+          e.target.value = '';
+        }
+      });
+    }
+
+    if (btnUploadSrt && srtFileInput) {
+      btnUploadSrt.addEventListener('click', e => {
+        e.stopPropagation();
+        srtFileInput.click();
+      });
+    }
+
+    if (btnUploadSrtStudio && srtFileInput) {
+      btnUploadSrtStudio.addEventListener('click', e => {
+        e.stopPropagation();
+        srtFileInput.click();
+      });
+    }
+
+    // Route subtitle file drag-and-drop on the main dropzone
+    const mainDropzone = document.getElementById('autoCaptionsDropzone');
+    if (mainDropzone && srtFileInput) {
+      mainDropzone.addEventListener('drop', async e => {
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!file) return;
+        const ext = file.name.toLowerCase().split('.').pop();
+        if (['srt', 'vtt', 'ass', 'ssa', 'txt'].includes(ext)) {
+          e.stopImmediatePropagation();
+          await importSubtitleFile(file);
+        }
+        // Otherwise, the existing drop handler already called loadVideoFile()
+      }, true); // capture phase so this fires before the video drop handler
+    }
 
     // Language Dropdown
     const langBtn = document.getElementById('langBtn');

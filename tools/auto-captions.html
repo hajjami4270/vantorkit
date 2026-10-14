@@ -607,6 +607,36 @@
       gap: 1rem;
     }
 
+    /* Animation & Motion FX Panel */
+    .motion-fx-panel {
+      background: rgba(2, 6, 23, 0.65);
+      border: 1px solid rgba(6, 182, 212, 0.28);
+      border-radius: 12px;
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+    .motion-fx-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: .6rem;
+    }
+    .motion-title {
+      font-size: .92rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .motion-title svg {
+      color: var(--accent);
+    }
+
     /* Color picker button */
     input[type="color"] {
       -webkit-appearance: none;
@@ -973,6 +1003,87 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Export Progress Modal (Dedicated Active Preview to Prevent Browser Throttling) */
+    .export-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 1.5rem;
+    }
+    .export-modal-backdrop.show {
+      display: flex;
+      animation: modalFadeIn 0.25s ease forwards;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .export-modal-card {
+      background: #0f172a;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(6, 182, 212, 0.25);
+      border-radius: 20px;
+      max-width: 520px;
+      width: 100%;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .export-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .export-modal-preview-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .export-modal-preview-wrap canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .export-live-indicator {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+      z-index: 10;
+    }
+    html[dir="rtl"] .export-live-indicator {
+      left: auto;
+      right: 10px;
+    }
+
     /* RTL specific */
     html[dir="rtl"] { text-align: right; }
     html[dir="rtl"] .cue-time-badges { direction: ltr; }
@@ -1056,7 +1167,16 @@
       <!-- Step 2: Transcript & Model Card -->
       <div class="step-grid">
         <div class="transcript-box">
-          <div class="box-title" data-i18n="transcriptTitle">Script &amp; Alignment Input</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem;flex-wrap:wrap;gap:.5rem;">
+            <div class="box-title" data-i18n="transcriptTitle" style="margin:0;">Script &amp; Alignment Input</div>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <input type="file" id="srtFileInput" accept=".srt,.vtt,.ass,.ssa,.txt" style="display:none;" />
+              <button type="button" class="btn-secondary" id="btnUploadSrt" style="font-size:.82rem;padding:.4rem .85rem;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;" data-i18n="btnUploadSrt">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span data-i18n="btnUploadSrt">📄 Import SRT Subtitles</span>
+              </button>
+            </div>
+          </div>
           <div class="box-desc" data-i18n="transcriptDesc">Paste your raw transcript script below as the absolute source of truth. The AI will align user words without modifying your spelling.</div>
           <textarea class="transcript-textarea" id="transcriptInput" data-i18n-placeholder="transcriptPlaceholder" placeholder="Paste your video script or transcript here..."></textarea>
 
@@ -1151,8 +1271,10 @@
             <div class="control-row">
               <label class="control-label" for="stylePresetSelect" data-i18n="lblPreset">Style Preset:</label>
               <select class="studio-select" id="stylePresetSelect">
-                <option value="poetic" data-i18n="presetPoetic">شعر كلاسيكي سينمائي (Classical Poetic)</option>
-                <option value="tiktok" data-i18n="presetTiktok">تيك توك بوب (Viral TikTok Pop)</option>
+                <option value="poetic" selected data-i18n="presetPoeticGlow">Classic Poetic Glow (شعر كلاسيكي سينمائي)</option>
+                <option value="typewriter" data-i18n="presetTypewriter">Canva Typewriter (كتابة تدريجية + مؤشر)</option>
+                <option value="tiktok" data-i18n="presetSubmagic">Viral TikTok / Submagic Pop (تيك توك بوب)</option>
+                <option value="karaoke" data-i18n="presetCapcut">CapCut Fluid Karaoke (تدفق لوني انسيابي)</option>
                 <option value="neon" data-i18n="presetNeon">نيون متوهج (Cyber Neon)</option>
                 <option value="clean" data-i18n="presetClean">مينيمال هادئ (Clean Minimal)</option>
               </select>
@@ -1233,21 +1355,56 @@
               </div>
             </div>
 
-            <!-- Kinetic Animations -->
-            <div class="control-grid-2col">
-              <div class="control-row">
-                <label class="control-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                  <input type="checkbox" id="toggleWordBounce" checked style="accent-color:var(--accent);width:16px;height:16px;">
-                  <span data-i18n="lblWordBounce">Word Pop / Bounce (1.15x)</span>
-                </label>
-                <span style="font-size:.74rem;color:var(--text-muted);" data-i18n="descWordBounce">Smooth kinetic scale on active word</span>
+            <!-- Animation & Motion FX Section -->
+            <div class="motion-fx-panel">
+              <div class="motion-fx-header">
+                <span class="box-title motion-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  <span data-i18n="lblAnimationSection">Animation &amp; Motion FX</span>
+                </span>
+                <span class="status-badge status-ready" style="font-size:.68rem;padding:2px 7px;">Pro Kinetic</span>
               </div>
+
+              <!-- Animation Mode Dropdown -->
               <div class="control-row">
-                <label class="control-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;">
-                  <input type="checkbox" id="toggleSlideUp" checked style="accent-color:var(--accent);width:16px;height:16px;">
-                  <span data-i18n="lblSlideUp">Slide Up / Fade</span>
-                </label>
-                <span style="font-size:.74rem;color:var(--text-muted);" data-i18n="descSlideUp">Subtle smooth entry for line transitions</span>
+                <label class="control-label" for="animationModeSelect" data-i18n="lblAnimationMode">Animation Mode:</label>
+                <select class="studio-select" id="animationModeSelect">
+                  <option value="none" data-i18n="animModeNone">None (Static Display)</option>
+                  <option value="typewriter" data-i18n="animModeTypewriter">Canva Typewriter (كتابة تدريجية + مؤشر)</option>
+                  <option value="pop" data-i18n="animModePop">Submagic Word Pop (ارتداد الكلمة النشطة)</option>
+                  <option value="karaoke-sweep" data-i18n="animModeKaraokeSweep">CapCut Karaoke Sweep (تدفق لوني انسيابي)</option>
+                  <option value="slide-up" selected data-i18n="animModeSlideUp">Cinematic Slide-Up (صعود وتلاشٍ ناعم)</option>
+                  <option value="glass-pill" data-i18n="animModeGlassPill">Sliding Glass Pill (كبسولة زجاجية انسيابية)</option>
+                  <option value="extrusion" data-i18n="animModeExtrusion">3D Extrusion Shadow (ظل مجسم ثلاثي الأبعاد)</option>
+                </select>
+              </div>
+
+              <!-- Sub-controls: Typewriter Caret & Slide-Up Toggles -->
+              <div class="control-grid-2col">
+                <div class="control-row" id="typewriterCursorRow">
+                  <label class="control-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+                    <input type="checkbox" id="toggleTypewriterCursor" checked style="accent-color:var(--accent);width:16px;height:16px;">
+                    <span data-i18n="lblTypewriterCursor">Blinking Cursor (|)</span>
+                  </label>
+                  <span style="font-size:.73rem;color:var(--text-muted);" data-i18n="descTypewriterCursor">Shows active typing caret</span>
+                </div>
+
+                <div class="control-row">
+                  <label class="control-label" style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+                    <input type="checkbox" id="toggleSlideUp" checked style="accent-color:var(--accent);width:16px;height:16px;">
+                    <span data-i18n="lblSlideUp">Slide Up / Fade</span>
+                  </label>
+                  <span style="font-size:.73rem;color:var(--text-muted);" data-i18n="descSlideUp">Subtle smooth entry for line transitions</span>
+                </div>
+              </div>
+
+              <!-- Kinetic Bounce Intensity Slider -->
+              <div class="control-row" id="bounceIntensityRow">
+                <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+                  <label class="control-label" for="bounceIntensitySlider" data-i18n="lblBounceIntensity">Kinetic Bounce Intensity:</label>
+                  <span id="bounceIntensityValue" style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--accent);font-weight:700;">1.15x</span>
+                </div>
+                <input type="range" id="bounceIntensitySlider" min="1.05" max="1.30" step="0.01" value="1.15" />
               </div>
             </div>
 
@@ -1270,7 +1427,8 @@
             <!-- Timeline Cues Section -->
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.5rem;">
               <span class="box-title" data-i18n="timelineHeader">Subtitle Timeline Cues</span>
-              <div style="display:flex;align-items:center;gap:6px;">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <button type="button" class="btn-secondary" id="btnUploadSrtStudio" style="font-size:.78rem;padding:4px 8px;display:inline-flex;align-items:center;gap:4px;" title="Upload SRT / VTT" data-i18n="btnUploadSrtShort">📄 Import SRT</button>
                 <button type="button" class="btn-secondary" id="btnUndoCue" style="font-size:.78rem;padding:4px 8px;" title="Undo (Ctrl+Z)" disabled>↩ Undo</button>
                 <button type="button" class="btn-secondary" id="btnRedoCue" style="font-size:.78rem;padding:4px 8px;" title="Redo (Ctrl+Y)" disabled>↪ Redo</button>
                 <button type="button" class="btn-secondary" id="btnAddCue" style="font-size:.78rem;padding:4px 10px;" data-i18n="btnAddCue">+ Add New Cue</button>
@@ -1307,6 +1465,10 @@
                 <button type="button" class="btn-export-sub" id="btnExportAss">
                   <span>🎨 .ASS</span>
                   <span style="font-size:.72rem;color:var(--text-muted);">Advanced Alpha</span>
+                </button>
+                <button type="button" class="btn-export-sub" id="btnExportAssStyled" style="border-color:var(--accent);background:rgba(6,182,212,0.06);" title="Export High-Fidelity Styled Subtitles with all Kinetic FX">
+                  <span style="color:var(--accent);">⚡ .ASS FX</span>
+                  <span style="font-size:.72rem;color:var(--accent);" data-i18n="btnInstantAssDesc">Instant Styled FX</span>
                 </button>
               </div>
 
@@ -1401,6 +1563,42 @@
       <p class="footer-copy" data-i18n="footerText">© 2026 VantorKit. Fast, private, and free client-side web utilities. All processing happens locally in your browser.</p>
     </div>
   </footer>
+
+  <!-- Export Progress Modal (Active Foreground Canvas Preview) -->
+  <div class="export-modal-backdrop" id="exportProgressModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <div class="export-modal-card">
+      <div class="export-modal-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+          <span class="box-title" id="exportModalTitle" data-i18n="exportModalTitle" style="margin:0;font-size:1.05rem;">Exporting 1080p Video...</span>
+        </div>
+        <span class="status-badge status-ready" id="exportModalBadge" style="font-size:.72rem;">Hardware WebCodecs</span>
+      </div>
+
+      <div class="export-modal-preview-wrap">
+        <div class="export-live-indicator">
+          <span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;animation:pulse 1s infinite alternate;"></span>
+          LIVE ENCODING
+        </div>
+        <canvas id="exportLivePreviewCanvas" width="640" height="360"></canvas>
+      </div>
+
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:.84rem;">
+          <span id="exportModalProgressText" style="font-weight:700;color:var(--accent);">Encoding: 0%</span>
+          <span id="exportModalTimeText" style="font-family:'JetBrains Mono',monospace;color:var(--text-muted);font-size:.8rem;">00:00 / 00:00</span>
+        </div>
+        <div class="burn-progress-bar" style="height:10px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;border:1px solid rgba(255,255,255,0.1);">
+          <div class="burn-progress-fill" id="exportModalProgressFill" style="width:0%;height:100%;background:linear-gradient(90deg, #06b6d4, #3b82f6);transition:width 0.15s ease;"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;align-items:center;">
+        <button type="button" class="btn-secondary" id="btnModalInstantAss" style="color:var(--accent);border-color:var(--accent);font-size:.85rem;padding:.5rem 1rem;" data-i18n="btnModalInstantAss">⚡ Instant (.ASS)</button>
+        <button type="button" class="btn-secondary" id="btnCancelModalExport" style="color:var(--danger);border-color:var(--danger);font-size:.85rem;padding:.5rem 1.25rem;" data-i18n="btnCancelBurn">Cancel Export</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Element -->
   <div class="toast" id="toastNotification" role="status" aria-live="polite">

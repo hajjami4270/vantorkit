@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+  <script src="/i18n-bootstrap.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Verify &amp; Decode JWT Locally in Browser RAM | VantorKit</title>
+  <meta name="description" content="Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.">
+  <meta name="keywords" content="verify JWT locally, decode JWT browser RAM, Web Crypto API JWT, client side JWT verification, HS256 signature verification offline, RS256 browser verify, zero upload JWT debugger, RFC 7519 subtle crypto">
+  <meta name="author" content="Mohamed Hajjami">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html">
+  <link rel="alternate" type="application/rss+xml" title="VantorKit Blog RSS Feed" href="https://vantorkit.com/blog/feed.xml">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html">
+  <meta property="og:title" content="Verify &amp; Decode JWT Locally in Browser RAM">
+  <meta property="og:description" content="Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.">
+  <meta property="og:image" content="https://vantorkit.com/og-image.svg">
+  <meta property="og:site_name" content="VantorKit">
+  <meta property="article:published_time" content="2026-10-14T12:00:00+00:00">
+  <meta property="article:modified_time" content="2026-10-14T12:00:00+00:00">
+  <meta property="article:author" content="Mohamed Hajjami">
+  <meta property="article:section" content="Security &amp; Cryptography">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Verify &amp; Decode JWT Locally in Browser RAM">
+  <meta name="twitter:description" content="Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.">
+  <meta name="twitter:image" content="https://vantorkit.com/og-image.svg">
+  <meta name="twitter:creator" content="@VantorKit">
+
+  <!-- Google Fonts Preconnect Hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(30, 41, 59, 0.85);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-cyan: #38bdf8;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(56, 189, 248, 0.2);
+      --nav-height: 72px;
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --amber: #f59e0b;
+      --orange: #fb923c;
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    html[dir="rtl"] {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="ltr"] {
+      direction: ltr;
+      text-align: left;
+    }
+
+    html[dir="rtl"] * {
+      font-family: 'Cairo', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    html[dir="rtl"] code,
+    html[dir="rtl"] pre,
+    html[dir="rtl"] .mono-val,
+    html[dir="rtl"] .code-box pre,
+    html[dir="rtl"] .code-box code {
+      direction: ltr !important;
+      text-align: left !important;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+      unicode-bidi: isolate;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 85% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(14, 165, 233, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Reading Progress Track */
+    .reading-progress-track {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      z-index: 1001;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+      transition: width 0.1s linear;
+    }
+
+    /* Top Navigation */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--nav-height);
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45));
+    }
+
+    .brand-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #38bdf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .blog-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.2s ease;
+    }
+
+    .nav-back-link:hover {
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .nav-launch-tool {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.48rem 1rem;
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.28);
+      transition: all 0.2s ease;
+    }
+
+    .nav-launch-tool:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.4);
+      filter: brightness(1.08);
+    }
+
+    /* Language Switcher */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.45rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 150px;
+      background: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 0.35rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+      z-index: 1000;
+    }
+
+    html[dir="rtl"] .lang-menu {
+      right: auto;
+      left: 0;
+    }
+
+    .lang-menu.show {
+      display: flex;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.45rem 0.65rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    html[dir="rtl"] .lang-option {
+      text-align: right;
+    }
+
+    .lang-option:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+    }
+
+    .lang-option.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+    }
+
+    .lang-option .check-icon {
+      display: none;
+      color: #38bdf8;
+    }
+
+    .lang-option.active .check-icon {
+      display: block;
+    }
+
+    /* Article Structure */
+    .article-layout {
+      max-width: 880px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+      flex: 1;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+
+    .breadcrumbs a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .breadcrumbs a:hover {
+      color: var(--accent);
+    }
+
+    .article-header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 2rem;
+    }
+
+    .article-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .badge-category {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(168, 85, 247, 0.12);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-privacy-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-lead {
+      font-size: 1.15rem;
+      color: #cbd5e1;
+      line-height: 1.75;
+      margin-bottom: 1.75rem;
+    }
+
+    .article-meta-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .article-meta-box div {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .article-meta-box .author-name {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    /* Table of Contents */
+    .toc-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .toc-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .toc-item a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .toc-item a:hover {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    html[dir="rtl"] .toc-item a:hover {
+      transform: translateX(-4px);
+    }
+
+    /* Article Content Typography */
+    .article-body section {
+      margin-bottom: 3.5rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin: 1.75rem 0 0.85rem;
+    }
+
+    p {
+      color: #cbd5e1;
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+      color: #cbd5e1;
+    }
+
+    html[dir="rtl"] ul, 
+    html[dir="rtl"] ol {
+      padding-left: 0;
+      padding-right: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.65rem;
+      line-height: 1.7;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+      background: rgba(255, 255, 255, 0.08);
+      color: #7dd3fc;
+      padding: 0.18rem 0.45rem;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      color: #fff;
+    }
+
+    /* Comparison Cards */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .comp-card {
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid;
+    }
+
+    .comp-card-danger {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    .comp-card-secure {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    .comp-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .comp-card-danger .comp-title { color: #f87171; }
+    .comp-card-secure .comp-title { color: #34d399; }
+
+    .comp-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .comp-list li {
+      margin-bottom: 0.5rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* Interactive Tool Callout Card */
+    .tool-callout-card {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(168, 85, 247, 0.08) 100%), var(--card-bg);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 16px;
+      padding: 2.25rem 2rem;
+      margin: 2.5rem 0;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 24px rgba(56, 189, 248, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-callout-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .tool-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+
+    .tool-callout-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-callout-desc {
+      color: #cbd5e1;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      max-width: 720px;
+    }
+
+    .btn-launch-large {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-launch-large:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(56, 189, 248, 0.45);
+      filter: brightness(1.08);
+    }
+
+    /* Benchmark Table */
+    .benchmark-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 2rem 0;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+    }
+
+    .benchmark-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    html[dir="rtl"] .benchmark-table {
+      text-align: right;
+    }
+
+    .benchmark-table th,
+    .benchmark-table td {
+      padding: 1rem 1.15rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .benchmark-table th {
+      background: rgba(2, 6, 23, 0.75);
+      color: #f8fafc;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .benchmark-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .benchmark-table .highlight-col {
+      background: rgba(56, 189, 248, 0.05);
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    .badge-metric-win {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .badge-metric-loss {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .badge-metric-mid {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    /* Code Box */
+    .code-box {
+      margin: 1.75rem 0;
+      border-radius: 12px;
+      background: #090d1a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .code-lang-badge {
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: #fff;
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .code-box pre {
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.65;
+    }
+
+    /* Step Cards */
+    .step-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin: 2rem 0;
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+    }
+
+    .step-content h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.45rem;
+    }
+
+    .step-content p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 0;
+    }
+
+    /* FAQ Section */
+    .faq-block {
+      margin-top: 3.5rem;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .faq-q {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.65rem;
+    }
+
+    .faq-a {
+      color: #cbd5e1;
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    /* Global Site Footer */
+    footer, .site-footer {
+      background: rgba(2, 6, 23, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .footer-link:hover, .footer-link.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-copy {
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+      color: #94a3b8;
+      font-size: 0.84rem;
+    }
+
+    .footer-x-link, .footer-github-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-x-link:hover, .footer-github-link:hover {
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.15rem; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .tool-callout-card { padding: 1.75rem 1.25rem; }
+      .tool-callout-title { font-size: 1.35rem; }
+      .btn-launch-large { width: 100%; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .article-layout { padding: 1.75rem 1rem 3.5rem; }
+      h1 { font-size: 1.85rem; line-height: 1.25; }
+      .article-lead { font-size: 1.05rem; }
+      .article-meta-box { gap: 0.85rem; font-size: 0.8rem; }
+      .benchmark-table th, .benchmark-table td { padding: 0.75rem 0.85rem; font-size: 0.82rem; }
+      .step-card { padding: 1.15rem; gap: 0.85rem; }
+      .step-num { width: 30px; height: 30px; font-size: 0.95rem; }
+    }
+  </style>
+
+  <!-- Structured Data: Unified TechArticle & FAQPage Graph -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "@id": "https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html#article",
+        "isPartOf": {
+          "@type": "WebSite",
+          "@id": "https://vantorkit.com/#website",
+          "name": "VantorKit",
+          "url": "https://vantorkit.com/"
+        },
+        "headline": "How to Verify and Inspect JWT Signatures in Browser Memory (Zero Server Uploads)",
+        "description": "Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.",
+        "inLanguage": "en",
+        "mainEntityOfPage": "https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html",
+        "datePublished": "2026-10-14T12:00:00+00:00",
+        "dateModified": "2026-10-14T12:00:00+00:00",
+        "author": {
+          "@type": "Person",
+          "name": "Mohamed Hajjami"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "VantorKit",
+          "url": "https://vantorkit.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://vantorkit.com/favicon.svg"
+          }
+        },
+        "articleSection": "Security & Cryptography",
+        "keywords": [
+          "verify JWT in browser",
+          "decode JWT locally",
+          "Web Crypto API JWT",
+          "client side JWT verification",
+          "HS256 signature verification offline",
+          "RS256 browser verify",
+          "zero upload JWT debugger"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://vantorkit.com/blog/how-to-verify-jwt-in-memory.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is it safe to paste production JWT tokens into online debuggers?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Online debuggers that process tokens on remote servers transmit bearer credentials over the internet, exposing them to CDN edge logs, reverse proxies, and third-party analytics trackers. If a token contains sensitive claims or if you paste your HMAC secret key to verify the signature, an attacker who intercepts the data can authenticate as that user or forge arbitrary valid tokens across your entire system. Tokens should only be decoded and verified locally in browser memory or via offline CLI tools."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does browser-based JWT signature verification work without a backend server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Modern browsers incorporate the W3C Web Cryptography API (window.crypto.subtle), which provides native, hardware-accelerated cryptographic primitives. VantorKit imports your secret or public key into an in-memory CryptoKey object, extracts the signing input and signature byte buffers from the token, and executes crypto.subtle.verify() directly inside the browser sandbox in constant time. No server calculation is required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I verify HS256 and RS256 signatures completely offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Because the Web Crypto API is implemented directly in the browser's C++ core (BoringSSL in Chrome/Edge, NSS in Firefox), signature verification requires zero network communication. Once the page is loaded, you can disconnect from Wi-Fi, enable Airplane Mode, or run the tool on air-gapped workstations without losing any functionality."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I verify that my HMAC secret key never leaves my device?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can verify zero network egress in seconds using your browser's Developer Tools. Press F12, switch to the Network tab, filter by 'Fetch/XHR', and clear any previous activity. Type or paste your secret key and verify a token. You will see zero outbound HTTP requests, zero WebSocket traffic, and zero beacon events—proving that the secret key exists solely in local RAM."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Top Reading Progress Tracker -->
+  <div class="reading-progress-track" aria-hidden="true">
+    <div class="reading-progress-bar" id="readingProgress"></div>
+  </div>
+
+  <!-- Top Navbar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <div class="brand-group">
+        <a href="../" class="brand-link" aria-label="VantorKit Home">
+          <svg class="brand-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="vGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" />
+                <stop offset="100%" stop-color="#3b82f6" />
+              </linearGradient>
+              <linearGradient id="vGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#818cf8" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+              <linearGradient id="vGradCenter" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#60a5fa" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+              <filter id="vGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#3b82f6" flood-opacity="0.35"/>
+              </filter>
+            </defs>
+            <rect x="2" y="2" width="36" height="36" rx="10" fill="#0d111d" stroke="rgba(59, 130, 246, 0.35)" stroke-width="1.5" />
+            <g filter="url(#vGlow)">
+              <path d="M10 11.5L17.5 28.5L20.5 23L15 11.5H10Z" fill="url(#vGradLeft)" />
+              <path d="M30 11.5L22.5 28.5L19.5 23L25 11.5H30Z" fill="url(#vGradRight)" />
+              <path d="M17.5 11.5L20 16.5L22.5 11.5L20 9L17.5 11.5Z" fill="url(#vGradCenter)" />
+              <path d="M20 23L17.5 28.5L20 30.5L22.5 28.5L20 23Z" fill="#a855f7" />
+            </g>
+          </svg>
+          <span class="brand-name">Vantor<span>Kit</span></span>
+        </a>
+        <span class="blog-badge" data-i18n="blog_badge">Blog</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Back to Blog Hub -->
+        <a href="/blog/" class="nav-back-link" aria-label="Return to Blog Index">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span data-i18n="nav_back_blog">Blog Hub</span>
+        </a>
+
+        <!-- Direct CTA to JWT Decoder Tool -->
+        <a href="../tools/jwt-decoder.html" class="nav-launch-tool" aria-label="Open JWT Decoder Tool">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span data-i18n="a5_nav_launch">Launch JWT Decoder</span>
+        </a>
+
+        <!-- Language Selector -->
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="lang-btn" id="langToggleBtn" aria-expanded="false" aria-haspopup="true" aria-label="Select Language (English)">
+            <svg class="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span id="currentLangLabel">English</span>
+            <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="lang-menu lang-dropdown-menu" id="langMenu" role="menu">
+            <button type="button" class="lang-option active" data-lang="en" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇺🇸</span>
+                <span>English</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇸🇦</span>
+                <span>العربية</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇫🇷</span>
+                <span>Français</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+            <button type="button" class="lang-option" data-lang="it" role="menuitem">
+              <span class="lang-item-content">
+                <span>🇮🇹</span>
+                <span>Italiano</span>
+              </span>
+              <svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Article Layout -->
+  <article class="article-layout">
+    
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/blog/" data-i18n="a5_breadcrumb_blog">Blog</a>
+      <span>/</span>
+      <span data-i18n="a5_breadcrumb_cat">Security &amp; Cryptography</span>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="article-header">
+      <div class="article-tag-row">
+        <span class="badge-category" data-i18n="a5_badge_cat">Security &amp; Cryptography</span>
+        <span class="badge-privacy-verified">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span data-i18n="a5_badge_verified">100% In-Browser Execution • 0 Bytes Uploaded</span>
+        </span>
+      </div>
+
+      <h1 data-i18n="a5_h1">How to Verify and Inspect JWT Signatures in Browser Memory (Zero Server Uploads)</h1>
+
+      <p class="article-lead" data-i18n="a5_lead">
+        Pasting production JSON Web Tokens (RFC 7519) and HMAC secrets into conventional online debuggers exposes bearer credentials to edge CDN logs, third-party analytics, and session interception. Discover how native Web Crypto API cryptographic primitives (SubtleCrypto) decode, validate claims, and verify signatures entirely within local browser RAM with zero network requests.
+      </p>
+
+      <div class="article-meta-box">
+        <div>
+          <span data-i18n="a5_meta_author_label">Author: </span>
+          <span class="author-name" data-i18n="a5_meta_author_val">Mohamed Hajjami</span>
+        </div>
+        <div>
+          <span data-i18n="a5_meta_pub_label">Published: </span>
+          <span data-i18n="a5_meta_pub_val">October 14, 2026</span>
+        </div>
+        <div>
+          <span data-i18n="a5_meta_time_label">Read Time: </span>
+          <span data-i18n="a5_meta_time_val">5 min read</span>
+        </div>
+        <div>
+          <span data-i18n="a5_meta_exfil_label">Network Exfiltration: </span>
+          <span class="badge-privacy-verified" data-i18n="a5_meta_exfil_val">0 Bytes (Client-Side)</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <nav class="toc-card" aria-label="Table of Contents">
+      <div class="toc-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        <span data-i18n="a5_toc_title">Table of Contents</span>
+      </div>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#section-1"><span class="mono-val">1.</span> <span data-i18n="a5_toc_1">The Production Token Leak Risk: Why Online JWT Debuggers are Hazardous</span></a></li>
+        <li class="toc-item"><a href="#section-tool"><span class="mono-val">2.</span> <span data-i18n="a5_toc_2">Interactive Tool: VantorKit Client-Side JWT Decoder &amp; Signer</span></a></li>
+        <li class="toc-item"><a href="#section-2"><span class="mono-val">3.</span> <span data-i18n="a5_toc_3">Architectural Deep Dive: RFC 7519 &amp; Native Web Crypto API</span></a></li>
+        <li class="toc-item"><a href="#section-3"><span class="mono-val">4.</span> <span data-i18n="a5_toc_4">Technical Benchmark: Cloud Debuggers vs. VantorKit Local RAM</span></a></li>
+        <li class="toc-item"><a href="#section-4"><span class="mono-val">5.</span> <span data-i18n="a5_toc_5">Step-by-Step Practical Guide &amp; DevTools Network Verification</span></a></li>
+        <li class="toc-item"><a href="#section-5"><span class="mono-val">6.</span> <span data-i18n="a5_toc_6">Frequently Asked Questions (JWT Security &amp; Cryptography)</span></a></li>
+      </ul>
+    </nav>
+
+    <!-- Article Content -->
+    <div class="article-body">
+
+      <!-- Section 1 -->
+      <section id="section-1">
+        <h2 data-i18n="a5_sec1_h2">1. The Production Token Leak Risk: Why Online JWT Debuggers are Hazardous</h2>
+        <p data-i18n="a5_sec1_p1">
+          In modern cloud architectures, JSON Web Tokens (RFC 7519) serve as the primary authentication currency. Whether backing OAuth2 bearer tokens, OpenID Connect session assertions, or microservice service-to-service authorizations, a JWT grants immediate, non-repudiable access to protected APIs until its expiration timestamp (`exp`). Yet, when debugging an authentication failure or inspecting a token claim, developers routinely paste live production tokens and HMAC secret keys into third-party online debuggers.
+        </p>
+        <p data-i18n="a5_sec1_p2">
+          Pasting production tokens into public online debuggers introduces acute security vulnerabilities:
+        </p>
+        
+        <ul>
+          <li data-i18n="a5_sec1_li1"><strong>Reverse Proxy &amp; CDN Access Logging:</strong> Request payloads, headers, and query parameters passing through cloud services are ingested into CDN edge logs (e.g., Cloudflare, AWS CloudFront, Fastly). These logs are indexed in data lakes, accessible to internal engineers, and retained for 30–90 days.</li>
+          <li data-i18n="a5_sec1_li2"><strong>Telemetry &amp; Session Recording Interception:</strong> Commercial debugging sites frequently embed third-party analytics, error monitors (e.g., Sentry, Datadog), and session replay scripts (e.g., FullStory, Hotjar) that capture pasted DOM values and transmit them to external tracking endpoints.</li>
+          <li data-i18n="a5_sec1_li3"><strong>Catastrophic Secret Key Compromise:</strong> When verifying an HMAC token (`HS256`, `HS384`, `HS512`), pasting your application's shared secret into an online debugger allows anyone who obtains that secret to forge arbitrary valid tokens (such as elevating privileges to <code>{"role": "admin"}</code>) across your entire infrastructure.</li>
+          <li data-i18n="a5_sec1_li4"><strong>Statutory &amp; Regulatory Non-Compliance:</strong> Transmitting live authentication tokens containing user emails, roles, or internal system IDs over untrusted networks triggers severe non-compliance under GDPR, HIPAA, SOC 2 Type II, and PCI-DSS standards.</li>
+        </ul>
+
+        <!-- Visual Risk Comparison -->
+        <div class="comparison-grid">
+          <div class="comp-card comp-card-danger">
+            <h4 class="comp-title" data-i18n="a5_comp_danger_title">Online Cloud Debuggers (Critical Risk)</h4>
+            <ul class="comp-list">
+              <li data-i18n="a5_comp_danger_1">❌ Tokens and secrets sent across external internet networks</li>
+              <li data-i18n="a5_comp_danger_2">❌ Captured by CDN edge access logs and reverse proxies</li>
+              <li data-i18n="a5_comp_danger_3">❌ Monitored by analytics, telemetry, and tracking scripts</li>
+              <li data-i18n="a5_comp_danger_4">❌ Shared HMAC secret compromise enables total token forgery</li>
+              <li data-i18n="a5_comp_danger_5">❌ Breaches enterprise compliance frameworks (GDPR, SOC 2)</li>
+            </ul>
+          </div>
+          <div class="comp-card comp-card-secure">
+            <h4 class="comp-title" data-i18n="a5_comp_secure_title">VantorKit In-RAM Verification (Zero Trust)</h4>
+            <ul class="comp-list">
+              <li data-i18n="a5_comp_secure_1">✅ Tokens and keys never leave your device's browser memory</li>
+              <li data-i18n="a5_comp_secure_2">✅ Exactly 0 bytes transmitted over the network (0 KB I/O)</li>
+              <li data-i18n="a5_comp_secure_3">✅ Zero telemetry, tracking cookies, or remote server logging</li>
+              <li data-i18n="a5_comp_secure_4">✅ Native Web Crypto API execution in C++ sandboxed RAM</li>
+              <li data-i18n="a5_comp_secure_5">✅ 100% compliant with air-gapped security policies</li>
+            </ul>
+          </div>
+        </div>
+
+        <p data-i18n="a5_sec1_p3">
+          True zero-trust development demands that production credentials and cryptographic keys never leave the local workstation. The modern web platform provides all the primitives needed to parse, validate, and verify cryptographic signatures directly in browser RAM without touching a network wire.
+        </p>
+      </section>
+
+      <!-- Section: Interactive Tool Callout (Above Fold) -->
+      <section id="section-tool">
+        <div class="tool-callout-card">
+          <div class="tool-badge-pill" data-i18n="a5_tool_badge">100% Client-Side Browser Sandbox</div>
+          <h3 class="tool-callout-title" data-i18n="a5_tool_title">Launch VantorKit Client-Side JWT Decoder &amp; Signer — 100% In-RAM Execution</h3>
+          <p class="tool-callout-desc" data-i18n="a5_tool_desc">
+            Decode JSON Web Tokens, audit claims and expiration timestamps in real time, verify HS256/RS256 signatures, and generate signed test tokens entirely inside browser RAM via the Web Crypto API. Zero cloud uploads, zero secret leaks.
+          </p>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+            <a href="../tools/jwt-decoder.html" class="btn-launch-large">
+              <span data-i18n="a5_tool_btn">Launch JWT Decoder Tool →</span>
+            </a>
+            <a href="../" class="nav-back-link" style="padding: 0.85rem 1.4rem; font-size: 0.95rem;">
+              <span data-i18n="nav_all_tools">Explore All 33 Utilities</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="section-2">
+        <h2 data-i18n="a5_sec2_h2">2. Architectural Deep Dive: RFC 7519 &amp; Native Web Crypto API</h2>
+        <p data-i18n="a5_sec2_p1">
+          A JSON Web Token (RFC 7519) is a compact, URL-safe container consisting of three Base64URL-encoded segments delimited by periods: <code>&lt;Header&gt;.&lt;Payload&gt;.&lt;Signature&gt;</code>. Slicing and verifying this structure client-side without remote backend calls relies on two core browser subsystems: Base64URL memory parsing and the W3C Web Cryptography API (<code>window.crypto.subtle</code>).
+        </p>
+        <p data-i18n="a5_sec2_p2">
+          Here is how the browser pipeline executes in-RAM decoding and signature verification:
+        </p>
+
+        <ul>
+          <li data-i18n="a5_sec2_li1"><strong>1. In-Memory Segmentation:</strong> The token string is split into its three components: <code>parts = token.trim().split('.')</code>. The header and payload are converted from Base64URL to standard Base64 (replacing <code>-</code> with <code>+</code>, <code>_</code> with <code>/</code>, and adding <code>=</code> padding), decoded into binary byte arrays, and parsed as UTF-8 JSON objects.</li>
+          <li data-i18n="a5_sec2_li2"><strong>2. Native Key Import:</strong> For symmetric HMAC verification (`HS256`, `HS384`, `HS512`), the user's secret key is converted into a UTF-8 `Uint8Array` and imported into an internal cryptographic key handle via <code>window.crypto.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify'])</code>. The raw secret remains memory-bound inside the browser process.</li>
+          <li data-i18n="a5_sec2_li3"><strong>3. Constant-Time Verification:</strong> The signature segment is decoded into a raw binary buffer. The signing input string (<code>`${headerB64}.${payloadB64}`</code>) is encoded to UTF-8 bytes. The browser calls <code>window.crypto.subtle.verify('HMAC', keyHandle, signatureBytes, signingInputBytes)</code>. The browser's native C++ cryptographic engine computes the HMAC digest and performs a constant-time comparison against the provided signature, preventing timing attacks.</li>
+        </ul>
+
+        <h3 data-i18n="a5_sec2_h3">Client-Side Cryptographic Architecture Flow</h3>
+        <p data-i18n="a5_sec2_p3">
+          The entire cryptographic pipeline executes in isolated memory with strict zero network I/O:
+        </p>
+
+        <!-- ASCII Architectural Diagram -->
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-lang-badge" data-i18n="a5_code1_header">Web Crypto In-RAM Verification Pipeline (0 KB Network I/O)</span>
+            <button type="button" class="btn-copy btn-copy-code" data-i18n="btn_copy">Copy</button>
+          </div>
+          <pre><code>+---------------------------------------------------------------------------------------+
+|                           BROWSER MEMORY SANDBOX (ISOLATED RAM)                       |
+|                                                                                       |
+|   +-----------------------+           +--------------------------+                    |
+|   |  JWT Token in Memory  |           |   Secret Key / Public    |                    |
+|   |  [Header].[Payload]   |           |     Certificate in RAM   |                    |
+|   +-----------+-----------+           +------------+-------------+                    |
+|               |                                    |                                  |
+|               v                                    v                                  |
+|      [UTF-8 Signing Input]             [window.crypto.subtle]                         |
+|      "eyJhbG... . eyJzdWI..."           importKey("raw", HMAC/SHA-256)                 |
+|               |                                    |                                  |
+|               +------------------+  +--------------+                                  |
+|                                  v  v                                                 |
+|                  +-----------------------------------+                                |
+|                  |   crypto.subtle.verify() Engine   |                                |
+|                  | (Constant-Time C++ Cryptography)  |                                |
+|                  +-----------------+-----------------+                                |
+|                                    |                                                  |
+|                                    v                                                  |
+|                       [Signature Valid: TRUE / FALSE]                                 |
+|                                                                                       |
+|                 ============================================                          |
+|                 TOTAL NETWORK EXFILTRATION: 0 KB (0 Requests)                         |
+|                 ============================================                          |
++---------------------------------------------------------------------------------------+</code></pre>
+        </div>
+
+        <!-- Real Web Crypto API Code Block -->
+        <div class="code-box">
+          <div class="code-header">
+            <span class="code-lang-badge" data-i18n="a5_code2_header">Client-Side Web Crypto Verification Implementation</span>
+            <button type="button" class="btn-copy btn-copy-code" data-i18n="btn_copy">Copy</button>
+          </div>
+          <pre><code>// Client-side Web Crypto API JWT signature verification (0 KB network activity)
+async function verifyJwtHmacSha256(rawJwt, secretKeyString) {
+  const [headerB64, payloadB64, signatureB64] = rawJwt.trim().split('.');
+  if (!headerB64 || !payloadB64 || !signatureB64) {
+    throw new Error('Malformed JWT: must contain 3 period-separated segments.');
+  }
+
+  // 1. Prepare UTF-8 signing input buffer ("header.payload")
+  const encoder = new TextEncoder();
+  const signingInputBytes = encoder.encode(`${headerB64}.${payloadB64}`);
+
+  // 2. Base64URL decode the signature segment into binary Uint8Array
+  const base64Signature = signatureB64.replace(/-/g, '+').replace(/_/g, '/');
+  const paddedSignature = base64Signature.padEnd(base64Signature.length + (4 - base64Signature.length % 4) % 4, '=');
+  const signatureBytes = Uint8Array.from(atob(paddedSignature), c => c.charCodeAt(0));
+
+  // 3. Import secret key into native Web Crypto SubtleCrypto key handle
+  const keyBytes = encoder.encode(secretKeyString);
+  const cryptoKey = await window.crypto.subtle.importKey(
+    'raw',
+    keyBytes,
+    { name: 'HMAC', hash: { name: 'SHA-256' } },
+    false,
+    ['verify']
+  );
+
+  // 4. Execute timing-safe verification directly inside browser process (C++)
+  const isValid = await window.crypto.subtle.verify(
+    'HMAC',
+    cryptoKey,
+    signatureBytes,
+    signingInputBytes
+  );
+
+  return isValid; // true if signature matches bit-for-bit, false otherwise
+}</code></pre>
+        </div>
+
+        <p data-i18n="a5_sec2_p4">
+          Unlike userland JavaScript libraries that execute un-optimized math in interpreted code, <code>crypto.subtle</code> binds directly to the operating system's native cryptographic libraries (such as BoringSSL in Chromium or NSS in Firefox), providing hardware-accelerated SHA-256 hashing and timing-attack immunity.
+        </p>
+      </section>
+
+      <!-- Section 3 -->
+      <section id="section-3">
+        <h2 data-i18n="a5_sec3_h2">3. Technical Benchmark: Cloud Debuggers vs. VantorKit Local RAM</h2>
+        <p data-i18n="a5_sec3_p1">
+          To understand the operational and security distinctions, we evaluated traditional cloud-hosted JWT debuggers against VantorKit's 100% in-browser memory architecture across critical security, performance, and compliance metrics:
+        </p>
+
+        <!-- Benchmark Table -->
+        <div class="benchmark-table-wrapper">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th data-i18n="a5_tb_th1">Architecture Dimension</th>
+                <th data-i18n="a5_tb_th2">Online Cloud Debuggers</th>
+                <th data-i18n="a5_tb_th3">Local Node.js CLI Script</th>
+                <th class="highlight-col" data-i18n="a5_tb_th4">VantorKit In-RAM Engine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="a5_tb_r1_metric"><strong>Secret Key Exposure</strong></td>
+                <td data-i18n="a5_tb_r1_c1"><span class="badge-metric-loss">High Risk</span> Transmitted to remote edge</td>
+                <td data-i18n="a5_tb_r1_c2"><span class="badge-metric-mid">Medium</span> Stored in shell history</td>
+                <td class="highlight-col" data-i18n="a5_tb_r1_c3"><span class="badge-metric-win">Zero Exposure</span> Local RAM only</td>
+              </tr>
+              <tr>
+                <td data-i18n="a5_tb_r2_metric"><strong>Cryptographic Engine</strong></td>
+                <td data-i18n="a5_tb_r2_c1"><span class="badge-metric-mid">Remote Server</span> Unknown library version</td>
+                <td data-i18n="a5_tb_r2_c2"><span class="badge-metric-win">Local OpenSSL</span> Node.js runtime</td>
+                <td class="highlight-col" data-i18n="a5_tb_r2_c3"><span class="badge-metric-win">W3C Web Crypto</span> BoringSSL / NSS</td>
+              </tr>
+              <tr>
+                <td data-i18n="a5_tb_r3_metric"><strong>Claim &amp; Expiry Auditing</strong></td>
+                <td data-i18n="a5_tb_r3_c1"><span class="badge-metric-mid">Server Skew</span> Clock drift dependent</td>
+                <td data-i18n="a5_tb_r3_c2"><span class="badge-metric-win">Instant</span> Script parsing</td>
+                <td class="highlight-col" data-i18n="a5_tb_r3_c3"><span class="badge-metric-win">Real-Time</span> Visual epoch clock sync</td>
+              </tr>
+              <tr>
+                <td data-i18n="a5_tb_r4_metric"><strong>Timing Attack Protection</strong></td>
+                <td data-i18n="a5_tb_r4_c1"><span class="badge-metric-loss">Vulnerable</span> Network jitter variance</td>
+                <td data-i18n="a5_tb_r4_c2"><span class="badge-metric-win">Constant-Time</span> timingSafeEqual</td>
+                <td class="highlight-col" data-i18n="a5_tb_r4_c3"><span class="badge-metric-win">Native Constant-Time</span> C++ Engine</td>
+              </tr>
+              <tr>
+                <td data-i18n="a5_tb_r5_metric"><strong>Security Telemetry &amp; Tracking</strong></td>
+                <td data-i18n="a5_tb_r5_c1"><span class="badge-metric-loss">Active</span> Analytics &amp; session replays</td>
+                <td data-i18n="a5_tb_r5_c2"><span class="badge-metric-win">0 Trackers</span> Clean terminal</td>
+                <td class="highlight-col" data-i18n="a5_tb_r5_c3"><span class="badge-metric-win">0 Trackers</span> 0 Cookies / 0 Telemetry</td>
+              </tr>
+              <tr>
+                <td data-i18n="a5_tb_r6_metric"><strong>Offline / Air-Gapped Usability</strong></td>
+                <td data-i18n="a5_tb_r6_c1"><span class="badge-metric-loss">Fails</span> Internet connection required</td>
+                <td data-i18n="a5_tb_r6_c2"><span class="badge-metric-win">Works Offline</span> Requires CLI setup</td>
+                <td class="highlight-col" data-i18n="a5_tb_r6_c3"><span class="badge-metric-win">100% Offline</span> Airplane mode ready</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p data-i18n="a5_sec3_p2">
+          By leveraging native browser cryptography, VantorKit matches the privacy guarantees of a local command-line script while delivering the intuitive, interactive visual experience of a modern web application.
+        </p>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="section-4">
+        <h2 data-i18n="a5_sec4_h2">4. Step-by-Step Practical Guide &amp; DevTools Network Verification</h2>
+        <p data-i18n="a5_sec4_p1">
+          Here is the exact workflow for decoding, inspecting, and verifying a JSON Web Token locally while independently verifying zero network activity via Chrome DevTools:
+        </p>
+
+        <div class="step-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st1_title">Load the In-Memory JWT Decoder</h4>
+              <p data-i18n="a5_st1_desc">Open VantorKit JWT Decoder in your browser. Paste your encoded token into the input area. The application instantly decomposes the Base64URL string into Header, Payload, and Signature components without initiating any background network requests.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st2_title">Audit Token Claims &amp; Expiration Timestamps</h4>
+              <p data-i18n="a5_st2_desc">Review the decoded JSON claims. VantorKit automatically inspects standard RFC 7519 timestamp claims (exp: Expiration Time, nbf: Not Before, iat: Issued At), compares them to your machine's system epoch clock, and renders real-time status badges indicating whether the token is currently active or expired.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st3_title">Enter Secret / Public Key for Cryptographic Verification</h4>
+              <p data-i18n="a5_st3_desc">For HMAC signatures (HS256, HS384, HS512), enter your shared secret in the key field. For RSA/ECDSA (RS256, ES256), paste the public key or certificate. The Web Crypto API verifies the signature in constant time and immediately toggles the Signature Verified status indicator.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st4_title">Verify 0 KB Network Egress in Chrome DevTools</h4>
+              <p data-i18n="a5_st4_desc">Press F12 (Cmd+Option+I on macOS) to open Developer Tools. Click on the Network tab and ensure the Fetch/XHR filter is enabled. Paste new tokens, alter payload claims, and verify signatures. You will observe exactly 0 requests recorded—proving that your production credentials and keys remain isolated in local RAM.</p>
+            </div>
+          </div>
+        </div>
+
+        <p data-i18n="a5_sec4_p2">
+          This independent audit guarantees compliance with enterprise security baselines and eliminates the risk of inadvertent credential leakage.
+        </p>
+      </section>
+
+      <!-- Section: Interactive Tool Callout (Below Fold) -->
+      <section id="section-tool-below">
+        <div class="tool-callout-card">
+          <div class="tool-badge-pill" data-i18n="a5_tool_badge">100% Client-Side Browser Sandbox</div>
+          <h3 class="tool-callout-title" data-i18n="a5_final_cta_title">Ready to Inspect &amp; Verify JWTs Securely?</h3>
+          <p class="tool-callout-desc" data-i18n="a5_final_cta_desc">
+            Audit token claims, verify cryptographic signatures, and sign test tokens with zero cloud uploads and zero credential leaks.
+          </p>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;">
+            <a href="../tools/jwt-decoder.html" class="btn-launch-large">
+              <span data-i18n="a5_final_cta_btn1">Launch VantorKit JWT Decoder →</span>
+            </a>
+            <a href="/blog/" class="nav-back-link" style="padding: 0.85rem 1.4rem; font-size: 0.95rem;">
+              <span data-i18n="a5_final_cta_btn2">Explore More Engineering Guides</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: FAQs -->
+      <section id="section-5" class="faq-block">
+        <h2 data-i18n="a5_sec5_h2">5. Frequently Asked Questions (JWT Security &amp; Cryptography)</h2>
+        
+        <div class="faq-item">
+          <h3 class="faq-q" data-i18n="a5_faq1_q">Is it safe to paste production JWT tokens into online debuggers?</h3>
+          <p class="faq-a" data-i18n="a5_faq1_a">
+            No. Online debuggers that process tokens on remote servers transmit bearer credentials over the internet, exposing them to CDN edge logs, reverse proxies, and third-party analytics trackers. If a token contains sensitive claims or if you paste your HMAC secret key to verify the signature, an attacker who intercepts the data can authenticate as that user or forge arbitrary valid tokens across your entire system. Tokens should only be decoded and verified locally in browser memory or via offline CLI tools.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-q" data-i18n="a5_faq2_q">How does browser-based JWT signature verification work without a backend server?</h3>
+          <p class="faq-a" data-i18n="a5_faq2_a">
+            Modern browsers incorporate the W3C Web Cryptography API (window.crypto.subtle), which provides native, hardware-accelerated cryptographic primitives. VantorKit imports your secret or public key into an in-memory CryptoKey object, extracts the signing input and signature byte buffers from the token, and executes crypto.subtle.verify() directly inside the browser sandbox in constant time. No server calculation is required.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-q" data-i18n="a5_faq3_q">Can I verify HS256 and RS256 signatures completely offline?</h3>
+          <p class="faq-a" data-i18n="a5_faq3_a">
+            Yes. Because the Web Crypto API is implemented directly in the browser's C++ core (BoringSSL in Chrome/Edge, NSS in Firefox), signature verification requires zero network communication. Once the page is loaded, you can disconnect from Wi-Fi, enable Airplane Mode, or run the tool on air-gapped workstations without losing any functionality.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3 class="faq-q" data-i18n="a5_faq4_q">How do I verify that my HMAC secret key never leaves my device?</h3>
+          <p class="faq-a" data-i18n="a5_faq4_a">
+            You can verify zero network egress in seconds using your browser's Developer Tools. Press F12, switch to the Network tab, filter by 'Fetch/XHR', and clear any previous activity. Type or paste your secret key and verify a token. You will see zero outbound HTTP requests, zero WebSocket traffic, and zero beacon events—proving that the secret key exists solely in local RAM.
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <nav class="footer-links" aria-label="Legal &amp; Support">
+        <a href="../privacy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
+        <a href="../terms.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
+        <a href="../about.html" class="footer-link" data-i18n="footer_about">About Us</a>
+        <a href="../contact.html" class="footer-link" data-i18n="footer_contact">Contact</a>
+        <a href="/blog/" class="footer-link active" data-i18n="footer_blog">Blog</a>
+        <a href="https://github.com/hajjami4270/vantorkit" target="_blank" rel="noopener noreferrer" class="footer-link footer-github-link" aria-label="View VantorKit on GitHub">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="https://x.com/VantorKit" target="_blank" rel="noopener noreferrer" class="footer-link footer-x-link" aria-label="Follow VantorKit on X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      </nav>
+      <p class="footer-copy" data-i18n="footer_copy">&copy; 2026 VantorKit. Fast, Private &amp; Free Web Utilities. All client processing is performed locally in your browser.</p>
+    </div>
+  </footer>
+
+  <!-- Subsystem Scripts -->
+  <script src="/blog/blog.js" defer></script>
+</body>
+</html>
