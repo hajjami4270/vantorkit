@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Verify &amp; Decode JWT Locally in Browser RAM | VantorKit</title>
-  <meta name="description" content="Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.">
+  <title data-i18n="a5_page_title">Verify &amp; Decode JWT Locally in Browser RAM | VantorKit</title>
+  <meta name="description" data-i18n-content="a5_meta_desc" content="Decode, inspect, and verify JWT signatures (HS256/RS256) 100% locally in browser RAM via Web Crypto API. Zero cloud uploads or secret key leaks.">
   <meta name="keywords" content="verify JWT locally, decode JWT browser RAM, Web Crypto API JWT, client side JWT verification, HS256 signature verification offline, RS256 browser verify, zero upload JWT debugger, RFC 7519 subtle crypto">
   <meta name="author" content="Mohamed Hajjami">
   <meta name="robots" content="index, follow">
@@ -245,44 +245,54 @@
     /* Language Switcher */
     .lang-dropdown {
       position: relative;
+      z-index: 101;
     }
 
     .lang-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 0.45rem 0.75rem;
-      border-radius: 8px;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
-      cursor: pointer;
       transition: all 0.2s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
-    .lang-btn:hover {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.08);
+    .lang-btn:hover, .lang-btn[aria-expanded="true"], .lang-dropdown.active .lang-btn {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(30, 41, 59, 0.85);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
     }
+
+    .globe-icon { color: #38bdf8; }
+    .chevron-icon { color: var(--text-muted); transition: transform 0.2s ease; }
+    .lang-btn[aria-expanded="true"] .chevron-icon,
+    .lang-dropdown.active .chevron-icon { transform: rotate(180deg); }
 
     .lang-menu {
       position: absolute;
       top: calc(100% + 8px);
       right: 0;
-      width: 150px;
-      background: rgba(15, 23, 42, 0.96);
-      backdrop-filter: blur(20px);
+      width: 175px;
+      background: rgba(10, 15, 28, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 0.35rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      padding: 0.4rem;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
       display: none;
       flex-direction: column;
       gap: 0.2rem;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-      z-index: 1000;
+      z-index: 200;
     }
 
     html[dir="rtl"] .lang-menu {
@@ -290,8 +300,20 @@
       left: 0;
     }
 
-    .lang-menu.show {
-      display: flex;
+    .lang-menu.open,
+    .lang-menu.show,
+    .lang-menu.active,
+    .lang-dropdown.active .lang-menu,
+    .lang-dropdown-menu.show,
+    .lang-dropdown-menu.open,
+    .lang-dropdown-menu.active {
+      display: flex !important;
+      animation: menuFadeIn 0.15s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .lang-option {
@@ -299,39 +321,28 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 0.45rem 0.65rem;
-      background: transparent;
+      padding: 0.55rem 0.75rem;
       border: none;
+      background: transparent;
       color: var(--text-muted);
-      border-radius: 6px;
-      font-size: 0.82rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
       text-align: left;
     }
 
-    html[dir="rtl"] .lang-option {
-      text-align: right;
-    }
+    html[dir="rtl"] .lang-option { text-align: right; }
+    .lang-option:hover { background: rgba(56, 189, 248, 0.15); color: #fff; }
+    .lang-option.active { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .lang-option .check-icon { display: none; color: #38bdf8; }
+    .lang-option.active .check-icon { display: block; }
 
-    .lang-option:hover {
-      background: rgba(56, 189, 248, 0.15);
-      color: #fff;
-    }
-
-    .lang-option.active {
-      background: rgba(56, 189, 248, 0.2);
-      color: #38bdf8;
-    }
-
-    .lang-option .check-icon {
-      display: none;
-      color: #38bdf8;
-    }
-
-    .lang-option.active .check-icon {
-      display: block;
+    .lang-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     /* Article Structure */
@@ -1149,9 +1160,11 @@
     
     <!-- Breadcrumbs -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../" data-i18n="a5_breadcrumb_home">Home</a>
+      <span>/</span>
       <a href="/blog/" data-i18n="a5_breadcrumb_blog">Blog</a>
       <span>/</span>
-      <span data-i18n="a5_breadcrumb_cat">Security &amp; Cryptography</span>
+      <span data-i18n="a5_breadcrumb_cat">Verify JWT in Memory</span>
     </nav>
 
     <!-- Header Section -->
@@ -1197,12 +1210,12 @@
         <span data-i18n="a5_toc_title">Table of Contents</span>
       </div>
       <ul class="toc-list">
-        <li class="toc-item"><a href="#section-1"><span class="mono-val">1.</span> <span data-i18n="a5_toc_1">The Production Token Leak Risk: Why Online JWT Debuggers are Hazardous</span></a></li>
-        <li class="toc-item"><a href="#section-tool"><span class="mono-val">2.</span> <span data-i18n="a5_toc_2">Interactive Tool: VantorKit Client-Side JWT Decoder &amp; Signer</span></a></li>
-        <li class="toc-item"><a href="#section-2"><span class="mono-val">3.</span> <span data-i18n="a5_toc_3">Architectural Deep Dive: RFC 7519 &amp; Native Web Crypto API</span></a></li>
-        <li class="toc-item"><a href="#section-3"><span class="mono-val">4.</span> <span data-i18n="a5_toc_4">Technical Benchmark: Cloud Debuggers vs. VantorKit Local RAM</span></a></li>
-        <li class="toc-item"><a href="#section-4"><span class="mono-val">5.</span> <span data-i18n="a5_toc_5">Step-by-Step Practical Guide &amp; DevTools Network Verification</span></a></li>
-        <li class="toc-item"><a href="#section-5"><span class="mono-val">6.</span> <span data-i18n="a5_toc_6">Frequently Asked Questions (JWT Security &amp; Cryptography)</span></a></li>
+        <li class="toc-item"><a href="#section-1"><span class="mono-val">1.</span> <span data-i18n="a5_toc_1">1. The Danger of Secret Key Leakage in Public JWT Debuggers</span></a></li>
+        <li class="toc-item"><a href="#section-2"><span class="mono-val">2.</span> <span data-i18n="a5_toc_2">2. In-Browser Cryptographic Architecture via Web Crypto API</span></a></li>
+        <li class="toc-item"><a href="#section-3"><span class="mono-val">3.</span> <span data-i18n="a5_toc_3">3. Steps to Inspect and Sign Tokens Locally in VantorKit</span></a></li>
+        <li class="toc-item"><a href="#section-4"><span class="mono-val">4.</span> <span data-i18n="a5_toc_4">4. Technical Comparison Table: Cloud Tools vs. Local RAM</span></a></li>
+        <li class="toc-item"><a href="#section-5"><span class="mono-val">5.</span> <span data-i18n="a5_toc_5">5. Self-Verification of Zero Network Egress via DevTools</span></a></li>
+        <li class="toc-item"><a href="#section-faq"><span class="mono-val">6.</span> <span data-i18n="a5_toc_6">6. Frequently Asked Questions (JWT Security &amp; Cryptography)</span></a></li>
       </ul>
     </nav>
 
@@ -1211,19 +1224,18 @@
 
       <!-- Section 1 -->
       <section id="section-1">
-        <h2 data-i18n="a5_sec1_h2">1. The Production Token Leak Risk: Why Online JWT Debuggers are Hazardous</h2>
+        <h2 data-i18n="a5_sec1_h2">1. The Danger of Secret Key Leakage in Public JWT Debuggers</h2>
         <p data-i18n="a5_sec1_p1">
-          In modern cloud architectures, JSON Web Tokens (RFC 7519) serve as the primary authentication currency. Whether backing OAuth2 bearer tokens, OpenID Connect session assertions, or microservice service-to-service authorizations, a JWT grants immediate, non-repudiable access to protected APIs until its expiration timestamp (`exp`). Yet, when debugging an authentication failure or inspecting a token claim, developers routinely paste live production tokens and HMAC secret keys into third-party online debuggers.
+          When debugging authentication flows or inspecting session payloads, developers instinctively paste tokens into public online JWT debuggers. Often, they also paste the shared HMAC Secret or private key to verify the signature.
         </p>
         <p data-i18n="a5_sec1_p2">
-          Pasting production tokens into public online debuggers introduces acute security vulnerabilities:
+          This practice introduces severe security risks:
         </p>
         
         <ul>
-          <li data-i18n="a5_sec1_li1"><strong>Reverse Proxy &amp; CDN Access Logging:</strong> Request payloads, headers, and query parameters passing through cloud services are ingested into CDN edge logs (e.g., Cloudflare, AWS CloudFront, Fastly). These logs are indexed in data lakes, accessible to internal engineers, and retained for 30–90 days.</li>
-          <li data-i18n="a5_sec1_li2"><strong>Telemetry &amp; Session Recording Interception:</strong> Commercial debugging sites frequently embed third-party analytics, error monitors (e.g., Sentry, Datadog), and session replay scripts (e.g., FullStory, Hotjar) that capture pasted DOM values and transmit them to external tracking endpoints.</li>
-          <li data-i18n="a5_sec1_li3"><strong>Catastrophic Secret Key Compromise:</strong> When verifying an HMAC token (`HS256`, `HS384`, `HS512`), pasting your application's shared secret into an online debugger allows anyone who obtains that secret to forge arbitrary valid tokens (such as elevating privileges to <code>{"role": "admin"}</code>) across your entire infrastructure.</li>
-          <li data-i18n="a5_sec1_li4"><strong>Statutory &amp; Regulatory Non-Compliance:</strong> Transmitting live authentication tokens containing user emails, roles, or internal system IDs over untrusted networks triggers severe non-compliance under GDPR, HIPAA, SOC 2 Type II, and PCI-DSS standards.</li>
+          <li data-i18n="a5_sec1_li1"><strong>Server and CDN Logs:</strong> Remote debugger servers log incoming HTTP payloads, potentially archiving live sessions and cryptographic keys in persistent access logs.</li>
+          <li data-i18n="a5_sec1_li2"><strong>Secret Key Exposure:</strong> Once an HMAC secret is pasted into an external website, it must be considered compromised and rotated across all services immediately.</li>
+          <li data-i18n="a5_sec1_li3"><strong>Privacy Compliance Violations:</strong> Transmitting personally identifiable information (PII) to untrusted servers violates GDPR, HIPAA, and enterprise compliance standards.</li>
         </ul>
 
         <!-- Visual Risk Comparison -->
@@ -1276,18 +1288,15 @@
 
       <!-- Section 2 -->
       <section id="section-2">
-        <h2 data-i18n="a5_sec2_h2">2. Architectural Deep Dive: RFC 7519 &amp; Native Web Crypto API</h2>
+        <h2 data-i18n="a5_sec2_h2">2. In-Browser Cryptographic Architecture via Web Crypto API</h2>
         <p data-i18n="a5_sec2_p1">
-          A JSON Web Token (RFC 7519) is a compact, URL-safe container consisting of three Base64URL-encoded segments delimited by periods: <code>&lt;Header&gt;.&lt;Payload&gt;.&lt;Signature&gt;</code>. Slicing and verifying this structure client-side without remote backend calls relies on two core browser subsystems: Base64URL memory parsing and the W3C Web Cryptography API (<code>window.crypto.subtle</code>).
-        </p>
-        <p data-i18n="a5_sec2_p2">
-          Here is how the browser pipeline executes in-RAM decoding and signature verification:
+          Modern browsers provide the standard SubtleCrypto interface, allowing you to import cryptographic keys and verify HMAC-SHA256 (HS256) signatures entirely within browser RAM without sending a single byte across the network:
         </p>
 
         <ul>
-          <li data-i18n="a5_sec2_li1"><strong>1. In-Memory Segmentation:</strong> The token string is split into its three components: <code>parts = token.trim().split('.')</code>. The header and payload are converted from Base64URL to standard Base64 (replacing <code>-</code> with <code>+</code>, <code>_</code> with <code>/</code>, and adding <code>=</code> padding), decoded into binary byte arrays, and parsed as UTF-8 JSON objects.</li>
-          <li data-i18n="a5_sec2_li2"><strong>2. Native Key Import:</strong> For symmetric HMAC verification (`HS256`, `HS384`, `HS512`), the user's secret key is converted into a UTF-8 `Uint8Array` and imported into an internal cryptographic key handle via <code>window.crypto.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify'])</code>. The raw secret remains memory-bound inside the browser process.</li>
-          <li data-i18n="a5_sec2_li3"><strong>3. Constant-Time Verification:</strong> The signature segment is decoded into a raw binary buffer. The signing input string (<code>`${headerB64}.${payloadB64}`</code>) is encoded to UTF-8 bytes. The browser calls <code>window.crypto.subtle.verify('HMAC', keyHandle, signatureBytes, signingInputBytes)</code>. The browser's native C++ cryptographic engine computes the HMAC digest and performs a constant-time comparison against the provided signature, preventing timing attacks.</li>
+          <li data-i18n="a5_sec2_li1"><strong>Absolute Key Secrecy:</strong> The secret key never leaves your workstation.</li>
+          <li data-i18n="a5_sec2_li2"><strong>Blazing Performance:</strong> Cryptographic verification executes in sub-millisecond time without network latency.</li>
+          <li data-i18n="a5_sec2_li3"><strong>Memory Safety:</strong> RAM is cleared immediately when the browser tab is closed.</li>
         </ul>
 
         <h3 data-i18n="a5_sec2_h3">Client-Side Cryptographic Architecture Flow</h3>
@@ -1374,15 +1383,54 @@ async function verifyJwtHmacSha256(rawJwt, secretKeyString) {
         </div>
 
         <p data-i18n="a5_sec2_p4">
-          Unlike userland JavaScript libraries that execute un-optimized math in interpreted code, <code>crypto.subtle</code> binds directly to the operating system's native cryptographic libraries (such as BoringSSL in Chromium or NSS in Firefox), providing hardware-accelerated SHA-256 hashing and timing-attack immunity.
+          Unlike userland JavaScript libraries that execute un-optimized math in interpreted code, <code>crypto.subtle</code> binds directly to operating system cryptographic libraries (BoringSSL/NSS), providing native hardware acceleration and constant-time execution.
         </p>
       </section>
 
       <!-- Section 3 -->
       <section id="section-3">
-        <h2 data-i18n="a5_sec3_h2">3. Technical Benchmark: Cloud Debuggers vs. VantorKit Local RAM</h2>
+        <h2 data-i18n="a5_sec3_h2">3. Steps to Inspect and Sign Tokens Locally in VantorKit</h2>
         <p data-i18n="a5_sec3_p1">
-          To understand the operational and security distinctions, we evaluated traditional cloud-hosted JWT debuggers against VantorKit's 100% in-browser memory architecture across critical security, performance, and compliance metrics:
+          Follow these streamlined steps to decode, inspect, and verify any JWT token securely in browser RAM:
+        </p>
+
+        <div class="step-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st1_title">1. Open VantorKit JWT Tool</h4>
+              <p data-i18n="a5_st1_desc">Open the JWT Decoder tool in VantorKit directly in your browser.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st2_title">2. Paste the Encoded Token</h4>
+              <p data-i18n="a5_st2_desc">Paste the encoded token: the tool instantly decodes the header, payload, and signature with semantic syntax coloring.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st3_title">3. Audit Validity Timestamps</h4>
+              <p data-i18n="a5_st3_desc">Audit expiration claims (exp, nbf, iat) to determine whether the token is currently active or expired.</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4 data-i18n="a5_st4_title">4. Verify Signature in Memory</h4>
+              <p data-i18n="a5_st4_desc">Paste your HMAC secret key to verify the cryptographic signature locally in browser RAM.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section id="section-4">
+        <h2 data-i18n="a5_sec4_h2">4. Technical Comparison Table: Cloud Tools vs. Local RAM</h2>
+        <p data-i18n="a5_sec4_p1">
+          To understand the operational and security distinctions, we evaluated traditional cloud debuggers against VantorKit's local RAM processing:
         </p>
 
         <!-- Benchmark Table -->
@@ -1390,99 +1438,75 @@ async function verifyJwtHmacSha256(rawJwt, secretKeyString) {
           <table class="benchmark-table">
             <thead>
               <tr>
-                <th data-i18n="a5_tb_th1">Architecture Dimension</th>
-                <th data-i18n="a5_tb_th2">Online Cloud Debuggers</th>
-                <th data-i18n="a5_tb_th3">Local Node.js CLI Script</th>
-                <th class="highlight-col" data-i18n="a5_tb_th4">VantorKit In-RAM Engine</th>
+                <th data-i18n="a5_tb_th1">Feature</th>
+                <th data-i18n="a5_tb_th2">Traditional Cloud Debuggers</th>
+                <th class="highlight-col" data-i18n="a5_tb_th3">VantorKit In-RAM Engine</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td data-i18n="a5_tb_r1_metric"><strong>Secret Key Exposure</strong></td>
-                <td data-i18n="a5_tb_r1_c1"><span class="badge-metric-loss">High Risk</span> Transmitted to remote edge</td>
-                <td data-i18n="a5_tb_r1_c2"><span class="badge-metric-mid">Medium</span> Stored in shell history</td>
-                <td class="highlight-col" data-i18n="a5_tb_r1_c3"><span class="badge-metric-win">Zero Exposure</span> Local RAM only</td>
+                <td data-i18n="a5_tb_r1_metric"><strong>Data Transmission</strong></td>
+                <td data-i18n="a5_tb_r1_c1">Token and secret sent to remote server</td>
+                <td class="highlight-col" data-i18n="a5_tb_r1_c2">0 bytes (isolated processing in RAM)</td>
               </tr>
               <tr>
-                <td data-i18n="a5_tb_r2_metric"><strong>Cryptographic Engine</strong></td>
-                <td data-i18n="a5_tb_r2_c1"><span class="badge-metric-mid">Remote Server</span> Unknown library version</td>
-                <td data-i18n="a5_tb_r2_c2"><span class="badge-metric-win">Local OpenSSL</span> Node.js runtime</td>
-                <td class="highlight-col" data-i18n="a5_tb_r2_c3"><span class="badge-metric-win">W3C Web Crypto</span> BoringSSL / NSS</td>
+                <td data-i18n="a5_tb_r2_metric"><strong>Secret Key Security</strong></td>
+                <td data-i18n="a5_tb_r2_c1">At risk of being logged on servers</td>
+                <td class="highlight-col" data-i18n="a5_tb_r2_c2">Never leaves the browser sandbox</td>
               </tr>
               <tr>
-                <td data-i18n="a5_tb_r3_metric"><strong>Claim &amp; Expiry Auditing</strong></td>
-                <td data-i18n="a5_tb_r3_c1"><span class="badge-metric-mid">Server Skew</span> Clock drift dependent</td>
-                <td data-i18n="a5_tb_r3_c2"><span class="badge-metric-win">Instant</span> Script parsing</td>
-                <td class="highlight-col" data-i18n="a5_tb_r3_c3"><span class="badge-metric-win">Real-Time</span> Visual epoch clock sync</td>
+                <td data-i18n="a5_tb_r3_metric"><strong>Cryptographic Engine</strong></td>
+                <td data-i18n="a5_tb_r3_c1">Server-side Node.js environment</td>
+                <td class="highlight-col" data-i18n="a5_tb_r3_c2">Standard in-browser Web Crypto API</td>
               </tr>
               <tr>
-                <td data-i18n="a5_tb_r4_metric"><strong>Timing Attack Protection</strong></td>
-                <td data-i18n="a5_tb_r4_c1"><span class="badge-metric-loss">Vulnerable</span> Network jitter variance</td>
-                <td data-i18n="a5_tb_r4_c2"><span class="badge-metric-win">Constant-Time</span> timingSafeEqual</td>
-                <td class="highlight-col" data-i18n="a5_tb_r4_c3"><span class="badge-metric-win">Native Constant-Time</span> C++ Engine</td>
+                <td data-i18n="a5_tb_r4_metric"><strong>Response Latency</strong></td>
+                <td data-i18n="a5_tb_r4_c1">200 to 1,500 ms</td>
+                <td class="highlight-col" data-i18n="a5_tb_r4_c2">Instant (&lt; 1 ms)</td>
               </tr>
               <tr>
-                <td data-i18n="a5_tb_r5_metric"><strong>Security Telemetry &amp; Tracking</strong></td>
-                <td data-i18n="a5_tb_r5_c1"><span class="badge-metric-loss">Active</span> Analytics &amp; session replays</td>
-                <td data-i18n="a5_tb_r5_c2"><span class="badge-metric-win">0 Trackers</span> Clean terminal</td>
-                <td class="highlight-col" data-i18n="a5_tb_r5_c3"><span class="badge-metric-win">0 Trackers</span> 0 Cookies / 0 Telemetry</td>
-              </tr>
-              <tr>
-                <td data-i18n="a5_tb_r6_metric"><strong>Offline / Air-Gapped Usability</strong></td>
-                <td data-i18n="a5_tb_r6_c1"><span class="badge-metric-loss">Fails</span> Internet connection required</td>
-                <td data-i18n="a5_tb_r6_c2"><span class="badge-metric-win">Works Offline</span> Requires CLI setup</td>
-                <td class="highlight-col" data-i18n="a5_tb_r6_c3"><span class="badge-metric-win">100% Offline</span> Airplane mode ready</td>
+                <td data-i18n="a5_tb_r5_metric"><strong>Privacy Compliance</strong></td>
+                <td data-i18n="a5_tb_r5_c1">Potential retention of session claims</td>
+                <td class="highlight-col" data-i18n="a5_tb_r5_c2">100% compliant with privacy standards</td>
               </tr>
             </tbody>
           </table>
         </div>
-
-        <p data-i18n="a5_sec3_p2">
-          By leveraging native browser cryptography, VantorKit matches the privacy guarantees of a local command-line script while delivering the intuitive, interactive visual experience of a modern web application.
-        </p>
       </section>
 
-      <!-- Section 4 -->
-      <section id="section-4">
-        <h2 data-i18n="a5_sec4_h2">4. Step-by-Step Practical Guide &amp; DevTools Network Verification</h2>
-        <p data-i18n="a5_sec4_p1">
-          Here is the exact workflow for decoding, inspecting, and verifying a JSON Web Token locally while independently verifying zero network activity via Chrome DevTools:
+      <!-- Section 5 -->
+      <section id="section-5">
+        <h2 data-i18n="a5_sec5_h2">5. Self-Verification of Zero Network Egress via DevTools</h2>
+        <p data-i18n="a5_sec5_p1">
+          You can verify for yourself that your secret keys never leave your workstation:
         </p>
 
         <div class="step-grid">
           <div class="step-card">
             <div class="step-num">1</div>
             <div class="step-content">
-              <h4 data-i18n="a5_st1_title">Load the In-Memory JWT Decoder</h4>
-              <p data-i18n="a5_st1_desc">Open VantorKit JWT Decoder in your browser. Paste your encoded token into the input area. The application instantly decomposes the Base64URL string into Header, Payload, and Signature components without initiating any background network requests.</p>
+              <p data-i18n="a5_dev_step1">1. Open Developer Tools in your browser (F12).</p>
             </div>
           </div>
           <div class="step-card">
             <div class="step-num">2</div>
             <div class="step-content">
-              <h4 data-i18n="a5_st2_title">Audit Token Claims &amp; Expiration Timestamps</h4>
-              <p data-i18n="a5_st2_desc">Review the decoded JSON claims. VantorKit automatically inspects standard RFC 7519 timestamp claims (exp: Expiration Time, nbf: Not Before, iat: Issued At), compares them to your machine's system epoch clock, and renders real-time status badges indicating whether the token is currently active or expired.</p>
+              <p data-i18n="a5_dev_step2">2. Switch to the Network tab.</p>
             </div>
           </div>
           <div class="step-card">
             <div class="step-num">3</div>
             <div class="step-content">
-              <h4 data-i18n="a5_st3_title">Enter Secret / Public Key for Cryptographic Verification</h4>
-              <p data-i18n="a5_st3_desc">For HMAC signatures (HS256, HS384, HS512), enter your shared secret in the key field. For RSA/ECDSA (RS256, ES256), paste the public key or certificate. The Web Crypto API verifies the signature in constant time and immediately toggles the Signature Verified status indicator.</p>
+              <p data-i18n="a5_dev_step3">3. Paste your token and secret key, then verify the signature.</p>
             </div>
           </div>
           <div class="step-card">
             <div class="step-num">4</div>
             <div class="step-content">
-              <h4 data-i18n="a5_st4_title">Verify 0 KB Network Egress in Chrome DevTools</h4>
-              <p data-i18n="a5_st4_desc">Press F12 (Cmd+Option+I on macOS) to open Developer Tools. Click on the Network tab and ensure the Fetch/XHR filter is enabled. Paste new tokens, alter payload claims, and verify signatures. You will observe exactly 0 requests recorded—proving that your production credentials and keys remain isolated in local RAM.</p>
+              <p data-i18n="a5_dev_step4">4. You will observe that external requests remain strictly zero (0 Requests / 0 KB).</p>
             </div>
           </div>
         </div>
-
-        <p data-i18n="a5_sec4_p2">
-          This independent audit guarantees compliance with enterprise security baselines and eliminates the risk of inadvertent credential leakage.
-        </p>
       </section>
 
       <!-- Section: Interactive Tool Callout (Below Fold) -->
@@ -1504,12 +1528,12 @@ async function verifyJwtHmacSha256(rawJwt, secretKeyString) {
         </div>
       </section>
 
-      <!-- Section 5: FAQs -->
-      <section id="section-5" class="faq-block">
-        <h2 data-i18n="a5_sec5_h2">5. Frequently Asked Questions (JWT Security &amp; Cryptography)</h2>
+      <!-- Section: FAQs -->
+      <section id="section-faq" class="faq-block">
+        <h2 data-i18n="a5_faq_sec_h2">Frequently Asked Questions (JWT Security &amp; Cryptography)</h2>
         
         <div class="faq-item">
-          <h3 class="faq-q" data-i18n="a5_faq1_q">Is it safe to paste production JWT tokens into online debuggers?</h3>
+          <h3 class="faq-q" data-i18n="a5_faq1_q">Is it safe to paste live production JWT tokens into online debuggers?</h3>
           <p class="faq-a" data-i18n="a5_faq1_a">
             No. Online debuggers that process tokens on remote servers transmit bearer credentials over the internet, exposing them to CDN edge logs, reverse proxies, and third-party analytics trackers. If a token contains sensitive claims or if you paste your HMAC secret key to verify the signature, an attacker who intercepts the data can authenticate as that user or forge arbitrary valid tokens across your entire system. Tokens should only be decoded and verified locally in browser memory or via offline CLI tools.
           </p>
@@ -1536,7 +1560,6 @@ async function verifyJwtHmacSha256(rawJwt, secretKeyString) {
           </p>
         </div>
       </section>
-
     </div>
   </article>
 
