@@ -431,7 +431,12 @@
       footerContact: "Contact",
       favAddAria: "Add to favorites",
       favRemoveAria: "Remove from favorites",
-      unstarTooltip: "Remove from favorites"
+      unstarTooltip: "Remove from favorites",
+      installApp: "Install App",
+      installAppSub: "Fast offline access",
+      installIosTip: "Tap Share (⎋) then 'Add to Home Screen'",
+      installDesktopTip: "Click the install icon in your browser address bar",
+      appInstalled: "App Installed"
     },
     ar: {
       hamburgerAria: "فتح القائمة",
@@ -455,7 +460,12 @@
       footerContact: "اتصل بنا",
       favAddAria: "أضف للمفضلة",
       favRemoveAria: "إزالة من المفضلة",
-      unstarTooltip: "إزالة من المفضلة"
+      unstarTooltip: "إزالة من المفضلة",
+      installApp: "تثبيت التطبيق",
+      installAppSub: "وصول سريع دون إنترنت",
+      installIosTip: "اضغط على مشاركة (⎋) ثم اختر 'إضافة إلى الشاشة الرئيسية'",
+      installDesktopTip: "انقر على أيقونة التثبيت في شريط عنوان المتصفح",
+      appInstalled: "تم تثبيت التطبيق"
     },
     fr: {
       hamburgerAria: "Ouvrir le menu",
@@ -479,7 +489,12 @@
       footerContact: "Contact",
       favAddAria: "Ajouter aux favoris",
       favRemoveAria: "Retirer des favoris",
-      unstarTooltip: "Retirer des favoris"
+      unstarTooltip: "Retirer des favoris",
+      installApp: "Installer l'application",
+      installAppSub: "Accès hors-ligne rapide",
+      installIosTip: "Appuyez sur Partager (⎋) puis 'Sur l'écran d'accueil'",
+      installDesktopTip: "Cliquez sur l'icône d'installation dans la barre d'adresse",
+      appInstalled: "Application installée"
     },
     it: {
       hamburgerAria: "Apri menu",
@@ -503,7 +518,12 @@
       footerContact: "Contatto",
       favAddAria: "Aggiungi ai preferiti",
       favRemoveAria: "Rimuovi dai preferiti",
-      unstarTooltip: "Rimuovi dai preferiti"
+      unstarTooltip: "Rimuovi dai preferiti",
+      installApp: "Installa applicazione",
+      installAppSub: "Accesso rapido offline",
+      installIosTip: "Tocca Condividi (⎋) e poi 'Aggiungi a schermata Home'",
+      installDesktopTip: "Fai clic sull'icona di installazione nella barra degli indirizzi",
+      appInstalled: "Applicazione installata"
     }
   };
 
@@ -728,6 +748,24 @@
           </div>
         </div>
 
+        <!-- PWA Install Action -->
+        <div class="vk-sidebar-install-wrap" id="vkSidebarInstallWrap">
+          <button type="button" class="vk-sidebar-install-btn" id="vkSidebarInstallBtn" aria-label="${getTranslation('installApp')}">
+            <div class="vk-sidebar-install-icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <div class="vk-sidebar-install-info">
+              <span class="vk-sidebar-install-title" id="vkSidebarInstallTitle">${getTranslation('installApp')}</span>
+              <span class="vk-sidebar-install-sub" id="vkSidebarInstallSub">${getTranslation('installAppSub')}</span>
+            </div>
+            <span class="vk-sidebar-install-badge" id="vkSidebarInstallBadge">PWA</span>
+          </button>
+        </div>
+
         <!-- Sidebar Footer -->
         <div class="vk-sidebar-footer">
           <a href="https://github.com/hajjami4270/vantorkit" target="_blank" rel="noopener noreferrer" class="vk-sidebar-footer-link" aria-label="View VantorKit on GitHub">
@@ -748,6 +786,11 @@
     }
 
     closeBtnEl = document.getElementById('vkSidebarClose');
+
+    const sidebarInstallBtn = document.getElementById('vkSidebarInstallBtn');
+    if (sidebarInstallBtn) {
+      sidebarInstallBtn.addEventListener('click', handleInstallClick);
+    }
 
     // Attach Event Listeners
     if (toggleBtnEl) {
@@ -1102,6 +1145,164 @@
     }
   });
 
+  // --- PWA Platform & Install Engine ---
+  let deferredInstallPrompt = null;
+
+  function ensurePwaHeadTags() {
+    try {
+      if (!document.querySelector('link[rel="manifest"]')) {
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = '/manifest.json';
+        document.head.appendChild(link);
+      }
+      if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+        const appleLink = document.createElement('link');
+        appleLink.rel = 'apple-touch-icon';
+        appleLink.href = '/apple-touch-icon.png';
+        document.head.appendChild(appleLink);
+      }
+      if (!document.querySelector('meta[name="theme-color"]')) {
+        const metaTheme = document.createElement('meta');
+        metaTheme.name = 'theme-color';
+        metaTheme.content = '#0f172a';
+        document.head.appendChild(metaTheme);
+      }
+      if (!document.querySelector('meta[name="mobile-web-app-capable"]')) {
+        const metaApp = document.createElement('meta');
+        metaApp.name = 'mobile-web-app-capable';
+        metaApp.content = 'yes';
+        document.head.appendChild(metaApp);
+      }
+    } catch (e) {}
+  }
+
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then((reg) => {
+            console.log('[PWA] Service Worker registered with scope:', reg.scope);
+          })
+          .catch((err) => {
+            console.warn('[PWA] Service Worker registration note:', err);
+          });
+      });
+    }
+  }
+
+  function isAppInstalled() {
+    try {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true ||
+             document.referrer.includes('android-app://');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function updateInstallUI() {
+    const isInstalled = isAppInstalled();
+    const badge = document.getElementById('vkSidebarInstallBadge');
+    const title = document.getElementById('vkSidebarInstallTitle');
+    const sub = document.getElementById('vkSidebarInstallSub');
+    const sidebarBtn = document.getElementById('vkSidebarInstallBtn');
+    const navBtn = document.getElementById('vkNavInstallBtn');
+    const navText = document.getElementById('vkNavInstallText');
+
+    if (isInstalled) {
+      if (badge) badge.textContent = '✓';
+      if (title) title.textContent = getTranslation('appInstalled');
+      if (sub) sub.textContent = getTranslation('installAppSub');
+      if (sidebarBtn) sidebarBtn.classList.add('vk-installed');
+      if (navBtn) navBtn.classList.add('vk-installed');
+      if (navText) navText.textContent = getTranslation('appInstalled');
+    } else {
+      if (badge) badge.textContent = 'PWA';
+      if (title) title.textContent = getTranslation('installApp');
+      if (sub) sub.textContent = getTranslation('installAppSub');
+      if (sidebarBtn) sidebarBtn.classList.remove('vk-installed');
+      if (navBtn) navBtn.classList.remove('vk-installed');
+      if (navText) navText.textContent = getTranslation('installApp');
+    }
+  }
+
+  function showPwaToast(message) {
+    let toast = document.getElementById('vkPwaToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'vkPwaToast';
+      toast.className = 'vk-pwa-toast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add('vk-toast-visible');
+    setTimeout(() => {
+      toast.classList.remove('vk-toast-visible');
+    }, 4500);
+  }
+
+  function handleInstallClick(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isAppInstalled()) {
+      showPwaToast(getTranslation('appInstalled'));
+      return;
+    }
+
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult && choiceResult.outcome === 'accepted') {
+          deferredInstallPrompt = null;
+          updateInstallUI();
+        }
+      }).catch(() => {});
+    } else {
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const tip = isIos ? getTranslation('installIosTip') : getTranslation('installDesktopTip');
+      showPwaToast(tip);
+    }
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    updateInstallUI();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    updateInstallUI();
+  });
+
+  function initNavInstallBtn() {
+    if (document.getElementById('vkNavInstallBtn')) return;
+    const navContainer = document.querySelector('.nav-actions, .nav-right');
+    if (navContainer) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'vk-nav-install-btn';
+      btn.id = 'vkNavInstallBtn';
+      btn.setAttribute('aria-label', getTranslation('installApp'));
+      btn.setAttribute('title', getTranslation('installApp'));
+      btn.innerHTML = `
+        <svg class="vk-nav-install-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span class="vk-nav-install-text" id="vkNavInstallText">${getTranslation('installApp')}</span>
+      `;
+      btn.addEventListener('click', handleInstallClick);
+      navContainer.insertBefore(btn, navContainer.firstChild);
+    }
+  }
+
   // --- Sync with Language Switcher via MutationObserver ---
   function updateSidebarLanguage() {
     if (toggleBtnEl) toggleBtnEl.setAttribute('aria-label', getTranslation('hamburgerAria'));
@@ -1131,10 +1332,29 @@
     const footerContact = document.getElementById('vkSidebarFooterContact');
     if (footerContact) footerContact.textContent = getTranslation('footerContact');
 
+    const installTitle = document.getElementById('vkSidebarInstallTitle');
+    if (installTitle) installTitle.textContent = getTranslation('installApp');
+
+    const installSub = document.getElementById('vkSidebarInstallSub');
+    if (installSub) installSub.textContent = getTranslation('installAppSub');
+
+    const sidebarInstallBtn = document.getElementById('vkSidebarInstallBtn');
+    if (sidebarInstallBtn) sidebarInstallBtn.setAttribute('aria-label', getTranslation('installApp'));
+
+    const navInstallText = document.getElementById('vkNavInstallText');
+    if (navInstallText) navInstallText.textContent = getTranslation('installApp');
+
+    const navInstallBtn = document.getElementById('vkNavInstallBtn');
+    if (navInstallBtn) {
+      navInstallBtn.setAttribute('aria-label', getTranslation('installApp'));
+      navInstallBtn.setAttribute('title', getTranslation('installApp'));
+    }
+
     renderCategories();
     renderRecents();
     renderFavorites();
     updateHomepageCardStars();
+    updateInstallUI();
   }
 
   const observer = new MutationObserver((mutations) => {
@@ -1163,8 +1383,12 @@
 
   // --- Initialization ---
   function init() {
+    ensurePwaHeadTags();
+    registerServiceWorker();
     recordCurrentTool();
     initDOM();
+    initNavInstallBtn();
+    updateInstallUI();
     checkUrlCategory();
   }
 
@@ -1174,3 +1398,4 @@
     init();
   }
 })();
+

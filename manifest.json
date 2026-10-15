@@ -1,0 +1,66 @@
+{
+  "name": "VantorKit — 100% Client-Side Private Web Utilities",
+  "short_name": "VantorKit",
+  "description": "33 privacy-first, in-browser utilities running 100% locally in RAM via WebAssembly and Web Workers with zero cloud uploads.",
+  "start_url": "/",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#020617",
+  "theme_color": "#0f172a",
+  "orientation": "any",
+  "dir": "auto",
+  "lang": "en",
+  "categories": ["utilities", "developer tools", "productivity", "security"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Private PDF Redactor",
+      "short_name": "PDF Redactor",
+      "description": "Redact and sign PDFs locally in RAM",
+      "url": "/tools/pdf-redactor.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Local Video Trimmer",
+      "short_name": "Video Trimmer",
+      "description": "Trim MP4 clips without re-encoding",
+      "url": "/tools/video-trimmer.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "JWT Decoder & Verifier",
+      "short_name": "JWT Decoder",
+      "description": "Inspect and verify JWTs via WebCrypto",
+      "url": "/tools/jwt-decoder.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Big-Data Transformer",
+      "short_name": "Big Data",
+      "description": "Parse large CSV/JSON streams in Web Workers",
+      "url": "/tools/big-data-transformer.html",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
