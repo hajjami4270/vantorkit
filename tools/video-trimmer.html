@@ -25,9 +25,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Client-Side FFmpeg.wasm Engine for Fast Stream Copying -->
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
-
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
 {
@@ -1809,7 +1806,7 @@
                 <option value="webm" data-i18n="optWebm">WebM (Universal Web)</option>
               </select>
             </div>
-            <button type="button" class="video-trimmer-btn video-trimmer-btn-export" id="btnExportVideo">
+            <button type="button" class="video-trimmer-btn video-trimmer-btn-export" id="trimBtn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               <span id="btnExportText" data-i18n="btnExport">Trim &amp; Export Video</span>
             </button>
@@ -2260,6 +2257,7 @@
   </div>
 
   <!-- Main Video Trimmer Engine Script -->
+  <script src="./js/mp4-muxer.js" defer></script>
   <script src="./js/video-trimmer.js" defer></script>
   <script src="../sidebar.js" defer></script>
 </body>

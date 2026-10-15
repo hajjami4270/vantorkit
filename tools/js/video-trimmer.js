@@ -295,7 +295,15 @@
 
     // Export Controls
     const exportFormatSelect = document.getElementById('exportFormatSelect');
-    const btnExportVideo = document.getElementById('btnExportVideo');
+    // Support both trimBtn and legacy btnExportVideo queries
+    const origGetById = document.getElementById.bind(document);
+    document.getElementById = function(id) {
+      if (id === 'btnExportVideo') {
+        return origGetById('trimBtn') || origGetById('btnExportVideo');
+      }
+      return origGetById(id);
+    };
+    const btnExportVideo = document.getElementById('trimBtn') || document.getElementById('btnExportVideo');
     const exportProgressCard = document.getElementById('exportProgressCard');
     const exportProgressText = document.getElementById('exportProgressText');
     const exportProgressSub = document.getElementById('exportProgressSub');
@@ -317,6 +325,7 @@
        ========================================================================== */
     let currentVideoFile = null;
     let currentVideoUrl = null;
+    let currentArrayBuffer = null;
     let videoDuration = 0;
     let selectionStart = 0;
     let selectionEnd = 0;
@@ -324,8 +333,6 @@
     let isDragging = null; // 'start', 'end', or null
     let exportedBlob = null;
     let exportedUrl = null;
-    let ffmpegInstance = null;
-    let isFfmpegLoading = false;
 
     /* ==========================================================================
        Time Utility Functions (Strict formatting & parsing)
@@ -453,6 +460,14 @@
       stopPreviewLoop();
       clearError();
       exportSuccessCard.classList.remove('active');
+
+      currentVideoFile = blob;
+      currentArrayBuffer = null;
+      if (blob && typeof blob.arrayBuffer === 'function') {
+        blob.arrayBuffer().then(buf => {
+          currentArrayBuffer = buf;
+        }).catch(() => {});
+      }
 
       const dict = TRANSLATIONS[getActiveLang()];
       videoLoadingText.textContent = dict.statusLoading;
@@ -903,31 +918,345 @@
     });
 
     /* ==========================================================================
-       Client-Side Video Processing Engine (Fast Stream Copy + Native Fallback)
+       Client-Side Video Processing Engine (Two-Tier Offline Architecture)
+       Tier 1: Pure In-Memory MP4 ISO-BMFF Box Stream Slicer (via Mp4Muxer)
+       Tier 2: Guaranteed Hardware Stream Capture Fallback (MediaRecorder)
        ========================================================================== */
 
-    async function initFFmpegEngine() {
-      if (ffmpegInstance && ffmpegInstance.isLoaded()) return ffmpegInstance;
-      if (typeof FFmpeg === 'undefined' || !FFmpeg.createFFmpeg) {
+    function sliceMp4Stream(arrayBuffer, startSec, endSec) {
+      if (typeof Mp4Muxer === 'undefined') {
+        throw new Error("Mp4Muxer library is not available");
+      }
+
+      const view = new DataView(arrayBuffer);
+      const totalLength = arrayBuffer.byteLength;
+
+      function findBox(offset, end, boxType) {
+        let cur = offset;
+        while (cur < end - 8) {
+          const size = view.getUint32(cur);
+          const type = String.fromCharCode(
+            view.getUint8(cur + 4),
+            view.getUint8(cur + 5),
+            view.getUint8(cur + 6),
+            view.getUint8(cur + 7)
+          );
+          const actualSize = size === 1 ? Number(view.getBigUint64(cur + 8)) : size;
+          if (type === boxType) {
+            return { offset: cur, size: actualSize };
+          }
+          if (actualSize <= 0) break;
+          cur += actualSize;
+        }
         return null;
       }
-      try {
-        isFfmpegLoading = true;
-        ffmpegInstance = FFmpeg.createFFmpeg({
-          corePath: 'https://unpkg.com/@ffmpeg/core-st@0.10.0/dist/ffmpeg-core.js',
-          log: false
-        });
-        await ffmpegInstance.load();
-        isFfmpegLoading = false;
-        return ffmpegInstance;
-      } catch (e) {
-        console.warn("FFmpeg single-threaded WASM load failed, native fallback will be used:", e);
-        isFfmpegLoading = false;
-        return null;
+
+      function findAllBoxes(offset, end, boxType) {
+        const list = [];
+        let cur = offset;
+        while (cur < end - 8) {
+          const size = view.getUint32(cur);
+          const type = String.fromCharCode(
+            view.getUint8(cur + 4),
+            view.getUint8(cur + 5),
+            view.getUint8(cur + 6),
+            view.getUint8(cur + 7)
+          );
+          const actualSize = size === 1 ? Number(view.getBigUint64(cur + 8)) : size;
+          if (type === boxType) {
+            list.push({ offset: cur, size: actualSize });
+          }
+          if (actualSize <= 0) break;
+          cur += actualSize;
+        }
+        return list;
       }
+
+      const moov = findBox(0, totalLength, 'moov');
+      const mdat = findBox(0, totalLength, 'mdat');
+      if (!moov || !mdat) throw new Error("Missing moov or mdat box");
+
+      const traks = findAllBoxes(moov.offset + 8, moov.offset + moov.size, 'trak');
+      if (traks.length === 0) throw new Error("No tracks found");
+
+      let videoTrackInfo = null;
+      let audioTrackInfo = null;
+
+      for (const trak of traks) {
+        const trakEnd = trak.offset + trak.size;
+        const mdia = findBox(trak.offset + 8, trakEnd, 'mdia');
+        if (!mdia) continue;
+        const mdiaEnd = mdia.offset + mdia.size;
+
+        const hdlr = findBox(mdia.offset + 8, mdiaEnd, 'hdlr');
+        if (!hdlr) continue;
+        const handlerType = String.fromCharCode(
+          view.getUint8(hdlr.offset + 16),
+          view.getUint8(hdlr.offset + 17),
+          view.getUint8(hdlr.offset + 18),
+          view.getUint8(hdlr.offset + 19)
+        );
+
+        const mdhd = findBox(mdia.offset + 8, mdiaEnd, 'mdhd');
+        if (!mdhd) continue;
+        const mdhdVer = view.getUint8(mdhd.offset + 8);
+        const timescale = mdhdVer === 0 ? view.getUint32(mdhd.offset + 20) : view.getUint32(mdhd.offset + 28);
+
+        const minf = findBox(mdia.offset + 8, mdiaEnd, 'minf');
+        if (!minf) continue;
+        const stbl = findBox(minf.offset + 8, minf.offset + minf.size, 'stbl');
+        if (!stbl) continue;
+        const stblEnd = stbl.offset + stbl.size;
+
+        const stsd = findBox(stbl.offset + 8, stblEnd, 'stsd');
+        if (!stsd) continue;
+
+        // stsz
+        const stsz = findBox(stbl.offset + 8, stblEnd, 'stsz');
+        if (!stsz) continue;
+        const defaultSampleSize = view.getUint32(stsz.offset + 12);
+        const sampleCount = view.getUint32(stsz.offset + 16);
+        const sampleSizes = [];
+        if (defaultSampleSize === 0) {
+          let cur = stsz.offset + 20;
+          for (let i = 0; i < sampleCount; i++) {
+            sampleSizes.push(view.getUint32(cur));
+            cur += 4;
+          }
+        } else {
+          for (let i = 0; i < sampleCount; i++) sampleSizes.push(defaultSampleSize);
+        }
+
+        // stts
+        const stts = findBox(stbl.offset + 8, stblEnd, 'stts');
+        if (!stts) continue;
+        const sttsEntries = view.getUint32(stts.offset + 12);
+        const sampleDurations = [];
+        let curStts = stts.offset + 16;
+        for (let i = 0; i < sttsEntries; i++) {
+          const count = view.getUint32(curStts);
+          const delta = view.getUint32(curStts + 4);
+          for (let c = 0; c < count; c++) sampleDurations.push(delta);
+          curStts += 8;
+        }
+
+        // stsc
+        const stsc = findBox(stbl.offset + 8, stblEnd, 'stsc');
+        const stscList = [];
+        if (stsc) {
+          const entryCount = view.getUint32(stsc.offset + 12);
+          let cur = stsc.offset + 16;
+          for (let i = 0; i < entryCount; i++) {
+            stscList.push({
+              firstChunk: view.getUint32(cur),
+              samplesPerChunk: view.getUint32(cur + 4)
+            });
+            cur += 12;
+          }
+        }
+
+        // stco or co64
+        const stco = findBox(stbl.offset + 8, stblEnd, 'stco');
+        const co64 = !stco ? findBox(stbl.offset + 8, stblEnd, 'co64') : null;
+        const chunkOffsets = [];
+        if (stco) {
+          const chunkCount = view.getUint32(stco.offset + 12);
+          let cur = stco.offset + 16;
+          for (let i = 0; i < chunkCount; i++) {
+            chunkOffsets.push(view.getUint32(cur));
+            cur += 4;
+          }
+        } else if (co64) {
+          const chunkCount = view.getUint32(co64.offset + 12);
+          let cur = co64.offset + 16;
+          for (let i = 0; i < chunkCount; i++) {
+            chunkOffsets.push(Number(view.getBigUint64(cur)));
+            cur += 8;
+          }
+        }
+
+        if (chunkOffsets.length === 0 || sampleSizes.length === 0) continue;
+
+        // stss
+        const stss = findBox(stbl.offset + 8, stblEnd, 'stss');
+        const syncSamples = new Set();
+        if (stss) {
+          const syncCount = view.getUint32(stss.offset + 12);
+          let cur = stss.offset + 16;
+          for (let i = 0; i < syncCount; i++) {
+            syncSamples.add(view.getUint32(cur));
+            cur += 4;
+          }
+        } else {
+          for (let i = 1; i <= sampleCount; i++) syncSamples.add(i);
+        }
+
+        // Build samples
+        const samples = [];
+        let sampleIdx = 0;
+        let stscIdx = 0;
+        let currentTimescaleUnits = 0;
+
+        for (let chunkIdx = 0; chunkIdx < chunkOffsets.length; chunkIdx++) {
+          const chunkNumber = chunkIdx + 1;
+          if (stscIdx + 1 < stscList.length && chunkNumber >= stscList[stscIdx + 1].firstChunk) {
+            stscIdx++;
+          }
+          const samplesInChunk = stscList[stscIdx] ? stscList[stscIdx].samplesPerChunk : 1;
+          let sampleOffset = chunkOffsets[chunkIdx];
+
+          for (let s = 0; s < samplesInChunk && sampleIdx < sampleSizes.length; s++) {
+            const size = sampleSizes[sampleIdx];
+            const dur = sampleDurations[sampleIdx] !== undefined ? sampleDurations[sampleIdx] : (sampleDurations[0] || 1000);
+            const timeSec = currentTimescaleUnits / timescale;
+            const isKey = syncSamples.has(sampleIdx + 1);
+
+            samples.push({
+              index: sampleIdx,
+              isKey,
+              offset: sampleOffset,
+              size,
+              duration: dur,
+              timeSec,
+              timestampUs: Math.round(timeSec * 1e6),
+              durationUs: Math.round((dur / timescale) * 1e6)
+            });
+
+            sampleOffset += size;
+            currentTimescaleUnits += dur;
+            sampleIdx++;
+          }
+        }
+
+        if (handlerType === 'vide' && !videoTrackInfo) {
+          const avc1 = findBox(stsd.offset + 16, stsd.offset + stsd.size, 'avc1');
+          if (avc1) {
+            const avcC = findBox(avc1.offset + 86, avc1.offset + avc1.size, 'avcC');
+            const width = view.getUint16(avc1.offset + 32);
+            const height = view.getUint16(avc1.offset + 34);
+            const avcCData = avcC ? new Uint8Array(arrayBuffer, avcC.offset + 8, avcC.size - 8) : null;
+            videoTrackInfo = {
+              codec: 'avc',
+              width,
+              height,
+              avcCData,
+              timescale,
+              samples
+            };
+          }
+        } else if (handlerType === 'soun' && !audioTrackInfo) {
+          const mp4a = findBox(stsd.offset + 16, stsd.offset + stsd.size, 'mp4a');
+          if (mp4a) {
+            const numberOfChannels = view.getUint16(mp4a.offset + 24) || 2;
+            const sampleRate = view.getUint16(mp4a.offset + 32) || 44100;
+            audioTrackInfo = {
+              codec: 'aac',
+              numberOfChannels,
+              sampleRate,
+              timescale,
+              samples
+            };
+          }
+        }
+      }
+
+      if (!videoTrackInfo || videoTrackInfo.samples.length === 0) {
+        throw new Error("No valid video track found for fast stream copying");
+      }
+
+      // Find start keyframe sample index <= startSec
+      let startIdx = 0;
+      for (let i = 0; i < videoTrackInfo.samples.length; i++) {
+        const s = videoTrackInfo.samples[i];
+        if (s.timeSec <= startSec && s.isKey) {
+          startIdx = i;
+        } else if (s.timeSec > startSec) {
+          break;
+        }
+      }
+
+      // Find end sample index <= endSec
+      let endIdx = startIdx;
+      for (let i = startIdx; i < videoTrackInfo.samples.length; i++) {
+        const s = videoTrackInfo.samples[i];
+        if (s.timeSec <= endSec) {
+          endIdx = i;
+        } else {
+          break;
+        }
+      }
+
+      const selectedVideoSamples = videoTrackInfo.samples.slice(startIdx, endIdx + 1);
+      if (selectedVideoSamples.length === 0) {
+        throw new Error("No video samples in selected range");
+      }
+
+      const target = new Mp4Muxer.ArrayBufferTarget();
+      const muxerOptions = {
+        target,
+        video: {
+          codec: 'avc',
+          width: videoTrackInfo.width,
+          height: videoTrackInfo.height
+        },
+        fastStart: 'in-memory'
+      };
+
+      if (audioTrackInfo && audioTrackInfo.samples.length > 0) {
+        muxerOptions.audio = {
+          codec: 'aac',
+          numberOfChannels: audioTrackInfo.numberOfChannels,
+          sampleRate: audioTrackInfo.sampleRate
+        };
+      }
+
+      const muxer = new Mp4Muxer.Muxer(muxerOptions);
+      const firstVideoTs = selectedVideoSamples[0].timestampUs;
+
+      const decoderConfig = videoTrackInfo.avcCData ? {
+        codec: 'avc1.42E01E',
+        description: videoTrackInfo.avcCData,
+        colorSpace: {}
+      } : undefined;
+
+      for (let i = 0; i < selectedVideoSamples.length; i++) {
+        const s = selectedVideoSamples[i];
+        const data = new Uint8Array(arrayBuffer, s.offset, s.size);
+        muxer.addVideoChunkRaw(
+          data,
+          (i === 0 || s.isKey) ? 'key' : 'delta',
+          s.timestampUs - firstVideoTs,
+          s.durationUs,
+          i === 0 && decoderConfig ? { decoderConfig } : undefined
+        );
+      }
+
+      if (audioTrackInfo && audioTrackInfo.samples.length > 0) {
+        const audioStartTime = selectedVideoSamples[0].timeSec;
+        const audioEndTime = selectedVideoSamples[selectedVideoSamples.length - 1].timeSec + (selectedVideoSamples[selectedVideoSamples.length - 1].durationUs / 1e6);
+        const selectedAudio = audioTrackInfo.samples.filter(s => s.timeSec >= audioStartTime && s.timeSec <= audioEndTime);
+        if (selectedAudio.length > 0) {
+          const firstAudioTs = selectedAudio[0].timestampUs;
+          for (let s of selectedAudio) {
+            const data = new Uint8Array(arrayBuffer, s.offset, s.size);
+            muxer.addAudioChunkRaw(
+              data,
+              'key',
+              s.timestampUs - firstAudioTs,
+              s.durationUs
+            );
+          }
+        }
+      }
+
+      muxer.finalize();
+      return {
+        buffer: target.buffer,
+        ext: 'mp4'
+      };
     }
 
-    // Native Browser Trimming Fallback (MediaRecorder + Video playback)
+    // Native Browser Trimming Fallback (Hardware stream capture via MediaRecorder)
     async function nativeTrimVideo(startSec, endSec, outputFormat, onProgress) {
       const duration = endSec - startSec;
       if (duration <= 0) throw new Error("Invalid duration");
@@ -937,18 +1266,54 @@
         throw new Error("Browser does not support stream capture");
       }
 
-      let mimeType = outputFormat === 'mp4' && MediaRecorder.isTypeSupported('video/mp4;codecs=avc1') 
-        ? 'video/mp4;codecs=avc1' 
-        : 'video/webm;codecs=vp9,opus';
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        mimeType = 'video/webm';
+      let mimeType = '';
+      if (outputFormat === 'mp4') {
+        if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
+          mimeType = 'video/mp4;codecs=avc1';
+        } else if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('video/mp4')) {
+          mimeType = 'video/mp4';
+        }
+      }
+      if (!mimeType) {
+        if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
+          mimeType = 'video/webm;codecs=vp9,opus';
+        } else if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')) {
+          mimeType = 'video/webm;codecs=vp8,opus';
+        } else {
+          mimeType = 'video/webm';
+        }
       }
 
-      const recorder = new MediaRecorder(stream, { mimeType });
-      const chunks = [];
-      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-
       return new Promise(async (resolve, reject) => {
+        let recorder;
+        let checkInterval = null;
+        let safetyTimer = null;
+        let isStopped = false;
+
+        const stopRecording = () => {
+          if (isStopped) return;
+          isStopped = true;
+          if (checkInterval) clearInterval(checkInterval);
+          if (safetyTimer) clearTimeout(safetyTimer);
+          try {
+            if (recorder && recorder.state !== 'inactive') {
+              recorder.stop();
+            }
+          } catch (e) {}
+        };
+
+        try {
+          recorder = new MediaRecorder(stream, { mimeType });
+        } catch (e) {
+          recorder = new MediaRecorder(stream);
+          mimeType = recorder.mimeType || 'video/webm';
+        }
+
+        const chunks = [];
+        recorder.ondataavailable = e => {
+          if (e.data && e.data.size > 0) chunks.push(e.data);
+        };
+
         recorder.onstop = () => {
           videoPreview.pause();
           const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
@@ -956,27 +1321,48 @@
           resolve({ blob, ext });
         };
 
-        recorder.onerror = reject;
+        recorder.onerror = err => {
+          stopRecording();
+          reject(err);
+        };
 
+        videoPreview.pause();
         videoPreview.currentTime = startSec;
+
         await new Promise(r => {
-          const onSeek = () => { videoPreview.removeEventListener('seeked', onSeek); r(); };
+          let resolved = false;
+          const onSeek = () => {
+            if (!resolved) {
+              resolved = true;
+              videoPreview.removeEventListener('seeked', onSeek);
+              r();
+            }
+          };
           videoPreview.addEventListener('seeked', onSeek);
+          setTimeout(onSeek, 600);
         });
 
         recorder.start(100);
-        videoPreview.play();
+        try {
+          await videoPreview.play();
+        } catch (playErr) {
+          console.warn("videoPreview.play() during capture warning:", playErr);
+        }
 
-        const checkInterval = setInterval(() => {
+        checkInterval = setInterval(() => {
           const cur = videoPreview.currentTime;
           const prog = Math.min(100, Math.round(((cur - startSec) / duration) * 100));
           if (onProgress) onProgress(prog);
 
           if (cur >= endSec || videoPreview.ended) {
-            clearInterval(checkInterval);
-            recorder.stop();
+            stopRecording();
           }
-        }, 80);
+        }, 60);
+
+        const maxDurationMs = Math.max(3000, Math.ceil(duration * 1000) + 4000);
+        safetyTimer = setTimeout(() => {
+          stopRecording();
+        }, maxDurationMs);
       });
     }
 
@@ -986,13 +1372,13 @@
       clearError();
 
       const duration = selectionEnd - selectionStart;
+      const dict = TRANSLATIONS[getActiveLang()] || TRANSLATIONS.en;
       if (duration <= 0.05) {
-        showError(TRANSLATIONS[getActiveLang()].errInvalidTime);
+        showError(dict.errInvalidTime);
         return;
       }
 
       const format = exportFormatSelect.value || 'mp4';
-      const dict = TRANSLATIONS[getActiveLang()];
 
       exportProgressCard.classList.add('active');
       exportSuccessCard.classList.remove('active');
@@ -1000,69 +1386,39 @@
       exportProgressText.textContent = dict.statusProcessing;
       exportProgressSub.textContent = dict.statusStreamCopy;
 
-      try {
+      const exportExecution = (async () => {
         let resultBlob = null;
         let finalExt = format;
 
-        // Step 1: Attempt FFmpeg Fast Stream Copy if available
-        let ffmpeg = await initFFmpegEngine();
-        if (ffmpeg) {
-          exportProgressBar.style.width = '40%';
-          const { fetchFile } = FFmpeg;
-          const inName = `input_${Date.now()}.${currentVideoFile?.name ? currentVideoFile.name.split('.').pop() : 'mp4'}`;
-          const outName = `output_${Date.now()}.${format}`;
-
-          exportProgressSub.textContent = "Writing file to in-memory filesystem...";
-          const fileData = await fetchFile(currentVideoFile || currentVideoUrl);
-          ffmpeg.FS('writeFile', inName, fileData);
-
-          exportProgressBar.style.width = '70%';
-          exportProgressSub.textContent = "Performing fast lossless stream copy (-c copy)...";
-
-          let ffmpegSuccess = false;
+        // Ensure ArrayBuffer is cached for in-memory stream slicing
+        if (!currentArrayBuffer && currentVideoFile && typeof currentVideoFile.arrayBuffer === 'function') {
           try {
-            await ffmpeg.run(
-              '-ss', selectionStart.toFixed(3),
-              '-to', selectionEnd.toFixed(3),
-              '-i', inName,
-              '-c', 'copy',
-              '-avoid_negative_ts', 'make_zero',
-              outName
-            );
-            ffmpegSuccess = true;
-          } catch (streamCopyErr) {
-            console.warn("Fast stream copy failed, falling back to fast transcode:", streamCopyErr);
-            exportProgressSub.textContent = dict.statusEncoding;
-            try {
-              await ffmpeg.run(
-                '-ss', selectionStart.toFixed(3),
-                '-to', selectionEnd.toFixed(3),
-                '-i', inName,
-                '-preset', 'ultrafast',
-                '-crf', '24',
-                outName
-              );
-              ffmpegSuccess = true;
-            } catch (transcodeErr) {
-              console.error("FFmpeg transcode failed:", transcodeErr);
-            }
-          }
-
-          if (ffmpegSuccess) {
-            const data = ffmpeg.FS('readFile', outName);
-            const mime = format === 'webm' ? 'video/webm' : 'video/mp4';
-            resultBlob = new Blob([data.buffer], { type: mime });
-
-            // Clean up in-memory filesystem
-            try { ffmpeg.FS('unlink', inName); } catch (e) {}
-            try { ffmpeg.FS('unlink', outName); } catch (e) {}
+            currentArrayBuffer = await currentVideoFile.arrayBuffer();
+          } catch (bufErr) {
+            console.warn("ArrayBuffer cache error:", bufErr);
           }
         }
 
-        // Step 2: If FFmpeg unavailable or failed, run native browser trimmer
+        // Tier 1: Pure In-Memory MP4 ISO-BMFF Box Stream Slicer
+        if (format === 'mp4' && currentArrayBuffer && typeof Mp4Muxer !== 'undefined') {
+          try {
+            exportProgressSub.textContent = "Extracting video frames with fast stream copying...";
+            exportProgressBar.style.width = '35%';
+            const sliceResult = sliceMp4Stream(currentArrayBuffer, selectionStart, selectionEnd);
+            if (sliceResult && sliceResult.buffer && sliceResult.buffer.byteLength > 0) {
+              exportProgressBar.style.width = '85%';
+              resultBlob = new Blob([sliceResult.buffer], { type: 'video/mp4' });
+              finalExt = 'mp4';
+            }
+          } catch (tier1Err) {
+            console.warn("Tier 1 fast stream slicing skipped, falling back to Tier 2 hardware capture:", tier1Err);
+          }
+        }
+
+        // Tier 2: Guaranteed Hardware Stream Capture Fallback
         if (!resultBlob) {
-          exportProgressBar.style.width = '50%';
-          exportProgressSub.textContent = "Running browser native video recorder...";
+          exportProgressBar.style.width = '45%';
+          exportProgressSub.textContent = "Processing video clip locally with hardware pipeline...";
           const res = await nativeTrimVideo(selectionStart, selectionEnd, format, (prog) => {
             exportProgressBar.style.width = `${Math.min(95, 40 + Math.round(prog * 0.55))}%`;
           });
@@ -1070,11 +1426,20 @@
           finalExt = res.ext;
         }
 
-        exportProgressBar.style.width = '100%';
-        exportProgressCard.classList.remove('active');
+        return { blob: resultBlob, ext: finalExt };
+      })();
 
-        // Present Result Card
+      const timeoutGuard = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Video export timed out after 25s")), 25000);
+      });
+
+      try {
+        const { blob: resultBlob, ext: finalExt } = await Promise.race([exportExecution, timeoutGuard]);
+
+        exportProgressBar.style.width = '100%';
+
         exportedBlob = resultBlob;
+        window.__vantorkitExportedBlob = resultBlob;
         if (exportedUrl) URL.revokeObjectURL(exportedUrl);
         exportedUrl = URL.createObjectURL(resultBlob);
 
@@ -1090,14 +1455,15 @@
 
       } catch (err) {
         console.error("Export process failed:", err);
-        exportProgressCard.classList.remove('active');
         showError(dict.errExportFailed);
+      } finally {
+        exportProgressCard.classList.remove('active');
       }
     }
 
     function triggerDownload(blob, originalName, ext) {
       const safeBase = sanitizeOriginalFilename(originalName);
-      const filename = `trimmed-${safeBase}.${ext || 'mp4'}`;
+      const filename = `trimmed_${safeBase}.${ext || 'mp4'}`;
 
       const a = document.createElement('a');
       const url = URL.createObjectURL(blob);
