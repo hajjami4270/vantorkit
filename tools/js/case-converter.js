@@ -71,7 +71,11 @@
         toastSample: '\ud83d\udcd6 Demonstration sample text loaded.',
         toastSwapped: '\u21c4 Output swapped back to input!',
         toastDownloaded: '\ud83d\udce5 Downloading converted.txt...',
-        toastApplied: '\u2728 Transformation applied!'
+        toastApplied: '\u2728 Transformation applied!',
+        inputPlaceholder: 'Type or paste your text, title, or code identifiers here...',
+        outputPlaceholder: 'Converted output will appear here in real-time...',
+        toastPasted: 'Pasted from clipboard',
+        toastPasteFallback: 'Press Ctrl+V to paste'
       },
       ar: {
         langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
@@ -130,7 +134,11 @@
         toastSample: '\ud83d\udcd6 \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.',
         toastSwapped: '\u21c4 \u062a\u0645 \u0646\u0642\u0644 \u0627\u0644\u0646\u062a\u064a\u062c\u0629 \u0625\u0644\u0649 \u062d\u0642\u0644 \u0627\u0644\u0625\u062f\u062e\u0627\u0644!',
         toastDownloaded: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 converted.txt...',
-        toastApplied: '\u2728 \u062a\u0645 \u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u062a\u062d\u0648\u064a\u0644!'
+        toastApplied: '\u2728 \u062a\u0645 \u062a\u0637\u0628\u064a\u0642 \u0627\u0644\u062a\u062d\u0648\u064a\u0644!',
+        inputPlaceholder: 'اكتب أو الصق النص أو العنوان أو المعرفات البرمجية هنا...',
+        outputPlaceholder: 'ستظهر النتيجة المحولة هنا بشكل لحظي...',
+        toastPasted: 'تم اللصق من الحافظة',
+        toastPasteFallback: 'اضغط Ctrl+V للصق'
       },
       fr: {
         langLabel: 'Fran\u00e7ais',
@@ -189,7 +197,11 @@
         toastSample: '\ud83d\udcd6 Texte d\'exemple charg\u00e9.',
         toastSwapped: '\u21c4 R\u00e9sultat r\u00e9inject\u00e9 en entr\u00e9e !',
         toastDownloaded: '\ud83d\udce5 T\u00e9l\u00e9chargement de converted.txt...',
-        toastApplied: '\u2728 Transformation appliqu\u00e9e !'
+        toastApplied: '\u2728 Transformation appliqu\u00e9e !',
+        inputPlaceholder: 'Saisissez ou collez votre texte, titre ou identifiant ici...',
+        outputPlaceholder: 'Le résultat converti apparaîtra ici en temps réel...',
+        toastPasted: 'Collé depuis le presse-papiers',
+        toastPasteFallback: 'Appuyez sur Ctrl+V pour coller'
       },
       it: {
         langLabel: 'Italiano',
@@ -248,7 +260,11 @@
         toastSample: '\ud83d\udcd6 Testo di esempio caricato.',
         toastSwapped: '\u21c4 Risultato trasferito in input!',
         toastDownloaded: '\ud83d\udce5 Download di converted.txt in corso...',
-        toastApplied: '\u2728 Trasformazione applicata!'
+        toastApplied: '\u2728 Trasformazione applicata!',
+        inputPlaceholder: 'Scrivi o incolla qui il tuo testo, titolo o identificatore...',
+        outputPlaceholder: 'Il risultato convertito apparirà qui in tempo reale...',
+        toastPasted: 'Incollato dagli appunti',
+        toastPasteFallback: 'Premi Ctrl+V per incollare'
       }
     };
 
@@ -540,15 +556,15 @@
           if (text) {
             inputText.value = text;
             updateLive();
-            showToast('Pasted from clipboard');
+            showToast(dict().toastPasted || 'Pasted from clipboard');
           }
         }).catch(function() {
           inputText.focus();
-          showToast('Press Ctrl+V to paste');
+          showToast(dict().toastPasteFallback || 'Press Ctrl+V to paste');
         });
       } else {
         inputText.focus();
-        showToast('Press Ctrl+V to paste');
+        showToast(dict().toastPasteFallback || 'Press Ctrl+V to paste');
       }
     });
 
@@ -639,6 +655,8 @@
       htmlRoot.setAttribute('lang', lang);
       htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
       currentLangLabel.textContent = d.langLabel;
+      if (inputText && d.inputPlaceholder) inputText.placeholder = d.inputPlaceholder;
+      if (outputText && d.outputPlaceholder) outputText.placeholder = d.outputPlaceholder;
 
       langOptions.forEach(function(o) {
         o.classList.toggle('active', o.dataset.lang === lang);

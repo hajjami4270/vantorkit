@@ -64,7 +64,8 @@
           jsonDownloadedToast: "Palette JSON exported!",
           pixelSampledToast: "Custom pixel sampled: ",
           pixelAddedToast: "Sampled color added to palette!",
-          sampleLoadedToast: "Sample image loaded successfully!"
+          sampleLoadedToast: "Sample image loaded successfully!",
+          toastInvalidImage: "Please upload a valid image (PNG, JPG, WEBP, or SVG)."
         },
         ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -126,7 +127,8 @@
           jsonDownloadedToast: "تم تصدير ملف لوحة الألوان JSON!",
           pixelSampledToast: "تم التقاط لون البكسل: ",
           pixelAddedToast: "تمت إضافة اللون الملتقط إلى اللوحة!",
-          sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!"
+          sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!",
+          toastInvalidImage: "يرجى رفع صورة صالحة (PNG أو JPG أو WEBP أو SVG)."
         },
         fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -188,7 +190,8 @@
           jsonDownloadedToast: "Fichier JSON de palette exporté !",
           pixelSampledToast: "Pixel personnalisé échantillonné : ",
           pixelAddedToast: "Couleur ajoutée à la palette !",
-          sampleLoadedToast: "Image exemple chargée avec succès !"
+          sampleLoadedToast: "Image exemple chargée avec succès !",
+          toastInvalidImage: "Veuillez téléverser une image valide (PNG, JPG, WEBP ou SVG)."
         },
         it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -250,7 +253,8 @@
           jsonDownloadedToast: "File JSON della palette esportato!",
           pixelSampledToast: "Pixel personalizzato campionato: ",
           pixelAddedToast: "Colore aggiunto alla palette!",
-          sampleLoadedToast: "Immagine di esempio caricata con successo!"
+          sampleLoadedToast: "Immagine di esempio caricata con successo!",
+          toastInvalidImage: "Carica un'immagine valida (PNG, JPG, WEBP o SVG)."
         }
       };
 
@@ -1206,7 +1210,7 @@
 
       function handleFile(file) {
         if (!file.type.startsWith('image/')) {
-          showToast('Please upload a valid image (PNG, JPG, WEBP, or SVG).');
+          showToast(getActiveDict().toastInvalidImage || 'Please upload a valid image (PNG, JPG, WEBP, or SVG).');
           return;
         }
 

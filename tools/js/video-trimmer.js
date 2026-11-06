@@ -1402,7 +1402,7 @@
         // Tier 1: Pure In-Memory MP4 ISO-BMFF Box Stream Slicer
         if (format === 'mp4' && currentArrayBuffer && typeof Mp4Muxer !== 'undefined') {
           try {
-            exportProgressSub.textContent = "Extracting video frames with fast stream copying...";
+            exportProgressSub.textContent = (TRANSLATIONS[getActiveLang()] || TRANSLATIONS.en).statusStreamCopy || "Extracting video frames with fast stream copying...";
             exportProgressBar.style.width = '35%';
             const sliceResult = sliceMp4Stream(currentArrayBuffer, selectionStart, selectionEnd);
             if (sliceResult && sliceResult.buffer && sliceResult.buffer.byteLength > 0) {
@@ -1418,7 +1418,7 @@
         // Tier 2: Guaranteed Hardware Stream Capture Fallback
         if (!resultBlob) {
           exportProgressBar.style.width = '45%';
-          exportProgressSub.textContent = "Processing video clip locally with hardware pipeline...";
+          exportProgressSub.textContent = (TRANSLATIONS[getActiveLang()] || TRANSLATIONS.en).statusEncoding || "Processing video clip locally with hardware pipeline...";
           const res = await nativeTrimVideo(selectionStart, selectionEnd, format, (prog) => {
             exportProgressBar.style.width = `${Math.min(95, 40 + Math.round(prog * 0.55))}%`;
           });

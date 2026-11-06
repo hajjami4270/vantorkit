@@ -56,7 +56,10 @@
         faq3Q: "Why doesn't my new favicon update immediately in my browser?",
         faq3A: "Web browsers cache favicons aggressively. To see your updated favicon immediately, open your website in an Incognito/Private window or perform a hard refresh with Ctrl+F5 (Cmd+Shift+R on Mac).",
         faq4Q: "What makes VantorKit's favicon.ico special?",
-        faq4A: "Our builder packages a genuine multi-resolution binary ICO container containing 16×16, 32×32, and 48×48 frames with full 32-bit alpha transparency for seamless desktop rendering."
+        faq4A: "Our builder packages a genuine multi-resolution binary ICO container containing 16×16, 32×32, and 48×48 frames with full 32-bit alpha transparency for seamless desktop rendering.",
+        toastZipLoading: "ZIP library is loading, please try again in a moment...",
+        toastZipError: "Error creating ZIP package. Please download files individually.",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -113,7 +116,10 @@
         faq3Q: "لماذا لا تظهر الأيقونة الجديدة فوراً في متصفحي؟",
         faq3A: "تحتفظ المتصفحات بالأيقونات في الذاكرة المخبئية مؤقتاً. لرؤية التغييرات فوراً، افتح نافذة تصفح خفي (Incognito) أو اضغط Ctrl+F5 لتحديث قوي.",
         faq4Q: "ما الذي يميز ملف favicon.ico الذي يولده VantorKit؟",
-        faq4A: "ينتج أداتنا ملف ICO ثنائي حقيقي متعدد الدقات يضم إطارات 16×16 و 32×32 و 48×48 مع شفافية ألفا 32 بت كاملة لأداء رائع على كافة أنظمة سطح المكتب."
+        faq4A: "ينتج أداتنا ملف ICO ثنائي حقيقي متعدد الدقات يضم إطارات 16×16 و 32×32 و 48×48 مع شفافية ألفا 32 بت كاملة لأداء رائع على كافة أنظمة سطح المكتب.",
+        toastZipLoading: "جاري تحميل مكتبة ZIP، يرجى المحاولة بعد لحظات...",
+        toastZipError: "حدث خطأ أثناء إنشاء حزمة ZIP. يرجى تحميل الملفات بشكل منفرد.",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -170,7 +176,10 @@
         faq3Q: "Pourquoi le nouveau favicon ne s'affiche-t-il pas immédiatement ?",
         faq3A: "Les navigateurs mettent fortement en cache les favicons. Ouvrez une fenêtre de navigation privée ou forcez l'actualisation avec Ctrl+F5 (Cmd+Shift+R sur Mac).",
         faq4Q: "Qu'est-ce qui rend le fichier favicon.ico de VantorKit unique ?",
-        faq4A: "Notre outil assemble un conteneur binaire ICO multi-trames (16×16, 32×32 et 48×48) avec une transparence alpha 32 bits authentique."
+        faq4A: "Notre outil assemble un conteneur binaire ICO multi-trames (16×16, 32×32 et 48×48) avec une transparence alpha 32 bits authentique.",
+        toastZipLoading: "Chargement de la bibliothèque ZIP, veuillez réessayer dans un instant...",
+        toastZipError: "Erreur lors de la création du ZIP. Veuillez télécharger les fichiers individuellement.",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -227,7 +236,10 @@
         faq3Q: "Perché la nuova favicon non si aggiorna subito nel browser?",
         faq3A: "I browser mantengono le favicon in cache in modo persistente. Apri una finestra in incognito o esegui un aggiornamento forzato con Ctrl+F5 (Cmd+Shift+R su Mac).",
         faq4Q: "Cosa rende speciale il file favicon.ico di VantorKit?",
-        faq4A: "Il nostro generatore crea un contenitore binario ICO multi-frame (16×16, 32×32 e 48×48) con autentica trasparenza alfa a 32 bit per tutti i sistemi operativi."
+        faq4A: "Il nostro generatore crea un contenitore binario ICO multi-frame (16×16, 32×32 e 48×48) con autentica trasparenza alfa a 32 bit per tutti i sistemi operativi.",
+        toastZipLoading: "Caricamento della libreria ZIP in corso, riprova tra un istante...",
+        toastZipError: "Errore nella creazione del pacchetto ZIP. Scarica i file singolarmente.",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -770,7 +782,7 @@
       if (!sourceImage) return;
 
       if (!window.JSZip) {
-        showToast("ZIP library is loading, please try again in a moment...");
+        showToast(I18N[activeLang]?.toastZipLoading || "ZIP library is loading, please try again in a moment...");
         return;
       }
 
@@ -855,7 +867,7 @@ Generated with VantorKit Multi-Size Favicon Builder (https://vantorkit.com/tools
         showToast(I18N[activeLang]?.zipDownloadedToast || "ZIP package downloaded successfully!");
       } catch (err) {
         console.error('ZIP generation error:', err);
-        showToast("Error creating ZIP package. Please download files individually.");
+        showToast(I18N[activeLang]?.toastZipError || "Error creating ZIP package. Please download files individually.");
       }
     });
 

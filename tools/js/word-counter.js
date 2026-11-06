@@ -72,7 +72,14 @@
         toastCopied: '\u2705 Text copied to clipboard!',
         toastCleared: '\u{1f5d1}\ufe0f Text cleared.',
         toastCleaned: '\u2728 Spaces and lines formatted!',
-        toastSample: '\u{1f4d6} Sample article text loaded.'
+        toastSample: '\u{1f4d6} Sample article text loaded.',
+        inputPlaceholder: 'Type or paste your text, essay, article, or social post here to analyze in real time...',
+        toastUpper: 'Transformed to UPPERCASE',
+        toastLower: 'Transformed to lowercase',
+        toastTitleCase: 'Transformed to Title Case',
+        toastSentenceCase: 'Transformed to Sentence case',
+        toastPasted: 'Pasted from clipboard',
+        toastPasteFallback: 'Please press Ctrl+V to paste'
       },
       ar: {
         langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
@@ -118,7 +125,14 @@
         toastCopied: '\u2705 \u062a\u0645 \u0646\u0633\u062e \u0627\u0644\u0646\u0635 \u0625\u0644\u0649 \u0627\u0644\u062d\u0627\u0641\u0638\u0629!',
         toastCleared: '\u{1f5d1}\ufe0f \u062a\u0645 \u0645\u0633\u062d \u0627\u0644\u0646\u0635.',
         toastCleaned: '\u2728 \u062a\u0645 \u062a\u0646\u0638\u064a\u0641 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0648\u0627\u0644\u0633\u0637\u0648\u0631!',
-        toastSample: '\u{1f4d6} \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.'
+        toastSample: '\u{1f4d6} \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.',
+        inputPlaceholder: 'اكتب أو الصق نصك أو مقالك أو منشورك هنا لتحليله فوراً...',
+        toastUpper: 'تم التحويل إلى أحرف كبيرة (UPPERCASE)',
+        toastLower: 'تم التحويل إلى أحرف صغيرة (lowercase)',
+        toastTitleCase: 'تم التحويل إلى حالة العنوان (Title Case)',
+        toastSentenceCase: 'تم التحويل إلى حالة الجملة (Sentence case)',
+        toastPasted: 'تم اللصق من الحافظة',
+        toastPasteFallback: 'يرجى الضغط على Ctrl+V للصق'
       },
       fr: {
         langLabel: 'Fran\u00e7ais',
@@ -164,7 +178,14 @@
         toastCopied: '\u2705 Texte copi\u00e9 !',
         toastCleared: '\u{1f5d1}\ufe0f Texte effac\u00e9.',
         toastCleaned: '\u2728 Espaces et lignes nettoy\u00e9s !',
-        toastSample: '\u{1f4d6} Texte d\u2019exemple charg\u00e9.'
+        toastSample: '\u{1f4d6} Texte d\u2019exemple charg\u00e9.',
+        inputPlaceholder: 'Saisissez ou collez votre texte, article ou publication ici pour une analyse en temps réel...',
+        toastUpper: 'Converti en MAJUSCULES',
+        toastLower: 'Converti en minuscules',
+        toastTitleCase: 'Converti en Casse De Titre',
+        toastSentenceCase: 'Converti en Casse de phrase',
+        toastPasted: 'Collé depuis le presse-papiers',
+        toastPasteFallback: 'Veuillez appuyer sur Ctrl+V pour coller'
       },
       it: {
         langLabel: 'Italiano',
@@ -210,7 +231,14 @@
         toastCopied: '\u2705 Testo copiato negli appunti!',
         toastCleared: '\u{1f5d1}\ufe0f Testo cancellato.',
         toastCleaned: '\u2728 Spazi e righe ripuliti!',
-        toastSample: '\u{1f4d6} Testo di esempio caricato.'
+        toastSample: '\u{1f4d6} Testo di esempio caricato.',
+        inputPlaceholder: 'Digita o incolla il tuo testo, articolo o post qui per analizzarlo in tempo reale...',
+        toastUpper: 'Trasformato in MAIUSCOLO',
+        toastLower: 'Trasformato in minuscolo',
+        toastTitleCase: 'Trasformato in Iniziali Maiuscole',
+        toastSentenceCase: 'Trasformato in Maiuscola ad inizio frase',
+        toastPasted: 'Incollato dagli appunti',
+        toastPasteFallback: 'Premi Ctrl+V per incollare'
       }
     };
 
@@ -428,14 +456,14 @@
       if (!textInput.value) return;
       textInput.value = textInput.value.toUpperCase();
       updateMetrics();
-      showToast('Transformed to UPPERCASE');
+      showToast(dict().toastUpper);
     });
 
     btnLower.addEventListener('click', function() {
       if (!textInput.value) return;
       textInput.value = textInput.value.toLowerCase();
       updateMetrics();
-      showToast('Transformed to lowercase');
+      showToast(dict().toastLower);
     });
 
     btnTitleCase.addEventListener('click', function() {
@@ -444,7 +472,7 @@
         return c.toUpperCase();
       });
       updateMetrics();
-      showToast('Transformed to Title Case');
+      showToast(dict().toastTitleCase);
     });
 
     btnSentenceCase.addEventListener('click', function() {
@@ -453,7 +481,7 @@
         return p1 + p2.toUpperCase();
       });
       updateMetrics();
-      showToast('Transformed to Sentence case');
+      showToast(dict().toastSentenceCase);
     });
 
     btnCleanSpaces.addEventListener('click', function() {
@@ -503,15 +531,15 @@
           if (text) {
             textInput.value = text;
             updateMetrics();
-            showToast('Pasted from clipboard');
+            showToast(dict().toastPasted);
           }
         }).catch(function() {
           textInput.focus();
-          showToast('Please press Ctrl+V to paste');
+          showToast(dict().toastPasteFallback);
         });
       } else {
         textInput.focus();
-        showToast('Please press Ctrl+V to paste');
+        showToast(dict().toastPasteFallback);
       }
     });
 
@@ -551,6 +579,7 @@
       htmlRoot.setAttribute('lang', lang);
       htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
       currentLangLabel.textContent = d.langLabel;
+      if (textInput && d.inputPlaceholder) textInput.placeholder = d.inputPlaceholder;
 
       langOptions.forEach(function(o) {
         o.classList.toggle('active', o.dataset.lang === lang);

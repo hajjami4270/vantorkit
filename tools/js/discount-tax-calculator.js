@@ -64,7 +64,9 @@
         faq4Q: "Can I use this for international currencies?",
         faq4A: "Yes! Select your preferred currency ($ USD, € EUR, £ GBP, د.إ AED, ¥ JPY, ₹ INR, CAD, AUD) from the currency dropdown at the top of the pricing card. The math applies universally across all fiat currencies.",
         toastCopied: "Receipt summary copied to clipboard!",
-        toastReverseCopied: "Reverse calculation copied to clipboard!"
+        toastReverseCopied: "Reverse calculation copied to clipboard!",
+        toastCopyErr: "Failed to copy to clipboard.",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         backLink: "← العودة إلى الأدوات",
@@ -126,7 +128,9 @@
         faq4Q: "هل تدعم الحاسبة العملات المختلفة؟",
         faq4A: "نعم، يمكنك اختيار عملتك المفضلة (الدولار، اليورو، الجنيه الإسترليني، الدرهم الإماراتي، الين، الروبية وغيرها) من القائمة المنسدلة.",
         toastCopied: "تم نسخ ملخص الفاتورة إلى الحافظة!",
-        toastReverseCopied: "تم نسخ تفاصيل الحساب العكسي!"
+        toastReverseCopied: "تم نسخ تفاصيل الحساب العكسي!",
+        toastCopyErr: "تعذر النسخ إلى الحافظة.",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         backLink: "← Retour aux Outils",
@@ -188,7 +192,9 @@
         faq4Q: "Puis-je changer de devise ?",
         faq4A: "Oui, sélectionnez la devise de votre choix ($, €, £, د.إ, ¥, ₹) dans le menu déroulant en haut de la carte.",
         toastCopied: "Ticket de caisse copié dans le presse-papier !",
-        toastReverseCopied: "Calcul inversé copié dans le presse-papier !"
+        toastReverseCopied: "Calcul inversé copié dans le presse-papier !",
+        toastCopyErr: "Échec de la copie dans le presse-papiers.",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         backLink: "← Torna agli Strumenti",
@@ -250,7 +256,9 @@
         faq4Q: "Posso utilizzare valute diverse?",
         faq4A: "Sì, seleziona la valuta desiderata ($, €, £, د.إ, ¥, ₹) nel menu a tendina in alto.",
         toastCopied: "Riepilogo scontrino copiato negli appunti!",
-        toastReverseCopied: "Calcolo inverso copiato negli appunti!"
+        toastReverseCopied: "Calcolo inverso copiato negli appunti!",
+        toastCopyErr: "Impossibile copiare negli appunti.",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -710,7 +718,7 @@
         navigator.clipboard.writeText(txt).then(() => {
           showToast(TRANSLATIONS[currentLang]?.toastCopied || 'Receipt summary copied to clipboard!');
         }).catch(() => {
-          showToast('Failed to copy to clipboard.');
+          showToast(TRANSLATIONS[currentLang]?.toastCopyErr || 'Failed to copy to clipboard.');
         });
       });
 

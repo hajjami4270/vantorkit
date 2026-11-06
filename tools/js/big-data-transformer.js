@@ -47,7 +47,11 @@ const I18N = {
         footerTerms: "Terms of Service",
         footerAbout: "About Us",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
+        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy.",
+        toastParsed: (ms) => `Dataset parsed in ${ms}ms!`,
+        toastExported: "Export downloaded successfully!",
+        toastCopied: "Data copied to clipboard!",
+        toastCleared: "Data cleared from browser RAM"
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -97,7 +101,11 @@ const I18N = {
         footerTerms: "شروط الخدمة",
         footerAbout: "من نحن",
         footerContact: "اتصل بنا",
-        footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات."
+        footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات.",
+        toastParsed: (ms) => `تمت معالجة البيانات خلال ${ms} مللي ثانية!`,
+        toastExported: "تم تنزيل الملف المحول بنجاح!",
+        toastCopied: "تم نسخ البيانات إلى الحافظة!",
+        toastCleared: "تم مسح البيانات من ذاكرة المتصفح RAM"
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -145,7 +153,11 @@ const I18N = {
         footerTerms: "Conditions d'Utilisation",
         footerAbout: "À Propos",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
+        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue.",
+        toastParsed: (ms) => `Jeu de données analysé en ${ms} ms !`,
+        toastExported: "Export téléchargé avec succès !",
+        toastCopied: "Données copiées dans le presse-papiers !",
+        toastCleared: "Données effacées de la RAM du navigateur"
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -193,7 +205,11 @@ const I18N = {
         footerTerms: "Termini di Servizio",
         footerAbout: "Chi Siamo",
         footerContact: "Contatti",
-        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy."
+        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy.",
+        toastParsed: (ms) => `Dataset analizzato in ${ms} ms!`,
+        toastExported: "Esportazione scaricata con successo!",
+        toastCopied: "Dati copiati negli appunti!",
+        toastCleared: "Dati cancellati dalla RAM del browser"
       }
     };
 
@@ -849,7 +865,7 @@ const I18N = {
         const previewSnippet = data.convertedText.slice(0, 10000);
         codeOutputBox.textContent = previewSnippet + (data.convertedText.length > 10000 ? '\n... [Preview Truncated: Use "Download Export" for entire dataset]' : '');
 
-        showToast('Dataset parsed in ' + data.elapsed + 'ms!');
+        showToast((I18N[currentLang] && I18N[currentLang].toastParsed) ? I18N[currentLang].toastParsed(data.elapsed) : ('Dataset parsed in ' + data.elapsed + 'ms!'));
       }
 
       function renderTableRows() {
@@ -1031,14 +1047,14 @@ const I18N = {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('Export downloaded successfully!');
+        showToast((I18N[currentLang] && I18N[currentLang].toastExported) || 'Export downloaded successfully!');
       });
 
       // Copy Data
       btnCopyConverted.addEventListener('click', () => {
         if (!currentResult || !currentResult.convertedText) return;
         navigator.clipboard.writeText(currentResult.convertedText).then(() => {
-          showToast('Data copied to clipboard!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastCopied) || 'Data copied to clipboard!');
         });
       });
 
@@ -1051,7 +1067,7 @@ const I18N = {
         controlsPanel.style.display = 'none';
         inspectorCard.style.display = 'none';
         progressBar.style.width = '0%';
-        showToast('Data cleared from browser RAM');
+        showToast((I18N[currentLang] && I18N[currentLang].toastCleared) || 'Data cleared from browser RAM');
       });
 
       // Inspector Tabs

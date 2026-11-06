@@ -55,7 +55,12 @@
           creatingZip: "Packing individual pages into ZIP archive...",
           complete: "Complete!",
           downloadSuccess: "Download triggered successfully!",
-          downloadZipSuccess: "ZIP archive downloaded successfully!"
+          downloadZipSuccess: "ZIP archive downloaded successfully!",
+          readingPdf: "Reading PDF...",
+          loadPdfErr: "Failed to load PDF: ",
+          processPdfErr: "Failed to process PDF: ",
+          downloadingDoc: "Downloading document...",
+          zipNoPreview: "ZIP file cannot be previewed in browser tab."
         },
         ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -108,7 +113,12 @@
           creatingZip: "ضغط الصفحات الفردية في أرشيف ZIP...",
           complete: "اكتمل!",
           downloadSuccess: "تم بدء تنزيل الملف بنجاح!",
-          downloadZipSuccess: "تم تنزيل أرشيف ZIP بنجاح!"
+          downloadZipSuccess: "تم تنزيل أرشيف ZIP بنجاح!",
+          readingPdf: "جارٍ قراءة ملف PDF...",
+          loadPdfErr: "فشل تحميل ملف PDF: ",
+          processPdfErr: "فشلت معالجة ملف PDF: ",
+          downloadingDoc: "جارٍ تنزيل المستند...",
+          zipNoPreview: "لا يمكن معاينة ملف ZIP في علامة تبويب المتصفح."
         },
         fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -161,7 +171,12 @@
           creatingZip: "Création de l'archive ZIP compressée...",
           complete: "Terminé !",
           downloadSuccess: "Téléchargement déclenché avec succès !",
-          downloadZipSuccess: "Archive ZIP téléchargée avec succès !"
+          downloadZipSuccess: "Archive ZIP téléchargée avec succès !",
+          readingPdf: "Lecture du PDF en cours...",
+          loadPdfErr: "Échec du chargement du PDF : ",
+          processPdfErr: "Échec du traitement du PDF : ",
+          downloadingDoc: "Téléchargement du document...",
+          zipNoPreview: "Le fichier ZIP ne peut pas être prévisualisé dans l'onglet du navigateur."
         },
         it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -214,7 +229,12 @@
           creatingZip: "Creazione archivio ZIP compresso...",
           complete: "Completato!",
           downloadSuccess: "Download avviato con successo!",
-          downloadZipSuccess: "Archivio ZIP scaricato con successo!"
+          downloadZipSuccess: "Archivio ZIP scaricato con successo!",
+          readingPdf: "Lettura PDF in corso...",
+          loadPdfErr: "Impossibile caricare il PDF: ",
+          processPdfErr: "Impossibile elaborare il PDF: ",
+          downloadingDoc: "Download del documento in corso...",
+          zipNoPreview: "Il file ZIP non può essere visualizzato in anteprima nella scheda del browser."
         }
       };
 
@@ -487,7 +507,7 @@
         successCard.style.display = 'none';
 
         try {
-          showToast('Reading PDF...');
+          showToast(dict.readingPdf || 'Reading PDF...');
           const arrayBuffer = await file.arrayBuffer();
           const doc = await PDFLib.PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
           
@@ -518,7 +538,7 @@
 
         } catch (err) {
           console.error('Failed to load PDF:', err);
-          showToast('Failed to load PDF: ' + err.message);
+          showToast((dict.loadPdfErr || 'Failed to load PDF: ') + err.message);
         }
       }
 
@@ -836,7 +856,7 @@
 
         } catch (err) {
           console.error('PDF Split Error:', err);
-          showToast('Failed to process PDF: ' + err.message);
+          showToast((dict.processPdfErr || 'Failed to process PDF: ') + err.message);
         } finally {
           btnExecute.disabled = false;
           setTimeout(() => {
@@ -849,14 +869,14 @@
       btnDownloadAgain.addEventListener('click', () => {
         if (generatedBlobUrl) {
           triggerDownload(generatedBlobUrl, generatedFilename);
-          showToast('Downloading document...');
+          showToast((I18N[localStorage.getItem('vantorkit_lang') || 'en'] || I18N.en).downloadingDoc || 'Downloading document...');
         }
       });
 
       btnPreviewExtracted.addEventListener('click', () => {
         if (generatedBlobUrl) {
           if (generatedFilename.endsWith('.zip')) {
-            showToast('ZIP file cannot be previewed in browser tab.');
+            showToast((I18N[localStorage.getItem('vantorkit_lang') || 'en'] || I18N.en).zipNoPreview || 'ZIP file cannot be previewed in browser tab.');
           } else {
             window.open(generatedBlobUrl, '_blank');
           }

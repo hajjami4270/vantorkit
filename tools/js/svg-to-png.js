@@ -52,7 +52,8 @@
           copyErrorToast: "Could not copy image to clipboard.",
           pngDownloadToast: "High-resolution PNG downloaded!",
           invalidSvgToast: "Invalid SVG content. Please check markup.",
-          loadedFileToast: "SVG loaded successfully!"
+          loadedFileToast: "SVG loaded successfully!",
+          toastInvalidFile: "Please upload a valid .svg file."
         },
         ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -102,7 +103,8 @@
           copyErrorToast: "تعذر نسخ الصورة إلى الحافظة.",
           pngDownloadToast: "تم تنزيل صورة PNG عالية الدقة!",
           invalidSvgToast: "محتوى SVG غير صالح، يرجى فحص الكود.",
-          loadedFileToast: "تم تحميل ملف SVG بنجاح!"
+          loadedFileToast: "تم تحميل ملف SVG بنجاح!",
+          toastInvalidFile: "يرجى رفع ملف .svg صالح."
         },
         fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -152,7 +154,8 @@
           copyErrorToast: "Impossible de copier l'image.",
           pngDownloadToast: "Image PNG haute résolution téléchargée !",
           invalidSvgToast: "Contenu SVG invalide. Vérifiez le balisage.",
-          loadedFileToast: "Fichier SVG chargé avec succès !"
+          loadedFileToast: "Fichier SVG chargé avec succès !",
+          toastInvalidFile: "Veuillez importer un fichier .svg valide."
         },
         it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -202,7 +205,8 @@
           copyErrorToast: "Impossibile copiare l'immagine.",
           pngDownloadToast: "PNG ad alta risoluzione scaricato!",
           invalidSvgToast: "Contenuto SVG non valido. Controlla il codice.",
-          loadedFileToast: "File SVG caricato con successo!"
+          loadedFileToast: "File SVG caricato con successo!",
+          toastInvalidFile: "Carica un file .svg valido."
         }
       };
 
@@ -685,7 +689,7 @@
 
       function handleFile(file) {
         if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
-          showToast('Please upload a valid .svg file.');
+          showToast((I18N[localStorage.getItem('vantorkit_lang') || 'en'] || I18N.en).toastInvalidFile || 'Please upload a valid .svg file.');
           return;
         }
 

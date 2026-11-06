@@ -84,7 +84,9 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
         toastCleared: '\ud83d\uddd1\ufe0f All texts cleared.',
         toastSample: '\ud83d\udcd6 Sample difference loaded.',
         toastCopied: '\u2705 Diff result copied to clipboard!',
-        toastExported: '\ud83d\udce5 Downloading diff-report.html...'
+        toastExported: '\ud83d\udce5 Downloading diff-report.html...',
+        origPlaceholder: 'Paste or type original text / code here...',
+        modPlaceholder: 'Paste or type modified / new text here...'
       },
       ar: {
         langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
@@ -138,7 +140,9 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
         toastCleared: '\ud83d\uddd1\ufe0f \u062a\u0645 \u0645\u0633\u062d \u062c\u0645\u064a\u0639 \u0627\u0644\u0646\u0635\u0648\u0635.',
         toastSample: '\ud83d\udcd6 \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0646\u0645\u0648\u0630\u062c \u0627\u0644\u0641\u0631\u0648\u0642\u0627\u062a.',
         toastCopied: '\u2705 \u062a\u0645 \u0646\u0633\u062e \u0646\u062a\u064a\u062c\u0629 \u0627\u0644\u0641\u0631\u0648\u0642\u0627\u062a!',
-        toastExported: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 \u062a\u0642\u0631\u064a\u0631 diff-report.html...'
+        toastExported: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 \u062a\u0642\u0631\u064a\u0631 diff-report.html...',
+        origPlaceholder: 'الصق أو اكتب النص الأصلي أو الكود هنا...',
+        modPlaceholder: 'الصق أو اكتب النص المعدل أو الجديد هنا...'
       },
       fr: {
         langLabel: 'Fran\u00e7ais',
@@ -192,7 +196,9 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
         toastCleared: '\ud83d\uddd1\ufe0f Textes effac\u00e9s.',
         toastSample: '\ud83d\udcd6 Exemple de comparaison charg\u00e9.',
         toastCopied: '\u2705 R\u00e9sultat diff copi\u00e9 !',
-        toastExported: '\ud83d\udce5 T\u00e9l\u00e9chargement de diff-report.html...'
+        toastExported: '\ud83d\udce5 T\u00e9l\u00e9chargement de diff-report.html...',
+        origPlaceholder: 'Collez ou saisissez le texte ou code original ici...',
+        modPlaceholder: 'Collez ou saisissez le texte modifié ou nouveau ici...'
       },
       it: {
         langLabel: 'Italiano',
@@ -246,7 +252,9 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
         toastCleared: '\ud83d\uddd1\ufe0f Testi cancellati.',
         toastSample: '\ud83d\udcd6 Esempio di confronto caricato.',
         toastCopied: '\u2705 Risultato diff copiato!',
-        toastExported: '\ud83d\udce5 Download di diff-report.html in corso...'
+        toastExported: '\ud83d\udce5 Download di diff-report.html in corso...',
+        origPlaceholder: 'Incolla o digita il testo o codice originale qui...',
+        modPlaceholder: 'Incolla o digita il testo modificato o nuovo qui...'
       }
     };
 
@@ -911,6 +919,8 @@ Zero-cloud telemetry guarantees complete privacy for all proprietary files.`;
       htmlRoot.setAttribute('lang', lang);
       htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
       currentLangLabel.textContent = d.langLabel;
+      if (origTextarea && d.origPlaceholder) origTextarea.placeholder = d.origPlaceholder;
+      if (modTextarea && d.modPlaceholder) modTextarea.placeholder = d.modPlaceholder;
 
       langOptions.forEach(function(o) {
         o.classList.toggle('active', o.dataset.lang === lang);

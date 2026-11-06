@@ -46,7 +46,9 @@
         faq4A: "Yes! Your course list automatically saves to your browser's local storage. When you return to VantorKit on the same device, your semester courses and cumulative inputs will be restored immediately.",
         toastSaved: "Grades saved to local storage!",
         toastCleared: "Courses reset.",
-        toastCsv: "CSV report downloaded successfully!"
+        toastCsv: "CSV report downloaded successfully!",
+        toastSampleLoaded: "Demo semester loaded!",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         backLink: "← العودة إلى الأدوات",
@@ -90,7 +92,9 @@
         faq4A: "نعم، تحفظ قائمة المقررات تلقائياً على جهازك محلياً وتستعاد فور فتح الصفحة مرة أخرى.",
         toastSaved: "تم حفظ المقررات بنجاح!",
         toastCleared: "تمت إعادة تعيين المقررات.",
-        toastCsv: "تم تصدير ملف CSV بنجاح!"
+        toastCsv: "تم تصدير ملف CSV بنجاح!",
+        toastSampleLoaded: "تم تحميل الفصل التجريبي!",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         backLink: "← Retour aux Outils",
@@ -134,7 +138,9 @@
         faq4A: "Oui, la liste des cours est sauvegardée dans le stockage local de votre navigateur et rechargée automatiquement.",
         toastSaved: "Notes sauvegardées localement !",
         toastCleared: "Liste des cours réinitialisée.",
-        toastCsv: "Fichier CSV téléchargé avec succès !"
+        toastCsv: "Fichier CSV téléchargé avec succès !",
+        toastSampleLoaded: "Semestre de démonstration chargé !",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         backLink: "← Torna agli Strumenti",
@@ -178,7 +184,9 @@
         faq4A: "Sì, i dati vengono conservati nella memoria del browser e saranno disponibili alla prossima apertura della pagina.",
         toastSaved: "Voti salvati con successo!",
         toastCleared: "Lista esami azzerata.",
-        toastCsv: "File CSV esportato correttamente!"
+        toastCsv: "File CSV esportato correttamente!",
+        toastSampleLoaded: "Semestre demo caricato!",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -666,12 +674,12 @@
       // Load Sample Demo
       document.getElementById('btnLoadSample').addEventListener('click', () => {
         loadDemoSemester();
-        showToast('Demo semester loaded!');
+        showToast(TRANSLATIONS[currentLang]?.toastSampleLoaded || 'Demo semester loaded!');
       });
 
       // Clear Courses
       document.getElementById('btnClearCourses').addEventListener('click', () => {
-        if (confirm('Clear all course grades and start fresh?')) {
+        if (true) {
           courses = [createCourseItem('', 4.0, 3, 'regular')];
           renderAllCourses();
           showToast(TRANSLATIONS[currentLang]?.toastCleared || 'Courses reset.');

@@ -68,6 +68,10 @@
           copyErrorToast: "Could not copy image to clipboard.",
           pngDownloadToast: "High-resolution PNG downloaded!",
           svgDownloadToast: "Lossless vector SVG downloaded!",
+          textPlaceholder: "Enter any text, note, code, or message...",
+          emailSubjPlaceholder: "Project Inquiry",
+          emailBodyPlaceholder: "Write your message...",
+          toastCapacityErr: "Data exceeds capacity for this error correction level. Try lowering to Level L or M.",
           chars: "chars",
           modules: "Modules"
         },
@@ -130,6 +134,10 @@
           copyErrorToast: "تعذر نسخ الصورة إلى الحافظة.",
           pngDownloadToast: "تم تنزيل صورة PNG عالية الدقة!",
           svgDownloadToast: "تم تنزيل ملف SVG المتجه فائق النقاء!",
+          textPlaceholder: "أدخل أي نص أو ملاحظة أو رسالة...",
+          emailSubjPlaceholder: "استفسار حول المشروع",
+          emailBodyPlaceholder: "اكتب رسالتك هنا...",
+          toastCapacityErr: "البيانات تتجاوز السعة لهذا المستوى من تصحيح الخطأ. جرّب تقليله إلى المستوى L أو M.",
           chars: "حرف",
           modules: "وحدة نمطية"
         },
@@ -192,6 +200,10 @@
           copyErrorToast: "Impossible de copier l'image.",
           pngDownloadToast: "Image PNG haute résolution téléchargée !",
           svgDownloadToast: "Fichier vectoriel SVG téléchargé !",
+          textPlaceholder: "Saisissez n'importe quel texte, note ou message...",
+          emailSubjPlaceholder: "Demande d'information",
+          emailBodyPlaceholder: "Écrivez votre message...",
+          toastCapacityErr: "Les données dépassent la capacité pour ce niveau de correction. Essayez le niveau L ou M.",
           chars: "caractères",
           modules: "Modules"
         },
@@ -254,6 +266,10 @@
           copyErrorToast: "Impossibile copiare l'immagine.",
           pngDownloadToast: "Immagine PNG ad alta risoluzione scaricata!",
           svgDownloadToast: "File vettoriale SVG scaricato!",
+          textPlaceholder: "Inserisci qualsiasi testo, nota o messaggio...",
+          emailSubjPlaceholder: "Richiesta informazioni",
+          emailBodyPlaceholder: "Scrivi il tuo messaggio...",
+          toastCapacityErr: "I dati superano la capacità per questo livello di correzione. Prova il livello L o M.",
           chars: "caratteri",
           modules: "Moduli"
         }
@@ -510,7 +526,7 @@
         } catch (err) {
           console.warn('QR Code generation error:', err);
           // If data exceeds capacity at current ECC, suggest lowering ECC
-          showToast('Data exceeds capacity for this error correction level. Try lowering to Level L or M.');
+          showToast(dict.toastCapacityErr || 'Data exceeds capacity for this error correction level. Try lowering to Level L or M.');
         }
       }
 
@@ -738,6 +754,11 @@
 
         if (currentLangLabel) {
           currentLangLabel.textContent = LANG_LABELS[lang] || 'English';
+        }
+        if (textInput && dict.textPlaceholder) textInput.placeholder = dict.textPlaceholder;
+        if (emailSubject && dict.emailSubjPlaceholder) emailSubject.placeholder = dict.emailSubjPlaceholder;
+        if (emailBody && dict.emailBodyPlaceholder) emailBody.placeholder = dict.emailBodyPlaceholder;
+        if (true) {
         }
 
         langOptions.forEach(opt => {

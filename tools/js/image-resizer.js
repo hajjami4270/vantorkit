@@ -61,7 +61,11 @@
           copySuccessToast: "Image copied to clipboard!",
           copyErrorToast: "Could not copy image to clipboard in this browser.",
           resetToast: "All settings reset to defaults.",
-          sampleLoadedToast: "Sample image loaded successfully!"
+          sampleLoadedToast: "Sample image loaded successfully!",
+          formatHintLossless: "Lossless Transparency",
+          formatHintWebp: "Modern & Lightweight",
+          formatHintJpg: "Universal Compatibility",
+          toastInvalidImage: "Please upload a valid image file (PNG, JPG, WEBP)."
         },
         ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -120,7 +124,11 @@
           copySuccessToast: "تم نسخ الصورة إلى الحافظة!",
           copyErrorToast: "تعذر نسخ الصورة إلى الحافظة في هذا المتصفح.",
           resetToast: "تمت إعادة ضبط جميع الإعدادات للوضع الافتراضي.",
-          sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!"
+          sampleLoadedToast: "تم تحميل الصورة النموذجية بنجاح!",
+          formatHintLossless: "شفافية بدون فقدان للجودة",
+          formatHintWebp: "حديثة وخفيفة الحجم",
+          formatHintJpg: "توافق قياسي شامل",
+          toastInvalidImage: "يرجى رفع ملف صورة صالح (PNG أو JPG أو WEBP)."
         },
         fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -179,7 +187,11 @@
           copySuccessToast: "Image copiée dans le presse-papiers !",
           copyErrorToast: "Impossible de copier l'image dans ce navigateur.",
           resetToast: "Paramètres réinitialisés aux valeurs par défaut.",
-          sampleLoadedToast: "Image exemple chargée avec succès !"
+          sampleLoadedToast: "Image exemple chargée avec succès !",
+          formatHintLossless: "Transparence sans perte",
+          formatHintWebp: "Moderne & Léger",
+          formatHintJpg: "Compatibilité universelle",
+          toastInvalidImage: "Veuillez téléverser un fichier image valide (PNG, JPG, WEBP)."
         },
         it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -238,7 +250,11 @@
           copySuccessToast: "Immagine copiata negli appunti!",
           copyErrorToast: "Impossibile copiare l'immagine in questo browser.",
           resetToast: "Tutte le impostazioni sono state ripristinate.",
-          sampleLoadedToast: "Immagine di esempio caricata con successo!"
+          sampleLoadedToast: "Immagine di esempio caricata con successo!",
+          formatHintLossless: "Trasparenza senza perdita",
+          formatHintWebp: "Moderno & Leggero",
+          formatHintJpg: "Compatibilità universale",
+          toastInvalidImage: "Carica un file immagine valido (PNG, JPG, WEBP)."
         }
       };
 
@@ -887,12 +903,12 @@
             qualityWrap.style.opacity = '0.5';
             qualitySlider.disabled = true;
             qualityValDisplay.textContent = 'Lossless (100%)';
-            formatHint.textContent = 'Lossless Transparency';
+            formatHint.textContent = getActiveDict().formatHintLossless || 'Lossless Transparency';
           } else {
             qualityWrap.style.opacity = '1';
             qualitySlider.disabled = false;
             updateQualityDisplay();
-            formatHint.textContent = exportFormat === 'image/webp' ? 'Modern & Lightweight' : 'Universal Compatibility';
+            formatHint.textContent = exportFormat === 'image/webp' ? (getActiveDict().formatHintWebp || 'Modern & Lightweight') : (getActiveDict().formatHintJpg || 'Universal Compatibility');
           }
 
           scheduleEstimateSize();
@@ -1092,7 +1108,7 @@
 
       function handleFile(file) {
         if (!file.type.startsWith('image/')) {
-          showToast('Please upload a valid image file (PNG, JPG, WEBP).');
+          showToast(getActiveDict().toastInvalidImage || 'Please upload a valid image file (PNG, JPG, WEBP).');
           return;
         }
 
@@ -1182,6 +1198,9 @@
         });
 
         // Translate all data-i18n elements
+        if (formatHint) {
+          formatHint.textContent = exportFormat === 'image/png' ? (dict.formatHintLossless || dict.formatHint) : (exportFormat === 'image/webp' ? (dict.formatHintWebp || dict.formatHint) : (dict.formatHintJpg || dict.formatHint));
+        }
         document.querySelectorAll('[data-i18n]').forEach(el => {
           const key = el.getAttribute('data-i18n');
           if (dict[key]) {

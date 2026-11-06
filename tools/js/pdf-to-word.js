@@ -39,7 +39,9 @@
         faq4Q:'Can I convert password-protected PDFs?',faq4A:'Not directly. Remove the password protection first, then upload the unlocked version here.',
         footerText:'\u00a9 2026 VantorKit. Fast, Private & Free Web Utilities. All processing is performed locally in your browser.',
         toastConverted:'\u2705 .docx ready for download!',toastDownload:'\u2b07\ufe0f Downloading your document\u2026',
-        toastCleared:'\u{1f5d1}\ufe0f File cleared.',toastLibErr:'\u26a0\ufe0f Libraries not yet loaded. Please wait.',toastNoFile:'\u{1f4c4} Please select a PDF file first.'
+        toastCleared:'\u{1f5d1}\ufe0f File cleared.',toastLibErr:'\u26a0\ufe0f Libraries not yet loaded. Please wait.',toastNoFile:'\u{1f4c4} Please select a PDF file first.',
+        toastInvalidPdf:'\u26a0\ufe0f Please upload a valid PDF file.',toastReadErr:'\u274c Failed to read PDF: ',toastConvErr:'\u274c Conversion failed: ',
+        pagesPill:function(n){return n+' page'+(n!==1?'s':'');}
       },
       ar:{
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -72,7 +74,9 @@
         faq4Q:'\u0647\u0644 \u064a\u0645\u0643\u0646 \u062a\u062d\u0648\u064a\u0644 \u0645\u0644\u0641\u0627\u062a \u0645\u062d\u0645\u064a\u0629\u061f',faq4A:'\u0644\u064a\u0633 \u0645\u0628\u0627\u0634\u0631\u0629. \u0623\u0632\u0644 \u0627\u0644\u062d\u0645\u0627\u064a\u0629 \u0623\u0648\u0644\u0627\u064b.',
         footerText:'\u00a9 2026 VantorKit. \u0623\u062f\u0648\u0627\u062a \u0648\u064a\u0628 \u0633\u0631\u064a\u0639\u0629 \u0648\u0645\u062c\u0627\u0646\u064a\u0629.',
         toastConverted:'\u2705 \u0645\u0644\u0641 .docx \u062c\u0627\u0647\u0632!',toastDownload:'\u2b07\ufe0f \u062c\u0627\u0631\u064a \u0627\u0644\u062a\u0646\u0632\u064a\u0644\u2026',
-        toastCleared:'\u{1f5d1}\ufe0f \u062a\u0645 \u0627\u0644\u0645\u0633\u062d.',toastLibErr:'\u26a0\ufe0f \u0627\u0644\u0645\u0643\u062a\u0628\u0627\u062a \u0644\u0645 \u062a\u064f\u062d\u0645\u0651\u0644 \u0628\u0639\u062f.',toastNoFile:'\u{1f4c4} \u064a\u0631\u062c\u0649 \u0627\u062e\u062a\u064a\u0627\u0631 \u0645\u0644\u0641 PDF \u0623\u0648\u0644\u0627\u064b.'
+        toastCleared:'\u{1f5d1}\ufe0f \u062a\u0645 \u0627\u0644\u0645\u0633\u062d.',toastLibErr:'\u26a0\ufe0f \u0627\u0644\u0645\u0643\u062a\u0628\u0627\u062a \u0644\u0645 \u062a\u064f\u062d\u0645\u0651\u0644 \u0628\u0639\u062f.',toastNoFile:'\u{1f4c4} \u064a\u0631\u062c\u0649 \u0627\u062e\u062a\u064a\u0627\u0631 \u0645\u0644\u0641 PDF \u0623\u0648\u0644\u0627\u064b.',
+        toastInvalidPdf:'\u26a0\ufe0f \u064a\u0631\u062c\u0649 \u0631\u0641\u0639 \u0645\u0644\u0641 PDF \u0635\u0627\u0644\u062d.',toastReadErr:'\u274c \u062a\u0639\u0630\u0631 \u0642\u0631\u0627\u0621\u0629 \u0645\u0644\u0641 PDF: ',toastConvErr:'\u274c \u0641\u0634\u0644 \u0627\u0644\u062a\u062d\u0648\u064a\u0644: ',
+        pagesPill:function(n){return n+' '+(n===1?'\u0635\u0641\u062d\u0629':'\u0635\u0641\u062d\u0627\u062a');}
       },
       fr:{
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -106,7 +110,9 @@
         faq4Q:'Puis-je convertir des PDF prot\u00e9g\u00e9s ?',faq4A:"Pas directement. Supprimez d'abord la protection.",
         footerText:'\u00a9 2026 VantorKit. Utilitaires web rapides, priv\u00e9s et gratuits.',
         toastConverted:'\u2705 Fichier .docx pr\u00eat !',toastDownload:'\u2b07\ufe0f T\u00e9l\u00e9chargement\u2026',
-        toastCleared:'\u{1f5d1}\ufe0f Fichier effac\u00e9.',toastLibErr:'\u26a0\ufe0f Biblioth\u00e8ques pas encore charg\u00e9es.',toastNoFile:"\u{1f4c4} Veuillez d'abord s\u00e9lectionner un fichier PDF."
+        toastCleared:'\u{1f5d1}\ufe0f Fichier effac\u00e9.',toastLibErr:'\u26a0\ufe0f Biblioth\u00e8ques pas encore charg\u00e9es.',toastNoFile:"\u{1f4c4} Veuillez d'abord s\u00e9lectionner un fichier PDF.",
+        toastInvalidPdf:'\u26a0\ufe0f Veuillez t\u00e9l\u00e9verser un fichier PDF valide.',toastReadErr:'\u274c \u00c9chec de lecture du PDF : ',toastConvErr:'\u274c \u00c9chec de la conversion : ',
+        pagesPill:function(n){return n+' page'+(n!==1?'s':'');}
       },
       it:{
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -140,7 +146,9 @@
         faq4Q:'Posso convertire PDF protetti da password?',faq4A:'Non direttamente. Rimuovi prima la protezione.',
         footerText:'\u00a9 2026 VantorKit. Utilit\u00e0 web veloci, private e gratuite.',
         toastConverted:'\u2705 File .docx pronto!',toastDownload:'\u2b07\ufe0f Download in corso\u2026',
-        toastCleared:'\u{1f5d1}\ufe0f File eliminato.',toastLibErr:'\u26a0\ufe0f Librerie non ancora caricate.',toastNoFile:'\u{1f4c4} Seleziona prima un file PDF.'
+        toastCleared:'\u{1f5d1}\ufe0f File eliminato.',toastLibErr:'\u26a0\ufe0f Librerie non ancora caricate.',toastNoFile:'\u{1f4c4} Seleziona prima un file PDF.',
+        toastInvalidPdf:'\u26a0\ufe0f Carica un file PDF valido.',toastReadErr:'\u274c Impossibile leggere il PDF: ',toastConvErr:'\u274c Conversione non riuscita: ',
+        pagesPill:function(n){return n+' '+(n===1?'pagina':'pagine');}
       }
     };
     const htmlRoot=document.getElementById('htmlRoot');
@@ -198,6 +206,9 @@
         var k=el.dataset.i18n;
         if(d[k]&&typeof d[k]==='string')el.textContent=d[k];
       });
+      if(pdfDoc&&currentFile&&d.pagesPill){
+        fileMetaRow.innerHTML='<span class="meta-pill">\ud83d\udcc4 PDF</span><span class="meta-pill">'+d.pagesPill(pdfDoc.numPages)+'</span><span class="meta-pill">'+formatBytes(currentFile.size)+'</span>';
+      }
     }
 
     langToggleBtn.addEventListener('click',function(e){
@@ -232,7 +243,7 @@
     });
 
     function handleFile(file){
-      if(!file||(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf'))){showToast('\u26a0\ufe0f Please upload a valid PDF file.');return;}
+      if(!file||(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf'))){showToast(dict().toastInvalidPdf);return;}
       resetState();
       currentFile=file;
       fileInfoName.textContent=file.name;
@@ -242,7 +253,7 @@
       }).then(function(pdf){
         pdfDoc=pdf;
         var pc=pdf.numPages;
-        fileMetaRow.innerHTML='<span class="meta-pill">\ud83d\udcc4 PDF</span><span class="meta-pill">'+pc+' page'+(pc!==1?'s':'')+'</span><span class="meta-pill">'+formatBytes(file.size)+'</span>';
+        fileMetaRow.innerHTML='<span class="meta-pill">\ud83d\udcc4 PDF</span><span class="meta-pill">'+dict().pagesPill(pc)+'</span><span class="meta-pill">'+formatBytes(file.size)+'</span>';
         var sampleChars=0,samplePages=Math.min(3,pc),promises=[];
         for(var i=1;i<=samplePages;i++){promises.push(pdf.getPage(i).then(function(pg){return pg.getTextContent();}).then(function(tc){tc.items.forEach(function(it){sampleChars+=(it.str||'').trim().length;});}));}
         return Promise.all(promises).then(function(){
@@ -254,7 +265,7 @@
       }).then(function(){
         convertCard.classList.add('visible');
       }).catch(function(err){
-        console.error(err);showToast('\u274c Failed to read PDF: '+(err.message||'Unknown error'));
+        console.error(err);showToast(dict().toastReadErr+(err.message||'Unknown error'));
       });
     }
 
@@ -800,7 +811,7 @@
         triggerDownload(docxBlobUrl,currentFile.name.replace(/\.pdf$/i,'.docx'));
         showToast(dict().toastConverted,3500);
       }).catch(function(err){
-        console.error(err);showToast('\u274c Conversion failed: '+(err.message||'Unknown error'));
+        console.error(err);showToast(dict().toastConvErr+(err.message||'Unknown error'));
       }).finally(function(){
         btnConvert.disabled=false;
         setTimeout(function(){progressContainer.style.display='none';progressBar.style.width='0%';},900);
@@ -810,7 +821,7 @@
     function triggerDownload(url,filename){var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);}
 
     btnDownload.addEventListener('click',function(){
-      if(docxBlobUrl&&currentFile){triggerDownload(docxBlobUrl,currentFile.name.replace('.pdf','.docx'));showToast(dict().toastDownload);}
+      if(docxBlobUrl&&currentFile){triggerDownload(docxBlobUrl,currentFile.name.replace(/\.pdf$/i,'.docx'));showToast(dict().toastDownload);}
     });
 
     function resetState(){

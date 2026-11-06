@@ -44,7 +44,9 @@
         faq4A: "Yes! You can use VantorKit's Base64 File Encoder & Decoder tool to paste any Base64 string and download the original binary image or document file instantly.",
         toastCopied: "Snippet copied to clipboard!",
         toastLoaded: "Image converted to Base64 successfully!",
-        toastCleared: "Workspace cleared."
+        toastCleared: "Workspace cleared.",
+        outputPlaceholder: "Encoded output will appear here...",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -90,7 +92,9 @@
         faq4A: "نعم! يمكنك استخدام أداة مشفر ومفكك Base64 في VantorKit للصق أي سلسلة وتنزيل ملف الصورة الأصلي على الفور.",
         toastCopied: "تم نسخ الكود إلى الحافظة بنجاح!",
         toastLoaded: "تم تحويل الصورة إلى Base64 بنجاح!",
-        toastCleared: "تم تفريغ مساحة العمل."
+        toastCleared: "تم تفريغ مساحة العمل.",
+        outputPlaceholder: "سيظهر الكود المشفر هنا...",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -136,7 +140,9 @@
         faq4A: "Oui ! Utilisez notre outil 'Encodeur et Décodeur de Fichiers Base64' pour coller du Base64 et réexporter le fichier binaire d'origine.",
         toastCopied: "Extrait copié dans le presse-papiers !",
         toastLoaded: "Image encodée en Base64 avec succès !",
-        toastCleared: "Espace de travail réinitialisé."
+        toastCleared: "Espace de travail réinitialisé.",
+        outputPlaceholder: "Le résultat encodé apparaîtra ici...",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -182,7 +188,9 @@
         faq4A: "Certamente! Utilizza lo strumento 'Codificatore e Decodificatore File Base64' di VantorKit per incollare il codice e scaricare il file immagine originale.",
         toastCopied: "Snippet copiato negli appunti!",
         toastLoaded: "Immagine convertita in Base64 con successo!",
-        toastCleared: "Area di lavoro svuotata."
+        toastCleared: "Area di lavoro svuotata.",
+        outputPlaceholder: "L'output codificato apparirà qui...",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -472,6 +480,7 @@
       });
 
       // Update snippet tabs labels
+      if (snippetOutput && dict.outputPlaceholder) snippetOutput.placeholder = dict.outputPlaceholder;
       updateOutputView();
     }
 

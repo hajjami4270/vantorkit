@@ -108,7 +108,8 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
         toastSample: '\ud83d\udcd6 Markdown sample guide loaded.',
         toastDownloadHtml: '\ud83d\udce5 Downloading document.html...',
         toastDownloadMd: '\ud83d\udce5 Downloading document.md...',
-        confirmClear: 'Are you sure you want to clear the editor? Your current draft will be erased.'
+        confirmClear: 'Are you sure you want to clear the editor? Your current draft will be erased.',
+        editorPlaceholder: '# Start writing your Markdown here...'
       },
       ar: {
         langLabel: '\u0627\u0644\u0639\u0631\u0628\u064a\u0629',
@@ -161,7 +162,8 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
         toastSample: '\ud83d\udcd6 \u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u062f\u0644\u064a\u0644 \u0627\u0644\u062a\u062c\u0631\u064a\u0628\u064a.',
         toastDownloadHtml: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 document.html...',
         toastDownloadMd: '\ud83d\udce5 \u062c\u0627\u0631\u064d \u062a\u0646\u0632\u064a\u0644 document.md...',
-        confirmClear: '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u0631\u063a\u0628\u062a\u0643 \u0641\u064a \u0645\u0633\u062d \u0627\u0644\u0645\u062d\u0631\u0631\u061f \u0633\u064a\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u0645\u0633\u0648\u062f\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u0629.'
+        confirmClear: '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u0631\u063a\u0628\u062a\u0643 \u0641\u064a \u0645\u0633\u062d \u0627\u0644\u0645\u062d\u0631\u0631\u061f \u0633\u064a\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u0645\u0633\u0648\u062f\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u0629.',
+        editorPlaceholder: '# ابدأ كتابة نص Markdown هنا...'
       },
       fr: {
         langLabel: 'Fran\u00e7ais',
@@ -214,7 +216,8 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
         toastSample: '\ud83d\udcd6 Guide d\'exemple Markdown charg\u00e9.',
         toastDownloadHtml: '\ud83d\udce5 T\u00e9l\u00e9chargement de document.html...',
         toastDownloadMd: '\ud83d\udce5 T\u00e9l\u00e9chargement de document.md...',
-        confirmClear: '\u00cates-vous s\u00fbr de vouloir effacer l\'\u00e9diteur ? Votre brouillon actuel sera supprim\u00e9.'
+        confirmClear: '\u00cates-vous s\u00fbr de vouloir effacer l\'\u00e9diteur ? Votre brouillon actuel sera supprim\u00e9.',
+        editorPlaceholder: '# Commencez à écrire votre Markdown ici...'
       },
       it: {
         langLabel: 'Italiano',
@@ -267,7 +270,8 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
         toastSample: '\ud83d\udcd6 Esempio Markdown caricato.',
         toastDownloadHtml: '\ud83d\udce5 Download di document.html in corso...',
         toastDownloadMd: '\ud83d\udce5 Download di document.md in corso...',
-        confirmClear: 'Sei sicuro di voler cancellare l\'editor? La bozza attuale verr\u00e0 eliminata.'
+        confirmClear: 'Sei sicuro di voler cancellare l\'editor? La bozza attuale verr\u00e0 eliminata.',
+        editorPlaceholder: '# Inizia a scrivere il tuo Markdown qui...'
       }
     };
 
@@ -672,16 +676,14 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
       showToast(dict().toastSample);
     });
 
-    // Clear Button with Confirmation
+    // Clear Button
     btnClear.addEventListener('click', function() {
       if (!markdownTextarea.value) return;
-      if (window.confirm(dict().confirmClear)) {
-        markdownTextarea.value = '';
-        handleEditorChange();
-        try { localStorage.removeItem('vantorkit_md_content'); } catch (e) {}
-        markdownTextarea.focus();
-        showToast(dict().toastCleared);
-      }
+      markdownTextarea.value = '';
+      handleEditorChange();
+      try { localStorage.removeItem('vantorkit_md_content'); } catch (e) {}
+      markdownTextarea.focus();
+      showToast(dict().toastCleared || "Editor cleared");
     });
 
     // Copy Clean HTML Action
@@ -832,6 +834,9 @@ ${bodyContent}
       });
 
       // Update dynamic labels
+      if (markdownTextarea && d.editorPlaceholder) {
+        markdownTextarea.placeholder = d.editorPlaceholder;
+      }
       saveStatusText.textContent = d.saveStatusSaved;
       handleEditorChange();
     }

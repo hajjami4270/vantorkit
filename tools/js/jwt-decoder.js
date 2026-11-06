@@ -50,7 +50,14 @@
           footerTerms: "Terms of Service",
           footerAbout: "About Us",
           footerContact: "Contact",
-          footerCopy: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
+          footerCopy: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser.",
+          jwtPlaceholder: "Paste your encoded JWT here (eyJhbGciOiJIUzI1NiIs...)",
+          secretPlaceholder: "Enter your 256-bit HMAC secret key to verify signature...",
+          signerSecretPlaceholder: "Enter secret key...",
+          toastSampleValid: "Sample active token loaded & verified!",
+          toastSampleExpired: "Sample expired token loaded!",
+          toastTokenCopied: "Generated token copied to clipboard!",
+          toastTokenSigned: "Token signed & generated!"
         },
         ar: {
           langLabel: "العربية",
@@ -99,7 +106,14 @@
           footerTerms: "شروط الخدمة",
           footerAbout: "من نحن",
           footerContact: "اتصل بنا",
-          footerCopy: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك."
+          footerCopy: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. المعالجة تتم محلياً في متصفحك.",
+          jwtPlaceholder: "الصق رمز JWT المشفر هنا (eyJhbGciOiJIUzI1NiIs...)",
+          secretPlaceholder: "أدخل المفتاح السري لـ HMAC للتحقق من التوقيع...",
+          signerSecretPlaceholder: "أدخل المفتاح السري...",
+          toastSampleValid: "تم تحميل التوكن النشط التجريبي والتحقق منه!",
+          toastSampleExpired: "تم تحميل التوكن التجريبي منتهي الصلاحية!",
+          toastTokenCopied: "تم نسخ التوكن المولد إلى الحافظة!",
+          toastTokenSigned: "تم توقيع وتوليد التوكن بنجاح!"
         },
         fr: {
           langLabel: "Français",
@@ -148,7 +162,14 @@
           footerTerms: "Conditions d'utilisation",
           footerAbout: "À propos",
           footerContact: "Contact",
-          footerCopy: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits."
+          footerCopy: "© 2026 VantorKit. Utilitaires web rapides, privés et gratuits.",
+          jwtPlaceholder: "Collez votre jeton JWT encodé ici (eyJhbGciOiJIUzI1NiIs...)",
+          secretPlaceholder: "Saisissez votre clé secrète HMAC 256 bits pour vérifier la signature...",
+          signerSecretPlaceholder: "Saisissez la clé secrète...",
+          toastSampleValid: "Jeton actif d'exemple chargé et vérifié !",
+          toastSampleExpired: "Jeton expiré d'exemple chargé !",
+          toastTokenCopied: "Jeton généré copié dans le presse-papiers !",
+          toastTokenSigned: "Jeton signé et généré !"
         },
         it: {
           langLabel: "Italiano",
@@ -197,7 +218,14 @@
           footerTerms: "Termini di servizio",
           footerAbout: "Chi siamo",
           footerContact: "Contatto",
-          footerCopy: "© 2026 VantorKit. Strumenti web veloci, privati e gratuiti."
+          footerCopy: "© 2026 VantorKit. Strumenti web veloci, privati e gratuiti.",
+          jwtPlaceholder: "Incolla qui il tuo JWT codificato (eyJhbGciOiJIUzI1NiIs...)",
+          secretPlaceholder: "Inserisci la tua chiave segreta HMAC a 256 bit per verificare la firma...",
+          signerSecretPlaceholder: "Inserisci la chiave segreta...",
+          toastSampleValid: "Token attivo di esempio caricato e verificato!",
+          toastSampleExpired: "Token scaduto di esempio caricato!",
+          toastTokenCopied: "Token generato copiato negli appunti!",
+          toastTokenSigned: "Token firmato e generato!"
         }
       };
 
@@ -261,6 +289,9 @@
 
         const dict = I18N[lang];
         currentLangLabel.textContent = dict.langLabel;
+        if (jwtInput && dict.jwtPlaceholder) jwtInput.placeholder = dict.jwtPlaceholder;
+        if (jwtSecretInput && dict.secretPlaceholder) jwtSecretInput.placeholder = dict.secretPlaceholder;
+        if (signerSecretInput && dict.signerSecretPlaceholder) signerSecretInput.placeholder = dict.signerSecretPlaceholder;
 
         langOptions.forEach(opt => {
           if (opt.dataset.lang === lang) opt.classList.add('active');
@@ -757,7 +788,7 @@
           jwtSecretInput.value = secret;
           chkBase64Secret.checked = false;
           decodeJWT(token);
-          showToast('Sample active token loaded & verified!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastSampleValid) || 'Sample active token loaded & verified!');
         });
       });
 
@@ -778,7 +809,7 @@
           jwtSecretInput.value = secret;
           chkBase64Secret.checked = false;
           decodeJWT(token);
-          showToast('Sample expired token loaded!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastSampleExpired) || 'Sample expired token loaded!');
         });
       });
 
@@ -838,11 +869,11 @@
 
           btnCopyGeneratedToken.onclick = () => {
             navigator.clipboard.writeText(token).then(() => {
-              showToast('Generated token copied to clipboard!');
+              showToast((I18N[currentLang] && I18N[currentLang].toastTokenCopied) || 'Generated token copied to clipboard!');
             });
           };
 
-          showToast('Token signed & generated!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastTokenSigned) || 'Token signed & generated!');
         } catch (e) {
           alert('Error signing token: Invalid JSON formatting in Header or Payload.');
         }

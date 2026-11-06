@@ -43,7 +43,12 @@
         toastCopied: "Base64 payload copied to clipboard!",
         toastTxtDownloaded: "Base64 text file downloaded!",
         toastFileDownloaded: "Decoded file downloaded successfully!",
-        toastCleared: "Workspace cleared."
+        toastCleared: "Workspace cleared.",
+        decodePlaceholder: "Paste raw Base64 (e.g. iVBORw0KGgo...) or Data URI (e.g. data:image/png;base64,iVBORw0KGgo...) here...",
+        toastCopyErr: "Failed to copy to clipboard.",
+        toastPasted: "Pasted from clipboard!",
+        toastPasteErr: "Clipboard access denied.",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -84,7 +89,12 @@
         toastCopied: "تم نسخ كود Base64 إلى الحافظة بنجاح!",
         toastTxtDownloaded: "تم تحميل الملف النصي بنجاح!",
         toastFileDownloaded: "تم تحميل الملف المسترجع بنجاح!",
-        toastCleared: "تم مسح مساحة العمل."
+        toastCleared: "تم مسح مساحة العمل.",
+        decodePlaceholder: "الصق كود Base64 الخام (مثل iVBORw0KGgo...) أو Data URI هنا...",
+        toastCopyErr: "تعذر النسخ إلى الحافظة.",
+        toastPasted: "تم اللصق من الحافظة!",
+        toastPasteErr: "تم رفض الوصول إلى الحافظة.",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -125,7 +135,12 @@
         toastCopied: "Données Base64 copiées dans le presse-papier !",
         toastTxtDownloaded: "Fichier texte téléchargé avec succès !",
         toastFileDownloaded: "Fichier décodé téléchargé avec succès !",
-        toastCleared: "Espace de travail réinitialisé."
+        toastCleared: "Espace de travail réinitialisé.",
+        decodePlaceholder: "Collez la chaîne Base64 brute (ex. iVBORw0KGgo...) ou Data URI ici...",
+        toastCopyErr: "Échec de la copie dans le presse-papiers.",
+        toastPasted: "Collé depuis le presse-papiers !",
+        toastPasteErr: "Accès au presse-papiers refusé.",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -166,7 +181,12 @@
         toastCopied: "Codice Base64 copiato negli appunti!",
         toastTxtDownloaded: "File di testo scaricato!",
         toastFileDownloaded: "File decodificato scaricato con successo!",
-        toastCleared: "Spazio di lavoro azzerato."
+        toastCleared: "Spazio di lavoro azzerato.",
+        decodePlaceholder: "Incolla qui la stringa Base64 grezza (es. iVBORw0KGgo...) o il Data URI...",
+        toastCopyErr: "Impossibile copiare negli appunti.",
+        toastPasted: "Incollato dagli appunti!",
+        toastPasteErr: "Accesso agli appunti negato.",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -242,6 +262,8 @@
 
       const langNames = { en: 'English', ar: 'العربية', fr: 'Français', it: 'Italiano' };
       document.getElementById('currentLangLabel').textContent = langNames[lang] || 'English';
+      const txtDecodeInput = document.getElementById('txtDecodeInput');
+      if (txtDecodeInput && t.decodePlaceholder) txtDecodeInput.placeholder = t.decodePlaceholder;
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -366,7 +388,7 @@
         navigator.clipboard.writeText(txtEncodedOutput.value).then(() => {
           showToast(TRANSLATIONS[currentLang]?.toastCopied || 'Base64 copied to clipboard!');
         }).catch(() => {
-          showToast('Failed to copy to clipboard.');
+          showToast(TRANSLATIONS[currentLang]?.toastCopyErr || 'Failed to copy to clipboard.');
         });
       });
 
@@ -511,10 +533,10 @@
           if (text) {
             txtDecodeInput.value = text;
             handleBase64Decode(text.trim());
-            showToast('Pasted from clipboard!');
+            showToast(TRANSLATIONS[currentLang]?.toastPasted || 'Pasted from clipboard!');
           }
         } catch (e) {
-          showToast('Clipboard access denied.');
+          showToast(TRANSLATIONS[currentLang]?.toastPasteErr || 'Clipboard access denied.');
         }
       });
 

@@ -41,7 +41,13 @@ const I18N = {
         footerTerms: "Terms of Service",
         footerAbout: "About Us",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
+        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy.",
+        areaPlaceholder: "e.g., header, sidebar, main",
+        toastClickCells: "Please click cells in the matrix first!",
+        toastAreaAssigned: (name) => `Area "${name}" assigned!`,
+        toastGridCopied: "Grid CSS copied to clipboard!",
+        toastMinStops: "At least 2 color stops are required!",
+        toastGradCopied: "Gradient CSS copied to clipboard!"
       },
       ar: {
         backLink: "جميع الأدوات",
@@ -85,7 +91,13 @@ const I18N = {
         footerTerms: "شروط الخدمة",
         footerAbout: "من نحن",
         footerContact: "اتصل بنا",
-        footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات."
+        footerCopy: "© 2026 فانتوركيت. أدوات عميل محلية مصممة مع خصوصية مطلقة للبيانات.",
+        areaPlaceholder: "مثال: header, sidebar, main",
+        toastClickCells: "يرجى النقر على خلايا المصفوفة أولاً!",
+        toastAreaAssigned: (name) => `تم تعيين المنطقة "${name}"!`,
+        toastGridCopied: "تم نسخ كود شبكة CSS إلى الحافظة!",
+        toastMinStops: "مطلوب نقطتا لون على الأقل!",
+        toastGradCopied: "تم نسخ كود التدرج اللوني إلى الحافظة!"
       },
       fr: {
         backLink: "Tous les Outils",
@@ -129,7 +141,13 @@ const I18N = {
         footerTerms: "Conditions d'Utilisation",
         footerAbout: "À Propos",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
+        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue.",
+        areaPlaceholder: "ex. header, sidebar, main",
+        toastClickCells: "Veuillez d'abord cliquer sur les cellules de la matrice !",
+        toastAreaAssigned: (name) => `Zone "${name}" attribuée !`,
+        toastGridCopied: "CSS Grid copié dans le presse-papiers !",
+        toastMinStops: "Au moins 2 points de couleur sont requis !",
+        toastGradCopied: "CSS du dégradé copié dans le presse-papiers !"
       },
       it: {
         backLink: "Tutti gli Strumenti",
@@ -173,7 +191,13 @@ const I18N = {
         footerTerms: "Termini di Servizio",
         footerAbout: "Chi Siamo",
         footerContact: "Contatti",
-        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy."
+        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy.",
+        areaPlaceholder: "es. header, sidebar, main",
+        toastClickCells: "Fai prima clic sulle celle nella matrice!",
+        toastAreaAssigned: (name) => `Area "${name}" assegnata!`,
+        toastGridCopied: "CSS Grid copiato negli appunti!",
+        toastMinStops: "Sono necessari almeno 2 punti di colore!",
+        toastGradCopied: "CSS della sfumatura copiato negli appunti!"
       }
     };
 
@@ -367,7 +391,7 @@ const I18N = {
         let name = inputAreaName.value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
         if (!name) name = 'area';
         if (selectedCells.size === 0) {
-          showToast('Please click cells in the matrix first!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastClickCells) || 'Please click cells in the matrix first!');
           return;
         }
 
@@ -385,7 +409,7 @@ const I18N = {
         selectedCells.clear();
         renderAreaChips();
         renderVisualGrid();
-        showToast('Area "' + name + '" assigned!');
+        showToast((I18N[currentLang] && I18N[currentLang].toastAreaAssigned) ? I18N[currentLang].toastAreaAssigned(name) : ('Area "' + name + '" assigned!'));
       });
 
       btnClearSelection.addEventListener('click', () => {
@@ -525,7 +549,7 @@ const I18N = {
 
       btnCopyGridCode.addEventListener('click', () => {
         navigator.clipboard.writeText(codeEditorView.textContent).then(() => {
-          showToast('Grid CSS copied to clipboard!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastGridCopied) || 'Grid CSS copied to clipboard!');
         });
       });
 
@@ -612,7 +636,7 @@ const I18N = {
               colorStops.splice(idx, 1);
               renderGradientStudio();
             } else {
-              showToast('At least 2 color stops are required!');
+              showToast((I18N[currentLang] && I18N[currentLang].toastMinStops) || 'At least 2 color stops are required!');
             }
           });
 
@@ -644,7 +668,7 @@ const I18N = {
 
       btnCopyGradCode.addEventListener('click', () => {
         navigator.clipboard.writeText(gradientCodeView.textContent).then(() => {
-          showToast('Gradient CSS copied to clipboard!');
+          showToast((I18N[currentLang] && I18N[currentLang].toastGradCopied) || 'Gradient CSS copied to clipboard!');
         });
       });
 
@@ -660,6 +684,7 @@ const I18N = {
         htmlRoot.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
 
         const dict = I18N[lang];
+        if (inputAreaName && dict.areaPlaceholder) inputAreaName.placeholder = dict.areaPlaceholder;
         currentLangLabel.textContent = dict.langLabel || (lang === 'ar' ? 'العربية' : lang === 'fr' ? 'Français' : lang === 'it' ? 'Italiano' : 'English');
 
         document.querySelectorAll('[data-i18n]').forEach(el => {

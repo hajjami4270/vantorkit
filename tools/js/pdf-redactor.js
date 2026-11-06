@@ -51,7 +51,19 @@ const I18N = {
         footerTerms: "Terms of Service",
         footerAbout: "About Us",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy."
+        footerCopy: "© 2026 VantorKit. Client-side tools designed with absolute data privacy.",
+        toastDocLoaded: "Document loaded successfully",
+        toastLoadErr: "Failed to load PDF. Document may be encrypted or invalid.",
+        toastBoxPlaced: "Redaction box placed",
+        toastBoxRemoved: "Last redaction box removed",
+        toastBoxesCleared: "All redactions cleared on this page",
+        toastSigRemoved: "Signature removed",
+        toastSigPlaced: "Signature placed. Drag or resize on document.",
+        statusFlattening: "Flattening & Baking...",
+        toastExportSuccess: "PDF redacted and downloaded securely!",
+        toastExportErr: "Export error: ",
+        toastSampleErr: "Error generating sample PDF",
+        toastInvalidPdf: "Please upload a valid PDF document."
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -105,7 +117,19 @@ const I18N = {
         footerTerms: "شروط الخدمة",
         footerAbout: "من نحن",
         footerContact: "اتصل بنا",
-        footerCopy: "© 2026 فانتوركيت. أدوات ويب صممت بخصوصية بيانات مطلقة ومعالجة محلية."
+        footerCopy: "© 2026 فانتوركيت. أدوات ويب صممت بخصوصية بيانات مطلقة ومعالجة محلية.",
+        toastDocLoaded: "تم تحميل المستند بنجاح",
+        toastLoadErr: "تعذر تحميل ملف PDF. قد يكون المستند مشفراً أو غير صالح.",
+        toastBoxPlaced: "تم وضع مربع التعتيم",
+        toastBoxRemoved: "تمت إزالة آخر مربع تعتيم",
+        toastBoxesCleared: "تم مسح جميع مربعات التعتيم في هذه الصفحة",
+        toastSigRemoved: "تمت إزالة التوقيع",
+        toastSigPlaced: "تم إدراج التوقيع. اسحبه أو غيّر حجمه على المستند.",
+        statusFlattening: "جارٍ تسطيح ودمج الصفحة...",
+        toastExportSuccess: "تم تعتيم ملف PDF وتنزيله بأمان!",
+        toastExportErr: "خطأ في التصدير: ",
+        toastSampleErr: "حدث خطأ أثناء إنشاء ملف PDF النموذجي",
+        toastInvalidPdf: "يرجى رفع مستند PDF صالح."
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -159,7 +183,19 @@ const I18N = {
         footerTerms: "Conditions d'utilisation",
         footerAbout: "À propos",
         footerContact: "Contact",
-        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue."
+        footerCopy: "© 2026 VantorKit. Outils côté client conçus avec une confidentialité absolue.",
+        toastDocLoaded: "Document chargé avec succès",
+        toastLoadErr: "Échec du chargement du PDF. Le document est peut-être chiffré ou invalide.",
+        toastBoxPlaced: "Zone de biffure ajoutée",
+        toastBoxRemoved: "Dernière zone de biffure supprimée",
+        toastBoxesCleared: "Toutes les biffures de cette page ont été effacées",
+        toastSigRemoved: "Signature supprimée",
+        toastSigPlaced: "Signature placée. Déplacez ou redimensionnez-la sur le document.",
+        statusFlattening: "Aplatissement en cours...",
+        toastExportSuccess: "PDF biffé et téléchargé en toute sécurité !",
+        toastExportErr: "Erreur d'exportation : ",
+        toastSampleErr: "Erreur lors de la génération du PDF d'exemple",
+        toastInvalidPdf: "Veuillez sélectionner un document PDF valide."
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -213,9 +249,26 @@ const I18N = {
         footerTerms: "Termini di servizio",
         footerAbout: "Chi siamo",
         footerContact: "Contatti",
-        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy."
+        footerCopy: "© 2026 VantorKit. Strumenti lato client progettati per la massima privacy.",
+        toastDocLoaded: "Documento caricato con successo",
+        toastLoadErr: "Impossibile caricare il PDF. Il documento potrebbe essere crittografato o non valido.",
+        toastBoxPlaced: "Riquadro di oscuramento inserito",
+        toastBoxRemoved: "Ultimo riquadro di oscuramento rimosso",
+        toastBoxesCleared: "Tutti gli oscuramenti di questa pagina sono stati cancellati",
+        toastSigRemoved: "Firma rimossa",
+        toastSigPlaced: "Firma inserita. Trascina o ridimensiona sul documento.",
+        statusFlattening: "Appiattimento in corso...",
+        toastExportSuccess: "PDF oscurato e scaricato in sicurezza!",
+        toastExportErr: "Errore di esportazione: ",
+        toastSampleErr: "Errore durante la generazione del PDF di esempio",
+        toastInvalidPdf: "Carica un documento PDF valido."
       }
     };
+
+    function getActiveDict() {
+      const l = document.documentElement.getAttribute('lang') || 'en';
+      return I18N[l] || I18N.en;
+    }
 
     // --- State Variables ---
     let currentPdfDoc = null;
@@ -354,10 +407,10 @@ const I18N = {
         workspace.style.display = 'flex';
 
         await renderCurrentPage();
-        showToast('Document loaded successfully');
+        showToast(getActiveDict().toastDocLoaded);
       } catch (err) {
         console.error(err);
-        showToast('Failed to load PDF. Document may be encrypted or invalid.');
+        showToast(getActiveDict().toastLoadErr);
       }
     }
 
@@ -486,7 +539,7 @@ const I18N = {
 
       redrawOverlay();
       updateBoxCount();
-      showToast('Redaction box placed');
+      showToast(getActiveDict().toastBoxPlaced);
     }
 
     drawCanvas.addEventListener('mouseup', finishBox);
@@ -498,7 +551,7 @@ const I18N = {
         redactions[currentPageNum].pop();
         redrawOverlay();
         updateBoxCount();
-        showToast('Last redaction box removed');
+        showToast(getActiveDict().toastBoxRemoved);
       }
     });
 
@@ -507,7 +560,7 @@ const I18N = {
         redactions[currentPageNum] = [];
         redrawOverlay();
         updateBoxCount();
-        showToast('All redactions cleared on this page');
+        showToast(getActiveDict().toastBoxesCleared);
       }
     });
 
@@ -540,7 +593,7 @@ const I18N = {
           ev.stopPropagation();
           signatures[currentPageNum] = signatures[currentPageNum].filter(s => s.id !== sig.id);
           renderSignatureElements();
-          showToast('Signature removed');
+          showToast(getActiveDict().toastSigRemoved);
         });
         el.appendChild(delBtn);
 
@@ -787,7 +840,7 @@ const I18N = {
 
       closeSignatureModal();
       renderSignatureElements();
-      showToast('Signature placed. Drag or resize on document.');
+      showToast(getActiveDict().toastSigPlaced);
     });
 
     // --- Export Engine (True Pixel Flattening via pdf-lib) ---
@@ -796,7 +849,7 @@ const I18N = {
 
       btnExport.disabled = true;
       const originalText = btnExport.innerHTML;
-      btnExport.innerHTML = '<span class="pulse-dot"></span> Flattening & Baking...';
+      btnExport.innerHTML = '<span class="pulse-dot"></span> ' + getActiveDict().statusFlattening;
 
       try {
         const { PDFDocument } = PDFLib;
@@ -888,10 +941,10 @@ const I18N = {
         document.body.removeChild(a);
         URL.revokeObjectURL(downloadUrl);
 
-        showToast('PDF redacted and downloaded securely!');
+        showToast(getActiveDict().toastExportSuccess);
       } catch (err) {
         console.error('Export error:', err);
-        showToast('Export error: ' + err.message);
+        showToast(getActiveDict().toastExportErr + err.message);
       } finally {
         btnExport.disabled = false;
         btnExport.innerHTML = originalText;
@@ -939,11 +992,12 @@ const I18N = {
         page2.drawText("Auditor Sign-off: Certified Public Accountant #881293", { x: 50, y: 580, size: 12, font });
 
         const bytes = await sampleDoc.save();
-        currentFile = new File([bytes.buffer], 'sample_agreement.pdf', { type: 'application/pdf' });
-        await loadPdfArrayBuffer(bytes.buffer, 'sample_agreement.pdf', currentFile);
+        const exactBuffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+        currentFile = new File([exactBuffer], 'sample_agreement.pdf', { type: 'application/pdf' });
+        await loadPdfArrayBuffer(exactBuffer, 'sample_agreement.pdf', currentFile);
       } catch (err) {
         console.error(err);
-        showToast('Error generating sample PDF');
+        showToast(getActiveDict().toastSampleErr);
       }
     });
 
@@ -974,7 +1028,7 @@ const I18N = {
         const buffer = await file.arrayBuffer();
         await loadPdfArrayBuffer(buffer, file.name, file);
       } else {
-        showToast('Please upload a valid PDF document.');
+        showToast(getActiveDict().toastInvalidPdf);
       }
     });
 

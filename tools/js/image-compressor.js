@@ -58,7 +58,14 @@
         toastCopied: "Compressed image copied to clipboard!",
         toastDownloaded: "Image downloaded successfully!",
         toastZipReady: "ZIP archive created and downloading!",
-        toastError: "Unable to process image format."
+        toastError: "Unable to process image format.",
+        toastClipboardDenied: "Clipboard access denied or unsupported.",
+        toastClipboardUnsupported: "Clipboard API not supported in this browser.",
+        toastClipboardFail: "Clipboard copy failed.",
+        toastZipLoading: "JSZip library loading, please wait...",
+        statusArchivingZip: "Archiving ZIP...",
+        toastZipError: "Failed to create ZIP.",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         dropzonePrivacyBadge: "🔒 100% خصوصية: معالجة محلية في ذاكرة المتصفح RAM (تم رفع 0 بايت)",
@@ -114,7 +121,14 @@
         toastCopied: "تم نسخ الصورة المضغوطة إلى الحافظة بنجاح!",
         toastDownloaded: "تم تحميل الصورة بنجاح!",
         toastZipReady: "تم تجهيز الأرشيف وجارٍ التحميل!",
-        toastError: "تعذر معالجة تنسيق الصورة."
+        toastError: "تعذر معالجة تنسيق الصورة.",
+        toastClipboardDenied: "تم رفض الوصول إلى الحافظة أو غير مدعوم.",
+        toastClipboardUnsupported: "واجهة الحافظة غير مدعومة في هذا المتصفح.",
+        toastClipboardFail: "فشل النسخ إلى الحافظة.",
+        toastZipLoading: "جاري تحميل مكتبة JSZip، يرجى الانتظار...",
+        statusArchivingZip: "جاري ضغط ملف ZIP...",
+        toastZipError: "فشل إنشاء ملف ZIP.",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         dropzonePrivacyBadge: "🔒 100% Privé : Traité localement dans la RAM du navigateur (0 octet téléversé)",
@@ -170,7 +184,14 @@
         toastCopied: "Image compressée copiée dans le presse-papier !",
         toastDownloaded: "Image téléchargée avec succès !",
         toastZipReady: "Archive ZIP générée avec succès !",
-        toastError: "Impossible de traiter ce format d'image."
+        toastError: "Impossible de traiter ce format d'image.",
+        toastClipboardDenied: "Accès au presse-papiers refusé ou non pris en charge.",
+        toastClipboardUnsupported: "API Presse-papiers non prise en charge dans ce navigateur.",
+        toastClipboardFail: "Échec de la copie dans le presse-papiers.",
+        toastZipLoading: "Chargement de la bibliothèque JSZip, veuillez patienter...",
+        statusArchivingZip: "Archivage ZIP en cours...",
+        toastZipError: "Échec de la création du fichier ZIP.",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         dropzonePrivacyBadge: "🔒 100% Privato: Elaborato localmente nella RAM del browser (0 byte caricati)",
@@ -226,7 +247,14 @@
         toastCopied: "Immagine compressa copiata negli appunti!",
         toastDownloaded: "Immagine scaricata con successo!",
         toastZipReady: "Archivio ZIP generato e in scaricamento!",
-        toastError: "Impossibile elaborare questo formato immagine."
+        toastError: "Impossibile elaborare questo formato immagine.",
+        toastClipboardDenied: "Accesso agli appunti negato o non supportato.",
+        toastClipboardUnsupported: "API Appunti non supportata in questo browser.",
+        toastClipboardFail: "Copia negli appunti non riuscita.",
+        toastZipLoading: "Caricamento libreria JSZip, attendere...",
+        statusArchivingZip: "Archiviazione ZIP in corso...",
+        toastZipError: "Impossibile creare l'archivio ZIP.",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -954,18 +982,18 @@
                     ]);
                     showToast(TRANSLATIONS[currentLang]?.toastCopied || 'Copied to clipboard!');
                   } catch (err) {
-                    showToast('Clipboard access denied or unsupported.');
+                    showToast(TRANSLATIONS[currentLang]?.toastClipboardDenied || 'Clipboard access denied or unsupported.');
                   }
                 }, 'image/png');
               };
               img.src = active.compressedUrl;
             }
           } else {
-            showToast('Clipboard API not supported in this browser.');
+            showToast(TRANSLATIONS[currentLang]?.toastClipboardUnsupported || 'Clipboard API not supported in this browser.');
           }
         } catch (e) {
           console.error('Clipboard copy error:', e);
-          showToast('Clipboard copy failed.');
+          showToast(TRANSLATIONS[currentLang]?.toastClipboardFail || 'Clipboard copy failed.');
         }
       });
 
@@ -973,12 +1001,12 @@
       btnDownloadAllZip.addEventListener('click', async () => {
         if (state.images.length === 0) return;
         if (!window.JSZip) {
-          showToast('JSZip library loading, please wait...');
+          showToast(TRANSLATIONS[currentLang]?.toastZipLoading || 'JSZip library loading, please wait...');
           return;
         }
 
         btnDownloadAllZip.disabled = true;
-        btnDownloadAllZip.textContent = 'Archiving ZIP...';
+        btnDownloadAllZip.textContent = TRANSLATIONS[currentLang]?.statusArchivingZip || 'Archiving ZIP...';
 
         try {
           const zip = new JSZip();
@@ -995,7 +1023,7 @@
           showToast(TRANSLATIONS[currentLang]?.toastZipReady || 'ZIP archive downloaded!');
         } catch (err) {
           console.error('ZIP error:', err);
-          showToast('Failed to create ZIP.');
+          showToast(TRANSLATIONS[currentLang]?.toastZipError || 'Failed to create ZIP.');
         } finally {
           btnDownloadAllZip.disabled = false;
           btnDownloadAllZip.innerHTML = `

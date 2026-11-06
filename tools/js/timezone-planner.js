@@ -39,7 +39,10 @@
         faq3Q: "How do I change the reference base city?",
         faq3A: "Click the star icon (★) on any city row to set it as the primary base. The 00:00 to 23:00 timeline axis will immediately re-anchor around that city's local day.",
         faq4Q: "Are my meeting dates or selected cities tracked?",
-        faq4A: "Never. All calculations run strictly in client-side memory with zero analytics, zero cookies, and zero server logging."
+        faq4A: "Never. All calculations run strictly in client-side memory with zero analytics, zero cookies, and zero server logging.",
+        searchPlaceholder: "+ Add city or time zone (e.g. Tokyo, Dubai, Berlin, Sydney)...",
+        toastReset: "Reset to defaults",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         backLink: "الرجوع إلى الأدوات ←",
@@ -79,7 +82,10 @@
         faq3Q: "كيف أغير المدينة المرجعية الأساسية؟",
         faq3A: "اضغط على أيقونة النجمة (★) بجانب أي مدينة لجعلها المرجع الأساسي، وسيعاد ترتيب شريط الـ 24 ساعة وفقاً ليومها المحلي فوراً.",
         faq4Q: "هل يتم تسجيل مواعيدي أو المدن المختارة؟",
-        faq4A: "أبداً. تتم كافة العمليات داخل ذاكرة متصفحك بنسبة 100% دون كوكيز أو تتبع."
+        faq4A: "أبداً. تتم كافة العمليات داخل ذاكرة متصفحك بنسبة 100% دون كوكيز أو تتبع.",
+        searchPlaceholder: "+ أضف مدينة أو منطقة زمنية (مثل طوكيو، دبي، برلين، سيدني)...",
+        toastReset: "تمت إعادة الضبط إلى الإعدادات الافتراضية",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         backLink: "← Retour aux outils",
@@ -119,7 +125,10 @@
         faq3Q: "Comment définir une nouvelle ville de référence ?",
         faq3A: "Cliquez sur l'étoile (★) sur n'importe quelle ligne de ville pour en faire la référence de l'axe 24 heures.",
         faq4Q: "Mes réunions et villes sont-elles enregistrées ?",
-        faq4A: "Jamais. Tout fonctionne localement dans la mémoire de votre navigateur, sans cookies ni transmission de données."
+        faq4A: "Jamais. Tout fonctionne localement dans la mémoire de votre navigateur, sans cookies ni transmission de données.",
+        searchPlaceholder: "+ Ajouter une ville ou un fuseau horaire (ex. Tokyo, Dubaï, Berlin, Sydney)...",
+        toastReset: "Réinitialisé aux valeurs par défaut",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         backLink: "← Torna agli strumenti",
@@ -159,7 +168,10 @@
         faq3Q: "Come cambio la città di riferimento?",
         faq3A: "Clicca sull'icona della stella (★) su una città per impostarla come riferimento principale dell'asse delle 24 ore.",
         faq4Q: "I miei dati o le città selezionate vengono tracciati?",
-        faq4A: "Mai. L'elaborazione avviene al 100% nella memoria del tuo browser senza cookie né archiviazione remota."
+        faq4A: "Mai. L'elaborazione avviene al 100% nella memoria del tuo browser senza cookie né archiviazione remota.",
+        searchPlaceholder: "+ Aggiungi città o fuso orario (es. Tokyo, Dubai, Berlino, Sydney)...",
+        toastReset: "Ripristinato ai valori predefiniti",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -576,7 +588,7 @@
 
     btnResetAll.addEventListener('click', () => {
       setDefaults();
-      showToast("Reset to defaults");
+      showToast(I18N[activeLang]?.toastReset || "Reset to defaults");
     });
 
     // Copy Meeting Invitation Text
@@ -614,6 +626,7 @@
       const dict = I18N[lang];
 
       // Update static elements with data-i18n
+      if (citySearchInput && dict.searchPlaceholder) citySearchInput.placeholder = dict.searchPlaceholder;
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {

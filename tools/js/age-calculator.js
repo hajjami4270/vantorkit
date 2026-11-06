@@ -56,7 +56,9 @@
         faq3Q: "How are heartbeats and breaths estimated?",
         faq3A: "Calculations are based on standard clinical baseline averages: 80 heartbeats per minute and 16 breaths per minute for healthy resting adults, multiplied across your total lived minutes.",
         faq4Q: "Can I calculate age for a past or future date?",
-        faq4A: "Yes! Click 'Calculate Age at Specific Date?' in the input panel to see your exact age at historical events, graduation dates, or future retirement milestones."
+        faq4A: "Yes! Click 'Calculate Age at Specific Date?' in the input panel to see your exact age at historical events, graduation dates, or future retirement milestones.",
+        toastReset: "Reset to defaults",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         backLink: "الرجوع إلى الأدوات ←",
@@ -113,7 +115,9 @@
         faq3Q: "كيف يتم تقدير نبضات القلب والأنفاس؟",
         faq3A: "تعتمد التقديرات على المعدلات الحيوية الطبيعية لشخص بالغ في حالة راحة: 80 نبضة/دقيقة و 16 نفساً/دقيقة مضروبة في إجمالي الدقائق المعاشة.",
         faq4Q: "هل يمكنني حساب عمري في تاريخ ماضٍ أو مستقبلي؟",
-        faq4A: "نعم! انقر على 'حساب العمر في تاريخ محدد؟' في لوحة الإدخال لمعرفة عمرك عند التخرج أو التقاعد أو أي مناسبة أخرى."
+        faq4A: "نعم! انقر على 'حساب العمر في تاريخ محدد؟' في لوحة الإدخال لمعرفة عمرك عند التخرج أو التقاعد أو أي مناسبة أخرى.",
+        toastReset: "تمت إعادة الضبط إلى الإعدادات الافتراضية",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         backLink: "← Retour aux outils",
@@ -170,7 +174,9 @@
         faq3Q: "Comment sont estimés les battements et respirations ?",
         faq3A: "Les estimations reposent sur des moyennes physiologiques au repos : 80 battements/minute et 16 respirations/minute multipliés par votre temps de vie.",
         faq4Q: "Puis-je calculer mon âge à une date passée ou future ?",
-        faq4A: "Oui ! Déroulez 'Calculer l'âge à une date spécifique ?' pour connaître votre âge lors d'un événement marquant ou lors de votre retraite."
+        faq4A: "Oui ! Déroulez 'Calculer l'âge à une date spécifique ?' pour connaître votre âge lors d'un événement marquant ou lors de votre retraite.",
+        toastReset: "Réinitialisé aux valeurs par défaut",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         backLink: "← Torna agli strumenti",
@@ -227,7 +233,9 @@
         faq3Q: "Come vengono stimati i battiti e i respiri?",
         faq3A: "Le stime usano valori medi a riposo: 80 battiti al minuto e 16 respiri al minuto moltiplicati per i minuti totali vissuti.",
         faq4Q: "Posso calcolare l'età a una data passata o futura?",
-        faq4A: "Sì! Espandi 'Calcolare l'età a una data specifica?' per visualizzare la tua età esatta alla laurea, alle nozze o al pensionamento."
+        faq4A: "Sì! Espandi 'Calcolare l'età a una data specifica?' per visualizzare la tua età esatta alla laurea, alle nozze o al pensionamento.",
+        toastReset: "Ripristinato ai valori predefiniti",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
@@ -624,7 +632,7 @@ Calculated with VantorKit (https://vantorkit.com/tools/age-calculator.html)`;
     // Reset Tool
     btnResetTool.addEventListener('click', () => {
       setInitialDefaults();
-      showToast("Reset to defaults");
+      showToast(I18N[activeLang]?.toastReset || "Reset to defaults");
     });
 
     // i18n Translation Switcher

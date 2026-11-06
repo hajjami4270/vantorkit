@@ -68,7 +68,8 @@
         faq3Q: "How are Leap Years handled?",
         faq3A: "Our calculation uses native JavaScript UTC calendar logic, which accurately factors in February 29th during leap years (such as 2024 and 2028), ensuring total day and month precision.",
         faq4Q: "Are calculations private and secure?",
-        faq4A: "Yes, 100%. No dates, project schedules, or calculations are ever transmitted across the internet. Everything runs purely within your local browser runtime."
+        faq4A: "Yes, 100%. No dates, project schedules, or calculations are ever transmitted across the internet. Everything runs purely within your local browser runtime.",
+        footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
         backLink: "الرجوع إلى الأدوات ←",
@@ -137,7 +138,8 @@
         faq3Q: "كيف يتم التعامل مع السنوات الكبيسة؟",
         faq3A: "يستخدم نظامنا منطق تقويم UTC الأصلي في جافاسكريبت، والذي يحتسب بدقة يوم 29 فبراير في السنوات الكبيسة لضمان دقة كاملة.",
         faq4Q: "هل الحسابات آمنة وخاصة؟",
-        faq4A: "نعم 100%. لا يتم إرسال أي تواريخ أو بيانات عبر الإنترنت. تجري كافة العمليات محلياً داخل متصفحك."
+        faq4A: "نعم 100%. لا يتم إرسال أي تواريخ أو بيانات عبر الإنترنت. تجري كافة العمليات محلياً داخل متصفحك.",
+        footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
         backLink: "← Retour aux outils",
@@ -206,7 +208,8 @@
         faq3Q: "Comment sont gérées les années bissextiles ?",
         faq3A: "L'outil utilise les fonctions de date natives en UTC, prenant en compte le 29 février lors des années bissextiles (comme 2024 et 2028).",
         faq4Q: "Mes données restent-elles confidentielles ?",
-        faq4A: "Oui, à 100%. Aucun calendrier ni résultat n'est transmis sur internet. Tout s'exécute dans votre navigateur."
+        faq4A: "Oui, à 100%. Aucun calendrier ni résultat n'est transmis sur internet. Tout s'exécute dans votre navigateur.",
+        footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
         backLink: "← Torna agli strumenti",
@@ -275,7 +278,8 @@
         faq3Q: "Come vengono gestiti gli anni bisestili?",
         faq3A: "Il calcolo utilizza la logica UTC standard di JavaScript, che include correttamente il 29 febbraio negli anni bisestili (come il 2024 e il 2028).",
         faq4Q: "I calcoli sono privati e sicuri?",
-        faq4A: "Sì, al 100%. Nessuna data o calcolo viene inviato via internet. Tutto viene elaborato localmente nel tuo browser."
+        faq4A: "Sì, al 100%. Nessuna data o calcolo viene inviato via internet. Tutto viene elaborato localmente nel tuo browser.",
+        footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
 
