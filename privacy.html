@@ -6,7 +6,7 @@
   <script src="./i18n-bootstrap.js"></script>
 
   <title>Privacy Policy — VantorKit</title>
-  <meta name="description" content="VantorKit Privacy Policy: Learn how our client-side utility platform protects your privacy with zero server uploads and transparent standards.">
+  <meta name="description" content="VantorKit Privacy Policy: Your files and text never leave your browser. Optional anonymous analytics load only with your consent.">
   <link rel="canonical" href="https://vantorkit.com/privacy.html">
   <!-- PWA Manifest & Mobile Meta -->
   <link rel="manifest" href="/manifest.json">
@@ -18,12 +18,12 @@
   <!-- Open Graph / Social Meta -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Privacy Policy — VantorKit">
-  <meta property="og:description" content="VantorKit Privacy Policy: Learn how our client-side utility platform protects your privacy with zero server uploads and transparent standards.">
+  <meta property="og:description" content="VantorKit Privacy Policy: Your files and text never leave your browser. Optional anonymous analytics load only with your consent.">
   <meta property="og:url" content="https://vantorkit.com/privacy.html">
   <meta property="og:image" content="https://vantorkit.com/og-image.svg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Privacy Policy — VantorKit">
-  <meta name="twitter:description" content="VantorKit Privacy Policy: Learn how our client-side utility platform protects your privacy with zero server uploads and transparent standards.">
+  <meta name="twitter:description" content="VantorKit Privacy Policy: Your files and text never leave your browser. Optional anonymous analytics load only with your consent.">
   <meta name="twitter:image" content="https://vantorkit.com/og-image.svg">
   <link rel="stylesheet" href="./sidebar.css">
 
@@ -607,8 +607,8 @@
     <header class="page-header">
       <div class="badge-pill" data-i18n="privBadge">Privacy &amp; Data Protection</div>
       <h1 data-i18n="privTitle">Privacy <span>Policy</span></h1>
-      <p class="page-subtitle" data-i18n="privSubtitle">VantorKit is built around an uncompromising zero-server data collection architecture. Your files, calculations, and inputs remain 100% on your device.</p>
-      <div class="effective-date" data-i18n="privUpdated">Last Updated: September 26, 2026 • Effective Date: September 26, 2026</div>
+      <p class="page-subtitle" data-i18n="privSubtitle">Your files and text never leave your browser. Optional anonymous analytics only with your consent.</p>
+      <div class="effective-date" data-i18n="privUpdated">Last Updated: November 6, 2026 • Effective Date: November 6, 2026</div>
     </header>
 
     <div class="policy-container">
@@ -619,69 +619,70 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div class="highlight-content">
-          <h2 data-i18n="privZeroTitle">100% Client-Side Architecture Guarantee</h2>
-          <p data-i18n="privZeroDesc">When you use VantorKit utilities—including PDF mergers, image converters, formatters, and calculators—all computing execution occurs locally within your web browser using HTML5 Canvas, the Web Crypto API, and WebAssembly. No documents, photos, text contents, or calculation parameters are ever transmitted to or stored on our servers.</p>
+          <h2 data-i18n="privZeroTitle">100% Client-Side Tool Processing</h2>
+          <p data-i18n="privZeroDesc">When you use VantorKit utilities—including PDF mergers, redactors, image converters, formatters, and calculators—all file and text processing occurs locally within your web browser using HTML5 Canvas, the Web Crypto API, and WebAssembly. Your files, photos, text contents, audio, video, and calculation inputs never leave your browser and are never transmitted to or stored on our servers.</p>
         </div>
       </div>
 
       <!-- Section 1: Information We Collect -->
       <section class="content-card">
         <h2 data-i18n="privSec1Title">1. Information We Collect (And What We Never Collect)</h2>
-        <p data-i18n="privSec1P1">Unlike conventional web applications that process files in the cloud, VantorKit executes operations locally on your hardware. Here is how our data handling is structured:</p>
+        <p data-i18n="privSec1P1">VantorKit executes all utility computations locally on your hardware. Here is how data handling is structured across the platform:</p>
         <ul>
-          <li><strong data-i18n="privSec1L1B">User Files &amp; Processing Inputs:</strong> We <em>never</em> receive, log, or store your uploaded images, PDFs, CSVs, markdown documents, passwords, or computational inputs. When you close or refresh your browser tab, all temporary memory used by the tool is immediately released.</li>
-          <li><strong data-i18n="privSec1L2B">Local Storage Data:</strong> We utilize standard browser <code>localStorage</code> solely to remember your preferred interface language (stored under the key <code>vantorkit_lang</code>). This data resides exclusively on your local device and is never uploaded.</li>
-          <li><strong data-i18n="privSec1L3B">Standard Server Log Files:</strong> Like nearly all websites, our hosting servers collect anonymous, standard access logs (such as IP addresses, browser user-agent strings, referring URLs, and timestamps). These logs are utilized strictly for DDoS mitigation, infrastructure stability, and bot protection.</li>
+          <li data-i18n="privSec1L1"><strong>User Files, Text &amp; Tool Content (Never Collected):</strong> We <em>never</em> receive, transmit, log, or store your uploaded images, PDFs, CSVs, audio, video, markdown documents, passwords, or tool inputs and outputs. When you close or refresh your browser tab, all temporary browser memory used by the tool is immediately released.</li>
+          <li data-i18n="privSec1L2"><strong>Local Storage Data:</strong> We use standard browser <code>localStorage</code> on your device solely to remember your preferred interface language (<code>vantorkit_lang</code>), your analytics consent preference (<code>vantorkit_analytics_consent</code>), and optional local tool drafts (such as in the Markdown Editor). This data resides on your device and is never uploaded to our servers.</li>
+          <li data-i18n="privSec1L3"><strong>Standard Hosting Access Logs:</strong> Like standard websites, our hosting infrastructure processes routine HTTP connection requests (such as IP addresses, browser user-agent strings, referring URLs, and timestamps) strictly to deliver static files, mitigate DDoS attacks, and maintain infrastructure stability.</li>
         </ul>
       </section>
 
-      <!-- Section 2: Advertising & Google AdSense -->
+      <!-- Section 2: Google Analytics 4 (Opt-In Only) -->
       <section class="content-card">
-        <h2 data-i18n="privSec2Title">2. Advertising &amp; Third-Party Cookies (Google AdSense)</h2>
-        <p data-i18n="privSec2P1">To keep all 25+ VantorKit tools 100% free with unlimited access for all users, we display third-party advertisements served by <strong>Google AdSense</strong>. Third-party vendors, including Google, use cookies to serve ads based on prior visits to this website or other websites across the Internet:</p>
+        <h2 data-i18n="privSec2Title">2. Optional Website Analytics (Google Analytics 4)</h2>
+        <p data-i18n="privSec2P1">On selected pages, VantorKit uses <strong>Google Analytics 4 (GA4)</strong> (Measurement ID: <code>G-S8MDMH082N</code>) strictly on an opt-in basis to measure aggregate traffic and understand which tools are used. VantorKit does not serve advertisements and does not use advertising or cross-site tracking cookies.</p>
         <ul>
-          <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on visits to VantorKit and/or other sites on the Internet.</li>
-          <li>Users may opt out of personalized advertising by visiting <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer">Google My Ad Center</a>.</li>
-          <li>Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting the <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer">Digital Advertising Alliance Consumer Choice</a> or <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener noreferrer">Your Online Choices (EU)</a>.</li>
+          <li data-i18n="privSec2L1"><strong>Loaded Only After Your Consent:</strong> Google Analytics is blocked by default. Before you click <em>Accept</em> on the consent banner—or if you click <em>Decline</em>—zero network requests are made to Google domains (<code>googletagmanager.com</code> or <code>google-analytics.com</code>) and no analytics cookies are set.</li>
+          <li data-i18n="privSec2L2"><strong>What Is Collected (With Consent):</strong> When you explicitly accept analytics, GA4 collects anonymous usage events such as page views, tool page visited, device and browser type, and approximate geographic region using first-party analytics cookies (<code>_ga</code> and <code>_ga_S8MDMH082N</code>). Under GA4, IP addresses are processed transiently by Google to derive coarse location metadata and are not logged or stored by Google Analytics.</li>
+          <li data-i18n="privSec2L3"><strong>What Is NEVER Collected:</strong> Google Analytics never receives or inspects your files, text, audio, video, passwords, tokens, calculation inputs, or any content processed inside any tool. Furthermore, privacy-sensitive tools (including PDF Redactor, JWT Decoder, Metadata Cleaner, Big-Data Transformer, CSS Grid Generator, and Video Trimmer) and legal/blog pages do not include the analytics loader at all.</li>
+          <li data-i18n="privSec2L4"><strong>Data Processor:</strong> Google LLC acts as the data processor for optional analytics data processed through Google Analytics 4.</li>
         </ul>
-        <p data-i18n="privSec2P2">Third-party ad networks or ad servers use technology in their respective advertisements and links that appear on VantorKit, which are sent directly to your browser. They automatically receive your IP address when this occurs. VantorKit has no access to or control over cookies that are used by third-party advertisers.</p>
+        <p data-i18n="privSec2P2"><strong>How to Withdraw Consent:</strong> You can review, change, or withdraw your analytics consent at any time by clicking the <strong>Privacy settings</strong> link in the footer of any page. Withdrawing consent immediately stops Google Analytics (enabling <code>window['ga-disable-G-S8MDMH082N'] = true</code>) and deletes the <code>_ga</code> cookies set by it.</p>
       </section>
 
       <!-- Section 3: Cookie Management -->
       <section class="content-card">
         <h2 data-i18n="privSec3Title">3. How to Manage and Disable Cookies</h2>
-        <p data-i18n="privSec3P1">You can choose to disable or selectively turn off third-party cookies in your browser settings, or by managing preferences in security software. However, this may affect how you interact with other sites on the web. Disabling cookies will not prevent you from using any of VantorKit's core client-side calculation, conversion, or formatting utilities.</p>
+        <p data-i18n="privSec3P1">You can decline or revoke analytics cookies at any time via the <strong>Privacy settings</strong> link in the site footer, or by clearing and blocking cookies in your browser settings. Declining or disabling cookies does not affect the functionality of any VantorKit tool.</p>
       </section>
 
-      <!-- Section 4: GDPR & European Data Protection Rights -->
+      <!-- Section 4: European Privacy Rights -->
       <section class="content-card">
-        <h2 data-i18n="privSec4Title">4. GDPR Compliance &amp; European Privacy Rights</h2>
-        <p data-i18n="privSec4P1">If you are a resident of the European Economic Area (EEA), the United Kingdom, or Switzerland, you possess distinct data protection rights under the General Data Protection Regulation (GDPR). Because VantorKit does not require account creation and does not retain personal profiles, identifying records, or uploaded files, our processing footprint is minimized by design.</p>
-        <p data-i18n="privSec4P2">To the extent that any personal data is captured in server connection logs, you hold the right to request access, rectification, erasure, restriction of processing, and data portability. To exercise any of these rights, contact us at the privacy email address indicated below.</p>
+        <h2 data-i18n="privSec4Title">4. European Privacy Rights (EEA, UK &amp; Switzerland)</h2>
+        <p data-i18n="privSec4P1">If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, you may exercise privacy rights regarding personal data, including requesting access, rectification, erasure, restriction of processing, or data portability, and withdrawing consent at any time.</p>
+        <p data-i18n="privSec4P2">Because VantorKit does not require user accounts and never uploads your files or tool inputs to our servers, we do not store personal user profiles or user content. For optional analytics, you may withdraw consent immediately using the <strong>Privacy settings</strong> link in the footer, or contact us at the email address below.</p>
       </section>
 
-      <!-- Section 5: CCPA / CPRA California Rights -->
+      <!-- Section 5: California Privacy Disclosures -->
       <section class="content-card">
-        <h2 data-i18n="privSec5Title">5. CCPA &amp; California Privacy Rights (Do Not Sell My Info)</h2>
-        <p data-i18n="privSec5P1">Under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA), California residents are entitled to know what personal information is collected, request its deletion, and opt out of the sale or sharing of personal data:</p>
+        <h2 data-i18n="privSec5Title">5. California Privacy Disclosures (Do Not Sell My Info)</h2>
+        <p data-i18n="privSec5P1">For California residents, here is a factual summary of how VantorKit handles information:</p>
         <ul>
-          <li><strong>We Do Not Sell Personal Information:</strong> VantorKit has never sold, rented, or bartered your personal information to third parties.</li>
-          <li><strong>Right to Know &amp; Delete:</strong> You have the right to request that we disclose what data we collect and request the deletion of any collected technical log records.</li>
-          <li><strong>Non-Discrimination:</strong> We will never discriminate against you for exercising any of your CCPA or CPRA privacy rights.</li>
+          <li data-i18n="privSec5L1"><strong>We Do Not Sell Personal Information:</strong> VantorKit does not sell, rent, or trade personal information to third parties or data brokers.</li>
+          <li data-i18n="privSec5L2"><strong>Control &amp; Deletion:</strong> You can revoke analytics consent and clear analytics cookies at any time via the <strong>Privacy settings</strong> link in the footer, and you may contact us to inquire about technical server log records.</li>
+          <li data-i18n="privSec5L3"><strong>Equal Access:</strong> All VantorKit tools provide identical features and performance regardless of whether you accept or decline optional analytics.</li>
         </ul>
       </section>
 
       <!-- Section 6: Children's Privacy -->
       <section class="content-card">
-        <h2 data-i18n="privSec6Title">6. Children's Online Privacy Protection (COPPA)</h2>
-        <p data-i18n="privSec6P1">Protecting children's online safety is paramount. VantorKit does not knowingly solicit or collect any Personal Identifiable Information from children under the age of 13. If you believe your child has provided personal information on our website, please notify us immediately, and we will promptly remove such records from our server logs.</p>
+        <h2 data-i18n="privSec6Title">6. Children's Privacy</h2>
+        <p data-i18n="privSec6P1">VantorKit does not knowingly solicit or collect personal information from children under the age of 13. If you believe a child has submitted personal information to us, please notify us at the address below so we can promptly delete any such records.</p>
       </section>
 
       <!-- Section 7: Contact Us -->
       <section class="content-card">
-        <h2 data-i18n="privSec7Title">7. Privacy Inquiries &amp; Data Protection Officer</h2>
+        <h2 data-i18n="privSec7Title">7. Privacy Inquiries &amp; Contact</h2>
         <p data-i18n="privSec7P1">If you have any questions, clarifications, or requests concerning this Privacy Policy or our client-side processing architecture, please reach out to our privacy team:</p>
-        <p><strong>Email:</strong> <a href="mailto:privacy@vantorkit.com">privacy@vantorkit.com</a> or <a href="mailto:support@vantorkit.com">support@vantorkit.com</a><br>
+        <p data-i18n="privSec7Contact"><strong>Email:</strong> <a href="mailto:privacy@vantorkit.com">privacy@vantorkit.com</a> or <a href="mailto:support@vantorkit.com">support@vantorkit.com</a><br>
         <strong>Website:</strong> <a href="https://vantorkit.com/contact.html">https://vantorkit.com/contact.html</a></p>
       </section>
 
@@ -697,6 +698,7 @@
         <a href="/about.html" class="footer-link" data-i18n="footerAbout">About Us</a>
         <a href="/contact.html" class="footer-link" data-i18n="footerContact">Contact</a>
         <a href="/blog/" class="footer-link">Blog</a>
+        <button type="button" class="footer-link vk-privacy-settings-link" id="vkPrivacySettingsBtn" data-i18n="footerPrivacySettings" style="background:none;border:none;padding:0;cursor:pointer;font-family:inherit;">Privacy settings</button>
         <a href="https://github.com/hajjami4270/vantorkit" target="_blank" rel="noopener noreferrer" class="footer-link footer-github-link vk-sidebar-github-link" aria-label="View VantorKit on GitHub">
           <svg class="footer-github-icon vk-sidebar-github-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>

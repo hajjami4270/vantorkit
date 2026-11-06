@@ -350,16 +350,46 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
       }
     }
 
-    // Markdown Parser Wrapper (with built-in fallback)
+    // Configure DOMPurify hook to enforce rel="noopener noreferrer" on target="_blank" links and block dangerous URI schemes
+    if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.addHook === 'function') {
+      DOMPurify.addHook('afterSanitizeAttributes', function(node) {
+        if (node.tagName === 'A') {
+          const href = node.getAttribute('href') || '';
+          if (/^\s*(javascript|vbscript|data):/i.test(href)) {
+            node.removeAttribute('href');
+          }
+          if (node.getAttribute('target') === '_blank') {
+            node.setAttribute('rel', 'noopener noreferrer');
+          }
+        }
+      });
+    }
+
+    function sanitizeMarkdownHtml(dirtyHtml) {
+      if (!dirtyHtml) return '';
+      if (typeof DOMPurify !== 'undefined' && typeof DOMPurify.sanitize === 'function') {
+        return DOMPurify.sanitize(String(dirtyHtml), {
+          USE_PROFILES: { html: true },
+          ADD_ATTR: ['target']
+        });
+      }
+      return '';
+    }
+
+    // Markdown Parser Wrapper (with built-in fallback and mandatory DOMPurify sanitization)
     function renderMarkdownToHtml(mdText) {
+      let rawHtml = '';
       if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
         try {
-          return marked.parse(mdText);
+          rawHtml = marked.parse(mdText);
         } catch (err) {
           console.error('marked parse failed, falling back:', err);
+          rawHtml = fallbackMarkdownParse(mdText);
         }
+      } else {
+        rawHtml = fallbackMarkdownParse(mdText);
       }
-      return fallbackMarkdownParse(mdText);
+      return sanitizeMarkdownHtml(rawHtml);
     }
 
     // Lightweight regex-based fallback parser
@@ -485,7 +515,7 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
     let saveTimeout;
     function handleEditorChange() {
       const text = markdownTextarea.value;
-      const html = renderMarkdownToHtml(text);
+      const html = sanitizeMarkdownHtml(renderMarkdownToHtml(text));
       previewBody.innerHTML = html;
       enhancePreviewCodeBlocks();
 
@@ -656,14 +686,14 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
 
     // Copy Clean HTML Action
     btnCopyHtml.addEventListener('click', function() {
-      const htmlOutput = previewBody.innerHTML;
+      const htmlOutput = renderMarkdownToHtml(markdownTextarea.value);
       if (!htmlOutput.trim()) return;
 
-      // Clean out any temporary copy buttons from output
+      // Clean out any temporary copy buttons from output and sanitize
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = htmlOutput;
+      tempDiv.innerHTML = sanitizeMarkdownHtml(htmlOutput);
       tempDiv.querySelectorAll('.code-copy-btn').forEach(function(b) { b.remove(); });
-      const cleanHtml = tempDiv.innerHTML.trim();
+      const cleanHtml = sanitizeMarkdownHtml(tempDiv.innerHTML).trim();
 
       copyTextToClipboard(cleanHtml);
       btnCopyHtml.classList.add('copied');
@@ -681,9 +711,9 @@ Visit [VantorKit Utility Suite](https://vantorkit.com) for fast, free, and priva
       if (!text.trim()) return;
 
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = previewBody.innerHTML;
+      tempDiv.innerHTML = sanitizeMarkdownHtml(renderMarkdownToHtml(text));
       tempDiv.querySelectorAll('.code-copy-btn').forEach(function(b) { b.remove(); });
-      const bodyContent = tempDiv.innerHTML;
+      const bodyContent = sanitizeMarkdownHtml(tempDiv.innerHTML);
 
       const fullHtmlDoc = `<!DOCTYPE html>
 <html lang="en">

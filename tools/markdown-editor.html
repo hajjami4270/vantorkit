@@ -25,8 +25,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Marked.js CDN for robust GitHub-Flavored Markdown parsing -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Marked.js CDN for robust GitHub-Flavored Markdown parsing + Self-Hosted DOMPurify -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" integrity="sha384-948ahk4ZmxYVYOc+rxN1H2gM1EJ2Duhp7uHtZ4WSLkV4Vtx5MUqnV+l7u9B+jFv+" crossorigin="anonymous"></script>
+  <script src="../js/vendor/purify.min.js"></script>
 
   <!-- Structured Data: WebApplication & FAQPage -->
   <script type="application/ld+json">
@@ -1340,9 +1341,7 @@
       outline-offset: 2px;
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S8MDMH082N"></script>
-  <script src="../gtag-init.js" defer></script>
+  <script src="../consent.js" defer></script>
 </head>
 <body>
 
