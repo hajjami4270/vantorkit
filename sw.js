@@ -4,10 +4,11 @@
  * Zero Stale Cache Traps • Privacy First • 100% CSP Compliant
  */
 
-const CACHE_NAME = 'vantorkit-pwa-v1.2';
+const CACHE_NAME = 'vantorkit-cache-v1.3';
 
-// Essential core shell assets to pre-cache on install
+// Synchronized pre-cache manifest: core shell, legal pages, blog resources, and 32 active tools
 const PRECACHE_ASSETS = [
+  // Core Shell & Static Assets
   '/',
   '/index.html',
   '/manifest.json',
@@ -15,14 +16,64 @@ const PRECACHE_ASSETS = [
   '/sidebar.css',
   '/sidebar.js',
   '/i18n-bootstrap.js',
+  '/js/gtag-init.js',
+  '/js/index.js',
+  '/assets/fazier-badge.svg',
   '/icon-192.png',
   '/icon-512.png',
   '/icon-maskable-512.png',
   '/apple-touch-icon.png',
+
+  // Legal & Transparency Pages
   '/about.html',
   '/contact.html',
   '/privacy.html',
-  '/terms.html'
+  '/terms.html',
+
+  // Blog Resources
+  '/blog/index.html',
+  '/blog/blog.js',
+  '/blog/feed.xml',
+  '/blog/how-to-redact-pdf-locally.html',
+  '/blog/why-metadata-stripping-fails.html',
+  '/blog/client-side-big-data-processing.html',
+  '/blog/how-to-trim-mp4-locally.html',
+  '/blog/how-to-verify-jwt-in-memory.html',
+  '/blog/how-i-built-33-tools-zero-backend.html',
+
+  // Active 32 Live Tools (Canonical /tools/ paths)
+  '/tools/percentage-calculator.html',
+  '/tools/compound-interest.html',
+  '/tools/loan-calculator.html',
+  '/tools/discount-tax-calculator.html',
+  '/tools/gpa-calculator.html',
+  '/tools/csv-json-converter.html',
+  '/tools/pdf-merge.html',
+  '/tools/pdf-split.html',
+  '/tools/pdf-to-word.html',
+  '/tools/base64-file-encoder.html',
+  '/tools/audio-trimmer.html',
+  '/tools/video-trimmer.html',
+  '/tools/color-palette-extractor.html',
+  '/tools/svg-to-png.html',
+  '/tools/image-resizer.html',
+  '/tools/image-to-base64.html',
+  '/tools/image-compressor.html',
+  '/tools/favicon-builder.html',
+  '/tools/date-difference.html',
+  '/tools/qr-generator.html',
+  '/tools/age-calculator.html',
+  '/tools/password-generator.html',
+  '/tools/timezone-planner.html',
+  '/tools/word-counter.html',
+  '/tools/markdown-editor.html',
+  '/tools/case-converter.html',
+  '/tools/text-diff.html',
+  '/tools/metadata-cleaner.html',
+  '/tools/jwt-decoder.html',
+  '/tools/pdf-redactor.html',
+  '/tools/big-data-transformer.html',
+  '/tools/css-grid-generator.html'
 ];
 
 // Install Event: Pre-cache critical shell assets & activate immediately
@@ -60,24 +111,26 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (!req || !req.url) return;
 
-  // 1. Immediately ignore any non-HTTP/HTTPS schemes so blob: and data: URLs are never intercepted
-  if (!req.url.startsWith('http')) return;
+  // 1. Immediately bypass non-HTTP schemes (blob:, data:, etc.) so they are never intercepted
+  if (
+    req.url.startsWith('blob:') ||
+    req.url.startsWith('data:') ||
+    !req.url.startsWith('http')
+  ) {
+    return;
+  }
 
   // 2. Only intercept GET requests
   if (req.method !== 'GET') return;
 
-  // 3. Ignore Google Analytics / GTM telemetry (never intercept or cache tracking calls)
+  // 3. Only intercept same-origin requests (never intercept cross-origin Fonts, CDNs, or GA4 telemetry)
   let url;
   try {
     url = new URL(req.url);
   } catch (e) {
     return;
   }
-  if (
-    url.hostname.includes('google-analytics.com') ||
-    url.hostname.includes('googletagmanager.com') ||
-    url.pathname.includes('/gtag/')
-  ) {
+  if (url.origin !== self.location.origin) {
     return;
   }
 

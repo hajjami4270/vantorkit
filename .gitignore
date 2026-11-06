@@ -14,3 +14,6 @@ env/
 venv/
 # Scratch & Local Test Scripts
 scratch/
+
+# Dependencies
+node_modules/

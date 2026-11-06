@@ -1,39 +1,109 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/base64-file-encoder",
-      "destination": "/tools/base64-file-encoder.html"
-    },
-    {
-      "source": "/base64-file-encoder.html",
-      "destination": "/tools/base64-file-encoder.html"
-    },
+  "redirects": [
     {
       "source": "/audio-trimmer",
-      "destination": "/tools/audio-trimmer.html"
+      "destination": "/tools/audio-trimmer.html",
+      "statusCode": 301
     },
     {
       "source": "/audio-trimmer.html",
-      "destination": "/tools/audio-trimmer.html"
-    },
-    {
-      "source": "/image-resizer",
-      "destination": "/tools/image-resizer.html"
-    },
-    {
-      "source": "/image-resizer.html",
-      "destination": "/tools/image-resizer.html"
+      "destination": "/tools/audio-trimmer.html",
+      "statusCode": 301
     },
     {
       "source": "/auto-captions",
-      "destination": "/tools/auto-captions.html"
+      "destination": "/tools/auto-captions.html",
+      "statusCode": 301
     },
     {
       "source": "/auto-captions.html",
-      "destination": "/tools/auto-captions.html"
+      "destination": "/tools/auto-captions.html",
+      "statusCode": 301
     },
+    {
+      "source": "/base64-file-encoder",
+      "destination": "/tools/base64-file-encoder.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/base64-file-encoder.html",
+      "destination": "/tools/base64-file-encoder.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/big-data-transformer",
+      "destination": "/tools/big-data-transformer.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/big-data-transformer.html",
+      "destination": "/tools/big-data-transformer.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/css-grid-generator",
+      "destination": "/tools/css-grid-generator.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/css-grid-generator.html",
+      "destination": "/tools/css-grid-generator.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/image-resizer",
+      "destination": "/tools/image-resizer.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/image-resizer.html",
+      "destination": "/tools/image-resizer.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jwt-decoder",
+      "destination": "/tools/jwt-decoder.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/jwt-decoder.html",
+      "destination": "/tools/jwt-decoder.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/metadata-cleaner",
+      "destination": "/tools/metadata-cleaner.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/metadata-cleaner.html",
+      "destination": "/tools/metadata-cleaner.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/pdf-redactor",
+      "destination": "/tools/pdf-redactor.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/pdf-redactor.html",
+      "destination": "/tools/pdf-redactor.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/video-trimmer",
+      "destination": "/tools/video-trimmer.html",
+      "statusCode": 301
+    },
+    {
+      "source": "/video-trimmer.html",
+      "destination": "/tools/video-trimmer.html",
+      "statusCode": 301
+    }
+  ],
+  "rewrites": [
     {
       "source": "/tools/:slug",
       "destination": "/tools/:slug.html"
@@ -91,7 +161,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://fazier.com https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; media-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://huggingface.co https://*.huggingface.co https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; media-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
         },
         {
           "key": "X-Content-Type-Options",
@@ -112,6 +182,15 @@
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    },
+    {
+      "source": "/tools/(video-trimmer|audio-trimmer)(\\.html)?",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; media-src 'self' blob: data:; worker-src 'self' blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; connect-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
         }
       ]
     }

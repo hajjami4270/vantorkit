@@ -1,7 +1,7 @@
 {
   "name": "VantorKit — 100% Client-Side Private Web Utilities",
   "short_name": "VantorKit",
-  "description": "33 privacy-first, in-browser utilities running 100% locally in RAM via WebAssembly and Web Workers with zero cloud uploads.",
+  "description": "32 privacy-first, in-browser utilities running 100% locally in RAM via WebAssembly and Web Workers with zero cloud uploads.",
   "start_url": "/",
   "id": "/",
   "scope": "/",
