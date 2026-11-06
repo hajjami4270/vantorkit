@@ -377,7 +377,9 @@
             }
           } catch (err) {
             console.warn('Could not read page count for', file.name, err);
-            fileObj.pages = 'Error';
+            fileQueue = fileQueue.filter(f => f.id !== fileId);
+            addedCount = Math.max(0, addedCount - 1);
+            showToast((dict.skippedNotPdf ? dict.skippedNotPdf(file.name) : 'Invalid PDF skipped: ' + file.name));
           }
           renderQueue();
         }

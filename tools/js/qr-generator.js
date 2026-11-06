@@ -1,10 +1,10 @@
 (function () {
-      'use strict';
+  'use strict';
 
-      // Ensure UTF-8 multi-byte support in qrcode-generator
-      if (window.qrcode && qrcode.stringToBytesFuncs && qrcode.stringToBytesFuncs['UTF-8']) {
-        qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
-      }
+  // Ensure UTF-8 multi-byte support in qrcode-generator
+  if (window.qrcode && qrcode.stringToBytesFuncs && qrcode.stringToBytesFuncs['UTF-8']) {
+    qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+  }
 
       // --- Internationalization (i18n) Dictionary ---
       const I18N = {
@@ -71,6 +71,12 @@
           textPlaceholder: "Enter any text, note, code, or message...",
           emailSubjPlaceholder: "Project Inquiry",
           emailBodyPlaceholder: "Write your message...",
+          wifiSsidPlaceholder: "Home-WiFi-5G",
+          wifiPassPlaceholder: "SecretPassword123",
+          vcardNamePlaceholder: "John Doe",
+          vcardEmailPlaceholder: "john@company.com",
+          vcardOrgPlaceholder: "Acme Technologies Inc.",
+          emailToPlaceholder: "contact@domain.com",
           toastCapacityErr: "Data exceeds capacity for this error correction level. Try lowering to Level L or M.",
           chars: "chars",
           modules: "Modules"
@@ -137,6 +143,12 @@
           textPlaceholder: "أدخل أي نص أو ملاحظة أو رسالة...",
           emailSubjPlaceholder: "استفسار حول المشروع",
           emailBodyPlaceholder: "اكتب رسالتك هنا...",
+          wifiSsidPlaceholder: "شبكة-المنزل-5G",
+          wifiPassPlaceholder: "كلمة-مرور-سرية-123",
+          vcardNamePlaceholder: "أحمد محمد",
+          vcardEmailPlaceholder: "name@example.com",
+          vcardOrgPlaceholder: "شركة التقنية الحديثة",
+          emailToPlaceholder: "contact@domain.com",
           toastCapacityErr: "البيانات تتجاوز السعة لهذا المستوى من تصحيح الخطأ. جرّب تقليله إلى المستوى L أو M.",
           chars: "حرف",
           modules: "وحدة نمطية"
@@ -203,6 +215,12 @@
           textPlaceholder: "Saisissez n'importe quel texte, note ou message...",
           emailSubjPlaceholder: "Demande d'information",
           emailBodyPlaceholder: "Écrivez votre message...",
+          wifiSsidPlaceholder: "WiFi-Maison-5G",
+          wifiPassPlaceholder: "MotDePasseSecret123",
+          vcardNamePlaceholder: "Jean Dupont",
+          vcardEmailPlaceholder: "jean@entreprise.fr",
+          vcardOrgPlaceholder: "Technologies Acme SAS",
+          emailToPlaceholder: "contact@domaine.fr",
           toastCapacityErr: "Les données dépassent la capacité pour ce niveau de correction. Essayez le niveau L ou M.",
           chars: "caractères",
           modules: "Modules"
@@ -269,488 +287,494 @@
           textPlaceholder: "Inserisci qualsiasi testo, nota o messaggio...",
           emailSubjPlaceholder: "Richiesta informazioni",
           emailBodyPlaceholder: "Scrivi il tuo messaggio...",
+          wifiSsidPlaceholder: "WiFi-Casa-5G",
+          wifiPassPlaceholder: "PasswordSegreta123",
+          vcardNamePlaceholder: "Mario Rossi",
+          vcardEmailPlaceholder: "mario@azienda.it",
+          vcardOrgPlaceholder: "Tecnologie Acme S.r.l.",
+          emailToPlaceholder: "contatto@dominio.it",
           toastCapacityErr: "I dati superano la capacità per questo livello di correzione. Prova il livello L o M.",
           chars: "caratteri",
           modules: "Moduli"
         }
       };
 
-      const LANG_LABELS = {
-        en: 'English',
-        ar: 'العربية',
-        fr: 'Français',
-        it: 'Italiano'
-      };
+  const LANG_LABELS = {
+    en: 'English',
+    ar: 'العربية',
+    fr: 'Français',
+    it: 'Italiano'
+  };
 
-      // --- State ---
-      let currentMode = 'url'; // 'url' | 'text' | 'wifi' | 'vcard' | 'email'
-      let qrSize = 300;
-      let qrEcc = 'M'; // 'L' | 'M' | 'Q' | 'H'
-      let fgColor = '#000000';
-      let bgColor = '#ffffff';
-      let currentQr = null;
-      let toastTimer = null;
+  // --- State ---
+  let currentMode = 'url'; // 'url' | 'text' | 'wifi' | 'vcard' | 'email'
+  let qrSize = 300;
+  let qrEcc = 'M'; // 'L' | 'M' | 'Q' | 'H'
+  let fgColor = '#000000';
+  let bgColor = '#ffffff';
+  let currentQr = null;
+  let toastTimer = null;
 
-      // --- DOM Elements ---
-      const modeTabs = document.getElementById('modeTabs');
-      const modeTabBtns = document.querySelectorAll('.mode-tab-btn');
-      const modeTabPill = document.getElementById('modeTabPill');
-      const modePanels = document.querySelectorAll('.mode-panel');
+  // --- DOM Elements ---
+  const modeTabs = document.getElementById('modeTabs');
+  const modeTabBtns = document.querySelectorAll('.mode-tab-btn');
+  const modeTabPill = document.getElementById('modeTabPill');
+  const modePanels = document.querySelectorAll('.mode-panel');
 
-      // Inputs
-      const urlInput = document.getElementById('urlInput');
-      const textInput = document.getElementById('textInput');
-      const textCharCount = document.getElementById('textCharCount');
-      const wifiSsid = document.getElementById('wifiSsid');
-      const wifiSecurity = document.getElementById('wifiSecurity');
-      const wifiPassword = document.getElementById('wifiPassword');
-      const wifiPassGroup = document.getElementById('wifiPassGroup');
-      const wifiHidden = document.getElementById('wifiHidden');
-      const btnToggleWifiPass = document.getElementById('btnToggleWifiPass');
-      const eyeIconOpen = document.getElementById('eyeIconOpen');
-      const eyeIconClosed = document.getElementById('eyeIconClosed');
+  // Inputs
+  const urlInput = document.getElementById('urlInput');
+  const textInput = document.getElementById('textInput');
+  const textCharCount = document.getElementById('textCharCount');
+  const wifiSsid = document.getElementById('wifiSsid');
+  const wifiSecurity = document.getElementById('wifiSecurity');
+  const wifiPassword = document.getElementById('wifiPassword');
+  const wifiPassGroup = document.getElementById('wifiPassGroup');
+  const wifiHidden = document.getElementById('wifiHidden');
+  const btnToggleWifiPass = document.getElementById('btnToggleWifiPass');
+  const eyeIconOpen = document.getElementById('eyeIconOpen');
+  const eyeIconClosed = document.getElementById('eyeIconClosed');
 
-      const vcardName = document.getElementById('vcardName');
-      const vcardPhone = document.getElementById('vcardPhone');
-      const vcardEmail = document.getElementById('vcardEmail');
-      const vcardOrg = document.getElementById('vcardOrg');
-      const vcardUrl = document.getElementById('vcardUrl');
+  const vcardName = document.getElementById('vcardName');
+  const vcardPhone = document.getElementById('vcardPhone');
+  const vcardEmail = document.getElementById('vcardEmail');
+  const vcardOrg = document.getElementById('vcardOrg');
+  const vcardUrl = document.getElementById('vcardUrl');
 
-      const emailTo = document.getElementById('emailTo');
-      const emailSubject = document.getElementById('emailSubject');
-      const emailBody = document.getElementById('emailBody');
+  const emailTo = document.getElementById('emailTo');
+  const emailSubject = document.getElementById('emailSubject');
+  const emailBody = document.getElementById('emailBody');
 
-      // Styling Controls
-      const fgColorPicker = document.getElementById('fgColorPicker');
-      const fgHexInput = document.getElementById('fgHexInput');
-      const bgColorPicker = document.getElementById('bgColorPicker');
-      const bgHexInput = document.getElementById('bgHexInput');
-      const sizeSlider = document.getElementById('sizeSlider');
-      const sizeBadge = document.getElementById('sizeBadge');
-      const eccPills = document.querySelectorAll('.ecc-pill');
-      const paletteBtns = document.querySelectorAll('.palette-btn');
+  // Styling Controls
+  const fgColorPicker = document.getElementById('fgColorPicker');
+  const fgHexInput = document.getElementById('fgHexInput');
+  const bgColorPicker = document.getElementById('bgColorPicker');
+  const bgHexInput = document.getElementById('bgHexInput');
+  const sizeSlider = document.getElementById('sizeSlider');
+  const sizeBadge = document.getElementById('sizeBadge');
+  const eccPills = document.querySelectorAll('.ecc-pill');
+  const paletteBtns = document.querySelectorAll('.palette-btn');
 
-      // Preview & Export Elements
-      const canvasBoard = document.getElementById('canvasBoard');
-      const qrCanvas = document.getElementById('qrCanvas');
-      const metaSize = document.getElementById('metaSize');
-      const metaModules = document.getElementById('metaModules');
-      const metaEcc = document.getElementById('metaEcc');
-      const btnDownloadPng = document.getElementById('btnDownloadPng');
-      const btnDownloadSvg = document.getElementById('btnDownloadSvg');
-      const btnCopyClipboard = document.getElementById('btnCopyClipboard');
+  // Preview & Export Elements
+  const canvasBoard = document.getElementById('canvasBoard');
+  const qrCanvas = document.getElementById('qrCanvas');
+  const metaSize = document.getElementById('metaSize');
+  const metaModules = document.getElementById('metaModules');
+  const metaEcc = document.getElementById('metaEcc');
+  const btnDownloadPng = document.getElementById('btnDownloadPng');
+  const btnDownloadSvg = document.getElementById('btnDownloadSvg');
+  const btnCopyClipboard = document.getElementById('btnCopyClipboard');
 
-      // Language Switcher Elements
-      const langDropdown = document.getElementById('langDropdown');
-      const langToggleBtn = document.getElementById('langToggleBtn');
-      const currentLangLabel = document.getElementById('currentLangLabel');
-      const langOptions = document.querySelectorAll('.lang-option');
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMsg');
+  // Language Switcher Elements
+  const langDropdown = document.getElementById('langDropdown');
+  const langToggleBtn = document.getElementById('langToggleBtn');
+  const currentLangLabel = document.getElementById('currentLangLabel');
+  const langOptions = document.querySelectorAll('.lang-option');
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
 
-      // --- Utilities ---
-      function showToast(msg) {
-        toastMsg.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toast.classList.remove('show');
-        }, 2400);
-      }
+  // --- Utilities ---
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2400);
+  }
 
-      function triggerDownload(url, filename) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
+  function triggerDownload(url, filename) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
-      function sanitizeHex(val, fallback) {
-        val = (val || '').trim();
-        if (/^#[0-9a-fA-F]{6}$/.test(val)) return val;
-        if (/^[0-9a-fA-F]{6}$/.test(val)) return '#' + val;
-        return fallback;
-      }
+  function sanitizeHex(val, fallback) {
+    val = (val || '').trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) return val;
+    if (/^[0-9a-fA-F]{6}$/.test(val)) return '#' + val;
+    return fallback;
+  }
 
-      // --- Mode Tabs Switching with Animated Indicator ---
-      function updateModeTabPill() {
-        const activeBtn = modeTabs.querySelector('.mode-tab-btn.active');
-        if (!activeBtn || !modeTabPill) return;
-        modeTabPill.style.width = `${activeBtn.offsetWidth}px`;
-        modeTabPill.style.transform = `translateX(${activeBtn.offsetLeft - 5}px)`;
-      }
+  // --- Mode Tabs Switching with Animated Indicator ---
+  function updateModeTabPill() {
+    const activeBtn = modeTabs.querySelector('.mode-tab-btn.active');
+    if (!activeBtn || !modeTabPill) return;
+    modeTabPill.style.width = `${activeBtn.offsetWidth}px`;
+    modeTabPill.style.transform = `translateX(${activeBtn.offsetLeft - 5}px)`;
+  }
 
-      modeTabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const mode = btn.getAttribute('data-mode');
-          if (mode === currentMode) return;
+  modeTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.getAttribute('data-mode');
+      if (mode === currentMode) return;
 
-          currentMode = mode;
-          modeTabBtns.forEach(b => b.classList.toggle('active', b === btn));
-          updateModeTabPill();
+      currentMode = mode;
+      modeTabBtns.forEach(b => b.classList.toggle('active', b === btn));
+      updateModeTabPill();
 
-          modePanels.forEach(p => {
-            p.classList.toggle('active', p.id === `panel${mode.charAt(0).toUpperCase() + mode.slice(1)}`);
-          });
-
-          renderQr();
-        });
+      modePanels.forEach(p => {
+        p.classList.toggle('active', p.id === `panel${mode.charAt(0).toUpperCase() + mode.slice(1)}`);
       });
 
-      window.addEventListener('resize', updateModeTabPill);
+      renderQr();
+    });
+  });
 
-      // --- Data Payload Assembly ---
-      function escapeWifi(str) {
-        return (str || '').replace(/([\\;,:"])/g, '\\$1');
+  window.addEventListener('resize', updateModeTabPill);
+
+  // --- Data Payload Assembly ---
+  function escapeWifi(str) {
+    return (str || '').replace(/([\\;,:"])/g, '\\$1');
+  }
+
+  function getPayloadString() {
+    switch (currentMode) {
+      case 'url': {
+        let u = (urlInput.value || '').trim();
+        if (!u) u = 'https://vantorkit.com';
+        return u;
       }
+      case 'text': {
+        let t = textInput.value || '';
+        return t || 'VantorKit QR Code Generator';
+      }
+      case 'wifi': {
+        const ssid = escapeWifi((wifiSsid.value || '').trim());
+        const sec = wifiSecurity.value || 'WPA';
+        const pass = escapeWifi(wifiPassword.value || '');
+        const isHidden = wifiHidden.checked;
 
-      function getPayloadString() {
-        switch (currentMode) {
-          case 'url': {
-            let u = (urlInput.value || '').trim();
-            if (!u) u = 'https://vantorkit.com';
-            return u;
-          }
-          case 'text': {
-            let t = textInput.value || '';
-            return t || 'VantorKit QR Code Generator';
-          }
-          case 'wifi': {
-            const ssid = escapeWifi((wifiSsid.value || '').trim());
-            const sec = wifiSecurity.value || 'WPA';
-            const pass = escapeWifi(wifiPassword.value || '');
-            const isHidden = wifiHidden.checked;
-            
-            let wifiStr = `WIFI:S:${ssid};T:${sec};`;
-            if (sec !== 'nopass' && pass) {
-              wifiStr += `P:${pass};`;
-            }
-            if (isHidden) {
-              wifiStr += `H:true;`;
-            }
-            wifiStr += `;`;
-            return wifiStr;
-          }
-          case 'vcard': {
-            const name = (vcardName.value || '').trim();
-            const phone = (vcardPhone.value || '').trim();
-            const email = (vcardEmail.value || '').trim();
-            const org = (vcardOrg.value || '').trim();
-            let site = (vcardUrl.value || '').trim();
-            if (site && !/^https?:\/\//i.test(site)) site = 'https://' + site;
+        let wifiStr = `WIFI:S:${ssid};T:${sec};`;
+        if (sec !== 'nopass' && pass) {
+          wifiStr += `P:${pass};`;
+        }
+        if (isHidden) {
+          wifiStr += `H:true;`;
+        }
+        wifiStr += `;`;
+        return wifiStr;
+      }
+      case 'vcard': {
+        const name = (vcardName.value || '').trim();
+        const phone = (vcardPhone.value || '').trim();
+        const email = (vcardEmail.value || '').trim();
+        const org = (vcardOrg.value || '').trim();
+        let site = (vcardUrl.value || '').trim();
+        if (site && !/^https?:\/\//i.test(site)) site = 'https://' + site;
 
-            const parts = name.split(/\s+/);
-            const lastName = parts.length > 1 ? parts.slice(1).join(' ') : '';
-            const firstName = parts[0] || '';
+        const parts = name.split(/\s+/);
+        const lastName = parts.length > 1 ? parts.slice(1).join(' ') : '';
+        const firstName = parts[0] || '';
 
-            let card = 'BEGIN:VCARD\nVERSION:3.0\n';
-            if (name) {
-              card += `FN:${name}\n`;
-              card += `N:${lastName};${firstName};;;\n`;
-            }
-            if (org) card += `ORG:${org}\n`;
-            if (phone) card += `TEL;TYPE=CELL,VOICE:${phone}\n`;
-            if (email) card += `EMAIL;TYPE=WORK,INTERNET:${email}\n`;
-            if (site) card += `URL:${site}\n`;
-            card += 'END:VCARD';
-            return card;
+        let card = 'BEGIN:VCARD\nVERSION:3.0\n';
+        if (name) {
+          card += `FN:${name}\n`;
+          card += `N:${lastName};${firstName};;;\n`;
+        }
+        if (org) card += `ORG:${org}\n`;
+        if (phone) card += `TEL;TYPE=CELL,VOICE:${phone}\n`;
+        if (email) card += `EMAIL;TYPE=WORK,INTERNET:${email}\n`;
+        if (site) card += `URL:${site}\n`;
+        card += 'END:VCARD';
+        return card;
+      }
+      case 'email': {
+        const to = (emailTo.value || '').trim();
+        const subj = (emailSubject.value || '').trim();
+        const body = emailBody.value || '';
+        if (!to) return 'mailto:info@example.com';
+        let mailto = `mailto:${encodeURIComponent(to)}`;
+        const params = [];
+        if (subj) params.push(`subject=${encodeURIComponent(subj)}`);
+        if (body) params.push(`body=${encodeURIComponent(body)}`);
+        if (params.length > 0) mailto += `?${params.join('&')}`;
+        return mailto;
+      }
+      default:
+        return 'https://vantorkit.com';
+    }
+  }
+
+  // --- QR Code Rendering to Canvas & SVG ---
+  function renderQr() {
+    const payload = getPayloadString();
+    const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+    const dict = I18N[activeLang] || I18N.en;
+
+    try {
+      // typeNumber = 0 auto-detects version
+      const qr = qrcode(0, qrEcc);
+      qr.addData(payload);
+      qr.make();
+      currentQr = qr;
+
+      const moduleCount = qr.getModuleCount();
+      const margin = 4; // Standard quiet zone
+      const totalModules = moduleCount + margin * 2;
+
+      qrCanvas.width = qrSize;
+      qrCanvas.height = qrSize;
+      const ctx = qrCanvas.getContext('2d');
+
+      // Draw Background
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, qrSize, qrSize);
+
+      // Draw Foreground Modules
+      ctx.fillStyle = fgColor;
+      const cellSize = qrSize / totalModules;
+
+      for (let r = 0; r < moduleCount; r++) {
+        for (let c = 0; c < moduleCount; c++) {
+          if (qr.isDark(r, c)) {
+            const x = (c + margin) * cellSize;
+            const y = (r + margin) * cellSize;
+            const w = ((c + margin + 1) * cellSize) - x;
+            const h = ((r + margin + 1) * cellSize) - y;
+            ctx.fillRect(x, y, w, h);
           }
-          case 'email': {
-            const to = (emailTo.value || '').trim();
-            const subj = (emailSubject.value || '').trim();
-            const body = emailBody.value || '';
-            if (!to) return 'mailto:info@example.com';
-            let mailto = `mailto:${encodeURIComponent(to)}`;
-            const params = [];
-            if (subj) params.push(`subject=${encodeURIComponent(subj)}`);
-            if (body) params.push(`body=${encodeURIComponent(body)}`);
-            if (params.length > 0) mailto += `?${params.join('&')}`;
-            return mailto;
-          }
-          default:
-            return 'https://vantorkit.com';
         }
       }
 
-      // --- QR Code Rendering to Canvas & SVG ---
-      function renderQr() {
-        const payload = getPayloadString();
-        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
-        const dict = I18N[activeLang] || I18N.en;
+      // Update board background to match QR background for seamless presentation
+      canvasBoard.style.backgroundColor = bgColor;
 
-        try {
-          // typeNumber = 0 auto-detects version
-          const qr = qrcode(0, qrEcc);
-          qr.addData(payload);
-          qr.make();
-          currentQr = qr;
+      // Update metadata pills
+      metaSize.textContent = `${qrSize} × ${qrSize} px`;
+      metaModules.textContent = `${moduleCount} × ${moduleCount} ${dict.modules}`;
+      metaEcc.textContent = `Level ${qrEcc} (${qrEcc === 'L' ? '7%' : qrEcc === 'M' ? '15%' : qrEcc === 'Q' ? '25%' : '30%'})`;
 
-          const moduleCount = qr.getModuleCount();
-          const margin = 4; // Standard quiet zone
-          const totalModules = moduleCount + margin * 2;
+    } catch (err) {
+      console.warn('QR Code generation error:', err);
+      // If data exceeds capacity at current ECC, suggest lowering ECC
+      showToast(dict.toastCapacityErr || 'Data exceeds capacity for this error correction level. Try lowering to Level L or M.');
+    }
+  }
 
-          qrCanvas.width = qrSize;
-          qrCanvas.height = qrSize;
-          const ctx = qrCanvas.getContext('2d');
+  // Generate pristine, resolution-independent SVG
+  function generateQrSvg() {
+    if (!currentQr) return '';
+    const moduleCount = currentQr.getModuleCount();
+    const margin = 4;
+    const totalModules = moduleCount + margin * 2;
 
-          // Draw Background
-          ctx.fillStyle = bgColor;
-          ctx.fillRect(0, 0, qrSize, qrSize);
-
-          // Draw Foreground Modules
-          ctx.fillStyle = fgColor;
-          const cellSize = qrSize / totalModules;
-
-          for (let r = 0; r < moduleCount; r++) {
-            for (let c = 0; c < moduleCount; c++) {
-              if (qr.isDark(r, c)) {
-                const x = (c + margin) * cellSize;
-                const y = (r + margin) * cellSize;
-                const w = ((c + margin + 1) * cellSize) - x;
-                const h = ((r + margin + 1) * cellSize) - y;
-                ctx.fillRect(x, y, w, h);
-              }
-            }
-          }
-
-          // Update board background to match QR background for seamless presentation
-          canvasBoard.style.backgroundColor = bgColor;
-
-          // Update metadata pills
-          metaSize.textContent = `${qrSize} × ${qrSize} px`;
-          metaModules.textContent = `${moduleCount} × ${moduleCount} ${dict.modules}`;
-          metaEcc.textContent = `Level ${qrEcc} (${qrEcc === 'L' ? '7%' : qrEcc === 'M' ? '15%' : qrEcc === 'Q' ? '25%' : '30%'})`;
-
-        } catch (err) {
-          console.warn('QR Code generation error:', err);
-          // If data exceeds capacity at current ECC, suggest lowering ECC
-          showToast(dict.toastCapacityErr || 'Data exceeds capacity for this error correction level. Try lowering to Level L or M.');
+    let rects = '';
+    for (let r = 0; r < moduleCount; r++) {
+      for (let c = 0; c < moduleCount; c++) {
+        if (currentQr.isDark(r, c)) {
+          rects += `<rect x="${c + margin}" y="${r + margin}" width="1" height="1" fill="${fgColor}"/>\n`;
         }
       }
+    }
 
-      // Generate pristine, resolution-independent SVG
-      function generateQrSvg() {
-        if (!currentQr) return '';
-        const moduleCount = currentQr.getModuleCount();
-        const margin = 4;
-        const totalModules = moduleCount + margin * 2;
-
-        let rects = '';
-        for (let r = 0; r < moduleCount; r++) {
-          for (let c = 0; c < moduleCount; c++) {
-            if (currentQr.isDark(r, c)) {
-              rects += `<rect x="${c + margin}" y="${r + margin}" width="1" height="1" fill="${fgColor}"/>\n`;
-            }
-          }
-        }
-
-        return `<?xml version="1.0" encoding="UTF-8"?>
+    return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${totalModules} ${totalModules}" width="${qrSize}" height="${qrSize}">
   <rect width="${totalModules}" height="${totalModules}" fill="${bgColor}"/>
   ${rects}
 </svg>`;
-      }
+  }
 
-      // --- Export Actions ---
-      // 1. Download PNG
-      btnDownloadPng.addEventListener('click', () => {
-        if (!qrCanvas) return;
-        const dataUrl = qrCanvas.toDataURL('image/png');
-        triggerDownload(dataUrl, 'vantorkit-qrcode.png');
-        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
-        showToast((I18N[activeLang] || I18N.en).pngDownloadToast);
-      });
+  // --- Export Actions ---
+  // 1. Download PNG
+  btnDownloadPng.addEventListener('click', () => {
+    if (!qrCanvas) return;
+    const dataUrl = qrCanvas.toDataURL('image/png');
+    triggerDownload(dataUrl, 'vantorkit-qrcode.png');
+    const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+    showToast((I18N[activeLang] || I18N.en).pngDownloadToast);
+  });
 
-      // 2. Download Vector SVG
-      btnDownloadSvg.addEventListener('click', () => {
-        const svgContent = generateQrSvg();
-        if (!svgContent) return;
-        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        triggerDownload(url, 'vantorkit-qrcode.svg');
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
-        showToast((I18N[activeLang] || I18N.en).svgDownloadToast);
-      });
+  // 2. Download Vector SVG
+  btnDownloadSvg.addEventListener('click', () => {
+    const svgContent = generateQrSvg();
+    if (!svgContent) return;
+    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    triggerDownload(url, 'vantorkit-qrcode.svg');
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+    showToast((I18N[activeLang] || I18N.en).svgDownloadToast);
+  });
 
-      // 3. Copy Image to System Clipboard
-      btnCopyClipboard.addEventListener('click', async () => {
-        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
-        const dict = I18N[activeLang] || I18N.en;
+  // 3. Copy Image to System Clipboard
+  btnCopyClipboard.addEventListener('click', async () => {
+    const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+    const dict = I18N[activeLang] || I18N.en;
 
-        if (!navigator.clipboard || !window.ClipboardItem) {
+    if (!navigator.clipboard || !window.ClipboardItem) {
+      showToast(dict.copyErrorToast);
+      return;
+    }
+
+    try {
+      qrCanvas.toBlob(async (blob) => {
+        if (!blob) {
           showToast(dict.copyErrorToast);
           return;
         }
-
         try {
-          qrCanvas.toBlob(async (blob) => {
-            if (!blob) {
-              showToast(dict.copyErrorToast);
-              return;
-            }
-            try {
-              await navigator.clipboard.write([
-                new ClipboardItem({ 'image/png': blob })
-              ]);
-              showToast(dict.copiedToast);
-            } catch (clipErr) {
-              console.error('Clipboard write failed:', clipErr);
-              showToast(dict.copyErrorToast);
-            }
-          }, 'image/png');
-        } catch (e) {
+          await navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob })
+          ]);
+          showToast(dict.copiedToast);
+        } catch (clipErr) {
+          console.error('Clipboard write failed:', clipErr);
           showToast(dict.copyErrorToast);
         }
-      });
+      }, 'image/png');
+    } catch (e) {
+      showToast(dict.copyErrorToast);
+    }
+  });
 
-      // --- Event Listeners for Live Preview Updates ---
-      const allInputs = [
-        urlInput, textInput, wifiSsid, wifiPassword, wifiHidden,
-        vcardName, vcardPhone, vcardEmail, vcardOrg, vcardUrl,
-        emailTo, emailSubject, emailBody
-      ];
+  // --- Event Listeners for Live Preview Updates ---
+  const allInputs = [
+    urlInput, textInput, wifiSsid, wifiPassword, wifiHidden,
+    vcardName, vcardPhone, vcardEmail, vcardOrg, vcardUrl,
+    emailTo, emailSubject, emailBody
+  ];
 
-      allInputs.forEach(inp => {
-        if (!inp) return;
-        inp.addEventListener('input', () => {
-          if (inp === textInput) {
-            const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
-            const dict = I18N[activeLang] || I18N.en;
-            textCharCount.textContent = `${textInput.value.length} ${dict.chars}`;
-          }
-          renderQr();
-        });
-      });
-
-      wifiSecurity.addEventListener('change', () => {
-        wifiPassGroup.style.display = wifiSecurity.value === 'nopass' ? 'none' : 'block';
-        renderQr();
-      });
-
-      // Wi-Fi Password Show/Hide Toggle
-      btnToggleWifiPass.addEventListener('click', () => {
-        const isPass = wifiPassword.type === 'password';
-        wifiPassword.type = isPass ? 'text' : 'password';
-        eyeIconOpen.style.display = isPass ? 'none' : 'block';
-        eyeIconClosed.style.display = isPass ? 'block' : 'none';
-      });
-
-      // Preset URL chips
-      document.querySelectorAll('.chip-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          urlInput.value = btn.getAttribute('data-fill');
-          renderQr();
-        });
-      });
-
-      // Foreground Color Pickers
-      fgColorPicker.addEventListener('input', (e) => {
-        fgColor = e.target.value;
-        fgHexInput.value = fgColor.toUpperCase();
-        renderQr();
-      });
-
-      fgHexInput.addEventListener('change', () => {
-        fgColor = sanitizeHex(fgHexInput.value, '#000000');
-        fgHexInput.value = fgColor.toUpperCase();
-        fgColorPicker.value = fgColor;
-        renderQr();
-      });
-
-      // Background Color Pickers
-      bgColorPicker.addEventListener('input', (e) => {
-        bgColor = e.target.value;
-        bgHexInput.value = bgColor.toUpperCase();
-        renderQr();
-      });
-
-      bgHexInput.addEventListener('change', () => {
-        bgColor = sanitizeHex(bgHexInput.value, '#FFFFFF');
-        bgHexInput.value = bgColor.toUpperCase();
-        bgColorPicker.value = bgColor;
-        renderQr();
-      });
-
-      // Palette Presets
-      paletteBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          fgColor = btn.getAttribute('data-fg');
-          bgColor = btn.getAttribute('data-bg');
-          fgColorPicker.value = fgColor;
-          fgHexInput.value = fgColor.toUpperCase();
-          bgColorPicker.value = bgColor;
-          bgHexInput.value = bgColor.toUpperCase();
-          renderQr();
-        });
-      });
-
-      // Size Slider
-      sizeSlider.addEventListener('input', (e) => {
-        qrSize = parseInt(e.target.value, 10);
-        sizeBadge.textContent = `${qrSize} × ${qrSize} px`;
-        renderQr();
-      });
-
-      // Error Correction Level Selector
-      eccPills.forEach(pill => {
-        pill.addEventListener('click', () => {
-          eccPills.forEach(p => p.classList.remove('active'));
-          pill.classList.add('active');
-          qrEcc = pill.getAttribute('data-ecc');
-          renderQr();
-        });
-      });
-
-      // --- Internationalization (i18n) Handler ---
-      function toggleLangMenu(force) {
-        const isExpanded = force !== undefined ? force : !langDropdown.classList.contains('active');
-        langDropdown.classList.toggle('active', isExpanded);
-        langToggleBtn.setAttribute('aria-expanded', isExpanded);
+  allInputs.forEach(inp => {
+    if (!inp) return;
+    inp.addEventListener('input', () => {
+      if (inp === textInput) {
+        const activeLang = localStorage.getItem('vantorkit_lang') || 'en';
+        const dict = I18N[activeLang] || I18N.en;
+        textCharCount.textContent = `${textInput.value.length} ${dict.chars}`;
       }
+      renderQr();
+    });
+  });
 
-      if (langToggleBtn) {
-        langToggleBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          toggleLangMenu();
-        });
+  wifiSecurity.addEventListener('change', () => {
+    wifiPassGroup.style.display = wifiSecurity.value === 'nopass' ? 'none' : 'block';
+    renderQr();
+  });
+
+  // Wi-Fi Password Show/Hide Toggle
+  btnToggleWifiPass.addEventListener('click', () => {
+    const isPass = wifiPassword.type === 'password';
+    wifiPassword.type = isPass ? 'text' : 'password';
+    eyeIconOpen.style.display = isPass ? 'none' : 'block';
+    eyeIconClosed.style.display = isPass ? 'block' : 'none';
+  });
+
+  // Preset URL chips
+  document.querySelectorAll('.chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      urlInput.value = btn.getAttribute('data-fill');
+      renderQr();
+    });
+  });
+
+  // Foreground Color Pickers
+  fgColorPicker.addEventListener('input', (e) => {
+    fgColor = e.target.value;
+    fgHexInput.value = fgColor.toUpperCase();
+    renderQr();
+  });
+
+  fgHexInput.addEventListener('change', () => {
+    fgColor = sanitizeHex(fgHexInput.value, '#000000');
+    fgHexInput.value = fgColor.toUpperCase();
+    fgColorPicker.value = fgColor;
+    renderQr();
+  });
+
+  // Background Color Pickers
+  bgColorPicker.addEventListener('input', (e) => {
+    bgColor = e.target.value;
+    bgHexInput.value = bgColor.toUpperCase();
+    renderQr();
+  });
+
+  bgHexInput.addEventListener('change', () => {
+    bgColor = sanitizeHex(bgHexInput.value, '#FFFFFF');
+    bgHexInput.value = bgColor.toUpperCase();
+    bgColorPicker.value = bgColor;
+    renderQr();
+  });
+
+  // Palette Presets
+  paletteBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      fgColor = btn.getAttribute('data-fg');
+      bgColor = btn.getAttribute('data-bg');
+      fgColorPicker.value = fgColor;
+      fgHexInput.value = fgColor.toUpperCase();
+      bgColorPicker.value = bgColor;
+      bgHexInput.value = bgColor.toUpperCase();
+      renderQr();
+    });
+  });
+
+  // Size Slider
+  sizeSlider.addEventListener('input', (e) => {
+    qrSize = parseInt(e.target.value, 10);
+    sizeBadge.textContent = `${qrSize} × ${qrSize} px`;
+    renderQr();
+  });
+
+  // Error Correction Level Selector
+  eccPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      eccPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      qrEcc = pill.getAttribute('data-ecc');
+      renderQr();
+    });
+  });
+
+  // --- Internationalization (i18n) Handler ---
+  function toggleLangMenu(force) {
+    const isExpanded = force !== undefined ? force : !langDropdown.classList.contains('active');
+    langDropdown.classList.toggle('active', isExpanded);
+    langToggleBtn.setAttribute('aria-expanded', isExpanded);
+  }
+
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleLangMenu();
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (langDropdown && !langDropdown.contains(e.target)) {
+      toggleLangMenu(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && langDropdown && langDropdown.classList.contains('active')) {
+      toggleLangMenu(false);
+      langToggleBtn.focus();
+    }
+  });
+
+  langOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+      const lang = opt.getAttribute('data-lang');
+      if (lang && I18N[lang]) {
+        setLanguage(lang);
+        toggleLangMenu(false);
       }
+    });
+  });
 
-      document.addEventListener('click', (e) => {
-        if (langDropdown && !langDropdown.contains(e.target)) {
-          toggleLangMenu(false);
-        }
-      });
+  function setLanguage(lang) {
+    window.setLanguage = setLanguage;
+    if (!I18N[lang]) lang = 'en';
+    localStorage.setItem('vantorkit_lang', lang);
 
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && langDropdown && langDropdown.classList.contains('active')) {
-          toggleLangMenu(false);
-          langToggleBtn.focus();
-        }
-      });
+    const dict = I18N[lang];
+    const isRtl = lang === 'ar';
 
-      langOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          const lang = opt.getAttribute('data-lang');
-          if (lang && I18N[lang]) {
-            setLanguage(lang);
-            toggleLangMenu(false);
-          }
-        });
-      });
-
-      function setLanguage(lang) {
-      window.setLanguage = setLanguage;
-        if (!I18N[lang]) lang = 'en';
-        localStorage.setItem('vantorkit_lang', lang);
-
-        const dict = I18N[lang];
-        const isRtl = lang === 'ar';
-
-        document.documentElement.setAttribute('lang', lang);
-        document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
 
         if (currentLangLabel) {
           currentLangLabel.textContent = LANG_LABELS[lang] || 'English';
@@ -758,219 +782,223 @@
         if (textInput && dict.textPlaceholder) textInput.placeholder = dict.textPlaceholder;
         if (emailSubject && dict.emailSubjPlaceholder) emailSubject.placeholder = dict.emailSubjPlaceholder;
         if (emailBody && dict.emailBodyPlaceholder) emailBody.placeholder = dict.emailBodyPlaceholder;
-        if (true) {
+        if (wifiSsid && dict.wifiSsidPlaceholder) wifiSsid.placeholder = dict.wifiSsidPlaceholder;
+        if (wifiPassword && dict.wifiPassPlaceholder) wifiPassword.placeholder = dict.wifiPassPlaceholder;
+        if (vcardName && dict.vcardNamePlaceholder) vcardName.placeholder = dict.vcardNamePlaceholder;
+        if (vcardEmail && dict.vcardEmailPlaceholder) vcardEmail.placeholder = dict.vcardEmailPlaceholder;
+        if (vcardOrg && dict.vcardOrgPlaceholder) vcardOrg.placeholder = dict.vcardOrgPlaceholder;
+        if (emailTo && dict.emailToPlaceholder) emailTo.placeholder = dict.emailToPlaceholder;
+
+    langOptions.forEach(opt => {
+      opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+    });
+
+    // Translate data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key]) {
+        if (key === 'pageTitle') {
+          el.innerHTML = dict[key];
+        } else {
+          el.textContent = dict[key];
         }
-
-        langOptions.forEach(opt => {
-          opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
-        });
-
-        // Translate data-i18n elements
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.getAttribute('data-i18n');
-          if (dict[key]) {
-            if (key === 'pageTitle') {
-              el.innerHTML = dict[key];
-            } else {
-              el.textContent = dict[key];
-            }
-          }
-        });
-
-        // Update tab pill position and re-render QR with translated labels
-        updateModeTabPill();
-        renderQr();
       }
+    });
 
-      // --- Initialization ---
-      const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
-      setLanguage(savedLang);
-      updateModeTabPill();
-      renderQr();
+    // Update tab pill position and re-render QR with translated labels
+    updateModeTabPill();
+    renderQr();
+  }
 
-    })();
+  // --- Initialization ---
+  const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
+  setLanguage(savedLang);
+  updateModeTabPill();
+  renderQr();
 
-(function() {
-    'use strict';
+})();
 
-    const LANG_NAMES = {
-      en: 'English',
-      ar: 'العربية',
-      fr: 'Français',
-      it: 'Italiano'
-    };
+(function () {
+  'use strict';
 
-    const BACK_LABELS = {
-      en: '← Back to Tools',
-      ar: 'الرجوع إلى الأدوات ←',
-      fr: '← Retour aux outils',
-      it: '← Torna agli strumenti'
-    };
+  const LANG_NAMES = {
+    en: 'English',
+    ar: 'العربية',
+    fr: 'Français',
+    it: 'Italiano'
+  };
 
-    const SEO_META = {
+  const BACK_LABELS = {
+    en: '← Back to Tools',
+    ar: 'الرجوع إلى الأدوات ←',
+    fr: '← Retour aux outils',
+    it: '← Torna agli strumenti'
+  };
+
+  const SEO_META = {
     "en": {
-        "title": "QR Code Generator – Custom Vector SVG & PNG Codes",
-        "desc": "Create scannable QR matrices for URLs, WiFi credentials, vCards, and emails. Visual rendering compiles into vector SVG entirely on your personal device."
+      "title": "QR Code Generator – Custom Vector SVG & PNG Codes",
+      "desc": "Create scannable QR matrices for URLs, WiFi credentials, vCards, and emails. Visual rendering compiles into vector SVG entirely on your personal device."
     },
     "ar": {
-        "title": "توليد رموز QR – إنشاء باركود متجه SVG وصور PNG",
-        "desc": "أنشئ رموز QR سريعة للروابط وبيانات Wi-Fi وجهات الاتصال وبطاقات vCard. يتم رسم الرموز وتصديرها محلياً في جهازك دون مشاركة معلوماتك."
+      "title": "توليد رموز QR – إنشاء باركود متجه SVG وصور PNG",
+      "desc": "أنشئ رموز QR سريعة للروابط وبيانات Wi-Fi وجهات الاتصال وبطاقات vCard. يتم رسم الرموز وتصديرها محلياً في جهازك دون مشاركة معلوماتك."
     },
     "fr": {
-        "title": "Générateur de QR Code – Export Vectoriel SVG & PNG",
-        "desc": "Créez des codes QR pour vos liens, accès Wi-Fi, contacts et emails. La génération graphique s'effectue entièrement sur votre appareil."
+      "title": "Générateur de QR Code – Export Vectoriel SVG & PNG",
+      "desc": "Créez des codes QR pour vos liens, accès Wi-Fi, contacts et emails. La génération graphique s'effectue entièrement sur votre appareil."
     },
     "it": {
-        "title": "Generatore Codici QR – Esportazione Vettoriale SVG e PNG",
-        "desc": "Genera codici QR per collegamenti web, reti Wi-Fi, contatti e messaggi. Il rendering visivo si elabora localmente sul tuo dispositivo."
+      "title": "Generatore Codici QR – Esportazione Vettoriale SVG e PNG",
+      "desc": "Genera codici QR per collegamenti web, reti Wi-Fi, contatti e messaggi. Il rendering visivo si elabora localmente sul tuo dispositivo."
     }
-};
+  };
 
-    function updateActiveLanguageUI(lang) {
-      if (!LANG_NAMES[lang]) lang = 'en';
-      const isRtl = (lang === 'ar');
+  function updateActiveLanguageUI(lang) {
+    if (!LANG_NAMES[lang]) lang = 'en';
+    const isRtl = (lang === 'ar');
 
-      // 1. Root lang & dir attributes
-      document.documentElement.setAttribute('lang', lang);
-      document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
-      const htmlRoot = document.getElementById('htmlRoot');
-      if (htmlRoot && htmlRoot !== document.documentElement) {
-        htmlRoot.setAttribute('lang', lang);
-        htmlRoot.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
-      }
-
-      // 2. Active button label text
-      const currentLangLabel = document.getElementById('currentLangLabel');
-      if (currentLangLabel) {
-        currentLangLabel.textContent = LANG_NAMES[lang];
-      }
-
-      // 3. Dropdown option active indicator
-      document.querySelectorAll('.lang-option').forEach(opt => {
-        const optLang = opt.getAttribute('data-lang');
-        opt.classList.toggle('active', optLang === lang);
-      });
-
-      // 4. Back to Tools link localization
-      const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
-      if (backSpan && BACK_LABELS[lang]) {
-        backSpan.textContent = BACK_LABELS[lang];
-      }
-
-      // 5. SEO Content Layer language block visibility sync
-      if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
-        if (SEO_META[lang].title) {
-          document.title = SEO_META[lang].title;
-          const ogTitle = document.querySelector('meta[property="og:title"]');
-          if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
-        }
-        if (SEO_META[lang].desc) {
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
-          const ogDesc = document.querySelector('meta[property="og:description"]');
-          if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
-        }
-      }
-
-      document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
-        block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
-      });
+    // 1. Root lang & dir attributes
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+    const htmlRoot = document.getElementById('htmlRoot');
+    if (htmlRoot && htmlRoot !== document.documentElement) {
+      htmlRoot.setAttribute('lang', lang);
+      htmlRoot.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
     }
 
-    function initLangSwitcher() {
-      const dropdown = document.getElementById('langDropdown');
-      const oldBtn = document.getElementById('langToggleBtn');
-      const oldMenu = document.getElementById('langMenu');
-      if (!dropdown || !oldBtn || !oldMenu) return;
+    // 2. Active button label text
+    const currentLangLabel = document.getElementById('currentLangLabel');
+    if (currentLangLabel) {
+      currentLangLabel.textContent = LANG_NAMES[lang];
+    }
 
-      // Clone button & menu to neutralize any competing or double-toggling event listeners
-      const toggleBtn = oldBtn.cloneNode(true);
-      oldBtn.parentNode.replaceChild(toggleBtn, oldBtn);
+    // 3. Dropdown option active indicator
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      const optLang = opt.getAttribute('data-lang');
+      opt.classList.toggle('active', optLang === lang);
+    });
 
-      const menu = oldMenu.cloneNode(true);
-      oldMenu.parentNode.replaceChild(menu, oldMenu);
+    // 4. Back to Tools link localization
+    const backSpan = document.querySelector('#backToHome [data-i18n="backLink"]');
+    if (backSpan && BACK_LABELS[lang]) {
+      backSpan.textContent = BACK_LABELS[lang];
+    }
 
-      function openMenu() {
-        menu.classList.add('open', 'show');
-        dropdown.classList.add('active');
-        toggleBtn.setAttribute('aria-expanded', 'true');
+    // 5. SEO Content Layer language block visibility sync
+    if (typeof SEO_META !== 'undefined' && SEO_META[lang]) {
+      if (SEO_META[lang].title) {
+        document.title = SEO_META[lang].title;
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute('content', SEO_META[lang].title);
       }
-
-      function closeMenu() {
-        menu.classList.remove('open', 'show');
-        dropdown.classList.remove('active');
-        toggleBtn.setAttribute('aria-expanded', 'false');
+      if (SEO_META[lang].desc) {
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', SEO_META[lang].desc);
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.setAttribute('content', SEO_META[lang].desc);
       }
+    }
 
-      function toggleMenu(e) {
+    document.querySelectorAll('.tool-content-layer .lang-content-block').forEach(block => {
+      block.style.display = (block.getAttribute('data-lang') === lang) ? 'block' : 'none';
+    });
+  }
+
+  function initLangSwitcher() {
+    const dropdown = document.getElementById('langDropdown');
+    const oldBtn = document.getElementById('langToggleBtn');
+    const oldMenu = document.getElementById('langMenu');
+    if (!dropdown || !oldBtn || !oldMenu) return;
+
+    // Clone button & menu to neutralize any competing or double-toggling event listeners
+    const toggleBtn = oldBtn.cloneNode(true);
+    oldBtn.parentNode.replaceChild(toggleBtn, oldBtn);
+
+    const menu = oldMenu.cloneNode(true);
+    oldMenu.parentNode.replaceChild(menu, oldMenu);
+
+    function openMenu() {
+      menu.classList.add('open', 'show');
+      dropdown.classList.add('active');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+      menu.classList.remove('open', 'show');
+      dropdown.classList.remove('active');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    // Authoritative toggle click listener
+    toggleBtn.addEventListener('click', toggleMenu);
+
+    // Authoritative language options click listener
+    menu.querySelectorAll('.lang-option').forEach(opt => {
+      opt.addEventListener('click', function (e) {
         if (e) {
           e.preventDefault();
           e.stopPropagation();
         }
-        const isOpen = menu.classList.contains('open') || menu.classList.contains('show') || dropdown.classList.contains('active');
-        if (isOpen) {
+        const selectedLang = opt.getAttribute('data-lang');
+        if (selectedLang && LANG_NAMES[selectedLang]) {
+          try {
+            localStorage.setItem('vantorkit_lang', selectedLang);
+          } catch (err) { }
+
+          updateActiveLanguageUI(selectedLang);
+
+          // Call tool translation engine if defined
+          if (typeof window.setLanguage === 'function') {
+            try { window.setLanguage(selectedLang); } catch (err) { console.warn(err); }
+          } else if (typeof window.applyLanguage === 'function') {
+            try { window.applyLanguage(selectedLang); } catch (err) { console.warn(err); }
+          }
+
           closeMenu();
-        } else {
-          openMenu();
         }
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!dropdown.contains(e.target)) {
+        closeMenu();
       }
+    });
 
-      // Authoritative toggle click listener
-      toggleBtn.addEventListener('click', toggleMenu);
+    // Close dropdown on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeMenu();
+      }
+    });
 
-      // Authoritative language options click listener
-      menu.querySelectorAll('.lang-option').forEach(opt => {
-        opt.addEventListener('click', function(e) {
-          if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-          const selectedLang = opt.getAttribute('data-lang');
-          if (selectedLang && LANG_NAMES[selectedLang]) {
-            try {
-              localStorage.setItem('vantorkit_lang', selectedLang);
-            } catch (err) {}
+    // Initial apply from localStorage
+    let currentLang = 'en';
+    try {
+      currentLang = localStorage.getItem('vantorkit_lang') || 'en';
+    } catch (err) { }
+    if (!LANG_NAMES[currentLang]) currentLang = 'en';
+    updateActiveLanguageUI(currentLang);
+  }
 
-            updateActiveLanguageUI(selectedLang);
-
-            // Call tool translation engine if defined
-            if (typeof window.setLanguage === 'function') {
-              try { window.setLanguage(selectedLang); } catch (err) { console.warn(err); }
-            } else if (typeof window.applyLanguage === 'function') {
-              try { window.applyLanguage(selectedLang); } catch (err) { console.warn(err); }
-            }
-
-            closeMenu();
-          }
-        });
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!dropdown.contains(e.target)) {
-          closeMenu();
-        }
-      });
-
-      // Close dropdown on Escape key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          closeMenu();
-        }
-      });
-
-      // Initial apply from localStorage
-      let currentLang = 'en';
-      try {
-        currentLang = localStorage.getItem('vantorkit_lang') || 'en';
-      } catch (err) {}
-      if (!LANG_NAMES[currentLang]) currentLang = 'en';
-      updateActiveLanguageUI(currentLang);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initLangSwitcher);
-    } else {
-      initLangSwitcher();
-    }
-  })();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLangSwitcher);
+  } else {
+    initLangSwitcher();
+  }
+})();

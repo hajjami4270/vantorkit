@@ -42,6 +42,9 @@
         faq4A: "Never. All calculations run strictly in client-side memory with zero analytics, zero cookies, and zero server logging.",
         searchPlaceholder: "+ Add city or time zone (e.g. Tokyo, Dubai, Berlin, Sydney)...",
         toastReset: "Reset to defaults",
+        noMatchingCities: "No matching cities",
+        toastAddedCity: "Added ",
+        toastAlreadyInList: " is already in the list",
         footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
@@ -85,6 +88,9 @@
         faq4A: "أبداً. تتم كافة العمليات داخل ذاكرة متصفحك بنسبة 100% دون كوكيز أو تتبع.",
         searchPlaceholder: "+ أضف مدينة أو منطقة زمنية (مثل طوكيو، دبي، برلين، سيدني)...",
         toastReset: "تمت إعادة الضبط إلى الإعدادات الافتراضية",
+        noMatchingCities: "لا توجد مدن مطابقة",
+        toastAddedCity: "تمت إضافة ",
+        toastAlreadyInList: " موجودة بالفعل في القائمة",
         footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
@@ -128,6 +134,9 @@
         faq4A: "Jamais. Tout fonctionne localement dans la mémoire de votre navigateur, sans cookies ni transmission de données.",
         searchPlaceholder: "+ Ajouter une ville ou un fuseau horaire (ex. Tokyo, Dubaï, Berlin, Sydney)...",
         toastReset: "Réinitialisé aux valeurs par défaut",
+        noMatchingCities: "Aucune ville correspondante",
+        toastAddedCity: "Ajouté : ",
+        toastAlreadyInList: " est déjà dans la liste",
         footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
@@ -171,6 +180,9 @@
         faq4A: "Mai. L'elaborazione avviene al 100% nella memoria del tuo browser senza cookie né archiviazione remota.",
         searchPlaceholder: "+ Aggiungi città o fuso orario (es. Tokyo, Dubai, Berlino, Sydney)...",
         toastReset: "Ripristinato ai valori predefiniti",
+        noMatchingCities: "Nessuna città corrispondente",
+        toastAddedCity: "Aggiunta: ",
+        toastAlreadyInList: " è già nell'elenco",
         footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
@@ -498,9 +510,10 @@
           c.tz.toLowerCase().includes(q)
         );
 
+        const dict = I18N[activeLang] || I18N.en;
         cityDropdownMenu.innerHTML = '';
         if (matches.length === 0) {
-          cityDropdownMenu.innerHTML = `<div class="city-option-item" style="color:var(--text-muted);">No matching cities</div>`;
+          cityDropdownMenu.innerHTML = `<div class="city-option-item" style="color:var(--text-muted);">${dict.noMatchingCities}</div>`;
         } else {
           matches.slice(0, 10).forEach(c => {
             const item = document.createElement('div');
@@ -516,9 +529,9 @@
                 activeCities.push({ ...c });
                 renderMatrix();
                 renderSummary();
-                showToast(`Added ${c.name}`);
+                showToast(dict.toastAddedCity + c.name);
               } else {
-                showToast(`${c.name} is already in the list`);
+                showToast(c.name + dict.toastAlreadyInList);
               }
               citySearchInput.value = '';
               cityDropdownMenu.classList.remove('show');

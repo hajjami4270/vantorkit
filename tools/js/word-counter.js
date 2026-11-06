@@ -363,7 +363,7 @@
       statParagraphs.textContent = paragraphs.toLocaleString();
       statReadingTime.textContent = formatDuration(readSec);
       statSpeakingTime.textContent = 'Speech: ' + formatDuration(speakSec) + ' (130 wpm)';
-      statAvgWordLen.textContent = avgWordLength + ' avg char/word';
+      statAvgWordLen.textContent = avgWordLength + ' ' + dict().statAvgWordLen;
       statAvgWordsSentence.textContent = avgWordsPerSentence + ' words/sentence';
       statReadingEase.textContent = dict().statReadingEase + readingEaseStr;
 

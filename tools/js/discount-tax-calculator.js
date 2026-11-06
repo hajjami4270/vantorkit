@@ -444,24 +444,28 @@
       }
 
       // Update Receipt
+      const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+      const baseDiscLbl = (t.recPrimaryDisc || 'Primary Discount:').replace(/\s*\([^)]*\)\s*:?$/, '').replace(/:$/, '');
       recOrigVal.textContent = formatCurrency(origPrice);
       if (discountMode === 'percent') {
-        recDiscLabel.textContent = `Primary Discount (${discountVal}%):`;
+        recDiscLabel.textContent = `${baseDiscLbl} (${discountVal}%):`;
       } else {
-        recDiscLabel.textContent = `Primary Discount (${formatCurrency(discountVal)}):`;
+        recDiscLabel.textContent = `${baseDiscLbl} (${formatCurrency(discountVal)}):`;
       }
       recDiscVal.textContent = `-${formatCurrency(primaryDiscountAmount)}`;
 
       if (isStackedActive && extraDiscountPct > 0) {
         recStackedRow.style.display = 'flex';
-        recStackedLabel.textContent = `Stacked VIP Discount (${extraDiscountPct}%):`;
+        const baseStackLbl = (t.recStackedDisc || 'Stacked VIP Discount:').replace(/\s*\([^)]*\)\s*:?$/, '').replace(/:$/, '');
+        recStackedLabel.textContent = `${baseStackLbl} (${extraDiscountPct}%):`;
         recStackedVal.textContent = `-${formatCurrency(stackedDiscountAmount)}`;
       } else {
         recStackedRow.style.display = 'none';
       }
 
       recSubtotalVal.textContent = formatCurrency(discountedSubtotal);
-      recTaxLabel.textContent = `Sales Tax (${taxRate}%):`;
+      const baseTaxLbl = (t.recTax || 'Sales Tax:').replace(/\s*\([^)]*\)\s*:?$/, '').replace(/:$/, '');
+      recTaxLabel.textContent = `${baseTaxLbl} (${taxRate}%):`;
       recTaxVal.textContent = `+${formatCurrency(taxAmount)}`;
       recTotalVal.textContent = formatCurrency(finalPrice);
     }
@@ -499,13 +503,15 @@
       }
       const savings = Math.max(0, origPrice - subtotal);
 
+      const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+      const baseSubLbl = (t.legSubtotal || 'Subtotal:').replace(/:$/, '');
       revDispOrigPrice.textContent = formatCurrency(origPrice);
-      revBadgeDiscount.textContent = `${discountPct}% Off`;
-      revDispSummary.textContent = `You saved ${formatCurrency(savings)} on the original sticker price.`;
+      revBadgeDiscount.textContent = `-${discountPct}%`;
+      revDispSummary.textContent = `${(t.lblTotalSavings || 'Total Savings')}: ${formatCurrency(savings)}`;
 
       revDispSavings.textContent = formatCurrency(savings);
       revDispTax.textContent = formatCurrency(taxPaid);
-      revDispPreTaxSub.textContent = `Pre-tax subtotal: ${formatCurrency(subtotal)}`;
+      revDispPreTaxSub.textContent = `${baseSubLbl}: ${formatCurrency(subtotal)}`;
 
       revValFormula1.textContent = formatCurrency(subtotal);
       revValFormula2.textContent = formatCurrency(origPrice);

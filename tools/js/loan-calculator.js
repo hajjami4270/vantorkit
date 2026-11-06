@@ -14,6 +14,8 @@
         lblTotalCost: 'Total Loan Cost',
         lblEarlyPayoff: 'Payoff Timeline',
         subOnSchedule: 'Standard payoff schedule',
+        subExtraIncluded: (extra, total) => `Includes $${extra} extra ($${total} total)`,
+        subPayoffEarlier: (timeStr) => `Pay off ${timeStr} earlier!`,
         titleLoanDetails: 'Loan Parameters',
         lblLoanAmount: 'Loan Amount',
         lblInterestRate: 'Annual Interest Rate',
@@ -69,6 +71,8 @@
         lblTotalCost: '\u0627\u0644\u062a\u0643\u0644\u0641\u0629 \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a\u0629',
         lblEarlyPayoff: '\u0627\u0644\u062e\u0637 \u0627\u0644\u0632\u0645\u0646\u064a \u0644\u0644\u0633\u062f\u0627\u062f',
         subOnSchedule: '\u062c\u062f\u0648\u0644 \u0627\u0644\u0633\u062f\u0627\u062f \u0627\u0644\u0642\u064a\u0627\u0633\u064a',
+        subExtraIncluded: (extra, total) => `يشمل $${extra} دفعة إضافية (الإجمالي $${total})`,
+        subPayoffEarlier: (timeStr) => `سداد مبكر بـ ${timeStr}!`,
         titleLoanDetails: '\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0642\u0631\u0636',
         lblLoanAmount: '\u0645\u0628\u0644\u063a \u0627\u0644\u0642\u0631\u0636',
         lblInterestRate: '\u0646\u0633\u0628\u0629 \u0627\u0644\u0641\u0627\u0626\u062f\u0629 \u0627\u0644\u0633\u0646\u0648\u064a\u0629',
@@ -121,6 +125,8 @@
         lblTotalCost: 'Co\u00fbt Total du Pr\u00eat',
         lblEarlyPayoff: 'Dur\u00e9e de Remboursement',
         subOnSchedule: '\u00c9ch\u00e9ance standard',
+        subExtraIncluded: (extra, total) => `Inclut $${extra} en plus ($${total} au total)`,
+        subPayoffEarlier: (timeStr) => `Remboursé ${timeStr} plus tôt !`,
         titleLoanDetails: 'Param\u00e8tres du Pr\u00eat',
         lblLoanAmount: 'Montant Emprunt\u00e9',
         lblInterestRate: 'Taux d\'Int\u00e9r\u00eat Annuel',
@@ -173,6 +179,8 @@
         lblTotalCost: 'Costo Totale del Prestito',
         lblEarlyPayoff: 'Tempi di Estinzione',
         subOnSchedule: 'Piano di rimborso standard',
+        subExtraIncluded: (extra, total) => `Include $${extra} extra ($${total} totale)`,
+        subPayoffEarlier: (timeStr) => `Estinto ${timeStr} prima!`,
         titleLoanDetails: 'Parametri del Prestito',
         lblLoanAmount: 'Importo del Prestito',
         lblInterestRate: 'Tasso di Interesse Annuo',
@@ -478,7 +486,7 @@
       // Dashboard cards
       dispMonthlyPayment.textContent = formatCurrency(res.baseMonthly);
       if (extraPayment > 0) {
-        dispMonthlySub.textContent = `Includes $${extraPayment.toFixed(0)} extra ($${res.totalMonthlyWithExtra.toFixed(2)} total)`;
+        dispMonthlySub.textContent = dict().subExtraIncluded ? dict().subExtraIncluded(extraPayment.toFixed(0), res.totalMonthlyWithExtra.toFixed(2)) : `Includes $${extraPayment.toFixed(0)} extra ($${res.totalMonthlyWithExtra.toFixed(2)} total)`;
       } else {
         dispMonthlySub.textContent = dict().subPrincipalInterest;
       }
@@ -498,7 +506,7 @@
         const yrsSaved = Math.floor(res.monthsSaved / 12);
         const mosSaved = res.monthsSaved % 12;
         const timeStr = yrsSaved > 0 ? `${yrsSaved}y ${mosSaved}m` : `${mosSaved} mos`;
-        dispSavingsSub.textContent = `Pay off ${timeStr} earlier!`;
+        dispSavingsSub.textContent = dict().subPayoffEarlier ? dict().subPayoffEarlier(timeStr) : `Pay off ${timeStr} earlier!`;
         savingsCallout.style.display = 'flex';
         savingsTitle.textContent = `Accelerated Payoff Benefit (${timeStr} saved):`;
         if (savingsDesc) savingsDesc.textContent = "You will save " + formatCompactCurrency(res.interestSaved) + " in interest charges";

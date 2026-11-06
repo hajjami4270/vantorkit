@@ -48,6 +48,7 @@
         toastCleared: "Courses reset.",
         toastCsv: "CSV report downloaded successfully!",
         toastSampleLoaded: "Demo semester loaded!",
+        coursePlaceholder: "e.g. Calculus I",
         footerText: "© 2026 VantorKit. Fast, Private & Free Web Utilities. All client processing is performed locally in your browser."
       },
       ar: {
@@ -94,6 +95,7 @@
         toastCleared: "تمت إعادة تعيين المقررات.",
         toastCsv: "تم تصدير ملف CSV بنجاح!",
         toastSampleLoaded: "تم تحميل الفصل التجريبي!",
+        coursePlaceholder: "مثال: تفاضل وتكامل 1",
         footerText: "© 2026 VantorKit. أدوات ويب سريعة وخاصة ومجانية. تتم جميع عمليات المعالجة محلياً داخل متصفحك."
       },
       fr: {
@@ -140,6 +142,7 @@
         toastCleared: "Liste des cours réinitialisée.",
         toastCsv: "Fichier CSV téléchargé avec succès !",
         toastSampleLoaded: "Semestre de démonstration chargé !",
+        coursePlaceholder: "ex. Analyse Mathématique I",
         footerText: "© 2026 VantorKit. Utilitaires Web rapides, privés et gratuits. Tout le traitement est effectué localement dans votre navigateur."
       },
       it: {
@@ -186,6 +189,7 @@
         toastCleared: "Lista esami azzerata.",
         toastCsv: "File CSV esportato correttamente!",
         toastSampleLoaded: "Semestre demo caricato!",
+        coursePlaceholder: "es. Analisi Matematica I",
         footerText: "© 2026 VantorKit. Utility Web veloci, private e gratuite. Tutta l'elaborazione avviene localmente nel tuo browser."
       }
     };
@@ -286,6 +290,10 @@
           el.innerHTML = t[key];
         }
       });
+
+      document.querySelectorAll('.course-name').forEach(inp => {
+        inp.placeholder = t.coursePlaceholder || 'e.g. Calculus I';
+      });
     }
 
     function showToast(message) {
@@ -337,7 +345,7 @@
       const nameInput = document.createElement('input');
       nameInput.type = 'text';
       nameInput.className = 'calc-input course-name';
-      nameInput.placeholder = 'e.g. Calculus I';
+      nameInput.placeholder = (TRANSLATIONS[currentLang] || TRANSLATIONS.en).coursePlaceholder || 'e.g. Calculus I';
       nameInput.value = course.name;
       nameInput.addEventListener('input', (e) => {
         course.name = e.target.value;
