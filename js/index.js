@@ -992,6 +992,35 @@
         }
       });
 
+
+      // --- Optional Cursor Spotlight on Cards (Hover-capable & Reduced-Motion Safe) ---
+      const canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+      const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const toolsGridEl = document.getElementById('toolsGrid');
+      if (canHover && !prefersReducedMotion && toolsGridEl) {
+        let rafId = null;
+        let activeCard = null;
+        let lastX = 0;
+        let lastY = 0;
+        toolsGridEl.addEventListener('pointermove', (e) => {
+          const card = e.target.closest('.tool-card');
+          if (!card) return;
+          const rect = card.getBoundingClientRect();
+          activeCard = card;
+          lastX = Math.round(e.clientX - rect.left);
+          lastY = Math.round(e.clientY - rect.top);
+          if (!rafId) {
+            rafId = requestAnimationFrame(() => {
+              if (activeCard) {
+                activeCard.style.setProperty('--mouse-x', lastX + 'px');
+                activeCard.style.setProperty('--mouse-y', lastY + 'px');
+              }
+              rafId = null;
+            });
+          }
+        }, { passive: true });
+      }
+
       // --- Initialization ---
       const savedLang = localStorage.getItem('vantorkit_lang') || 'en';
       setLanguage(savedLang);
