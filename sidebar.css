@@ -693,16 +693,11 @@ html[dir="rtl"] .vk-sidebar-tool-arrow {
   gap: 8px;
 }
 
-.vk-sidebar-cat-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: var(--text-muted);
-}
-
-.vk-sidebar-cat-item:hover .vk-sidebar-cat-dot {
-  background: var(--accent);
+.vk-sidebar-cat-dot,
+.cat-dot,
+html[lang="ar"] .cat-dot,
+html[dir="rtl"] .cat-dot {
+  display: none !important;
 }
 
 .vk-sidebar-cat-arrow {
